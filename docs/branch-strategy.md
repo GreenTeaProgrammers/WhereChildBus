@@ -22,13 +22,13 @@
 
 - `feature/frontend`
 - `feature/backend`
-- `feature/muchine-learning`
+- `feature/machine-learning`
 
 - **機能名**: ブランチが実装する機能の名前を含めます
 
 - `feature/backend/user-authentication`
 - `feature/frontend/payment-integration`
-- `feature/muchine-learning/image-recognition`
+- `feature/machine-learning/image-recognition`
 
 #### 開発フロー
 
