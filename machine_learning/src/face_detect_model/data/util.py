@@ -35,7 +35,7 @@ def save_faces(clipped_faces, save_dir):
 def main():
      # パスの指定
     face_cascade_path = 'haarcascade_frontalface_default.xml'
-    image_path = 'src/face_detect_model/data/test2.jpg'  #ローカルなのであとで変更する
+    image_path = 'src/face_detect_model/data/Nanakusa.jpeg'  #ローカルなのであとで変更する
     save_dir = './src/face_detect_model/data/img'
     image_size = (500, 500) # 保存する画像サイズ
     
@@ -43,16 +43,12 @@ def main():
     image = cv2.imread(image_path)
     if image is None:
         print(f"画像ファイルが見つからないか読み込めません: {image_path}")
-        return None, None
+        return
 
-    # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
-
-    # 画像から顔を検出
-    image, faces = detect_faces(image_path, face_cascade)
-    if image is not None and faces is not None:
-        # 検出された顔を固定サイズで保存
-        save_faces(image, faces, save_dir, image_size)
+    faces = detect_faces(image, face_cascade)
+    clipped_faces = clip_and_resize_faces(image, faces, image_size)
+    save_faces(clipped_faces, save_dir)
 
 if __name__ == "__main__":
     main()
