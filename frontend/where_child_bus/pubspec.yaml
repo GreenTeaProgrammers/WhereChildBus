@@ -22,5 +22,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets: 
-    - assets/images/face_1.svg
-    - assets/images/face_2.svg
+    - assets/images/face_1.png
+    - assets/images/face_2.png
