@@ -36,8 +36,8 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Widget busListCard(String name) {
-    return SizedBox(
-      width: 300,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
         elevation: 8,
         margin: const EdgeInsets.all(16),
@@ -64,8 +64,6 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget busName(name) {
     return Container(
-      padding:
-          const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Text(
         name,
         textAlign: TextAlign.left,
@@ -79,7 +77,6 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget busDescription(String description) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
       child:  Text(
         description,
         style: const TextStyle(
