@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
 
 void main() {
-  runApp(const App());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
