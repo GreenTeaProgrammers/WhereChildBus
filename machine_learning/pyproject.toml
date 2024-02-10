@@ -2,9 +2,7 @@
 name = "wherechildbus"
 version = "0.1.0"
 description = "Add your description here"
-authors = [
-    { name = "Mizuki", email = "mbaba@kanolab.net" }
-]
+authors = []
 dependencies = [
     "opencv-python>=4.9.0.80",
     "torch>=2.2.0",
