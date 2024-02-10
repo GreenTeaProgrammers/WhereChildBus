@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 
 class BusListPage extends StatefulWidget {
   const BusListPage({super.key});
@@ -48,11 +49,25 @@ class _BusListPageState extends State<BusListPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Material(
           color: Colors.white,
-          child: Row(
-            children: [
-              busPhoto(isBusOperating),
-              busNameAndDescription(name),
-            ],
+          child: InkWell(
+            onTap: () async {
+              await showModalBottomSheet<void>(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: false,
+                  enableDrag: true,
+                  isDismissible: true,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  builder: (context) {
+                    return BottomSheetWidget();
+                  });
+            },
+            child: Row(
+              children: [
+                busPhoto(isBusOperating),
+                busNameAndDescription(name),
+              ],
+            ),
           ),
         ),
       ),
@@ -115,3 +130,4 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 }
+
