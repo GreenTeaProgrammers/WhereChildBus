@@ -1,18 +1,20 @@
+# ビルドステージ
 FROM golang:1.21.5 AS builder
 
 WORKDIR /src
 COPY ./proto-gen ./proto-gen
 
-WORKDIR /src/backend
-COPY backend/go.mod backend/go.sum ./
+WORKDIR /src/
+COPY /go.mod /go.sum ./
 RUN go mod download
 
-COPY ./backend .
+COPY . .
 RUN go build \
     -tags timetzdata \
     -o where-my-bus-backend \
     ./cmd/server
 
+# 実行ステージ
 FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,6 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV TZ Asia/Tokyo
 
 WORKDIR /app
-COPY --from=builder /src/backend/where-my-bus .
+COPY --from=builder /src/where-my-bus-backend .
+
+# gRPCサービスが使用するポート50051を公開
+EXPOSE 50051
 
 ENTRYPOINT [ "/app/where-my-bus-backend" ]
