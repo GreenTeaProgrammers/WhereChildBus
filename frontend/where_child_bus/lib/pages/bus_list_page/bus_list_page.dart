@@ -7,7 +7,9 @@ class BusListPage extends StatefulWidget {
   State<BusListPage> createState() => _BusListPageState();
 }
 
+
 class _BusListPageState extends State<BusListPage> {
+  //TODO: 将来的には動的にデータを受け取る。そのためのメソッドが増える
   final items = ["バス1", "バス2", "バス3", "バス4", "バス5", "バス5", "バス5", "バス5", "バス5"];
   final busesOperatingState = [true, false, true, false, false, false, false, false, false];
 
@@ -36,6 +38,7 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
+  //TODO: 将来的にBus型を受け取る
   Widget busListCard(String name, bool isBusOperating) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -97,11 +100,13 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
+  //TODO: 将来的には説明文も引数として受け取る
   Widget busNameAndDescription(String name) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, 
+        //TODO:動的になる
         children: [
           busName(name),
           busDescription("テストの説明文")
