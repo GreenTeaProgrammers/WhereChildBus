@@ -11,19 +11,26 @@ def detect_faces(image, face_cascade):
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
     return faces
 
-def save_faces(image, faces, save_dir, image_size):
-    """検出された顔を固定サイズで保存する"""
+def clip_and_resize_faces(image, faces, image_size):
+    """検出された顔をクリップし、指定サイズにリサイズする"""
+    clipped_faces = []
+    for (x, y, w, h) in faces:
+        face_roi = image[y:y+h, x:x+w]
+        resized_face = cv2.resize(face_roi, image_size, interpolation=cv2.INTER_AREA)
+        clipped_faces.append(resized_face)
+    return clipped_faces
+
+def save_faces(clipped_faces, save_dir):
+    """クリップされた顔画像を保存する"""
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    for i, (x, y, w, h) in enumerate(faces):
-        face_roi = image[y:y+h, x:x+w]
-        # 画像を固定サイズにリサイズ
-        resized_face = cv2.resize(face_roi, image_size, interpolation=cv2.INTER_AREA)
+    for i, face in enumerate(clipped_faces):
         save_path = os.path.join(save_dir, f'face_{i}.jpg')
-        if not cv2.imwrite(save_path, resized_face):
-            print(f"画像の保存に失敗しました: {save_path}")
-        else:
+        try:
+            cv2.imwrite(save_path, face)
             print(f"画像を保存しました: {save_path}")
+        except Exception as e:
+            print(f"画像の保存に失敗しました: {save_path}. エラー: {e}")
 
 def main():
      # パスの指定
