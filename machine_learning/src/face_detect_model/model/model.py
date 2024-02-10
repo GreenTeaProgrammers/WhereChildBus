@@ -34,7 +34,8 @@ class Net(nn.Module):
         x = self.conv2(x)
         x = self.relu(x)
         x = self.pool(x)
-        x = x.view(x.size()[0], -1)
+        # Flatten層を使用
+        x = self.flatten(x)
         x = self.linear(x)
         x = self.relu(x)
         x = self.classier(x)
