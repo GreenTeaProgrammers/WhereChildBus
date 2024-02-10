@@ -25,7 +25,7 @@ class Net(nn.Module):
         # Flatten操作を明示的に
         self.flatten = nn.Flatten()
         self.linear = nn.Linear(32 * 5 * 5, config["model"]["hidden_size"])
-        self.classier = nn.Linear(config["model"]["hidden_size"], num_classes)
+        self.classifier = nn.Linear(config["model"]["hidden_size"], num_classes)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -38,5 +38,5 @@ class Net(nn.Module):
         x = self.flatten(x)
         x = self.linear(x)
         x = self.relu(x)
-        x = self.classier(x)
+        x = self.classifier(x)
         return x
