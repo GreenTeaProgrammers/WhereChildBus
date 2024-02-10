@@ -37,16 +37,19 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget busListCard(String name) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Card(
         elevation: 8,
         margin: const EdgeInsets.all(16),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Row(
-          children: [
-            busPhoto(),
-            busNameAndDescription(name),
-          ],
+        child: Material(
+          color: Colors.white,
+          child: Row(
+            children: [
+              busPhoto(),
+              busNameAndDescription(name),
+            ],
+          ),
         ),
       ),
     );
@@ -63,29 +66,25 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Widget busName(name) {
-    return Container(
-      child: Text(
-        name,
-        textAlign: TextAlign.left,
-        style: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 22,
-        ),
+    return Text(
+      name,
+      textAlign: TextAlign.left,
+      style: const TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 22,
       ),
     );
   }
 
   Widget busDescription(String description) {
-    return Container(
-      child:  Text(
-        description,
-        style: const TextStyle(
-          color: Colors.grey,
-          fontSize: 16,
-        ),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
+    return Text(
+      description,
+      style: const TextStyle(
+        color: Colors.grey,
+        fontSize: 16,
       ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
     );
   }
 
