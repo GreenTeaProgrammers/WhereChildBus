@@ -24,6 +24,13 @@ class _StudentListPageState extends State<StudentListPage> {
       "4組",
       "5組",
     ];
+    final List<String> image = <String>[
+      "1",
+      "2",
+      "1",
+      "1",
+      "2",
+    ];
 
     var screenSize = MediaQuery.of(context).size;
 
@@ -43,7 +50,7 @@ class _StudentListPageState extends State<StudentListPage> {
                   child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Row(children: <Widget>[
-                        childImage(),
+                        childImage(image[index]),
                         SizedBox(
                           width: screenSize.width * 0.05,
                         ),
@@ -52,13 +59,11 @@ class _StudentListPageState extends State<StudentListPage> {
         });
   }
 
-  Widget childImage() {
+  Widget childImage(String image) {
     return SizedBox(
         width: 100,
         height: 100,
-        child: Card(
-          color: Colors.grey,
-        ));
+        child: Image.asset("assets/images/face_${image}.png"));
   }
 
   Widget nameAndGroup(String name, String group, Size size) {
