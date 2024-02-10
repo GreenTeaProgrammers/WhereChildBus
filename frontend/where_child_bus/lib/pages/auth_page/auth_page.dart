@@ -14,11 +14,10 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-            body: Center(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: Center(
           child: Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
@@ -64,11 +63,11 @@ class _AuthPageState extends State<AuthPage> {
                     },
                     child: const Text('ログイン'),
                   ),
-                ),
+                )
               ],
             ),
           ),
-        )),
+        ),
       ),
     );
   }
