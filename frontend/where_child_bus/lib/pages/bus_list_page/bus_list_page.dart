@@ -9,6 +9,7 @@ class BusListPage extends StatefulWidget {
 
 class _BusListPageState extends State<BusListPage> {
   final items = ["バス1", "バス2", "バス3", "バス4", "バス5", "バス5", "バス5", "バス5", "バス5"];
+  final busesOperatingState = [true, false, true, false, false, false, false, false, false];
 
 
   @override
@@ -30,12 +31,12 @@ class _BusListPageState extends State<BusListPage> {
       //TODO: 実際にはAPIからデータを取得
       itemCount: items.length,
       itemBuilder: (BuildContext context, int index) {
-        return busListCard(items[index]);
+        return busListCard(items[index], busesOperatingState[index]);
       },
     );
   }
 
-  Widget busListCard(String name) {
+  Widget busListCard(String name, bool isBusOperating) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Card(
@@ -46,7 +47,7 @@ class _BusListPageState extends State<BusListPage> {
           color: Colors.white,
           child: Row(
             children: [
-              busPhoto(),
+              busPhoto(isBusOperating),
               busNameAndDescription(name),
             ],
           ),
@@ -55,13 +56,21 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busPhoto() {
+  Widget busPhoto(bool isBusOperating) {
+    String imagePath = isBusOperating
+          ? "assets/images/bus_operating.png"
+          : "assets/images/bus_not_operating.png";
+
     return SizedBox(
       width: 100,
       height: 100,
-      child: Card(
-        child: const Text("ここに画像が来る")
-      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Image.asset(
+          imagePath,
+          fit:BoxFit.cover,
+        ),
+      )
     );
   }
 
