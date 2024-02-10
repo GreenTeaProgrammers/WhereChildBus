@@ -36,6 +36,7 @@ Temporary Items
 
 ### Python ###
 src/face_detect_model/pickle/*
+src/face_detect_model/data/img
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
