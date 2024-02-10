@@ -35,6 +35,9 @@ Temporary Items
 *.icloud
 
 ### Python ###
+src/face_detect_model/pickle/*
+src/face_detect_model/data/img
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
