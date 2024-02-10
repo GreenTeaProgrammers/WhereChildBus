@@ -1,5 +1,6 @@
 model:
   hidden_size: 120
+  in_channels: 1
   Conv2d:
     kernel_size: 3
   pooling:
