@@ -5,15 +5,11 @@ def load_cascade(cascade_path):
     """Haar Cascadeを読み込む"""
     return cv2.CascadeClassifier(cv2.data.haarcascades + cascade_path)
 
-def detect_faces(image_path, face_cascade):
+def detect_faces(image, face_cascade):
     """画像から顔を検出する"""
-    image = cv2.imread(image_path)
-    if image is None:
-        print(f"画像ファイルが見つからないか読み込めません: {image_path}")
-        return None, None
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    return image, faces
+    return faces
 
 def save_faces(image, faces, save_dir, image_size):
     """検出された顔を固定サイズで保存する"""
@@ -35,6 +31,12 @@ def main():
     image_path = 'src/face_detect_model/data/test2.jpg'  #ローカルなのであとで変更する
     save_dir = './src/face_detect_model/data/img'
     image_size = (500, 500) # 保存する画像サイズ
+    
+    # 画像読み込み
+    image = cv2.imread(image_path)
+    if image is None:
+        print(f"画像ファイルが見つからないか読み込めません: {image_path}")
+        return None, None
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
