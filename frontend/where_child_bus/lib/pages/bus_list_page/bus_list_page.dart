@@ -38,7 +38,7 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget busListCard(String name, bool isBusOperating) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
         elevation: 8,
         margin: const EdgeInsets.all(16),
