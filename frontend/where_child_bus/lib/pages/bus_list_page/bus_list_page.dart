@@ -17,20 +17,10 @@ class _BusListPageState extends State<BusListPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          pageTitle(),
           Expanded(
             child: listViewBuilder(),
           )
         ],
-      ),
-    );
-  }
-
-  Widget pageTitle() {
-    return const Padding(
-      padding:  EdgeInsets.all(10),
-      child:  Text(
-        '送迎バスコース一覧',
       ),
     );
   }
@@ -46,11 +36,19 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Widget busListCard(String name) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.all(16),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: busNameAndDescription(name),
+    return SizedBox(
+      width: 300,
+      child: Card(
+        elevation: 8,
+        margin: const EdgeInsets.all(16),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Row(
+          children: [
+            busPhoto(),
+            busNameAndDescription(name),
+          ],
+        ),
+      ),
     );
   }
 
@@ -59,18 +57,18 @@ class _BusListPageState extends State<BusListPage> {
       width: 100,
       height: 100,
       child: Card(
-        child: Text("ここに画像が来る")
+        child: const Text("ここに画像が来る")
       ),
     );
   }
 
   Widget busName(name) {
     return Container(
-      width: double.infinity,
       padding:
           const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Text(
         name,
+        textAlign: TextAlign.left,
         style: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22,
@@ -81,7 +79,6 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget busDescription(String description) {
     return Container(
-      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child:  Text(
         description,
@@ -99,6 +96,7 @@ class _BusListPageState extends State<BusListPage> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, 
         children: [
           busName(name),
           busDescription("テストの説明文")
