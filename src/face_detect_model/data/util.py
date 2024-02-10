@@ -32,9 +32,9 @@ def save_faces(image, faces, save_dir, image_size):
 def main():
      # パスの指定
     face_cascade_path = 'haarcascade_frontalface_default.xml'
-    image_path = 'src/face_detect_model/data/test2.jpg' 
-    save_dir = './detected_faces'
-    image_size = (100, 100) # 保存する画像サイズ
+    image_path = 'src/face_detect_model/data/test2.jpg'  #ローカルなのであとで変更する
+    save_dir = './src/face_detect_model/data/img'
+    image_size = (500, 500) # 保存する画像サイズ
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
