@@ -25,6 +25,8 @@ class _StudentListPageState extends State<StudentListPage> {
       "5組",
     ];
 
+    var screenSize = MediaQuery.of(context).size;
+
     return ListView.separated(
         itemCount: name.length,
         separatorBuilder: (BuildContext context, int index) {
@@ -43,9 +45,9 @@ class _StudentListPageState extends State<StudentListPage> {
                       child: Row(children: <Widget>[
                         childImage(),
                         SizedBox(
-                          width: 30,
+                          width: screenSize.width * 0.05,
                         ),
-                        nameAndGroup(name[index], group[index]),
+                        nameAndGroup(name[index], group[index], screenSize),
                       ]))));
         });
   }
@@ -59,24 +61,22 @@ class _StudentListPageState extends State<StudentListPage> {
         ));
   }
 
-  Widget nameAndGroup(String name, String group) {
-    return SizedBox(
-        width: 200,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(name, style: TextStyle(color: Colors.black, fontSize: 24)),
-              Text(
-                group,
-                style: TextStyle(color: Colors.black),
-              ),
-              place(),
-            ]));
+  Widget nameAndGroup(String name, String group, Size size) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(name, style: TextStyle(color: Colors.black, fontSize: 24)),
+          Text(
+            group,
+            style: TextStyle(color: Colors.black),
+          ),
+          place(),
+        ]);
   }
 
   Widget place() {
     return Row(children: <Widget>[
-      Text("乗降場所："),
+      Icon(Icons.location_on),
       Text("停留所名"),
     ]);
   }
