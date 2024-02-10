@@ -13,7 +13,7 @@ class Net(nn.Module):
         )
 
         self.conv1 = nn.Conv2d(
-            in_channels=1,
+            in_channels=in_channels,
             out_channels=16,
             kernel_size=config["model"]["Conv2d"]["kernel_size"],
         )
