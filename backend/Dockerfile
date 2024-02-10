@@ -20,5 +20,7 @@ FROM scratch
 
 # Corrected COPY command to use 'builder' instead of 'build'
 COPY --from=builder /go/bin/server /server
+COPY --from=builder /srv/grpc/.env /
+
 
 ENTRYPOINT ["/server"]
