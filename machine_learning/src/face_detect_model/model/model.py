@@ -22,7 +22,8 @@ class Net(nn.Module):
             out_channels=32,
             kernel_size=config["model"]["Conv2d"]["kernel_size"],
         )
-
+        # Flatten操作を明示的に
+        self.flatten = nn.Flatten()
         self.linear = nn.Linear(32 * 5 * 5, config["model"]["hidden_size"])
         self.classier = nn.Linear(config["model"]["hidden_size"], num_classes)
 
