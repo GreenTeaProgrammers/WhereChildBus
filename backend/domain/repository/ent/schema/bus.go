@@ -20,6 +20,10 @@ func (Bus) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
 		field.String("name"),
 		field.String("plate_number").Optional(),
+		field.Float("latitude").Optional().Comment("現在の緯度"),
+		field.Float("longitude").Optional().Comment("現在の経度"),
+		field.Enum("status").Default("stopped").Comment("バスのステータス（運行中、停止中など）").
+			Values("stopped", "running", "maintenance"),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}
@@ -28,8 +32,9 @@ func (Bus) Fields() []ent.Field {
 // Edges of the Bus.
 func (Bus) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("nursery", Nursery.Type).
-			Unique(),
-		edge.To("guardians", Guardian.Type),
+		edge.To("nursery", Nursery.Type).Unique(),
+		edge.To("stations", Station.Type),
+		edge.To("boarding_records", BoardingRecord.Type),
+		edge.To("childBusAssociations", ChildBusAssociation.Type),
 	}
 }

@@ -30,10 +30,9 @@ func (Guardian) Fields() []ent.Field {
 func (Guardian) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("children", Child.Type),
-		edge.From("bus", Bus.Type).
-			Ref("guardians").
-			Unique(),
 		edge.To("nursery", Nursery.Type).
+			Unique(),
+		edge.To("station", Station.Type).
 			Unique(),
 	}
 }
