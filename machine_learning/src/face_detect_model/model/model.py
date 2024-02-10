@@ -5,7 +5,8 @@ class Net(nn.Module):
     def __init__(self, config: dict, num_classes: int):
         super(Net, self).__init__()
         self.config = config
-
+        # 汎用性のために入力チャンネル数をconfigから取得(一応)
+        in_channels = config["model"]["in_channels"]
         self.relu = nn.ReLU()
         self.pool = nn.MaxPool2d(
             kernel_size=config["model"]["kernel_size"], stride=config["model"]["stride"]
