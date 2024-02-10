@@ -9,7 +9,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -112,15 +111,6 @@ class PingResponse extends $pb.GeneratedMessage {
   $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(1)
   void clearMessage() => clearField(1);
-}
-
-class HealthcheckServiceApi {
-  $pb.RpcClient _client;
-  HealthcheckServiceApi(this._client);
-
-  $async.Future<PingResponse> ping($pb.ClientContext? ctx, PingRequest request) =>
-    _client.invoke<PingResponse>(ctx, 'HealthcheckService', 'Ping', request, PingResponse())
-  ;
 }
 
 
