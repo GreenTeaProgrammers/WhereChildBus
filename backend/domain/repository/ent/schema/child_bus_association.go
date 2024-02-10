@@ -16,7 +16,6 @@ type ChildBusAssociation struct {
 // Fields of the ChildBusAssociation.
 func (ChildBusAssociation) Fields() []ent.Field {
 	return []ent.Field{
-		// ! Optionalではなく、Requiredにすると、外部キー制約が効いてしまう。
 		field.UUID("child_id", uuid.UUID{}),
 		field.UUID("bus_id", uuid.UUID{}),
 		field.Enum("bus_type").
