@@ -1,0 +1,12 @@
+model:
+  hidden_size: 120
+  Conv2d:
+    kernel_size: 3
+  pooling:
+    kernel_size: 2
+    stride: 2
+train:
+  epoch: 3
+  train_batch_size: 128
+  valid_batch_size: 64
+  test_batch_size: 1
