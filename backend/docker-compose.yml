@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  grpc-calculator:
+    image: gcr.io/wherechildbus/grpc-calculator:latest
+    ports:
+      - "50051:50051"
+    environment:
+      DSN: env
+      DB_USER_NAME: env
+      DB_PASSWORD: env
+      DB_ADDR: env
+      DB_NAME: "where_child_bus"
+      PORT: "50051"
+      ModeDev: "true"
+    volumes:
+      - "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt" # ←重要
+

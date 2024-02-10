@@ -1,32 +1,24 @@
-# ビルドステージ
+# First stage: build environment
 FROM golang:1.21.5 AS builder
 
-WORKDIR /src
-COPY ./proto-gen ./proto-gen
-
-WORKDIR /src/
-COPY /go.mod /go.sum ./
+WORKDIR /srv/grpc
+COPY . .
+# .env ファイルをイメージ内にコピー
+COPY .env /
 RUN go mod download
 
-COPY . .
-RUN go build \
-    -tags timetzdata \
-    -o where-my-bus-backend \
-    ./cmd/server
+ARG VERS="3.11.4"
+ARG ARCH="linux-x86_64"
 
-# 実行ステージ
-FROM ubuntu:22.04
+RUN CGO_ENABLED=0 GOOS=linux \
+    go build -a -installsuffix cgo \
+    -o /go/bin/server \
+    github.com/GreenTeaProgrammers/WhereChildBus/backend/cmd/server
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        tzdata \
-        ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-ENV TZ Asia/Tokyo
+# Final stage: runtime environment
+FROM scratch
 
-WORKDIR /app
-COPY --from=builder /src/where-my-bus-backend .
+# Corrected COPY command to use 'builder' instead of 'build'
+COPY --from=builder /go/bin/server /server
 
-# gRPCサービスが使用するポート50051を公開
-EXPOSE 50051
-
-ENTRYPOINT [ "/app/where-my-bus-backend" ]
+ENTRYPOINT ["/server"]
