@@ -4,16 +4,17 @@ go 1.21.5
 
 require (
 	entgo.io/ent v0.13.0
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.4.0
 )
 
+require google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
+
 require (
-	github.com/golang/protobuf v1.5.2 // indirect
-	golang.org/x/net v0.14.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
-	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
-	google.golang.org/grpc v1.53.0 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
+	golang.org/x/net v0.18.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
+	google.golang.org/grpc v1.61.0
+	google.golang.org/protobuf v1.31.0
 )
 
 require (
@@ -31,6 +32,5 @@ require (
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	golang.org/x/exp v0.0.0-20240205201215-2c58cdc269a3
 	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
-	gorm.io/gorm v1.25.7
+	golang.org/x/text v0.14.0 // indirect
 )
