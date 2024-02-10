@@ -24,6 +24,7 @@ class Net(nn.Module):
         )
         # Flatten操作を明示的に
         self.flatten = nn.Flatten()
+        # TODO: 入力サイズを動的に取得する
         self.linear = nn.Linear(32 * 5 * 5, config["model"]["hidden_size"])
         self.classifier = nn.Linear(config["model"]["hidden_size"], num_classes)
 
@@ -34,7 +35,6 @@ class Net(nn.Module):
         x = self.conv2(x)
         x = self.relu(x)
         x = self.pool(x)
-        # Flatten層を使用
         x = self.flatten(x)
         x = self.linear(x)
         x = self.relu(x)
