@@ -5,8 +5,8 @@ import os
 
 
 # ヒストグラム均一化
-def equalizeHistRGB(src):
-    RGB = cv2.split(src)
+def equalizeHistRGB(image):
+    RGB = cv2.split(image)
     Blue   = RGB[0]
     Green = RGB[1]
     Red    = RGB[2]
@@ -17,111 +17,83 @@ def equalizeHistRGB(src):
     return hist_image
 
 # ガウシアンノイズ
-def addGaussianNoise(src):
-    row,col,ch= src.shape
+def addGaussianNoise(image):
+    row,col,ch= image.shape
     mean = 0
     var = 0.1
     sigma = 15
     gauss = np.random.normal(mean,sigma,(row,col,ch))
     gauss = gauss.reshape(row,col,ch)
-    noise_image = src + gauss
+    noise_image = image + gauss
     return noise_image
 
 # salt&pepperノイズ
-def addSaltPepperNoise(src):
-    row, col, ch = src.shape
+def addSaltPepperNoise(image):
+    row, col, ch = image.shape
     s_vs_p = 0.5
     amount = 0.004
-    out = np.copy(src)
+    out = np.copy(image)
 
     # Salt mode
-    num_salt = np.ceil(amount * src.size * s_vs_p)
+    num_salt = np.ceil(amount * image.size * s_vs_p)
     coords = [np.random.randint(0, i - 1, int(num_salt)) for i in (row, col)]
     out[coords[0], coords[1], :] = (255, 255, 255)
 
     # Pepper mode
-    num_pepper = np.ceil(amount * src.size * (1. - s_vs_p))
+    num_pepper = np.ceil(amount * image.size * (1. - s_vs_p))
     coords = [np.random.randint(0, i - 1, int(num_pepper)) for i in (row, col)]
     out[coords[0], coords[1], :] = (0, 0, 0)
 
     return out
 
-
-if __name__ == '__main__':
-    # ルックアップテーブルの生成
-    min_table = 50
-    max_table = 205
-    diff_table = max_table - min_table
-    gamma1 = 0.75
-    gamma2 = 1.5
-
-    LUT_HC = np.arange(256, dtype = 'uint8' )
-    LUT_LC = np.arange(256, dtype = 'uint8' )
-    LUT_G1 = np.arange(256, dtype = 'uint8' )
-    LUT_G2 = np.arange(256, dtype = 'uint8' )
-
-    LUTs = []
-
-    # 平滑化用
-    average_square = (10,10)
-
-    # ハイコントラストLUT作成
-    for i in range(0, min_table):
-        LUT_HC[i] = 0
-               
-    for i in range(min_table, max_table):
-        LUT_HC[i] = 255 * (i - min_table) / diff_table
-                                  
-    for i in range(max_table, 255):
-        LUT_HC[i] = 255
-
-    # その他LUT作成
-    for i in range(256):
-        LUT_LC[i] = min_table + i * (diff_table) / 255
-        LUT_G1[i] = 255 * pow(float(i) / 255, 1.0 / gamma1) 
-        LUT_G2[i] = 255 * pow(float(i) / 255, 1.0 / gamma2)
-
-    LUTs.append(LUT_HC)
-    LUTs.append(LUT_LC)
-    LUTs.append(LUT_G1)
-    LUTs.append(LUT_G2)
-
-    # 画像の読み込み
-    image_path = './src/face_detect_model/data/test2.jpg'
-
-    # 画像の読み込み
+def main():
+    
+    image_path = '/mnt/c/Users/takuy/Downloads/WhereChildBus/machine_learning/src/face_detect_model/data/Nanakusa.jpeg'
     img_src = cv2.imread(image_path)
     if img_src is None:
         print(f"画像ファイルが読み込めません: {image_path}")
-        sys.exit(1)  # 画像が読み込めない場合はプログラムを終了
-    trans_img = []
-    trans_img.append(img_src)
+        return
     
-    # LUT変換
-    for i, LUT in enumerate(LUTs):
-        trans_img.append( cv2.LUT(img_src, LUT))
+    # Define kernel size for blurring
+    average_square = (5, 5)
+    
+    # Define LUT for High Contrast
+    LUT_HC = np.array([0 if i < 128 else 255 for i in range(256)], dtype=np.uint8)
 
-    # 平滑化      
-    trans_img.append(cv2.blur(img_src, average_square))      
+    # Define LUT for Low Contrast
+    LUT_LC = np.array([i//2 + 128//2 for i in range(256)], dtype=np.uint8)
 
-    # ヒストグラム均一化
+    # Define LUT for Gamma 1 (increase brightness)
+    gamma1 = 0.5  # More than 1 will darken; less than 1 will brighten
+    LUT_G1 = np.array([((i / 255.0) ** gamma1) * 255 for i in np.arange(0, 256)]).astype("uint8")
+
+    # Define LUT for Gamma 2 (decrease brightness)
+    gamma2 = 2.0
+    LUT_G2 = np.array([((i / 255.0) ** gamma2) * 255 for i in np.arange(0, 256)]).astype("uint8")
+
+    # 画像の前処理と変換処理を行う
+    trans_img = [img_src]
+    # Assuming LUT_HC, LUT_LC, LUT_G1, and LUT_G2 are defined earlier in your script
+    trans_img += [cv2.LUT(img_src, LUT) for LUT in [LUT_HC, LUT_LC, LUT_G1, LUT_G2]]
+    trans_img.append(cv2.blur(img_src, average_square))
     trans_img.append(equalizeHistRGB(img_src))
-
-    # ノイズ付加
     trans_img.append(addGaussianNoise(img_src))
     trans_img.append(addSaltPepperNoise(img_src))
 
-    # 反転
-    flip_img = []
-    for img in trans_img:
-        flip_img.append(cv2.flip(img, 1))
+    # 画像の反転処理
+    flip_img = [cv2.flip(img, 1) for img in trans_img]
     trans_img.extend(flip_img)
 
-    # 保存
-    if not os.path.exists("trans_images"):
-        os.mkdir("trans_images")
+    # 処理後の画像を保存するディレクトリの確認と作成
+    save_dir = "trans_images"
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
     
-    base =  os.path.splitext(os.path.basename(sys.argv[1]))[0] + "_"
-    img_src.astype(np.float64)
+    # 処理後の画像を保存
+    base_name = os.path.splitext(os.path.basename(image_path))[0]
     for i, img in enumerate(trans_img):
-        cv2.imwrite("trans_images/" + base + str(i) + ".jpg" ,img) 
+        save_path = f"{save_dir}/{base_name}_{i}.jpg"
+        cv2.imwrite(save_path, img)
+
+if __name__ == '__main__':
+    main()
