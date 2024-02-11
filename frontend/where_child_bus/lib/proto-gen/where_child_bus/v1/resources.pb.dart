@@ -187,10 +187,11 @@ class Nursery extends $pb.GeneratedMessage {
 class NurseryResponse extends $pb.GeneratedMessage {
   factory NurseryResponse({
     $core.String? id,
-    $core.String? nurseryId,
+    $core.String? nurseryCode,
     $core.String? name,
-    $core.String? email,
+    $core.String? address,
     $core.String? phoneNumber,
+    $core.String? email,
     $0.Timestamp? createdAt,
     $0.Timestamp? updatedAt,
   }) {
@@ -198,17 +199,20 @@ class NurseryResponse extends $pb.GeneratedMessage {
     if (id != null) {
       $result.id = id;
     }
-    if (nurseryId != null) {
-      $result.nurseryId = nurseryId;
+    if (nurseryCode != null) {
+      $result.nurseryCode = nurseryCode;
     }
     if (name != null) {
       $result.name = name;
     }
-    if (email != null) {
-      $result.email = email;
+    if (address != null) {
+      $result.address = address;
     }
     if (phoneNumber != null) {
       $result.phoneNumber = phoneNumber;
+    }
+    if (email != null) {
+      $result.email = email;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -224,12 +228,13 @@ class NurseryResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
+    ..aOS(2, _omitFieldNames ? '' : 'nurseryCode')
     ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..aOS(4, _omitFieldNames ? '' : 'email')
+    ..aOS(4, _omitFieldNames ? '' : 'address')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
-    ..aOM<$0.Timestamp>(6, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
-    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'updatedAt', subBuilder: $0.Timestamp.create)
+    ..aOS(6, _omitFieldNames ? '' : 'email')
+    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
+    ..aOM<$0.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $0.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -264,13 +269,13 @@ class NurseryResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get nurseryId => $_getSZ(1);
+  $core.String get nurseryCode => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nurseryId($core.String v) { $_setString(1, v); }
+  set nurseryCode($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasNurseryId() => $_has(1);
+  $core.bool hasNurseryCode() => $_has(1);
   @$pb.TagNumber(2)
-  void clearNurseryId() => clearField(2);
+  void clearNurseryCode() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get name => $_getSZ(2);
@@ -282,13 +287,13 @@ class NurseryResponse extends $pb.GeneratedMessage {
   void clearName() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get email => $_getSZ(3);
+  $core.String get address => $_getSZ(3);
   @$pb.TagNumber(4)
-  set email($core.String v) { $_setString(3, v); }
+  set address($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasEmail() => $_has(3);
+  $core.bool hasAddress() => $_has(3);
   @$pb.TagNumber(4)
-  void clearEmail() => clearField(4);
+  void clearAddress() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get phoneNumber => $_getSZ(4);
@@ -299,28 +304,37 @@ class NurseryResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   void clearPhoneNumber() => clearField(5);
 
-  /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(6)
-  $0.Timestamp get createdAt => $_getN(5);
+  $core.String get email => $_getSZ(5);
   @$pb.TagNumber(6)
-  set createdAt($0.Timestamp v) { setField(6, v); }
+  set email($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasCreatedAt() => $_has(5);
+  $core.bool hasEmail() => $_has(5);
   @$pb.TagNumber(6)
-  void clearCreatedAt() => clearField(6);
-  @$pb.TagNumber(6)
-  $0.Timestamp ensureCreatedAt() => $_ensure(5);
+  void clearEmail() => clearField(6);
 
+  /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(7)
-  $0.Timestamp get updatedAt => $_getN(6);
+  $0.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set updatedAt($0.Timestamp v) { setField(7, v); }
+  set createdAt($0.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasUpdatedAt() => $_has(6);
+  $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
-  void clearUpdatedAt() => clearField(7);
+  void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $0.Timestamp ensureUpdatedAt() => $_ensure(6);
+  $0.Timestamp ensureCreatedAt() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  $0.Timestamp get updatedAt => $_getN(7);
+  @$pb.TagNumber(8)
+  set updatedAt($0.Timestamp v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasUpdatedAt() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearUpdatedAt() => clearField(8);
+  @$pb.TagNumber(8)
+  $0.Timestamp ensureUpdatedAt() => $_ensure(7);
 }
 
 class Guardian extends $pb.GeneratedMessage {
