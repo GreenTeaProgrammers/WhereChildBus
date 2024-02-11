@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomSheetWidget extends StatelessWidget {
-  final busStations = ["station1", "station2", "station3","station4","station5","station6",];
+  final busStations = ["station1", "station2", "station3","station4","station5","station6", "station7", "station8", "station7", "station7"];
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +16,13 @@ class BottomSheetWidget extends StatelessWidget {
       ),
       child: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // titleText(),
             header("tesaaaaaaaaaaaaaaaaaaaaaaaaaa", "test"),
-            stationsList(context, busStations),
+            Expanded(
+              child: stationsList(context, busStations)
+            ),
             boardingConfirmButton(context),
           ],
         )
@@ -40,17 +43,21 @@ class BottomSheetWidget extends StatelessWidget {
     );
   }
 
-  
-
   //将来的にはStationのListを参照
   Widget stationsList(BuildContext context, busStationsList) {
     String viewText = "";
     for (var station in busStationsList) {
       viewText += station + "\n";
     }
-    return Text(
-      viewText,
-
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(50, 10, 0, 0),
+      child: SizedBox(
+        child: Text(
+          viewText,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
     );
   }
 
@@ -107,19 +114,24 @@ class BottomSheetWidget extends StatelessWidget {
   Widget boardingConfirmButton(BuildContext context) {
     const double fontSize = 20;    
 
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.6,
-        height: fontSize * 2,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-        ),
-        child: const Text(
-          "乗客状況",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: fontSize,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: fontSize * 2,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+            ),
+            child: const Text(
+              "乗客状況",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: fontSize,
+              ),
+            ),
           ),
         ),
       ),
