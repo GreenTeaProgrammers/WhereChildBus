@@ -18,18 +18,50 @@ class BottomSheetWidget extends StatelessWidget {
           topRight: Radius.circular(10),
         ),
       ),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // titleText(),
-            modalHeader(busName, "test"),
-            Expanded(
-              child: stationsList(context, busStations)
-            ),
-            boardingConfirmButton(context),
-          ],
-        )
+      child: Stack(
+        children: [
+          modalBody(context),
+          editButton(),
+        ]
+      ),
+    );
+  }
+
+  Widget modalBody(BuildContext context) {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // titleText(),
+          modalHeader(busName, "test"),
+          Expanded(
+            child: stationsList(context, busStations)
+          ),
+          boardingConfirmButton(context),
+        ],
+      )
+    );
+  }
+
+  Widget editButton() {
+    return Align(
+      alignment: const Alignment(1, -1),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey.shade300,
+            elevation: 0,
+          ),
+          child: const Text(
+            "Edit",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            )
+          ),
+        ),
       ),
     );
   }
