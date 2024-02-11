@@ -91,6 +91,10 @@ class _StudentListPageState extends State<StudentListPage> {
     ]);
   }
 
+  Widget detail(String element) {
+    return Text(element, style: TextStyle(color: Colors.black, fontSize: 18));
+  }
+
   void showBottomSheet(BuildContext context, int index) {
     showModalBottomSheet(
         context: context,
@@ -127,9 +131,12 @@ class _StudentListPageState extends State<StudentListPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text(group[index]),
-                        Text("利用コース: "),
-                        Text("乗降場所: ")
+                        detail("年齢: "),
+                        detail("クラス: ${group[index]}"),
+                        detail("保護者氏名: "),
+                        detail("保護者連絡先: "),
+                        detail("利用コース: "),
+                        detail("乗降場所: "),
                       ],
                     ),
                   ),
