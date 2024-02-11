@@ -42,16 +42,16 @@ func (gc *GuardianCreate) SetName(s string) *GuardianCreate {
 	return gc
 }
 
-// SetPhone sets the "phone" field.
-func (gc *GuardianCreate) SetPhone(s string) *GuardianCreate {
-	gc.mutation.SetPhone(s)
+// SetPhoneNumber sets the "phone_number" field.
+func (gc *GuardianCreate) SetPhoneNumber(s string) *GuardianCreate {
+	gc.mutation.SetPhoneNumber(s)
 	return gc
 }
 
-// SetNillablePhone sets the "phone" field if the given value is not nil.
-func (gc *GuardianCreate) SetNillablePhone(s *string) *GuardianCreate {
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (gc *GuardianCreate) SetNillablePhoneNumber(s *string) *GuardianCreate {
 	if s != nil {
-		gc.SetPhone(*s)
+		gc.SetPhoneNumber(*s)
 	}
 	return gc
 }
@@ -264,9 +264,9 @@ func (gc *GuardianCreate) createSpec() (*Guardian, *sqlgraph.CreateSpec) {
 		_spec.SetField(guardian.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := gc.mutation.Phone(); ok {
-		_spec.SetField(guardian.FieldPhone, field.TypeString, value)
-		_node.Phone = value
+	if value, ok := gc.mutation.PhoneNumber(); ok {
+		_spec.SetField(guardian.FieldPhoneNumber, field.TypeString, value)
+		_node.PhoneNumber = value
 	}
 	if value, ok := gc.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)

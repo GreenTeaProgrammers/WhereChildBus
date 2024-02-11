@@ -157,7 +157,7 @@ var (
 		{Name: "email", Type: field.TypeString},
 		{Name: "encrypted_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
-		{Name: "phone", Type: field.TypeString, Nullable: true},
+		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_nursery", Type: field.TypeUUID, Nullable: true},

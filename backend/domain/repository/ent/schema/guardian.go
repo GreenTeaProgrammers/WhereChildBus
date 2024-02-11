@@ -21,7 +21,7 @@ func (Guardian) Fields() []ent.Field {
 		field.String("email"),
 		field.String("encrypted_password"),
 		field.String("name"),
-		field.String("phone").Optional(),
+		field.String("phone_number").Optional(),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}

@@ -21,8 +21,8 @@ const (
 	FieldEncryptedPassword = "encrypted_password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldPhone holds the string denoting the phone field in the database.
-	FieldPhone = "phone"
+	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
+	FieldPhoneNumber = "phone_number"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -64,7 +64,7 @@ var Columns = []string{
 	FieldEmail,
 	FieldEncryptedPassword,
 	FieldName,
-	FieldPhone,
+	FieldPhoneNumber,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -124,9 +124,9 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByPhone orders the results by the phone field.
-func ByPhone(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPhone, opts...).ToFunc()
+// ByPhoneNumber orders the results by the phone_number field.
+func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhoneNumber, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

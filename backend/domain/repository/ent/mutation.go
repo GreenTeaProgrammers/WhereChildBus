@@ -4156,7 +4156,7 @@ type GuardianMutation struct {
 	email              *string
 	encrypted_password *string
 	name               *string
-	phone              *string
+	phone_number       *string
 	created_at         *time.Time
 	updated_at         *time.Time
 	clearedFields      map[string]struct{}
@@ -4384,53 +4384,53 @@ func (m *GuardianMutation) ResetName() {
 	m.name = nil
 }
 
-// SetPhone sets the "phone" field.
-func (m *GuardianMutation) SetPhone(s string) {
-	m.phone = &s
+// SetPhoneNumber sets the "phone_number" field.
+func (m *GuardianMutation) SetPhoneNumber(s string) {
+	m.phone_number = &s
 }
 
-// Phone returns the value of the "phone" field in the mutation.
-func (m *GuardianMutation) Phone() (r string, exists bool) {
-	v := m.phone
+// PhoneNumber returns the value of the "phone_number" field in the mutation.
+func (m *GuardianMutation) PhoneNumber() (r string, exists bool) {
+	v := m.phone_number
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldPhone returns the old "phone" field's value of the Guardian entity.
+// OldPhoneNumber returns the old "phone_number" field's value of the Guardian entity.
 // If the Guardian object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GuardianMutation) OldPhone(ctx context.Context) (v string, err error) {
+func (m *GuardianMutation) OldPhoneNumber(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPhone is only allowed on UpdateOne operations")
+		return v, errors.New("OldPhoneNumber is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPhone requires an ID field in the mutation")
+		return v, errors.New("OldPhoneNumber requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPhone: %w", err)
+		return v, fmt.Errorf("querying old value for OldPhoneNumber: %w", err)
 	}
-	return oldValue.Phone, nil
+	return oldValue.PhoneNumber, nil
 }
 
-// ClearPhone clears the value of the "phone" field.
-func (m *GuardianMutation) ClearPhone() {
-	m.phone = nil
-	m.clearedFields[guardian.FieldPhone] = struct{}{}
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (m *GuardianMutation) ClearPhoneNumber() {
+	m.phone_number = nil
+	m.clearedFields[guardian.FieldPhoneNumber] = struct{}{}
 }
 
-// PhoneCleared returns if the "phone" field was cleared in this mutation.
-func (m *GuardianMutation) PhoneCleared() bool {
-	_, ok := m.clearedFields[guardian.FieldPhone]
+// PhoneNumberCleared returns if the "phone_number" field was cleared in this mutation.
+func (m *GuardianMutation) PhoneNumberCleared() bool {
+	_, ok := m.clearedFields[guardian.FieldPhoneNumber]
 	return ok
 }
 
-// ResetPhone resets all changes to the "phone" field.
-func (m *GuardianMutation) ResetPhone() {
-	m.phone = nil
-	delete(m.clearedFields, guardian.FieldPhone)
+// ResetPhoneNumber resets all changes to the "phone_number" field.
+func (m *GuardianMutation) ResetPhoneNumber() {
+	m.phone_number = nil
+	delete(m.clearedFields, guardian.FieldPhoneNumber)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -4681,8 +4681,8 @@ func (m *GuardianMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, guardian.FieldName)
 	}
-	if m.phone != nil {
-		fields = append(fields, guardian.FieldPhone)
+	if m.phone_number != nil {
+		fields = append(fields, guardian.FieldPhoneNumber)
 	}
 	if m.created_at != nil {
 		fields = append(fields, guardian.FieldCreatedAt)
@@ -4704,8 +4704,8 @@ func (m *GuardianMutation) Field(name string) (ent.Value, bool) {
 		return m.EncryptedPassword()
 	case guardian.FieldName:
 		return m.Name()
-	case guardian.FieldPhone:
-		return m.Phone()
+	case guardian.FieldPhoneNumber:
+		return m.PhoneNumber()
 	case guardian.FieldCreatedAt:
 		return m.CreatedAt()
 	case guardian.FieldUpdatedAt:
@@ -4725,8 +4725,8 @@ func (m *GuardianMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldEncryptedPassword(ctx)
 	case guardian.FieldName:
 		return m.OldName(ctx)
-	case guardian.FieldPhone:
-		return m.OldPhone(ctx)
+	case guardian.FieldPhoneNumber:
+		return m.OldPhoneNumber(ctx)
 	case guardian.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case guardian.FieldUpdatedAt:
@@ -4761,12 +4761,12 @@ func (m *GuardianMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
-	case guardian.FieldPhone:
+	case guardian.FieldPhoneNumber:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetPhone(v)
+		m.SetPhoneNumber(v)
 		return nil
 	case guardian.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -4812,8 +4812,8 @@ func (m *GuardianMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *GuardianMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(guardian.FieldPhone) {
-		fields = append(fields, guardian.FieldPhone)
+	if m.FieldCleared(guardian.FieldPhoneNumber) {
+		fields = append(fields, guardian.FieldPhoneNumber)
 	}
 	return fields
 }
@@ -4829,8 +4829,8 @@ func (m *GuardianMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *GuardianMutation) ClearField(name string) error {
 	switch name {
-	case guardian.FieldPhone:
-		m.ClearPhone()
+	case guardian.FieldPhoneNumber:
+		m.ClearPhoneNumber()
 		return nil
 	}
 	return fmt.Errorf("unknown Guardian nullable field %s", name)
@@ -4849,8 +4849,8 @@ func (m *GuardianMutation) ResetField(name string) error {
 	case guardian.FieldName:
 		m.ResetName()
 		return nil
-	case guardian.FieldPhone:
-		m.ResetPhone()
+	case guardian.FieldPhoneNumber:
+		m.ResetPhoneNumber()
 		return nil
 	case guardian.FieldCreatedAt:
 		m.ResetCreatedAt()
