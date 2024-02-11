@@ -1,7 +1,7 @@
 package healthcheck
 
 import (
-	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus"
+	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 )
 
 type Interactor struct{}
