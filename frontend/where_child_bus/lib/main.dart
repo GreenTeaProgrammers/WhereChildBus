@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
-
 import 'package:where_child_bus/util/health_check.dart';
+import 'package:where_child_bus/config/config.dart';
 
-void main() {
-  createHoge();
-  // runApp(const MyApp());
+void main() async {
+  await appConfig.loadConfig();
+  await serviceHealthCheck();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
