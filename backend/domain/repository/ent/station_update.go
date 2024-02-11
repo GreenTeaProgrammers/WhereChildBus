@@ -106,24 +106,24 @@ func (su *StationUpdate) AddMorningOrder(i int) *StationUpdate {
 	return su
 }
 
-// SetEveningOrder sets the "evening_order" field.
-func (su *StationUpdate) SetEveningOrder(i int) *StationUpdate {
-	su.mutation.ResetEveningOrder()
-	su.mutation.SetEveningOrder(i)
+// SetAfternoonOrder sets the "afternoon_order" field.
+func (su *StationUpdate) SetAfternoonOrder(i int) *StationUpdate {
+	su.mutation.ResetAfternoonOrder()
+	su.mutation.SetAfternoonOrder(i)
 	return su
 }
 
-// SetNillableEveningOrder sets the "evening_order" field if the given value is not nil.
-func (su *StationUpdate) SetNillableEveningOrder(i *int) *StationUpdate {
+// SetNillableAfternoonOrder sets the "afternoon_order" field if the given value is not nil.
+func (su *StationUpdate) SetNillableAfternoonOrder(i *int) *StationUpdate {
 	if i != nil {
-		su.SetEveningOrder(*i)
+		su.SetAfternoonOrder(*i)
 	}
 	return su
 }
 
-// AddEveningOrder adds i to the "evening_order" field.
-func (su *StationUpdate) AddEveningOrder(i int) *StationUpdate {
-	su.mutation.AddEveningOrder(i)
+// AddAfternoonOrder adds i to the "afternoon_order" field.
+func (su *StationUpdate) AddAfternoonOrder(i int) *StationUpdate {
+	su.mutation.AddAfternoonOrder(i)
 	return su
 }
 
@@ -282,11 +282,11 @@ func (su *StationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.AddedMorningOrder(); ok {
 		_spec.AddField(station.FieldMorningOrder, field.TypeInt, value)
 	}
-	if value, ok := su.mutation.EveningOrder(); ok {
-		_spec.SetField(station.FieldEveningOrder, field.TypeInt, value)
+	if value, ok := su.mutation.AfternoonOrder(); ok {
+		_spec.SetField(station.FieldAfternoonOrder, field.TypeInt, value)
 	}
-	if value, ok := su.mutation.AddedEveningOrder(); ok {
-		_spec.AddField(station.FieldEveningOrder, field.TypeInt, value)
+	if value, ok := su.mutation.AddedAfternoonOrder(); ok {
+		_spec.AddField(station.FieldAfternoonOrder, field.TypeInt, value)
 	}
 	if value, ok := su.mutation.CreatedAt(); ok {
 		_spec.SetField(station.FieldCreatedAt, field.TypeTime, value)
@@ -463,24 +463,24 @@ func (suo *StationUpdateOne) AddMorningOrder(i int) *StationUpdateOne {
 	return suo
 }
 
-// SetEveningOrder sets the "evening_order" field.
-func (suo *StationUpdateOne) SetEveningOrder(i int) *StationUpdateOne {
-	suo.mutation.ResetEveningOrder()
-	suo.mutation.SetEveningOrder(i)
+// SetAfternoonOrder sets the "afternoon_order" field.
+func (suo *StationUpdateOne) SetAfternoonOrder(i int) *StationUpdateOne {
+	suo.mutation.ResetAfternoonOrder()
+	suo.mutation.SetAfternoonOrder(i)
 	return suo
 }
 
-// SetNillableEveningOrder sets the "evening_order" field if the given value is not nil.
-func (suo *StationUpdateOne) SetNillableEveningOrder(i *int) *StationUpdateOne {
+// SetNillableAfternoonOrder sets the "afternoon_order" field if the given value is not nil.
+func (suo *StationUpdateOne) SetNillableAfternoonOrder(i *int) *StationUpdateOne {
 	if i != nil {
-		suo.SetEveningOrder(*i)
+		suo.SetAfternoonOrder(*i)
 	}
 	return suo
 }
 
-// AddEveningOrder adds i to the "evening_order" field.
-func (suo *StationUpdateOne) AddEveningOrder(i int) *StationUpdateOne {
-	suo.mutation.AddEveningOrder(i)
+// AddAfternoonOrder adds i to the "afternoon_order" field.
+func (suo *StationUpdateOne) AddAfternoonOrder(i int) *StationUpdateOne {
+	suo.mutation.AddAfternoonOrder(i)
 	return suo
 }
 
@@ -669,11 +669,11 @@ func (suo *StationUpdateOne) sqlSave(ctx context.Context) (_node *Station, err e
 	if value, ok := suo.mutation.AddedMorningOrder(); ok {
 		_spec.AddField(station.FieldMorningOrder, field.TypeInt, value)
 	}
-	if value, ok := suo.mutation.EveningOrder(); ok {
-		_spec.SetField(station.FieldEveningOrder, field.TypeInt, value)
+	if value, ok := suo.mutation.AfternoonOrder(); ok {
+		_spec.SetField(station.FieldAfternoonOrder, field.TypeInt, value)
 	}
-	if value, ok := suo.mutation.AddedEveningOrder(); ok {
-		_spec.AddField(station.FieldEveningOrder, field.TypeInt, value)
+	if value, ok := suo.mutation.AddedAfternoonOrder(); ok {
+		_spec.AddField(station.FieldAfternoonOrder, field.TypeInt, value)
 	}
 	if value, ok := suo.mutation.CreatedAt(); ok {
 		_spec.SetField(station.FieldCreatedAt, field.TypeTime, value)

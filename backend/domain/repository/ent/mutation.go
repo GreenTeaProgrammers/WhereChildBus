@@ -5995,28 +5995,28 @@ func (m *NurseryMutation) ResetEdge(name string) error {
 // StationMutation represents an operation that mutates the Station nodes in the graph.
 type StationMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	latitude         *float64
-	addlatitude      *float64
-	longitude        *float64
-	addlongitude     *float64
-	morning_order    *int
-	addmorning_order *int
-	evening_order    *int
-	addevening_order *int
-	created_at       *time.Time
-	updated_at       *time.Time
-	clearedFields    map[string]struct{}
-	guardian         *uuid.UUID
-	clearedguardian  bool
-	bus              map[uuid.UUID]struct{}
-	removedbus       map[uuid.UUID]struct{}
-	clearedbus       bool
-	done             bool
-	oldValue         func(context.Context) (*Station, error)
-	predicates       []predicate.Station
+	op                 Op
+	typ                string
+	id                 *uuid.UUID
+	latitude           *float64
+	addlatitude        *float64
+	longitude          *float64
+	addlongitude       *float64
+	morning_order      *int
+	addmorning_order   *int
+	afternoon_order    *int
+	addafternoon_order *int
+	created_at         *time.Time
+	updated_at         *time.Time
+	clearedFields      map[string]struct{}
+	guardian           *uuid.UUID
+	clearedguardian    bool
+	bus                map[uuid.UUID]struct{}
+	removedbus         map[uuid.UUID]struct{}
+	clearedbus         bool
+	done               bool
+	oldValue           func(context.Context) (*Station, error)
+	predicates         []predicate.Station
 }
 
 var _ ent.Mutation = (*StationMutation)(nil)
@@ -6319,60 +6319,60 @@ func (m *StationMutation) ResetMorningOrder() {
 	m.addmorning_order = nil
 }
 
-// SetEveningOrder sets the "evening_order" field.
-func (m *StationMutation) SetEveningOrder(i int) {
-	m.evening_order = &i
-	m.addevening_order = nil
+// SetAfternoonOrder sets the "afternoon_order" field.
+func (m *StationMutation) SetAfternoonOrder(i int) {
+	m.afternoon_order = &i
+	m.addafternoon_order = nil
 }
 
-// EveningOrder returns the value of the "evening_order" field in the mutation.
-func (m *StationMutation) EveningOrder() (r int, exists bool) {
-	v := m.evening_order
+// AfternoonOrder returns the value of the "afternoon_order" field in the mutation.
+func (m *StationMutation) AfternoonOrder() (r int, exists bool) {
+	v := m.afternoon_order
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEveningOrder returns the old "evening_order" field's value of the Station entity.
+// OldAfternoonOrder returns the old "afternoon_order" field's value of the Station entity.
 // If the Station object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StationMutation) OldEveningOrder(ctx context.Context) (v int, err error) {
+func (m *StationMutation) OldAfternoonOrder(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEveningOrder is only allowed on UpdateOne operations")
+		return v, errors.New("OldAfternoonOrder is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEveningOrder requires an ID field in the mutation")
+		return v, errors.New("OldAfternoonOrder requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEveningOrder: %w", err)
+		return v, fmt.Errorf("querying old value for OldAfternoonOrder: %w", err)
 	}
-	return oldValue.EveningOrder, nil
+	return oldValue.AfternoonOrder, nil
 }
 
-// AddEveningOrder adds i to the "evening_order" field.
-func (m *StationMutation) AddEveningOrder(i int) {
-	if m.addevening_order != nil {
-		*m.addevening_order += i
+// AddAfternoonOrder adds i to the "afternoon_order" field.
+func (m *StationMutation) AddAfternoonOrder(i int) {
+	if m.addafternoon_order != nil {
+		*m.addafternoon_order += i
 	} else {
-		m.addevening_order = &i
+		m.addafternoon_order = &i
 	}
 }
 
-// AddedEveningOrder returns the value that was added to the "evening_order" field in this mutation.
-func (m *StationMutation) AddedEveningOrder() (r int, exists bool) {
-	v := m.addevening_order
+// AddedAfternoonOrder returns the value that was added to the "afternoon_order" field in this mutation.
+func (m *StationMutation) AddedAfternoonOrder() (r int, exists bool) {
+	v := m.addafternoon_order
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetEveningOrder resets all changes to the "evening_order" field.
-func (m *StationMutation) ResetEveningOrder() {
-	m.evening_order = nil
-	m.addevening_order = nil
+// ResetAfternoonOrder resets all changes to the "afternoon_order" field.
+func (m *StationMutation) ResetAfternoonOrder() {
+	m.afternoon_order = nil
+	m.addafternoon_order = nil
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -6584,8 +6584,8 @@ func (m *StationMutation) Fields() []string {
 	if m.morning_order != nil {
 		fields = append(fields, station.FieldMorningOrder)
 	}
-	if m.evening_order != nil {
-		fields = append(fields, station.FieldEveningOrder)
+	if m.afternoon_order != nil {
+		fields = append(fields, station.FieldAfternoonOrder)
 	}
 	if m.created_at != nil {
 		fields = append(fields, station.FieldCreatedAt)
@@ -6607,8 +6607,8 @@ func (m *StationMutation) Field(name string) (ent.Value, bool) {
 		return m.Longitude()
 	case station.FieldMorningOrder:
 		return m.MorningOrder()
-	case station.FieldEveningOrder:
-		return m.EveningOrder()
+	case station.FieldAfternoonOrder:
+		return m.AfternoonOrder()
 	case station.FieldCreatedAt:
 		return m.CreatedAt()
 	case station.FieldUpdatedAt:
@@ -6628,8 +6628,8 @@ func (m *StationMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldLongitude(ctx)
 	case station.FieldMorningOrder:
 		return m.OldMorningOrder(ctx)
-	case station.FieldEveningOrder:
-		return m.OldEveningOrder(ctx)
+	case station.FieldAfternoonOrder:
+		return m.OldAfternoonOrder(ctx)
 	case station.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case station.FieldUpdatedAt:
@@ -6664,12 +6664,12 @@ func (m *StationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMorningOrder(v)
 		return nil
-	case station.FieldEveningOrder:
+	case station.FieldAfternoonOrder:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEveningOrder(v)
+		m.SetAfternoonOrder(v)
 		return nil
 	case station.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -6702,8 +6702,8 @@ func (m *StationMutation) AddedFields() []string {
 	if m.addmorning_order != nil {
 		fields = append(fields, station.FieldMorningOrder)
 	}
-	if m.addevening_order != nil {
-		fields = append(fields, station.FieldEveningOrder)
+	if m.addafternoon_order != nil {
+		fields = append(fields, station.FieldAfternoonOrder)
 	}
 	return fields
 }
@@ -6719,8 +6719,8 @@ func (m *StationMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedLongitude()
 	case station.FieldMorningOrder:
 		return m.AddedMorningOrder()
-	case station.FieldEveningOrder:
-		return m.AddedEveningOrder()
+	case station.FieldAfternoonOrder:
+		return m.AddedAfternoonOrder()
 	}
 	return nil, false
 }
@@ -6751,12 +6751,12 @@ func (m *StationMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddMorningOrder(v)
 		return nil
-	case station.FieldEveningOrder:
+	case station.FieldAfternoonOrder:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddEveningOrder(v)
+		m.AddAfternoonOrder(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Station numeric field %s", name)
@@ -6809,8 +6809,8 @@ func (m *StationMutation) ResetField(name string) error {
 	case station.FieldMorningOrder:
 		m.ResetMorningOrder()
 		return nil
-	case station.FieldEveningOrder:
-		m.ResetEveningOrder()
+	case station.FieldAfternoonOrder:
+		m.ResetAfternoonOrder()
 		return nil
 	case station.FieldCreatedAt:
 		m.ResetCreatedAt()

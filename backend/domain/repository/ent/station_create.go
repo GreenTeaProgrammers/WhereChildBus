@@ -57,9 +57,9 @@ func (sc *StationCreate) SetMorningOrder(i int) *StationCreate {
 	return sc
 }
 
-// SetEveningOrder sets the "evening_order" field.
-func (sc *StationCreate) SetEveningOrder(i int) *StationCreate {
-	sc.mutation.SetEveningOrder(i)
+// SetAfternoonOrder sets the "afternoon_order" field.
+func (sc *StationCreate) SetAfternoonOrder(i int) *StationCreate {
+	sc.mutation.SetAfternoonOrder(i)
 	return sc
 }
 
@@ -193,8 +193,8 @@ func (sc *StationCreate) check() error {
 	if _, ok := sc.mutation.MorningOrder(); !ok {
 		return &ValidationError{Name: "morning_order", err: errors.New(`ent: missing required field "Station.morning_order"`)}
 	}
-	if _, ok := sc.mutation.EveningOrder(); !ok {
-		return &ValidationError{Name: "evening_order", err: errors.New(`ent: missing required field "Station.evening_order"`)}
+	if _, ok := sc.mutation.AfternoonOrder(); !ok {
+		return &ValidationError{Name: "afternoon_order", err: errors.New(`ent: missing required field "Station.afternoon_order"`)}
 	}
 	if _, ok := sc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Station.created_at"`)}
@@ -249,9 +249,9 @@ func (sc *StationCreate) createSpec() (*Station, *sqlgraph.CreateSpec) {
 		_spec.SetField(station.FieldMorningOrder, field.TypeInt, value)
 		_node.MorningOrder = value
 	}
-	if value, ok := sc.mutation.EveningOrder(); ok {
-		_spec.SetField(station.FieldEveningOrder, field.TypeInt, value)
-		_node.EveningOrder = value
+	if value, ok := sc.mutation.AfternoonOrder(); ok {
+		_spec.SetField(station.FieldAfternoonOrder, field.TypeInt, value)
+		_node.AfternoonOrder = value
 	}
 	if value, ok := sc.mutation.CreatedAt(); ok {
 		_spec.SetField(station.FieldCreatedAt, field.TypeTime, value)

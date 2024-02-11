@@ -26,7 +26,7 @@ type Station struct {
 	// 朝のバス停の順番
 	MorningOrder int `json:"morning_order,omitempty"`
 	// 帰りのバス停の順番
-	EveningOrder int `json:"evening_order,omitempty"`
+	AfternoonOrder int `json:"afternoon_order,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -78,7 +78,7 @@ func (*Station) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case station.FieldLatitude, station.FieldLongitude:
 			values[i] = new(sql.NullFloat64)
-		case station.FieldMorningOrder, station.FieldEveningOrder:
+		case station.FieldMorningOrder, station.FieldAfternoonOrder:
 			values[i] = new(sql.NullInt64)
 		case station.FieldCreatedAt, station.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -125,11 +125,11 @@ func (s *Station) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.MorningOrder = int(value.Int64)
 			}
-		case station.FieldEveningOrder:
+		case station.FieldAfternoonOrder:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field evening_order", values[i])
+				return fmt.Errorf("unexpected type %T for field afternoon_order", values[i])
 			} else if value.Valid {
-				s.EveningOrder = int(value.Int64)
+				s.AfternoonOrder = int(value.Int64)
 			}
 		case station.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -205,8 +205,8 @@ func (s *Station) String() string {
 	builder.WriteString("morning_order=")
 	builder.WriteString(fmt.Sprintf("%v", s.MorningOrder))
 	builder.WriteString(", ")
-	builder.WriteString("evening_order=")
-	builder.WriteString(fmt.Sprintf("%v", s.EveningOrder))
+	builder.WriteString("afternoon_order=")
+	builder.WriteString(fmt.Sprintf("%v", s.AfternoonOrder))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(s.CreatedAt.Format(time.ANSIC))

@@ -21,7 +21,7 @@ func (Station) Fields() []ent.Field {
 		field.Float("latitude").Optional(),
 		field.Float("longitude").Optional(),
 		field.Int("morning_order").Comment("朝のバス停の順番"),
-		field.Int("evening_order").Comment("帰りのバス停の順番"),
+		field.Int("afternoon_order").Comment("帰りのバス停の順番"),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}

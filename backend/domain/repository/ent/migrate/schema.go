@@ -200,7 +200,7 @@ var (
 		{Name: "latitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "longitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "morning_order", Type: field.TypeInt},
-		{Name: "evening_order", Type: field.TypeInt},
+		{Name: "afternoon_order", Type: field.TypeInt},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_station", Type: field.TypeUUID, Unique: true, Nullable: true},
