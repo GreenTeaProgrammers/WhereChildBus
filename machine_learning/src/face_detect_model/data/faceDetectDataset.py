@@ -1,4 +1,5 @@
 import torch
+import torchvision.transforms.functional as TF
 from torch.utils.data import Dataset
 import os
 import cv2
@@ -7,31 +8,45 @@ import cv2
 class FaceDetectDataset(Dataset):
     def __init__(self, config):
         self.data_dir = config["dataset"]["root_path"]
-        self.data = []
+        self.face_data = []
         self.label_name_dict = {}
         name_label_dict = {}
         self.label_num = 0
 
-        for file in os.listdir(self.data_dir):
-            file_path = os.path.join(self.data_dir, file)
-            name = file.split("-")[0]
-            image = cv2.imread(file_path)
-            one_data = [torch.Tensor(self.label_num), image]
-            self.data.append(one_data)
+        for file_name in os.listdir(self.data_dir):
+            # macOS環境におけるDS_Storeなどのファイルをスキップ
+            if os.path.splitext(file_name)[1][1:] != "png":
+                continue
 
-            if name_label_dict.get(name) is None:
-                self.label_name_dict[self.label_num] = name
-                name_label_dict[name] = self.label_num
+            file_path = os.path.join(self.data_dir, file_name)
+            people_name = file_name.split("-")[0]
+
+            image = cv2.imread(file_path)
+            image_tensor = TF.to_tensor(image)
+
+            # 人物名とラベルの対応を辞書に保存
+            if name_label_dict.get(people_name) is None:
+                self.label_name_dict[self.label_num] = people_name
+                name_label_dict[people_name] = self.label_num
                 self.label_num += 1
 
+            label_img_data = (
+                torch.tensor(name_label_dict[people_name], dtype=torch.int64),
+                image_tensor,
+            )
+            self.face_data.append(label_img_data)
+
     def __len__(self):
-        return len(self.data)
+        return len(self.face_data)
 
     def __getitem__(self, idx):
-        return self.data[idx]
+        return self.face_data[idx]
 
     def get_label_name_dict(self):
         return self.label_name_dict
 
     def get_label_num(self):
         return self.label_num
+
+    def get_image_shape(self):
+        return self.face_data[0][1].shape
