@@ -59,6 +59,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--mode", type=str, required=True, choices=["train", "test"])
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
     with open(args.config, "r") as f:
