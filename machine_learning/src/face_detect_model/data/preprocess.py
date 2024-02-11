@@ -3,6 +3,15 @@ import numpy as np
 import sys
 import os
 
+def define_luts():
+    # High Contrast LUT
+    LUT_HC = np.array([0 if i < 128 else 255 for i in range(256)], dtype=np.uint8)
+    # Low Contrast LUT
+    LUT_LC = np.array([i // 2 + 128 // 2 for i in range(256)], dtype=np.uint8)
+    # Gamma Correction LUTs
+    LUT_G1 = np.array([((i / 255.0) ** 0.5) * 255 for i in np.arange(0, 256)]).astype("uint8")
+    LUT_G2 = np.array([((i / 255.0) ** 2.0) * 255 for i in np.arange(0, 256)]).astype("uint8")
+    return LUT_HC, LUT_LC, LUT_G1, LUT_G2
 
 # ヒストグラム均一化
 def equalizeHistRGB(image):
@@ -47,49 +56,33 @@ def addSaltPepperNoise(image):
     return out
 
 def main():
-    
-    image_path = '/mnt/c/Users/takuy/Downloads/WhereChildBus/machine_learning/src/face_detect_model/data/Nanakusa.jpeg'
+    image_path = 'src/face_detect_model/data/Nanakusa.jpeg'
     img_src = cv2.imread(image_path)
     if img_src is None:
         print(f"画像ファイルが読み込めません: {image_path}")
         return
     
-    # Define kernel size for blurring
-    average_square = (5, 5)
+    # LUTの定義
+    LUT_HC, LUT_LC, LUT_G1, LUT_G2 = define_luts()
     
-    # Define LUT for High Contrast
-    LUT_HC = np.array([0 if i < 128 else 255 for i in range(256)], dtype=np.uint8)
-
-    # Define LUT for Low Contrast
-    LUT_LC = np.array([i//2 + 128//2 for i in range(256)], dtype=np.uint8)
-
-    # Define LUT for Gamma 1 (increase brightness)
-    gamma1 = 0.5  # More than 1 will darken; less than 1 will brighten
-    LUT_G1 = np.array([((i / 255.0) ** gamma1) * 255 for i in np.arange(0, 256)]).astype("uint8")
-
-    # Define LUT for Gamma 2 (decrease brightness)
-    gamma2 = 2.0
-    LUT_G2 = np.array([((i / 255.0) ** gamma2) * 255 for i in np.arange(0, 256)]).astype("uint8")
-
-    # 画像の前処理と変換処理を行う
+    # 画像の前処理
     trans_img = [img_src]
-    # Assuming LUT_HC, LUT_LC, LUT_G1, and LUT_G2 are defined earlier in your script
     trans_img += [cv2.LUT(img_src, LUT) for LUT in [LUT_HC, LUT_LC, LUT_G1, LUT_G2]]
-    trans_img.append(cv2.blur(img_src, average_square))
+    trans_img.append(cv2.blur(img_src, (5, 5)))
     trans_img.append(equalizeHistRGB(img_src))
     trans_img.append(addGaussianNoise(img_src))
     trans_img.append(addSaltPepperNoise(img_src))
-
+    
     # 画像の反転処理
     flip_img = [cv2.flip(img, 1) for img in trans_img]
     trans_img.extend(flip_img)
-
-    # 処理後の画像を保存するディレクトリの確認と作成
+    
+    # 処理後の画像を保存するディレクトリの定義と作成
     save_dir = "trans_images"
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     
-    # 処理後の画像を保存
+    # 画像の保存
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     for i, img in enumerate(trans_img):
         save_path = f"{save_dir}/{base_name}_{i}.jpg"
