@@ -184,8 +184,8 @@ class Nursery extends $pb.GeneratedMessage {
   $0.Timestamp ensureUpdatedAt() => $_ensure(8);
 }
 
-class NurseryReponse extends $pb.GeneratedMessage {
-  factory NurseryReponse({
+class NurseryResponse extends $pb.GeneratedMessage {
+  factory NurseryResponse({
     $core.String? id,
     $core.String? nurseryId,
     $core.String? name,
@@ -218,11 +218,11 @@ class NurseryReponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  NurseryReponse._() : super();
-  factory NurseryReponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory NurseryReponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  NurseryResponse._() : super();
+  factory NurseryResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory NurseryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryReponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
@@ -237,22 +237,22 @@ class NurseryReponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  NurseryReponse clone() => NurseryReponse()..mergeFromMessage(this);
+  NurseryResponse clone() => NurseryResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  NurseryReponse copyWith(void Function(NurseryReponse) updates) => super.copyWith((message) => updates(message as NurseryReponse)) as NurseryReponse;
+  NurseryResponse copyWith(void Function(NurseryResponse) updates) => super.copyWith((message) => updates(message as NurseryResponse)) as NurseryResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static NurseryReponse create() => NurseryReponse._();
-  NurseryReponse createEmptyInstance() => create();
-  static $pb.PbList<NurseryReponse> createRepeated() => $pb.PbList<NurseryReponse>();
+  static NurseryResponse create() => NurseryResponse._();
+  NurseryResponse createEmptyInstance() => create();
+  static $pb.PbList<NurseryResponse> createRepeated() => $pb.PbList<NurseryResponse>();
   @$core.pragma('dart2js:noInline')
-  static NurseryReponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<NurseryReponse>(create);
-  static NurseryReponse? _defaultInstance;
+  static NurseryResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<NurseryResponse>(create);
+  static NurseryResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);

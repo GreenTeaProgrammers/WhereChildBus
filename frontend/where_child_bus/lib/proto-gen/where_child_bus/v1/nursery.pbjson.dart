@@ -35,14 +35,14 @@ const NurseryLoginResponse$json = {
   '1': 'NurseryLoginResponse',
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'nursery', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.Nursery', '10': 'nursery'},
+    {'1': 'nursery', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryResponse', '10': 'nursery'},
   ],
 };
 
 /// Descriptor for `NurseryLoginResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List nurseryLoginResponseDescriptor = $convert.base64Decode(
-    'ChROdXJzZXJ5TG9naW5SZXNwb25zZRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEjUKB251cn'
-    'NlcnkYAiABKAsyGy53aGVyZV9jaGlsZF9idXMudjEuTnVyc2VyeVIHbnVyc2VyeQ==');
+    'ChROdXJzZXJ5TG9naW5SZXNwb25zZRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEj0KB251cn'
+    'NlcnkYAiABKAsyIy53aGVyZV9jaGlsZF9idXMudjEuTnVyc2VyeVJlc3BvbnNlUgdudXJzZXJ5');
 
 const $core.Map<$core.String, $core.dynamic> NurseryServiceBase$json = {
   '1': 'NurseryService',
@@ -55,7 +55,7 @@ const $core.Map<$core.String, $core.dynamic> NurseryServiceBase$json = {
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> NurseryServiceBase$messageJson = {
   '.where_child_bus.v1.NurseryLoginRequest': NurseryLoginRequest$json,
   '.where_child_bus.v1.NurseryLoginResponse': NurseryLoginResponse$json,
-  '.where_child_bus.v1.Nursery': $1.Nursery$json,
+  '.where_child_bus.v1.NurseryResponse': $1.NurseryResponse$json,
   '.google.protobuf.Timestamp': $0.Timestamp$json,
 };
 

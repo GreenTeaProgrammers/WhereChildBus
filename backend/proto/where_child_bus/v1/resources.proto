@@ -16,7 +16,7 @@ message Nursery {
         google.protobuf.Timestamp  updated_at = 9;
 }
 
-message NurseryReponse {
+message NurseryResponse {
         string id = 1;
         string nursery_id = 2;
         string name = 3;
