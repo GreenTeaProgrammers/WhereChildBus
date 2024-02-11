@@ -1,9 +1,9 @@
 import torch.nn as nn
 
 
-class Net(nn.Module):
+class FaceDetectModel(nn.Module):
     def __init__(self, config: dict, num_classes: int):
-        super(Net, self).__init__()
+        super(FaceDetectModel, self).__init__()
         self.config = config
         # 汎用性のために入力チャンネル数をconfigから取得(一応)
         in_channels = config["model"]["in_channels"]
