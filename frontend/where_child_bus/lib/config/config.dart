@@ -1,4 +1,4 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
   static final AppConfig _instance = AppConfig._internal();
@@ -10,11 +10,12 @@ class AppConfig {
   AppConfig._internal();
 
   late String grpcEndpoint;
-  String get grpcEndpointUrl => grpcEndpoint;
-  Future<void> loadConfig() async {
-    await dotenv.dotenv.load();
+  late int grpcPort;
 
-    grpcEndpoint = dotenv.dotenv.env['GRPC_ENDPOINT'] ?? 'http://localhost:443';
+  Future<void> loadConfig() async {
+    await dotenv.load();
+    grpcEndpoint = dotenv.get("GRPC_ENDPOINT");
+    grpcPort = int.tryParse(dotenv.get("GRPC_PORT")) ?? 0;
   }
 }
 
