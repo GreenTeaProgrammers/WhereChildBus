@@ -51,41 +51,50 @@ def main():
         config["face_detect"]["clip_size"]["width"],
     )
 
+    # 保存先ディレクトリの作成，存在した場合は中身を削除
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-
-    for file in os.listdir(save_dir):
-        file_path = os.path.join(save_dir, file)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
+    else:
+        for file in os.listdir(save_dir):
+            file_path = os.path.join(save_dir, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
 
     # 画像の読み込み
-    for image_name in os.listdir(image_dir_path):
-        image = cv2.imread(image_path := os.path.join(image_dir_path, image_name))
-        if image is None:
-            print(f"画像ファイルが見つからないか読み込めません: {image_path}")
-            return
-        # Haar Cascadeの読み込み
-        face_cascade = load_cascade(face_cascade_path)
+    # TODO: 良い感じのlog
+    for target_people_name in os.listdir(image_dir_path):
+        detect_face_num = 0
+        for image_name in os.listdir(os.path.join(image_dir_path, target_people_name)):
+            image = cv2.imread(
+                image_path := os.path.join(
+                    image_dir_path, target_people_name, image_name
+                )
+            )
+            if image is None:
+                raise ValueError(
+                    f"画像ファイルが見つからないか読み込めません: {image_path}"
+                )
+            # Haar Cascadeの読み込み
+            face_cascade = load_cascade(face_cascade_path)
 
-        # 画像から顔を検出
-        faces = detect_face(
-            image,
-            face_cascade,
-            scaleFactor=config["face_detect"]["scale_factor"],
-            minNeighbors=config["face_detect"]["min_neighbors"],
-            minSize=(
-                config["face_detect"]["min_size"]["height"],
-                config["face_detect"]["min_size"]["width"],
-            ),
-        )
+            # 画像から顔を検出
+            faces = detect_face(
+                image,
+                face_cascade,
+                scaleFactor=config["face_detect"]["scale_factor"],
+                minNeighbors=config["face_detect"]["min_neighbors"],
+                minSize=(
+                    config["face_detect"]["min_size"]["height"],
+                    config["face_detect"]["min_size"]["width"],
+                ),
+            )
 
-        # 検出された各顔に対して処理
-        for i, face in enumerate(faces):
-            clipped_face = clip_and_resize_face(face, image, image_size)
-            image_name_without_ext = os.path.splitext(image_name)[0]
-            save_file_name = f"{image_name_without_ext}-{i}.png"
-            save_face(clipped_face, save_dir, save_file_name)
+            # 検出された各顔に対して処理
+            for face in faces:
+                clipped_face = clip_and_resize_face(face, image, image_size)
+                save_file_name = f"{target_people_name}-{detect_face_num}.png"
+                save_face(clipped_face, save_dir, save_file_name)
+                detect_face_num += 1
 
 
 if __name__ == "__main__":
