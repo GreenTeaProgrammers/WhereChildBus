@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service StationService {
+        rpc CreateStation(CreateStationRequest) returns (CreateStationResponse);
+        rpc GetStationListByBusId(GetStationListByBusIdRequest) returns (GetStationListByBusIdResponse);
+}
+
+message CreateStationRequest {
+    string guardian_id = 1:
+    double longtitude = 2;
+    double latitude = 3;
+}
+
+message CreateStationResponse {
+    Station station = 1;
+}
+
+message GetStationListByBusIdRequest {
+        string bus_id = 1;
+}
+
+message GetStationListByBusIdResponse {
+        repeated Station stations = 1;
+        repeated GuardianResponse guardians = 2;
+        repeated Child children = 3;
+}

@@ -8,6 +8,7 @@ service ChildService {
         rpc CreateChild(CreateChildRequest) returns (CreateChildResponse);
         rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (GetChildListByNurseryIDResponse);
         rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
+        rpc GetChildListByBusID(GetChildListByBusIDRequest) returns (GetChildListByBusIDResponse);
 }
 
 message CreateChildRequest {
@@ -35,5 +36,13 @@ message GetChildListByGuardianIDRequest {
 }
 
 message GetChildListByGuardianIDResponse {
+        repeated Child children = 1;
+}
+
+message GetChildListByBusIDRequest {
+        string bus_id = 1;
+}
+
+message GetChildListByBusIDResponse {
         repeated Child children = 1;
 }
