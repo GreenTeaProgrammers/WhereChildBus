@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import sys
 import os
 
 def define_luts():
@@ -15,50 +14,49 @@ def define_luts():
 
 # ヒストグラム均一化
 def equalizeHistRGB(image):
-    RGB = cv2.split(image)
-    Blue   = RGB[0]
-    Green = RGB[1]
-    Red    = RGB[2]
-    for i in range(3):
-        cv2.equalizeHist(RGB[i])
+    channels = cv2.split(image)
+    eq_channels = []
 
-    hist_image = cv2.merge([RGB[0],RGB[1], RGB[2]])
+    for ch in channels:
+        eq_channels.append(cv2.equalizeHist(ch))
+
+    hist_image = cv2.merge(eq_channels)
     return hist_image
 
 # ガウシアンノイズ
 def addGaussianNoise(image):
-    row,col,ch= image.shape
-    mean = 0
-    var = 0.1
-    sigma = 15
-    gauss = np.random.normal(mean,sigma,(row,col,ch))
-    gauss = gauss.reshape(row,col,ch)
-    noise_image = image + gauss
-    return noise_image
-
-# salt&pepperノイズ
-def addSaltPepperNoise(image):
     row, col, ch = image.shape
-    s_vs_p = 0.5
-    amount = 0.004
-    out = np.copy(image)
+    mean = 0
+    sigma = 15  # 標準偏差
+    gauss = np.random.normal(mean, sigma, (row, col, ch))
+    gauss = gauss.reshape(row, col, ch).astype('float32')
+    noisy_image = np.clip(image.astype('float32') + gauss, 0, 255)
+    return noisy_image.astype('uint8')
 
-    # Salt mode
-    num_salt = np.ceil(amount * image.size * s_vs_p)
-    coords = [np.random.randint(0, i - 1, int(num_salt)) for i in (row, col)]
-    out[coords[0], coords[1], :] = (255, 255, 255)
+def addSaltNoise(image, amount=0.004, s_vs_p=0.5):
+    row, col, ch = image.shape
+    num_salt = np.ceil(amount * image.size * s_vs_p).astype(int)
+    # ランダムな座標に対してSaltノイズを適用
+    for _ in range(num_salt):
+        x = np.random.randint(0, row)
+        y = np.random.randint(0, col)
+        image[x, y] = 255
+    return image
 
-    # Pepper mode
-    num_pepper = np.ceil(amount * image.size * (1. - s_vs_p))
-    coords = [np.random.randint(0, i - 1, int(num_pepper)) for i in (row, col)]
-    out[coords[0], coords[1], :] = (0, 0, 0)
-
-    return out
+def addPepperNoise(image, amount=0.004, s_vs_p=0.5):
+    row, col, ch = image.shape
+    num_pepper = np.ceil(amount * image.size * (1. - s_vs_p)).astype(int)
+    # ランダムな座標に対してPepperノイズを適用
+    for _ in range(num_pepper):
+        x = np.random.randint(0, row)
+        y = np.random.randint(0, col)
+        image[x, y] = 0
+    return image
 
 def main():
     image_path = 'src/face_detect_model/data/Nanakusa.jpeg'
-    img_src = cv2.imread(image_path)
-    if img_src is None:
+    image = cv2.imread(image_path)
+    if image is None:
         print(f"画像ファイルが読み込めません: {image_path}")
         return
     
@@ -66,12 +64,16 @@ def main():
     LUT_HC, LUT_LC, LUT_G1, LUT_G2 = define_luts()
     
     # 画像の前処理
-    trans_img = [img_src]
-    trans_img += [cv2.LUT(img_src, LUT) for LUT in [LUT_HC, LUT_LC, LUT_G1, LUT_G2]]
-    trans_img.append(cv2.blur(img_src, (5, 5)))
-    trans_img.append(equalizeHistRGB(img_src))
-    trans_img.append(addGaussianNoise(img_src))
-    trans_img.append(addSaltPepperNoise(img_src))
+    trans_img = [image]
+    trans_img += [cv2.LUT(image, LUT) for LUT in [LUT_HC, LUT_LC, LUT_G1, LUT_G2]]
+    trans_img.append(cv2.blur(image, (5, 5)))
+    trans_img.append(equalizeHistRGB(image))
+    # ガウシアンノイズを追加
+    trans_img.append(addGaussianNoise(image))
+    # Saltノイズを追加
+    trans_img.append(addSaltNoise(image))
+    # Pepperノイズを追加
+    trans_img.append(addPepperNoise(image))
     
     # 画像の反転処理
     flip_img = [cv2.flip(img, 1) for img in trans_img]
@@ -85,7 +87,7 @@ def main():
     # 画像の保存
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     for i, img in enumerate(trans_img):
-        save_path = f"{save_dir}/{base_name}_{i}.jpg"
+        save_path = os.path.join(save_dir, f"{base_name}_{i}.jpg")
         cv2.imwrite(save_path, img)
 
 if __name__ == '__main__':
