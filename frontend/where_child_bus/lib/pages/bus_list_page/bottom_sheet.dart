@@ -19,18 +19,10 @@ class BottomSheetWidget extends StatelessWidget {
           children: [
             // titleText(),
             header("tesaaaaaaaaaaaaaaaaaaaaaaaaaa", "test"),
+            stationsList(context, busStations),
             boardingConfirmButton(context),
           ],
         )
-      ),
-    );
-  }
-
-  Widget titleText() {
-    return const Text(
-      "ルート詳細情報",
-      style: TextStyle(
-        fontSize: 30
       ),
     );
   }
@@ -51,7 +43,7 @@ class BottomSheetWidget extends StatelessWidget {
   
 
   //将来的にはStationのListを参照
-  Widget stationsListBuilder(BuildContext context, busStationsList) {
+  Widget stationsList(BuildContext context, busStationsList) {
     String viewText = "";
     for (var station in busStationsList) {
       viewText += station + "\n";
