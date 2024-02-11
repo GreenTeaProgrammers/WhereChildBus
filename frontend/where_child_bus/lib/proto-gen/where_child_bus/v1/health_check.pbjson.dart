@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: where_child_bus/health_check.proto
+//  source: where_child_bus/v1/health_check.proto
 //
 // @dart = 2.12
 
@@ -40,18 +40,18 @@ final $typed_data.Uint8List pingResponseDescriptor = $convert.base64Decode(
 const $core.Map<$core.String, $core.dynamic> HealthcheckServiceBase$json = {
   '1': 'HealthcheckService',
   '2': [
-    {'1': 'Ping', '2': '.where_child_bus.PingRequest', '3': '.where_child_bus.PingResponse'},
+    {'1': 'Ping', '2': '.where_child_bus.v1.PingRequest', '3': '.where_child_bus.v1.PingResponse'},
   ],
 };
 
 @$core.Deprecated('Use healthcheckServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> HealthcheckServiceBase$messageJson = {
-  '.where_child_bus.PingRequest': PingRequest$json,
-  '.where_child_bus.PingResponse': PingResponse$json,
+  '.where_child_bus.v1.PingRequest': PingRequest$json,
+  '.where_child_bus.v1.PingResponse': PingResponse$json,
 };
 
 /// Descriptor for `HealthcheckService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List healthcheckServiceDescriptor = $convert.base64Decode(
-    'ChJIZWFsdGhjaGVja1NlcnZpY2USQwoEUGluZxIcLndoZXJlX2NoaWxkX2J1cy5QaW5nUmVxdW'
-    'VzdBodLndoZXJlX2NoaWxkX2J1cy5QaW5nUmVzcG9uc2U=');
+    'ChJIZWFsdGhjaGVja1NlcnZpY2USSQoEUGluZxIfLndoZXJlX2NoaWxkX2J1cy52MS5QaW5nUm'
+    'VxdWVzdBogLndoZXJlX2NoaWxkX2J1cy52MS5QaW5nUmVzcG9uc2U=');
 
