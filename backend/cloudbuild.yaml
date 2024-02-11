@@ -2,24 +2,21 @@ options:
   logging: CLOUD_LOGGING_ONLY
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
+    args: [
         "build",
         "-t",
-        "gcr.io/wherechildbus/gcr.io/wherechildbus/where_child_bus-grpc",
-        ".",
+        "gcr.io/wherechildbus/where_child_bus-grpc", # 重複したリポジトリパスを修正
+        "backend", # コンテキストパスをbackendディレクトリに変更
       ]
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      ["push", "gcr.io/wherechildbus/gcr.io/wherechildbus/where_child_bus-grpc"]
+    args: ["push", "gcr.io/wherechildbus/where_child_bus-grpc"] # 重複したリポジトリパスを修正
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    args:
-      [
+    args: [
         "run",
         "deploy",
         "where-child-bus-grpc",
-        "--image=gcr.io/wherechildbus/gcr.io/wherechildbus/where_child_bus-grpc",
+        "--image=gcr.io/wherechildbus/where_child_bus-grpc", # 重複したリポジトリパスを修正
         "--region=your-region",
-        "--set-env-vars=DSN=$$DSN,DB_USER_NAME=$$DB_USER_NAME,DB_PASSWORD=$$DB_PASSWORD,DB_ADDR=$$DB_ADDR,DB_NAME=$$DB_NAME,PORT=$$PORT,ModeDev=$$ModeDev",
+        "--set-env-vars=DSN=$$_DSN,DB_USER_NAME=$$_DB_USER_NAME,DB_PASSWORD=$$_DB_PASSWORD,DB_ADDR=$$_DB_ADDR,DB_NAME=$$_DB_NAME,PORT=$$_PORT,ModeDev=$$_ModeDev",
       ]
 timeout: "1600s"
