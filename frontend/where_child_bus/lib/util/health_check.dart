@@ -11,8 +11,6 @@ Future<PingResponse> serviceHealthCheck() async {
     port: appConfig.grpcPort,
   );
 
-  // final channel = GrpcWebClientChannel.xhr(Uri.parse('http://where-child-bus-grpc-k3dkun2lpq-uw.a.run.app:443'));
-
   final grpcClient = HealthcheckServiceClient(channel,
       options: CallOptions(timeout: const Duration(seconds: 60)));
 
