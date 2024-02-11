@@ -17,8 +17,8 @@ class BottomSheetWidget extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            titleText(),
-            header("test", "test"),
+            // titleText(),
+            header("tesaaaaaaaaaaaaaaaaaaaaaaaaaa", "test"),
             boardingConfirmButton(context),
           ],
         )
@@ -37,7 +37,7 @@ class BottomSheetWidget extends StatelessWidget {
 
   Widget header(String busCourseName, String busOperatorName) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -48,9 +48,23 @@ class BottomSheetWidget extends StatelessWidget {
     );
   }
 
+  
+
+  //将来的にはStationのListを参照
+  Widget stationsListBuilder(BuildContext context, busStationsList) {
+    String viewText = "";
+    for (var station in busStationsList) {
+      viewText += station + "\n";
+    }
+    return Text(
+      viewText,
+
+    );
+  }
+
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+      padding: const EdgeInsets.only(left:50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,10 +78,14 @@ class BottomSheetWidget extends StatelessWidget {
   Widget courseNameText(String name) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Text(
-        name,
-        style: const TextStyle(
-          fontSize: 30,
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 150),
+        child: Text(
+          name,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 30,
+          ),
         ),
       ),
     );
@@ -76,6 +94,9 @@ class BottomSheetWidget extends StatelessWidget {
   Widget operatorNameText(String name) {
     return Text(
       "担当：$name",
+      style: const TextStyle(
+        color: Colors.grey,
+      )
     );
   }
 
