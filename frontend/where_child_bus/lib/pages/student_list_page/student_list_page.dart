@@ -9,6 +9,7 @@ class StudentListPage extends StatefulWidget {
 }
 
 class _StudentListPageState extends State<StudentListPage> {
+  //TODO: 将来的には動的にデータを受け取る。
   final List<String> name = <String>[
     "園児1",
     "園児2",
@@ -38,6 +39,7 @@ class _StudentListPageState extends State<StudentListPage> {
     return childCardListBuilder(screenSize);
   }
 
+  //TODO: 将来的にはAPIからデータを取得する。
   Widget childCardListBuilder(Size screenSize) {
     return ListView.separated(
         itemCount: name.length,
@@ -67,6 +69,7 @@ class _StudentListPageState extends State<StudentListPage> {
         ));
   }
 
+  //TODO: Child型を受け取る
   Widget childCard(int index, Size screenSize) {
     return Card(
         color: Colors.white,
@@ -102,6 +105,7 @@ class _StudentListPageState extends State<StudentListPage> {
         ]);
   }
 
+  //TODO: 引数に停留所名を加える。
   Widget busStopName() {
     return const Row(children: <Widget>[
       Icon(Icons.location_on),

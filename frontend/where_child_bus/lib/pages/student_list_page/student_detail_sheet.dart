@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class StudentDetailSheet extends StatelessWidget {
   final String childName;
 
+  //将来的にはChild型を受け取る。
   const StudentDetailSheet({super.key, required this.childName});
 
   @override
@@ -37,6 +38,7 @@ class StudentDetailSheet extends StatelessWidget {
         alignment: Alignment.topRight,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+          //将来的に編集画面へ遷移する。
           onPressed: () {},
           child: const Icon(Icons.edit),
         ),
@@ -56,6 +58,7 @@ class StudentDetailSheet extends StatelessWidget {
     ]);
   }
 
+  //TODO: 将来的に画像を受け取る。
   Widget childFaceImage() {
     return const SizedBox(
       width: 100,
@@ -66,6 +69,7 @@ class StudentDetailSheet extends StatelessWidget {
     );
   }
 
+  //TODO: 将来的にはデータを受け取る。
   Widget childDetailList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
