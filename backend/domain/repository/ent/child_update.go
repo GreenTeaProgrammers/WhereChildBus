@@ -97,16 +97,16 @@ func (cu *ChildUpdate) SetNillableIsRideMorningBus(b *bool) *ChildUpdate {
 	return cu
 }
 
-// SetIsRideAfternoonBus sets the "is_ride_afternoon_bus" field.
-func (cu *ChildUpdate) SetIsRideAfternoonBus(b bool) *ChildUpdate {
-	cu.mutation.SetIsRideAfternoonBus(b)
+// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
+func (cu *ChildUpdate) SetIsRideEveningBus(b bool) *ChildUpdate {
+	cu.mutation.SetIsRideEveningBus(b)
 	return cu
 }
 
-// SetNillableIsRideAfternoonBus sets the "is_ride_afternoon_bus" field if the given value is not nil.
-func (cu *ChildUpdate) SetNillableIsRideAfternoonBus(b *bool) *ChildUpdate {
+// SetNillableIsRideEveningBus sets the "is_ride_evening_bus" field if the given value is not nil.
+func (cu *ChildUpdate) SetNillableIsRideEveningBus(b *bool) *ChildUpdate {
 	if b != nil {
-		cu.SetIsRideAfternoonBus(*b)
+		cu.SetIsRideEveningBus(*b)
 	}
 	return cu
 }
@@ -451,8 +451,8 @@ func (cu *ChildUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cu.mutation.IsRideMorningBus(); ok {
 		_spec.SetField(child.FieldIsRideMorningBus, field.TypeBool, value)
 	}
-	if value, ok := cu.mutation.IsRideAfternoonBus(); ok {
-		_spec.SetField(child.FieldIsRideAfternoonBus, field.TypeBool, value)
+	if value, ok := cu.mutation.IsRideEveningBus(); ok {
+		_spec.SetField(child.FieldIsRideEveningBus, field.TypeBool, value)
 	}
 	if value, ok := cu.mutation.CheckForMissingItems(); ok {
 		_spec.SetField(child.FieldCheckForMissingItems, field.TypeBool, value)
@@ -754,16 +754,16 @@ func (cuo *ChildUpdateOne) SetNillableIsRideMorningBus(b *bool) *ChildUpdateOne 
 	return cuo
 }
 
-// SetIsRideAfternoonBus sets the "is_ride_afternoon_bus" field.
-func (cuo *ChildUpdateOne) SetIsRideAfternoonBus(b bool) *ChildUpdateOne {
-	cuo.mutation.SetIsRideAfternoonBus(b)
+// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
+func (cuo *ChildUpdateOne) SetIsRideEveningBus(b bool) *ChildUpdateOne {
+	cuo.mutation.SetIsRideEveningBus(b)
 	return cuo
 }
 
-// SetNillableIsRideAfternoonBus sets the "is_ride_afternoon_bus" field if the given value is not nil.
-func (cuo *ChildUpdateOne) SetNillableIsRideAfternoonBus(b *bool) *ChildUpdateOne {
+// SetNillableIsRideEveningBus sets the "is_ride_evening_bus" field if the given value is not nil.
+func (cuo *ChildUpdateOne) SetNillableIsRideEveningBus(b *bool) *ChildUpdateOne {
 	if b != nil {
-		cuo.SetIsRideAfternoonBus(*b)
+		cuo.SetIsRideEveningBus(*b)
 	}
 	return cuo
 }
@@ -1138,8 +1138,8 @@ func (cuo *ChildUpdateOne) sqlSave(ctx context.Context) (_node *Child, err error
 	if value, ok := cuo.mutation.IsRideMorningBus(); ok {
 		_spec.SetField(child.FieldIsRideMorningBus, field.TypeBool, value)
 	}
-	if value, ok := cuo.mutation.IsRideAfternoonBus(); ok {
-		_spec.SetField(child.FieldIsRideAfternoonBus, field.TypeBool, value)
+	if value, ok := cuo.mutation.IsRideEveningBus(); ok {
+		_spec.SetField(child.FieldIsRideEveningBus, field.TypeBool, value)
 	}
 	if value, ok := cuo.mutation.CheckForMissingItems(); ok {
 		_spec.SetField(child.FieldCheckForMissingItems, field.TypeBool, value)

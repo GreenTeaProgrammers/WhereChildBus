@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: where_child_bus/health_check.proto
+// source: where_child_bus/v1/health_check.proto
 
-package where_child_bus
+package where_child_busv1
 
 import (
 	context "context"
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	HealthcheckService_Ping_FullMethodName = "/where_child_bus.HealthcheckService/Ping"
+	HealthcheckService_Ping_FullMethodName = "/where_child_bus.v1.HealthcheckService/Ping"
 )
 
 // HealthcheckServiceClient is the client API for HealthcheckService service.
@@ -94,7 +94,7 @@ func _HealthcheckService_Ping_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var HealthcheckService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "where_child_bus.HealthcheckService",
+	ServiceName: "where_child_bus.v1.HealthcheckService",
 	HandlerType: (*HealthcheckServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -103,5 +103,5 @@ var HealthcheckService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "where_child_bus/health_check.proto",
+	Metadata: "where_child_bus/v1/health_check.proto",
 }

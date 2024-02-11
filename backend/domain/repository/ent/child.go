@@ -29,7 +29,7 @@ type Child struct {
 	// 朝のバスに乗るかどうか
 	IsRideMorningBus bool `json:"is_ride_morning_bus,omitempty"`
 	// 放課後のバスに乗るかどうか
-	IsRideAfternoonBus bool `json:"is_ride_afternoon_bus,omitempty"`
+	IsRideEveningBus bool `json:"is_ride_evening_bus,omitempty"`
 	// 持ち物が欠けていないかをチェックするかどうか
 	CheckForMissingItems bool `json:"check_for_missing_items,omitempty"`
 	// HasBag holds the value of the "has_bag" field.
@@ -129,7 +129,7 @@ func (*Child) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case child.FieldIsRideMorningBus, child.FieldIsRideAfternoonBus, child.FieldCheckForMissingItems, child.FieldHasBag, child.FieldHasLunchBox, child.FieldHasWaterBottle, child.FieldHasUmbrella, child.FieldHasOther:
+		case child.FieldIsRideMorningBus, child.FieldIsRideEveningBus, child.FieldCheckForMissingItems, child.FieldHasBag, child.FieldHasLunchBox, child.FieldHasWaterBottle, child.FieldHasUmbrella, child.FieldHasOther:
 			values[i] = new(sql.NullBool)
 		case child.FieldAge:
 			values[i] = new(sql.NullInt64)
@@ -188,11 +188,11 @@ func (c *Child) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.IsRideMorningBus = value.Bool
 			}
-		case child.FieldIsRideAfternoonBus:
+		case child.FieldIsRideEveningBus:
 			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field is_ride_afternoon_bus", values[i])
+				return fmt.Errorf("unexpected type %T for field is_ride_evening_bus", values[i])
 			} else if value.Valid {
-				c.IsRideAfternoonBus = value.Bool
+				c.IsRideEveningBus = value.Bool
 			}
 		case child.FieldCheckForMissingItems:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -329,8 +329,8 @@ func (c *Child) String() string {
 	builder.WriteString("is_ride_morning_bus=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsRideMorningBus))
 	builder.WriteString(", ")
-	builder.WriteString("is_ride_afternoon_bus=")
-	builder.WriteString(fmt.Sprintf("%v", c.IsRideAfternoonBus))
+	builder.WriteString("is_ride_evening_bus=")
+	builder.WriteString(fmt.Sprintf("%v", c.IsRideEveningBus))
 	builder.WriteString(", ")
 	builder.WriteString("check_for_missing_items=")
 	builder.WriteString(fmt.Sprintf("%v", c.CheckForMissingItems))

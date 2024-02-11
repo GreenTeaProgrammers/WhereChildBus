@@ -69,7 +69,7 @@ var (
 		{Name: "age", Type: field.TypeInt},
 		{Name: "sex", Type: field.TypeEnum, Enums: []string{"man", "women", "other"}},
 		{Name: "is_ride_morning_bus", Type: field.TypeBool, Default: false},
-		{Name: "is_ride_afternoon_bus", Type: field.TypeBool, Default: false},
+		{Name: "is_ride_evening_bus", Type: field.TypeBool, Default: false},
 		{Name: "check_for_missing_items", Type: field.TypeBool, Default: false},
 		{Name: "has_bag", Type: field.TypeBool, Default: true},
 		{Name: "has_lunch_box", Type: field.TypeBool, Default: true},
@@ -154,9 +154,10 @@ var (
 	// GuardiansColumns holds the columns for the "guardians" table.
 	GuardiansColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "email", Type: field.TypeString},
+		{Name: "encrypted_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
-		{Name: "email", Type: field.TypeString, Nullable: true},
-		{Name: "phone", Type: field.TypeString, Nullable: true},
+		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_nursery", Type: field.TypeUUID, Nullable: true},
@@ -169,7 +170,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "guardians_nurseries_nursery",
-				Columns:    []*schema.Column{GuardiansColumns[6]},
+				Columns:    []*schema.Column{GuardiansColumns[7]},
 				RefColumns: []*schema.Column{NurseriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -179,10 +180,11 @@ var (
 	NurseriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "nursery_code", Type: field.TypeString, Unique: true},
+		{Name: "email", Type: field.TypeString},
+		{Name: "encrypted_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
-		{Name: "address", Type: field.TypeString},
+		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
-		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 	}
