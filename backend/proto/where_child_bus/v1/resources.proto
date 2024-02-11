@@ -18,13 +18,14 @@ message Nursery {
 
 message NurseryResponse {
         string id = 1;
-        string nursery_id = 2;
+        string nursery_code = 2;
         string name = 3;
-        string email = 4;
+        string address = 4;
         string phone_number = 5;
+        string email = 6;
         // ハッシュ化されたパスワードは除外
-        google.protobuf.Timestamp created_at = 6;
-        google.protobuf.Timestamp updated_at = 7;
+        google.protobuf.Timestamp created_at = 7;
+        google.protobuf.Timestamp updated_at = 8;
 }
 
 message Guardian {
