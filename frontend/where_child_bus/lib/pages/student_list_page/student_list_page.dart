@@ -46,21 +46,26 @@ class _StudentListPageState extends State<StudentListPage> {
           return FractionallySizedBox(
               widthFactor: 0.8,
               child: InkWell(
-                  onTap: () {
-                    showBottomSheet(context, index);
-                  },
-                  child: Card(
-                      color: Colors.white,
-                      child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Row(children: <Widget>[
-                            childImage(index),
-                            SizedBox(
-                              width: screenSize.width * 0.05,
-                            ),
-                            nameAndGroup(index),
-                          ])))));
+                onTap: () {
+                  showBottomSheet(context, index);
+                },
+                child: childCard(index, screenSize),
+              ));
         });
+  }
+
+  Widget childCard(int index, Size screenSize) {
+    return Card(
+        color: Colors.white,
+        child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(children: <Widget>[
+              childImage(index),
+              SizedBox(
+                width: screenSize.width * 0.05,
+              ),
+              nameAndGroup(index),
+            ])));
   }
 
   Widget childImage(int index) {
