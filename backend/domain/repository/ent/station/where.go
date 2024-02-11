@@ -71,9 +71,9 @@ func MorningOrder(v int) predicate.Station {
 	return predicate.Station(sql.FieldEQ(FieldMorningOrder, v))
 }
 
-// AfternoonOrder applies equality check predicate on the "afternoon_order" field. It's identical to AfternoonOrderEQ.
-func AfternoonOrder(v int) predicate.Station {
-	return predicate.Station(sql.FieldEQ(FieldAfternoonOrder, v))
+// EveningOrder applies equality check predicate on the "evening_order" field. It's identical to EveningOrderEQ.
+func EveningOrder(v int) predicate.Station {
+	return predicate.Station(sql.FieldEQ(FieldEveningOrder, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -226,44 +226,44 @@ func MorningOrderLTE(v int) predicate.Station {
 	return predicate.Station(sql.FieldLTE(FieldMorningOrder, v))
 }
 
-// AfternoonOrderEQ applies the EQ predicate on the "afternoon_order" field.
-func AfternoonOrderEQ(v int) predicate.Station {
-	return predicate.Station(sql.FieldEQ(FieldAfternoonOrder, v))
+// EveningOrderEQ applies the EQ predicate on the "evening_order" field.
+func EveningOrderEQ(v int) predicate.Station {
+	return predicate.Station(sql.FieldEQ(FieldEveningOrder, v))
 }
 
-// AfternoonOrderNEQ applies the NEQ predicate on the "afternoon_order" field.
-func AfternoonOrderNEQ(v int) predicate.Station {
-	return predicate.Station(sql.FieldNEQ(FieldAfternoonOrder, v))
+// EveningOrderNEQ applies the NEQ predicate on the "evening_order" field.
+func EveningOrderNEQ(v int) predicate.Station {
+	return predicate.Station(sql.FieldNEQ(FieldEveningOrder, v))
 }
 
-// AfternoonOrderIn applies the In predicate on the "afternoon_order" field.
-func AfternoonOrderIn(vs ...int) predicate.Station {
-	return predicate.Station(sql.FieldIn(FieldAfternoonOrder, vs...))
+// EveningOrderIn applies the In predicate on the "evening_order" field.
+func EveningOrderIn(vs ...int) predicate.Station {
+	return predicate.Station(sql.FieldIn(FieldEveningOrder, vs...))
 }
 
-// AfternoonOrderNotIn applies the NotIn predicate on the "afternoon_order" field.
-func AfternoonOrderNotIn(vs ...int) predicate.Station {
-	return predicate.Station(sql.FieldNotIn(FieldAfternoonOrder, vs...))
+// EveningOrderNotIn applies the NotIn predicate on the "evening_order" field.
+func EveningOrderNotIn(vs ...int) predicate.Station {
+	return predicate.Station(sql.FieldNotIn(FieldEveningOrder, vs...))
 }
 
-// AfternoonOrderGT applies the GT predicate on the "afternoon_order" field.
-func AfternoonOrderGT(v int) predicate.Station {
-	return predicate.Station(sql.FieldGT(FieldAfternoonOrder, v))
+// EveningOrderGT applies the GT predicate on the "evening_order" field.
+func EveningOrderGT(v int) predicate.Station {
+	return predicate.Station(sql.FieldGT(FieldEveningOrder, v))
 }
 
-// AfternoonOrderGTE applies the GTE predicate on the "afternoon_order" field.
-func AfternoonOrderGTE(v int) predicate.Station {
-	return predicate.Station(sql.FieldGTE(FieldAfternoonOrder, v))
+// EveningOrderGTE applies the GTE predicate on the "evening_order" field.
+func EveningOrderGTE(v int) predicate.Station {
+	return predicate.Station(sql.FieldGTE(FieldEveningOrder, v))
 }
 
-// AfternoonOrderLT applies the LT predicate on the "afternoon_order" field.
-func AfternoonOrderLT(v int) predicate.Station {
-	return predicate.Station(sql.FieldLT(FieldAfternoonOrder, v))
+// EveningOrderLT applies the LT predicate on the "evening_order" field.
+func EveningOrderLT(v int) predicate.Station {
+	return predicate.Station(sql.FieldLT(FieldEveningOrder, v))
 }
 
-// AfternoonOrderLTE applies the LTE predicate on the "afternoon_order" field.
-func AfternoonOrderLTE(v int) predicate.Station {
-	return predicate.Station(sql.FieldLTE(FieldAfternoonOrder, v))
+// EveningOrderLTE applies the LTE predicate on the "evening_order" field.
+func EveningOrderLTE(v int) predicate.Station {
+	return predicate.Station(sql.FieldLTE(FieldEveningOrder, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

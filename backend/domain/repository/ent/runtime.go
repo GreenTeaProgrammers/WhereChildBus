@@ -52,10 +52,10 @@ func init() {
 	childDescIsRideMorningBus := childFields[4].Descriptor()
 	// child.DefaultIsRideMorningBus holds the default value on creation for the is_ride_morning_bus field.
 	child.DefaultIsRideMorningBus = childDescIsRideMorningBus.Default.(bool)
-	// childDescIsRideAfternoonBus is the schema descriptor for is_ride_afternoon_bus field.
-	childDescIsRideAfternoonBus := childFields[5].Descriptor()
-	// child.DefaultIsRideAfternoonBus holds the default value on creation for the is_ride_afternoon_bus field.
-	child.DefaultIsRideAfternoonBus = childDescIsRideAfternoonBus.Default.(bool)
+	// childDescIsRideEveningBus is the schema descriptor for is_ride_evening_bus field.
+	childDescIsRideEveningBus := childFields[5].Descriptor()
+	// child.DefaultIsRideEveningBus holds the default value on creation for the is_ride_evening_bus field.
+	child.DefaultIsRideEveningBus = childDescIsRideEveningBus.Default.(bool)
 	// childDescCheckForMissingItems is the schema descriptor for check_for_missing_items field.
 	childDescCheckForMissingItems := childFields[6].Descriptor()
 	// child.DefaultCheckForMissingItems holds the default value on creation for the check_for_missing_items field.

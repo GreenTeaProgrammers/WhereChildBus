@@ -21,8 +21,8 @@ const (
 	FieldLongitude = "longitude"
 	// FieldMorningOrder holds the string denoting the morning_order field in the database.
 	FieldMorningOrder = "morning_order"
-	// FieldAfternoonOrder holds the string denoting the afternoon_order field in the database.
-	FieldAfternoonOrder = "afternoon_order"
+	// FieldEveningOrder holds the string denoting the evening_order field in the database.
+	FieldEveningOrder = "evening_order"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -53,7 +53,7 @@ var Columns = []string{
 	FieldLatitude,
 	FieldLongitude,
 	FieldMorningOrder,
-	FieldAfternoonOrder,
+	FieldEveningOrder,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -119,9 +119,9 @@ func ByMorningOrder(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMorningOrder, opts...).ToFunc()
 }
 
-// ByAfternoonOrder orders the results by the afternoon_order field.
-func ByAfternoonOrder(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAfternoonOrder, opts...).ToFunc()
+// ByEveningOrder orders the results by the evening_order field.
+func ByEveningOrder(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEveningOrder, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.
