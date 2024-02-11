@@ -18,11 +18,13 @@ plugins:
   # Python用の設定 (クライアント側)
   - plugin: buf.build/grpc/python:v1.61.0
     out:
-      ../proto-gen/python
+      ../../machine_learning/src/proto-gen/
       # dependencies
   - plugin: buf.build/protocolbuffers/python
-    out: ../proto-gen/python
+    out: ../../machine_learning/src/proto-gen/
 
   # Dart用の設定 (クライアント側)
-  - plugin: buf.build/protocolbuffers/dart:v21.1.2
-    out: ../proto-gen/dart
+  - name: dart
+    out: ../../frontend/where_child_bus/proto-gen/
+    opt:
+      - grpc

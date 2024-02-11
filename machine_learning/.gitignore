@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,macos
+# Created by https://www.toptal.com/developers/gitignore/api/macos,python,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,visualstudiocode
 
 ### macOS ###
 # General
@@ -35,8 +35,6 @@ Temporary Items
 *.icloud
 
 ### Python ###
-src/face_detect_model/pickle/*
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -208,4 +206,23 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
-# End of https://www.toptal.com/developers/gitignore/api/python,macos
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,python,visualstudiocode
