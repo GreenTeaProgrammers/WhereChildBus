@@ -16,11 +16,15 @@ RUN CGO_ENABLED=0 GOOS=linux \
     github.com/GreenTeaProgrammers/WhereChildBus/backend/cmd/server
 
 # Final stage: runtime environment
-FROM scratch
+# CA証明書が必要なので、alpineをベースにする
+FROM alpine:latest
 
-# Corrected COPY command to use 'builder' instead of 'build'
+# 必要なパッケージをインストール
+RUN apk --no-cache add ca-certificates
+
+# ビルドステージからバイナリと.envファイルをコピー
 COPY --from=builder /go/bin/server /server
 COPY --from=builder /srv/grpc/.env /
 
-
+# アプリケーションの起動
 ENTRYPOINT ["/server"]
