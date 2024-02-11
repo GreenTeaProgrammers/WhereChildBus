@@ -44,26 +44,27 @@ class BottomSheetWidget extends StatelessWidget {
   }
 
   //将来的にはStationのListを参照
-  Widget stationsList(BuildContext context, busStationsList) {
-    String viewText = "";
-    for (var station in busStationsList) {
-      viewText += station + "\n";
-    }
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(50, 10, 0, 0),
-      child: SizedBox(
-        child: Text(
-          viewText,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+  Widget stationsList(BuildContext context, List<String> busStationsList) {
+    return ListView.builder(
+      itemCount: busStationsList.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(50,  10,  0,  0),
+          child: Text(
+            busStationsList[index],
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              fontSize:  18,
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
-      padding: const EdgeInsets.only(left:50),
+      padding: const EdgeInsets.only(left:30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
