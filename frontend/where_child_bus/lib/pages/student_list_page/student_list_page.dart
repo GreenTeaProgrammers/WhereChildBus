@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/student_list_page/student_detail_sheet.dart';
 
 class StudentListPage extends StatefulWidget {
   const StudentListPage({super.key});
@@ -55,8 +56,12 @@ class _StudentListPageState extends State<StudentListPage> {
     return FractionallySizedBox(
         widthFactor: 0.8,
         child: InkWell(
-          onTap: () {
-            showBottomSheet(context, index);
+          onTap: () async {
+            await showBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return StudentDetailSheet(childName: name[index]);
+                });
           },
           child: childCard(index, screenSize),
         ));
@@ -106,87 +111,5 @@ class _StudentListPageState extends State<StudentListPage> {
       Icon(Icons.location_on),
       Text("停留所名"),
     ]);
-  }
-
-  Widget childImageAndChildName(int index) {
-    return Row(children: <Widget>[
-      childFaceImage(index),
-      const SizedBox(
-        width: 50,
-      ),
-      Text(name[index],
-          style: const TextStyle(color: Colors.black, fontSize: 24)),
-    ]);
-  }
-
-  Widget childDetailInfo(String title, String element) {
-    return Row(
-      children: <Widget>[
-        detailTitle(title),
-        const SizedBox(
-          width: 50,
-        ),
-        Text(element, style: TextStyle(color: Colors.black, fontSize: 18))
-      ],
-    );
-  }
-
-  Widget detailTitle(String title) {
-    return SizedBox(
-      width: 18 * 6 + 6,
-      child: Text(
-        title,
-        style: const TextStyle(color: Colors.black, fontSize: 18),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  void showBottomSheet(BuildContext context, int index) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-              padding: const EdgeInsets.all(30.0),
-              height: 1000,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Stack(children: <Widget>[
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(shape: CircleBorder()),
-                        onPressed: () {},
-                        child: Icon(Icons.edit),
-                      ),
-                    ),
-                    childImageAndChildName(index),
-                  ]),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        childDetailInfo("年齢", "3歳"),
-                        childDetailInfo("クラス", group[index]),
-                        childDetailInfo("保護者氏名", "保護者1"),
-                        childDetailInfo("保護者連絡先", "xxx-xxxx-xxxx"),
-                        childDetailInfo("利用コース", "○○コース"),
-                        childDetailInfo("乗降場所", "○○駐車場前"),
-                      ],
-                    ),
-                  ),
-                ],
-              ));
-        });
   }
 }
