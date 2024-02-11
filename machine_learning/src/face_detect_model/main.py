@@ -7,6 +7,7 @@ from model.faceDetectModel import FaceDetectModel
 from trainer import Trainer
 
 
+# TODO: loggerを用いたログ出力を実装する
 def main(args: argparse.Namespace, config: dict):
     args.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
