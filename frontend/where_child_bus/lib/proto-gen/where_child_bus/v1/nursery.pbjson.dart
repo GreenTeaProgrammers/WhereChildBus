@@ -13,9 +13,6 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../google/protobuf/timestamp.pbjson.dart' as $0;
-import 'resources.pbjson.dart' as $1;
-
 @$core.Deprecated('Use nurseryLoginRequestDescriptor instead')
 const NurseryLoginRequest$json = {
   '1': 'NurseryLoginRequest',
@@ -43,25 +40,4 @@ const NurseryLoginResponse$json = {
 final $typed_data.Uint8List nurseryLoginResponseDescriptor = $convert.base64Decode(
     'ChROdXJzZXJ5TG9naW5SZXNwb25zZRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEjUKB251cn'
     'NlcnkYAiABKAsyGy53aGVyZV9jaGlsZF9idXMudjEuTnVyc2VyeVIHbnVyc2VyeQ==');
-
-const $core.Map<$core.String, $core.dynamic> NurseryServiceBase$json = {
-  '1': 'NurseryService',
-  '2': [
-    {'1': 'NurseryLogin', '2': '.where_child_bus.v1.NurseryLoginRequest', '3': '.where_child_bus.v1.NurseryLoginResponse'},
-  ],
-};
-
-@$core.Deprecated('Use nurseryServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> NurseryServiceBase$messageJson = {
-  '.where_child_bus.v1.NurseryLoginRequest': NurseryLoginRequest$json,
-  '.where_child_bus.v1.NurseryLoginResponse': NurseryLoginResponse$json,
-  '.where_child_bus.v1.Nursery': $1.Nursery$json,
-  '.google.protobuf.Timestamp': $0.Timestamp$json,
-};
-
-/// Descriptor for `NurseryService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List nurseryServiceDescriptor = $convert.base64Decode(
-    'Cg5OdXJzZXJ5U2VydmljZRJhCgxOdXJzZXJ5TG9naW4SJy53aGVyZV9jaGlsZF9idXMudjEuTn'
-    'Vyc2VyeUxvZ2luUmVxdWVzdBooLndoZXJlX2NoaWxkX2J1cy52MS5OdXJzZXJ5TG9naW5SZXNw'
-    'b25zZQ==');
 
