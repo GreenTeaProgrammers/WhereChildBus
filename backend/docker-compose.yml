@@ -1,9 +1,0 @@
-version: "3.8"
-services:
-  grpc-calculator:
-    image: gcr.io/wherechildbus/grpc-calculator:latest
-    ports:
-      - "50051:50051"
-    volumes:
-      - "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt" # ←重要
-
