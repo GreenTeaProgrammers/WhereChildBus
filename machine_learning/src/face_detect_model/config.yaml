@@ -25,4 +25,5 @@ train:
   valid_batch_size: 1
   test_batch_size: 1
   validate_interval: 10
-  save_model_path: "src/face_detect_model/pickle/mock_model/"
+  save_model_dir: "src/face_detect_model/pickle/mock_model/"
+  test_model_path: "src/face_detect_model/pickle/mock_model/best_model.pth"
