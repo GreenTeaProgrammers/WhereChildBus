@@ -100,12 +100,7 @@ class _StudentListPageState extends State<StudentListPage> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-              padding: const EdgeInsets.only(
-                top: 50.0,
-                right: 30.0,
-                bottom: 30.0,
-                left: 30.0,
-              ),
+              padding: const EdgeInsets.all(30.0),
               height: 1000,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -117,13 +112,23 @@ class _StudentListPageState extends State<StudentListPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Row(children: <Widget>[
-                    childImage(index),
-                    SizedBox(
-                      width: 50,
+                  Stack(children: <Widget>[
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(shape: CircleBorder()),
+                        onPressed: () {},
+                        child: Icon(Icons.edit),
+                      ),
                     ),
-                    Text(name[index],
-                        style: TextStyle(color: Colors.black, fontSize: 24)),
+                    Row(children: <Widget>[
+                      childImage(index),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Text(name[index],
+                          style: TextStyle(color: Colors.black, fontSize: 24)),
+                    ]),
                   ]),
                   Container(
                     margin: EdgeInsets.only(top: 20),
