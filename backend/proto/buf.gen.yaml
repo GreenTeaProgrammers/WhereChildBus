@@ -1,0 +1,28 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go
+plugins:
+  # Go用の設定 (サーバー側)
+  - plugin: buf.build/protocolbuffers/go
+    out: ../proto-gen/go
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc/go
+    out: ../proto-gen/go
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+
+  # Python用の設定 (クライアント側)
+  - plugin: buf.build/grpc/python:v1.61.0
+    out:
+      ../../machine_learning/src/proto-gen/
+      # dependencies
+  - plugin: buf.build/protocolbuffers/python
+    out: ../../machine_learning/src/proto-gen/
+
+  # Dart用の設定 (クライアント側)
+  - plugin: buf.build/protocolbuffers/dart:v21.1.2
+    out: ../../frontend/where_child_bus/lib/proto-gen/
