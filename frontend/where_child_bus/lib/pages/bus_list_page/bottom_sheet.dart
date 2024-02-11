@@ -50,17 +50,22 @@ class BottomSheetWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(50,  10,  0,  0),
-          child: Text(
-            busStationsList[index],
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontSize:  18,
-            ),
-          ),
+          child: stationsListElement(busStationsList[index]),
         );
       },
     );
   }
+
+
+    Widget stationsListElement(String stationName) {
+      return Text(
+        stationName,
+        textAlign: TextAlign.left,
+        style: const TextStyle(
+          fontSize:  18,
+        ),
+      );
+    }
 
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
