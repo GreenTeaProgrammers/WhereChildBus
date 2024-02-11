@@ -15,10 +15,12 @@ const (
 	Label = "guardian"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
+	// FieldEncryptedPassword holds the string denoting the encrypted_password field in the database.
+	FieldEncryptedPassword = "encrypted_password"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldPhone holds the string denoting the phone field in the database.
 	FieldPhone = "phone"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -59,8 +61,9 @@ const (
 // Columns holds all SQL columns for guardian fields.
 var Columns = []string{
 	FieldID,
-	FieldName,
 	FieldEmail,
+	FieldEncryptedPassword,
+	FieldName,
 	FieldPhone,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -106,14 +109,19 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByEncryptedPassword orders the results by the encrypted_password field.
+func ByEncryptedPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptedPassword, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
 // ByPhone orders the results by the phone field.

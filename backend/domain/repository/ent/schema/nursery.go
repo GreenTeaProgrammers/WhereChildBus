@@ -28,10 +28,11 @@ func (Nursery) Fields() []ent.Field {
 		field.String("nursery_code").DefaultFunc(func() string {
 			return strconv.Itoa(rand.Intn(90000) + 10000)
 		}).Unique().Comment("ユニークな数字(文字列)のコード"), //!: ユニークじゃないコードが生成される可能性がある
+		field.String("email"),
+		field.String("encrypted_password"),
 		field.String("name"),
-		field.String("address"),
+		field.String("address").Optional(),
 		field.String("phone_number").Optional(),
-		field.String("email").Optional(),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}

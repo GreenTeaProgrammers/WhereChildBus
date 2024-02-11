@@ -38,6 +38,18 @@ func (nc *NurseryCreate) SetNillableNurseryCode(s *string) *NurseryCreate {
 	return nc
 }
 
+// SetEmail sets the "email" field.
+func (nc *NurseryCreate) SetEmail(s string) *NurseryCreate {
+	nc.mutation.SetEmail(s)
+	return nc
+}
+
+// SetEncryptedPassword sets the "encrypted_password" field.
+func (nc *NurseryCreate) SetEncryptedPassword(s string) *NurseryCreate {
+	nc.mutation.SetEncryptedPassword(s)
+	return nc
+}
+
 // SetName sets the "name" field.
 func (nc *NurseryCreate) SetName(s string) *NurseryCreate {
 	nc.mutation.SetName(s)
@@ -47,6 +59,14 @@ func (nc *NurseryCreate) SetName(s string) *NurseryCreate {
 // SetAddress sets the "address" field.
 func (nc *NurseryCreate) SetAddress(s string) *NurseryCreate {
 	nc.mutation.SetAddress(s)
+	return nc
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (nc *NurseryCreate) SetNillableAddress(s *string) *NurseryCreate {
+	if s != nil {
+		nc.SetAddress(*s)
+	}
 	return nc
 }
 
@@ -60,20 +80,6 @@ func (nc *NurseryCreate) SetPhoneNumber(s string) *NurseryCreate {
 func (nc *NurseryCreate) SetNillablePhoneNumber(s *string) *NurseryCreate {
 	if s != nil {
 		nc.SetPhoneNumber(*s)
-	}
-	return nc
-}
-
-// SetEmail sets the "email" field.
-func (nc *NurseryCreate) SetEmail(s string) *NurseryCreate {
-	nc.mutation.SetEmail(s)
-	return nc
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (nc *NurseryCreate) SetNillableEmail(s *string) *NurseryCreate {
-	if s != nil {
-		nc.SetEmail(*s)
 	}
 	return nc
 }
@@ -223,11 +229,14 @@ func (nc *NurseryCreate) check() error {
 	if _, ok := nc.mutation.NurseryCode(); !ok {
 		return &ValidationError{Name: "nursery_code", err: errors.New(`ent: missing required field "Nursery.nursery_code"`)}
 	}
+	if _, ok := nc.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Nursery.email"`)}
+	}
+	if _, ok := nc.mutation.EncryptedPassword(); !ok {
+		return &ValidationError{Name: "encrypted_password", err: errors.New(`ent: missing required field "Nursery.encrypted_password"`)}
+	}
 	if _, ok := nc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Nursery.name"`)}
-	}
-	if _, ok := nc.mutation.Address(); !ok {
-		return &ValidationError{Name: "address", err: errors.New(`ent: missing required field "Nursery.address"`)}
 	}
 	if _, ok := nc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Nursery.created_at"`)}
@@ -274,6 +283,14 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 		_spec.SetField(nursery.FieldNurseryCode, field.TypeString, value)
 		_node.NurseryCode = value
 	}
+	if value, ok := nc.mutation.Email(); ok {
+		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
+		_node.Email = value
+	}
+	if value, ok := nc.mutation.EncryptedPassword(); ok {
+		_spec.SetField(nursery.FieldEncryptedPassword, field.TypeString, value)
+		_node.EncryptedPassword = value
+	}
 	if value, ok := nc.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -285,10 +302,6 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.PhoneNumber(); ok {
 		_spec.SetField(nursery.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
-	}
-	if value, ok := nc.mutation.Email(); ok {
-		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
-		_node.Email = value
 	}
 	if value, ok := nc.mutation.CreatedAt(); ok {
 		_spec.SetField(nursery.FieldCreatedAt, field.TypeTime, value)

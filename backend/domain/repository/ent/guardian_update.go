@@ -32,20 +32,6 @@ func (gu *GuardianUpdate) Where(ps ...predicate.Guardian) *GuardianUpdate {
 	return gu
 }
 
-// SetName sets the "name" field.
-func (gu *GuardianUpdate) SetName(s string) *GuardianUpdate {
-	gu.mutation.SetName(s)
-	return gu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (gu *GuardianUpdate) SetNillableName(s *string) *GuardianUpdate {
-	if s != nil {
-		gu.SetName(*s)
-	}
-	return gu
-}
-
 // SetEmail sets the "email" field.
 func (gu *GuardianUpdate) SetEmail(s string) *GuardianUpdate {
 	gu.mutation.SetEmail(s)
@@ -60,9 +46,31 @@ func (gu *GuardianUpdate) SetNillableEmail(s *string) *GuardianUpdate {
 	return gu
 }
 
-// ClearEmail clears the value of the "email" field.
-func (gu *GuardianUpdate) ClearEmail() *GuardianUpdate {
-	gu.mutation.ClearEmail()
+// SetEncryptedPassword sets the "encrypted_password" field.
+func (gu *GuardianUpdate) SetEncryptedPassword(s string) *GuardianUpdate {
+	gu.mutation.SetEncryptedPassword(s)
+	return gu
+}
+
+// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableEncryptedPassword(s *string) *GuardianUpdate {
+	if s != nil {
+		gu.SetEncryptedPassword(*s)
+	}
+	return gu
+}
+
+// SetName sets the "name" field.
+func (gu *GuardianUpdate) SetName(s string) *GuardianUpdate {
+	gu.mutation.SetName(s)
+	return gu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableName(s *string) *GuardianUpdate {
+	if s != nil {
+		gu.SetName(*s)
+	}
 	return gu
 }
 
@@ -242,14 +250,14 @@ func (gu *GuardianUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := gu.mutation.Name(); ok {
-		_spec.SetField(guardian.FieldName, field.TypeString, value)
-	}
 	if value, ok := gu.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 	}
-	if gu.mutation.EmailCleared() {
-		_spec.ClearField(guardian.FieldEmail, field.TypeString)
+	if value, ok := gu.mutation.EncryptedPassword(); ok {
+		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
+	}
+	if value, ok := gu.mutation.Name(); ok {
+		_spec.SetField(guardian.FieldName, field.TypeString, value)
 	}
 	if value, ok := gu.mutation.Phone(); ok {
 		_spec.SetField(guardian.FieldPhone, field.TypeString, value)
@@ -386,20 +394,6 @@ type GuardianUpdateOne struct {
 	mutation *GuardianMutation
 }
 
-// SetName sets the "name" field.
-func (guo *GuardianUpdateOne) SetName(s string) *GuardianUpdateOne {
-	guo.mutation.SetName(s)
-	return guo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (guo *GuardianUpdateOne) SetNillableName(s *string) *GuardianUpdateOne {
-	if s != nil {
-		guo.SetName(*s)
-	}
-	return guo
-}
-
 // SetEmail sets the "email" field.
 func (guo *GuardianUpdateOne) SetEmail(s string) *GuardianUpdateOne {
 	guo.mutation.SetEmail(s)
@@ -414,9 +408,31 @@ func (guo *GuardianUpdateOne) SetNillableEmail(s *string) *GuardianUpdateOne {
 	return guo
 }
 
-// ClearEmail clears the value of the "email" field.
-func (guo *GuardianUpdateOne) ClearEmail() *GuardianUpdateOne {
-	guo.mutation.ClearEmail()
+// SetEncryptedPassword sets the "encrypted_password" field.
+func (guo *GuardianUpdateOne) SetEncryptedPassword(s string) *GuardianUpdateOne {
+	guo.mutation.SetEncryptedPassword(s)
+	return guo
+}
+
+// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableEncryptedPassword(s *string) *GuardianUpdateOne {
+	if s != nil {
+		guo.SetEncryptedPassword(*s)
+	}
+	return guo
+}
+
+// SetName sets the "name" field.
+func (guo *GuardianUpdateOne) SetName(s string) *GuardianUpdateOne {
+	guo.mutation.SetName(s)
+	return guo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableName(s *string) *GuardianUpdateOne {
+	if s != nil {
+		guo.SetName(*s)
+	}
 	return guo
 }
 
@@ -626,14 +642,14 @@ func (guo *GuardianUpdateOne) sqlSave(ctx context.Context) (_node *Guardian, err
 			}
 		}
 	}
-	if value, ok := guo.mutation.Name(); ok {
-		_spec.SetField(guardian.FieldName, field.TypeString, value)
-	}
 	if value, ok := guo.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 	}
-	if guo.mutation.EmailCleared() {
-		_spec.ClearField(guardian.FieldEmail, field.TypeString)
+	if value, ok := guo.mutation.EncryptedPassword(); ok {
+		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
+	}
+	if value, ok := guo.mutation.Name(); ok {
+		_spec.SetField(guardian.FieldName, field.TypeString, value)
 	}
 	if value, ok := guo.mutation.Phone(); ok {
 		_spec.SetField(guardian.FieldPhone, field.TypeString, value)

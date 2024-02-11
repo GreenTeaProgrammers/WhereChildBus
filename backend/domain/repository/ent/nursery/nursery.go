@@ -17,14 +17,16 @@ const (
 	FieldID = "id"
 	// FieldNurseryCode holds the string denoting the nursery_code field in the database.
 	FieldNurseryCode = "nursery_code"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
+	// FieldEncryptedPassword holds the string denoting the encrypted_password field in the database.
+	FieldEncryptedPassword = "encrypted_password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldAddress holds the string denoting the address field in the database.
 	FieldAddress = "address"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
 	FieldPhoneNumber = "phone_number"
-	// FieldEmail holds the string denoting the email field in the database.
-	FieldEmail = "email"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -64,10 +66,11 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldNurseryCode,
+	FieldEmail,
+	FieldEncryptedPassword,
 	FieldName,
 	FieldAddress,
 	FieldPhoneNumber,
-	FieldEmail,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -108,6 +111,16 @@ func ByNurseryCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNurseryCode, opts...).ToFunc()
 }
 
+// ByEmail orders the results by the email field.
+func ByEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByEncryptedPassword orders the results by the encrypted_password field.
+func ByEncryptedPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptedPassword, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -121,11 +134,6 @@ func ByAddress(opts ...sql.OrderTermOption) OrderOption {
 // ByPhoneNumber orders the results by the phone_number field.
 func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPhoneNumber, opts...).ToFunc()
-}
-
-// ByEmail orders the results by the email field.
-func ByEmail(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

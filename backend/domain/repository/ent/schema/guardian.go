@@ -18,8 +18,9 @@ type Guardian struct {
 func (Guardian) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
+		field.String("email"),
+		field.String("encrypted_password"),
 		field.String("name"),
-		field.String("email").Optional(),
 		field.String("phone").Optional(),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),

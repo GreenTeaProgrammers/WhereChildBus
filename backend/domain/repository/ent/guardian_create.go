@@ -24,23 +24,21 @@ type GuardianCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (gc *GuardianCreate) SetName(s string) *GuardianCreate {
-	gc.mutation.SetName(s)
-	return gc
-}
-
 // SetEmail sets the "email" field.
 func (gc *GuardianCreate) SetEmail(s string) *GuardianCreate {
 	gc.mutation.SetEmail(s)
 	return gc
 }
 
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (gc *GuardianCreate) SetNillableEmail(s *string) *GuardianCreate {
-	if s != nil {
-		gc.SetEmail(*s)
-	}
+// SetEncryptedPassword sets the "encrypted_password" field.
+func (gc *GuardianCreate) SetEncryptedPassword(s string) *GuardianCreate {
+	gc.mutation.SetEncryptedPassword(s)
+	return gc
+}
+
+// SetName sets the "name" field.
+func (gc *GuardianCreate) SetName(s string) *GuardianCreate {
+	gc.mutation.SetName(s)
 	return gc
 }
 
@@ -204,6 +202,12 @@ func (gc *GuardianCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (gc *GuardianCreate) check() error {
+	if _, ok := gc.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Guardian.email"`)}
+	}
+	if _, ok := gc.mutation.EncryptedPassword(); !ok {
+		return &ValidationError{Name: "encrypted_password", err: errors.New(`ent: missing required field "Guardian.encrypted_password"`)}
+	}
 	if _, ok := gc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Guardian.name"`)}
 	}
@@ -248,13 +252,17 @@ func (gc *GuardianCreate) createSpec() (*Guardian, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := gc.mutation.Name(); ok {
-		_spec.SetField(guardian.FieldName, field.TypeString, value)
-		_node.Name = value
-	}
 	if value, ok := gc.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 		_node.Email = value
+	}
+	if value, ok := gc.mutation.EncryptedPassword(); ok {
+		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
+		_node.EncryptedPassword = value
+	}
+	if value, ok := gc.mutation.Name(); ok {
+		_spec.SetField(guardian.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := gc.mutation.Phone(); ok {
 		_spec.SetField(guardian.FieldPhone, field.TypeString, value)

@@ -20,10 +20,12 @@ type Guardian struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
+	// EncryptedPassword holds the value of the "encrypted_password" field.
+	EncryptedPassword string `json:"encrypted_password,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 	// Phone holds the value of the "phone" field.
 	Phone string `json:"phone,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -90,7 +92,7 @@ func (*Guardian) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case guardian.FieldName, guardian.FieldEmail, guardian.FieldPhone:
+		case guardian.FieldEmail, guardian.FieldEncryptedPassword, guardian.FieldName, guardian.FieldPhone:
 			values[i] = new(sql.NullString)
 		case guardian.FieldCreatedAt, guardian.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -119,17 +121,23 @@ func (gu *Guardian) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				gu.ID = *value
 			}
-		case guardian.FieldName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
-			} else if value.Valid {
-				gu.Name = value.String
-			}
 		case guardian.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
 				gu.Email = value.String
+			}
+		case guardian.FieldEncryptedPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field encrypted_password", values[i])
+			} else if value.Valid {
+				gu.EncryptedPassword = value.String
+			}
+		case guardian.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				gu.Name = value.String
 			}
 		case guardian.FieldPhone:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -207,11 +215,14 @@ func (gu *Guardian) String() string {
 	var builder strings.Builder
 	builder.WriteString("Guardian(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", gu.ID))
-	builder.WriteString("name=")
-	builder.WriteString(gu.Name)
-	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(gu.Email)
+	builder.WriteString(", ")
+	builder.WriteString("encrypted_password=")
+	builder.WriteString(gu.EncryptedPassword)
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(gu.Name)
 	builder.WriteString(", ")
 	builder.WriteString("phone=")
 	builder.WriteString(gu.Phone)
