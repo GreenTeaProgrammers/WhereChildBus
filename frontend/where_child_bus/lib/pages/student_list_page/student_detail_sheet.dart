@@ -3,50 +3,46 @@ import 'package:flutter/material.dart';
 class StudentDetailSheet extends StatelessWidget {
   final String childName;
 
-  StudentDetailSheet({required this.childName});
+  const StudentDetailSheet({super.key, required this.childName});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(30.0),
-        height: 1000,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+      padding: const EdgeInsets.all(30.0),
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+      ),
+      child: modalBody(),
+    );
+  }
+
+  Widget modalBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        modalHeader(),
+        Container(
+            margin: const EdgeInsets.only(top: 20), child: childDetailList())
+      ],
+    );
+  }
+
+  Widget modalHeader() {
+    return Stack(children: <Widget>[
+      Align(
+        alignment: Alignment.topRight,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+          onPressed: () {},
+          child: const Icon(Icons.edit),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Stack(children: <Widget>[
-              Align(
-                alignment: Alignment.topRight,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(shape: CircleBorder()),
-                  onPressed: () {},
-                  child: Icon(Icons.edit),
-                ),
-              ),
-              childImageAndChildName(),
-            ]),
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  childDetailInfo("年齢", "3歳"),
-                  childDetailInfo("クラス", "1組"),
-                  childDetailInfo("保護者氏名", "保護者1"),
-                  childDetailInfo("保護者連絡先", "xxx-xxxx-xxxx"),
-                  childDetailInfo("利用コース", "○○コース"),
-                  childDetailInfo("乗降場所", "○○駐車場前"),
-                ],
-              ),
-            ),
-          ],
-        ));
+      ),
+      childImageAndChildName(),
+    ]);
   }
 
   Widget childImageAndChildName() {
@@ -70,19 +66,34 @@ class StudentDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget childDetailInfo(String title, String element) {
-    return Row(
+  Widget childDetailList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        detailTitle(title),
-        const SizedBox(
-          width: 50,
-        ),
-        Text(element, style: TextStyle(color: Colors.black, fontSize: 18))
+        childDetailItem("年齢", "3歳"),
+        childDetailItem("クラス", "1組"),
+        childDetailItem("保護者氏名", "保護者1"),
+        childDetailItem("保護者連絡先", "xxx-xxxx-xxxx"),
+        childDetailItem("利用コース", "○○コース"),
+        childDetailItem("乗降場所", "○○駐車場前"),
       ],
     );
   }
 
-  Widget detailTitle(String title) {
+  Widget childDetailItem(String title, String element) {
+    return Row(
+      children: <Widget>[
+        detailItemTitle(title),
+        const SizedBox(
+          width: 50,
+        ),
+        Text(element, style: const TextStyle(color: Colors.black, fontSize: 18))
+      ],
+    );
+  }
+
+  Widget detailItemTitle(String title) {
     return SizedBox(
       width: 18 * 6 + 6,
       child: Text(

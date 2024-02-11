@@ -57,7 +57,7 @@ class _StudentListPageState extends State<StudentListPage> {
         widthFactor: 0.8,
         child: InkWell(
           onTap: () async {
-            await showBottomSheet<void>(
+            await showModalBottomSheet<void>(
                 context: context,
                 builder: (BuildContext context) {
                   return StudentDetailSheet(childName: name[index]);
@@ -72,17 +72,13 @@ class _StudentListPageState extends State<StudentListPage> {
         color: Colors.white,
         child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: childFaceImageNameAndGroupName(index, screenSize)));
-  }
-
-  Widget childFaceImageNameAndGroupName(int index, Size screenSize) {
-    return Row(children: <Widget>[
-      childFaceImage(index),
-      SizedBox(
-        width: screenSize.width * 0.05,
-      ),
-      childNameAndGroupName(index),
-    ]);
+            child: Row(children: <Widget>[
+              childFaceImage(index),
+              SizedBox(
+                width: screenSize.width * 0.05,
+              ),
+              childNameAndGroupName(index),
+            ])));
   }
 
   Widget childFaceImage(int index) {
