@@ -38,9 +38,9 @@ final $typed_data.Uint8List nurseryDescriptor = $convert.base64Decode(
     'YXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYX'
     'RlZF9hdBgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdA==');
 
-@$core.Deprecated('Use nurseryReponseDescriptor instead')
-const NurseryReponse$json = {
-  '1': 'NurseryReponse',
+@$core.Deprecated('Use nurseryResponseDescriptor instead')
+const NurseryResponse$json = {
+  '1': 'NurseryResponse',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
@@ -52,13 +52,13 @@ const NurseryReponse$json = {
   ],
 };
 
-/// Descriptor for `NurseryReponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List nurseryReponseDescriptor = $convert.base64Decode(
-    'Cg5OdXJzZXJ5UmVwb25zZRIOCgJpZBgBIAEoCVICaWQSHQoKbnVyc2VyeV9pZBgCIAEoCVIJbn'
-    'Vyc2VyeUlkEhIKBG5hbWUYAyABKAlSBG5hbWUSFAoFZW1haWwYBCABKAlSBWVtYWlsEiEKDHBo'
-    'b25lX251bWJlchgFIAEoCVILcGhvbmVOdW1iZXISOQoKY3JlYXRlZF9hdBgGIAEoCzIaLmdvb2'
-    'dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAcgASgLMhou'
-    'Z29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
+/// Descriptor for `NurseryResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List nurseryResponseDescriptor = $convert.base64Decode(
+    'Cg9OdXJzZXJ5UmVzcG9uc2USDgoCaWQYASABKAlSAmlkEh0KCm51cnNlcnlfaWQYAiABKAlSCW'
+    '51cnNlcnlJZBISCgRuYW1lGAMgASgJUgRuYW1lEhQKBWVtYWlsGAQgASgJUgVlbWFpbBIhCgxw'
+    'aG9uZV9udW1iZXIYBSABKAlSC3Bob25lTnVtYmVyEjkKCmNyZWF0ZWRfYXQYBiABKAsyGi5nb2'
+    '9nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgHIAEoCzIa'
+    'Lmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdA==');
 
 @$core.Deprecated('Use guardianDescriptor instead')
 const Guardian$json = {

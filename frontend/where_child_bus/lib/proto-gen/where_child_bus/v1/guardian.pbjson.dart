@@ -36,7 +36,7 @@ const GuardianLoginResponse$json = {
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
     {'1': 'guardian', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardian'},
-    {'1': 'nursery', '3': 3, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryReponse', '10': 'nursery'},
+    {'1': 'nursery', '3': 3, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryResponse', '10': 'nursery'},
   ],
 };
 
@@ -44,8 +44,8 @@ const GuardianLoginResponse$json = {
 final $typed_data.Uint8List guardianLoginResponseDescriptor = $convert.base64Decode(
     'ChVHdWFyZGlhbkxvZ2luUmVzcG9uc2USGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxJACghndW'
     'FyZGlhbhgCIAEoCzIkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUghndWFy'
-    'ZGlhbhI8CgdudXJzZXJ5GAMgASgLMiIud2hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXBvbn'
-    'NlUgdudXJzZXJ5');
+    'ZGlhbhI9CgdudXJzZXJ5GAMgASgLMiMud2hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXNwb2'
+    '5zZVIHbnVyc2VyeQ==');
 
 const $core.Map<$core.String, $core.dynamic> GuardianServiceBase$json = {
   '1': 'GuardianService',
@@ -60,7 +60,7 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> GuardianSe
   '.where_child_bus.v1.GuardianLoginResponse': GuardianLoginResponse$json,
   '.where_child_bus.v1.GuardianResponse': $1.GuardianResponse$json,
   '.google.protobuf.Timestamp': $0.Timestamp$json,
-  '.where_child_bus.v1.NurseryReponse': $1.NurseryReponse$json,
+  '.where_child_bus.v1.NurseryResponse': $1.NurseryResponse$json,
 };
 
 /// Descriptor for `GuardianService`. Decode as a `google.protobuf.ServiceDescriptorProto`.

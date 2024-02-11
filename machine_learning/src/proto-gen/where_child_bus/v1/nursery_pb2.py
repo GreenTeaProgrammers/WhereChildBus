@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from where_child_bus.v1 import resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n where_child_bus/v1/nursery.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"G\n\x13NurseryLoginRequest\x12\x14\n\x05\x65mail\x18\x01 \x01(\tR\x05\x65mail\x12\x1a\n\x08password\x18\x02 \x01(\tR\x08password\"g\n\x14NurseryLoginResponse\x12\x18\n\x07success\x18\x01 \x01(\x08R\x07success\x12\x35\n\x07nursery\x18\x02 \x01(\x0b\x32\x1b.where_child_bus.v1.NurseryR\x07nursery2s\n\x0eNurseryService\x12\x61\n\x0cNurseryLogin\x12\'.where_child_bus.v1.NurseryLoginRequest\x1a(.where_child_bus.v1.NurseryLoginResponseB\xef\x01\n\x16\x63om.where_child_bus.v1B\x0cNurseryProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n where_child_bus/v1/nursery.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"G\n\x13NurseryLoginRequest\x12\x14\n\x05\x65mail\x18\x01 \x01(\tR\x05\x65mail\x12\x1a\n\x08password\x18\x02 \x01(\tR\x08password\"o\n\x14NurseryLoginResponse\x12\x18\n\x07success\x18\x01 \x01(\x08R\x07success\x12=\n\x07nursery\x18\x02 \x01(\x0b\x32#.where_child_bus.v1.NurseryResponseR\x07nursery2s\n\x0eNurseryService\x12\x61\n\x0cNurseryLogin\x12\'.where_child_bus.v1.NurseryLoginRequest\x1a(.where_child_bus.v1.NurseryLoginResponseB\xef\x01\n\x16\x63om.where_child_bus.v1B\x0cNurseryProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,7 +26,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_NURSERYLOGINREQUEST']._serialized_start=92
   _globals['_NURSERYLOGINREQUEST']._serialized_end=163
   _globals['_NURSERYLOGINRESPONSE']._serialized_start=165
-  _globals['_NURSERYLOGINRESPONSE']._serialized_end=268
-  _globals['_NURSERYSERVICE']._serialized_start=270
-  _globals['_NURSERYSERVICE']._serialized_end=385
+  _globals['_NURSERYLOGINRESPONSE']._serialized_end=276
+  _globals['_NURSERYSERVICE']._serialized_start=278
+  _globals['_NURSERYSERVICE']._serialized_end=393
 # @@protoc_insertion_point(module_scope)
