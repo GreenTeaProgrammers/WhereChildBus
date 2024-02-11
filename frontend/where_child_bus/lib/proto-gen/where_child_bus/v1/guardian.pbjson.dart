@@ -13,6 +13,9 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+import '../../google/protobuf/timestamp.pbjson.dart' as $0;
+import 'resources.pbjson.dart' as $1;
+
 @$core.Deprecated('Use guardianLoginRequestDescriptor instead')
 const GuardianLoginRequest$json = {
   '1': 'GuardianLoginRequest',
@@ -43,4 +46,26 @@ final $typed_data.Uint8List guardianLoginResponseDescriptor = $convert.base64Dec
     'FyZGlhbhgCIAEoCzIkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUghndWFy'
     'ZGlhbhI8CgdudXJzZXJ5GAMgASgLMiIud2hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXBvbn'
     'NlUgdudXJzZXJ5');
+
+const $core.Map<$core.String, $core.dynamic> GuardianServiceBase$json = {
+  '1': 'GuardianService',
+  '2': [
+    {'1': 'GuardianLogin', '2': '.where_child_bus.v1.GuardianLoginRequest', '3': '.where_child_bus.v1.GuardianLoginResponse'},
+  ],
+};
+
+@$core.Deprecated('Use guardianServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> GuardianServiceBase$messageJson = {
+  '.where_child_bus.v1.GuardianLoginRequest': GuardianLoginRequest$json,
+  '.where_child_bus.v1.GuardianLoginResponse': GuardianLoginResponse$json,
+  '.where_child_bus.v1.GuardianResponse': $1.GuardianResponse$json,
+  '.google.protobuf.Timestamp': $0.Timestamp$json,
+  '.where_child_bus.v1.NurseryReponse': $1.NurseryReponse$json,
+};
+
+/// Descriptor for `GuardianService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List guardianServiceDescriptor = $convert.base64Decode(
+    'Cg9HdWFyZGlhblNlcnZpY2USZAoNR3VhcmRpYW5Mb2dpbhIoLndoZXJlX2NoaWxkX2J1cy52MS'
+    '5HdWFyZGlhbkxvZ2luUmVxdWVzdBopLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhbkxvZ2lu'
+    'UmVzcG9uc2U=');
 

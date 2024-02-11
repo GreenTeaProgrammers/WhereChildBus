@@ -9,11 +9,12 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'resources.pb.dart' as $6;
+import 'resources.pb.dart' as $1;
 
 class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDRequest({
@@ -67,7 +68,7 @@ class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
 
 class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse({
-    $core.Iterable<$6.Child>? children,
+    $core.Iterable<$1.Child>? children,
   }) {
     final $result = create();
     if (children != null) {
@@ -80,7 +81,7 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByNurseryIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$6.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $6.Child.create)
+    ..pc<$1.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $1.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -106,7 +107,7 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   static GetChildListByNurseryIDResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$6.Child> get children => $_getList(0);
+  $core.List<$1.Child> get children => $_getList(0);
 }
 
 class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
@@ -161,7 +162,7 @@ class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
 
 class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse({
-    $core.Iterable<$6.Child>? children,
+    $core.Iterable<$1.Child>? children,
   }) {
     final $result = create();
     if (children != null) {
@@ -174,7 +175,7 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByGuardianIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$6.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $6.Child.create)
+    ..pc<$1.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $1.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -200,7 +201,19 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   static GetChildListByGuardianIDResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$6.Child> get children => $_getList(0);
+  $core.List<$1.Child> get children => $_getList(0);
+}
+
+class ChildServiceApi {
+  $pb.RpcClient _client;
+  ChildServiceApi(this._client);
+
+  $async.Future<GetChildListByNurseryIDResponse> getChildListByNurseryID($pb.ClientContext? ctx, GetChildListByNurseryIDRequest request) =>
+    _client.invoke<GetChildListByNurseryIDResponse>(ctx, 'ChildService', 'GetChildListByNurseryID', request, GetChildListByNurseryIDResponse())
+  ;
+  $async.Future<GetChildListByGuardianIDResponse> getChildListByGuardianID($pb.ClientContext? ctx, GetChildListByGuardianIDRequest request) =>
+    _client.invoke<GetChildListByGuardianIDResponse>(ctx, 'ChildService', 'GetChildListByGuardianID', request, GetChildListByGuardianIDResponse())
+  ;
 }
 
 

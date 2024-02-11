@@ -37,3 +37,21 @@ const PingResponse$json = {
 final $typed_data.Uint8List pingResponseDescriptor = $convert.base64Decode(
     'CgxQaW5nUmVzcG9uc2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
 
+const $core.Map<$core.String, $core.dynamic> HealthcheckServiceBase$json = {
+  '1': 'HealthcheckService',
+  '2': [
+    {'1': 'Ping', '2': '.where_child_bus.v1.PingRequest', '3': '.where_child_bus.v1.PingResponse'},
+  ],
+};
+
+@$core.Deprecated('Use healthcheckServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> HealthcheckServiceBase$messageJson = {
+  '.where_child_bus.v1.PingRequest': PingRequest$json,
+  '.where_child_bus.v1.PingResponse': PingResponse$json,
+};
+
+/// Descriptor for `HealthcheckService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List healthcheckServiceDescriptor = $convert.base64Decode(
+    'ChJIZWFsdGhjaGVja1NlcnZpY2USSQoEUGluZxIfLndoZXJlX2NoaWxkX2J1cy52MS5QaW5nUm'
+    'VxdWVzdBogLndoZXJlX2NoaWxkX2J1cy52MS5QaW5nUmVzcG9uc2U=');
+

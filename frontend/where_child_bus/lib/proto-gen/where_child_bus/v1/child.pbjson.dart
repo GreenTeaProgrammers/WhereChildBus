@@ -13,6 +13,9 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+import '../../google/protobuf/timestamp.pbjson.dart' as $0;
+import 'resources.pbjson.dart' as $1;
+
 @$core.Deprecated('Use getChildListByNurseryIDRequestDescriptor instead')
 const GetChildListByNurseryIDRequest$json = {
   '1': 'GetChildListByNurseryIDRequest',
@@ -64,4 +67,31 @@ const GetChildListByGuardianIDResponse$json = {
 final $typed_data.Uint8List getChildListByGuardianIDResponseDescriptor = $convert.base64Decode(
     'CiBHZXRDaGlsZExpc3RCeUd1YXJkaWFuSURSZXNwb25zZRI1CghjaGlsZHJlbhgBIAMoCzIZLn'
     'doZXJlX2NoaWxkX2J1cy52MS5DaGlsZFIIY2hpbGRyZW4=');
+
+const $core.Map<$core.String, $core.dynamic> ChildServiceBase$json = {
+  '1': 'ChildService',
+  '2': [
+    {'1': 'GetChildListByNurseryID', '2': '.where_child_bus.v1.GetChildListByNurseryIDRequest', '3': '.where_child_bus.v1.GetChildListByNurseryIDResponse'},
+    {'1': 'GetChildListByGuardianID', '2': '.where_child_bus.v1.GetChildListByGuardianIDRequest', '3': '.where_child_bus.v1.GetChildListByGuardianIDResponse'},
+  ],
+};
+
+@$core.Deprecated('Use childServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> ChildServiceBase$messageJson = {
+  '.where_child_bus.v1.GetChildListByNurseryIDRequest': GetChildListByNurseryIDRequest$json,
+  '.where_child_bus.v1.GetChildListByNurseryIDResponse': GetChildListByNurseryIDResponse$json,
+  '.where_child_bus.v1.Child': $1.Child$json,
+  '.google.protobuf.Timestamp': $0.Timestamp$json,
+  '.where_child_bus.v1.GetChildListByGuardianIDRequest': GetChildListByGuardianIDRequest$json,
+  '.where_child_bus.v1.GetChildListByGuardianIDResponse': GetChildListByGuardianIDResponse$json,
+};
+
+/// Descriptor for `ChildService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List childServiceDescriptor = $convert.base64Decode(
+    'CgxDaGlsZFNlcnZpY2USggEKF0dldENoaWxkTGlzdEJ5TnVyc2VyeUlEEjIud2hlcmVfY2hpbG'
+    'RfYnVzLnYxLkdldENoaWxkTGlzdEJ5TnVyc2VyeUlEUmVxdWVzdBozLndoZXJlX2NoaWxkX2J1'
+    'cy52MS5HZXRDaGlsZExpc3RCeU51cnNlcnlJRFJlc3BvbnNlEoUBChhHZXRDaGlsZExpc3RCeU'
+    'd1YXJkaWFuSUQSMy53aGVyZV9jaGlsZF9idXMudjEuR2V0Q2hpbGRMaXN0QnlHdWFyZGlhbklE'
+    'UmVxdWVzdBo0LndoZXJlX2NoaWxkX2J1cy52MS5HZXRDaGlsZExpc3RCeUd1YXJkaWFuSURSZX'
+    'Nwb25zZQ==');
 
