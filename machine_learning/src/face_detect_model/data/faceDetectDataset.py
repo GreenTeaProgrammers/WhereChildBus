@@ -1,12 +1,10 @@
 import torch
 from torchvision import transforms
-import torchvision.transforms.functional as TF
-from torch.utils.data import Dataset
 import os
 import cv2
 
-class FaceDetectDataset(Dataset):
-    VALID_EXTENSIONS = {".png"}  # 適宜調整
+class FaceDetectDataset(torch.utils.data.Dataset):
+    VALID_EXTENSIONS = {".png"}  # 変更しない
 
     def __init__(self, config, transform=None):
         self.data_dir = config["dataset"]["root_path"]
@@ -35,7 +33,7 @@ class FaceDetectDataset(Dataset):
 
             self.face_data.append((
                 torch.tensor(name_label_dict[people_name], dtype=torch.int64),
-                image,  # この時点ではまだNumPy配列
+                image,  # ここではNumPy配列として格納
             ))
 
     @staticmethod
