@@ -34,24 +34,32 @@ class _StudentListPageState extends State<StudentListPage> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
+    return childCardListBuilder(screenSize);
+  }
+
+  Widget childCardListBuilder(Size screenSize) {
     return ListView.separated(
         itemCount: name.length,
         separatorBuilder: (BuildContext context, int index) {
-          return Divider(
+          return const Divider(
             height: 20,
             color: Colors.transparent,
           );
         },
         itemBuilder: (BuildContext context, int index) {
-          return FractionallySizedBox(
-              widthFactor: 0.8,
-              child: InkWell(
-                onTap: () {
-                  showBottomSheet(context, index);
-                },
-                child: childCard(index, screenSize),
-              ));
+          return childCardListInner(index, screenSize);
         });
+  }
+
+  Widget childCardListInner(int index, Size screenSize) {
+    return FractionallySizedBox(
+        widthFactor: 0.8,
+        child: InkWell(
+          onTap: () {
+            showBottomSheet(context, index);
+          },
+          child: childCard(index, screenSize),
+        ));
   }
 
   Widget childCard(int index, Size screenSize) {
@@ -59,69 +67,78 @@ class _StudentListPageState extends State<StudentListPage> {
         color: Colors.white,
         child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Row(children: <Widget>[
-              childImage(index),
-              SizedBox(
-                width: screenSize.width * 0.05,
-              ),
-              nameAndGroup(index),
-            ])));
+            child: childFaceImageNameAndGroupName(index, screenSize)));
   }
 
-  Widget childImage(int index) {
+  Widget childFaceImageNameAndGroupName(int index, Size screenSize) {
+    return Row(children: <Widget>[
+      childFaceImage(index),
+      SizedBox(
+        width: screenSize.width * 0.05,
+      ),
+      childNameAndGroupName(index),
+    ]);
+  }
+
+  Widget childFaceImage(int index) {
     return SizedBox(
         width: 100,
         height: 100,
         child: Image.asset("assets/images/face_${image[index]}.png"));
   }
 
-  Widget nameAndGroup(int index) {
+  Widget childNameAndGroupName(int index) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(name[index],
-              style: TextStyle(color: Colors.black, fontSize: 24)),
+              style: const TextStyle(color: Colors.black, fontSize: 24)),
           Text(
             group[index],
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           ),
-          place(),
+          busStopName(),
         ]);
   }
 
-  Widget place() {
-    return Row(children: <Widget>[
+  Widget busStopName() {
+    return const Row(children: <Widget>[
       Icon(Icons.location_on),
       Text("停留所名"),
     ]);
   }
 
-  Widget imageAndName(int index) {
+  Widget childImageAndChildName(int index) {
     return Row(children: <Widget>[
-      childImage(index),
-      SizedBox(
+      childFaceImage(index),
+      const SizedBox(
         width: 50,
       ),
-      Text(name[index], style: TextStyle(color: Colors.black, fontSize: 24)),
+      Text(name[index],
+          style: const TextStyle(color: Colors.black, fontSize: 24)),
     ]);
   }
 
-  Widget detail(String title, String element) {
+  Widget childDetailInfo(String title, String element) {
     return Row(
       children: <Widget>[
-        SizedBox(
-          width: 18 * 6 + 6,
-          child: Text(
-            title,
-            style: TextStyle(color: Colors.black, fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        SizedBox(
+        detailTitle(title),
+        const SizedBox(
           width: 50,
         ),
         Text(element, style: TextStyle(color: Colors.black, fontSize: 18))
       ],
+    );
+  }
+
+  Widget detailTitle(String title) {
+    return SizedBox(
+      width: 18 * 6 + 6,
+      child: Text(
+        title,
+        style: const TextStyle(color: Colors.black, fontSize: 18),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -151,7 +168,7 @@ class _StudentListPageState extends State<StudentListPage> {
                         child: Icon(Icons.edit),
                       ),
                     ),
-                    imageAndName(index),
+                    childImageAndChildName(index),
                   ]),
                   Container(
                     margin: EdgeInsets.only(top: 20),
@@ -159,12 +176,12 @@ class _StudentListPageState extends State<StudentListPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        detail("年齢", "3歳"),
-                        detail("クラス", group[index]),
-                        detail("保護者氏名", "保護者1"),
-                        detail("保護者連絡先", "xxx-xxxx-xxxx"),
-                        detail("利用コース", "○○コース"),
-                        detail("乗降場所", "○○駐車場前"),
+                        childDetailInfo("年齢", "3歳"),
+                        childDetailInfo("クラス", group[index]),
+                        childDetailInfo("保護者氏名", "保護者1"),
+                        childDetailInfo("保護者連絡先", "xxx-xxxx-xxxx"),
+                        childDetailInfo("利用コース", "○○コース"),
+                        childDetailInfo("乗降場所", "○○駐車場前"),
                       ],
                     ),
                   ),
