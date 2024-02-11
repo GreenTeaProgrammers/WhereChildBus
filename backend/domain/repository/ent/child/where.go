@@ -71,9 +71,9 @@ func IsRideMorningBus(v bool) predicate.Child {
 	return predicate.Child(sql.FieldEQ(FieldIsRideMorningBus, v))
 }
 
-// IsRideAfternoonBus applies equality check predicate on the "is_ride_afternoon_bus" field. It's identical to IsRideAfternoonBusEQ.
-func IsRideAfternoonBus(v bool) predicate.Child {
-	return predicate.Child(sql.FieldEQ(FieldIsRideAfternoonBus, v))
+// IsRideEveningBus applies equality check predicate on the "is_ride_evening_bus" field. It's identical to IsRideEveningBusEQ.
+func IsRideEveningBus(v bool) predicate.Child {
+	return predicate.Child(sql.FieldEQ(FieldIsRideEveningBus, v))
 }
 
 // CheckForMissingItems applies equality check predicate on the "check_for_missing_items" field. It's identical to CheckForMissingItemsEQ.
@@ -251,14 +251,14 @@ func IsRideMorningBusNEQ(v bool) predicate.Child {
 	return predicate.Child(sql.FieldNEQ(FieldIsRideMorningBus, v))
 }
 
-// IsRideAfternoonBusEQ applies the EQ predicate on the "is_ride_afternoon_bus" field.
-func IsRideAfternoonBusEQ(v bool) predicate.Child {
-	return predicate.Child(sql.FieldEQ(FieldIsRideAfternoonBus, v))
+// IsRideEveningBusEQ applies the EQ predicate on the "is_ride_evening_bus" field.
+func IsRideEveningBusEQ(v bool) predicate.Child {
+	return predicate.Child(sql.FieldEQ(FieldIsRideEveningBus, v))
 }
 
-// IsRideAfternoonBusNEQ applies the NEQ predicate on the "is_ride_afternoon_bus" field.
-func IsRideAfternoonBusNEQ(v bool) predicate.Child {
-	return predicate.Child(sql.FieldNEQ(FieldIsRideAfternoonBus, v))
+// IsRideEveningBusNEQ applies the NEQ predicate on the "is_ride_evening_bus" field.
+func IsRideEveningBusNEQ(v bool) predicate.Child {
+	return predicate.Child(sql.FieldNEQ(FieldIsRideEveningBus, v))
 }
 
 // CheckForMissingItemsEQ applies the EQ predicate on the "check_for_missing_items" field.
