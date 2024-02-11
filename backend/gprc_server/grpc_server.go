@@ -4,7 +4,7 @@ import (
 	"context"
 
 	grpc_interfaces "github.com/GreenTeaProgrammers/WhereChildBus/backend/interfaces"
-	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus"
+	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"golang.org/x/exp/slog"
 	"google.golang.org/grpc"
