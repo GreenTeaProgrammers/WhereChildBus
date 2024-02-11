@@ -3,8 +3,7 @@ FROM golang:1.21.5 AS builder
 
 WORKDIR /srv/grpc
 COPY . .
-# .env ファイルをイメージ内にコピー
-COPY .env /
+
 RUN go mod download
 
 ARG VERS="3.11.4"
@@ -24,7 +23,6 @@ RUN apk --no-cache add ca-certificates
 
 # ビルドステージからバイナリと.envファイルをコピー
 COPY --from=builder /go/bin/server /server
-COPY --from=builder /srv/grpc/.env /
 
 # アプリケーションの起動
 ENTRYPOINT ["/server"]
