@@ -20,7 +20,6 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
   factory GuardianLoginRequest({
     $core.String? email,
     $core.String? password,
-    $core.String? guardianId,
   }) {
     final $result = create();
     if (email != null) {
@@ -28,9 +27,6 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
     }
     if (password != null) {
       $result.password = password;
-    }
-    if (guardianId != null) {
-      $result.guardianId = guardianId;
     }
     return $result;
   }
@@ -41,7 +37,6 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GuardianLoginRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'email')
     ..aOS(2, _omitFieldNames ? '' : 'password')
-    ..aOS(3, _omitFieldNames ? '' : 'guardianId')
     ..hasRequiredFields = false
   ;
 
@@ -83,21 +78,13 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get guardianId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set guardianId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasGuardianId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearGuardianId() => clearField(3);
 }
 
 class GuardianLoginResponse extends $pb.GeneratedMessage {
   factory GuardianLoginResponse({
     $core.bool? success,
-    $1.Guardian? guardian,
+    $1.GuardianResponse? guardian,
+    $1.NurseryReponse? nursery,
   }) {
     final $result = create();
     if (success != null) {
@@ -105,6 +92,9 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
     }
     if (guardian != null) {
       $result.guardian = guardian;
+    }
+    if (nursery != null) {
+      $result.nursery = nursery;
     }
     return $result;
   }
@@ -114,7 +104,8 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GuardianLoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'success')
-    ..aOM<$1.Guardian>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $1.Guardian.create)
+    ..aOM<$1.GuardianResponse>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $1.GuardianResponse.create)
+    ..aOM<$1.NurseryReponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $1.NurseryReponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -149,15 +140,26 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(1);
 
   @$pb.TagNumber(2)
-  $1.Guardian get guardian => $_getN(1);
+  $1.GuardianResponse get guardian => $_getN(1);
   @$pb.TagNumber(2)
-  set guardian($1.Guardian v) { setField(2, v); }
+  set guardian($1.GuardianResponse v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasGuardian() => $_has(1);
   @$pb.TagNumber(2)
   void clearGuardian() => clearField(2);
   @$pb.TagNumber(2)
-  $1.Guardian ensureGuardian() => $_ensure(1);
+  $1.GuardianResponse ensureGuardian() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $1.NurseryReponse get nursery => $_getN(2);
+  @$pb.TagNumber(3)
+  set nursery($1.NurseryReponse v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasNursery() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNursery() => clearField(3);
+  @$pb.TagNumber(3)
+  $1.NurseryReponse ensureNursery() => $_ensure(2);
 }
 
 class GuardianServiceApi {

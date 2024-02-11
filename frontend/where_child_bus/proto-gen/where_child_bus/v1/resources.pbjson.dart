@@ -38,6 +38,28 @@ final $typed_data.Uint8List nurseryDescriptor = $convert.base64Decode(
     'YXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYX'
     'RlZF9hdBgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdA==');
 
+@$core.Deprecated('Use nurseryReponseDescriptor instead')
+const NurseryReponse$json = {
+  '1': 'NurseryReponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'email', '3': 4, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'phone_number', '3': 5, '4': 1, '5': 9, '10': 'phoneNumber'},
+    {'1': 'created_at', '3': 6, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'updated_at', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
+  ],
+};
+
+/// Descriptor for `NurseryReponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List nurseryReponseDescriptor = $convert.base64Decode(
+    'Cg5OdXJzZXJ5UmVwb25zZRIOCgJpZBgBIAEoCVICaWQSHQoKbnVyc2VyeV9pZBgCIAEoCVIJbn'
+    'Vyc2VyeUlkEhIKBG5hbWUYAyABKAlSBG5hbWUSFAoFZW1haWwYBCABKAlSBWVtYWlsEiEKDHBo'
+    'b25lX251bWJlchgFIAEoCVILcGhvbmVOdW1iZXISOQoKY3JlYXRlZF9hdBgGIAEoCzIaLmdvb2'
+    'dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAcgASgLMhou'
+    'Z29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
+
 @$core.Deprecated('Use guardianDescriptor instead')
 const Guardian$json = {
   '1': 'Guardian',
@@ -61,6 +83,28 @@ final $typed_data.Uint8List guardianDescriptor = $convert.base64Decode(
     'NyeXB0ZWRQYXNzd29yZBI5CgpjcmVhdGVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRp'
     'bWVzdGFtcFIJY3JlYXRlZEF0EjkKCnVwZGF0ZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idW'
     'YuVGltZXN0YW1wUgl1cGRhdGVkQXQ=');
+
+@$core.Deprecated('Use guardianResponseDescriptor instead')
+const GuardianResponse$json = {
+  '1': 'GuardianResponse',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'email', '3': 4, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'phone_number', '3': 5, '4': 1, '5': 9, '10': 'phoneNumber'},
+    {'1': 'created_at', '3': 6, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'updated_at', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
+  ],
+};
+
+/// Descriptor for `GuardianResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List guardianResponseDescriptor = $convert.base64Decode(
+    'ChBHdWFyZGlhblJlc3BvbnNlEg4KAmlkGAEgASgJUgJpZBIdCgpudXJzZXJ5X2lkGAIgASgJUg'
+    'ludXJzZXJ5SWQSEgoEbmFtZRgDIAEoCVIEbmFtZRIUCgVlbWFpbBgEIAEoCVIFZW1haWwSIQoM'
+    'cGhvbmVfbnVtYmVyGAUgASgJUgtwaG9uZU51bWJlchI5CgpjcmVhdGVkX2F0GAYgASgLMhouZ2'
+    '9vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0EjkKCnVwZGF0ZWRfYXQYByABKAsy'
+    'Gi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgl1cGRhdGVkQXQ=');
 
 @$core.Deprecated('Use busDescriptor instead')
 const Bus$json = {

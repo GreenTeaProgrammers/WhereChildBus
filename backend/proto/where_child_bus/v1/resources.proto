@@ -16,6 +16,17 @@ message Nursery {
         google.protobuf.Timestamp  updated_at = 9;
 }
 
+message NurseryReponse {
+        string id = 1;
+        string nursery_id = 2;
+        string name = 3;
+        string email = 4;
+        string phone_number = 5;
+        // ハッシュ化されたパスワードは除外
+        google.protobuf.Timestamp created_at = 6;
+        google.protobuf.Timestamp updated_at = 7;
+}
+
 message Guardian {
         string id = 1;
         string nursery_id = 2;
@@ -25,6 +36,17 @@ message Guardian {
         string encrypted_password = 6;
         google.protobuf.Timestamp  created_at = 7;
         google.protobuf.Timestamp  updated_at =8;
+}
+
+message GuardianResponse {
+        string id = 1;
+        string nursery_id = 2;
+        string name = 3;
+        string email = 4;
+        string phone_number = 5;
+        // ハッシュ化されたパスワードは除外
+        google.protobuf.Timestamp created_at = 6;
+        google.protobuf.Timestamp updated_at = 7;
 }
 
 message Bus {
