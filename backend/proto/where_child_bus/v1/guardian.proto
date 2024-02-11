@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service GuardianService {
+        rpc GuardianLogin(GuardianLoginRequest) returns (GuardianLoginResponse);
+}
+
+message GuardianLoginRequest {
+        string email = 1;
+        string password = 2;
+}
+
+message GuardianLoginResponse {
+        bool success = 1;
+        GuardianResponse guardian = 2;
+        NurseryReponse nursery = 3;
+}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service ChildService {
+        rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (GetChildListByNurseryIDResponse);
+        rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
+}
+
+message GetChildListByNurseryIDRequest {
+        string nursery_id = 1;
+}
+
+message GetChildListByNurseryIDResponse {
+        repeated Child children = 1;
+}
+
+message GetChildListByGuardianIDRequest {
+        string guardian_id = 1;
+}
+
+message GetChildListByGuardianIDResponse {
+        repeated Child children = 1;
+}
