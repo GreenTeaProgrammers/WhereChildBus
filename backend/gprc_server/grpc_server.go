@@ -8,6 +8,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/bus"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/guardian"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/nursery"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"golang.org/x/exp/slog"
 	"google.golang.org/grpc"
@@ -46,6 +47,10 @@ func New(opts ...optionFunc) *grpc.Server {
 
 	healthcheckSrv := grpc_interfaces.NewHealthcheckServiceServer()
 	pb.RegisterHealthcheckServiceServer(srv, healthcheckSrv)
+
+	nurseryInteractor := nursery.NewInteractor(opt.entClient, opt.logger)
+	nurserySrv := grpc_interfaces.NewNurseryServiceServer(nurseryInteractor)
+	pb.RegisterNurseryServiceServer(srv, nurserySrv)
 
 	return srv
 }

@@ -81,3 +81,16 @@ func ToPbGuardianResponse(t *ent.Guardian) *pb.GuardianResponse {
 		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
+
+func ToPbNurseryResponse(t *ent.Nursery) *pb.NurseryResponse {
+	return &pb.NurseryResponse{
+		Id:          t.ID.String(),
+		NurseryCode: t.NurseryCode,
+		Name:        t.Name,
+		Email:       t.Email,
+		Address:     t.Address,
+		PhoneNumber: t.PhoneNumber,
+		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
