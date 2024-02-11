@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: where_child_bus/v1/health_check.proto
+//  source: where_child_bus/v1/bus.proto
 //
 // @dart = 2.12
 
@@ -15,29 +15,29 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'health_check.pb.dart' as $5;
-import 'health_check.pbjson.dart';
+import 'bus.pb.dart' as $2;
+import 'bus.pbjson.dart';
 
-export 'health_check.pb.dart';
+export 'bus.pb.dart';
 
-abstract class HealthcheckServiceBase extends $pb.GeneratedService {
-  $async.Future<$5.PingResponse> ping($pb.ServerContext ctx, $5.PingRequest request);
+abstract class BusServiceBase extends $pb.GeneratedService {
+  $async.Future<$2.GetBusListByNurseryIdResponse> getBusListByNurseryId($pb.ServerContext ctx, $2.GetBusListByNurseryIdRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'Ping': return $5.PingRequest();
+      case 'GetBusListByNurseryId': return $2.GetBusListByNurseryIdRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'Ping': return this.ping(ctx, request as $5.PingRequest);
+      case 'GetBusListByNurseryId': return this.getBusListByNurseryId(ctx, request as $2.GetBusListByNurseryIdRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
-  $core.Map<$core.String, $core.dynamic> get $json => HealthcheckServiceBase$json;
-  $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> get $messageJson => HealthcheckServiceBase$messageJson;
+  $core.Map<$core.String, $core.dynamic> get $json => BusServiceBase$json;
+  $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> get $messageJson => BusServiceBase$messageJson;
 }
 
