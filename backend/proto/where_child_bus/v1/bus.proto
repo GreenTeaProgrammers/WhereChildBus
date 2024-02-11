@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service BusService {
+        rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
+}
+
+message GetBusListByNurseryIdRequest {
+        string nursery_id = 1;
+}
+
+message GetBusListByNurseryIdResponse {
+        repeated Bus buses = 1;
+}
