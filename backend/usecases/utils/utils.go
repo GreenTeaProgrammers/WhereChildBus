@@ -69,3 +69,15 @@ func convertStatusToPbStatus(status bus.Status) pb.Bus_Status {
 		return pb.Bus_STATUS_UNSPECIFIED
 	}
 }
+
+func ToPbGuardianResponse(t *ent.Guardian) *pb.GuardianResponse {
+	return &pb.GuardianResponse{
+		Id:          t.ID.String(),
+		NurseryId:   t.Edges.Nursery.ID.String(),
+		Email:       t.Email,
+		PhoneNumber: t.PhoneNumber,
+		Name:        t.Name,
+		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
