@@ -96,25 +96,35 @@ class _StudentListPageState extends State<StudentListPage> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-            padding: const EdgeInsets.only(
-              top: 50.0,
-              right: 30.0,
-              bottom: 30.0,
-              left: 30.0,
-            ),
-            height: 1000,
-            child: Row(
+              padding: const EdgeInsets.only(
+                top: 50.0,
+                right: 30.0,
+                bottom: 30.0,
+                left: 30.0,
+              ),
+              height: 1000,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  childImage(index),
-                  SizedBox(
-                    width: 50,
+                  Row(children: <Widget>[
+                    childImage(index),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    Text(name[index],
+                        style: TextStyle(color: Colors.black, fontSize: 24)),
+                  ]),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[Text("利用コース: "), Text("乗降場所: ")],
+                    ),
                   ),
-                  Text(name[index],
-                      style: TextStyle(color: Colors.black, fontSize: 24)),
-                ]),
-          );
+                ],
+              ));
         });
   }
 }
