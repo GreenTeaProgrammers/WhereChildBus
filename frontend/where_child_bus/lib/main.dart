@@ -4,8 +4,8 @@ import 'package:where_child_bus/app.dart';
 import 'package:where_child_bus/util/health_check.dart';
 
 void main() {
-  // createHoge();
-  runApp(const MyApp());
+  createHoge();
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {

@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:developer' as developer; // エラーログに使用
-import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_web.dart';
 import 'package:where_child_bus/proto-gen/where_child_bus/v1/health_check.pbgrpc.dart';
 
 Future<PingResponse> createHoge() async {
-  final channel = ClientChannel(
-    'where-child-bus-grpc-k3dkun2lpq-uw.a.run.app',
-    port: 443,
-  );
+  // final channel = ClientChannel(
+  //   'where-child-bus-grpc-k3dkun2lpq-uw.a.run.app',
+  //   port: 443,
+  // );
+
+  final channel = GrpcWebClientChannel.xhr(Uri.parse('http://where-child-bus-grpc-k3dkun2lpq-uw.a.run.app:443'));
+
   final grpcClient = HealthcheckServiceClient(channel,
       options: CallOptions(timeout: const Duration(seconds: 60)));
 
