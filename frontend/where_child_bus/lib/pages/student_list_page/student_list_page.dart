@@ -103,6 +103,12 @@ class _StudentListPageState extends State<StudentListPage> {
                 left: 30.0,
               ),
               height: 1000,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0)),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -120,7 +126,11 @@ class _StudentListPageState extends State<StudentListPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[Text("利用コース: "), Text("乗降場所: ")],
+                      children: <Widget>[
+                        Text(group[index]),
+                        Text("利用コース: "),
+                        Text("乗降場所: ")
+                      ],
                     ),
                   ),
                 ],
