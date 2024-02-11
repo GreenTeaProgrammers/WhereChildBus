@@ -5,6 +5,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 )
 
@@ -40,5 +41,31 @@ func convertSexToPbSex(sex child.Sex) pb.Child_Sex {
 		return pb.Child_SEX_OTHER
 	default:
 		return pb.Child_SEX_UNSPECIFIED
+	}
+}
+
+func ToPbBus(t *ent.Bus) *pb.Bus {
+	status := convertStatusToPbStatus(t.Status)
+	return &pb.Bus{
+		Id:          t.ID.String(),
+		NurseryId:   t.Edges.Nursery.ID.String(),
+		Name:        t.Name,
+		PlateNumber: t.PlateNumber,
+		Latitude:    t.Latitude,
+		Longitude:   t.Longitude,
+		Status:      status,
+		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
+
+func convertStatusToPbStatus(status bus.Status) pb.Bus_Status {
+	switch status {
+	case bus.StatusRunning:
+		return pb.Bus_STATUS_RUNNING
+	case bus.StatusStopped:
+		return pb.Bus_STATUS_STOPPED
+	default:
+		return pb.Bus_STATUS_UNSPECIFIED
 	}
 }

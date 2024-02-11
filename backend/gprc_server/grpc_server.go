@@ -5,6 +5,7 @@ import (
 
 	grpc_interfaces "github.com/GreenTeaProgrammers/WhereChildBus/backend/interfaces"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/bus"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/child"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"golang.org/x/exp/slog"
@@ -29,6 +30,10 @@ func New(opts ...optionFunc) *grpc.Server {
 	if opt.useReflection {
 		reflection.Register(srv)
 	}
+
+	busInteractor := bus.NewInteractor(opt.entClient, opt.logger)
+	busSrv := grpc_interfaces.NewBusServiceServer(busInteractor)
+	pb.RegisterBusServiceServer(srv, busSrv)
 
 	childInteractor := child.NewInteractor(opt.entClient, opt.logger)
 	childSrv := grpc_interfaces.NewChildServiceServer(childInteractor)
