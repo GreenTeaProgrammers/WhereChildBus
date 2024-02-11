@@ -1,6 +1,6 @@
 model:
   hidden_size: 120
-  in_channels: 1
+  in_channels: 3
   Conv2d:
     kernel_size: 3
   pooling:
@@ -15,11 +15,14 @@ face_detect:
 dataset:
   root_path: "src/face_detect_model/data/detect_img"
   ratio:
-    train: 0.8
+    train: 0.7
     valid: 0.1
-    test: 0.1
+    test: 0.2
 train:
-  epoch: 3
-  train_batch_size: 128
-  valid_batch_size: 64
+  epoch: 100
+  learning_rate: 0.001
+  train_batch_size: 1
+  valid_batch_size: 1
   test_batch_size: 1
+  validate_interval: 10
+  save_model_path: "src/face_detect_model/pickle/mock_model/"
