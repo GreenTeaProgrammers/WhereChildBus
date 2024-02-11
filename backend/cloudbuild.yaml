@@ -16,7 +16,7 @@ steps:
         "deploy",
         "where-child-bus-grpc",
         "--image=gcr.io/wherechildbus/where_child_bus-grpc", # 重複したリポジトリパスを修正
-        "--region=your-region",
+        "--region=us-west1",
         "--set-env-vars=DSN=$$_DSN,DB_USER_NAME=$$_DB_USER_NAME,DB_PASSWORD=$$_DB_PASSWORD,DB_ADDR=$$_DB_ADDR,DB_NAME=$$_DB_NAME,PORT=$$_PORT,ModeDev=$$_ModeDev",
       ]
 timeout: "1600s"
