@@ -52,16 +52,22 @@ class Trainer:
             shuffle=False,
         )
 
-        if not os.path.exists(config["train"]["save_model_path"]):
-            os.makedirs(config["train"]["save_model_path"])
+        self.save_model_dir = config["train"]["save_model_dir"]
+        if not os.path.exists(self.save_model_dir):
+            os.makedirs(self.save_model_dir)
 
     def train(self):
         for _ in range(self.config["train"]["epoch"]):
             for label, image in self.train_dataloader:
                 self.step(label, image)
             self.end_epoch()
+
             if self.epoch % self.config["train"]["validate_interval"] == 0:
+                self.save_model(
+                    self.save_model_dir + f"model_epoch_{self.epoch}.pth",
+                )
                 self.validate()
+
         self.test()
 
     def step(self, label: torch.Tensor, image: torch.Tensor):
@@ -81,12 +87,7 @@ class Trainer:
 
         if self.last_loss < self.best_loss:
             self.best_loss = self.last_loss
-            self.save_model(
-                os.path.join(
-                    self.config["train"]["save_model_path"],
-                    "best_model.pth",
-                )
-            )
+            self.save_model(self.save_model_dir + "best_model.pth")
 
         self.epoch += 1
         self.step_num = 1
@@ -103,12 +104,13 @@ class Trainer:
             pred_list.append(pred)
             collect_list.append(label)
 
-        if self.args.debug:
-            print(f"Collect: {collect_list}")
-            print(f"Predict: {pred_list}")
         accuracy = self.calc_accuracy(pred_list, collect_list)
         print(f"########## Epoch {self.epoch} ##########")
         print(f"Validation Accuracy: {accuracy}")
+
+        if self.args.debug:
+            print(f"Collect: {collect_list}")
+            print(f"Predict: {pred_list}")
 
     def test(self):
         self.model.eval()
@@ -124,12 +126,12 @@ class Trainer:
             pred_list.append(pred)
             collect_list.append(label)
 
-        if self.args.debug:
-            print(f"Collect: {collect_list}")
-            print(f"Predict: {pred_list}")
         accuracy = self.calc_accuracy(pred_list, collect_list)
         print("########## Test ##########")
         print(f"Test Accuracy: {accuracy}")
+        if self.args.debug:
+            print(f"Collect: {collect_list}")
+            print(f"Predict: {pred_list}")
 
     def calc_accuracy(self, pred_list, collect_list):
         pred = torch.cat(pred_list)
