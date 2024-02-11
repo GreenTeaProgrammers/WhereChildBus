@@ -19,7 +19,7 @@ class BottomSheetWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // titleText(),
-            header("tesaaaaaaaaaaaaaaaaaaaaaaaaaa", "test"),
+            modalHeader("tesaaaaaaaaaaaaaaaaaaaaaaaaaa", "test"),
             Expanded(
               child: stationsList(context, busStations)
             ),
@@ -30,7 +30,7 @@ class BottomSheetWidget extends StatelessWidget {
     );
   }
 
-  Widget header(String busCourseName, String busOperatorName) {
+  Widget modalHeader(String busCourseName, String busOperatorName) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
       child: Row(
@@ -57,15 +57,15 @@ class BottomSheetWidget extends StatelessWidget {
   }
 
 
-    Widget stationsListElement(String stationName) {
-      return Text(
-        stationName,
-        textAlign: TextAlign.left,
-        style: const TextStyle(
-          fontSize:  18,
-        ),
-      );
-    }
+  Widget stationsListElement(String stationName) {
+    return Text(
+      stationName,
+      textAlign: TextAlign.left,
+      style: const TextStyle(
+        fontSize:  18,
+      ),
+    );
+  }
 
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
@@ -105,6 +105,7 @@ class BottomSheetWidget extends StatelessWidget {
     );
   }
 
+  //TODO:本来は画像を受蹴取って表示する
   Widget busThumbnail() {
     return const SizedBox(
         width: 100,
@@ -117,6 +118,7 @@ class BottomSheetWidget extends StatelessWidget {
     );
   }
 
+  //TODO 将来的に乗客詳細ページへの遷移を実装する
   Widget boardingConfirmButton(BuildContext context) {
     const double fontSize = 20;    
 
