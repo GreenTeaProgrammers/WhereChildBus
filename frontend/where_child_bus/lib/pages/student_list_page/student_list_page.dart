@@ -96,6 +96,16 @@ class _StudentListPageState extends State<StudentListPage> {
     ]);
   }
 
+  Widget imageAndName(int index) {
+    return Row(children: <Widget>[
+      childImage(index),
+      SizedBox(
+        width: 50,
+      ),
+      Text(name[index], style: TextStyle(color: Colors.black, fontSize: 24)),
+    ]);
+  }
+
   Widget detail(String title, String element) {
     return Row(
       children: <Widget>[
@@ -141,14 +151,7 @@ class _StudentListPageState extends State<StudentListPage> {
                         child: Icon(Icons.edit),
                       ),
                     ),
-                    Row(children: <Widget>[
-                      childImage(index),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Text(name[index],
-                          style: TextStyle(color: Colors.black, fontSize: 24)),
-                    ]),
+                    imageAndName(index),
                   ]),
                   Container(
                     margin: EdgeInsets.only(top: 20),
