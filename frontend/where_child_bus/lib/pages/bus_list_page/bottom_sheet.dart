@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 class BottomSheetWidget extends StatelessWidget {
   final busStations = ["station1", "station2", "station3","station4","station5","station6", "station7", "station8", "station7", "station7"];
+  final String busName;
+
+  //将来的にはコンストラクタでバス型を受け取る
+  BottomSheetWidget({required this.busName});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class BottomSheetWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // titleText(),
-            modalHeader("tesaaaaaaaaaaaaaaaaaaaaaaaaaa", "test"),
+            modalHeader(busName, "test"),
             Expanded(
               child: stationsList(context, busStations)
             ),
@@ -32,9 +36,9 @@ class BottomSheetWidget extends StatelessWidget {
 
   Widget modalHeader(String busCourseName, String busOperatorName) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+      padding: const EdgeInsets.fromLTRB(40, 50, 0, 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           busThumbnail(),
           courseAndOperator(busCourseName, busOperatorName),
@@ -55,7 +59,6 @@ class BottomSheetWidget extends StatelessWidget {
       },
     );
   }
-
 
   Widget stationsListElement(String stationName) {
     return Text(

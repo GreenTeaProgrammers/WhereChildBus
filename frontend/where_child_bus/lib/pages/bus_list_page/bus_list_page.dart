@@ -39,7 +39,7 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  //TODO: 将来的にBus型を受け取る
+  //TODO: 将来的にBus型を受け取る, 将来的にモーダルにバスを渡す
   Widget busListCard(String name, bool isBusOperating) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -59,7 +59,7 @@ class _BusListPageState extends State<BusListPage> {
                   isDismissible: true,
                   barrierColor: Colors.black.withOpacity(0.5),
                   builder: (context) {
-                    return BottomSheetWidget();
+                    return BottomSheetWidget(busName: name,);
                   });
             },
             child: Row(
