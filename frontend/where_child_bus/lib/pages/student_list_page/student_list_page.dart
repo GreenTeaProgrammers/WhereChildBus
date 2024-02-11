@@ -8,30 +8,30 @@ class StudentListPage extends StatefulWidget {
 }
 
 class _StudentListPageState extends State<StudentListPage> {
+  final List<String> name = <String>[
+    "園児1",
+    "園児2",
+    "園児3",
+    "園児4",
+    "園児5",
+  ];
+  final List<String> group = <String>[
+    "1組",
+    "2組",
+    "3組",
+    "4組",
+    "5組",
+  ];
+  final List<String> image = <String>[
+    "1",
+    "2",
+    "1",
+    "1",
+    "2",
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final List<String> name = <String>[
-      "園児1",
-      "園児2",
-      "園児3",
-      "園児4",
-      "園児5",
-    ];
-    final List<String> group = <String>[
-      "1組",
-      "2組",
-      "3組",
-      "4組",
-      "5組",
-    ];
-    final List<String> image = <String>[
-      "1",
-      "2",
-      "1",
-      "1",
-      "2",
-    ];
-
     var screenSize = MediaQuery.of(context).size;
 
     return ListView.separated(
@@ -47,36 +47,37 @@ class _StudentListPageState extends State<StudentListPage> {
               widthFactor: 0.8,
               child: InkWell(
                   onTap: () {
-                    showBottomSheet(context);
+                    showBottomSheet(context, index);
                   },
                   child: Card(
                       color: Colors.white,
                       child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Row(children: <Widget>[
-                            childImage(image[index]),
+                            childImage(index),
                             SizedBox(
                               width: screenSize.width * 0.05,
                             ),
-                            nameAndGroup(name[index], group[index], screenSize),
+                            nameAndGroup(index),
                           ])))));
         });
   }
 
-  Widget childImage(String image) {
+  Widget childImage(int index) {
     return SizedBox(
         width: 100,
         height: 100,
-        child: Image.asset("assets/images/face_${image}.png"));
+        child: Image.asset("assets/images/face_${image[index]}.png"));
   }
 
-  Widget nameAndGroup(String name, String group, Size size) {
+  Widget nameAndGroup(int index) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(name, style: TextStyle(color: Colors.black, fontSize: 24)),
+          Text(name[index],
+              style: TextStyle(color: Colors.black, fontSize: 24)),
           Text(
-            group,
+            group[index],
             style: TextStyle(color: Colors.black),
           ),
           place(),
@@ -90,13 +91,29 @@ class _StudentListPageState extends State<StudentListPage> {
     ]);
   }
 
-  void showBottomSheet(BuildContext context) {
+  void showBottomSheet(BuildContext context, int index) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return Container(
+            padding: const EdgeInsets.only(
+              top: 50.0,
+              right: 30.0,
+              bottom: 30.0,
+              left: 30.0,
+            ),
             height: 1000,
-            child: Center(child: Text("園児詳細情報")),
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  childImage(index),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Text(name[index],
+                      style: TextStyle(color: Colors.black, fontSize: 24)),
+                ]),
           );
         });
   }
