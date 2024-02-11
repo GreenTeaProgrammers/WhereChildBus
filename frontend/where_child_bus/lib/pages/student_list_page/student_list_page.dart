@@ -45,17 +45,21 @@ class _StudentListPageState extends State<StudentListPage> {
         itemBuilder: (BuildContext context, int index) {
           return FractionallySizedBox(
               widthFactor: 0.8,
-              child: Card(
-                  color: Colors.white,
-                  child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(children: <Widget>[
-                        childImage(image[index]),
-                        SizedBox(
-                          width: screenSize.width * 0.05,
-                        ),
-                        nameAndGroup(name[index], group[index], screenSize),
-                      ]))));
+              child: InkWell(
+                  onTap: () {
+                    showBottomSheet(context);
+                  },
+                  child: Card(
+                      color: Colors.white,
+                      child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(children: <Widget>[
+                            childImage(image[index]),
+                            SizedBox(
+                              width: screenSize.width * 0.05,
+                            ),
+                            nameAndGroup(name[index], group[index], screenSize),
+                          ])))));
         });
   }
 
@@ -84,5 +88,16 @@ class _StudentListPageState extends State<StudentListPage> {
       Icon(Icons.location_on),
       Text("停留所名"),
     ]);
+  }
+
+  void showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 1000,
+            child: Center(child: Text("園児詳細情報")),
+          );
+        });
   }
 }
