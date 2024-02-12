@@ -184,31 +184,35 @@ class Nursery extends $pb.GeneratedMessage {
   $5.Timestamp ensureUpdatedAt() => $_ensure(8);
 }
 
-class NurseryReponse extends $pb.GeneratedMessage {
-  factory NurseryReponse({
+class NurseryResponse extends $pb.GeneratedMessage {
+  factory NurseryResponse({
     $core.String? id,
-    $core.String? nurseryId,
+    $core.String? nurseryCode,
     $core.String? name,
-    $core.String? email,
+    $core.String? address,
     $core.String? phoneNumber,
-    $5.Timestamp? createdAt,
-    $5.Timestamp? updatedAt,
+    $core.String? email,
+    $0.Timestamp? createdAt,
+    $0.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
     }
-    if (nurseryId != null) {
-      $result.nurseryId = nurseryId;
+    if (nurseryCode != null) {
+      $result.nurseryCode = nurseryCode;
     }
     if (name != null) {
       $result.name = name;
     }
-    if (email != null) {
-      $result.email = email;
+    if (address != null) {
+      $result.address = address;
     }
     if (phoneNumber != null) {
       $result.phoneNumber = phoneNumber;
+    }
+    if (email != null) {
+      $result.email = email;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -218,18 +222,19 @@ class NurseryReponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  NurseryReponse._() : super();
-  factory NurseryReponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory NurseryReponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  NurseryResponse._() : super();
+  factory NurseryResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory NurseryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryReponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
+    ..aOS(2, _omitFieldNames ? '' : 'nurseryCode')
     ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..aOS(4, _omitFieldNames ? '' : 'email')
+    ..aOS(4, _omitFieldNames ? '' : 'address')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
-    ..aOM<$5.Timestamp>(6, _omitFieldNames ? '' : 'createdAt', subBuilder: $5.Timestamp.create)
-    ..aOM<$5.Timestamp>(7, _omitFieldNames ? '' : 'updatedAt', subBuilder: $5.Timestamp.create)
+    ..aOS(6, _omitFieldNames ? '' : 'email')
+    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
+    ..aOM<$0.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $0.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -237,22 +242,22 @@ class NurseryReponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  NurseryReponse clone() => NurseryReponse()..mergeFromMessage(this);
+  NurseryResponse clone() => NurseryResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  NurseryReponse copyWith(void Function(NurseryReponse) updates) => super.copyWith((message) => updates(message as NurseryReponse)) as NurseryReponse;
+  NurseryResponse copyWith(void Function(NurseryResponse) updates) => super.copyWith((message) => updates(message as NurseryResponse)) as NurseryResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static NurseryReponse create() => NurseryReponse._();
-  NurseryReponse createEmptyInstance() => create();
-  static $pb.PbList<NurseryReponse> createRepeated() => $pb.PbList<NurseryReponse>();
+  static NurseryResponse create() => NurseryResponse._();
+  NurseryResponse createEmptyInstance() => create();
+  static $pb.PbList<NurseryResponse> createRepeated() => $pb.PbList<NurseryResponse>();
   @$core.pragma('dart2js:noInline')
-  static NurseryReponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<NurseryReponse>(create);
-  static NurseryReponse? _defaultInstance;
+  static NurseryResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<NurseryResponse>(create);
+  static NurseryResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -264,13 +269,13 @@ class NurseryReponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get nurseryId => $_getSZ(1);
+  $core.String get nurseryCode => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nurseryId($core.String v) { $_setString(1, v); }
+  set nurseryCode($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasNurseryId() => $_has(1);
+  $core.bool hasNurseryCode() => $_has(1);
   @$pb.TagNumber(2)
-  void clearNurseryId() => clearField(2);
+  void clearNurseryCode() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get name => $_getSZ(2);
@@ -282,13 +287,13 @@ class NurseryReponse extends $pb.GeneratedMessage {
   void clearName() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get email => $_getSZ(3);
+  $core.String get address => $_getSZ(3);
   @$pb.TagNumber(4)
-  set email($core.String v) { $_setString(3, v); }
+  set address($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasEmail() => $_has(3);
+  $core.bool hasAddress() => $_has(3);
   @$pb.TagNumber(4)
-  void clearEmail() => clearField(4);
+  void clearAddress() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get phoneNumber => $_getSZ(4);
@@ -299,28 +304,37 @@ class NurseryReponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   void clearPhoneNumber() => clearField(5);
 
-  /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(6)
-  $5.Timestamp get createdAt => $_getN(5);
+  $core.String get email => $_getSZ(5);
   @$pb.TagNumber(6)
-  set createdAt($5.Timestamp v) { setField(6, v); }
+  set email($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasCreatedAt() => $_has(5);
+  $core.bool hasEmail() => $_has(5);
   @$pb.TagNumber(6)
-  void clearCreatedAt() => clearField(6);
-  @$pb.TagNumber(6)
-  $5.Timestamp ensureCreatedAt() => $_ensure(5);
+  void clearEmail() => clearField(6);
 
+  /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(7)
-  $5.Timestamp get updatedAt => $_getN(6);
+  $0.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set updatedAt($5.Timestamp v) { setField(7, v); }
+  set createdAt($0.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasUpdatedAt() => $_has(6);
+  $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
-  void clearUpdatedAt() => clearField(7);
+  void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $5.Timestamp ensureUpdatedAt() => $_ensure(6);
+  $0.Timestamp ensureCreatedAt() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  $0.Timestamp get updatedAt => $_getN(7);
+  @$pb.TagNumber(8)
+  set updatedAt($0.Timestamp v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasUpdatedAt() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearUpdatedAt() => clearField(8);
+  @$pb.TagNumber(8)
+  $0.Timestamp ensureUpdatedAt() => $_ensure(7);
 }
 
 class Guardian extends $pb.GeneratedMessage {

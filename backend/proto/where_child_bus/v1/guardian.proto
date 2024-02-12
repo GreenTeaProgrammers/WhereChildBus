@@ -16,5 +16,5 @@ message GuardianLoginRequest {
 message GuardianLoginResponse {
         bool success = 1;
         GuardianResponse guardian = 2;
-        NurseryReponse nursery = 3;
+        NurseryResponse nursery = 3;
 }

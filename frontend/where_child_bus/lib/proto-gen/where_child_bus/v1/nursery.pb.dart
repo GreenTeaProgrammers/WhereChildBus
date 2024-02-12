@@ -82,7 +82,7 @@ class NurseryLoginRequest extends $pb.GeneratedMessage {
 class NurseryLoginResponse extends $pb.GeneratedMessage {
   factory NurseryLoginResponse({
     $core.bool? success,
-    $6.Nursery? nursery,
+    $1.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (success != null) {
@@ -99,7 +99,7 @@ class NurseryLoginResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryLoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'success')
-    ..aOM<$6.Nursery>(2, _omitFieldNames ? '' : 'nursery', subBuilder: $6.Nursery.create)
+    ..aOM<$1.NurseryResponse>(2, _omitFieldNames ? '' : 'nursery', subBuilder: $1.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -134,15 +134,24 @@ class NurseryLoginResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(1);
 
   @$pb.TagNumber(2)
-  $6.Nursery get nursery => $_getN(1);
+  $1.NurseryResponse get nursery => $_getN(1);
   @$pb.TagNumber(2)
-  set nursery($6.Nursery v) { setField(2, v); }
+  set nursery($1.NurseryResponse v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasNursery() => $_has(1);
   @$pb.TagNumber(2)
   void clearNursery() => clearField(2);
   @$pb.TagNumber(2)
-  $6.Nursery ensureNursery() => $_ensure(1);
+  $1.NurseryResponse ensureNursery() => $_ensure(1);
+}
+
+class NurseryServiceApi {
+  $pb.RpcClient _client;
+  NurseryServiceApi(this._client);
+
+  $async.Future<NurseryLoginResponse> nurseryLogin($pb.ClientContext? ctx, NurseryLoginRequest request) =>
+    _client.invoke<NurseryLoginResponse>(ctx, 'NurseryService', 'NurseryLogin', request, NurseryLoginResponse())
+  ;
 }
 
 
