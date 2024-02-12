@@ -9,12 +9,11 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'resources.pb.dart' as $1;
+import 'resources.pb.dart' as $6;
 
 class GuardianLoginRequest extends $pb.GeneratedMessage {
   factory GuardianLoginRequest({
@@ -83,6 +82,7 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
 class GuardianLoginResponse extends $pb.GeneratedMessage {
   factory GuardianLoginResponse({
     $core.bool? success,
+
     $1.GuardianResponse? guardian,
     $1.NurseryResponse? nursery,
   }) {
@@ -140,17 +140,18 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(1);
 
   @$pb.TagNumber(2)
-  $1.GuardianResponse get guardian => $_getN(1);
+  $6.GuardianResponse get guardian => $_getN(1);
   @$pb.TagNumber(2)
-  set guardian($1.GuardianResponse v) { setField(2, v); }
+  set guardian($6.GuardianResponse v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasGuardian() => $_has(1);
   @$pb.TagNumber(2)
   void clearGuardian() => clearField(2);
   @$pb.TagNumber(2)
-  $1.GuardianResponse ensureGuardian() => $_ensure(1);
+  $6.GuardianResponse ensureGuardian() => $_ensure(1);
 
   @$pb.TagNumber(3)
+
   $1.NurseryResponse get nursery => $_getN(2);
   @$pb.TagNumber(3)
   set nursery($1.NurseryResponse v) { setField(3, v); }

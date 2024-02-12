@@ -9,12 +9,11 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'resources.pb.dart' as $1;
+import 'resources.pb.dart' as $6;
 
 class NurseryLoginRequest extends $pb.GeneratedMessage {
   factory NurseryLoginRequest({
