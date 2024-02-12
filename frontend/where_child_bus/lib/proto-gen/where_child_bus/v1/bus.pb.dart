@@ -9,12 +9,11 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'resources.pb.dart' as $1;
+import 'resources.pb.dart' as $6;
 
 class CreateBusRequest extends $pb.GeneratedMessage {
   factory CreateBusRequest({
@@ -214,7 +213,7 @@ class GetBusListByNurseryIdRequest extends $pb.GeneratedMessage {
 
 class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetBusListByNurseryIdResponse({
-    $core.Iterable<$1.Bus>? buses,
+    $core.Iterable<$6.Bus>? buses,
   }) {
     final $result = create();
     if (buses != null) {
@@ -227,7 +226,7 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetBusListByNurseryIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusListByNurseryIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$1.Bus>(1, _omitFieldNames ? '' : 'buses', $pb.PbFieldType.PM, subBuilder: $1.Bus.create)
+    ..pc<$6.Bus>(1, _omitFieldNames ? '' : 'buses', $pb.PbFieldType.PM, subBuilder: $6.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -253,19 +252,7 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   static GetBusListByNurseryIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$1.Bus> get buses => $_getList(0);
-}
-
-class BusServiceApi {
-  $pb.RpcClient _client;
-  BusServiceApi(this._client);
-
-  $async.Future<CreateBusResponse> createBus($pb.ClientContext? ctx, CreateBusRequest request) =>
-    _client.invoke<CreateBusResponse>(ctx, 'BusService', 'CreateBus', request, CreateBusResponse())
-  ;
-  $async.Future<GetBusListByNurseryIdResponse> getBusListByNurseryId($pb.ClientContext? ctx, GetBusListByNurseryIdRequest request) =>
-    _client.invoke<GetBusListByNurseryIdResponse>(ctx, 'BusService', 'GetBusListByNurseryId', request, GetBusListByNurseryIdResponse())
-  ;
+  $core.List<$6.Bus> get buses => $_getList(0);
 }
 
 

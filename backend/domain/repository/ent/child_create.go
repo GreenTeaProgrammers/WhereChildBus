@@ -58,16 +58,16 @@ func (cc *ChildCreate) SetNillableIsRideMorningBus(b *bool) *ChildCreate {
 	return cc
 }
 
-// SetIsRideAfternoonBus sets the "is_ride_afternoon_bus" field.
-func (cc *ChildCreate) SetIsRideAfternoonBus(b bool) *ChildCreate {
-	cc.mutation.SetIsRideAfternoonBus(b)
+// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
+func (cc *ChildCreate) SetIsRideEveningBus(b bool) *ChildCreate {
+	cc.mutation.SetIsRideEveningBus(b)
 	return cc
 }
 
-// SetNillableIsRideAfternoonBus sets the "is_ride_afternoon_bus" field if the given value is not nil.
-func (cc *ChildCreate) SetNillableIsRideAfternoonBus(b *bool) *ChildCreate {
+// SetNillableIsRideEveningBus sets the "is_ride_evening_bus" field if the given value is not nil.
+func (cc *ChildCreate) SetNillableIsRideEveningBus(b *bool) *ChildCreate {
 	if b != nil {
-		cc.SetIsRideAfternoonBus(*b)
+		cc.SetIsRideEveningBus(*b)
 	}
 	return cc
 }
@@ -320,9 +320,9 @@ func (cc *ChildCreate) defaults() {
 		v := child.DefaultIsRideMorningBus
 		cc.mutation.SetIsRideMorningBus(v)
 	}
-	if _, ok := cc.mutation.IsRideAfternoonBus(); !ok {
-		v := child.DefaultIsRideAfternoonBus
-		cc.mutation.SetIsRideAfternoonBus(v)
+	if _, ok := cc.mutation.IsRideEveningBus(); !ok {
+		v := child.DefaultIsRideEveningBus
+		cc.mutation.SetIsRideEveningBus(v)
 	}
 	if _, ok := cc.mutation.CheckForMissingItems(); !ok {
 		v := child.DefaultCheckForMissingItems
@@ -381,8 +381,8 @@ func (cc *ChildCreate) check() error {
 	if _, ok := cc.mutation.IsRideMorningBus(); !ok {
 		return &ValidationError{Name: "is_ride_morning_bus", err: errors.New(`ent: missing required field "Child.is_ride_morning_bus"`)}
 	}
-	if _, ok := cc.mutation.IsRideAfternoonBus(); !ok {
-		return &ValidationError{Name: "is_ride_afternoon_bus", err: errors.New(`ent: missing required field "Child.is_ride_afternoon_bus"`)}
+	if _, ok := cc.mutation.IsRideEveningBus(); !ok {
+		return &ValidationError{Name: "is_ride_evening_bus", err: errors.New(`ent: missing required field "Child.is_ride_evening_bus"`)}
 	}
 	if _, ok := cc.mutation.CheckForMissingItems(); !ok {
 		return &ValidationError{Name: "check_for_missing_items", err: errors.New(`ent: missing required field "Child.check_for_missing_items"`)}
@@ -459,9 +459,9 @@ func (cc *ChildCreate) createSpec() (*Child, *sqlgraph.CreateSpec) {
 		_spec.SetField(child.FieldIsRideMorningBus, field.TypeBool, value)
 		_node.IsRideMorningBus = value
 	}
-	if value, ok := cc.mutation.IsRideAfternoonBus(); ok {
-		_spec.SetField(child.FieldIsRideAfternoonBus, field.TypeBool, value)
-		_node.IsRideAfternoonBus = value
+	if value, ok := cc.mutation.IsRideEveningBus(); ok {
+		_spec.SetField(child.FieldIsRideEveningBus, field.TypeBool, value)
+		_node.IsRideEveningBus = value
 	}
 	if value, ok := cc.mutation.CheckForMissingItems(); ok {
 		_spec.SetField(child.FieldCheckForMissingItems, field.TypeBool, value)

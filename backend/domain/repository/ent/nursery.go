@@ -20,14 +20,16 @@ type Nursery struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// ユニークな数字(文字列)のコード
 	NurseryCode string `json:"nursery_code,omitempty"`
+	// Email holds the value of the "email" field.
+	Email string `json:"email,omitempty"`
+	// HashedPassword holds the value of the "hashed_password" field.
+	HashedPassword string `json:"hashed_password,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Address holds the value of the "address" field.
 	Address string `json:"address,omitempty"`
 	// PhoneNumber holds the value of the "phone_number" field.
 	PhoneNumber string `json:"phone_number,omitempty"`
-	// Email holds the value of the "email" field.
-	Email string `json:"email,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -83,7 +85,7 @@ func (*Nursery) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case nursery.FieldNurseryCode, nursery.FieldName, nursery.FieldAddress, nursery.FieldPhoneNumber, nursery.FieldEmail:
+		case nursery.FieldNurseryCode, nursery.FieldEmail, nursery.FieldHashedPassword, nursery.FieldName, nursery.FieldAddress, nursery.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case nursery.FieldCreatedAt, nursery.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -116,6 +118,18 @@ func (n *Nursery) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.NurseryCode = value.String
 			}
+		case nursery.FieldEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email", values[i])
+			} else if value.Valid {
+				n.Email = value.String
+			}
+		case nursery.FieldHashedPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field hashed_password", values[i])
+			} else if value.Valid {
+				n.HashedPassword = value.String
+			}
 		case nursery.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -133,12 +147,6 @@ func (n *Nursery) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
 				n.PhoneNumber = value.String
-			}
-		case nursery.FieldEmail:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field email", values[i])
-			} else if value.Valid {
-				n.Email = value.String
 			}
 		case nursery.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -206,6 +214,12 @@ func (n *Nursery) String() string {
 	builder.WriteString("nursery_code=")
 	builder.WriteString(n.NurseryCode)
 	builder.WriteString(", ")
+	builder.WriteString("email=")
+	builder.WriteString(n.Email)
+	builder.WriteString(", ")
+	builder.WriteString("hashed_password=")
+	builder.WriteString(n.HashedPassword)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(n.Name)
 	builder.WriteString(", ")
@@ -214,9 +228,6 @@ func (n *Nursery) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
 	builder.WriteString(n.PhoneNumber)
-	builder.WriteString(", ")
-	builder.WriteString("email=")
-	builder.WriteString(n.Email)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(n.CreatedAt.Format(time.ANSIC))
