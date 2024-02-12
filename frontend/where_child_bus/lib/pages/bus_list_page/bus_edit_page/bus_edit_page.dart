@@ -105,7 +105,9 @@ class _BusEditPage extends State<BusEditPage> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: ElevatedButton(
-          onPressed: () {}, 
+          onPressed: () {
+
+          }, 
           child: const Text("バスに乗車する子供を変更"),
         ),
       ),
