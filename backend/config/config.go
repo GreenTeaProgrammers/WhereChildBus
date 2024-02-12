@@ -17,6 +17,7 @@ type Config struct {
 	ModeDev                      bool   `envconfig:"MODE_DEV" default:"true"`
 	GoogleApplicationCredentials string `envconfig:"GOOGLE_APPLICATION_CREDENTIALS" required:"true"`
 	StorageBucketName            string `envconfig:"STORAGE_BUCKET_NAME" required:"true"`
+	PasswordPepper               string `envconfig:"PASSWORD_PEPPER" required:"true"`
 }
 
 func New() (*Config, error) {
