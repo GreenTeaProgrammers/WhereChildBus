@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import './compornents/submit_button.dart';
 
 class StudentEditPage extends StatefulWidget {
   const StudentEditPage({super.key});
@@ -167,10 +168,6 @@ class _StudentEditPageState extends State<StudentEditPage> {
   }
 
   Widget submitButton() {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black, foregroundColor: Colors.white),
-        onPressed: () {},
-        child: const Text("保存"));
+    return SubmitButton(onPressed: () {});
   }
 }

@@ -36,7 +36,14 @@ class _StudentListPageState extends State<StudentListPage> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
-    return childCardListBuilder(screenSize);
+    return Scaffold(
+      appBar: AppBar(),
+      body: childCardListBuilder(screenSize),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 
   //TODO: 将来的にはAPIからデータを取得する。
