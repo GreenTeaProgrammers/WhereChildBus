@@ -32,20 +32,6 @@ func (gu *GuardianUpdate) Where(ps ...predicate.Guardian) *GuardianUpdate {
 	return gu
 }
 
-// SetName sets the "name" field.
-func (gu *GuardianUpdate) SetName(s string) *GuardianUpdate {
-	gu.mutation.SetName(s)
-	return gu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (gu *GuardianUpdate) SetNillableName(s *string) *GuardianUpdate {
-	if s != nil {
-		gu.SetName(*s)
-	}
-	return gu
-}
-
 // SetEmail sets the "email" field.
 func (gu *GuardianUpdate) SetEmail(s string) *GuardianUpdate {
 	gu.mutation.SetEmail(s)
@@ -60,29 +46,51 @@ func (gu *GuardianUpdate) SetNillableEmail(s *string) *GuardianUpdate {
 	return gu
 }
 
-// ClearEmail clears the value of the "email" field.
-func (gu *GuardianUpdate) ClearEmail() *GuardianUpdate {
-	gu.mutation.ClearEmail()
+// SetEncryptedPassword sets the "encrypted_password" field.
+func (gu *GuardianUpdate) SetEncryptedPassword(s string) *GuardianUpdate {
+	gu.mutation.SetEncryptedPassword(s)
 	return gu
 }
 
-// SetPhone sets the "phone" field.
-func (gu *GuardianUpdate) SetPhone(s string) *GuardianUpdate {
-	gu.mutation.SetPhone(s)
-	return gu
-}
-
-// SetNillablePhone sets the "phone" field if the given value is not nil.
-func (gu *GuardianUpdate) SetNillablePhone(s *string) *GuardianUpdate {
+// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableEncryptedPassword(s *string) *GuardianUpdate {
 	if s != nil {
-		gu.SetPhone(*s)
+		gu.SetEncryptedPassword(*s)
 	}
 	return gu
 }
 
-// ClearPhone clears the value of the "phone" field.
-func (gu *GuardianUpdate) ClearPhone() *GuardianUpdate {
-	gu.mutation.ClearPhone()
+// SetName sets the "name" field.
+func (gu *GuardianUpdate) SetName(s string) *GuardianUpdate {
+	gu.mutation.SetName(s)
+	return gu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableName(s *string) *GuardianUpdate {
+	if s != nil {
+		gu.SetName(*s)
+	}
+	return gu
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (gu *GuardianUpdate) SetPhoneNumber(s string) *GuardianUpdate {
+	gu.mutation.SetPhoneNumber(s)
+	return gu
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillablePhoneNumber(s *string) *GuardianUpdate {
+	if s != nil {
+		gu.SetPhoneNumber(*s)
+	}
+	return gu
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (gu *GuardianUpdate) ClearPhoneNumber() *GuardianUpdate {
+	gu.mutation.ClearPhoneNumber()
 	return gu
 }
 
@@ -242,20 +250,20 @@ func (gu *GuardianUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := gu.mutation.Name(); ok {
-		_spec.SetField(guardian.FieldName, field.TypeString, value)
-	}
 	if value, ok := gu.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 	}
-	if gu.mutation.EmailCleared() {
-		_spec.ClearField(guardian.FieldEmail, field.TypeString)
+	if value, ok := gu.mutation.EncryptedPassword(); ok {
+		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
 	}
-	if value, ok := gu.mutation.Phone(); ok {
-		_spec.SetField(guardian.FieldPhone, field.TypeString, value)
+	if value, ok := gu.mutation.Name(); ok {
+		_spec.SetField(guardian.FieldName, field.TypeString, value)
 	}
-	if gu.mutation.PhoneCleared() {
-		_spec.ClearField(guardian.FieldPhone, field.TypeString)
+	if value, ok := gu.mutation.PhoneNumber(); ok {
+		_spec.SetField(guardian.FieldPhoneNumber, field.TypeString, value)
+	}
+	if gu.mutation.PhoneNumberCleared() {
+		_spec.ClearField(guardian.FieldPhoneNumber, field.TypeString)
 	}
 	if value, ok := gu.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)
@@ -386,20 +394,6 @@ type GuardianUpdateOne struct {
 	mutation *GuardianMutation
 }
 
-// SetName sets the "name" field.
-func (guo *GuardianUpdateOne) SetName(s string) *GuardianUpdateOne {
-	guo.mutation.SetName(s)
-	return guo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (guo *GuardianUpdateOne) SetNillableName(s *string) *GuardianUpdateOne {
-	if s != nil {
-		guo.SetName(*s)
-	}
-	return guo
-}
-
 // SetEmail sets the "email" field.
 func (guo *GuardianUpdateOne) SetEmail(s string) *GuardianUpdateOne {
 	guo.mutation.SetEmail(s)
@@ -414,29 +408,51 @@ func (guo *GuardianUpdateOne) SetNillableEmail(s *string) *GuardianUpdateOne {
 	return guo
 }
 
-// ClearEmail clears the value of the "email" field.
-func (guo *GuardianUpdateOne) ClearEmail() *GuardianUpdateOne {
-	guo.mutation.ClearEmail()
+// SetEncryptedPassword sets the "encrypted_password" field.
+func (guo *GuardianUpdateOne) SetEncryptedPassword(s string) *GuardianUpdateOne {
+	guo.mutation.SetEncryptedPassword(s)
 	return guo
 }
 
-// SetPhone sets the "phone" field.
-func (guo *GuardianUpdateOne) SetPhone(s string) *GuardianUpdateOne {
-	guo.mutation.SetPhone(s)
-	return guo
-}
-
-// SetNillablePhone sets the "phone" field if the given value is not nil.
-func (guo *GuardianUpdateOne) SetNillablePhone(s *string) *GuardianUpdateOne {
+// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableEncryptedPassword(s *string) *GuardianUpdateOne {
 	if s != nil {
-		guo.SetPhone(*s)
+		guo.SetEncryptedPassword(*s)
 	}
 	return guo
 }
 
-// ClearPhone clears the value of the "phone" field.
-func (guo *GuardianUpdateOne) ClearPhone() *GuardianUpdateOne {
-	guo.mutation.ClearPhone()
+// SetName sets the "name" field.
+func (guo *GuardianUpdateOne) SetName(s string) *GuardianUpdateOne {
+	guo.mutation.SetName(s)
+	return guo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableName(s *string) *GuardianUpdateOne {
+	if s != nil {
+		guo.SetName(*s)
+	}
+	return guo
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (guo *GuardianUpdateOne) SetPhoneNumber(s string) *GuardianUpdateOne {
+	guo.mutation.SetPhoneNumber(s)
+	return guo
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillablePhoneNumber(s *string) *GuardianUpdateOne {
+	if s != nil {
+		guo.SetPhoneNumber(*s)
+	}
+	return guo
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (guo *GuardianUpdateOne) ClearPhoneNumber() *GuardianUpdateOne {
+	guo.mutation.ClearPhoneNumber()
 	return guo
 }
 
@@ -626,20 +642,20 @@ func (guo *GuardianUpdateOne) sqlSave(ctx context.Context) (_node *Guardian, err
 			}
 		}
 	}
-	if value, ok := guo.mutation.Name(); ok {
-		_spec.SetField(guardian.FieldName, field.TypeString, value)
-	}
 	if value, ok := guo.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 	}
-	if guo.mutation.EmailCleared() {
-		_spec.ClearField(guardian.FieldEmail, field.TypeString)
+	if value, ok := guo.mutation.EncryptedPassword(); ok {
+		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
 	}
-	if value, ok := guo.mutation.Phone(); ok {
-		_spec.SetField(guardian.FieldPhone, field.TypeString, value)
+	if value, ok := guo.mutation.Name(); ok {
+		_spec.SetField(guardian.FieldName, field.TypeString, value)
 	}
-	if guo.mutation.PhoneCleared() {
-		_spec.ClearField(guardian.FieldPhone, field.TypeString)
+	if value, ok := guo.mutation.PhoneNumber(); ok {
+		_spec.SetField(guardian.FieldPhoneNumber, field.TypeString, value)
+	}
+	if guo.mutation.PhoneNumberCleared() {
+		_spec.ClearField(guardian.FieldPhoneNumber, field.TypeString)
 	}
 	if value, ok := guo.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)

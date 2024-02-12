@@ -15,12 +15,14 @@ const (
 	Label = "guardian"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldPhone holds the string denoting the phone field in the database.
-	FieldPhone = "phone"
+	// FieldEncryptedPassword holds the string denoting the encrypted_password field in the database.
+	FieldEncryptedPassword = "encrypted_password"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
+	FieldPhoneNumber = "phone_number"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -59,9 +61,10 @@ const (
 // Columns holds all SQL columns for guardian fields.
 var Columns = []string{
 	FieldID,
-	FieldName,
 	FieldEmail,
-	FieldPhone,
+	FieldEncryptedPassword,
+	FieldName,
+	FieldPhoneNumber,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -106,19 +109,24 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
-// ByPhone orders the results by the phone field.
-func ByPhone(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPhone, opts...).ToFunc()
+// ByEncryptedPassword orders the results by the encrypted_password field.
+func ByEncryptedPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptedPassword, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByPhoneNumber orders the results by the phone_number field.
+func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhoneNumber, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

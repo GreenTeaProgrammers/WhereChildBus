@@ -372,12 +372,12 @@ func (gq *GuardianQuery) WithStation(opts ...func(*StationQuery)) *GuardianQuery
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Email string `json:"email,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Guardian.Query().
-//		GroupBy(guardian.FieldName).
+//		GroupBy(guardian.FieldEmail).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (gq *GuardianQuery) GroupBy(field string, fields ...string) *GuardianGroupBy {
@@ -395,11 +395,11 @@ func (gq *GuardianQuery) GroupBy(field string, fields ...string) *GuardianGroupB
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Email string `json:"email,omitempty"`
 //	}
 //
 //	client.Guardian.Query().
-//		Select(guardian.FieldName).
+//		Select(guardian.FieldEmail).
 //		Scan(ctx, &v)
 func (gq *GuardianQuery) Select(fields ...string) *GuardianSelect {
 	gq.ctx.Fields = append(gq.ctx.Fields, fields...)
