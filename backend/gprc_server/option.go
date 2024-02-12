@@ -1,6 +1,7 @@
 package grpc_server
 
 import (
+	"cloud.google.com/go/storage"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	"golang.org/x/exp/slog"
 )
@@ -8,6 +9,8 @@ import (
 type option struct {
 	logger        *slog.Logger
 	entClient     *ent.Client
+	storageClient *storage.Client
+	bucketName    string
 	useReflection bool
 }
 
@@ -35,5 +38,17 @@ func WithReflection(b bool) optionFunc {
 func WithEntClient(c *ent.Client) optionFunc {
 	return func(o *option) {
 		o.entClient = c
+	}
+}
+
+func WithStorageClient(s *storage.Client) optionFunc {
+	return func(o *option) {
+		o.storageClient = s
+	}
+}
+
+func WithBucketName(b string) optionFunc {
+	return func(o *option) {
+		o.bucketName = b
 	}
 }
