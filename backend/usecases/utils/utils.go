@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -24,23 +26,23 @@ func ToPbChild(t *ent.Child) *pb.Child {
 		HasBag:               t.HasBag,
 		HasLunchBox:          t.HasLunchBox,
 		HasWaterBottle:       t.HasWaterBottle,
-		HasUmbrera:           t.HasUmbrella,
+		HasUmbrella:          t.HasUmbrella,
 		HasOther:             t.HasOther,
 		CreatedAt:            &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
 		UpdatedAt:            &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 
-func convertSexToPbSex(sex child.Sex) pb.Child_Sex {
+func convertSexToPbSex(sex child.Sex) pb.Sex {
 	switch sex {
 	case child.SexMan:
-		return pb.Child_SEX_MAN
-	case child.SexWomen:
-		return pb.Child_SEX_WOMEN
+		return pb.Sex_SEX_MAN
+	case child.SexWoman:
+		return pb.Sex_SEX_WOMAN
 	case child.SexOther:
-		return pb.Child_SEX_OTHER
+		return pb.Sex_SEX_OTHER
 	default:
-		return pb.Child_SEX_UNSPECIFIED
+		return pb.Sex_SEX_UNSPECIFIED
 	}
 }
 
@@ -59,14 +61,31 @@ func ToPbBus(t *ent.Bus) *pb.Bus {
 	}
 }
 
-func convertStatusToPbStatus(status bus.Status) pb.Bus_Status {
+func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
+	switch pbSex {
+	case pb.Sex_SEX_MAN:
+		sex := child.SexMan
+		return &sex, nil
+	case pb.Sex_SEX_WOMAN: // 修正: WOMEN -> WOMAN
+		sex := child.SexWoman
+		return &sex, nil
+	case pb.Sex_SEX_OTHER:
+		sex := child.SexOther
+		return &sex, nil
+	default:
+		// 不正な値の場合はエラーを返す
+		return nil, fmt.Errorf("invalid Sex value: %v", pbSex)
+	}
+}
+
+func convertStatusToPbStatus(status bus.Status) pb.Status {
 	switch status {
 	case bus.StatusRunning:
-		return pb.Bus_STATUS_RUNNING
+		return pb.Status_STATUS_RUNNING
 	case bus.StatusStopped:
-		return pb.Bus_STATUS_STOPPED
+		return pb.Status_STATUS_STOPPED
 	default:
-		return pb.Bus_STATUS_UNSPECIFIED
+		return pb.Status_STATUS_UNSPECIFIED
 	}
 }
 

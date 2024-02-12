@@ -15,6 +15,11 @@ func NewChildServiceServer(interactor *child.Interactor) pb.ChildServiceServer {
 	return &childServiceServer{interactor}
 }
 
+// CreateChild implements where_child_busv1.ChildServiceServer.
+func (s *childServiceServer) CreateChild(ctx context.Context, req *pb.CreateChildRequest) (*pb.CreateChildResponse, error) {
+	return s.interactor.CreateChild(ctx, req)
+}
+
 // GetChildListByGuardianID implements where_child_busv1.ChildServiceServer.
 func (s *childServiceServer) GetChildListByGuardianID(ctx context.Context, req *pb.GetChildListByGuardianIDRequest) (*pb.GetChildListByGuardianIDResponse, error) {
 	return s.interactor.GetChildListByGuardianID(ctx, req)
