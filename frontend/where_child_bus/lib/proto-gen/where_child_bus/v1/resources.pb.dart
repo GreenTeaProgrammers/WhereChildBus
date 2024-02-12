@@ -809,7 +809,7 @@ class Child extends $pb.GeneratedMessage {
     $core.bool? hasBag,
     $core.bool? hasLunchBox,
     $core.bool? hasWaterBottle,
-    $core.bool? hasUmbrera,
+    $core.bool? hasUmbrella,
     $core.bool? hasOther,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
@@ -851,8 +851,8 @@ class Child extends $pb.GeneratedMessage {
     if (hasWaterBottle != null) {
       $result.hasWaterBottle = hasWaterBottle;
     }
-    if (hasUmbrera != null) {
-      $result.hasUmbrera = hasUmbrera;
+    if (hasUmbrella != null) {
+      $result.hasUmbrella = hasUmbrella;
     }
     if (hasOther != null) {
       $result.hasOther = hasOther;
@@ -882,7 +882,7 @@ class Child extends $pb.GeneratedMessage {
     ..aOB(10, _omitFieldNames ? '' : 'hasBag')
     ..aOB(11, _omitFieldNames ? '' : 'hasLunchBox')
     ..aOB(12, _omitFieldNames ? '' : 'hasWaterBottle')
-    ..aOB(13, _omitFieldNames ? '' : 'hasUmbrera')
+    ..aOB(13, _omitFieldNames ? '' : 'hasUmbrella')
     ..aOB(14, _omitFieldNames ? '' : 'hasOther')
     ..aOM<$7.Timestamp>(15, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
     ..aOM<$7.Timestamp>(16, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
@@ -1019,13 +1019,13 @@ class Child extends $pb.GeneratedMessage {
   void clearHasWaterBottle() => clearField(12);
 
   @$pb.TagNumber(13)
-  $core.bool get hasUmbrera => $_getBF(12);
+  $core.bool get hasUmbrella => $_getBF(12);
   @$pb.TagNumber(13)
-  set hasUmbrera($core.bool v) { $_setBool(12, v); }
+  set hasUmbrella($core.bool v) { $_setBool(12, v); }
   @$pb.TagNumber(13)
-  $core.bool hasHasUmbrera() => $_has(12);
+  $core.bool hasHasUmbrella() => $_has(12);
   @$pb.TagNumber(13)
-  void clearHasUmbrera() => clearField(13);
+  void clearHasUmbrella() => clearField(13);
 
   @$pb.TagNumber(14)
   $core.bool get hasOther => $_getBF(13);
