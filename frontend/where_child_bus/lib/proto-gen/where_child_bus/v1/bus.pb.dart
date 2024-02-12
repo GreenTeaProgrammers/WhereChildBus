@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'resources.pb.dart' as $6;
+import 'resources.pb.dart' as $8;
 
 class CreateBusRequest extends $pb.GeneratedMessage {
   factory CreateBusRequest({
@@ -103,8 +103,8 @@ class CreateBusRequest extends $pb.GeneratedMessage {
 
 class CreateBusResponse extends $pb.GeneratedMessage {
   factory CreateBusResponse({
-    $1.Bus? bus,
-    $core.Iterable<$1.Child>? children,
+    $8.Bus? bus,
+    $core.Iterable<$8.Child>? children,
   }) {
     final $result = create();
     if (bus != null) {
@@ -120,8 +120,8 @@ class CreateBusResponse extends $pb.GeneratedMessage {
   factory CreateBusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$1.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $1.Bus.create)
-    ..pc<$1.Child>(2, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $1.Child.create)
+    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..pc<$8.Child>(2, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -147,18 +147,18 @@ class CreateBusResponse extends $pb.GeneratedMessage {
   static CreateBusResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $1.Bus get bus => $_getN(0);
+  $8.Bus get bus => $_getN(0);
   @$pb.TagNumber(1)
-  set bus($1.Bus v) { setField(1, v); }
+  set bus($8.Bus v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasBus() => $_has(0);
   @$pb.TagNumber(1)
   void clearBus() => clearField(1);
   @$pb.TagNumber(1)
-  $1.Bus ensureBus() => $_ensure(0);
+  $8.Bus ensureBus() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.List<$1.Child> get children => $_getList(1);
+  $core.List<$8.Child> get children => $_getList(1);
 }
 
 class GetBusListByNurseryIdRequest extends $pb.GeneratedMessage {
@@ -213,7 +213,7 @@ class GetBusListByNurseryIdRequest extends $pb.GeneratedMessage {
 
 class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetBusListByNurseryIdResponse({
-    $core.Iterable<$6.Bus>? buses,
+    $core.Iterable<$8.Bus>? buses,
   }) {
     final $result = create();
     if (buses != null) {
@@ -226,7 +226,7 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetBusListByNurseryIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusListByNurseryIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$6.Bus>(1, _omitFieldNames ? '' : 'buses', $pb.PbFieldType.PM, subBuilder: $6.Bus.create)
+    ..pc<$8.Bus>(1, _omitFieldNames ? '' : 'buses', $pb.PbFieldType.PM, subBuilder: $8.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -252,7 +252,7 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   static GetBusListByNurseryIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$6.Bus> get buses => $_getList(0);
+  $core.List<$8.Bus> get buses => $_getList(0);
 }
 
 

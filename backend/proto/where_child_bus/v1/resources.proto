@@ -73,7 +73,7 @@ message Bus {
 enum Sex {
         SEX_UNSPECIFIED = 0;
         SEX_MAN = 1;
-        SEX_WOMEN = 2;
+        SEX_WOMAN = 2;
         SEX_OTHER = 3;
 }
 
