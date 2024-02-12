@@ -42,10 +42,7 @@ class StudentDetailSheet extends StatelessWidget {
           //将来的に編集画面へ遷移する。
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => StudentEditPage(
-                childName: childName,
-              ),
-            ));
+                builder: (BuildContext context) => StudentEditPage()));
           },
           child: const Icon(Icons.edit),
         ),
