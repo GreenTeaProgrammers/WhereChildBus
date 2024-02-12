@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 
 class BusEditPage extends StatelessWidget {
   final List<String> busStations;
 
-  BusEditPage({required List<String> this.busStations});
+  const BusEditPage({super.key, required this.busStations});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,8 @@ class BusEditPage extends StatelessWidget {
       child: Column(
         children: [
           inputFieldsAndThumbnail(context),
-          StationsList(busStationsList: busStations)
+          StationsList(busStationsList: busStations),
+          ConfirmButton(buttonText: "保存"),
         ],
       ),
     );
@@ -39,7 +41,6 @@ class BusEditPage extends StatelessWidget {
         ],
       );
   }
-
 
   Widget busThumbnail(BuildContext context) {
     return Column(

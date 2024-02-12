@@ -2,9 +2,10 @@ import "package:flutter/material.dart";
 
 class ConfirmButton extends StatelessWidget {
   final String buttonText;
+  final VoidCallback? onTap;
   final double fontSize = 20;    
 
-  ConfirmButton({required String this.buttonText});
+  ConfirmButton({required this.buttonText, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,7 @@ class ConfirmButton extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.6,
             height: fontSize * 2,
           child: ElevatedButton(
-            onPressed: () {
-            },
+            onPressed: onTap ?? () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
             ),
