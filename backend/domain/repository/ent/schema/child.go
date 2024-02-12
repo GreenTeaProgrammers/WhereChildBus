@@ -21,7 +21,7 @@ func (Child) Fields() []ent.Field {
 		field.String("name"),
 		field.Int("age"),
 		field.Enum("sex").
-			Values("man", "women", "other"),
+			Values("man", "woman", "other"),
 		field.Bool("is_ride_morning_bus").Default(false).Comment("朝のバスに乗るかどうか"),
 		field.Bool("is_ride_evening_bus").Default(false).Comment("放課後のバスに乗るかどうか"),
 		field.Bool("check_for_missing_items").Default(false).Comment("持ち物が欠けていないかをチェックするかどうか"),
