@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
 
@@ -38,7 +39,7 @@ class BottomSheetWidget extends StatelessWidget {
           // titleText(),
           modalHeader(busName, "test"),
           StationsList(busStationsList: busStations),
-          boardingConfirmButton(context),
+          ConfirmButton(buttonText: "乗客情報"),
         ],
       )
     );
