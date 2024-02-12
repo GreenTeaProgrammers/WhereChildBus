@@ -192,8 +192,8 @@ class NurseryResponse extends $pb.GeneratedMessage {
     $core.String? address,
     $core.String? phoneNumber,
     $core.String? email,
-    $0.Timestamp? createdAt,
-    $0.Timestamp? updatedAt,
+    $5.Timestamp? createdAt,
+    $5.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -233,8 +233,8 @@ class NurseryResponse extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'address')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
     ..aOS(6, _omitFieldNames ? '' : 'email')
-    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
-    ..aOM<$0.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $0.Timestamp.create)
+    ..aOM<$5.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $5.Timestamp.create)
+    ..aOM<$5.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $5.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -315,26 +315,26 @@ class NurseryResponse extends $pb.GeneratedMessage {
 
   /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(7)
-  $0.Timestamp get createdAt => $_getN(6);
+  $5.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set createdAt($0.Timestamp v) { setField(7, v); }
+  set createdAt($5.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $0.Timestamp ensureCreatedAt() => $_ensure(6);
+  $5.Timestamp ensureCreatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $0.Timestamp get updatedAt => $_getN(7);
+  $5.Timestamp get updatedAt => $_getN(7);
   @$pb.TagNumber(8)
-  set updatedAt($0.Timestamp v) { setField(8, v); }
+  set updatedAt($5.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasUpdatedAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearUpdatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $0.Timestamp ensureUpdatedAt() => $_ensure(7);
+  $5.Timestamp ensureUpdatedAt() => $_ensure(7);
 }
 
 class Guardian extends $pb.GeneratedMessage {

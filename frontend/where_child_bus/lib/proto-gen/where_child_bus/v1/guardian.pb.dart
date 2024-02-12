@@ -82,9 +82,8 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
 class GuardianLoginResponse extends $pb.GeneratedMessage {
   factory GuardianLoginResponse({
     $core.bool? success,
-
-    $1.GuardianResponse? guardian,
-    $1.NurseryResponse? nursery,
+    $6.GuardianResponse? guardian,
+    $6.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (success != null) {
@@ -104,8 +103,8 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GuardianLoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'success')
-    ..aOM<$1.GuardianResponse>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $1.GuardianResponse.create)
-    ..aOM<$1.NurseryResponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $1.NurseryResponse.create)
+    ..aOM<$6.GuardianResponse>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $6.GuardianResponse.create)
+    ..aOM<$6.NurseryResponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $6.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -151,25 +150,15 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   $6.GuardianResponse ensureGuardian() => $_ensure(1);
 
   @$pb.TagNumber(3)
-
-  $1.NurseryResponse get nursery => $_getN(2);
+  $6.NurseryResponse get nursery => $_getN(2);
   @$pb.TagNumber(3)
-  set nursery($1.NurseryResponse v) { setField(3, v); }
+  set nursery($6.NurseryResponse v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasNursery() => $_has(2);
   @$pb.TagNumber(3)
   void clearNursery() => clearField(3);
   @$pb.TagNumber(3)
-  $1.NurseryResponse ensureNursery() => $_ensure(2);
-}
-
-class GuardianServiceApi {
-  $pb.RpcClient _client;
-  GuardianServiceApi(this._client);
-
-  $async.Future<GuardianLoginResponse> guardianLogin($pb.ClientContext? ctx, GuardianLoginRequest request) =>
-    _client.invoke<GuardianLoginResponse>(ctx, 'GuardianService', 'GuardianLogin', request, GuardianLoginResponse())
-  ;
+  $6.NurseryResponse ensureNursery() => $_ensure(2);
 }
 
 
