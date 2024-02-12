@@ -13,6 +13,53 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use statusDescriptor instead')
+const Status$json = {
+  '1': 'Status',
+  '2': [
+    {'1': 'STATUS_UNSPECIFIED', '2': 0},
+    {'1': 'STATUS_STOPPED', '2': 1},
+    {'1': 'STATUS_RUNNING', '2': 2},
+    {'1': 'STATUS_MAINTEINANCE', '2': 3},
+  ],
+};
+
+/// Descriptor for `Status`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
+    'CgZTdGF0dXMSFgoSU1RBVFVTX1VOU1BFQ0lGSUVEEAASEgoOU1RBVFVTX1NUT1BQRUQQARISCg'
+    '5TVEFUVVNfUlVOTklORxACEhcKE1NUQVRVU19NQUlOVEVJTkFOQ0UQAw==');
+
+@$core.Deprecated('Use sexDescriptor instead')
+const Sex$json = {
+  '1': 'Sex',
+  '2': [
+    {'1': 'SEX_UNSPECIFIED', '2': 0},
+    {'1': 'SEX_MAN', '2': 1},
+    {'1': 'SEX_WOMEN', '2': 2},
+    {'1': 'SEX_OTHER', '2': 3},
+  ],
+};
+
+/// Descriptor for `Sex`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List sexDescriptor = $convert.base64Decode(
+    'CgNTZXgSEwoPU0VYX1VOU1BFQ0lGSUVEEAASCwoHU0VYX01BThABEg0KCVNFWF9XT01FThACEg'
+    '0KCVNFWF9PVEhFUhAD');
+
+@$core.Deprecated('Use busTypeDescriptor instead')
+const BusType$json = {
+  '1': 'BusType',
+  '2': [
+    {'1': 'BUS_TYPE_UNSPECIFIED', '2': 0},
+    {'1': 'BUS_TYPE_MORNING', '2': 1},
+    {'1': 'BUS_TYPE_EVENING', '2': 2},
+  ],
+};
+
+/// Descriptor for `BusType`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List busTypeDescriptor = $convert.base64Decode(
+    'CgdCdXNUeXBlEhgKFEJVU19UWVBFX1VOU1BFQ0lGSUVEEAASFAoQQlVTX1RZUEVfTU9STklORx'
+    'ABEhQKEEJVU19UWVBFX0VWRU5JTkcQAg==');
+
 @$core.Deprecated('Use nurseryDescriptor instead')
 const Nursery$json = {
   '1': 'Nursery',
@@ -116,36 +163,23 @@ const Bus$json = {
     {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
     {'1': 'plate_number', '3': 4, '4': 1, '5': 9, '10': 'plateNumber'},
-    {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.where_child_bus.v1.Bus.Status', '10': 'status'},
+    {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.where_child_bus.v1.Status', '10': 'status'},
     {'1': 'latitude', '3': 6, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 7, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'created_at', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
     {'1': 'updated_at', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
-  ],
-  '4': [Bus_Status$json],
-};
-
-@$core.Deprecated('Use busDescriptor instead')
-const Bus_Status$json = {
-  '1': 'Status',
-  '2': [
-    {'1': 'STATUS_UNSPECIFIED', '2': 0},
-    {'1': 'STATUS_STOPPED', '2': 1},
-    {'1': 'STATUS_RUNNING', '2': 2},
-    {'1': 'STATUS_MAINTEINANCE', '2': 3},
   ],
 };
 
 /// Descriptor for `Bus`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List busDescriptor = $convert.base64Decode(
     'CgNCdXMSDgoCaWQYASABKAlSAmlkEh0KCm51cnNlcnlfaWQYAiABKAlSCW51cnNlcnlJZBISCg'
-    'RuYW1lGAMgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgEIAEoCVILcGxhdGVOdW1iZXISNgoG'
-    'c3RhdHVzGAUgASgOMh4ud2hlcmVfY2hpbGRfYnVzLnYxLkJ1cy5TdGF0dXNSBnN0YXR1cxIaCg'
-    'hsYXRpdHVkZRgGIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAcgASgBUglsb25naXR1ZGUS'
-    'OQoKY3JlYXRlZF9hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZW'
-    'RBdBI5Cgp1cGRhdGVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBk'
-    'YXRlZEF0ImEKBlN0YXR1cxIWChJTVEFUVVNfVU5TUEVDSUZJRUQQABISCg5TVEFUVVNfU1RPUF'
-    'BFRBABEhIKDlNUQVRVU19SVU5OSU5HEAISFwoTU1RBVFVTX01BSU5URUlOQU5DRRAD');
+    'RuYW1lGAMgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgEIAEoCVILcGxhdGVOdW1iZXISMgoG'
+    'c3RhdHVzGAUgASgOMhoud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXR1c1IGc3RhdHVzEhoKCGxhdG'
+    'l0dWRlGAYgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYByABKAFSCWxvbmdpdHVkZRI5Cgpj'
+    'cmVhdGVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0Ej'
+    'kKCnVwZGF0ZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgl1cGRhdGVk'
+    'QXQ=');
 
 @$core.Deprecated('Use childDescriptor instead')
 const Child$json = {
@@ -156,7 +190,7 @@ const Child$json = {
     {'1': 'guardian_id', '3': 3, '4': 1, '5': 9, '10': 'guardianId'},
     {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
     {'1': 'age', '3': 5, '4': 1, '5': 5, '10': 'age'},
-    {'1': 'sex', '3': 6, '4': 1, '5': 14, '6': '.where_child_bus.v1.Child.Sex', '10': 'sex'},
+    {'1': 'sex', '3': 6, '4': 1, '5': 14, '6': '.where_child_bus.v1.Sex', '10': 'sex'},
     {'1': 'is_ride_morning_bus', '3': 7, '4': 1, '5': 8, '10': 'isRideMorningBus'},
     {'1': 'is_ride_evening_bus', '3': 8, '4': 1, '5': 8, '10': 'isRideEveningBus'},
     {'1': 'check_for_missing_items', '3': 9, '4': 1, '5': 8, '10': 'checkForMissingItems'},
@@ -168,35 +202,21 @@ const Child$json = {
     {'1': 'created_at', '3': 15, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
     {'1': 'updated_at', '3': 16, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
   ],
-  '4': [Child_Sex$json],
-};
-
-@$core.Deprecated('Use childDescriptor instead')
-const Child_Sex$json = {
-  '1': 'Sex',
-  '2': [
-    {'1': 'SEX_UNSPECIFIED', '2': 0},
-    {'1': 'SEX_MAN', '2': 1},
-    {'1': 'SEX_WOMEN', '2': 2},
-    {'1': 'SEX_OTHER', '2': 3},
-  ],
 };
 
 /// Descriptor for `Child`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List childDescriptor = $convert.base64Decode(
     'CgVDaGlsZBIOCgJpZBgBIAEoCVICaWQSHQoKbnVyc2VyeV9pZBgCIAEoCVIJbnVyc2VyeUlkEh'
     '8KC2d1YXJkaWFuX2lkGAMgASgJUgpndWFyZGlhbklkEhIKBG5hbWUYBCABKAlSBG5hbWUSEAoD'
-    'YWdlGAUgASgFUgNhZ2USLwoDc2V4GAYgASgOMh0ud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkLl'
-    'NleFIDc2V4Ei0KE2lzX3JpZGVfbW9ybmluZ19idXMYByABKAhSEGlzUmlkZU1vcm5pbmdCdXMS'
-    'LQoTaXNfcmlkZV9ldmVuaW5nX2J1cxgIIAEoCFIQaXNSaWRlRXZlbmluZ0J1cxI1ChdjaGVja1'
-    '9mb3JfbWlzc2luZ19pdGVtcxgJIAEoCFIUY2hlY2tGb3JNaXNzaW5nSXRlbXMSFwoHaGFzX2Jh'
-    'ZxgKIAEoCFIGaGFzQmFnEiIKDWhhc19sdW5jaF9ib3gYCyABKAhSC2hhc0x1bmNoQm94EigKEG'
-    'hhc193YXRlcl9ib3R0bGUYDCABKAhSDmhhc1dhdGVyQm90dGxlEh8KC2hhc191bWJyZXJhGA0g'
-    'ASgIUgpoYXNVbWJyZXJhEhsKCWhhc19vdGhlchgOIAEoCFIIaGFzT3RoZXISOQoKY3JlYXRlZF'
-    '9hdBgPIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRh'
-    'dGVkX2F0GBAgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0IkUKA1'
-    'NleBITCg9TRVhfVU5TUEVDSUZJRUQQABILCgdTRVhfTUFOEAESDQoJU0VYX1dPTUVOEAISDQoJ'
-    'U0VYX09USEVSEAM=');
+    'YWdlGAUgASgFUgNhZ2USKQoDc2V4GAYgASgOMhcud2hlcmVfY2hpbGRfYnVzLnYxLlNleFIDc2'
+    'V4Ei0KE2lzX3JpZGVfbW9ybmluZ19idXMYByABKAhSEGlzUmlkZU1vcm5pbmdCdXMSLQoTaXNf'
+    'cmlkZV9ldmVuaW5nX2J1cxgIIAEoCFIQaXNSaWRlRXZlbmluZ0J1cxI1ChdjaGVja19mb3JfbW'
+    'lzc2luZ19pdGVtcxgJIAEoCFIUY2hlY2tGb3JNaXNzaW5nSXRlbXMSFwoHaGFzX2JhZxgKIAEo'
+    'CFIGaGFzQmFnEiIKDWhhc19sdW5jaF9ib3gYCyABKAhSC2hhc0x1bmNoQm94EigKEGhhc193YX'
+    'Rlcl9ib3R0bGUYDCABKAhSDmhhc1dhdGVyQm90dGxlEh8KC2hhc191bWJyZXJhGA0gASgIUgpo'
+    'YXNVbWJyZXJhEhsKCWhhc19vdGhlchgOIAEoCFIIaGFzT3RoZXISOQoKY3JlYXRlZF9hdBgPIA'
+    'EoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0'
+    'GBAgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
 
 @$core.Deprecated('Use stationDescriptor instead')
 const Station$json = {
@@ -229,28 +249,15 @@ const ChildBusAssociation$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'bus_id', '3': 2, '4': 1, '5': 9, '10': 'busId'},
     {'1': 'child_id', '3': 3, '4': 1, '5': 9, '10': 'childId'},
-    {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.ChildBusAssociation.BusType', '10': 'busType'},
-  ],
-  '4': [ChildBusAssociation_BusType$json],
-};
-
-@$core.Deprecated('Use childBusAssociationDescriptor instead')
-const ChildBusAssociation_BusType$json = {
-  '1': 'BusType',
-  '2': [
-    {'1': 'BUS_TYPE_UNSPECIFIED', '2': 0},
-    {'1': 'BUS_TYPE_MORNING', '2': 1},
-    {'1': 'BUS_TYPE_EVENING', '2': 2},
+    {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
   ],
 };
 
 /// Descriptor for `ChildBusAssociation`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List childBusAssociationDescriptor = $convert.base64Decode(
     'ChNDaGlsZEJ1c0Fzc29jaWF0aW9uEg4KAmlkGAEgASgJUgJpZBIVCgZidXNfaWQYAiABKAlSBW'
-    'J1c0lkEhkKCGNoaWxkX2lkGAMgASgJUgdjaGlsZElkEkoKCGJ1c190eXBlGAQgASgOMi8ud2hl'
-    'cmVfY2hpbGRfYnVzLnYxLkNoaWxkQnVzQXNzb2NpYXRpb24uQnVzVHlwZVIHYnVzVHlwZSJPCg'
-    'dCdXNUeXBlEhgKFEJVU19UWVBFX1VOU1BFQ0lGSUVEEAASFAoQQlVTX1RZUEVfTU9STklORxAB'
-    'EhQKEEJVU19UWVBFX0VWRU5JTkcQAg==');
+    'J1c0lkEhkKCGNoaWxkX2lkGAMgASgJUgdjaGlsZElkEjYKCGJ1c190eXBlGAQgASgOMhsud2hl'
+    'cmVfY2hpbGRfYnVzLnYxLkJ1c1R5cGVSB2J1c1R5cGU=');
 
 @$core.Deprecated('Use busStationAssociationDescriptor instead')
 const BusStationAssociation$json = {

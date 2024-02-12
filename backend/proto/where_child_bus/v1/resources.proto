@@ -50,17 +50,18 @@ message GuardianResponse {
         google.protobuf.Timestamp updated_at = 7;
 }
 
+enum Status {
+        STATUS_UNSPECIFIED = 0;
+        STATUS_STOPPED = 1;
+        STATUS_RUNNING = 2;
+        STATUS_MAINTEINANCE = 3;
+}
+
 message Bus {
         string id = 1;
         string nursery_id = 2;
         string name = 3;
         string plate_number = 4;
-        enum Status {
-                STATUS_UNSPECIFIED = 0;
-                STATUS_STOPPED = 1;
-                STATUS_RUNNING = 2;
-                STATUS_MAINTEINANCE = 3;
-        }
         Status status = 5;
         //緯度経度
         double latitude = 6;
@@ -69,18 +70,19 @@ message Bus {
         google.protobuf.Timestamp  updated_at = 9;
 }
 
+enum Sex {
+        SEX_UNSPECIFIED = 0;
+        SEX_MAN = 1;
+        SEX_WOMEN = 2;
+        SEX_OTHER = 3;
+}
+
 message Child {
         string id = 1;
         string nursery_id = 2;
         string guardian_id = 3;
         string name = 4;
         int32 age = 5;
-        enum Sex {
-                SEX_UNSPECIFIED = 0;
-                SEX_MAN = 1;
-                SEX_WOMEN = 2;
-                SEX_OTHER = 3;
-        }
         Sex sex  = 6;
         bool is_ride_morning_bus = 7;
         bool is_ride_evening_bus = 8;
@@ -105,15 +107,16 @@ message Station {
         google.protobuf.Timestamp  updated_at = 8;
 }
 
+enum BusType {
+        BUS_TYPE_UNSPECIFIED = 0;
+        BUS_TYPE_MORNING = 1;
+        BUS_TYPE_EVENING = 2;
+}
+
 message ChildBusAssociation {
         string id = 1;
         string bus_id = 2;
         string child_id = 3;
-        enum BusType {
-                BUS_TYPE_UNSPECIFIED = 0;
-                BUS_TYPE_MORNING = 1;
-                BUS_TYPE_EVENING = 2;
-        }
         BusType bus_type = 4;
 }
 
