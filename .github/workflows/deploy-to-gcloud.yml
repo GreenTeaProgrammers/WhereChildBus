@@ -15,10 +15,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}  # GitHub Secretsからサービスアカウントキーを参照
           export_default_credentials: true
 
       - name: Build Docker Image
@@ -26,13 +26,14 @@ jobs:
           docker build --tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest \
             --file=./backend/Dockerfile \
             --platform linux/amd64 ./backend \
-            --build-arg DSN=${{ secrets.DSN }} \
-            --build-arg DB_USER_NAME=${{ secrets.DB_USER_NAME }} \
-            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --build-arg DB_ADDR=${{ secrets.DB_ADDR }} \
-            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
-            --build-arg PORT=${{ secrets.PORT }} \
-            --build-arg MODE_DEV=${{ secrets.MODE_DEV }}
+            --build-arg DSN="${{ secrets.DSN }}" \
+            --build-arg DB_USER_NAME="${{ secrets.DB_USER_NAME }}" \
+            --build-arg DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            --build-arg DB_ADDR="${{ secrets.DB_ADDR }}" \
+            --build-arg DB_NAME="${{ secrets.DB_NAME }}" \
+            --build-arg PORT="${{ secrets.PORT }}" \
+            --build-arg MODE_DEV="${{ secrets.MODE_DEV }}"
+
 
       - name: Push Docker Image to Google Container Registry
         run: |
