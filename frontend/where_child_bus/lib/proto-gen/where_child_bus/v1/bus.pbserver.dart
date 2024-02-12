@@ -21,10 +21,12 @@ import 'bus.pbjson.dart';
 export 'bus.pb.dart';
 
 abstract class BusServiceBase extends $pb.GeneratedService {
+  $async.Future<$2.CreateBusResponse> createBus($pb.ServerContext ctx, $2.CreateBusRequest request);
   $async.Future<$2.GetBusListByNurseryIdResponse> getBusListByNurseryId($pb.ServerContext ctx, $2.GetBusListByNurseryIdRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
+      case 'CreateBus': return $2.CreateBusRequest();
       case 'GetBusListByNurseryId': return $2.GetBusListByNurseryIdRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
@@ -32,6 +34,7 @@ abstract class BusServiceBase extends $pb.GeneratedService {
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
+      case 'CreateBus': return this.createBus(ctx, request as $2.CreateBusRequest);
       case 'GetBusListByNurseryId': return this.getBusListByNurseryId(ctx, request as $2.GetBusListByNurseryIdRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }

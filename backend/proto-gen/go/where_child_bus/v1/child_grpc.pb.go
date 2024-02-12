@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	ChildService_CreateChild_FullMethodName              = "/where_child_bus.v1.ChildService/CreateChild"
 	ChildService_GetChildListByNurseryID_FullMethodName  = "/where_child_bus.v1.ChildService/GetChildListByNurseryID"
 	ChildService_GetChildListByGuardianID_FullMethodName = "/where_child_bus.v1.ChildService/GetChildListByGuardianID"
 )
@@ -27,6 +28,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChildServiceClient interface {
+	CreateChild(ctx context.Context, in *CreateChildRequest, opts ...grpc.CallOption) (*CreateChildResponse, error)
 	GetChildListByNurseryID(ctx context.Context, in *GetChildListByNurseryIDRequest, opts ...grpc.CallOption) (*GetChildListByNurseryIDResponse, error)
 	GetChildListByGuardianID(ctx context.Context, in *GetChildListByGuardianIDRequest, opts ...grpc.CallOption) (*GetChildListByGuardianIDResponse, error)
 }
@@ -37,6 +39,15 @@ type childServiceClient struct {
 
 func NewChildServiceClient(cc grpc.ClientConnInterface) ChildServiceClient {
 	return &childServiceClient{cc}
+}
+
+func (c *childServiceClient) CreateChild(ctx context.Context, in *CreateChildRequest, opts ...grpc.CallOption) (*CreateChildResponse, error) {
+	out := new(CreateChildResponse)
+	err := c.cc.Invoke(ctx, ChildService_CreateChild_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *childServiceClient) GetChildListByNurseryID(ctx context.Context, in *GetChildListByNurseryIDRequest, opts ...grpc.CallOption) (*GetChildListByNurseryIDResponse, error) {
@@ -61,6 +72,7 @@ func (c *childServiceClient) GetChildListByGuardianID(ctx context.Context, in *G
 // All implementations should embed UnimplementedChildServiceServer
 // for forward compatibility
 type ChildServiceServer interface {
+	CreateChild(context.Context, *CreateChildRequest) (*CreateChildResponse, error)
 	GetChildListByNurseryID(context.Context, *GetChildListByNurseryIDRequest) (*GetChildListByNurseryIDResponse, error)
 	GetChildListByGuardianID(context.Context, *GetChildListByGuardianIDRequest) (*GetChildListByGuardianIDResponse, error)
 }
@@ -69,6 +81,9 @@ type ChildServiceServer interface {
 type UnimplementedChildServiceServer struct {
 }
 
+func (UnimplementedChildServiceServer) CreateChild(context.Context, *CreateChildRequest) (*CreateChildResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateChild not implemented")
+}
 func (UnimplementedChildServiceServer) GetChildListByNurseryID(context.Context, *GetChildListByNurseryIDRequest) (*GetChildListByNurseryIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChildListByNurseryID not implemented")
 }
@@ -85,6 +100,24 @@ type UnsafeChildServiceServer interface {
 
 func RegisterChildServiceServer(s grpc.ServiceRegistrar, srv ChildServiceServer) {
 	s.RegisterService(&ChildService_ServiceDesc, srv)
+}
+
+func _ChildService_CreateChild_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateChildRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChildServiceServer).CreateChild(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChildService_CreateChild_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChildServiceServer).CreateChild(ctx, req.(*CreateChildRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ChildService_GetChildListByNurseryID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -130,6 +163,10 @@ var ChildService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "where_child_bus.v1.ChildService",
 	HandlerType: (*ChildServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateChild",
+			Handler:    _ChildService_CreateChild_Handler,
+		},
 		{
 			MethodName: "GetChildListByNurseryID",
 			Handler:    _ChildService_GetChildListByNurseryID_Handler,

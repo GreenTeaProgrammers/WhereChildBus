@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: where_child_bus/v1/guardian.proto
+//  source: where_child_bus/v1/child_photo.proto
 //
 // @dart = 2.12
 
@@ -15,29 +15,29 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'guardian.pb.dart' as $5;
-import 'guardian.pbjson.dart';
+import 'child_photo.pb.dart' as $4;
+import 'child_photo.pbjson.dart';
 
-export 'guardian.pb.dart';
+export 'child_photo.pb.dart';
 
-abstract class GuardianServiceBase extends $pb.GeneratedService {
-  $async.Future<$5.GuardianLoginResponse> guardianLogin($pb.ServerContext ctx, $5.GuardianLoginRequest request);
+abstract class ChildPhotoServiceBase extends $pb.GeneratedService {
+  $async.Future<$4.DeleteChildPhotoResponse> deleteChildPhoto($pb.ServerContext ctx, $4.DeleteChildPhotoRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'GuardianLogin': return $5.GuardianLoginRequest();
+      case 'DeleteChildPhoto': return $4.DeleteChildPhotoRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'GuardianLogin': return this.guardianLogin(ctx, request as $5.GuardianLoginRequest);
+      case 'DeleteChildPhoto': return this.deleteChildPhoto(ctx, request as $4.DeleteChildPhotoRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
-  $core.Map<$core.String, $core.dynamic> get $json => GuardianServiceBase$json;
-  $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> get $messageJson => GuardianServiceBase$messageJson;
+  $core.Map<$core.String, $core.dynamic> get $json => ChildPhotoServiceBase$json;
+  $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> get $messageJson => ChildPhotoServiceBase$messageJson;
 }
 

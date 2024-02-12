@@ -21,11 +21,13 @@ import 'child.pbjson.dart';
 export 'child.pb.dart';
 
 abstract class ChildServiceBase extends $pb.GeneratedService {
+  $async.Future<$3.CreateChildResponse> createChild($pb.ServerContext ctx, $3.CreateChildRequest request);
   $async.Future<$3.GetChildListByNurseryIDResponse> getChildListByNurseryID($pb.ServerContext ctx, $3.GetChildListByNurseryIDRequest request);
   $async.Future<$3.GetChildListByGuardianIDResponse> getChildListByGuardianID($pb.ServerContext ctx, $3.GetChildListByGuardianIDRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
+      case 'CreateChild': return $3.CreateChildRequest();
       case 'GetChildListByNurseryID': return $3.GetChildListByNurseryIDRequest();
       case 'GetChildListByGuardianID': return $3.GetChildListByGuardianIDRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
@@ -34,6 +36,7 @@ abstract class ChildServiceBase extends $pb.GeneratedService {
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
+      case 'CreateChild': return this.createChild(ctx, request as $3.CreateChildRequest);
       case 'GetChildListByNurseryID': return this.getChildListByNurseryID(ctx, request as $3.GetChildListByNurseryIDRequest);
       case 'GetChildListByGuardianID': return this.getChildListByGuardianID(ctx, request as $3.GetChildListByGuardianIDRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');

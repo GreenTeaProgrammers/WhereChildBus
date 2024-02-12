@@ -634,7 +634,7 @@ class Bus extends $pb.GeneratedMessage {
     $core.String? nurseryId,
     $core.String? name,
     $core.String? plateNumber,
-    Bus_Status? status,
+    Status? status,
     $core.double? latitude,
     $core.double? longitude,
     $0.Timestamp? createdAt,
@@ -679,7 +679,7 @@ class Bus extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'plateNumber')
-    ..e<Bus_Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Bus_Status.STATUS_UNSPECIFIED, valueOf: Bus_Status.valueOf, enumValues: Bus_Status.values)
+    ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..aOM<$0.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
@@ -745,9 +745,9 @@ class Bus extends $pb.GeneratedMessage {
   void clearPlateNumber() => clearField(4);
 
   @$pb.TagNumber(5)
-  Bus_Status get status => $_getN(4);
+  Status get status => $_getN(4);
   @$pb.TagNumber(5)
-  set status(Bus_Status v) { setField(5, v); }
+  set status(Status v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasStatus() => $_has(4);
   @$pb.TagNumber(5)
@@ -802,7 +802,7 @@ class Child extends $pb.GeneratedMessage {
     $core.String? guardianId,
     $core.String? name,
     $core.int? age,
-    Child_Sex? sex,
+    Sex? sex,
     $core.bool? isRideMorningBus,
     $core.bool? isRideEveningBus,
     $core.bool? checkForMissingItems,
@@ -875,7 +875,7 @@ class Child extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'guardianId')
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..a<$core.int>(5, _omitFieldNames ? '' : 'age', $pb.PbFieldType.O3)
-    ..e<Child_Sex>(6, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: Child_Sex.SEX_UNSPECIFIED, valueOf: Child_Sex.valueOf, enumValues: Child_Sex.values)
+    ..e<Sex>(6, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: Sex.SEX_UNSPECIFIED, valueOf: Sex.valueOf, enumValues: Sex.values)
     ..aOB(7, _omitFieldNames ? '' : 'isRideMorningBus')
     ..aOB(8, _omitFieldNames ? '' : 'isRideEveningBus')
     ..aOB(9, _omitFieldNames ? '' : 'checkForMissingItems')
@@ -956,9 +956,9 @@ class Child extends $pb.GeneratedMessage {
   void clearAge() => clearField(5);
 
   @$pb.TagNumber(6)
-  Child_Sex get sex => $_getN(5);
+  Sex get sex => $_getN(5);
   @$pb.TagNumber(6)
-  set sex(Child_Sex v) { setField(6, v); }
+  set sex(Sex v) { setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasSex() => $_has(5);
   @$pb.TagNumber(6)
@@ -1216,7 +1216,7 @@ class ChildBusAssociation extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? busId,
     $core.String? childId,
-    ChildBusAssociation_BusType? busType,
+    BusType? busType,
   }) {
     final $result = create();
     if (id != null) {
@@ -1241,7 +1241,7 @@ class ChildBusAssociation extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'busId')
     ..aOS(3, _omitFieldNames ? '' : 'childId')
-    ..e<ChildBusAssociation_BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: ChildBusAssociation_BusType.BUS_TYPE_UNSPECIFIED, valueOf: ChildBusAssociation_BusType.valueOf, enumValues: ChildBusAssociation_BusType.values)
+    ..e<BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: BusType.BUS_TYPE_UNSPECIFIED, valueOf: BusType.valueOf, enumValues: BusType.values)
     ..hasRequiredFields = false
   ;
 
@@ -1294,9 +1294,9 @@ class ChildBusAssociation extends $pb.GeneratedMessage {
   void clearChildId() => clearField(3);
 
   @$pb.TagNumber(4)
-  ChildBusAssociation_BusType get busType => $_getN(3);
+  BusType get busType => $_getN(3);
   @$pb.TagNumber(4)
-  set busType(ChildBusAssociation_BusType v) { setField(4, v); }
+  set busType(BusType v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasBusType() => $_has(3);
   @$pb.TagNumber(4)

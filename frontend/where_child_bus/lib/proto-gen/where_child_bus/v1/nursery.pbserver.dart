@@ -15,24 +15,24 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'nursery.pb.dart' as $6;
+import 'nursery.pb.dart' as $7;
 import 'nursery.pbjson.dart';
 
 export 'nursery.pb.dart';
 
 abstract class NurseryServiceBase extends $pb.GeneratedService {
-  $async.Future<$6.NurseryLoginResponse> nurseryLogin($pb.ServerContext ctx, $6.NurseryLoginRequest request);
+  $async.Future<$7.NurseryLoginResponse> nurseryLogin($pb.ServerContext ctx, $7.NurseryLoginRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'NurseryLogin': return $6.NurseryLoginRequest();
+      case 'NurseryLogin': return $7.NurseryLoginRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'NurseryLogin': return this.nurseryLogin(ctx, request as $6.NurseryLoginRequest);
+      case 'NurseryLogin': return this.nurseryLogin(ctx, request as $7.NurseryLoginRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

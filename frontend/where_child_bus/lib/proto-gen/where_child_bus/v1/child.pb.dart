@@ -15,6 +15,159 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'resources.pb.dart' as $1;
+import 'resources.pbenum.dart' as $1;
+
+class CreateChildRequest extends $pb.GeneratedMessage {
+  factory CreateChildRequest({
+    $core.String? nurseryId,
+    $core.String? guardianId,
+    $core.String? name,
+    $1.Sex? sex,
+    $core.Iterable<$core.List<$core.int>>? photos,
+  }) {
+    final $result = create();
+    if (nurseryId != null) {
+      $result.nurseryId = nurseryId;
+    }
+    if (guardianId != null) {
+      $result.guardianId = guardianId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (sex != null) {
+      $result.sex = sex;
+    }
+    if (photos != null) {
+      $result.photos.addAll(photos);
+    }
+    return $result;
+  }
+  CreateChildRequest._() : super();
+  factory CreateChildRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateChildRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateChildRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
+    ..aOS(2, _omitFieldNames ? '' : 'guardianId')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..e<$1.Sex>(4, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: $1.Sex.SEX_UNSPECIFIED, valueOf: $1.Sex.valueOf, enumValues: $1.Sex.values)
+    ..p<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PY)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateChildRequest clone() => CreateChildRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateChildRequest copyWith(void Function(CreateChildRequest) updates) => super.copyWith((message) => updates(message as CreateChildRequest)) as CreateChildRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateChildRequest create() => CreateChildRequest._();
+  CreateChildRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateChildRequest> createRepeated() => $pb.PbList<CreateChildRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateChildRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateChildRequest>(create);
+  static CreateChildRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get nurseryId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set nurseryId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNurseryId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNurseryId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get guardianId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set guardianId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasGuardianId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearGuardianId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $1.Sex get sex => $_getN(3);
+  @$pb.TagNumber(4)
+  set sex($1.Sex v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasSex() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSex() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.List<$core.List<$core.int>> get photos => $_getList(4);
+}
+
+class CreateChildResponse extends $pb.GeneratedMessage {
+  factory CreateChildResponse({
+    $1.Child? child,
+  }) {
+    final $result = create();
+    if (child != null) {
+      $result.child = child;
+    }
+    return $result;
+  }
+  CreateChildResponse._() : super();
+  factory CreateChildResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateChildResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateChildResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$1.Child>(1, _omitFieldNames ? '' : 'child', subBuilder: $1.Child.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateChildResponse clone() => CreateChildResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateChildResponse copyWith(void Function(CreateChildResponse) updates) => super.copyWith((message) => updates(message as CreateChildResponse)) as CreateChildResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateChildResponse create() => CreateChildResponse._();
+  CreateChildResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateChildResponse> createRepeated() => $pb.PbList<CreateChildResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreateChildResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateChildResponse>(create);
+  static CreateChildResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $1.Child get child => $_getN(0);
+  @$pb.TagNumber(1)
+  set child($1.Child v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChild() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChild() => clearField(1);
+  @$pb.TagNumber(1)
+  $1.Child ensureChild() => $_ensure(0);
+}
 
 class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDRequest({
@@ -208,6 +361,9 @@ class ChildServiceApi {
   $pb.RpcClient _client;
   ChildServiceApi(this._client);
 
+  $async.Future<CreateChildResponse> createChild($pb.ClientContext? ctx, CreateChildRequest request) =>
+    _client.invoke<CreateChildResponse>(ctx, 'ChildService', 'CreateChild', request, CreateChildResponse())
+  ;
   $async.Future<GetChildListByNurseryIDResponse> getChildListByNurseryID($pb.ClientContext? ctx, GetChildListByNurseryIDRequest request) =>
     _client.invoke<GetChildListByNurseryIDResponse>(ctx, 'ChildService', 'GetChildListByNurseryID', request, GetChildListByNurseryIDResponse())
   ;

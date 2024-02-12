@@ -15,24 +15,24 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'health_check.pb.dart' as $5;
+import 'health_check.pb.dart' as $6;
 import 'health_check.pbjson.dart';
 
 export 'health_check.pb.dart';
 
 abstract class HealthcheckServiceBase extends $pb.GeneratedService {
-  $async.Future<$5.PingResponse> ping($pb.ServerContext ctx, $5.PingRequest request);
+  $async.Future<$6.PingResponse> ping($pb.ServerContext ctx, $6.PingRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'Ping': return $5.PingRequest();
+      case 'Ping': return $6.PingRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'Ping': return this.ping(ctx, request as $5.PingRequest);
+      case 'Ping': return this.ping(ctx, request as $6.PingRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

@@ -5,8 +5,21 @@ package where_child_bus.v1;
 import "where_child_bus/v1/resources.proto";
 
 service ChildService {
+        rpc CreateChild(CreateChildRequest) returns (CreateChildResponse);
         rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (GetChildListByNurseryIDResponse);
         rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
+}
+
+message CreateChildRequest {
+        string nursery_id = 1;
+        string guardian_id = 2;
+        string name = 3;
+        Sex    sex = 4;
+        repeated bytes photos = 5;
+}
+
+message CreateChildResponse {
+        Child child = 1;
 }
 
 message GetChildListByNurseryIDRequest {
