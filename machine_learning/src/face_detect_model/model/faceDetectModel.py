@@ -9,11 +9,19 @@ def compute_conv_output_size(L_in, kernel_size, stride=1, padding=0, dilation=1)
 
 class FaceDetectModel(nn.Module):
     def __init__(self, config: dict, num_classes: int, input_dim: tuple):
+        """顔検出モデルの初期化
+        Args:
+            config (dict): モデル設定
+            num_classes (int): 出力クラス数
+            input_dim (tuple): 入力画像の次元 (チャンネル, 高さ, 幅)
+        """
         super(FaceDetectModel, self).__init__()
         self.config = config
 
         in_channels = config["model"]["in_channels"]
         kernel_size = config["model"]["Conv2d"]["kernel_size"]
+        out_channels_1 = config["model"]["Conv2d"]["out_channels_1"]
+        out_channels_2 = config["model"]["Conv2d"]["out_channels_2"]
         pooling_kernel_size = config["model"]["pooling"]["kernel_size"]
         pooling_stride = config["model"]["pooling"]["stride"]
 
@@ -21,9 +29,15 @@ class FaceDetectModel(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=pooling_kernel_size, stride=pooling_stride)
 
         self.conv1 = nn.Conv2d(
-            in_channels=in_channels, out_channels=16, kernel_size=kernel_size
+            in_channels=in_channels,
+            out_channels=out_channels_1,
+            kernel_size=kernel_size,
         )
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=kernel_size)
+        self.conv2 = nn.Conv2d(
+            in_channels=out_channels_1,
+            out_channels=out_channels_2,
+            kernel_size=kernel_size,
+        )
 
         self.flatten = nn.Flatten()
 
@@ -38,7 +52,7 @@ class FaceDetectModel(nn.Module):
         )
 
         # 最終的な特徴マップのサイズに基づいてLinear層の入力サイズを設定
-        linear_input_size = 32 * size * size
+        linear_input_size = out_channels_2 * size * size
 
         self.linear = nn.Linear(linear_input_size, config["model"]["hidden_size"])
         self.classifier = nn.Linear(config["model"]["hidden_size"], num_classes)
