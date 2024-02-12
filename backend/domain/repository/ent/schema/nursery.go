@@ -2,7 +2,6 @@ package schema
 
 import (
 	"math/rand"
-	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -25,11 +24,9 @@ func init() {
 func (Nursery) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
-		field.String("nursery_code").DefaultFunc(func() string {
-			return strconv.Itoa(rand.Intn(90000) + 10000)
-		}).Unique().Comment("ユニークな数字(文字列)のコード"), //!: ユニークじゃないコードが生成される可能性がある
+		field.String("nursery_code").Unique().Comment("ユニークな数字(文字列)のコード"),
 		field.String("email"),
-		field.String("encrypted_password"),
+		field.String("hashed_password"),
 		field.String("name"),
 		field.String("address").Optional(),
 		field.String("phone_number").Optional(),

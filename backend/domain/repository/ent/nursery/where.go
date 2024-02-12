@@ -66,9 +66,9 @@ func Email(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldEQ(FieldEmail, v))
 }
 
-// EncryptedPassword applies equality check predicate on the "encrypted_password" field. It's identical to EncryptedPasswordEQ.
-func EncryptedPassword(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldEQ(FieldEncryptedPassword, v))
+// HashedPassword applies equality check predicate on the "hashed_password" field. It's identical to HashedPasswordEQ.
+func HashedPassword(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEQ(FieldHashedPassword, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -226,69 +226,69 @@ func EmailContainsFold(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldContainsFold(FieldEmail, v))
 }
 
-// EncryptedPasswordEQ applies the EQ predicate on the "encrypted_password" field.
-func EncryptedPasswordEQ(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldEQ(FieldEncryptedPassword, v))
+// HashedPasswordEQ applies the EQ predicate on the "hashed_password" field.
+func HashedPasswordEQ(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEQ(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordNEQ applies the NEQ predicate on the "encrypted_password" field.
-func EncryptedPasswordNEQ(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldNEQ(FieldEncryptedPassword, v))
+// HashedPasswordNEQ applies the NEQ predicate on the "hashed_password" field.
+func HashedPasswordNEQ(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldNEQ(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordIn applies the In predicate on the "encrypted_password" field.
-func EncryptedPasswordIn(vs ...string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldIn(FieldEncryptedPassword, vs...))
+// HashedPasswordIn applies the In predicate on the "hashed_password" field.
+func HashedPasswordIn(vs ...string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldIn(FieldHashedPassword, vs...))
 }
 
-// EncryptedPasswordNotIn applies the NotIn predicate on the "encrypted_password" field.
-func EncryptedPasswordNotIn(vs ...string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldNotIn(FieldEncryptedPassword, vs...))
+// HashedPasswordNotIn applies the NotIn predicate on the "hashed_password" field.
+func HashedPasswordNotIn(vs ...string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldNotIn(FieldHashedPassword, vs...))
 }
 
-// EncryptedPasswordGT applies the GT predicate on the "encrypted_password" field.
-func EncryptedPasswordGT(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldGT(FieldEncryptedPassword, v))
+// HashedPasswordGT applies the GT predicate on the "hashed_password" field.
+func HashedPasswordGT(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldGT(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordGTE applies the GTE predicate on the "encrypted_password" field.
-func EncryptedPasswordGTE(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldGTE(FieldEncryptedPassword, v))
+// HashedPasswordGTE applies the GTE predicate on the "hashed_password" field.
+func HashedPasswordGTE(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldGTE(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordLT applies the LT predicate on the "encrypted_password" field.
-func EncryptedPasswordLT(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldLT(FieldEncryptedPassword, v))
+// HashedPasswordLT applies the LT predicate on the "hashed_password" field.
+func HashedPasswordLT(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldLT(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordLTE applies the LTE predicate on the "encrypted_password" field.
-func EncryptedPasswordLTE(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldLTE(FieldEncryptedPassword, v))
+// HashedPasswordLTE applies the LTE predicate on the "hashed_password" field.
+func HashedPasswordLTE(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldLTE(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordContains applies the Contains predicate on the "encrypted_password" field.
-func EncryptedPasswordContains(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldContains(FieldEncryptedPassword, v))
+// HashedPasswordContains applies the Contains predicate on the "hashed_password" field.
+func HashedPasswordContains(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldContains(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordHasPrefix applies the HasPrefix predicate on the "encrypted_password" field.
-func EncryptedPasswordHasPrefix(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldHasPrefix(FieldEncryptedPassword, v))
+// HashedPasswordHasPrefix applies the HasPrefix predicate on the "hashed_password" field.
+func HashedPasswordHasPrefix(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldHasPrefix(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordHasSuffix applies the HasSuffix predicate on the "encrypted_password" field.
-func EncryptedPasswordHasSuffix(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldHasSuffix(FieldEncryptedPassword, v))
+// HashedPasswordHasSuffix applies the HasSuffix predicate on the "hashed_password" field.
+func HashedPasswordHasSuffix(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldHasSuffix(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordEqualFold applies the EqualFold predicate on the "encrypted_password" field.
-func EncryptedPasswordEqualFold(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldEqualFold(FieldEncryptedPassword, v))
+// HashedPasswordEqualFold applies the EqualFold predicate on the "hashed_password" field.
+func HashedPasswordEqualFold(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEqualFold(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordContainsFold applies the ContainsFold predicate on the "encrypted_password" field.
-func EncryptedPasswordContainsFold(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldContainsFold(FieldEncryptedPassword, v))
+// HashedPasswordContainsFold applies the ContainsFold predicate on the "hashed_password" field.
+func HashedPasswordContainsFold(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldContainsFold(FieldHashedPassword, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

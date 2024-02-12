@@ -19,8 +19,8 @@ const (
 	FieldNurseryCode = "nursery_code"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldEncryptedPassword holds the string denoting the encrypted_password field in the database.
-	FieldEncryptedPassword = "encrypted_password"
+	// FieldHashedPassword holds the string denoting the hashed_password field in the database.
+	FieldHashedPassword = "hashed_password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldAddress holds the string denoting the address field in the database.
@@ -67,7 +67,7 @@ var Columns = []string{
 	FieldID,
 	FieldNurseryCode,
 	FieldEmail,
-	FieldEncryptedPassword,
+	FieldHashedPassword,
 	FieldName,
 	FieldAddress,
 	FieldPhoneNumber,
@@ -86,8 +86,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultNurseryCode holds the default value on creation for the "nursery_code" field.
-	DefaultNurseryCode func() string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -116,9 +114,9 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
-// ByEncryptedPassword orders the results by the encrypted_password field.
-func ByEncryptedPassword(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEncryptedPassword, opts...).ToFunc()
+// ByHashedPassword orders the results by the hashed_password field.
+func ByHashedPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHashedPassword, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

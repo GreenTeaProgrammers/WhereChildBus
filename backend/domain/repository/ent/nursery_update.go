@@ -60,16 +60,16 @@ func (nu *NurseryUpdate) SetNillableEmail(s *string) *NurseryUpdate {
 	return nu
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (nu *NurseryUpdate) SetEncryptedPassword(s string) *NurseryUpdate {
-	nu.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (nu *NurseryUpdate) SetHashedPassword(s string) *NurseryUpdate {
+	nu.mutation.SetHashedPassword(s)
 	return nu
 }
 
-// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
-func (nu *NurseryUpdate) SetNillableEncryptedPassword(s *string) *NurseryUpdate {
+// SetNillableHashedPassword sets the "hashed_password" field if the given value is not nil.
+func (nu *NurseryUpdate) SetNillableHashedPassword(s *string) *NurseryUpdate {
 	if s != nil {
-		nu.SetEncryptedPassword(*s)
+		nu.SetHashedPassword(*s)
 	}
 	return nu
 }
@@ -312,8 +312,8 @@ func (nu *NurseryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := nu.mutation.Email(); ok {
 		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := nu.mutation.EncryptedPassword(); ok {
-		_spec.SetField(nursery.FieldEncryptedPassword, field.TypeString, value)
+	if value, ok := nu.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
 	}
 	if value, ok := nu.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)
@@ -519,16 +519,16 @@ func (nuo *NurseryUpdateOne) SetNillableEmail(s *string) *NurseryUpdateOne {
 	return nuo
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (nuo *NurseryUpdateOne) SetEncryptedPassword(s string) *NurseryUpdateOne {
-	nuo.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (nuo *NurseryUpdateOne) SetHashedPassword(s string) *NurseryUpdateOne {
+	nuo.mutation.SetHashedPassword(s)
 	return nuo
 }
 
-// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
-func (nuo *NurseryUpdateOne) SetNillableEncryptedPassword(s *string) *NurseryUpdateOne {
+// SetNillableHashedPassword sets the "hashed_password" field if the given value is not nil.
+func (nuo *NurseryUpdateOne) SetNillableHashedPassword(s *string) *NurseryUpdateOne {
 	if s != nil {
-		nuo.SetEncryptedPassword(*s)
+		nuo.SetHashedPassword(*s)
 	}
 	return nuo
 }
@@ -801,8 +801,8 @@ func (nuo *NurseryUpdateOne) sqlSave(ctx context.Context) (_node *Nursery, err e
 	if value, ok := nuo.mutation.Email(); ok {
 		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := nuo.mutation.EncryptedPassword(); ok {
-		_spec.SetField(nursery.FieldEncryptedPassword, field.TypeString, value)
+	if value, ok := nuo.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
 	}
 	if value, ok := nuo.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)

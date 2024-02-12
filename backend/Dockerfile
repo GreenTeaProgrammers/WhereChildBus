@@ -3,8 +3,27 @@ FROM golang:1.21.5 AS builder
 
 WORKDIR /srv/grpc
 COPY . .
-# .env ファイルをイメージ内にコピー
-COPY .env /
+
+# ARGでビルド時の引数を定義
+ARG DSN
+ARG DB_USER_NAME
+ARG DB_PASSWORD
+ARG DB_ADDR
+ARG DB_NAME
+ARG PORT
+ARG MODE_DEV
+
+# .env ファイルを生成
+RUN echo "DSN=$DSN" > .env \
+    && echo "DB_USER_NAME=$DB_USER_NAME" >> .env \
+    && echo "DB_PASSWORD=$DB_PASSWORD" >> .env \
+    && echo "DB_ADDR=$DB_ADDR" >> .env \
+    && echo "DB_NAME=$DB_NAME" >> .env \
+    && echo "PORT=$PORT" >> .env \
+    && echo "MODE_DEV=$MODE_DEV" >> .env
+
+RUN go mod download
+
 RUN go mod download
 
 ARG VERS="3.11.4"
@@ -24,7 +43,6 @@ RUN apk --no-cache add ca-certificates
 
 # ビルドステージからバイナリと.envファイルをコピー
 COPY --from=builder /go/bin/server /server
-COPY --from=builder /srv/grpc/.env /
 
 # アプリケーションの起動
 ENTRYPOINT ["/server"]
