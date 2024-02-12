@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 
 class BusListPage extends StatefulWidget {
   const BusListPage({super.key});
@@ -38,7 +39,7 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  //TODO: 将来的にBus型を受け取る
+  //TODO: 将来的にBus型を受け取る, 将来的にモーダルにバスを渡す
   Widget busListCard(String name, bool isBusOperating) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -48,11 +49,25 @@ class _BusListPageState extends State<BusListPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Material(
           color: Colors.white,
-          child: Row(
-            children: [
-              busPhoto(isBusOperating),
-              busNameAndDescription(name),
-            ],
+          child: InkWell(
+            onTap: () async {
+              await showModalBottomSheet<void>(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: false,
+                  enableDrag: true,
+                  isDismissible: true,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  builder: (context) {
+                    return BottomSheetWidget(busName: name,);
+                  });
+            },
+            child: Row(
+              children: [
+                busPhoto(isBusOperating),
+                busNameAndDescription(name),
+              ],
+            ),
           ),
         ),
       ),
@@ -115,3 +130,4 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 }
+
