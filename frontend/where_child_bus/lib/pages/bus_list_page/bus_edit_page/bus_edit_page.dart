@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 
 class BusEditPage extends StatelessWidget {
+  final List<String> busStations;
+
+  BusEditPage({required List<String> this.busStations});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -15,15 +20,24 @@ class BusEditPage extends StatelessWidget {
 
   Widget pageBody(BuildContext context) {
     return Center(
-      child: Row(
+      child: Column(
+        children: [
+          inputFieldsAndThumbnail(context),
+          StationsList(busStationsList: busStations)
+        ],
+      ),
+    );
+  }
+
+  Widget inputFieldsAndThumbnail(BuildContext context) {
+      return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const InputElement(inputFieldTitle: "コース名", labelText: "コース名", hintText: "コース名を入力してください"),
           busThumbnail(context),
         ],
-      ),
-    );
+      );
   }
 
 

@@ -52,7 +52,7 @@ class BottomSheetWidget extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             Navigator.push(
-                context,MaterialPageRoute(builder: (context) => BusEditPage())
+                context,MaterialPageRoute(builder: (context) => BusEditPage(busStations: busStations))
               );
           },
           style: editButtonStyle(),
