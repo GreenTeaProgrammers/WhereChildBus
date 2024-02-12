@@ -30,23 +30,15 @@ func (nc *NurseryCreate) SetNurseryCode(s string) *NurseryCreate {
 	return nc
 }
 
-// SetNillableNurseryCode sets the "nursery_code" field if the given value is not nil.
-func (nc *NurseryCreate) SetNillableNurseryCode(s *string) *NurseryCreate {
-	if s != nil {
-		nc.SetNurseryCode(*s)
-	}
-	return nc
-}
-
 // SetEmail sets the "email" field.
 func (nc *NurseryCreate) SetEmail(s string) *NurseryCreate {
 	nc.mutation.SetEmail(s)
 	return nc
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (nc *NurseryCreate) SetEncryptedPassword(s string) *NurseryCreate {
-	nc.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (nc *NurseryCreate) SetHashedPassword(s string) *NurseryCreate {
+	nc.mutation.SetHashedPassword(s)
 	return nc
 }
 
@@ -206,10 +198,6 @@ func (nc *NurseryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (nc *NurseryCreate) defaults() {
-	if _, ok := nc.mutation.NurseryCode(); !ok {
-		v := nursery.DefaultNurseryCode()
-		nc.mutation.SetNurseryCode(v)
-	}
 	if _, ok := nc.mutation.CreatedAt(); !ok {
 		v := nursery.DefaultCreatedAt()
 		nc.mutation.SetCreatedAt(v)
@@ -232,8 +220,8 @@ func (nc *NurseryCreate) check() error {
 	if _, ok := nc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Nursery.email"`)}
 	}
-	if _, ok := nc.mutation.EncryptedPassword(); !ok {
-		return &ValidationError{Name: "encrypted_password", err: errors.New(`ent: missing required field "Nursery.encrypted_password"`)}
+	if _, ok := nc.mutation.HashedPassword(); !ok {
+		return &ValidationError{Name: "hashed_password", err: errors.New(`ent: missing required field "Nursery.hashed_password"`)}
 	}
 	if _, ok := nc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Nursery.name"`)}
@@ -287,9 +275,9 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := nc.mutation.EncryptedPassword(); ok {
-		_spec.SetField(nursery.FieldEncryptedPassword, field.TypeString, value)
-		_node.EncryptedPassword = value
+	if value, ok := nc.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
+		_node.HashedPassword = value
 	}
 	if value, ok := nc.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)

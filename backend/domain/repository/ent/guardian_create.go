@@ -30,9 +30,9 @@ func (gc *GuardianCreate) SetEmail(s string) *GuardianCreate {
 	return gc
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (gc *GuardianCreate) SetEncryptedPassword(s string) *GuardianCreate {
-	gc.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (gc *GuardianCreate) SetHashedPassword(s string) *GuardianCreate {
+	gc.mutation.SetHashedPassword(s)
 	return gc
 }
 
@@ -205,8 +205,8 @@ func (gc *GuardianCreate) check() error {
 	if _, ok := gc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Guardian.email"`)}
 	}
-	if _, ok := gc.mutation.EncryptedPassword(); !ok {
-		return &ValidationError{Name: "encrypted_password", err: errors.New(`ent: missing required field "Guardian.encrypted_password"`)}
+	if _, ok := gc.mutation.HashedPassword(); !ok {
+		return &ValidationError{Name: "hashed_password", err: errors.New(`ent: missing required field "Guardian.hashed_password"`)}
 	}
 	if _, ok := gc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Guardian.name"`)}
@@ -256,9 +256,9 @@ func (gc *GuardianCreate) createSpec() (*Guardian, *sqlgraph.CreateSpec) {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := gc.mutation.EncryptedPassword(); ok {
-		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
-		_node.EncryptedPassword = value
+	if value, ok := gc.mutation.HashedPassword(); ok {
+		_spec.SetField(guardian.FieldHashedPassword, field.TypeString, value)
+		_node.HashedPassword = value
 	}
 	if value, ok := gc.mutation.Name(); ok {
 		_spec.SetField(guardian.FieldName, field.TypeString, value)

@@ -1,0 +1,43 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  setup-build-deploy:
+    name: Setup, Build, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Build Docker Image
+        run: |
+          docker build --tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest \
+            --file=./backend/Dockerfile \
+            --platform linux/amd64 ./backend \
+            --build-arg DSN=${{ secrets.DSN }} \
+            --build-arg DB_USER_NAME=${{ secrets.DB_USER_NAME }} \
+            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --build-arg DB_ADDR=${{ secrets.DB_ADDR }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+            --build-arg PORT=${{ secrets.PORT }} \
+            --build-arg MODE_DEV=${{ secrets.MODE_DEV }}
+
+      - name: Push Docker Image to Google Container Registry
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy where-child-bus-grpc --image=gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest --platform=managed --allow-unauthenticated --project=${{ secrets.GCP_PROJECT_ID }} --region=${{ secrets.GCP_REGION }}

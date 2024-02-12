@@ -19,7 +19,7 @@ func (Guardian) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
 		field.String("email"),
-		field.String("encrypted_password"),
+		field.String("hashed_password"),
 		field.String("name"),
 		field.String("phone_number").Optional(),
 		field.Time("created_at").Default(time.Now),
