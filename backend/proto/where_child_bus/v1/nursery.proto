@@ -15,5 +15,5 @@ message NurseryLoginRequest {
 
 message NurseryLoginResponse {
         bool success = 1;
-        Nursery nursery = 2;
+        NurseryResponse nursery = 2;
 }

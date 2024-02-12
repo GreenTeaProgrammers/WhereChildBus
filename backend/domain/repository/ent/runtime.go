@@ -128,10 +128,6 @@ func init() {
 	guardian.DefaultID = guardianDescID.Default.(func() uuid.UUID)
 	nurseryFields := schema.Nursery{}.Fields()
 	_ = nurseryFields
-	// nurseryDescNurseryCode is the schema descriptor for nursery_code field.
-	nurseryDescNurseryCode := nurseryFields[1].Descriptor()
-	// nursery.DefaultNurseryCode holds the default value on creation for the nursery_code field.
-	nursery.DefaultNurseryCode = nurseryDescNurseryCode.Default.(func() string)
 	// nurseryDescCreatedAt is the schema descriptor for created_at field.
 	nurseryDescCreatedAt := nurseryFields[7].Descriptor()
 	// nursery.DefaultCreatedAt holds the default value on creation for the created_at field.

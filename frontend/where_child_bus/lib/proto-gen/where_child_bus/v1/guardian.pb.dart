@@ -9,12 +9,11 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'resources.pb.dart' as $1;
+import 'resources.pb.dart' as $6;
 
 class GuardianLoginRequest extends $pb.GeneratedMessage {
   factory GuardianLoginRequest({
@@ -83,8 +82,9 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
 class GuardianLoginResponse extends $pb.GeneratedMessage {
   factory GuardianLoginResponse({
     $core.bool? success,
+
     $1.GuardianResponse? guardian,
-    $1.NurseryReponse? nursery,
+    $1.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (success != null) {
@@ -105,7 +105,7 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GuardianLoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'success')
     ..aOM<$1.GuardianResponse>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $1.GuardianResponse.create)
-    ..aOM<$1.NurseryReponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $1.NurseryReponse.create)
+    ..aOM<$1.NurseryResponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $1.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -140,26 +140,27 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(1);
 
   @$pb.TagNumber(2)
-  $1.GuardianResponse get guardian => $_getN(1);
+  $6.GuardianResponse get guardian => $_getN(1);
   @$pb.TagNumber(2)
-  set guardian($1.GuardianResponse v) { setField(2, v); }
+  set guardian($6.GuardianResponse v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasGuardian() => $_has(1);
   @$pb.TagNumber(2)
   void clearGuardian() => clearField(2);
   @$pb.TagNumber(2)
-  $1.GuardianResponse ensureGuardian() => $_ensure(1);
+  $6.GuardianResponse ensureGuardian() => $_ensure(1);
 
   @$pb.TagNumber(3)
-  $1.NurseryReponse get nursery => $_getN(2);
+
+  $1.NurseryResponse get nursery => $_getN(2);
   @$pb.TagNumber(3)
-  set nursery($1.NurseryReponse v) { setField(3, v); }
+  set nursery($1.NurseryResponse v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasNursery() => $_has(2);
   @$pb.TagNumber(3)
   void clearNursery() => clearField(3);
   @$pb.TagNumber(3)
-  $1.NurseryReponse ensureNursery() => $_ensure(2);
+  $1.NurseryResponse ensureNursery() => $_ensure(2);
 }
 
 class GuardianServiceApi {

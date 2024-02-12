@@ -13,9 +13,6 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../google/protobuf/timestamp.pbjson.dart' as $0;
-import 'resources.pbjson.dart' as $1;
-
 @$core.Deprecated('Use getBusListByNurseryIdRequestDescriptor instead')
 const GetBusListByNurseryIdRequest$json = {
   '1': 'GetBusListByNurseryIdRequest',
@@ -41,25 +38,4 @@ const GetBusListByNurseryIdResponse$json = {
 final $typed_data.Uint8List getBusListByNurseryIdResponseDescriptor = $convert.base64Decode(
     'Ch1HZXRCdXNMaXN0QnlOdXJzZXJ5SWRSZXNwb25zZRItCgVidXNlcxgBIAMoCzIXLndoZXJlX2'
     'NoaWxkX2J1cy52MS5CdXNSBWJ1c2Vz');
-
-const $core.Map<$core.String, $core.dynamic> BusServiceBase$json = {
-  '1': 'BusService',
-  '2': [
-    {'1': 'GetBusListByNurseryId', '2': '.where_child_bus.v1.GetBusListByNurseryIdRequest', '3': '.where_child_bus.v1.GetBusListByNurseryIdResponse'},
-  ],
-};
-
-@$core.Deprecated('Use busServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> BusServiceBase$messageJson = {
-  '.where_child_bus.v1.GetBusListByNurseryIdRequest': GetBusListByNurseryIdRequest$json,
-  '.where_child_bus.v1.GetBusListByNurseryIdResponse': GetBusListByNurseryIdResponse$json,
-  '.where_child_bus.v1.Bus': $1.Bus$json,
-  '.google.protobuf.Timestamp': $0.Timestamp$json,
-};
-
-/// Descriptor for `BusService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List busServiceDescriptor = $convert.base64Decode(
-    'CgpCdXNTZXJ2aWNlEnwKFUdldEJ1c0xpc3RCeU51cnNlcnlJZBIwLndoZXJlX2NoaWxkX2J1cy'
-    '52MS5HZXRCdXNMaXN0QnlOdXJzZXJ5SWRSZXF1ZXN0GjEud2hlcmVfY2hpbGRfYnVzLnYxLkdl'
-    'dEJ1c0xpc3RCeU51cnNlcnlJZFJlc3BvbnNl');
 

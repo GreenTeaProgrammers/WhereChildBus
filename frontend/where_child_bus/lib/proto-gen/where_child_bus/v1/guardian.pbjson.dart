@@ -13,9 +13,6 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../google/protobuf/timestamp.pbjson.dart' as $0;
-import 'resources.pbjson.dart' as $1;
-
 @$core.Deprecated('Use guardianLoginRequestDescriptor instead')
 const GuardianLoginRequest$json = {
   '1': 'GuardianLoginRequest',
@@ -36,7 +33,7 @@ const GuardianLoginResponse$json = {
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
     {'1': 'guardian', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardian'},
-    {'1': 'nursery', '3': 3, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryReponse', '10': 'nursery'},
+    {'1': 'nursery', '3': 3, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryResponse', '10': 'nursery'},
   ],
 };
 
@@ -44,28 +41,6 @@ const GuardianLoginResponse$json = {
 final $typed_data.Uint8List guardianLoginResponseDescriptor = $convert.base64Decode(
     'ChVHdWFyZGlhbkxvZ2luUmVzcG9uc2USGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxJACghndW'
     'FyZGlhbhgCIAEoCzIkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUghndWFy'
-    'ZGlhbhI8CgdudXJzZXJ5GAMgASgLMiIud2hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXBvbn'
-    'NlUgdudXJzZXJ5');
-
-const $core.Map<$core.String, $core.dynamic> GuardianServiceBase$json = {
-  '1': 'GuardianService',
-  '2': [
-    {'1': 'GuardianLogin', '2': '.where_child_bus.v1.GuardianLoginRequest', '3': '.where_child_bus.v1.GuardianLoginResponse'},
-  ],
-};
-
-@$core.Deprecated('Use guardianServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> GuardianServiceBase$messageJson = {
-  '.where_child_bus.v1.GuardianLoginRequest': GuardianLoginRequest$json,
-  '.where_child_bus.v1.GuardianLoginResponse': GuardianLoginResponse$json,
-  '.where_child_bus.v1.GuardianResponse': $1.GuardianResponse$json,
-  '.google.protobuf.Timestamp': $0.Timestamp$json,
-  '.where_child_bus.v1.NurseryReponse': $1.NurseryReponse$json,
-};
-
-/// Descriptor for `GuardianService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List guardianServiceDescriptor = $convert.base64Decode(
-    'Cg9HdWFyZGlhblNlcnZpY2USZAoNR3VhcmRpYW5Mb2dpbhIoLndoZXJlX2NoaWxkX2J1cy52MS'
-    '5HdWFyZGlhbkxvZ2luUmVxdWVzdBopLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhbkxvZ2lu'
-    'UmVzcG9uc2U=');
+    'ZGlhbhI9CgdudXJzZXJ5GAMgASgLMiMud2hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXNwb2'
+    '5zZVIHbnVyc2VyeQ==');
 
