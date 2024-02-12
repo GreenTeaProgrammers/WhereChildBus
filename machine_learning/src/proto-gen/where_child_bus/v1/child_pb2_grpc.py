@@ -14,6 +14,11 @@ class ChildServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.CreateChild = channel.unary_unary(
+                '/where_child_bus.v1.ChildService/CreateChild',
+                request_serializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildResponse.FromString,
+                )
         self.GetChildListByNurseryID = channel.unary_unary(
                 '/where_child_bus.v1.ChildService/GetChildListByNurseryID',
                 request_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDRequest.SerializeToString,
@@ -24,10 +29,21 @@ class ChildServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByGuardianIDRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByGuardianIDResponse.FromString,
                 )
+        self.GetChildListByBusID = channel.unary_unary(
+                '/where_child_bus.v1.ChildService/GetChildListByBusID',
+                request_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDResponse.FromString,
+                )
 
 
 class ChildServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def CreateChild(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def GetChildListByNurseryID(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -41,9 +57,20 @@ class ChildServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetChildListByBusID(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ChildServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'CreateChild': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateChild,
+                    request_deserializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildResponse.SerializeToString,
+            ),
             'GetChildListByNurseryID': grpc.unary_unary_rpc_method_handler(
                     servicer.GetChildListByNurseryID,
                     request_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDRequest.FromString,
@@ -54,6 +81,11 @@ def add_ChildServiceServicer_to_server(servicer, server):
                     request_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByGuardianIDRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByGuardianIDResponse.SerializeToString,
             ),
+            'GetChildListByBusID': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetChildListByBusID,
+                    request_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'where_child_bus.v1.ChildService', rpc_method_handlers)
@@ -63,6 +95,23 @@ def add_ChildServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class ChildService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def CreateChild(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildService/CreateChild',
+            where__child__bus_dot_v1_dot_child__pb2.CreateChildRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_child__pb2.CreateChildResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def GetChildListByNurseryID(request,
@@ -95,5 +144,22 @@ class ChildService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildService/GetChildListByGuardianID',
             where__child__bus_dot_v1_dot_child__pb2.GetChildListByGuardianIDRequest.SerializeToString,
             where__child__bus_dot_v1_dot_child__pb2.GetChildListByGuardianIDResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetChildListByBusID(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildService/GetChildListByBusID',
+            where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
