@@ -1,21 +1,39 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class StudentEditPage extends StatefulWidget {
-  StudentEditPage({super.key});
+  const StudentEditPage({super.key});
 
   @override
   State<StudentEditPage> createState() => _StudentEditPageState();
 }
 
 class _StudentEditPageState extends State<StudentEditPage> {
-  final List<String> busCourse = <String>["コース1", "コース2", "コース3"];
+  List<File>? images;
+  final picker = ImagePicker();
+
+  final List<String> busName = <String>["バス1", "バス2", "バス3"];
   final List<String> busStop = <String>["停留所1", "停留所2", "停留所3"];
+
+  Future getImageFromGallery() async {
+    final pickedFiles = await picker.pickMultiImage();
+
+    setState(() {
+      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+        images = pickedFiles.map((xFile) => File(xFile.path)).toList();
+      } else {
+        print("画像が選択できませんでした。");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(),
         body: pageBody(context),
       ),
@@ -24,7 +42,36 @@ class _StudentEditPageState extends State<StudentEditPage> {
 
   Widget pageBody(BuildContext context) {
     return Center(
-      child: editFormBody(context),
+        child: ListView(
+      children: <Widget>[
+        selectChildImage(),
+        editFormBody(context),
+      ],
+    ));
+  }
+
+  Widget selectChildImage() {
+    return Column(
+      children: [
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: images == null || images!.isEmpty
+              ? [const Text("画像が選択されていません。")]
+              : images!
+                  .map((image) => Image.file(
+                        image,
+                        width: 100,
+                        height: 100,
+                      ))
+                  .toList(),
+        ),
+        Center(
+            child: ElevatedButton(
+          onPressed: getImageFromGallery,
+          child: const Text("画像を選択する"),
+        ))
+      ],
     );
   }
 
@@ -39,8 +86,13 @@ class _StudentEditPageState extends State<StudentEditPage> {
             context, "保護者氏名", "保護者氏名を入力してください", TextInputType.name),
         inputLabelAndTextField(
             context, "保護者連絡先", "保護者連絡先を入力してください", TextInputType.phone),
-        inputLabelAndSelectBox(context, "利用バスコース", busCourse),
-        inputLabelAndSelectBox(context, "乗降場所", busStop)
+        inputLabelAndSelectBox(context, "利用バス", busName),
+        inputLabelAndSelectBox(context, "乗降場所", busStop),
+        Container(
+          margin: const EdgeInsets.only(top: 20.0),
+          width: MediaQuery.of(context).size.width * 0.6,
+          child: submitButton(),
+        )
       ],
     );
   }
@@ -72,7 +124,7 @@ class _StudentEditPageState extends State<StudentEditPage> {
         padding: const EdgeInsets.all(8.0),
         child: Text(
           label,
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(color: Colors.black, fontSize: 16),
         ));
   }
 
@@ -96,21 +148,29 @@ class _StudentEditPageState extends State<StudentEditPage> {
   }
 
   Widget selectValueBox(BuildContext context, List<String> lists) {
-    String isSelectedValue = lists.first;
+    String? selectedValue;
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       height: 50,
       child: DropdownButton<String>(
-          value: isSelectedValue,
+          value: selectedValue ?? lists.first,
           items: lists
               .map((String list) =>
                   DropdownMenuItem(value: list, child: Text(list)))
               .toList(),
           onChanged: (String? value) {
             setState(() {
-              isSelectedValue = value!;
+              selectedValue = value;
             });
           }),
     );
+  }
+
+  Widget submitButton() {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black, foregroundColor: Colors.white),
+        onPressed: () {},
+        child: const Text("保存"));
   }
 }
