@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- この文を追加することで、releaseでアプリからのネットワーク接続が許可されるようになる -->
+    <!-- NOTE:この文を追加することで、releaseでアプリからのネットワーク接続が許可されるようになる -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="where_child_bus"

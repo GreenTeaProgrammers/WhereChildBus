@@ -14,8 +14,14 @@ class AppConfig {
 
   Future<void> loadConfig() async {
     await dotenv.load();
-    grpcEndpoint = dotenv.get("GRPC_ENDPOINT");
-    grpcPort = int.tryParse(dotenv.get("GRPC_PORT")) ?? 0;
+
+    try {
+
+      grpcEndpoint = dotenv.get("GRPC_ENDPOINT");
+      grpcPort = int.tryParse(dotenv.get("GRPC_PORT")) ?? 0;
+    } catch(e) {
+      print("設定の読み込みにエラーが発生しました");
+    }
   }
 }
 
