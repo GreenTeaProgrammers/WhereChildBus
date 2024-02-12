@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
-import 'package:where_child_bus/util/health_check.dart';
+import 'package:where_child_bus/util/api/health_check.dart';
 import 'package:where_child_bus/config/config.dart';
 
 void main() async {
-  await appConfig.loadConfig();
-  await serviceHealthCheck();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await appConfig.loadConfig();
+    await serviceHealthCheck();
+  } catch (e) {
+    print("Failed to initialize the app");
+  }
   runApp(const MyApp());
 }
 
