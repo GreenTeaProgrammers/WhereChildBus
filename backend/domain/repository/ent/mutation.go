@@ -4150,26 +4150,26 @@ func (m *ChildPhotoMutation) ResetEdge(name string) error {
 // GuardianMutation represents an operation that mutates the Guardian nodes in the graph.
 type GuardianMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *uuid.UUID
-	email              *string
-	encrypted_password *string
-	name               *string
-	phone_number       *string
-	created_at         *time.Time
-	updated_at         *time.Time
-	clearedFields      map[string]struct{}
-	children           map[uuid.UUID]struct{}
-	removedchildren    map[uuid.UUID]struct{}
-	clearedchildren    bool
-	nursery            *uuid.UUID
-	clearednursery     bool
-	station            *uuid.UUID
-	clearedstation     bool
-	done               bool
-	oldValue           func(context.Context) (*Guardian, error)
-	predicates         []predicate.Guardian
+	op              Op
+	typ             string
+	id              *uuid.UUID
+	email           *string
+	hashed_password *string
+	name            *string
+	phone_number    *string
+	created_at      *time.Time
+	updated_at      *time.Time
+	clearedFields   map[string]struct{}
+	children        map[uuid.UUID]struct{}
+	removedchildren map[uuid.UUID]struct{}
+	clearedchildren bool
+	nursery         *uuid.UUID
+	clearednursery  bool
+	station         *uuid.UUID
+	clearedstation  bool
+	done            bool
+	oldValue        func(context.Context) (*Guardian, error)
+	predicates      []predicate.Guardian
 }
 
 var _ ent.Mutation = (*GuardianMutation)(nil)
@@ -4312,40 +4312,40 @@ func (m *GuardianMutation) ResetEmail() {
 	m.email = nil
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (m *GuardianMutation) SetEncryptedPassword(s string) {
-	m.encrypted_password = &s
+// SetHashedPassword sets the "hashed_password" field.
+func (m *GuardianMutation) SetHashedPassword(s string) {
+	m.hashed_password = &s
 }
 
-// EncryptedPassword returns the value of the "encrypted_password" field in the mutation.
-func (m *GuardianMutation) EncryptedPassword() (r string, exists bool) {
-	v := m.encrypted_password
+// HashedPassword returns the value of the "hashed_password" field in the mutation.
+func (m *GuardianMutation) HashedPassword() (r string, exists bool) {
+	v := m.hashed_password
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEncryptedPassword returns the old "encrypted_password" field's value of the Guardian entity.
+// OldHashedPassword returns the old "hashed_password" field's value of the Guardian entity.
 // If the Guardian object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GuardianMutation) OldEncryptedPassword(ctx context.Context) (v string, err error) {
+func (m *GuardianMutation) OldHashedPassword(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEncryptedPassword is only allowed on UpdateOne operations")
+		return v, errors.New("OldHashedPassword is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEncryptedPassword requires an ID field in the mutation")
+		return v, errors.New("OldHashedPassword requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEncryptedPassword: %w", err)
+		return v, fmt.Errorf("querying old value for OldHashedPassword: %w", err)
 	}
-	return oldValue.EncryptedPassword, nil
+	return oldValue.HashedPassword, nil
 }
 
-// ResetEncryptedPassword resets all changes to the "encrypted_password" field.
-func (m *GuardianMutation) ResetEncryptedPassword() {
-	m.encrypted_password = nil
+// ResetHashedPassword resets all changes to the "hashed_password" field.
+func (m *GuardianMutation) ResetHashedPassword() {
+	m.hashed_password = nil
 }
 
 // SetName sets the "name" field.
@@ -4675,8 +4675,8 @@ func (m *GuardianMutation) Fields() []string {
 	if m.email != nil {
 		fields = append(fields, guardian.FieldEmail)
 	}
-	if m.encrypted_password != nil {
-		fields = append(fields, guardian.FieldEncryptedPassword)
+	if m.hashed_password != nil {
+		fields = append(fields, guardian.FieldHashedPassword)
 	}
 	if m.name != nil {
 		fields = append(fields, guardian.FieldName)
@@ -4700,8 +4700,8 @@ func (m *GuardianMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case guardian.FieldEmail:
 		return m.Email()
-	case guardian.FieldEncryptedPassword:
-		return m.EncryptedPassword()
+	case guardian.FieldHashedPassword:
+		return m.HashedPassword()
 	case guardian.FieldName:
 		return m.Name()
 	case guardian.FieldPhoneNumber:
@@ -4721,8 +4721,8 @@ func (m *GuardianMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case guardian.FieldEmail:
 		return m.OldEmail(ctx)
-	case guardian.FieldEncryptedPassword:
-		return m.OldEncryptedPassword(ctx)
+	case guardian.FieldHashedPassword:
+		return m.OldHashedPassword(ctx)
 	case guardian.FieldName:
 		return m.OldName(ctx)
 	case guardian.FieldPhoneNumber:
@@ -4747,12 +4747,12 @@ func (m *GuardianMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmail(v)
 		return nil
-	case guardian.FieldEncryptedPassword:
+	case guardian.FieldHashedPassword:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEncryptedPassword(v)
+		m.SetHashedPassword(v)
 		return nil
 	case guardian.FieldName:
 		v, ok := value.(string)
@@ -4843,8 +4843,8 @@ func (m *GuardianMutation) ResetField(name string) error {
 	case guardian.FieldEmail:
 		m.ResetEmail()
 		return nil
-	case guardian.FieldEncryptedPassword:
-		m.ResetEncryptedPassword()
+	case guardian.FieldHashedPassword:
+		m.ResetHashedPassword()
 		return nil
 	case guardian.FieldName:
 		m.ResetName()
@@ -4985,30 +4985,30 @@ func (m *GuardianMutation) ResetEdge(name string) error {
 // NurseryMutation represents an operation that mutates the Nursery nodes in the graph.
 type NurseryMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *uuid.UUID
-	nursery_code       *string
-	email              *string
-	encrypted_password *string
-	name               *string
-	address            *string
-	phone_number       *string
-	created_at         *time.Time
-	updated_at         *time.Time
-	clearedFields      map[string]struct{}
-	children           map[uuid.UUID]struct{}
-	removedchildren    map[uuid.UUID]struct{}
-	clearedchildren    bool
-	guardians          map[uuid.UUID]struct{}
-	removedguardians   map[uuid.UUID]struct{}
-	clearedguardians   bool
-	buses              map[uuid.UUID]struct{}
-	removedbuses       map[uuid.UUID]struct{}
-	clearedbuses       bool
-	done               bool
-	oldValue           func(context.Context) (*Nursery, error)
-	predicates         []predicate.Nursery
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	nursery_code     *string
+	email            *string
+	hashed_password  *string
+	name             *string
+	address          *string
+	phone_number     *string
+	created_at       *time.Time
+	updated_at       *time.Time
+	clearedFields    map[string]struct{}
+	children         map[uuid.UUID]struct{}
+	removedchildren  map[uuid.UUID]struct{}
+	clearedchildren  bool
+	guardians        map[uuid.UUID]struct{}
+	removedguardians map[uuid.UUID]struct{}
+	clearedguardians bool
+	buses            map[uuid.UUID]struct{}
+	removedbuses     map[uuid.UUID]struct{}
+	clearedbuses     bool
+	done             bool
+	oldValue         func(context.Context) (*Nursery, error)
+	predicates       []predicate.Nursery
 }
 
 var _ ent.Mutation = (*NurseryMutation)(nil)
@@ -5187,40 +5187,40 @@ func (m *NurseryMutation) ResetEmail() {
 	m.email = nil
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (m *NurseryMutation) SetEncryptedPassword(s string) {
-	m.encrypted_password = &s
+// SetHashedPassword sets the "hashed_password" field.
+func (m *NurseryMutation) SetHashedPassword(s string) {
+	m.hashed_password = &s
 }
 
-// EncryptedPassword returns the value of the "encrypted_password" field in the mutation.
-func (m *NurseryMutation) EncryptedPassword() (r string, exists bool) {
-	v := m.encrypted_password
+// HashedPassword returns the value of the "hashed_password" field in the mutation.
+func (m *NurseryMutation) HashedPassword() (r string, exists bool) {
+	v := m.hashed_password
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEncryptedPassword returns the old "encrypted_password" field's value of the Nursery entity.
+// OldHashedPassword returns the old "hashed_password" field's value of the Nursery entity.
 // If the Nursery object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NurseryMutation) OldEncryptedPassword(ctx context.Context) (v string, err error) {
+func (m *NurseryMutation) OldHashedPassword(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEncryptedPassword is only allowed on UpdateOne operations")
+		return v, errors.New("OldHashedPassword is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEncryptedPassword requires an ID field in the mutation")
+		return v, errors.New("OldHashedPassword requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEncryptedPassword: %w", err)
+		return v, fmt.Errorf("querying old value for OldHashedPassword: %w", err)
 	}
-	return oldValue.EncryptedPassword, nil
+	return oldValue.HashedPassword, nil
 }
 
-// ResetEncryptedPassword resets all changes to the "encrypted_password" field.
-func (m *NurseryMutation) ResetEncryptedPassword() {
-	m.encrypted_password = nil
+// ResetHashedPassword resets all changes to the "hashed_password" field.
+func (m *NurseryMutation) ResetHashedPassword() {
+	m.hashed_password = nil
 }
 
 // SetName sets the "name" field.
@@ -5632,8 +5632,8 @@ func (m *NurseryMutation) Fields() []string {
 	if m.email != nil {
 		fields = append(fields, nursery.FieldEmail)
 	}
-	if m.encrypted_password != nil {
-		fields = append(fields, nursery.FieldEncryptedPassword)
+	if m.hashed_password != nil {
+		fields = append(fields, nursery.FieldHashedPassword)
 	}
 	if m.name != nil {
 		fields = append(fields, nursery.FieldName)
@@ -5662,8 +5662,8 @@ func (m *NurseryMutation) Field(name string) (ent.Value, bool) {
 		return m.NurseryCode()
 	case nursery.FieldEmail:
 		return m.Email()
-	case nursery.FieldEncryptedPassword:
-		return m.EncryptedPassword()
+	case nursery.FieldHashedPassword:
+		return m.HashedPassword()
 	case nursery.FieldName:
 		return m.Name()
 	case nursery.FieldAddress:
@@ -5687,8 +5687,8 @@ func (m *NurseryMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldNurseryCode(ctx)
 	case nursery.FieldEmail:
 		return m.OldEmail(ctx)
-	case nursery.FieldEncryptedPassword:
-		return m.OldEncryptedPassword(ctx)
+	case nursery.FieldHashedPassword:
+		return m.OldHashedPassword(ctx)
 	case nursery.FieldName:
 		return m.OldName(ctx)
 	case nursery.FieldAddress:
@@ -5722,12 +5722,12 @@ func (m *NurseryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmail(v)
 		return nil
-	case nursery.FieldEncryptedPassword:
+	case nursery.FieldHashedPassword:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEncryptedPassword(v)
+		m.SetHashedPassword(v)
 		return nil
 	case nursery.FieldName:
 		v, ok := value.(string)
@@ -5834,8 +5834,8 @@ func (m *NurseryMutation) ResetField(name string) error {
 	case nursery.FieldEmail:
 		m.ResetEmail()
 		return nil
-	case nursery.FieldEncryptedPassword:
-		m.ResetEncryptedPassword()
+	case nursery.FieldHashedPassword:
+		m.ResetHashedPassword()
 		return nil
 	case nursery.FieldName:
 		m.ResetName()

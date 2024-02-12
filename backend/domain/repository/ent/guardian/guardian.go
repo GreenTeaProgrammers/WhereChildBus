@@ -17,8 +17,8 @@ const (
 	FieldID = "id"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldEncryptedPassword holds the string denoting the encrypted_password field in the database.
-	FieldEncryptedPassword = "encrypted_password"
+	// FieldHashedPassword holds the string denoting the hashed_password field in the database.
+	FieldHashedPassword = "hashed_password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
@@ -62,7 +62,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldEmail,
-	FieldEncryptedPassword,
+	FieldHashedPassword,
 	FieldName,
 	FieldPhoneNumber,
 	FieldCreatedAt,
@@ -114,9 +114,9 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
-// ByEncryptedPassword orders the results by the encrypted_password field.
-func ByEncryptedPassword(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEncryptedPassword, opts...).ToFunc()
+// ByHashedPassword orders the results by the hashed_password field.
+func ByHashedPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHashedPassword, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
