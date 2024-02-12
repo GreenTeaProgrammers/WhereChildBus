@@ -24,21 +24,74 @@ class _StudentEditPageState extends State<StudentEditPage> {
 
   Widget pageBody(BuildContext context) {
     return Center(
-      child: childNameBody(context),
+      child: editFormBody(context),
     );
   }
 
-  Widget childNameBody(BuildContext context) {
+  Widget editFormBody(BuildContext context) {
     return Column(
       children: [
-        textInputField(context, "園児氏名", "園児氏名を入力してください", TextInputType.name),
-        textInputField(context, "年齢", "年齢を入力してください", TextInputType.number),
-        textInputField(context, "保護者氏名", "保護者氏名を入力してください", TextInputType.name),
-        textInputField(
+        inputLabelAndTextField(
+            context, "園児氏名", "園児氏名を入力してください", TextInputType.name),
+        inputLabelAndTextField(
+            context, "年齢", "年齢を入力してください", TextInputType.number),
+        inputLabelAndTextField(
+            context, "保護者氏名", "保護者氏名を入力してください", TextInputType.name),
+        inputLabelAndTextField(
             context, "保護者連絡先", "保護者連絡先を入力してください", TextInputType.phone),
-        selectValueBox(context, busCourse),
-        selectValueBox(context, busStop),
+        inputLabelAndSelectBox(context, "利用バスコース", busCourse),
+        inputLabelAndSelectBox(context, "乗降場所", busStop)
       ],
+    );
+  }
+
+  Widget inputLabelAndTextField(
+      BuildContext context, String label, String hintText, TextInputType type) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        inputValueLabel(label),
+        textInputField(context, hintText, type)
+      ],
+    );
+  }
+
+  Widget inputLabelAndSelectBox(
+      BuildContext context, String label, List<String> lists) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        inputValueLabel(label),
+        selectValueBox(context, lists),
+      ],
+    );
+  }
+
+  Widget inputValueLabel(String label) {
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          label,
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ));
+  }
+
+  Widget textInputField(
+      BuildContext context, String hintText, TextInputType type) {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: 40,
+        child: TextField(
+          decoration: formInputDecoration(hintText),
+          keyboardType: type,
+        ));
+  }
+
+  InputDecoration formInputDecoration(String hintText) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: const TextStyle(fontSize: 13),
+      border: const OutlineInputBorder(),
     );
   }
 
@@ -46,6 +99,7 @@ class _StudentEditPageState extends State<StudentEditPage> {
     String isSelectedValue = lists.first;
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
+      height: 50,
       child: DropdownButton<String>(
           value: isSelectedValue,
           items: lists
@@ -57,24 +111,6 @@ class _StudentEditPageState extends State<StudentEditPage> {
               isSelectedValue = value!;
             });
           }),
-    );
-  }
-
-  Widget textInputField(BuildContext context, String labelText, String hintText,
-      TextInputType type) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: TextField(
-          decoration: formInputDecoration(labelText, hintText),
-          keyboardType: type,
-        ));
-  }
-
-  InputDecoration formInputDecoration(String labelText, String hintText) {
-    return InputDecoration(
-      labelText: labelText,
-      hintText: hintText,
-      border: const OutlineInputBorder(),
     );
   }
 }
