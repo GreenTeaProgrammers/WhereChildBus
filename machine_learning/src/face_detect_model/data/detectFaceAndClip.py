@@ -1,6 +1,16 @@
 import cv2
 import os
 import yaml
+from tqdm import tqdm
+import argparse
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(name)s - PID: %(process)d -  %(message)s",
+    datefmt="%m/%d/%Y %H:%M:%S",
+    level=logging.INFO,
+)
+logger = logging.getLogger(__name__)
 
 
 def load_cascade(cascade_path):
@@ -35,7 +45,8 @@ def save_face(face, save_dir, save_file_name):
     cv2.imwrite(save_path, face)
 
 
-def main():
+def main(args):
+    logger.info(f"env: {args.env}")
     # パスの指定
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
@@ -48,30 +59,35 @@ def main():
         config["face_detect"]["clip_size"]["width"],
     )
 
-    # 保存先ディレクトリの作成，存在した場合は中身を削除
-    os.makedirs(save_dir, exist_ok=True)
+    if args.env == "local":
+        # 保存先ディレクトリの作成，存在した場合は中身を削除
+        os.makedirs(save_dir, exist_ok=True)
+        for file in os.listdir(save_dir):
+            file_path = os.path.join(save_dir, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
 
-    for file in os.listdir(save_dir):
-        file_path = os.path.join(save_dir, file)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
 
     # 画像の読み込み
     # TODO: 良い感じのlog
     for target_people_name in os.listdir(image_dir_path):
+        logger.info(f"processing... : {target_people_name}")
         detect_face_num = 0
-        for image_name in os.listdir(os.path.join(image_dir_path, target_people_name)):
+        for image_name in tqdm(
+            os.listdir(os.path.join(image_dir_path, target_people_name))
+        ):
             image = cv2.imread(
                 image_path := os.path.join(
                     image_dir_path, target_people_name, image_name
                 )
             )
             if image is None:
-                raise ValueError(
+                logger.error(
                     f"画像ファイルが見つからないか読み込めません: {image_path}"
                 )
+                continue
 
             # 画像から顔を検出
             faces = detect_face(
@@ -91,7 +107,16 @@ def main():
                 save_file_name = f"{target_people_name}-{detect_face_num}.png"
                 save_face(clipped_face, save_dir, save_file_name)
                 detect_face_num += 1
+    logger.info("Done")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--env",
+        type=str,
+        choices=["local", "remote"],
+        help="local: ローカル環境, remote: GCP環境",
+    )
+    args = parser.parse_args()
+    main(args)
