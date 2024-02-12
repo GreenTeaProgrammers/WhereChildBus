@@ -16,7 +16,7 @@ class StationsList extends StatelessWidget {
       itemCount: busStationsList.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.fromLTRB(50,  10,  0,  0),
+          padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.1,  10,  0,  0),
           child: stationsListElement(busStationsList[index]),
         );
       },
