@@ -23,6 +23,7 @@ class FaceDetectDataset(Dataset):
             file_path = os.path.join(self.data_dir, file_name)
             people_name = file_name.split("-")[0]
 
+            # TODO: データ拡張によってはBGR -> RGB変換処理を検討
             image = cv2.imread(file_path)
             if image is None:
                 continue
