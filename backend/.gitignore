@@ -28,3 +28,6 @@ go.work
 
 # envfile
 .env
+
+# secrets
+secrets/*
