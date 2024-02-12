@@ -6,6 +6,8 @@ import cv2
 
 
 class FaceDetectDataset(Dataset):
+    VALID_EXTENSIONS = {".png"}  # 適宜調整
+
     def __init__(self, config):
         self.data_dir = config["dataset"]["root_path"]
         self.face_data = []
@@ -15,13 +17,15 @@ class FaceDetectDataset(Dataset):
 
         for file_name in os.listdir(self.data_dir):
             # macOS環境におけるDS_Storeなどのファイルをスキップ
-            if os.path.splitext(file_name)[1][1:] != "png":
+            if not self._is_valid_file(file_name):
                 continue
 
             file_path = os.path.join(self.data_dir, file_name)
             people_name = file_name.split("-")[0]
 
             image = cv2.imread(file_path)
+            if image is None:
+                continue
             image_tensor = TF.to_tensor(image)
 
             # 人物名とラベルの対応を辞書に保存
@@ -35,6 +39,9 @@ class FaceDetectDataset(Dataset):
                 image_tensor,
             )
             self.face_data.append(label_img_data)
+
+    def _is_valid_file(self, file_name):
+        return os.path.splitext(file_name)[1].lower() in self.VALID_EXTENSIONS
 
     def __len__(self):
         return len(self.face_data)
