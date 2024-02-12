@@ -20,7 +20,7 @@ Future<PingResponse> serviceHealthCheck() async {
     PingResponse res = await grpcClient.ping(rqst);
     print(res.message);
     await channel.shutdown();
-    return Future<PingResponse>.value(res);
+    return res;
   } catch (error) {
     developer.log('Caught error: $error');
     await channel.shutdown();
