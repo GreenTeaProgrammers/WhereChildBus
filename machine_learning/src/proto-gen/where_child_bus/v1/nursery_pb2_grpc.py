@@ -14,6 +14,11 @@ class NurseryServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.CreateNursery = channel.unary_unary(
+                '/where_child_bus.v1.NurseryService/CreateNursery',
+                request_serializer=where__child__bus_dot_v1_dot_nursery__pb2.CreateNurseryRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_nursery__pb2.CreateNurseryResponse.FromString,
+                )
         self.NurseryLogin = channel.unary_unary(
                 '/where_child_bus.v1.NurseryService/NurseryLogin',
                 request_serializer=where__child__bus_dot_v1_dot_nursery__pb2.NurseryLoginRequest.SerializeToString,
@@ -24,6 +29,12 @@ class NurseryServiceStub(object):
 class NurseryServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
+    def CreateNursery(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def NurseryLogin(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -33,6 +44,11 @@ class NurseryServiceServicer(object):
 
 def add_NurseryServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'CreateNursery': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateNursery,
+                    request_deserializer=where__child__bus_dot_v1_dot_nursery__pb2.CreateNurseryRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_nursery__pb2.CreateNurseryResponse.SerializeToString,
+            ),
             'NurseryLogin': grpc.unary_unary_rpc_method_handler(
                     servicer.NurseryLogin,
                     request_deserializer=where__child__bus_dot_v1_dot_nursery__pb2.NurseryLoginRequest.FromString,
@@ -47,6 +63,23 @@ def add_NurseryServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class NurseryService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def CreateNursery(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.NurseryService/CreateNursery',
+            where__child__bus_dot_v1_dot_nursery__pb2.CreateNurseryRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_nursery__pb2.CreateNurseryResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def NurseryLogin(request,

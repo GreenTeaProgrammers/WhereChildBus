@@ -13,6 +13,37 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use createNurseryRequestDescriptor instead')
+const CreateNurseryRequest$json = {
+  '1': 'CreateNurseryRequest',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'phone_number', '3': 4, '4': 1, '5': 9, '10': 'phoneNumber'},
+    {'1': 'address', '3': 5, '4': 1, '5': 9, '10': 'address'},
+  ],
+};
+
+/// Descriptor for `CreateNurseryRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createNurseryRequestDescriptor = $convert.base64Decode(
+    'ChRDcmVhdGVOdXJzZXJ5UmVxdWVzdBIUCgVlbWFpbBgBIAEoCVIFZW1haWwSGgoIcGFzc3dvcm'
+    'QYAiABKAlSCHBhc3N3b3JkEhIKBG5hbWUYAyABKAlSBG5hbWUSIQoMcGhvbmVfbnVtYmVyGAQg'
+    'ASgJUgtwaG9uZU51bWJlchIYCgdhZGRyZXNzGAUgASgJUgdhZGRyZXNz');
+
+@$core.Deprecated('Use createNurseryResponseDescriptor instead')
+const CreateNurseryResponse$json = {
+  '1': 'CreateNurseryResponse',
+  '2': [
+    {'1': 'nursery', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryResponse', '10': 'nursery'},
+  ],
+};
+
+/// Descriptor for `CreateNurseryResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createNurseryResponseDescriptor = $convert.base64Decode(
+    'ChVDcmVhdGVOdXJzZXJ5UmVzcG9uc2USPQoHbnVyc2VyeRgBIAEoCzIjLndoZXJlX2NoaWxkX2'
+    'J1cy52MS5OdXJzZXJ5UmVzcG9uc2VSB251cnNlcnk=');
+
 @$core.Deprecated('Use nurseryLoginRequestDescriptor instead')
 const NurseryLoginRequest$json = {
   '1': 'NurseryLoginRequest',

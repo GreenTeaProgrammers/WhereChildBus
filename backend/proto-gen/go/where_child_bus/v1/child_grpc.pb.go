@@ -22,6 +22,7 @@ const (
 	ChildService_CreateChild_FullMethodName              = "/where_child_bus.v1.ChildService/CreateChild"
 	ChildService_GetChildListByNurseryID_FullMethodName  = "/where_child_bus.v1.ChildService/GetChildListByNurseryID"
 	ChildService_GetChildListByGuardianID_FullMethodName = "/where_child_bus.v1.ChildService/GetChildListByGuardianID"
+	ChildService_GetChildListByBusID_FullMethodName      = "/where_child_bus.v1.ChildService/GetChildListByBusID"
 )
 
 // ChildServiceClient is the client API for ChildService service.
@@ -31,6 +32,7 @@ type ChildServiceClient interface {
 	CreateChild(ctx context.Context, in *CreateChildRequest, opts ...grpc.CallOption) (*CreateChildResponse, error)
 	GetChildListByNurseryID(ctx context.Context, in *GetChildListByNurseryIDRequest, opts ...grpc.CallOption) (*GetChildListByNurseryIDResponse, error)
 	GetChildListByGuardianID(ctx context.Context, in *GetChildListByGuardianIDRequest, opts ...grpc.CallOption) (*GetChildListByGuardianIDResponse, error)
+	GetChildListByBusID(ctx context.Context, in *GetChildListByBusIDRequest, opts ...grpc.CallOption) (*GetChildListByBusIDResponse, error)
 }
 
 type childServiceClient struct {
@@ -68,6 +70,15 @@ func (c *childServiceClient) GetChildListByGuardianID(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *childServiceClient) GetChildListByBusID(ctx context.Context, in *GetChildListByBusIDRequest, opts ...grpc.CallOption) (*GetChildListByBusIDResponse, error) {
+	out := new(GetChildListByBusIDResponse)
+	err := c.cc.Invoke(ctx, ChildService_GetChildListByBusID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChildServiceServer is the server API for ChildService service.
 // All implementations should embed UnimplementedChildServiceServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type ChildServiceServer interface {
 	CreateChild(context.Context, *CreateChildRequest) (*CreateChildResponse, error)
 	GetChildListByNurseryID(context.Context, *GetChildListByNurseryIDRequest) (*GetChildListByNurseryIDResponse, error)
 	GetChildListByGuardianID(context.Context, *GetChildListByGuardianIDRequest) (*GetChildListByGuardianIDResponse, error)
+	GetChildListByBusID(context.Context, *GetChildListByBusIDRequest) (*GetChildListByBusIDResponse, error)
 }
 
 // UnimplementedChildServiceServer should be embedded to have forward compatible implementations.
@@ -89,6 +101,9 @@ func (UnimplementedChildServiceServer) GetChildListByNurseryID(context.Context, 
 }
 func (UnimplementedChildServiceServer) GetChildListByGuardianID(context.Context, *GetChildListByGuardianIDRequest) (*GetChildListByGuardianIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChildListByGuardianID not implemented")
+}
+func (UnimplementedChildServiceServer) GetChildListByBusID(context.Context, *GetChildListByBusIDRequest) (*GetChildListByBusIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetChildListByBusID not implemented")
 }
 
 // UnsafeChildServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -156,6 +171,24 @@ func _ChildService_GetChildListByGuardianID_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChildService_GetChildListByBusID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetChildListByBusIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChildServiceServer).GetChildListByBusID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChildService_GetChildListByBusID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChildServiceServer).GetChildListByBusID(ctx, req.(*GetChildListByBusIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ChildService_ServiceDesc is the grpc.ServiceDesc for ChildService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -174,6 +207,10 @@ var ChildService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetChildListByGuardianID",
 			Handler:    _ChildService_GetChildListByGuardianID_Handler,
+		},
+		{
+			MethodName: "GetChildListByBusID",
+			Handler:    _ChildService_GetChildListByBusID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

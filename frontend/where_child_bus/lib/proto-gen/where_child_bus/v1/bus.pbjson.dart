@@ -13,6 +13,38 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use createBusRequestDescriptor instead')
+const CreateBusRequest$json = {
+  '1': 'CreateBusRequest',
+  '2': [
+    {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'plate_number', '3': 3, '4': 1, '5': 9, '10': 'plateNumber'},
+    {'1': 'child_ids', '3': 4, '4': 3, '5': 9, '10': 'childIds'},
+  ],
+};
+
+/// Descriptor for `CreateBusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createBusRequestDescriptor = $convert.base64Decode(
+    'ChBDcmVhdGVCdXNSZXF1ZXN0Eh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcnlJZBISCgRuYW'
+    '1lGAIgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgDIAEoCVILcGxhdGVOdW1iZXISGwoJY2hp'
+    'bGRfaWRzGAQgAygJUghjaGlsZElkcw==');
+
+@$core.Deprecated('Use createBusResponseDescriptor instead')
+const CreateBusResponse$json = {
+  '1': 'CreateBusResponse',
+  '2': [
+    {'1': 'bus', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Bus', '10': 'bus'},
+    {'1': 'children', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+  ],
+};
+
+/// Descriptor for `CreateBusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createBusResponseDescriptor = $convert.base64Decode(
+    'ChFDcmVhdGVCdXNSZXNwb25zZRIpCgNidXMYASABKAsyFy53aGVyZV9jaGlsZF9idXMudjEuQn'
+    'VzUgNidXMSNQoIY2hpbGRyZW4YAiADKAsyGS53aGVyZV9jaGlsZF9idXMudjEuQ2hpbGRSCGNo'
+    'aWxkcmVu');
+
 @$core.Deprecated('Use getBusListByNurseryIdRequestDescriptor instead')
 const GetBusListByNurseryIdRequest$json = {
   '1': 'GetBusListByNurseryIdRequest',

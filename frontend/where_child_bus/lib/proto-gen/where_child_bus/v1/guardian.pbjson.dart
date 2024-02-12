@@ -13,6 +13,37 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use createGuardianRequestDescriptor instead')
+const CreateGuardianRequest$json = {
+  '1': 'CreateGuardianRequest',
+  '2': [
+    {'1': 'nursery_code', '3': 1, '4': 1, '5': 9, '10': 'nurseryCode'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'password', '3': 3, '4': 1, '5': 9, '10': 'password'},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'phone_number', '3': 5, '4': 1, '5': 9, '10': 'phoneNumber'},
+  ],
+};
+
+/// Descriptor for `CreateGuardianRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createGuardianRequestDescriptor = $convert.base64Decode(
+    'ChVDcmVhdGVHdWFyZGlhblJlcXVlc3QSIQoMbnVyc2VyeV9jb2RlGAEgASgJUgtudXJzZXJ5Q2'
+    '9kZRIUCgVlbWFpbBgCIAEoCVIFZW1haWwSGgoIcGFzc3dvcmQYAyABKAlSCHBhc3N3b3JkEhIK'
+    'BG5hbWUYBCABKAlSBG5hbWUSIQoMcGhvbmVfbnVtYmVyGAUgASgJUgtwaG9uZU51bWJlcg==');
+
+@$core.Deprecated('Use createGuardianResponseDescriptor instead')
+const CreateGuardianResponse$json = {
+  '1': 'CreateGuardianResponse',
+  '2': [
+    {'1': 'guardian', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardian'},
+  ],
+};
+
+/// Descriptor for `CreateGuardianResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createGuardianResponseDescriptor = $convert.base64Decode(
+    'ChZDcmVhdGVHdWFyZGlhblJlc3BvbnNlEkAKCGd1YXJkaWFuGAEgASgLMiQud2hlcmVfY2hpbG'
+    'RfYnVzLnYxLkd1YXJkaWFuUmVzcG9uc2VSCGd1YXJkaWFu');
+
 @$core.Deprecated('Use guardianLoginRequestDescriptor instead')
 const GuardianLoginRequest$json = {
   '1': 'GuardianLoginRequest',
