@@ -58,6 +58,7 @@ class Trainer:
 
     def train(self):
         for _ in range(self.config["train"]["epoch"]):
+            self.model.train()
             for label, image in self.train_dataloader:
                 self.step(label, image)
             self.end_epoch()
@@ -93,6 +94,7 @@ class Trainer:
         self.step_num = 1
 
     def validate(self):
+        self.model.eval()
         collect_list = []
         pred_list = []
         for label, image in self.valid_dataloader:

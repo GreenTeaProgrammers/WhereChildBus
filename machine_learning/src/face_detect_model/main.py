@@ -34,21 +34,18 @@ def main(args: argparse.Namespace, config: dict):
     face_detect_model = FaceDetectModel(config, num_classes, image_shape)
     face_detect_model.to(args.device)
 
+    trainer = Trainer(
+        args, config, face_detect_model, train_dataset, valid_dataset, test_dataset
+    )
     # trainerの読み込み
     if args.mode == "train":
         # 学習
-        face_detect_model = face_detect_model.train()
-        trainer = Trainer(
-            args, config, face_detect_model, train_dataset, valid_dataset, test_dataset
-        )
+
         trainer.train()
     else:
         # テスト
         face_detect_model.load_state_dict(
             torch.load(config["train"]["test_model_path"])
-        )
-        trainer = Trainer(
-            args, config, face_detect_model, train_dataset, valid_dataset, test_dataset
         )
         trainer.test()
 
