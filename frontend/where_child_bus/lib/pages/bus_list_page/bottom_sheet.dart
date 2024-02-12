@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
 
 class BottomSheetWidget extends StatelessWidget {
   final busStations = ["station1", "station2", "station3","station4","station5","station6", "station7", "station8", "station7", "station7"];
@@ -21,7 +25,7 @@ class BottomSheetWidget extends StatelessWidget {
       child: Stack(
         children: [
           modalBody(context),
-          editButton(),
+          editButton(context),
         ]
       ),
     );
@@ -34,26 +38,25 @@ class BottomSheetWidget extends StatelessWidget {
         children: [
           // titleText(),
           modalHeader(busName, "test"),
-          Expanded(
-            child: stationsList(context, busStations)
-          ),
-          boardingConfirmButton(context),
+          StationsList(busStationsList: busStations),
+          ConfirmButton(buttonText: "乗客情報"),
         ],
       )
     );
   }
 
-  Widget editButton() {
+  Widget editButton(BuildContext context) {
     return Align(
-      alignment: const Alignment(1, -1),
+      alignment: const Alignment(1, -0.98),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey.shade300,
-            elevation: 0,
-          ),
+          onPressed: () {
+            Navigator.push(
+                context,MaterialPageRoute(builder: (context) => BusEditPage(busStations: busStations))
+              );
+          },
+          style: editButtonStyle(),
           child: const Text(
             "Edit",
             style: TextStyle(
@@ -152,8 +155,7 @@ class BottomSheetWidget extends StatelessWidget {
         ),
     );
   }
-
-  //TODO 将来的に乗客詳細ページへの遷移を実装する
+//TODO 将来的に乗客詳細ページへの遷移を実装する
   Widget boardingConfirmButton(BuildContext context) {
     const double fontSize = 20;    
 
@@ -164,7 +166,8 @@ class BottomSheetWidget extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.6,
             height: fontSize * 2,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
             ),
@@ -180,4 +183,5 @@ class BottomSheetWidget extends StatelessWidget {
       ),
     );
   }
+
 }
