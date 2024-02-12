@@ -197,7 +197,7 @@ const Child$json = {
     {'1': 'has_bag', '3': 10, '4': 1, '5': 8, '10': 'hasBag'},
     {'1': 'has_lunch_box', '3': 11, '4': 1, '5': 8, '10': 'hasLunchBox'},
     {'1': 'has_water_bottle', '3': 12, '4': 1, '5': 8, '10': 'hasWaterBottle'},
-    {'1': 'has_umbrera', '3': 13, '4': 1, '5': 8, '10': 'hasUmbrera'},
+    {'1': 'has_umbrella', '3': 13, '4': 1, '5': 8, '10': 'hasUmbrella'},
     {'1': 'has_other', '3': 14, '4': 1, '5': 8, '10': 'hasOther'},
     {'1': 'created_at', '3': 15, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
     {'1': 'updated_at', '3': 16, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
@@ -213,10 +213,10 @@ final $typed_data.Uint8List childDescriptor = $convert.base64Decode(
     'cmlkZV9ldmVuaW5nX2J1cxgIIAEoCFIQaXNSaWRlRXZlbmluZ0J1cxI1ChdjaGVja19mb3JfbW'
     'lzc2luZ19pdGVtcxgJIAEoCFIUY2hlY2tGb3JNaXNzaW5nSXRlbXMSFwoHaGFzX2JhZxgKIAEo'
     'CFIGaGFzQmFnEiIKDWhhc19sdW5jaF9ib3gYCyABKAhSC2hhc0x1bmNoQm94EigKEGhhc193YX'
-    'Rlcl9ib3R0bGUYDCABKAhSDmhhc1dhdGVyQm90dGxlEh8KC2hhc191bWJyZXJhGA0gASgIUgpo'
-    'YXNVbWJyZXJhEhsKCWhhc19vdGhlchgOIAEoCFIIaGFzT3RoZXISOQoKY3JlYXRlZF9hdBgPIA'
-    'EoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0'
-    'GBAgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
+    'Rlcl9ib3R0bGUYDCABKAhSDmhhc1dhdGVyQm90dGxlEiEKDGhhc191bWJyZWxsYRgNIAEoCFIL'
+    'aGFzVW1icmVsbGESGwoJaGFzX290aGVyGA4gASgIUghoYXNPdGhlchI5CgpjcmVhdGVkX2F0GA'
+    '8gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0EjkKCnVwZGF0ZWRf'
+    'YXQYECABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgl1cGRhdGVkQXQ=');
 
 @$core.Deprecated('Use stationDescriptor instead')
 const Station$json = {
