@@ -30,11 +30,15 @@ func (nc *NurseryCreate) SetNurseryCode(s string) *NurseryCreate {
 	return nc
 }
 
-// SetNillableNurseryCode sets the "nursery_code" field if the given value is not nil.
-func (nc *NurseryCreate) SetNillableNurseryCode(s *string) *NurseryCreate {
-	if s != nil {
-		nc.SetNurseryCode(*s)
-	}
+// SetEmail sets the "email" field.
+func (nc *NurseryCreate) SetEmail(s string) *NurseryCreate {
+	nc.mutation.SetEmail(s)
+	return nc
+}
+
+// SetHashedPassword sets the "hashed_password" field.
+func (nc *NurseryCreate) SetHashedPassword(s string) *NurseryCreate {
+	nc.mutation.SetHashedPassword(s)
 	return nc
 }
 
@@ -50,6 +54,14 @@ func (nc *NurseryCreate) SetAddress(s string) *NurseryCreate {
 	return nc
 }
 
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (nc *NurseryCreate) SetNillableAddress(s *string) *NurseryCreate {
+	if s != nil {
+		nc.SetAddress(*s)
+	}
+	return nc
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (nc *NurseryCreate) SetPhoneNumber(s string) *NurseryCreate {
 	nc.mutation.SetPhoneNumber(s)
@@ -60,20 +72,6 @@ func (nc *NurseryCreate) SetPhoneNumber(s string) *NurseryCreate {
 func (nc *NurseryCreate) SetNillablePhoneNumber(s *string) *NurseryCreate {
 	if s != nil {
 		nc.SetPhoneNumber(*s)
-	}
-	return nc
-}
-
-// SetEmail sets the "email" field.
-func (nc *NurseryCreate) SetEmail(s string) *NurseryCreate {
-	nc.mutation.SetEmail(s)
-	return nc
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (nc *NurseryCreate) SetNillableEmail(s *string) *NurseryCreate {
-	if s != nil {
-		nc.SetEmail(*s)
 	}
 	return nc
 }
@@ -200,10 +198,6 @@ func (nc *NurseryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (nc *NurseryCreate) defaults() {
-	if _, ok := nc.mutation.NurseryCode(); !ok {
-		v := nursery.DefaultNurseryCode()
-		nc.mutation.SetNurseryCode(v)
-	}
 	if _, ok := nc.mutation.CreatedAt(); !ok {
 		v := nursery.DefaultCreatedAt()
 		nc.mutation.SetCreatedAt(v)
@@ -223,11 +217,14 @@ func (nc *NurseryCreate) check() error {
 	if _, ok := nc.mutation.NurseryCode(); !ok {
 		return &ValidationError{Name: "nursery_code", err: errors.New(`ent: missing required field "Nursery.nursery_code"`)}
 	}
+	if _, ok := nc.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Nursery.email"`)}
+	}
+	if _, ok := nc.mutation.HashedPassword(); !ok {
+		return &ValidationError{Name: "hashed_password", err: errors.New(`ent: missing required field "Nursery.hashed_password"`)}
+	}
 	if _, ok := nc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Nursery.name"`)}
-	}
-	if _, ok := nc.mutation.Address(); !ok {
-		return &ValidationError{Name: "address", err: errors.New(`ent: missing required field "Nursery.address"`)}
 	}
 	if _, ok := nc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Nursery.created_at"`)}
@@ -274,6 +271,14 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 		_spec.SetField(nursery.FieldNurseryCode, field.TypeString, value)
 		_node.NurseryCode = value
 	}
+	if value, ok := nc.mutation.Email(); ok {
+		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
+		_node.Email = value
+	}
+	if value, ok := nc.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
+		_node.HashedPassword = value
+	}
 	if value, ok := nc.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -285,10 +290,6 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.PhoneNumber(); ok {
 		_spec.SetField(nursery.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
-	}
-	if value, ok := nc.mutation.Email(); ok {
-		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
-		_node.Email = value
 	}
 	if value, ok := nc.mutation.CreatedAt(); ok {
 		_spec.SetField(nursery.FieldCreatedAt, field.TypeTime, value)

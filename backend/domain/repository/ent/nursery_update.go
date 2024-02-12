@@ -46,6 +46,34 @@ func (nu *NurseryUpdate) SetNillableNurseryCode(s *string) *NurseryUpdate {
 	return nu
 }
 
+// SetEmail sets the "email" field.
+func (nu *NurseryUpdate) SetEmail(s string) *NurseryUpdate {
+	nu.mutation.SetEmail(s)
+	return nu
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (nu *NurseryUpdate) SetNillableEmail(s *string) *NurseryUpdate {
+	if s != nil {
+		nu.SetEmail(*s)
+	}
+	return nu
+}
+
+// SetHashedPassword sets the "hashed_password" field.
+func (nu *NurseryUpdate) SetHashedPassword(s string) *NurseryUpdate {
+	nu.mutation.SetHashedPassword(s)
+	return nu
+}
+
+// SetNillableHashedPassword sets the "hashed_password" field if the given value is not nil.
+func (nu *NurseryUpdate) SetNillableHashedPassword(s *string) *NurseryUpdate {
+	if s != nil {
+		nu.SetHashedPassword(*s)
+	}
+	return nu
+}
+
 // SetName sets the "name" field.
 func (nu *NurseryUpdate) SetName(s string) *NurseryUpdate {
 	nu.mutation.SetName(s)
@@ -74,6 +102,12 @@ func (nu *NurseryUpdate) SetNillableAddress(s *string) *NurseryUpdate {
 	return nu
 }
 
+// ClearAddress clears the value of the "address" field.
+func (nu *NurseryUpdate) ClearAddress() *NurseryUpdate {
+	nu.mutation.ClearAddress()
+	return nu
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (nu *NurseryUpdate) SetPhoneNumber(s string) *NurseryUpdate {
 	nu.mutation.SetPhoneNumber(s)
@@ -91,26 +125,6 @@ func (nu *NurseryUpdate) SetNillablePhoneNumber(s *string) *NurseryUpdate {
 // ClearPhoneNumber clears the value of the "phone_number" field.
 func (nu *NurseryUpdate) ClearPhoneNumber() *NurseryUpdate {
 	nu.mutation.ClearPhoneNumber()
-	return nu
-}
-
-// SetEmail sets the "email" field.
-func (nu *NurseryUpdate) SetEmail(s string) *NurseryUpdate {
-	nu.mutation.SetEmail(s)
-	return nu
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (nu *NurseryUpdate) SetNillableEmail(s *string) *NurseryUpdate {
-	if s != nil {
-		nu.SetEmail(*s)
-	}
-	return nu
-}
-
-// ClearEmail clears the value of the "email" field.
-func (nu *NurseryUpdate) ClearEmail() *NurseryUpdate {
-	nu.mutation.ClearEmail()
 	return nu
 }
 
@@ -295,23 +309,26 @@ func (nu *NurseryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := nu.mutation.NurseryCode(); ok {
 		_spec.SetField(nursery.FieldNurseryCode, field.TypeString, value)
 	}
+	if value, ok := nu.mutation.Email(); ok {
+		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := nu.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
+	}
 	if value, ok := nu.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)
 	}
 	if value, ok := nu.mutation.Address(); ok {
 		_spec.SetField(nursery.FieldAddress, field.TypeString, value)
 	}
+	if nu.mutation.AddressCleared() {
+		_spec.ClearField(nursery.FieldAddress, field.TypeString)
+	}
 	if value, ok := nu.mutation.PhoneNumber(); ok {
 		_spec.SetField(nursery.FieldPhoneNumber, field.TypeString, value)
 	}
 	if nu.mutation.PhoneNumberCleared() {
 		_spec.ClearField(nursery.FieldPhoneNumber, field.TypeString)
-	}
-	if value, ok := nu.mutation.Email(); ok {
-		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
-	}
-	if nu.mutation.EmailCleared() {
-		_spec.ClearField(nursery.FieldEmail, field.TypeString)
 	}
 	if value, ok := nu.mutation.CreatedAt(); ok {
 		_spec.SetField(nursery.FieldCreatedAt, field.TypeTime, value)
@@ -488,6 +505,34 @@ func (nuo *NurseryUpdateOne) SetNillableNurseryCode(s *string) *NurseryUpdateOne
 	return nuo
 }
 
+// SetEmail sets the "email" field.
+func (nuo *NurseryUpdateOne) SetEmail(s string) *NurseryUpdateOne {
+	nuo.mutation.SetEmail(s)
+	return nuo
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (nuo *NurseryUpdateOne) SetNillableEmail(s *string) *NurseryUpdateOne {
+	if s != nil {
+		nuo.SetEmail(*s)
+	}
+	return nuo
+}
+
+// SetHashedPassword sets the "hashed_password" field.
+func (nuo *NurseryUpdateOne) SetHashedPassword(s string) *NurseryUpdateOne {
+	nuo.mutation.SetHashedPassword(s)
+	return nuo
+}
+
+// SetNillableHashedPassword sets the "hashed_password" field if the given value is not nil.
+func (nuo *NurseryUpdateOne) SetNillableHashedPassword(s *string) *NurseryUpdateOne {
+	if s != nil {
+		nuo.SetHashedPassword(*s)
+	}
+	return nuo
+}
+
 // SetName sets the "name" field.
 func (nuo *NurseryUpdateOne) SetName(s string) *NurseryUpdateOne {
 	nuo.mutation.SetName(s)
@@ -516,6 +561,12 @@ func (nuo *NurseryUpdateOne) SetNillableAddress(s *string) *NurseryUpdateOne {
 	return nuo
 }
 
+// ClearAddress clears the value of the "address" field.
+func (nuo *NurseryUpdateOne) ClearAddress() *NurseryUpdateOne {
+	nuo.mutation.ClearAddress()
+	return nuo
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (nuo *NurseryUpdateOne) SetPhoneNumber(s string) *NurseryUpdateOne {
 	nuo.mutation.SetPhoneNumber(s)
@@ -533,26 +584,6 @@ func (nuo *NurseryUpdateOne) SetNillablePhoneNumber(s *string) *NurseryUpdateOne
 // ClearPhoneNumber clears the value of the "phone_number" field.
 func (nuo *NurseryUpdateOne) ClearPhoneNumber() *NurseryUpdateOne {
 	nuo.mutation.ClearPhoneNumber()
-	return nuo
-}
-
-// SetEmail sets the "email" field.
-func (nuo *NurseryUpdateOne) SetEmail(s string) *NurseryUpdateOne {
-	nuo.mutation.SetEmail(s)
-	return nuo
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (nuo *NurseryUpdateOne) SetNillableEmail(s *string) *NurseryUpdateOne {
-	if s != nil {
-		nuo.SetEmail(*s)
-	}
-	return nuo
-}
-
-// ClearEmail clears the value of the "email" field.
-func (nuo *NurseryUpdateOne) ClearEmail() *NurseryUpdateOne {
-	nuo.mutation.ClearEmail()
 	return nuo
 }
 
@@ -767,23 +798,26 @@ func (nuo *NurseryUpdateOne) sqlSave(ctx context.Context) (_node *Nursery, err e
 	if value, ok := nuo.mutation.NurseryCode(); ok {
 		_spec.SetField(nursery.FieldNurseryCode, field.TypeString, value)
 	}
+	if value, ok := nuo.mutation.Email(); ok {
+		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := nuo.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
+	}
 	if value, ok := nuo.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)
 	}
 	if value, ok := nuo.mutation.Address(); ok {
 		_spec.SetField(nursery.FieldAddress, field.TypeString, value)
 	}
+	if nuo.mutation.AddressCleared() {
+		_spec.ClearField(nursery.FieldAddress, field.TypeString)
+	}
 	if value, ok := nuo.mutation.PhoneNumber(); ok {
 		_spec.SetField(nursery.FieldPhoneNumber, field.TypeString, value)
 	}
 	if nuo.mutation.PhoneNumberCleared() {
 		_spec.ClearField(nursery.FieldPhoneNumber, field.TypeString)
-	}
-	if value, ok := nuo.mutation.Email(); ok {
-		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
-	}
-	if nuo.mutation.EmailCleared() {
-		_spec.ClearField(nursery.FieldEmail, field.TypeString)
 	}
 	if value, ok := nuo.mutation.CreatedAt(); ok {
 		_spec.SetField(nursery.FieldCreatedAt, field.TypeTime, value)

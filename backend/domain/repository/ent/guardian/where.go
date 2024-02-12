@@ -56,19 +56,24 @@ func IDLTE(id uuid.UUID) predicate.Guardian {
 	return predicate.Guardian(sql.FieldLTE(FieldID, id))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEQ(FieldName, v))
-}
-
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
 func Email(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldEQ(FieldEmail, v))
 }
 
-// Phone applies equality check predicate on the "phone" field. It's identical to PhoneEQ.
-func Phone(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEQ(FieldPhone, v))
+// HashedPassword applies equality check predicate on the "hashed_password" field. It's identical to HashedPasswordEQ.
+func HashedPassword(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldHashedPassword, v))
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldName, v))
+}
+
+// PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
+func PhoneNumber(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldPhoneNumber, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -79,6 +84,136 @@ func CreatedAt(v time.Time) predicate.Guardian {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.Guardian {
 	return predicate.Guardian(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// EmailEQ applies the EQ predicate on the "email" field.
+func EmailEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldEmail, v))
+}
+
+// EmailNEQ applies the NEQ predicate on the "email" field.
+func EmailNEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldEmail, v))
+}
+
+// EmailIn applies the In predicate on the "email" field.
+func EmailIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldIn(FieldEmail, vs...))
+}
+
+// EmailNotIn applies the NotIn predicate on the "email" field.
+func EmailNotIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNotIn(FieldEmail, vs...))
+}
+
+// EmailGT applies the GT predicate on the "email" field.
+func EmailGT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGT(FieldEmail, v))
+}
+
+// EmailGTE applies the GTE predicate on the "email" field.
+func EmailGTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGTE(FieldEmail, v))
+}
+
+// EmailLT applies the LT predicate on the "email" field.
+func EmailLT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLT(FieldEmail, v))
+}
+
+// EmailLTE applies the LTE predicate on the "email" field.
+func EmailLTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLTE(FieldEmail, v))
+}
+
+// EmailContains applies the Contains predicate on the "email" field.
+func EmailContains(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContains(FieldEmail, v))
+}
+
+// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
+func EmailHasPrefix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasPrefix(FieldEmail, v))
+}
+
+// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
+func EmailHasSuffix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasSuffix(FieldEmail, v))
+}
+
+// EmailEqualFold applies the EqualFold predicate on the "email" field.
+func EmailEqualFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEqualFold(FieldEmail, v))
+}
+
+// EmailContainsFold applies the ContainsFold predicate on the "email" field.
+func EmailContainsFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContainsFold(FieldEmail, v))
+}
+
+// HashedPasswordEQ applies the EQ predicate on the "hashed_password" field.
+func HashedPasswordEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldHashedPassword, v))
+}
+
+// HashedPasswordNEQ applies the NEQ predicate on the "hashed_password" field.
+func HashedPasswordNEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldHashedPassword, v))
+}
+
+// HashedPasswordIn applies the In predicate on the "hashed_password" field.
+func HashedPasswordIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldIn(FieldHashedPassword, vs...))
+}
+
+// HashedPasswordNotIn applies the NotIn predicate on the "hashed_password" field.
+func HashedPasswordNotIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNotIn(FieldHashedPassword, vs...))
+}
+
+// HashedPasswordGT applies the GT predicate on the "hashed_password" field.
+func HashedPasswordGT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGT(FieldHashedPassword, v))
+}
+
+// HashedPasswordGTE applies the GTE predicate on the "hashed_password" field.
+func HashedPasswordGTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGTE(FieldHashedPassword, v))
+}
+
+// HashedPasswordLT applies the LT predicate on the "hashed_password" field.
+func HashedPasswordLT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLT(FieldHashedPassword, v))
+}
+
+// HashedPasswordLTE applies the LTE predicate on the "hashed_password" field.
+func HashedPasswordLTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLTE(FieldHashedPassword, v))
+}
+
+// HashedPasswordContains applies the Contains predicate on the "hashed_password" field.
+func HashedPasswordContains(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContains(FieldHashedPassword, v))
+}
+
+// HashedPasswordHasPrefix applies the HasPrefix predicate on the "hashed_password" field.
+func HashedPasswordHasPrefix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasPrefix(FieldHashedPassword, v))
+}
+
+// HashedPasswordHasSuffix applies the HasSuffix predicate on the "hashed_password" field.
+func HashedPasswordHasSuffix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasSuffix(FieldHashedPassword, v))
+}
+
+// HashedPasswordEqualFold applies the EqualFold predicate on the "hashed_password" field.
+func HashedPasswordEqualFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEqualFold(FieldHashedPassword, v))
+}
+
+// HashedPasswordContainsFold applies the ContainsFold predicate on the "hashed_password" field.
+func HashedPasswordContainsFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContainsFold(FieldHashedPassword, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -146,154 +281,79 @@ func NameContainsFold(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldContainsFold(FieldName, v))
 }
 
-// EmailEQ applies the EQ predicate on the "email" field.
-func EmailEQ(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEQ(FieldEmail, v))
+// PhoneNumberEQ applies the EQ predicate on the "phone_number" field.
+func PhoneNumberEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldPhoneNumber, v))
 }
 
-// EmailNEQ applies the NEQ predicate on the "email" field.
-func EmailNEQ(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldNEQ(FieldEmail, v))
+// PhoneNumberNEQ applies the NEQ predicate on the "phone_number" field.
+func PhoneNumberNEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldPhoneNumber, v))
 }
 
-// EmailIn applies the In predicate on the "email" field.
-func EmailIn(vs ...string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldIn(FieldEmail, vs...))
+// PhoneNumberIn applies the In predicate on the "phone_number" field.
+func PhoneNumberIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldIn(FieldPhoneNumber, vs...))
 }
 
-// EmailNotIn applies the NotIn predicate on the "email" field.
-func EmailNotIn(vs ...string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldNotIn(FieldEmail, vs...))
+// PhoneNumberNotIn applies the NotIn predicate on the "phone_number" field.
+func PhoneNumberNotIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNotIn(FieldPhoneNumber, vs...))
 }
 
-// EmailGT applies the GT predicate on the "email" field.
-func EmailGT(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldGT(FieldEmail, v))
+// PhoneNumberGT applies the GT predicate on the "phone_number" field.
+func PhoneNumberGT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGT(FieldPhoneNumber, v))
 }
 
-// EmailGTE applies the GTE predicate on the "email" field.
-func EmailGTE(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldGTE(FieldEmail, v))
+// PhoneNumberGTE applies the GTE predicate on the "phone_number" field.
+func PhoneNumberGTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGTE(FieldPhoneNumber, v))
 }
 
-// EmailLT applies the LT predicate on the "email" field.
-func EmailLT(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldLT(FieldEmail, v))
+// PhoneNumberLT applies the LT predicate on the "phone_number" field.
+func PhoneNumberLT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLT(FieldPhoneNumber, v))
 }
 
-// EmailLTE applies the LTE predicate on the "email" field.
-func EmailLTE(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldLTE(FieldEmail, v))
+// PhoneNumberLTE applies the LTE predicate on the "phone_number" field.
+func PhoneNumberLTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLTE(FieldPhoneNumber, v))
 }
 
-// EmailContains applies the Contains predicate on the "email" field.
-func EmailContains(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldContains(FieldEmail, v))
+// PhoneNumberContains applies the Contains predicate on the "phone_number" field.
+func PhoneNumberContains(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContains(FieldPhoneNumber, v))
 }
 
-// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
-func EmailHasPrefix(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldHasPrefix(FieldEmail, v))
+// PhoneNumberHasPrefix applies the HasPrefix predicate on the "phone_number" field.
+func PhoneNumberHasPrefix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasPrefix(FieldPhoneNumber, v))
 }
 
-// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
-func EmailHasSuffix(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldHasSuffix(FieldEmail, v))
+// PhoneNumberHasSuffix applies the HasSuffix predicate on the "phone_number" field.
+func PhoneNumberHasSuffix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasSuffix(FieldPhoneNumber, v))
 }
 
-// EmailIsNil applies the IsNil predicate on the "email" field.
-func EmailIsNil() predicate.Guardian {
-	return predicate.Guardian(sql.FieldIsNull(FieldEmail))
+// PhoneNumberIsNil applies the IsNil predicate on the "phone_number" field.
+func PhoneNumberIsNil() predicate.Guardian {
+	return predicate.Guardian(sql.FieldIsNull(FieldPhoneNumber))
 }
 
-// EmailNotNil applies the NotNil predicate on the "email" field.
-func EmailNotNil() predicate.Guardian {
-	return predicate.Guardian(sql.FieldNotNull(FieldEmail))
+// PhoneNumberNotNil applies the NotNil predicate on the "phone_number" field.
+func PhoneNumberNotNil() predicate.Guardian {
+	return predicate.Guardian(sql.FieldNotNull(FieldPhoneNumber))
 }
 
-// EmailEqualFold applies the EqualFold predicate on the "email" field.
-func EmailEqualFold(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEqualFold(FieldEmail, v))
+// PhoneNumberEqualFold applies the EqualFold predicate on the "phone_number" field.
+func PhoneNumberEqualFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEqualFold(FieldPhoneNumber, v))
 }
 
-// EmailContainsFold applies the ContainsFold predicate on the "email" field.
-func EmailContainsFold(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldContainsFold(FieldEmail, v))
-}
-
-// PhoneEQ applies the EQ predicate on the "phone" field.
-func PhoneEQ(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEQ(FieldPhone, v))
-}
-
-// PhoneNEQ applies the NEQ predicate on the "phone" field.
-func PhoneNEQ(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldNEQ(FieldPhone, v))
-}
-
-// PhoneIn applies the In predicate on the "phone" field.
-func PhoneIn(vs ...string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldIn(FieldPhone, vs...))
-}
-
-// PhoneNotIn applies the NotIn predicate on the "phone" field.
-func PhoneNotIn(vs ...string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldNotIn(FieldPhone, vs...))
-}
-
-// PhoneGT applies the GT predicate on the "phone" field.
-func PhoneGT(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldGT(FieldPhone, v))
-}
-
-// PhoneGTE applies the GTE predicate on the "phone" field.
-func PhoneGTE(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldGTE(FieldPhone, v))
-}
-
-// PhoneLT applies the LT predicate on the "phone" field.
-func PhoneLT(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldLT(FieldPhone, v))
-}
-
-// PhoneLTE applies the LTE predicate on the "phone" field.
-func PhoneLTE(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldLTE(FieldPhone, v))
-}
-
-// PhoneContains applies the Contains predicate on the "phone" field.
-func PhoneContains(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldContains(FieldPhone, v))
-}
-
-// PhoneHasPrefix applies the HasPrefix predicate on the "phone" field.
-func PhoneHasPrefix(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldHasPrefix(FieldPhone, v))
-}
-
-// PhoneHasSuffix applies the HasSuffix predicate on the "phone" field.
-func PhoneHasSuffix(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldHasSuffix(FieldPhone, v))
-}
-
-// PhoneIsNil applies the IsNil predicate on the "phone" field.
-func PhoneIsNil() predicate.Guardian {
-	return predicate.Guardian(sql.FieldIsNull(FieldPhone))
-}
-
-// PhoneNotNil applies the NotNil predicate on the "phone" field.
-func PhoneNotNil() predicate.Guardian {
-	return predicate.Guardian(sql.FieldNotNull(FieldPhone))
-}
-
-// PhoneEqualFold applies the EqualFold predicate on the "phone" field.
-func PhoneEqualFold(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEqualFold(FieldPhone, v))
-}
-
-// PhoneContainsFold applies the ContainsFold predicate on the "phone" field.
-func PhoneContainsFold(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldContainsFold(FieldPhone, v))
+// PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
+func PhoneNumberContainsFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContainsFold(FieldPhoneNumber, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

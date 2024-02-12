@@ -24,8 +24,8 @@ const (
 	FieldSex = "sex"
 	// FieldIsRideMorningBus holds the string denoting the is_ride_morning_bus field in the database.
 	FieldIsRideMorningBus = "is_ride_morning_bus"
-	// FieldIsRideAfternoonBus holds the string denoting the is_ride_afternoon_bus field in the database.
-	FieldIsRideAfternoonBus = "is_ride_afternoon_bus"
+	// FieldIsRideEveningBus holds the string denoting the is_ride_evening_bus field in the database.
+	FieldIsRideEveningBus = "is_ride_evening_bus"
 	// FieldCheckForMissingItems holds the string denoting the check_for_missing_items field in the database.
 	FieldCheckForMissingItems = "check_for_missing_items"
 	// FieldHasBag holds the string denoting the has_bag field in the database.
@@ -98,7 +98,7 @@ var Columns = []string{
 	FieldAge,
 	FieldSex,
 	FieldIsRideMorningBus,
-	FieldIsRideAfternoonBus,
+	FieldIsRideEveningBus,
 	FieldCheckForMissingItems,
 	FieldHasBag,
 	FieldHasLunchBox,
@@ -134,8 +134,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultIsRideMorningBus holds the default value on creation for the "is_ride_morning_bus" field.
 	DefaultIsRideMorningBus bool
-	// DefaultIsRideAfternoonBus holds the default value on creation for the "is_ride_afternoon_bus" field.
-	DefaultIsRideAfternoonBus bool
+	// DefaultIsRideEveningBus holds the default value on creation for the "is_ride_evening_bus" field.
+	DefaultIsRideEveningBus bool
 	// DefaultCheckForMissingItems holds the default value on creation for the "check_for_missing_items" field.
 	DefaultCheckForMissingItems bool
 	// DefaultHasBag holds the default value on creation for the "has_bag" field.
@@ -210,9 +210,9 @@ func ByIsRideMorningBus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsRideMorningBus, opts...).ToFunc()
 }
 
-// ByIsRideAfternoonBus orders the results by the is_ride_afternoon_bus field.
-func ByIsRideAfternoonBus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIsRideAfternoonBus, opts...).ToFunc()
+// ByIsRideEveningBus orders the results by the is_ride_evening_bus field.
+func ByIsRideEveningBus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsRideEveningBus, opts...).ToFunc()
 }
 
 // ByCheckForMissingItems orders the results by the check_for_missing_items field.
