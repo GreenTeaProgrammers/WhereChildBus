@@ -41,7 +41,7 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 	// Guardianを取得
 	guardian, err := tx.Guardian.Query().
 		Where(guardianRepo.Email(req.Email)).
-		Where(guardianRepo.EncryptedPassword(string(hashedPassword))).
+		Where(guardianRepo.HashedPassword(string(hashedPassword))).
 		Only(ctx)
 
 	if err != nil {

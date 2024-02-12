@@ -41,7 +41,7 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 	//Nurseryを取得
 	nursery, err := tx.Nursery.Query().
 		Where(nurseryRepo.Email(req.Email)).
-		Where(nurseryRepo.EncryptedPassword(string(hashedPassword))).
+		Where(nurseryRepo.HashedPassword(string(hashedPassword))).
 		Only(ctx)
 
 	if err != nil {
