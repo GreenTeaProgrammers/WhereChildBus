@@ -16,8 +16,7 @@ def main(args: argparse.Namespace, config: dict):
 
     train_data_size = int(len(dataset) * config["dataset"]["ratio"]["train"])
     valid_data_size = int(len(dataset) * config["dataset"]["ratio"]["valid"])
-    test_data_size = int(len(dataset) * config["dataset"]["ratio"]["test"])
-    train_data_size = len(dataset) - valid_data_size - test_data_size
+    test_data_size = len(dataset) - train_data_size - valid_data_size
 
     train_dataset, valid_dataset, test_dataset = torch.utils.data.random_split(
         dataset,
@@ -34,20 +33,21 @@ def main(args: argparse.Namespace, config: dict):
     face_detect_model = FaceDetectModel(config, num_classes, image_shape)
     face_detect_model.to(args.device)
 
+    # trainerの読み込み
     trainer = Trainer(
         args, config, face_detect_model, train_dataset, valid_dataset, test_dataset
     )
-    # trainerの読み込み
     if args.mode == "train":
         # 学習
-
         trainer.train()
-    else:
+    elif args.mode == "test":
         # テスト
         face_detect_model.load_state_dict(
             torch.load(config["train"]["test_model_path"])
         )
         trainer.test()
+    else:  # TODO: 他のモードを実装する
+        raise ValueError("invalid mode")
 
 
 if __name__ == "__main__":
