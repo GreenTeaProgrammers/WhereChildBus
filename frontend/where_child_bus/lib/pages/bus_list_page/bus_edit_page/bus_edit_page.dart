@@ -39,7 +39,7 @@ class _BusEditPage extends State<BusEditPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           inputFieldsAndThumbnail(context),
-          StationsList(busStationsList: busStations),
+          manageChildrenButton(),
           ConfirmButton(buttonText: "保存"),
         ],
       ),
@@ -54,10 +54,19 @@ class _BusEditPage extends State<BusEditPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             busThumbnail(context),
-            const InputElement(inputFieldTitle: "コース名", labelText: "コース名", hintText: "コース名を入力してください"),
+            inputFields(),
           ],
         ),
       );
+  }
+
+  Widget inputFields() {
+    return const Column(
+      children: [
+        InputElement(inputFieldTitle: "バス名", labelText: "バス名を入力してください", hintText: "バス名を入力してください"),
+        InputElement(inputFieldTitle: "ナンバー", labelText: "ナンバーを入力してください", hintText: "ナンバーを入力してください"),
+      ],
+    );
   }
 
   Widget busThumbnail(BuildContext context) {
@@ -85,8 +94,20 @@ class _BusEditPage extends State<BusEditPage> {
   Widget unselectedImageButton() {
     return ElevatedButton(
       onPressed: () => pickImage(),
-      child: Text (
+      child: const Text (
         "画像が選択されていません",
+      ),
+    );
+  }
+
+  Widget manageChildrenButton() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: ElevatedButton(
+          onPressed: () {}, 
+          child: const Text("バスに乗車する子供を変更"),
+        ),
       ),
     );
   }

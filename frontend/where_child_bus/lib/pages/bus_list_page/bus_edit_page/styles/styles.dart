@@ -21,7 +21,14 @@ InputDecoration editPageInputDecoration(String labelText, String hintText) {
     labelText: labelText,
     hintText: hintText,
     border: const OutlineInputBorder(),
-    contentPadding: EdgeInsets.symmetric(vertical:  5)
+    contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+    labelStyle: inputFieldLabelStyle(),
+  );
+}
+
+TextStyle inputFieldLabelStyle() {
+  return const TextStyle(
+    fontSize: 15,
   );
 }
 
