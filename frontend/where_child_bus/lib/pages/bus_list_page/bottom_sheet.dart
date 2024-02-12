@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
 
 class BottomSheetWidget extends StatelessWidget {
@@ -36,9 +37,7 @@ class BottomSheetWidget extends StatelessWidget {
         children: [
           // titleText(),
           modalHeader(busName, "test"),
-          Expanded(
-            child: stationsList(context, busStations)
-          ),
+          StationsList(busStationsList: busStations),
           boardingConfirmButton(context),
         ],
       )
