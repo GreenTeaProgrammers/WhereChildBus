@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from where_child_bus import health_check_pb2 as where__child__bus_dot_health__check__pb2
+from where_child_bus.v1 import health_check_pb2 as where__child__bus_dot_v1_dot_health__check__pb2
 
 
 class HealthcheckServiceStub(object):
@@ -15,9 +15,9 @@ class HealthcheckServiceStub(object):
             channel: A grpc.Channel.
         """
         self.Ping = channel.unary_unary(
-                '/where_child_bus.HealthcheckService/Ping',
-                request_serializer=where__child__bus_dot_health__check__pb2.PingRequest.SerializeToString,
-                response_deserializer=where__child__bus_dot_health__check__pb2.PingResponse.FromString,
+                '/where_child_bus.v1.HealthcheckService/Ping',
+                request_serializer=where__child__bus_dot_v1_dot_health__check__pb2.PingRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_health__check__pb2.PingResponse.FromString,
                 )
 
 
@@ -35,12 +35,12 @@ def add_HealthcheckServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Ping': grpc.unary_unary_rpc_method_handler(
                     servicer.Ping,
-                    request_deserializer=where__child__bus_dot_health__check__pb2.PingRequest.FromString,
-                    response_serializer=where__child__bus_dot_health__check__pb2.PingResponse.SerializeToString,
+                    request_deserializer=where__child__bus_dot_v1_dot_health__check__pb2.PingRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_health__check__pb2.PingResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'where_child_bus.HealthcheckService', rpc_method_handlers)
+            'where_child_bus.v1.HealthcheckService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -59,8 +59,8 @@ class HealthcheckService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/where_child_bus.HealthcheckService/Ping',
-            where__child__bus_dot_health__check__pb2.PingRequest.SerializeToString,
-            where__child__bus_dot_health__check__pb2.PingResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.HealthcheckService/Ping',
+            where__child__bus_dot_v1_dot_health__check__pb2.PingRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_health__check__pb2.PingResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

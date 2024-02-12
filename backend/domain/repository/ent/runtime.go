@@ -52,10 +52,10 @@ func init() {
 	childDescIsRideMorningBus := childFields[4].Descriptor()
 	// child.DefaultIsRideMorningBus holds the default value on creation for the is_ride_morning_bus field.
 	child.DefaultIsRideMorningBus = childDescIsRideMorningBus.Default.(bool)
-	// childDescIsRideAfternoonBus is the schema descriptor for is_ride_afternoon_bus field.
-	childDescIsRideAfternoonBus := childFields[5].Descriptor()
-	// child.DefaultIsRideAfternoonBus holds the default value on creation for the is_ride_afternoon_bus field.
-	child.DefaultIsRideAfternoonBus = childDescIsRideAfternoonBus.Default.(bool)
+	// childDescIsRideEveningBus is the schema descriptor for is_ride_evening_bus field.
+	childDescIsRideEveningBus := childFields[5].Descriptor()
+	// child.DefaultIsRideEveningBus holds the default value on creation for the is_ride_evening_bus field.
+	child.DefaultIsRideEveningBus = childDescIsRideEveningBus.Default.(bool)
 	// childDescCheckForMissingItems is the schema descriptor for check_for_missing_items field.
 	childDescCheckForMissingItems := childFields[6].Descriptor()
 	// child.DefaultCheckForMissingItems holds the default value on creation for the check_for_missing_items field.
@@ -113,11 +113,11 @@ func init() {
 	guardianFields := schema.Guardian{}.Fields()
 	_ = guardianFields
 	// guardianDescCreatedAt is the schema descriptor for created_at field.
-	guardianDescCreatedAt := guardianFields[4].Descriptor()
+	guardianDescCreatedAt := guardianFields[5].Descriptor()
 	// guardian.DefaultCreatedAt holds the default value on creation for the created_at field.
 	guardian.DefaultCreatedAt = guardianDescCreatedAt.Default.(func() time.Time)
 	// guardianDescUpdatedAt is the schema descriptor for updated_at field.
-	guardianDescUpdatedAt := guardianFields[5].Descriptor()
+	guardianDescUpdatedAt := guardianFields[6].Descriptor()
 	// guardian.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	guardian.DefaultUpdatedAt = guardianDescUpdatedAt.Default.(func() time.Time)
 	// guardian.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -128,16 +128,12 @@ func init() {
 	guardian.DefaultID = guardianDescID.Default.(func() uuid.UUID)
 	nurseryFields := schema.Nursery{}.Fields()
 	_ = nurseryFields
-	// nurseryDescNurseryCode is the schema descriptor for nursery_code field.
-	nurseryDescNurseryCode := nurseryFields[1].Descriptor()
-	// nursery.DefaultNurseryCode holds the default value on creation for the nursery_code field.
-	nursery.DefaultNurseryCode = nurseryDescNurseryCode.Default.(func() string)
 	// nurseryDescCreatedAt is the schema descriptor for created_at field.
-	nurseryDescCreatedAt := nurseryFields[6].Descriptor()
+	nurseryDescCreatedAt := nurseryFields[7].Descriptor()
 	// nursery.DefaultCreatedAt holds the default value on creation for the created_at field.
 	nursery.DefaultCreatedAt = nurseryDescCreatedAt.Default.(func() time.Time)
 	// nurseryDescUpdatedAt is the schema descriptor for updated_at field.
-	nurseryDescUpdatedAt := nurseryFields[7].Descriptor()
+	nurseryDescUpdatedAt := nurseryFields[8].Descriptor()
 	// nursery.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	nursery.DefaultUpdatedAt = nurseryDescUpdatedAt.Default.(func() time.Time)
 	// nursery.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

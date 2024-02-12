@@ -23,7 +23,7 @@ func (Child) Fields() []ent.Field {
 		field.Enum("sex").
 			Values("man", "women", "other"),
 		field.Bool("is_ride_morning_bus").Default(false).Comment("朝のバスに乗るかどうか"),
-		field.Bool("is_ride_afternoon_bus").Default(false).Comment("放課後のバスに乗るかどうか"),
+		field.Bool("is_ride_evening_bus").Default(false).Comment("放課後のバスに乗るかどうか"),
 		field.Bool("check_for_missing_items").Default(false).Comment("持ち物が欠けていないかをチェックするかどうか"),
 		// ?: 持ち物エンティティを作成する?
 		field.Bool("has_bag").Default(true),

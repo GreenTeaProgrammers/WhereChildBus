@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package where_child_bus;
+package where_child_bus.v1;
 
 service HealthcheckService {
   rpc Ping(PingRequest) returns (PingResponse);

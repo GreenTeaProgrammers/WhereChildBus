@@ -61,6 +61,16 @@ func NurseryCode(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldEQ(FieldNurseryCode, v))
 }
 
+// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
+func Email(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEQ(FieldEmail, v))
+}
+
+// HashedPassword applies equality check predicate on the "hashed_password" field. It's identical to HashedPasswordEQ.
+func HashedPassword(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEQ(FieldHashedPassword, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldEQ(FieldName, v))
@@ -74,11 +84,6 @@ func Address(v string) predicate.Nursery {
 // PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
 func PhoneNumber(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldEQ(FieldPhoneNumber, v))
-}
-
-// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
-func Email(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldEQ(FieldEmail, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -154,6 +159,136 @@ func NurseryCodeEqualFold(v string) predicate.Nursery {
 // NurseryCodeContainsFold applies the ContainsFold predicate on the "nursery_code" field.
 func NurseryCodeContainsFold(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldContainsFold(FieldNurseryCode, v))
+}
+
+// EmailEQ applies the EQ predicate on the "email" field.
+func EmailEQ(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEQ(FieldEmail, v))
+}
+
+// EmailNEQ applies the NEQ predicate on the "email" field.
+func EmailNEQ(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldNEQ(FieldEmail, v))
+}
+
+// EmailIn applies the In predicate on the "email" field.
+func EmailIn(vs ...string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldIn(FieldEmail, vs...))
+}
+
+// EmailNotIn applies the NotIn predicate on the "email" field.
+func EmailNotIn(vs ...string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldNotIn(FieldEmail, vs...))
+}
+
+// EmailGT applies the GT predicate on the "email" field.
+func EmailGT(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldGT(FieldEmail, v))
+}
+
+// EmailGTE applies the GTE predicate on the "email" field.
+func EmailGTE(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldGTE(FieldEmail, v))
+}
+
+// EmailLT applies the LT predicate on the "email" field.
+func EmailLT(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldLT(FieldEmail, v))
+}
+
+// EmailLTE applies the LTE predicate on the "email" field.
+func EmailLTE(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldLTE(FieldEmail, v))
+}
+
+// EmailContains applies the Contains predicate on the "email" field.
+func EmailContains(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldContains(FieldEmail, v))
+}
+
+// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
+func EmailHasPrefix(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldHasPrefix(FieldEmail, v))
+}
+
+// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
+func EmailHasSuffix(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldHasSuffix(FieldEmail, v))
+}
+
+// EmailEqualFold applies the EqualFold predicate on the "email" field.
+func EmailEqualFold(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEqualFold(FieldEmail, v))
+}
+
+// EmailContainsFold applies the ContainsFold predicate on the "email" field.
+func EmailContainsFold(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldContainsFold(FieldEmail, v))
+}
+
+// HashedPasswordEQ applies the EQ predicate on the "hashed_password" field.
+func HashedPasswordEQ(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEQ(FieldHashedPassword, v))
+}
+
+// HashedPasswordNEQ applies the NEQ predicate on the "hashed_password" field.
+func HashedPasswordNEQ(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldNEQ(FieldHashedPassword, v))
+}
+
+// HashedPasswordIn applies the In predicate on the "hashed_password" field.
+func HashedPasswordIn(vs ...string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldIn(FieldHashedPassword, vs...))
+}
+
+// HashedPasswordNotIn applies the NotIn predicate on the "hashed_password" field.
+func HashedPasswordNotIn(vs ...string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldNotIn(FieldHashedPassword, vs...))
+}
+
+// HashedPasswordGT applies the GT predicate on the "hashed_password" field.
+func HashedPasswordGT(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldGT(FieldHashedPassword, v))
+}
+
+// HashedPasswordGTE applies the GTE predicate on the "hashed_password" field.
+func HashedPasswordGTE(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldGTE(FieldHashedPassword, v))
+}
+
+// HashedPasswordLT applies the LT predicate on the "hashed_password" field.
+func HashedPasswordLT(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldLT(FieldHashedPassword, v))
+}
+
+// HashedPasswordLTE applies the LTE predicate on the "hashed_password" field.
+func HashedPasswordLTE(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldLTE(FieldHashedPassword, v))
+}
+
+// HashedPasswordContains applies the Contains predicate on the "hashed_password" field.
+func HashedPasswordContains(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldContains(FieldHashedPassword, v))
+}
+
+// HashedPasswordHasPrefix applies the HasPrefix predicate on the "hashed_password" field.
+func HashedPasswordHasPrefix(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldHasPrefix(FieldHashedPassword, v))
+}
+
+// HashedPasswordHasSuffix applies the HasSuffix predicate on the "hashed_password" field.
+func HashedPasswordHasSuffix(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldHasSuffix(FieldHashedPassword, v))
+}
+
+// HashedPasswordEqualFold applies the EqualFold predicate on the "hashed_password" field.
+func HashedPasswordEqualFold(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldEqualFold(FieldHashedPassword, v))
+}
+
+// HashedPasswordContainsFold applies the ContainsFold predicate on the "hashed_password" field.
+func HashedPasswordContainsFold(v string) predicate.Nursery {
+	return predicate.Nursery(sql.FieldContainsFold(FieldHashedPassword, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -276,6 +411,16 @@ func AddressHasSuffix(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldHasSuffix(FieldAddress, v))
 }
 
+// AddressIsNil applies the IsNil predicate on the "address" field.
+func AddressIsNil() predicate.Nursery {
+	return predicate.Nursery(sql.FieldIsNull(FieldAddress))
+}
+
+// AddressNotNil applies the NotNil predicate on the "address" field.
+func AddressNotNil() predicate.Nursery {
+	return predicate.Nursery(sql.FieldNotNull(FieldAddress))
+}
+
 // AddressEqualFold applies the EqualFold predicate on the "address" field.
 func AddressEqualFold(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldEqualFold(FieldAddress, v))
@@ -359,81 +504,6 @@ func PhoneNumberEqualFold(v string) predicate.Nursery {
 // PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
 func PhoneNumberContainsFold(v string) predicate.Nursery {
 	return predicate.Nursery(sql.FieldContainsFold(FieldPhoneNumber, v))
-}
-
-// EmailEQ applies the EQ predicate on the "email" field.
-func EmailEQ(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldEQ(FieldEmail, v))
-}
-
-// EmailNEQ applies the NEQ predicate on the "email" field.
-func EmailNEQ(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldNEQ(FieldEmail, v))
-}
-
-// EmailIn applies the In predicate on the "email" field.
-func EmailIn(vs ...string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldIn(FieldEmail, vs...))
-}
-
-// EmailNotIn applies the NotIn predicate on the "email" field.
-func EmailNotIn(vs ...string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldNotIn(FieldEmail, vs...))
-}
-
-// EmailGT applies the GT predicate on the "email" field.
-func EmailGT(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldGT(FieldEmail, v))
-}
-
-// EmailGTE applies the GTE predicate on the "email" field.
-func EmailGTE(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldGTE(FieldEmail, v))
-}
-
-// EmailLT applies the LT predicate on the "email" field.
-func EmailLT(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldLT(FieldEmail, v))
-}
-
-// EmailLTE applies the LTE predicate on the "email" field.
-func EmailLTE(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldLTE(FieldEmail, v))
-}
-
-// EmailContains applies the Contains predicate on the "email" field.
-func EmailContains(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldContains(FieldEmail, v))
-}
-
-// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
-func EmailHasPrefix(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldHasPrefix(FieldEmail, v))
-}
-
-// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
-func EmailHasSuffix(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldHasSuffix(FieldEmail, v))
-}
-
-// EmailIsNil applies the IsNil predicate on the "email" field.
-func EmailIsNil() predicate.Nursery {
-	return predicate.Nursery(sql.FieldIsNull(FieldEmail))
-}
-
-// EmailNotNil applies the NotNil predicate on the "email" field.
-func EmailNotNil() predicate.Nursery {
-	return predicate.Nursery(sql.FieldNotNull(FieldEmail))
-}
-
-// EmailEqualFold applies the EqualFold predicate on the "email" field.
-func EmailEqualFold(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldEqualFold(FieldEmail, v))
-}
-
-// EmailContainsFold applies the ContainsFold predicate on the "email" field.
-func EmailContainsFold(v string) predicate.Nursery {
-	return predicate.Nursery(sql.FieldContainsFold(FieldEmail, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

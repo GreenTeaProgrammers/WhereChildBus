@@ -24,7 +24,7 @@ plugins:
     out: ../../machine_learning/src/proto-gen/
 
   # Dart用の設定 (クライアント側)
-  - name: dart
-    out: ../../frontend/where_child_bus/proto-gen/
-    opt:
-      - grpc
+
+  - plugin: buf.build/protocolbuffers/dart:v21.1.2
+    out: ../../frontend/where_child_bus/lib/proto-gen/
+
