@@ -10,7 +10,7 @@ service StationService {
 }
 
 message CreateStationRequest {
-    string guardian_id = 1:
+    string guardian_id = 1;
     double longtitude = 2;
     double latitude = 3;
 }

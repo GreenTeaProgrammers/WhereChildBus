@@ -39,22 +39,3 @@ final $typed_data.Uint8List deleteChildPhotoResponseDescriptor = $convert.base64
     'ChhEZWxldGVDaGlsZFBob3RvUmVzcG9uc2USJgoPaXNfc3VjY2Vzc19saXN0GAEgAygIUg1pc1'
     'N1Y2Nlc3NMaXN0EhAKA2lkcxgCIAMoCVIDaWRz');
 
-const $core.Map<$core.String, $core.dynamic> ChildPhotoServiceBase$json = {
-  '1': 'ChildPhotoService',
-  '2': [
-    {'1': 'DeleteChildPhoto', '2': '.where_child_bus.v1.DeleteChildPhotoRequest', '3': '.where_child_bus.v1.DeleteChildPhotoResponse'},
-  ],
-};
-
-@$core.Deprecated('Use childPhotoServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> ChildPhotoServiceBase$messageJson = {
-  '.where_child_bus.v1.DeleteChildPhotoRequest': DeleteChildPhotoRequest$json,
-  '.where_child_bus.v1.DeleteChildPhotoResponse': DeleteChildPhotoResponse$json,
-};
-
-/// Descriptor for `ChildPhotoService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List childPhotoServiceDescriptor = $convert.base64Decode(
-    'ChFDaGlsZFBob3RvU2VydmljZRJtChBEZWxldGVDaGlsZFBob3RvEisud2hlcmVfY2hpbGRfYn'
-    'VzLnYxLkRlbGV0ZUNoaWxkUGhvdG9SZXF1ZXN0Giwud2hlcmVfY2hpbGRfYnVzLnYxLkRlbGV0'
-    'ZUNoaWxkUGhvdG9SZXNwb25zZQ==');
-

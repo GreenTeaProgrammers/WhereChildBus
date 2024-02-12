@@ -21,6 +21,10 @@ export 'bus.pb.dart';
 
 @$pb.GrpcServiceName('where_child_bus.v1.BusService')
 class BusServiceClient extends $grpc.Client {
+  static final _$createBus = $grpc.ClientMethod<$0.CreateBusRequest, $0.CreateBusResponse>(
+      '/where_child_bus.v1.BusService/CreateBus',
+      ($0.CreateBusRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.CreateBusResponse.fromBuffer(value));
   static final _$getBusListByNurseryId = $grpc.ClientMethod<$0.GetBusListByNurseryIdRequest, $0.GetBusListByNurseryIdResponse>(
       '/where_child_bus.v1.BusService/GetBusListByNurseryId',
       ($0.GetBusListByNurseryIdRequest value) => value.writeToBuffer(),
@@ -32,6 +36,10 @@ class BusServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
+  $grpc.ResponseFuture<$0.CreateBusResponse> createBus($0.CreateBusRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$createBus, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($0.GetBusListByNurseryIdRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBusListByNurseryId, request, options: options);
   }
@@ -42,6 +50,13 @@ abstract class BusServiceBase extends $grpc.Service {
   $core.String get $name => 'where_child_bus.v1.BusService';
 
   BusServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.CreateBusRequest, $0.CreateBusResponse>(
+        'CreateBus',
+        createBus_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.CreateBusRequest.fromBuffer(value),
+        ($0.CreateBusResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetBusListByNurseryIdRequest, $0.GetBusListByNurseryIdResponse>(
         'GetBusListByNurseryId',
         getBusListByNurseryId_Pre,
@@ -51,9 +66,14 @@ abstract class BusServiceBase extends $grpc.Service {
         ($0.GetBusListByNurseryIdResponse value) => value.writeToBuffer()));
   }
 
+  $async.Future<$0.CreateBusResponse> createBus_Pre($grpc.ServiceCall call, $async.Future<$0.CreateBusRequest> request) async {
+    return createBus(call, await request);
+  }
+
   $async.Future<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId_Pre($grpc.ServiceCall call, $async.Future<$0.GetBusListByNurseryIdRequest> request) async {
     return getBusListByNurseryId(call, await request);
   }
 
+  $async.Future<$0.CreateBusResponse> createBus($grpc.ServiceCall call, $0.CreateBusRequest request);
   $async.Future<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($grpc.ServiceCall call, $0.GetBusListByNurseryIdRequest request);
 }

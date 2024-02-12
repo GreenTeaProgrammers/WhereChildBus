@@ -5,7 +5,7 @@ package where_child_bus.v1;
 import "where_child_bus/v1/resources.proto";
 
 service GuardianService {
-        rpc CreateGuardian(CreateGuardianRequest) returns (CreateGuardianResponces);
+        rpc CreateGuardian(CreateGuardianRequest) returns (CreateGuardianResponse);
         rpc GuardianLogin(GuardianLoginRequest) returns (GuardianLoginResponse);
 }
 
@@ -17,7 +17,7 @@ message CreateGuardianRequest{
         string phone_number = 5;
 }
 
-message CreateGuardianResponces{
+message CreateGuardianResponse{
         GuardianResponse guardian = 1;
 }
 

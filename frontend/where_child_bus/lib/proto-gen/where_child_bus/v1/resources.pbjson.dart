@@ -35,14 +35,14 @@ const Sex$json = {
   '2': [
     {'1': 'SEX_UNSPECIFIED', '2': 0},
     {'1': 'SEX_MAN', '2': 1},
-    {'1': 'SEX_WOMEN', '2': 2},
+    {'1': 'SEX_WOMAN', '2': 2},
     {'1': 'SEX_OTHER', '2': 3},
   ],
 };
 
 /// Descriptor for `Sex`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List sexDescriptor = $convert.base64Decode(
-    'CgNTZXgSEwoPU0VYX1VOU1BFQ0lGSUVEEAASCwoHU0VYX01BThABEg0KCVNFWF9XT01FThACEg'
+    'CgNTZXgSEwoPU0VYX1VOU1BFQ0lGSUVEEAASCwoHU0VYX01BThABEg0KCVNFWF9XT01BThACEg'
     '0KCVNFWF9PVEhFUhAD');
 
 @$core.Deprecated('Use busTypeDescriptor instead')

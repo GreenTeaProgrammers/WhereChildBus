@@ -15,8 +15,9 @@ message CreateChildRequest {
         string nursery_id = 1;
         string guardian_id = 2;
         string name = 3;
-        Sex    sex = 4;
-        repeated bytes photos = 5;
+        int32 age = 4;
+        Sex    sex =5;
+        repeated bytes photos = 6;
 }
 
 message CreateChildResponse {
