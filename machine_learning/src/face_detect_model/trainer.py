@@ -5,6 +5,7 @@ import argparse
 
 from data.faceDetectDataset import FaceDetectDataset
 from model.faceDetectModel import FaceDetectModel
+from util import logger
 
 
 class Trainer:
@@ -17,6 +18,7 @@ class Trainer:
         valid_dataset: FaceDetectDataset,
         test_dataset: FaceDetectDataset,
     ):
+        logger.info("Initializing Trainer...")
         self.args = args
         self.config = config
         self.model = model
@@ -57,6 +59,7 @@ class Trainer:
             os.makedirs(self.save_model_dir)
 
     def train(self):
+        logger.info("Start Training")
         for _ in range(self.config["train"]["epoch"]):
             self.model.train()
             for label, image in self.train_dataloader:
@@ -84,7 +87,7 @@ class Trainer:
         self.step_num += 1
 
     def end_epoch(self):
-        print(f"Epoch {self.epoch} Loss: {self.last_loss}")
+        logger.info(f"Epoch {self.epoch} Loss: {self.last_loss}")
 
         if self.last_loss < self.best_loss:
             self.best_loss = self.last_loss
@@ -107,8 +110,8 @@ class Trainer:
             collect_list.append(label)
 
         accuracy = self.calc_accuracy(pred_list, collect_list)
-        print(f"########## Epoch {self.epoch} ##########")
-        print(f"Validation Accuracy: {accuracy}")
+        logger.info(f"########## Epoch {self.epoch} ##########")
+        logger.info(f"Validation Accuracy: {accuracy}")
 
         if self.args.debug:
             print(f"Collect: {collect_list}")
@@ -129,8 +132,8 @@ class Trainer:
             collect_list.append(label)
 
         accuracy = self.calc_accuracy(pred_list, collect_list)
-        print("########## Test ##########")
-        print(f"Test Accuracy: {accuracy}")
+        logger.info("########## Test ##########")
+        logger.info(f"Test Accuracy: {accuracy}")
         if self.args.debug:
             print(f"Collect: {collect_list}")
             print(f"Predict: {pred_list}")

@@ -5,13 +5,15 @@ import torch
 from data.faceDetectDataset import FaceDetectDataset
 from model.faceDetectModel import FaceDetectModel
 from trainer import Trainer
+from util import logger
 
 
-# TODO: loggerを用いたログ出力を実装する
 def main(args: argparse.Namespace, config: dict):
     args.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    logger.info("Your env is : {args.device}")
 
     # datasetの読み込み
+    logger.info("dataset Initializing")
     dataset = FaceDetectDataset(config)
 
     train_data_size = int(len(dataset) * config["dataset"]["ratio"]["train"])
@@ -28,6 +30,7 @@ def main(args: argparse.Namespace, config: dict):
     )
 
     # modelの読み込み
+    logger.info("model Initializing")
     num_classes = dataset.get_label_num()
     image_shape = dataset.get_image_shape()
     face_detect_model = FaceDetectModel(config, num_classes, image_shape)
