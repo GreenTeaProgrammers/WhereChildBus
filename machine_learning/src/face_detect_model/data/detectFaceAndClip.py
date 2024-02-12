@@ -29,13 +29,10 @@ def clip_and_resize_face(face, image, image_size):
 
 def save_face(face, save_dir, save_file_name):
     """クリップされた顔画像を保存する"""
-    if not os.path.exists(os.path.dirname(save_dir)):
-        os.makedirs(os.path.dirname(save_dir))
+    os.makedirs(save_dir, exist_ok=True)
+
     save_path = os.path.join(save_dir, save_file_name)
-    try:
-        cv2.imwrite(save_path, face)
-    except Exception as e:
-        raise e
+    cv2.imwrite(save_path, face)
 
 
 def main():
@@ -52,13 +49,14 @@ def main():
     )
 
     # 保存先ディレクトリの作成，存在した場合は中身を削除
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    else:
-        for file in os.listdir(save_dir):
-            file_path = os.path.join(save_dir, file)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+    os.makedirs(save_dir, exist_ok=True)
+
+    for file in os.listdir(save_dir):
+        file_path = os.path.join(save_dir, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+    # Haar Cascadeの読み込み
+    face_cascade = load_cascade(face_cascade_path)
 
     # 画像の読み込み
     # TODO: 良い感じのlog
@@ -74,8 +72,6 @@ def main():
                 raise ValueError(
                     f"画像ファイルが見つからないか読み込めません: {image_path}"
                 )
-            # Haar Cascadeの読み込み
-            face_cascade = load_cascade(face_cascade_path)
 
             # 画像から顔を検出
             faces = detect_face(
