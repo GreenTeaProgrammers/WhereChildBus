@@ -32,7 +32,7 @@ class _CheckPageState extends State<CheckPage> {
       children: [
         const Text(
           "本日の乗車予定",
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 20),
         ),
         const SizedBox(height: 20),
         isRideBusToggleButtonBody("乗る", true),
@@ -53,6 +53,7 @@ class _CheckPageState extends State<CheckPage> {
           });
         },
         style: ElevatedButton.styleFrom(
+          textStyle: TextStyle(fontSize: 20),
           backgroundColor: isRideBus != isRide ? Colors.grey : null,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
