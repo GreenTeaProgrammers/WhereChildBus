@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:where_child_bus/components/utils/child_list_element.dart";
 
 class ChildList extends StatelessWidget {
   final List<String> childNames;
@@ -14,75 +15,70 @@ class ChildList extends StatelessWidget {
     return childCardListBuilder(screenSize);
   }
 
-    //TODO: 将来的にはAPIからデータを取得する。
   Widget childCardListBuilder(Size screenSize) {
     return ListView.separated(
-        itemCount: childNames.length,
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(
-            height: 20,
-            color: Colors.transparent,
-          );
-        },
-        itemBuilder: (BuildContext context, int index) {
-          return childCardListInner(index, screenSize);
-        }
+      itemCount: childNames.length,
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider(
+          height: 20,
+          color: Colors.transparent,
+        );
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return ChildListElement(
+          childName: childNames[index],
+          groupName: groupNames[index],
+          image: images[index],
+          screenSize: screenSize,
+          onTap: callback,
+        );
+      }
     );
   }
 
-  Widget childCardListInner(int index, Size screenSize) {
+  Widget childCardListInner(String childName, String groupName, String image, Size screenSize) {
     return FractionallySizedBox(
         widthFactor: 0.8,
         child: InkWell(
-          onTap: () {},
-          child: childCard(index, screenSize),
+          onTap: callback,
+          child: childCard(childName, groupName, image, screenSize),
         ));
   }
 
-  //TODO: Child型を受け取る
-  Widget childCard(int index, Size screenSize) {
+  Widget childCard(String childName, String groupName, String image, Size screenSize) {
     return Card(
-        color: Colors.white,
-        child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(children: <Widget>[
-              childFaceImage(index),
-              SizedBox(
-                width: screenSize.width * 0.05,
-              ),
-              childNameAndGroupName(index),
-            ]
-          )
-        )
-      );
-  }
-
-  Widget childFaceImage(int index) {
-    return SizedBox(
-        width: 100,
-        height: 100,
-        child: Image.asset("assets/images/face_${images[index]}.png"));
-  }
-
-  Widget childNameAndGroupName(int index) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(childNames[index],
-              style: const TextStyle(color: Colors.black, fontSize: 24)),
-          Text(
-            groupNames[index],
-            style: const TextStyle(color: Colors.black),
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(children: <Widget>[
+          childFaceImage(image),
+          SizedBox(
+            width: screenSize.width * 0.05,
           ),
-          busStopName(),
-        ]);
+          childNameAndGroupName(childName, groupName),
+        ])
+      )
+    );
   }
 
-  //TODO: 引数に停留所名を加える。
-  Widget busStopName() {
-    return const Row(children: <Widget>[
-      Icon(Icons.location_on),
-      Text("停留所名"),
-    ]);
+  Widget childFaceImage(String image) {
+    return SizedBox(
+      width: 100,
+      height: 100,
+      child: Image.asset("assets/images/face_$image.png"),
+    );
+  }
+
+  Widget childNameAndGroupName(String childName, String groupName) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(childName,
+            style: const TextStyle(color: Colors.black, fontSize: 24)),
+        Text(
+          groupName,
+          style: const TextStyle(color: Colors.black),
+        ),
+      ]);
   }
 }
