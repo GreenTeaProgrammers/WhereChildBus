@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/app.dart';
 import 'package:where_child_bus/proto-gen/where_child_bus/v1/nursery.pbgrpc.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
 
@@ -121,6 +122,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   login() async {
+    BuildContext currentContext = context;
     try {
       NurseryLoginResponse res = await nurseryLogin(
           _emailController.text, _passwordController.text);
@@ -128,7 +130,12 @@ class _AuthPageState extends State<AuthPage> {
       if (res.success) {
         print(res.success);
         print(res.nursery.name);
-        //  ログイン成功後の処理をここに記述
+        Navigator.pushReplacement(
+          currentContext,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const App(),
+          ),
+        );
       } else {
         //  ログイン失敗時の処理をここに記述
         print('Login failed');
