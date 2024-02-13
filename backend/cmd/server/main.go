@@ -82,7 +82,6 @@ func main() {
 
 	// gRPCサーバーを起動
 	srv := grpc_server.New(
-
 		grpc_server.WithLogger(logger),
 		grpc_server.WithEntClient(entClient),
 		grpc_server.WithReflection(config.ModeDev),

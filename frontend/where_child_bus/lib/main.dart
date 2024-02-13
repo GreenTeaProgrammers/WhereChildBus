@@ -30,6 +30,9 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white, // AppBarの背景色を白に設定
+        ),
       ),
       home: const App(),
     );

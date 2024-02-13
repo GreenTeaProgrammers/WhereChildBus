@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
 
 class StudentDetailSheet extends StatelessWidget {
   final String childName;
@@ -16,30 +17,33 @@ class StudentDetailSheet extends StatelessWidget {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
       ),
-      child: modalBody(),
+      child: modalBody(context),
     );
   }
 
-  Widget modalBody() {
+  Widget modalBody(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        modalHeader(),
+        modalHeader(context),
         Container(
             margin: const EdgeInsets.only(top: 20), child: childDetailList())
       ],
     );
   }
 
-  Widget modalHeader() {
+  Widget modalHeader(BuildContext context) {
     return Stack(children: <Widget>[
       Align(
         alignment: Alignment.topRight,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(shape: const CircleBorder()),
           //将来的に編集画面へ遷移する。
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => StudentEditPage()));
+          },
           child: const Icon(Icons.edit),
         ),
       ),

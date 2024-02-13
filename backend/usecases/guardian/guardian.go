@@ -3,7 +3,6 @@ package guardian
 import (
 	"fmt"
 
-	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/exp/slog"
 
 	"context"
@@ -25,7 +24,7 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 
 func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginRequest) (*pb.GuardianLoginResponse, error) {
 	// パスワードをハッシュ化
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
 		// エラーハンドリング
 		return nil, fmt.Errorf("failed to hash password: %w", err)
