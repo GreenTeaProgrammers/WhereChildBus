@@ -9,7 +9,8 @@ class CheckPage extends StatefulWidget {
 }
 
 class _CheckPageState extends State<CheckPage> {
-  bool isRideBus = true;
+  var isRideMorningBus = true;
+  var isRideEveningBus = true;
 
   @override
   Widget build(BuildContext context) {
@@ -21,44 +22,85 @@ class _CheckPageState extends State<CheckPage> {
           const SizedBox(
             height: 50,
           ),
-          toggleButtonBody(),
+          toggleSwitchBody(context),
         ],
       ),
     );
   }
 
-  Widget toggleButtonBody() {
-    return Column(
-      children: [
-        const Text(
-          "本日の乗車予定",
-          style: TextStyle(fontSize: 20),
-        ),
-        const SizedBox(height: 20),
-        isRideBusToggleButtonBody("乗る", true),
-        const SizedBox(height: 20),
-        isRideBusToggleButtonBody("乗らない", false),
-      ],
-    );
+  Widget toggleSwitchBody(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            const Text(
+              "本日の乗車予定",
+              style: TextStyle(fontSize: 20),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: <Widget>[
+                  Column(children: [
+                    const Text("朝のバス"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        displayRideOrNot(context, isRideMorningBus),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: Switch(
+                                value: !isRideMorningBus,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isRideMorningBus = !value;
+                                  });
+                                })),
+                      ],
+                    ),
+                  ]),
+                  Column(
+                    children: <Widget>[
+                      const Text("夕方のバス"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          displayRideOrNot(context, isRideEveningBus),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: Switch(
+                                  value: !isRideEveningBus,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isRideEveningBus = !value;
+                                    });
+                                  })),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 
-  Widget isRideBusToggleButtonBody(String text, bool isRide) {
-    return SizedBox(
-      width: 200,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            isRideBus = isRide;
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          textStyle: TextStyle(fontSize: 20),
-          backgroundColor: isRideBus != isRide ? Colors.grey : null,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-        ),
-        child: Text(text),
+  Widget displayRideOrNot(BuildContext context, bool isRide) {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      width: MediaQuery.of(context).size.width * 0.3,
+      decoration: BoxDecoration(
+          color: isRide ? Colors.green[100] : Colors.red[100],
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: isRide ? Colors.green : Colors.red)),
+      child: Text(
+        isRide ? "乗る" : "乗らない",
+        style: TextStyle(
+            color: isRide ? Colors.green : Colors.red,
+            fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
       ),
     );
   }
