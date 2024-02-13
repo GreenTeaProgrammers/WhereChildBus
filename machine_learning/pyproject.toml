@@ -11,6 +11,7 @@ dependencies = [
     "pyyaml>=6.0.1",
     "tqdm>=4.66.2",
     "google-cloud-storage>=2.14.0",
+    "python-dotenv>=1.0.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
