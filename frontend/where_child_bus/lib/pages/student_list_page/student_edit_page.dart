@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import './compornents/submit_button.dart';
+import 'compornents/utils/submit_button.dart';
 
 class StudentEditPage extends StatefulWidget {
   const StudentEditPage({super.key});
