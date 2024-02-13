@@ -47,8 +47,8 @@ class _ChildListElementWithButtonState extends State<ChildListElementWithButton>
             onTap: widget.onTap,
           ),
           Positioned(
-            right: 8,
-            bottom: 8,
+            right: 25,
+            bottom: 2,
             child: IconButton(
               icon: Icon(
                 currentButtonType == ButtonIconType.add ? Icons.add : Icons.remove,

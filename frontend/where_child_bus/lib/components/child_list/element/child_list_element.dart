@@ -19,16 +19,16 @@ class ChildListElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Card(
+    return listElementPadding(
+      Card(
         elevation: 8,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Material(
           color: Colors.white, // Cardの背景色
           child: InkWell(
             onTap: onTap, // タップ時のアクション
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
                   Image.asset(imagePath, width: 100, height: 100),
@@ -50,6 +50,13 @@ class ChildListElement extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Padding listElementPadding(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: child,
     );
   }
 }
