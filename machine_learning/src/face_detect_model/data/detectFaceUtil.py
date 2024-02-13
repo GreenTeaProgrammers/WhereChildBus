@@ -22,7 +22,7 @@ def clip_and_resize_face(face, image, image_size):
     """検出された顔をクリップし、指定サイズにリサイズする"""
     (x, y, w, h) = face
     face_roi = image[y : y + h, x : x + w]
-    resized_face = cv2.resize(face_roi, image_size, interpolation=cv2.INTER_AREA)
+    resized_face = cv2.resize(face_roi, image_size, interpolation=cv2.INTER_CUBIC)
     return resized_face
 
 
