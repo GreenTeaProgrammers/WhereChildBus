@@ -42,49 +42,43 @@ class _CheckPageState extends State<CheckPage> {
               padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: <Widget>[
-                  Column(children: [
-                    const Text("朝のバス"),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        displayRideOrNot(context, isRideMorningBus),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: Switch(
-                                value: !isRideMorningBus,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isRideMorningBus = !value;
-                                  });
-                                })),
-                      ],
-                    ),
-                  ]),
-                  Column(
-                    children: <Widget>[
-                      const Text("夕方のバス"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          displayRideOrNot(context, isRideEveningBus),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: Switch(
-                                  value: !isRideEveningBus,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isRideEveningBus = !value;
-                                    });
-                                  })),
-                        ],
-                      ),
-                    ],
-                  )
+                  busTitleAndToggleSwitch(
+                      context, "朝のバス", isRideMorningBus, true),
+                  busTitleAndToggleSwitch(
+                      context, "夕方のバス", isRideEveningBus, false),
                 ],
               ),
             ),
           ],
         ));
+  }
+
+  Widget busTitleAndToggleSwitch(
+      BuildContext context, String title, bool isRide, bool isMorning) {
+    return Column(children: [
+      Text(title),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          displayRideOrNot(context, isRide),
+          toggleSwitch(context, isRide, isMorning),
+        ],
+      ),
+    ]);
+  }
+
+  Widget toggleSwitch(BuildContext context, bool isRide, bool isMorning) {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width * 0.3,
+        child: Switch(
+            value: !isRide,
+            onChanged: (value) {
+              setState(() {
+                isMorning
+                    ? isRideMorningBus = !value
+                    : isRideEveningBus = !value;
+              });
+            }));
   }
 
   Widget displayRideOrNot(BuildContext context, bool isRide) {
