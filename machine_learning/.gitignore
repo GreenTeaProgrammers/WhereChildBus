@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,visualstudiocode
 
-service_account_where_child_bus.json
+secrets/
 
 ### macOS ###
 # General
