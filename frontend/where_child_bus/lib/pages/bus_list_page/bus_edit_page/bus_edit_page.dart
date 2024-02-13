@@ -8,8 +8,9 @@ import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/sta
 
 class BusEditPage extends StatefulWidget {
   final List<String> busStations;
+  static const defaultBusStations = ["バス停が登録されていません"];
 
-  BusEditPage({required this.busStations});
+  BusEditPage({ this.busStations = defaultBusStations});
 
   @override
   _BusEditPage createState() => _BusEditPage(busStations: busStations);
