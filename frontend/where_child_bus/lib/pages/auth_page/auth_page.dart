@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/proto-gen/where_child_bus/v1/nursery.pbgrpc.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
 
 class AuthPage extends StatefulWidget {
@@ -84,17 +85,30 @@ class _AuthPageState extends State<AuthPage> {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.6,
       child: ElevatedButton(
-        onPressed: () {
-          if (kDebugMode) {
-            debugPrint("email: ${_emailController.text}");
-            debugPrint("password: ${_passwordController.text}");
-          }
-          nurseryLogin(
-              _emailController.text, _passwordController.text);
-        },
+        onPressed: () => login(),
         child: const Text('ログイン'),
       ),
     );
+  }
+
+  login() async {
+    try {
+      NurseryLoginResponse res = await nurseryLogin(
+          _emailController.text, _passwordController.text);
+      
+      if (res.success) {
+        print(res.success);
+        print(res.nursery.name);
+        //  ログイン成功後の処理をここに記述
+      } else {
+        //  ログイン失敗時の処理をここに記述
+        print('Login failed');
+      }
+    } catch (e) {
+      //  エラーハンドリング
+      print('An error occurred: $e');
+      //  エラーメッセージを表示するか、ユーザーに通知するなどの処理を行う
+    }
   }
 
   Widget spacer32() {

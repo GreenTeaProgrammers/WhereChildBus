@@ -13,6 +13,11 @@ Future<NurseryLoginResponse> nurseryLogin(String email, String password) async {
   var client = NurseryServiceClient(channel);
   try {
     var req = NurseryLoginRequest(email: email, password: password);
+    
+    if(kDebugMode) {
+      print("リクエスト: ${req}");
+    }
+    jk
     var res = await client.nurseryLogin(req);
     if (kDebugMode) {
       debugPrint(res.toString());
