@@ -41,12 +41,10 @@ class _AuthPageState extends State<AuthPage> {
       mailInputField(),
       passwordInputField(),
       spacer32(),
+      if (_loginError != null && _loginError == NurseryLoginError.invalidCredentials)
+        emailOrPasswordNotFound(),
       loginButton(),
     ];
-
-    if (_loginError != null && _loginError == NurseryLoginError.invalidCredentials) {
-      columnChildren.add(emailOrPasswordNotFound());
-    }
 
     return Center(
       child: Padding(
