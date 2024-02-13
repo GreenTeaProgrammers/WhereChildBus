@@ -11,10 +11,9 @@ from detectFaceUtil import (
     load_cascade,
     detect_face,
     clip_and_resize_face,
-    save_face,
 )
 
-load_dotenv()
+load_dotenv("secrets/.env")
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - PID: %(process)d -  %(message)s",
@@ -65,6 +64,25 @@ def load_image_from_remote(nursery_id, child_id, blobs):
     return images
 
 
+def save_face_image_to_local(face, save_dir, save_file_name):
+    """クリップされた顔画像を保存する"""
+    os.makedirs(save_dir, exist_ok=True)
+
+    save_path = os.path.join(save_dir, save_file_name)
+    cv2.imwrite(save_path, face)
+
+
+def save_face_image_to_remote(face, save_blob_name, bucket):
+    from google.cloud.storage import Blob
+
+    """クリップされた顔画像をGCSに保存する"""
+    _, encoded_image = cv2.imencode(".png", face)
+    png_cliped_face_data = encoded_image.tobytes()
+
+    save_blob = Blob(save_blob_name, bucket)
+    save_blob.upload_from_string(data=png_cliped_face_data, content_type="image/png")
+
+
 def main(args):
     logger.info(f"env: {args.env}")
     with open("src/face_detect_model/config.yaml", "r") as f:
@@ -76,15 +94,17 @@ def main(args):
         config["face_detect"]["clip_size"]["width"],
     )
 
+    # 保存先ディレクトリの作成，存在した場合は中身を削除
     if args.env == "local":
         save_dir_path = args.save_dir_path
-        # 保存先ディレクトリの作成，存在した場合は中身を削除
         os.makedirs(save_dir_path, exist_ok=True)
         for file in os.listdir(save_dir_path):
             file_path = os.path.join(save_dir_path, file)
             if os.path.isfile(file_path):
                 os.remove(file_path)
-    elif args.env == "remote":
+
+    # GCSとの接続
+    if args.env == "remote":
         from google.oauth2 import service_account
         import google.cloud.storage as gcs
 
@@ -112,9 +132,6 @@ def main(args):
         images = load_image(args, blobs=blobs)
 
     logger.info("Detecting faces...")
-    if args.env == "remote":
-        from google.cloud.storage import Blob
-
     detect_face_num = 0
     for image in images:
         faces = detect_face(
@@ -133,18 +150,12 @@ def main(args):
             clipped_face = clip_and_resize_face(face, image, image_size)
             if args.env == "local":
                 save_file_name = f"{detect_face_num}.png"
-                logger.info(f"saving: {save_file_name}")
-                save_face(clipped_face, save_dir_path, save_file_name)
+                logger.info(f"save: {save_file_name}")
+                save_face_image_to_local(clipped_face, save_dir_path, save_file_name)
             elif args.env == "remote":
-                _, encoded_image = cv2.imencode(".png", clipped_face)
-                png_cliped_face_data = encoded_image.tobytes()
-
                 save_blob_name = f"{args.nursery_id}/{args.child_id}/clipped/{args.child_id}-{detect_face_num}.png"
-                logger.info(f"uploading: {save_blob_name}")
-                save_blob = Blob(save_blob_name, bucket)
-                save_blob.upload_from_string(
-                    data=png_cliped_face_data, content_type="image/png"
-                )
+                logger.info(f"save: {save_blob_name}")
+                save_face_image_to_remote(clipped_face, save_blob_name, bucket)
             detect_face_num += 1
     logger.info("Done")
 

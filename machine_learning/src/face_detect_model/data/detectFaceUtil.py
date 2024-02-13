@@ -24,11 +24,3 @@ def clip_and_resize_face(face, image, image_size):
     face_roi = image[y : y + h, x : x + w]
     resized_face = cv2.resize(face_roi, image_size, interpolation=cv2.INTER_CUBIC)
     return resized_face
-
-
-def save_face(face, save_dir, save_file_name):
-    """クリップされた顔画像を保存する"""
-    os.makedirs(save_dir, exist_ok=True)
-
-    save_path = os.path.join(save_dir, save_file_name)
-    cv2.imwrite(save_path, face)
