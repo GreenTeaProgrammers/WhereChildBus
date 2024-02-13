@@ -1,14 +1,16 @@
 import 'dart:io'; 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_child_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 
 class BusEditPage extends StatefulWidget {
   final List<String> busStations;
+  static const defaultBusStations = ["バス停が登録されていません"];
 
-  BusEditPage({required this.busStations});
+  BusEditPage({ this.busStations = defaultBusStations});
 
   @override
   _BusEditPage createState() => _BusEditPage(busStations: busStations);
@@ -106,7 +108,9 @@ class _BusEditPage extends State<BusEditPage> {
         padding: const EdgeInsets.all(10),
         child: ElevatedButton(
           onPressed: () {
-
+            Navigator.push(
+                context,MaterialPageRoute(builder: (context) => BusChildManagePage())
+              ); 
           }, 
           child: const Text("バスに乗車する子供を変更"),
         ),
