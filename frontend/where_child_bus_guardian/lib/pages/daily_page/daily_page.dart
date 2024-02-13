@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_guardian/components/utils/current_time_body.dart';
 
 class DailyPage extends StatefulWidget {
   const DailyPage({super.key});
@@ -10,12 +11,13 @@ class DailyPage extends StatefulWidget {
 class _DailyPageState extends State<DailyPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text(
-            '日々の記録',
+          CurrentTimeBody(),
+          const SizedBox(
+            height: 50,
           ),
         ],
       ),
