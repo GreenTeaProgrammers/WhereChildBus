@@ -140,6 +140,12 @@ func HashPassword(password string) (string, error) {
 
 // ハッシュ化されたパスワードと送られてきたパスワードを比較
 func CheckPassword(hashedPassword string, plainPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(plainPassword))
+	config, _ := config.New()
+	pepper := config.PasswordPepper
+
+	//パスワードにペッパーを追加
+	passwordWithPepper := plainPassword + pepper
+
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(passwordWithPepper))
 	return err == nil
 }
