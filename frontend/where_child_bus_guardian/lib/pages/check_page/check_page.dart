@@ -15,9 +15,12 @@ class _CheckPageState extends State<CheckPage> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           CurrentTimeBody(),
+          const SizedBox(
+            height: 50,
+          ),
           toggleButtonBody(),
         ],
       ),
@@ -27,6 +30,11 @@ class _CheckPageState extends State<CheckPage> {
   Widget toggleButtonBody() {
     return Column(
       children: [
+        const Text(
+          "本日の乗車予定",
+          style: TextStyle(fontSize: 16),
+        ),
+        const SizedBox(height: 20),
         isRideBusToggleButtonBody("乗る", true),
         const SizedBox(height: 20),
         isRideBusToggleButtonBody("乗らない", false),
