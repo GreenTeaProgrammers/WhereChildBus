@@ -66,12 +66,29 @@ def main(args):
             file_path = os.path.join(save_dir, file)
             if os.path.isfile(file_path):
                 os.remove(file_path)
+    elif args.env == "remote":
+        from google.oauth2 import service_account
+        import google.cloud.storage as gcs
+
+        key_path = "service_account_where_child_bus.json"
+        credential = service_account.Credentials.from_service_account_file(key_path)
+
+        # TODO: 保育園のIDと写真のIDを指定して、その写真を取得する
+        PROJECT_ID = "wherechildbus"
+        BUCKET_NAME = "where_child_bus_photo_bucket"
+        SOURCE_BLOB_NAME = "00001/"
+
+        client = gcs.Client(PROJECT_ID, credentials=credential)
+        logger.info("get client success!")
+        # bucket = client.get_bucket(BUCKET_NAME)
+        # blob = bucket.blob(SOURCE_BLOB_NAME)
+        [print(file.name) for file in client.list_blobs(BUCKET_NAME)]
+        exit()
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
 
     # 画像の読み込み
-    # TODO: 良い感じのlog
     for target_people_name in os.listdir(image_dir_path):
         logger.info(f"processing... : {target_people_name}")
         detect_face_num = 0
@@ -107,6 +124,9 @@ def main(args):
                 save_file_name = f"{target_people_name}-{detect_face_num}.png"
                 save_face(clipped_face, save_dir, save_file_name)
                 detect_face_num += 1
+    if args.env == "remote":
+        # TODO: GCSに保存するprocess
+        pass
     logger.info("Done")
 
 
