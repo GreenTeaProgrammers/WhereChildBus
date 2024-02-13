@@ -22,17 +22,37 @@ class ChildListElement extends StatelessWidget {
       widthFactor: 0.8,
       child: InkWell(
         onTap: onTap,
-        child: Card(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(children: <Widget>[
-              ChildImage(image: image),
-              SizedBox(width: screenSize.width * 0.05),
-              ChildDetails(childName: childName, groupName: groupName),
-            ]),
-          ),
-        ),
+        child: ChildCard(image: image, screenSize: screenSize, childName: childName, groupName: groupName),
+      ),
+    );
+  }
+}
+
+class ChildCard extends StatelessWidget {
+  const ChildCard({
+    super.key,
+    required this.image,
+    required this.screenSize,
+    required this.childName,
+    required this.groupName,
+  });
+
+  final String image;
+  final Size screenSize;
+  final String childName;
+  final String groupName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(children: <Widget>[
+          ChildImage(image: image),
+          SizedBox(width: screenSize.width * 0.05),
+          ChildDetails(childName: childName, groupName: groupName),
+        ]),
       ),
     );
   }
