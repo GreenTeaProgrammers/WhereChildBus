@@ -13,8 +13,36 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../google/protobuf/timestamp.pbjson.dart' as $0;
-import 'resources.pbjson.dart' as $1;
+@$core.Deprecated('Use createNurseryRequestDescriptor instead')
+const CreateNurseryRequest$json = {
+  '1': 'CreateNurseryRequest',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'phone_number', '3': 4, '4': 1, '5': 9, '10': 'phoneNumber'},
+    {'1': 'address', '3': 5, '4': 1, '5': 9, '10': 'address'},
+  ],
+};
+
+/// Descriptor for `CreateNurseryRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createNurseryRequestDescriptor = $convert.base64Decode(
+    'ChRDcmVhdGVOdXJzZXJ5UmVxdWVzdBIUCgVlbWFpbBgBIAEoCVIFZW1haWwSGgoIcGFzc3dvcm'
+    'QYAiABKAlSCHBhc3N3b3JkEhIKBG5hbWUYAyABKAlSBG5hbWUSIQoMcGhvbmVfbnVtYmVyGAQg'
+    'ASgJUgtwaG9uZU51bWJlchIYCgdhZGRyZXNzGAUgASgJUgdhZGRyZXNz');
+
+@$core.Deprecated('Use createNurseryResponseDescriptor instead')
+const CreateNurseryResponse$json = {
+  '1': 'CreateNurseryResponse',
+  '2': [
+    {'1': 'nursery', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryResponse', '10': 'nursery'},
+  ],
+};
+
+/// Descriptor for `CreateNurseryResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createNurseryResponseDescriptor = $convert.base64Decode(
+    'ChVDcmVhdGVOdXJzZXJ5UmVzcG9uc2USPQoHbnVyc2VyeRgBIAEoCzIjLndoZXJlX2NoaWxkX2'
+    'J1cy52MS5OdXJzZXJ5UmVzcG9uc2VSB251cnNlcnk=');
 
 @$core.Deprecated('Use nurseryLoginRequestDescriptor instead')
 const NurseryLoginRequest$json = {
@@ -43,25 +71,4 @@ const NurseryLoginResponse$json = {
 final $typed_data.Uint8List nurseryLoginResponseDescriptor = $convert.base64Decode(
     'ChROdXJzZXJ5TG9naW5SZXNwb25zZRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEj0KB251cn'
     'NlcnkYAiABKAsyIy53aGVyZV9jaGlsZF9idXMudjEuTnVyc2VyeVJlc3BvbnNlUgdudXJzZXJ5');
-
-const $core.Map<$core.String, $core.dynamic> NurseryServiceBase$json = {
-  '1': 'NurseryService',
-  '2': [
-    {'1': 'NurseryLogin', '2': '.where_child_bus.v1.NurseryLoginRequest', '3': '.where_child_bus.v1.NurseryLoginResponse'},
-  ],
-};
-
-@$core.Deprecated('Use nurseryServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> NurseryServiceBase$messageJson = {
-  '.where_child_bus.v1.NurseryLoginRequest': NurseryLoginRequest$json,
-  '.where_child_bus.v1.NurseryLoginResponse': NurseryLoginResponse$json,
-  '.where_child_bus.v1.NurseryResponse': $1.NurseryResponse$json,
-  '.google.protobuf.Timestamp': $0.Timestamp$json,
-};
-
-/// Descriptor for `NurseryService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List nurseryServiceDescriptor = $convert.base64Decode(
-    'Cg5OdXJzZXJ5U2VydmljZRJhCgxOdXJzZXJ5TG9naW4SJy53aGVyZV9jaGlsZF9idXMudjEuTn'
-    'Vyc2VyeUxvZ2luUmVxdWVzdBooLndoZXJlX2NoaWxkX2J1cy52MS5OdXJzZXJ5TG9naW5SZXNw'
-    'b25zZQ==');
 

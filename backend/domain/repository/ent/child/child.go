@@ -164,7 +164,7 @@ type Sex string
 // Sex values.
 const (
 	SexMan   Sex = "man"
-	SexWomen Sex = "women"
+	SexWoman Sex = "woman"
 	SexOther Sex = "other"
 )
 
@@ -175,7 +175,7 @@ func (s Sex) String() string {
 // SexValidator is a validator for the "sex" field enum values. It is called by the builders before save.
 func SexValidator(s Sex) error {
 	switch s {
-	case SexMan, SexWomen, SexOther:
+	case SexMan, SexWoman, SexOther:
 		return nil
 	default:
 		return fmt.Errorf("child: invalid enum value for sex field: %q", s)
