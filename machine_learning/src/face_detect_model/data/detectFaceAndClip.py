@@ -1,9 +1,20 @@
 import cv2
 import os
 import yaml
-from tqdm import tqdm
+import numpy as np
 import argparse
 import logging
+from dotenv import load_dotenv
+
+
+from detectFaceUtil import (
+    load_cascade,
+    detect_face,
+    clip_and_resize_face,
+    save_face,
+)
+
+load_dotenv()
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - PID: %(process)d -  %(message)s",
@@ -13,130 +24,151 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def load_cascade(cascade_path):
-    """Haar Cascadeを読み込む"""
-    return cv2.CascadeClassifier(cv2.data.haarcascades + cascade_path)
-
-
-def detect_face(
-    image, face_cascade, scaleFactor=1.1, minNeighbors=15, minSize=(50, 50)
-):
-    """画像から顔を検出する"""
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(
-        gray, scaleFactor=scaleFactor, minNeighbors=minNeighbors, minSize=minSize
-    )
-    return faces
-
-
-def clip_and_resize_face(face, image, image_size):
-    """検出された顔をクリップし、指定サイズにリサイズする"""
-    (x, y, w, h) = face
-    face_roi = image[y : y + h, x : x + w]
-    resized_face = cv2.resize(face_roi, image_size, interpolation=cv2.INTER_AREA)
-    return resized_face
-
-
-def save_face(face, save_dir, save_file_name):
-    """クリップされた顔画像を保存する"""
-    os.makedirs(save_dir, exist_ok=True)
-
-    save_path = os.path.join(save_dir, save_file_name)
-    cv2.imwrite(save_path, face)
-
-
 def main(args):
     logger.info(f"env: {args.env}")
-    # パスの指定
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
 
     face_cascade_path = config["face_detect"]["cascade_path"]
-    image_dir_path = "src/face_detect_model/data/img"
-    save_dir = "src/face_detect_model/data/detect_img"
     image_size = (
         config["face_detect"]["clip_size"]["height"],
         config["face_detect"]["clip_size"]["width"],
     )
 
     if args.env == "local":
+        image_dir_path = args.img_dir_path
+        save_dir_path = args.save_dir_path
         # 保存先ディレクトリの作成，存在した場合は中身を削除
-        os.makedirs(save_dir, exist_ok=True)
-        for file in os.listdir(save_dir):
-            file_path = os.path.join(save_dir, file)
+        os.makedirs(save_dir_path, exist_ok=True)
+        for file in os.listdir(save_dir_path):
+            file_path = os.path.join(save_dir_path, file)
             if os.path.isfile(file_path):
                 os.remove(file_path)
     elif args.env == "remote":
         from google.oauth2 import service_account
         import google.cloud.storage as gcs
 
-        key_path = "service_account_where_child_bus.json"
+        # TODO: GCP Cloud Functions でdeployする際の実装
+        key_path = os.environ.get("CREDENTIALS_KEY_PATH")
         credential = service_account.Credentials.from_service_account_file(key_path)
 
-        # TODO: 保育園のIDと写真のIDを指定して、その写真を取得する
-        PROJECT_ID = "wherechildbus"
-        BUCKET_NAME = "where_child_bus_photo_bucket"
-        SOURCE_BLOB_NAME = "00001/"
+        PROJECT_ID = os.environ.get("PROJECT_ID")
+        BUCKET_NAME = os.environ.get("BUCKET_NAME")
+
+        nursery_id = args.nursery_id
+        child_id = args.child_id
+        SOURCE_BLOB_NAME = f"{nursery_id}/{child_id}/row/"
 
         client = gcs.Client(PROJECT_ID, credentials=credential)
-        logger.info("get client success!")
-        # bucket = client.get_bucket(BUCKET_NAME)
-        # blob = bucket.blob(SOURCE_BLOB_NAME)
-        [print(file.name) for file in client.list_blobs(BUCKET_NAME)]
-        exit()
+        bucket = client.bucket(BUCKET_NAME)
+        logger.info("get bucket success!")
+
+        blobs = bucket.list_blobs(prefix=SOURCE_BLOB_NAME, delimiter="/")
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
 
     # 画像の読み込み
-    for target_people_name in os.listdir(image_dir_path):
-        logger.info(f"processing... : {target_people_name}")
-        detect_face_num = 0
-        for image_name in tqdm(
-            os.listdir(os.path.join(image_dir_path, target_people_name))
-        ):
-            image = cv2.imread(
-                image_path := os.path.join(
-                    image_dir_path, target_people_name, image_name
-                )
-            )
+    images = []
+    if args.env == "local":
+        for image_path in os.listdir(image_dir_path):
+            logger.info(f"loading: {image_path}")
+            image = cv2.imread(image_dir_path + image_path)
             if image is None:
-                logger.error(
-                    f"画像ファイルが見つからないか読み込めません: {image_path}"
-                )
+                logger.error(f"Can not find or load : {image_path}")
+                continue
+            images.append(image)
+    elif args.env == "remote":
+        for blob in blobs:
+            logger.info(f"loading: {blob.name}")
+            if blob.name.endswith("/"):
+                logger.info(f"skip: {blob.name}")
                 continue
 
-            # 画像から顔を検出
-            faces = detect_face(
-                image,
-                face_cascade,
-                scaleFactor=config["face_detect"]["scale_factor"],
-                minNeighbors=config["face_detect"]["min_neighbors"],
-                minSize=(
-                    config["face_detect"]["min_size"]["height"],
-                    config["face_detect"]["min_size"]["width"],
-                ),
-            )
+            # バイトデータから numpy 配列を作成
+            image_data = blob.download_as_string()
+            image_array = np.frombuffer(image_data, dtype=np.uint8)
 
-            # 検出された各顔に対して処理
-            for face in faces:
-                clipped_face = clip_and_resize_face(face, image, image_size)
-                save_file_name = f"{target_people_name}-{detect_face_num}.png"
-                save_face(clipped_face, save_dir, save_file_name)
-                detect_face_num += 1
+            # cv2.imdecode でバイト配列を画像に変換
+            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+            if image is None:
+                logger.error(f"Can not load: {blob.name}")
+                continue
+            images.append(image)
+
+    logger.info("Detecting faces...")
+
     if args.env == "remote":
-        # TODO: GCSに保存するprocess
-        pass
+        from google.cloud.storage import Blob
+
+    detect_face_num = 0
+    for image in images:
+        faces = detect_face(
+            image,
+            face_cascade,
+            scaleFactor=config["face_detect"]["scale_factor"],
+            minNeighbors=config["face_detect"]["min_neighbors"],
+            minSize=(
+                config["face_detect"]["min_size"]["height"],
+                config["face_detect"]["min_size"]["width"],
+            ),
+        )
+
+        # 検出された各顔に対して処理
+        for face in faces:
+            clipped_face = clip_and_resize_face(face, image, image_size)
+            if args.env == "local":
+                save_file_name = f"{detect_face_num}.png"
+                logger.info(f"saving: {save_file_name}")
+                save_face(clipped_face, save_dir_path, save_file_name)
+            elif args.env == "remote":
+                _, encoded_image = cv2.imencode(".png", clipped_face)
+                png_cliped_face_data = encoded_image.tobytes()
+
+                save_blob_name = (
+                    f"{nursery_id}/{child_id}/clipped/{child_id}-{detect_face_num}.png"
+                )
+
+                logger.info(f"uploading: {save_blob_name}")
+                save_blob = Blob(save_blob_name, bucket)
+                save_blob.upload_from_string(
+                    data=png_cliped_face_data, content_type="image/png"
+                )
+            detect_face_num += 1
     logger.info("Done")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--env",
+    env_subparsers = parser.add_subparsers(dest="env")
+
+    local_parser = env_subparsers.add_parser("local")
+    local_parser.add_argument(
+        "--img_dir_path",
         type=str,
-        choices=["local", "remote"],
-        help="local: ローカル環境, remote: GCP環境",
+        help="画像のディレクトリパス",
+        required=True,
     )
+    local_parser.add_argument(
+        "--save_dir_path",
+        type=str,
+        help="保存先のディレクトリパス",
+        required=True,
+    )
+
+    remote_parser = env_subparsers.add_parser("remote")
+    remote_parser.add_argument(
+        "--nursery_id",
+        type=str,
+        help="保育園・幼稚園のID",
+        required=True,
+    )
+    remote_parser.add_argument(
+        "--child_id",
+        type=str,
+        help="園児のID",
+        required=True,
+    )
+
     args = parser.parse_args()
     main(args)
