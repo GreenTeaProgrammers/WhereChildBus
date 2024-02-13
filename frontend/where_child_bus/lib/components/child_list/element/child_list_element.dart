@@ -19,30 +19,33 @@ class ChildListElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 8,
-      child: Material(
-        color: Colors.white, // Cardの背景色
-        child: InkWell(
-          onTap: onTap, // タップ時のアクション
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Image.asset(imagePath, width: 100, height: 100),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
-                      Text(subtitle),
-                    ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Card(
+        elevation: 8,
+        child: Material(
+          color: Colors.white, // Cardの背景色
+          child: InkWell(
+            onTap: onTap, // タップ時のアクション
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Image.asset(imagePath, width: 100, height: 100),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        Text(subtitle),
+                      ],
+                    ),
                   ),
-                ),
-                if (actionButton != null) actionButton!, // アクションボタンを表示
-              ],
+                  if (actionButton != null) actionButton!, // アクションボタンを表示
+                ],
+              ),
             ),
           ),
         ),

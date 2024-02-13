@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/element/child_list_element.dart';
+import 'package:where_child_bus/pages/student_list_page/student_detail_sheet.dart';
 
 class ChildList extends StatefulWidget {
   final List<String> childNames;
@@ -34,8 +35,21 @@ class _ChildListState extends State<ChildList> {
       title: widget.childNames[index],
       subtitle: widget.groupNames[index],
       imagePath: "assets/images/face_${widget.images[index]}.png",
-      onTap: widget.callback,
-      // actionButton: ここに任意のアクションボタンウィジェットを追加可能
+      onTap: () {
+        if (widget.callback == null) {
+          childDetailModal(index);
+        } else {
+          widget.callback!();
+        }
+      }
     );
+  }
+
+  childDetailModal(int index) async{
+    await showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StudentDetailSheet(childName: widget.childNames[index]);
+        });
   }
 }
