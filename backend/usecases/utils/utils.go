@@ -137,3 +137,9 @@ func HashPassword(password string) (string, error) {
 	}
 	return string(hashedPassword), nil
 }
+
+// ハッシュ化されたパスワードと送られてきたパスワードを比較
+func CheckPassword(hashedPassword string, plainPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(plainPassword))
+	return err == nil
+}
