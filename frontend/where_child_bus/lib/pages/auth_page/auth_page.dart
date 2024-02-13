@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/util/api/nursery_login.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -60,6 +61,8 @@ class _AuthPageState extends State<AuthPage> {
                         debugPrint("email: ${_emailController.text}");
                         debugPrint("password: ${_passwordController.text}");
                       }
+                      nurseryLogin(
+                          _emailController.text, _passwordController.text);
                     },
                     child: const Text('ログイン'),
                   ),
