@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// 再利用性の高いChildListElementクラスの定義
 class ChildListElement extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -34,14 +33,7 @@ class ChildListElement extends StatelessWidget {
                   Image.asset(imagePath, width: 100, height: 100),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 8),
-                        Text(subtitle),
-                      ],
-                    ),
+                    child: titleAndSubTitle(title, subtitle),
                   ),
                   if (actionButton != null) actionButton!, // アクションボタンを表示
                 ],
@@ -51,6 +43,28 @@ class ChildListElement extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Column titleAndSubTitle(String title, String subtitle) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        titleText(title),
+        subTitleText(subtitle),
+      ],
+    );
+  }
+
+  Text titleText(String title) {
+    return Text(
+      title,
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+    );
+  }
+
+  Text subTitleText(String subtitle) {
+    return Text(subtitle);
   }
 
   Padding listElementPadding(Widget child) {

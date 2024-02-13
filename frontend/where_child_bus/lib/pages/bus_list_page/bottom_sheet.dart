@@ -3,6 +3,7 @@ import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_passenger_page/bus_passenger_page.dart';
 
 class BottomSheetWidget extends StatelessWidget {
   final busStations = ["station1", "station2", "station3","station4","station5","station6", "station7", "station8", "station7", "station7"];
@@ -39,9 +40,18 @@ class BottomSheetWidget extends StatelessWidget {
           // titleText(),
           modalHeader(busName, "test"),
           StationsList(busStationsList: busStations),
-          ConfirmButton(buttonText: "乗客情報"),
+          ConfirmButton(
+            buttonText: "乗客情報", 
+            onTap: () => moveToBusPassengerPage(context),
+          ),
         ],
       )
+    );
+  }
+
+  moveToBusPassengerPage(BuildContext context) {
+    Navigator.push(
+      context,MaterialPageRoute(builder: (context) => BusPassengerPage()) 
     );
   }
 
@@ -155,33 +165,4 @@ class BottomSheetWidget extends StatelessWidget {
         ),
     );
   }
-//TODO 将来的に乗客詳細ページへの遷移を実装する
-  Widget boardingConfirmButton(BuildContext context) {
-    const double fontSize = 20;    
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.6,
-            height: fontSize * 2,
-          child: ElevatedButton(
-            onPressed: () {
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-            ),
-            child: const Text(
-              "乗客状況",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: fontSize,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
 }
