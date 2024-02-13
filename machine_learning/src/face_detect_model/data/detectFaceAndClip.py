@@ -25,34 +25,43 @@ logger = logging.getLogger(__name__)
 
 
 def load_image(args, blobs=None):
-    # 画像の読み込み
-    images = []
+    """画像の読み込みを行うラッパー関数"""
     if args.env == "local":
-        for image_path in os.listdir(args.img_dir_path):
-            logger.info(f"loading: {image_path}")
-            image = cv2.imread(args.img_dir_path + image_path)
-            if image is None:
-                logger.error(f"Can not find or load : {image_path}")
-                continue
-            images.append(image)
+        return load_image_fromm_local(args.img_dir_path)
     elif args.env == "remote":
+        return load_image_from_remote(args.nursery_id, args.child_id, blobs)
 
-        for blob in blobs:
-            logger.info(f"loading: {blob.name}")
-            if blob.name.endswith("/"):
-                logger.info(f"skip: {blob.name}")
-                continue
 
-            # バイトデータから numpy 配列を作成
-            image_data = blob.download_as_string()
-            image_array = np.frombuffer(image_data, dtype=np.uint8)
+def load_image_fromm_local(img_dir_path):
+    images = []
+    for image_path in os.listdir(img_dir_path):
+        logger.info(f"loading: {image_path}")
+        image = cv2.imread(img_dir_path + image_path)
+        if image is None:
+            logger.error(f"Can not find or load : {image_path}")
+            continue
+        images.append(image)
+    return images
 
-            # cv2.imdecode でバイト配列を画像に変換
-            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-            if image is None:
-                logger.error(f"Can not load: {blob.name}")
-                continue
-            images.append(image)
+
+def load_image_from_remote(nursery_id, child_id, blobs):
+    images = []
+    for blob in blobs:
+        logger.info(f"loading: {blob.name}")
+        if blob.name.endswith("/"):
+            logger.info(f"skip: {blob.name}")
+            continue
+
+        # バイトデータから numpy 配列を作成
+        image_data = blob.download_as_string()
+        image_array = np.frombuffer(image_data, dtype=np.uint8)
+
+        # cv2.imdecode でバイト配列を画像に変換
+        image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+        if image is None:
+            logger.error(f"Can not load: {blob.name}")
+            continue
+        images.append(image)
     return images
 
 
