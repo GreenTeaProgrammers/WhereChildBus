@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import '../components/utils/current_time_body.dart';
 
 class CheckPage extends StatefulWidget {
@@ -42,9 +43,9 @@ class _CheckPageState extends State<CheckPage> {
               padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: <Widget>[
-                  busTitleAndToggleSwitch(
+                  busTitleAndToggleButton(
                       context, "朝のバス", isRideMorningBus, true),
-                  busTitleAndToggleSwitch(
+                  busTitleAndToggleButton(
                       context, "夕方のバス", isRideEveningBus, false),
                 ],
               ),
@@ -53,49 +54,42 @@ class _CheckPageState extends State<CheckPage> {
         ));
   }
 
-  Widget busTitleAndToggleSwitch(
+  Widget busTitleAndToggleButton(
       BuildContext context, String title, bool isRide, bool isMorning) {
     return Column(children: [
-      Text(title),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          displayRideOrNot(context, isRide),
-          toggleSwitch(context, isRide, isMorning),
-        ],
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text(title, style: const TextStyle(fontSize: 16)),
       ),
+      toggleSwitch(context, isRide, isMorning),
     ]);
   }
 
   Widget toggleSwitch(BuildContext context, bool isRide, bool isMorning) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.3,
-        child: Switch(
-            value: !isRide,
-            onChanged: (value) {
-              setState(() {
-                isMorning
-                    ? isRideMorningBus = !value
-                    : isRideEveningBus = !value;
-              });
-            }));
-  }
-
-  Widget displayRideOrNot(BuildContext context, bool isRide) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      width: MediaQuery.of(context).size.width * 0.3,
-      decoration: BoxDecoration(
-          color: isRide ? Colors.green[100] : Colors.red[100],
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: isRide ? Colors.green : Colors.red)),
-      child: Text(
-        isRide ? "乗る" : "乗らない",
-        style: TextStyle(
-            color: isRide ? Colors.green : Colors.red,
-            fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
+    int selectedIndex = isRide ? 0 : 1;
+    return FlutterToggleTab(
+      width: 70,
+      height: 50,
+      borderRadius: 15,
+      selectedBackgroundColors: const [Colors.blue],
+      selectedTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
       ),
+      unSelectedTextStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+      ),
+      labels: const ["乗る", "乗らない"],
+      selectedIndex: selectedIndex,
+      selectedLabelIndex: (index) {
+        setState(() {
+          isMorning
+              ? isRideMorningBus = index == 0
+              : isRideEveningBus = index == 0;
+        });
+      },
+      marginSelected: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
     );
   }
 }
