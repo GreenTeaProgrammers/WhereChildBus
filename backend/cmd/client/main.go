@@ -85,12 +85,12 @@ func (c *Client) Ping(ctx context.Context, r *pb.PingRequest) (*pb.PingResponse,
 
 // `makeGetRequest` makes a request to the provided `targetURL`
 // with an authenticated client using audience `audience`.
-func makeGetRequest(credsPath, targetURL, audience string) error {
+func makeGetRequest(credsPath, targetURL string) error {
 	ctx := context.Background()
 
 	// client is a http.Client that automatically adds an "Authorization" header
 	// to any requests made.
-	client, err := idtoken.NewClient(ctx, audience, option.WithCredentialsFile(credsPath))
+	client, err := idtoken.NewClient(ctx, targetURL, option.WithCredentialsFile(credsPath))
 	if err != nil {
 		return fmt.Errorf("idtoken.NewClient: %w", err)
 	}
