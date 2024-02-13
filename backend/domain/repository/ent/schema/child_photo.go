@@ -18,9 +18,7 @@ type ChildPhoto struct {
 func (ChildPhoto) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
-		// TODO: s3周りのfieldを要件等
-		field.String("s3_bucket").Comment("AWS S3のバケット名"),
-		field.String("s3_key").Comment("S3内の画像ファイルのキー（ファイルパス含む）"),
+		field.Bool("is_duplicate").Default(false).Comment("重複画像があるかどうか"),
 		field.Time("created_at").Default(time.Now).Comment("レコードの作成日時"),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).Comment("レコードの最終更新日時"),
 	}

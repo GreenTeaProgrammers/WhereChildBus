@@ -96,12 +96,16 @@ func init() {
 	child.DefaultID = childDescID.Default.(func() uuid.UUID)
 	childphotoFields := schema.ChildPhoto{}.Fields()
 	_ = childphotoFields
+	// childphotoDescIsDuplicate is the schema descriptor for is_duplicate field.
+	childphotoDescIsDuplicate := childphotoFields[1].Descriptor()
+	// childphoto.DefaultIsDuplicate holds the default value on creation for the is_duplicate field.
+	childphoto.DefaultIsDuplicate = childphotoDescIsDuplicate.Default.(bool)
 	// childphotoDescCreatedAt is the schema descriptor for created_at field.
-	childphotoDescCreatedAt := childphotoFields[3].Descriptor()
+	childphotoDescCreatedAt := childphotoFields[2].Descriptor()
 	// childphoto.DefaultCreatedAt holds the default value on creation for the created_at field.
 	childphoto.DefaultCreatedAt = childphotoDescCreatedAt.Default.(func() time.Time)
 	// childphotoDescUpdatedAt is the schema descriptor for updated_at field.
-	childphotoDescUpdatedAt := childphotoFields[4].Descriptor()
+	childphotoDescUpdatedAt := childphotoFields[3].Descriptor()
 	// childphoto.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	childphoto.DefaultUpdatedAt = childphotoDescUpdatedAt.Default.(func() time.Time)
 	// childphoto.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

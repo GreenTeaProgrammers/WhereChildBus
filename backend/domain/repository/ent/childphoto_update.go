@@ -30,30 +30,16 @@ func (cpu *ChildPhotoUpdate) Where(ps ...predicate.ChildPhoto) *ChildPhotoUpdate
 	return cpu
 }
 
-// SetS3Bucket sets the "s3_bucket" field.
-func (cpu *ChildPhotoUpdate) SetS3Bucket(s string) *ChildPhotoUpdate {
-	cpu.mutation.SetS3Bucket(s)
+// SetIsDuplicate sets the "is_duplicate" field.
+func (cpu *ChildPhotoUpdate) SetIsDuplicate(b bool) *ChildPhotoUpdate {
+	cpu.mutation.SetIsDuplicate(b)
 	return cpu
 }
 
-// SetNillableS3Bucket sets the "s3_bucket" field if the given value is not nil.
-func (cpu *ChildPhotoUpdate) SetNillableS3Bucket(s *string) *ChildPhotoUpdate {
-	if s != nil {
-		cpu.SetS3Bucket(*s)
-	}
-	return cpu
-}
-
-// SetS3Key sets the "s3_key" field.
-func (cpu *ChildPhotoUpdate) SetS3Key(s string) *ChildPhotoUpdate {
-	cpu.mutation.SetS3Key(s)
-	return cpu
-}
-
-// SetNillableS3Key sets the "s3_key" field if the given value is not nil.
-func (cpu *ChildPhotoUpdate) SetNillableS3Key(s *string) *ChildPhotoUpdate {
-	if s != nil {
-		cpu.SetS3Key(*s)
+// SetNillableIsDuplicate sets the "is_duplicate" field if the given value is not nil.
+func (cpu *ChildPhotoUpdate) SetNillableIsDuplicate(b *bool) *ChildPhotoUpdate {
+	if b != nil {
+		cpu.SetIsDuplicate(*b)
 	}
 	return cpu
 }
@@ -153,11 +139,8 @@ func (cpu *ChildPhotoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := cpu.mutation.S3Bucket(); ok {
-		_spec.SetField(childphoto.FieldS3Bucket, field.TypeString, value)
-	}
-	if value, ok := cpu.mutation.S3Key(); ok {
-		_spec.SetField(childphoto.FieldS3Key, field.TypeString, value)
+	if value, ok := cpu.mutation.IsDuplicate(); ok {
+		_spec.SetField(childphoto.FieldIsDuplicate, field.TypeBool, value)
 	}
 	if value, ok := cpu.mutation.CreatedAt(); ok {
 		_spec.SetField(childphoto.FieldCreatedAt, field.TypeTime, value)
@@ -214,30 +197,16 @@ type ChildPhotoUpdateOne struct {
 	mutation *ChildPhotoMutation
 }
 
-// SetS3Bucket sets the "s3_bucket" field.
-func (cpuo *ChildPhotoUpdateOne) SetS3Bucket(s string) *ChildPhotoUpdateOne {
-	cpuo.mutation.SetS3Bucket(s)
+// SetIsDuplicate sets the "is_duplicate" field.
+func (cpuo *ChildPhotoUpdateOne) SetIsDuplicate(b bool) *ChildPhotoUpdateOne {
+	cpuo.mutation.SetIsDuplicate(b)
 	return cpuo
 }
 
-// SetNillableS3Bucket sets the "s3_bucket" field if the given value is not nil.
-func (cpuo *ChildPhotoUpdateOne) SetNillableS3Bucket(s *string) *ChildPhotoUpdateOne {
-	if s != nil {
-		cpuo.SetS3Bucket(*s)
-	}
-	return cpuo
-}
-
-// SetS3Key sets the "s3_key" field.
-func (cpuo *ChildPhotoUpdateOne) SetS3Key(s string) *ChildPhotoUpdateOne {
-	cpuo.mutation.SetS3Key(s)
-	return cpuo
-}
-
-// SetNillableS3Key sets the "s3_key" field if the given value is not nil.
-func (cpuo *ChildPhotoUpdateOne) SetNillableS3Key(s *string) *ChildPhotoUpdateOne {
-	if s != nil {
-		cpuo.SetS3Key(*s)
+// SetNillableIsDuplicate sets the "is_duplicate" field if the given value is not nil.
+func (cpuo *ChildPhotoUpdateOne) SetNillableIsDuplicate(b *bool) *ChildPhotoUpdateOne {
+	if b != nil {
+		cpuo.SetIsDuplicate(*b)
 	}
 	return cpuo
 }
@@ -367,11 +336,8 @@ func (cpuo *ChildPhotoUpdateOne) sqlSave(ctx context.Context) (_node *ChildPhoto
 			}
 		}
 	}
-	if value, ok := cpuo.mutation.S3Bucket(); ok {
-		_spec.SetField(childphoto.FieldS3Bucket, field.TypeString, value)
-	}
-	if value, ok := cpuo.mutation.S3Key(); ok {
-		_spec.SetField(childphoto.FieldS3Key, field.TypeString, value)
+	if value, ok := cpuo.mutation.IsDuplicate(); ok {
+		_spec.SetField(childphoto.FieldIsDuplicate, field.TypeBool, value)
 	}
 	if value, ok := cpuo.mutation.CreatedAt(); ok {
 		_spec.SetField(childphoto.FieldCreatedAt, field.TypeTime, value)

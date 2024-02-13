@@ -131,8 +131,7 @@ var (
 	// ChildPhotosColumns holds the columns for the "child_photos" table.
 	ChildPhotosColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "s3_bucket", Type: field.TypeString},
-		{Name: "s3_key", Type: field.TypeString},
+		{Name: "is_duplicate", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "child_photos", Type: field.TypeUUID, Nullable: true},
@@ -145,7 +144,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "child_photos_childs_photos",
-				Columns:    []*schema.Column{ChildPhotosColumns[5]},
+				Columns:    []*schema.Column{ChildPhotosColumns[4]},
 				RefColumns: []*schema.Column{ChildsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

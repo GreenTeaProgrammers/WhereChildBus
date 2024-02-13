@@ -3592,8 +3592,7 @@ type ChildPhotoMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	s3_bucket     *string
-	s3_key        *string
+	is_duplicate  *bool
 	created_at    *time.Time
 	updated_at    *time.Time
 	clearedFields map[string]struct{}
@@ -3708,76 +3707,40 @@ func (m *ChildPhotoMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	}
 }
 
-// SetS3Bucket sets the "s3_bucket" field.
-func (m *ChildPhotoMutation) SetS3Bucket(s string) {
-	m.s3_bucket = &s
+// SetIsDuplicate sets the "is_duplicate" field.
+func (m *ChildPhotoMutation) SetIsDuplicate(b bool) {
+	m.is_duplicate = &b
 }
 
-// S3Bucket returns the value of the "s3_bucket" field in the mutation.
-func (m *ChildPhotoMutation) S3Bucket() (r string, exists bool) {
-	v := m.s3_bucket
+// IsDuplicate returns the value of the "is_duplicate" field in the mutation.
+func (m *ChildPhotoMutation) IsDuplicate() (r bool, exists bool) {
+	v := m.is_duplicate
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldS3Bucket returns the old "s3_bucket" field's value of the ChildPhoto entity.
+// OldIsDuplicate returns the old "is_duplicate" field's value of the ChildPhoto entity.
 // If the ChildPhoto object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildPhotoMutation) OldS3Bucket(ctx context.Context) (v string, err error) {
+func (m *ChildPhotoMutation) OldIsDuplicate(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldS3Bucket is only allowed on UpdateOne operations")
+		return v, errors.New("OldIsDuplicate is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldS3Bucket requires an ID field in the mutation")
+		return v, errors.New("OldIsDuplicate requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldS3Bucket: %w", err)
+		return v, fmt.Errorf("querying old value for OldIsDuplicate: %w", err)
 	}
-	return oldValue.S3Bucket, nil
+	return oldValue.IsDuplicate, nil
 }
 
-// ResetS3Bucket resets all changes to the "s3_bucket" field.
-func (m *ChildPhotoMutation) ResetS3Bucket() {
-	m.s3_bucket = nil
-}
-
-// SetS3Key sets the "s3_key" field.
-func (m *ChildPhotoMutation) SetS3Key(s string) {
-	m.s3_key = &s
-}
-
-// S3Key returns the value of the "s3_key" field in the mutation.
-func (m *ChildPhotoMutation) S3Key() (r string, exists bool) {
-	v := m.s3_key
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldS3Key returns the old "s3_key" field's value of the ChildPhoto entity.
-// If the ChildPhoto object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildPhotoMutation) OldS3Key(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldS3Key is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldS3Key requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldS3Key: %w", err)
-	}
-	return oldValue.S3Key, nil
-}
-
-// ResetS3Key resets all changes to the "s3_key" field.
-func (m *ChildPhotoMutation) ResetS3Key() {
-	m.s3_key = nil
+// ResetIsDuplicate resets all changes to the "is_duplicate" field.
+func (m *ChildPhotoMutation) ResetIsDuplicate() {
+	m.is_duplicate = nil
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -3925,12 +3888,9 @@ func (m *ChildPhotoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChildPhotoMutation) Fields() []string {
-	fields := make([]string, 0, 4)
-	if m.s3_bucket != nil {
-		fields = append(fields, childphoto.FieldS3Bucket)
-	}
-	if m.s3_key != nil {
-		fields = append(fields, childphoto.FieldS3Key)
+	fields := make([]string, 0, 3)
+	if m.is_duplicate != nil {
+		fields = append(fields, childphoto.FieldIsDuplicate)
 	}
 	if m.created_at != nil {
 		fields = append(fields, childphoto.FieldCreatedAt)
@@ -3946,10 +3906,8 @@ func (m *ChildPhotoMutation) Fields() []string {
 // schema.
 func (m *ChildPhotoMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case childphoto.FieldS3Bucket:
-		return m.S3Bucket()
-	case childphoto.FieldS3Key:
-		return m.S3Key()
+	case childphoto.FieldIsDuplicate:
+		return m.IsDuplicate()
 	case childphoto.FieldCreatedAt:
 		return m.CreatedAt()
 	case childphoto.FieldUpdatedAt:
@@ -3963,10 +3921,8 @@ func (m *ChildPhotoMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ChildPhotoMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case childphoto.FieldS3Bucket:
-		return m.OldS3Bucket(ctx)
-	case childphoto.FieldS3Key:
-		return m.OldS3Key(ctx)
+	case childphoto.FieldIsDuplicate:
+		return m.OldIsDuplicate(ctx)
 	case childphoto.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case childphoto.FieldUpdatedAt:
@@ -3980,19 +3936,12 @@ func (m *ChildPhotoMutation) OldField(ctx context.Context, name string) (ent.Val
 // type.
 func (m *ChildPhotoMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case childphoto.FieldS3Bucket:
-		v, ok := value.(string)
+	case childphoto.FieldIsDuplicate:
+		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetS3Bucket(v)
-		return nil
-	case childphoto.FieldS3Key:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetS3Key(v)
+		m.SetIsDuplicate(v)
 		return nil
 	case childphoto.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -4057,11 +4006,8 @@ func (m *ChildPhotoMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ChildPhotoMutation) ResetField(name string) error {
 	switch name {
-	case childphoto.FieldS3Bucket:
-		m.ResetS3Bucket()
-		return nil
-	case childphoto.FieldS3Key:
-		m.ResetS3Key()
+	case childphoto.FieldIsDuplicate:
+		m.ResetIsDuplicate()
 		return nil
 	case childphoto.FieldCreatedAt:
 		m.ResetCreatedAt()
