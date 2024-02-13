@@ -84,12 +84,18 @@ class _CheckPageState extends State<CheckPage> {
       selectedIndex: selectedIndex,
       selectedLabelIndex: (index) {
         setState(() {
-          isMorning
-              ? isRideMorningBus = index == 0
-              : isRideEveningBus = index == 0;
+          setRideState(isMorning, index);
         });
       },
       marginSelected: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
     );
+  }
+
+  void setRideState(bool isMorning, int index) {
+    if (isMorning) {
+      isRideMorningBus = index == 0;
+    } else {
+      isRideEveningBus = index == 0;
+    }
   }
 }
