@@ -28,9 +28,9 @@ def load_image(args, blobs=None):
     # 画像の読み込み
     images = []
     if args.env == "local":
-        for image_path in os.listdir(args.image_dir_path):
+        for image_path in os.listdir(args.img_dir_path):
             logger.info(f"loading: {image_path}")
-            image = cv2.imread(args.image_dir_path + image_path)
+            image = cv2.imread(args.img_dir_path + image_path)
             if image is None:
                 logger.error(f"Can not find or load : {image_path}")
                 continue
