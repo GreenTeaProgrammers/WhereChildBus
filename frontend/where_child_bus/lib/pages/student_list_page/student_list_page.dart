@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/student_list_page/student_detail_sheet.dart';
+import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
 
 class StudentListPage extends StatefulWidget {
   const StudentListPage({super.key});
@@ -36,7 +37,17 @@ class _StudentListPageState extends State<StudentListPage> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
-    return childCardListBuilder(screenSize);
+    return Scaffold(
+      appBar: AppBar(),
+      body: childCardListBuilder(screenSize),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => const StudentEditPage()));
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 
   //TODO: 将来的にはAPIからデータを取得する。
