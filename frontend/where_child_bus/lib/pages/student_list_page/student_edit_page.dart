@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'compornents/utils/submit_button.dart';
+import 'components/utils/input_value_label.dart';
+import 'components/utils/submit_button.dart';
 
 class StudentEditPage extends StatefulWidget {
   const StudentEditPage({super.key});
@@ -103,7 +104,7 @@ class _StudentEditPageState extends State<StudentEditPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        inputValueLabel(label),
+        InputValueLabel(label: label),
         textInputField(context, hintText, type)
       ],
     );
@@ -114,19 +115,10 @@ class _StudentEditPageState extends State<StudentEditPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        inputValueLabel(label),
+        InputValueLabel(label: label),
         selectValueBox(context, lists),
       ],
     );
-  }
-
-  Widget inputValueLabel(String label) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          label,
-          style: const TextStyle(color: Colors.black, fontSize: 16),
-        ));
   }
 
   Widget textInputField(
