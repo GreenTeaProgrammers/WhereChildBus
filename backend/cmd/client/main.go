@@ -32,7 +32,7 @@ func main() {
 	}
 
 	// Cloud Functionに対して認証済みGETリクエストを行う
-	if err := makeGetRequest(cfg.GoogleApplicationCredentials, cloudFunctionURL, cloudFunctionURL); err != nil {
+	if err := makeGetRequest(cfg.GoogleApplicationCredentials, cloudFunctionURL); err != nil {
 		log.Fatalf("Failed to make GET request: %v", err)
 	}
 	if *grpcEndpoint == "" {
