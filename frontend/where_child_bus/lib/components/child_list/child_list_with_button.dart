@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:where_child_bus/components/child_list/element/child_list_element.dart';
+import 'package:where_child_bus/components/child_list/element/child_list_element_with_button.dart';
 
 enum ButtonIconType { add, remove }
 
@@ -29,52 +29,24 @@ class _ChildListWithButtonState extends State<ChildListWithButton> {
     return ListView.separated(
       itemCount: widget.childNames.length,
       separatorBuilder: (BuildContext context, int index) => const Divider(height: 20, color: Colors.transparent),
-      itemBuilder: (BuildContext context, int index) => ChildListElementWithButton(widget: widget, context: context, index: index),
+      itemBuilder: (BuildContext context, int index) {
+        // ChildListElementWithButtonに必要な情報を渡す
+        return ChildListElementWithButton(
+          childName: widget.childNames[index],
+          groupName: widget.groupNames[index],
+          image: widget.images[index],
+          buttonIconType: widget.buttonIconTypes[index], // 各アイテムに対応するアイコンタイプ
+          onTap: () {
+            // ここでリストアイテムがタップされたときの動作を定義
+            print("${widget.childNames[index]}がタップされました");
+          },
+          onButtonTap: () {
+            // ここでアイコンボタンがタップされたときの動作を定義
+            print("${widget.childNames[index]}のボタンがタップされました");
+          },
+        );
+      },
     );
   }
 }
 
-class ChildListElementWithButton extends StatelessWidget {
-  const ChildListElementWithButton({
-    super.key,
-    required this.widget,
-    required this.context,
-    required this.index,
-  });
-
-  final ChildListWithButton widget;
-  final BuildContext context;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    // 各アイテムに対応するボタンアイコンタイプを取得
-    ButtonIconType buttonIconType = widget.buttonIconTypes[index];
-
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Stack(
-        children: [
-          ChildListElement(
-            title: widget.childNames[index],
-            subtitle: widget.groupNames[index],
-            imagePath: "assets/images/face_${widget.images[index]}.png",
-            onTap: widget.callback,
-          ),
-          Positioned(
-            right: 4,
-            bottom: 4,
-            child: IconButton(
-              icon: Icon(buttonIconType == ButtonIconType.add ? Icons.add : Icons.remove),
-              onPressed: () {
-                // ここにボタンタップ時のアクションを実装
-              },
-              color: Theme.of(context).primaryColor,
-              iconSize: 24.0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
