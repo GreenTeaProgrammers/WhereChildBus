@@ -23,13 +23,6 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 }
 
 func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginRequest) (*pb.GuardianLoginResponse, error) {
-	// パスワードをハッシュ化
-	hashedPassword, err := utils.HashPassword(req.Password)
-	if err != nil {
-		// エラーハンドリング
-		return nil, fmt.Errorf("failed to hash password: %w", err)
-	}
-
 	// トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
@@ -40,16 +33,20 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 	// Guardianを取得
 	guardian, err := tx.Guardian.Query().
 		Where(guardianRepo.Email(req.Email)).
-		Where(guardianRepo.HashedPassword(string(hashedPassword))).
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get guardian: %w", err)
+		return nil, fmt.Errorf("failed to get guardian")
+	}
+
+	// フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
+	if !utils.CheckPassword(guardian.HashedPassword, req.Password) {
+		return nil, fmt.Errorf("failed to get guardian")
 	}
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		return nil, fmt.Errorf("failed to commit transaction: %w")
 	}
 
 	// レスポンスを返す
@@ -57,5 +54,4 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 		Success:  true,
 		Guardian: utils.ToPbGuardianResponse(guardian),
 	}, nil
-
 }
