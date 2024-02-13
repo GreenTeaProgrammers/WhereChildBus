@@ -24,6 +24,38 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def load_image(args, blobs=None):
+    # 画像の読み込み
+    images = []
+    if args.env == "local":
+        for image_path in os.listdir(args.image_dir_path):
+            logger.info(f"loading: {image_path}")
+            image = cv2.imread(args.image_dir_path + image_path)
+            if image is None:
+                logger.error(f"Can not find or load : {image_path}")
+                continue
+            images.append(image)
+    elif args.env == "remote":
+
+        for blob in blobs:
+            logger.info(f"loading: {blob.name}")
+            if blob.name.endswith("/"):
+                logger.info(f"skip: {blob.name}")
+                continue
+
+            # バイトデータから numpy 配列を作成
+            image_data = blob.download_as_string()
+            image_array = np.frombuffer(image_data, dtype=np.uint8)
+
+            # cv2.imdecode でバイト配列を画像に変換
+            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+            if image is None:
+                logger.error(f"Can not load: {blob.name}")
+                continue
+            images.append(image)
+    return images
+
+
 def main(args):
     logger.info(f"env: {args.env}")
     with open("src/face_detect_model/config.yaml", "r") as f:
@@ -36,7 +68,6 @@ def main(args):
     )
 
     if args.env == "local":
-        image_dir_path = args.img_dir_path
         save_dir_path = args.save_dir_path
         # 保存先ディレクトリの作成，存在した場合は中身を削除
         os.makedirs(save_dir_path, exist_ok=True)
@@ -55,9 +86,7 @@ def main(args):
         PROJECT_ID = os.environ.get("PROJECT_ID")
         BUCKET_NAME = os.environ.get("BUCKET_NAME")
 
-        nursery_id = args.nursery_id
-        child_id = args.child_id
-        SOURCE_BLOB_NAME = f"{nursery_id}/{child_id}/row/"
+        SOURCE_BLOB_NAME = f"{args.nursery_id}/{args.child_id}/row/"
 
         client = gcs.Client(PROJECT_ID, credentials=credential)
         bucket = client.bucket(BUCKET_NAME)
@@ -68,36 +97,12 @@ def main(args):
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
 
-    # 画像の読み込み
-    images = []
     if args.env == "local":
-        for image_path in os.listdir(image_dir_path):
-            logger.info(f"loading: {image_path}")
-            image = cv2.imread(image_dir_path + image_path)
-            if image is None:
-                logger.error(f"Can not find or load : {image_path}")
-                continue
-            images.append(image)
+        images = load_image(args)
     elif args.env == "remote":
-        for blob in blobs:
-            logger.info(f"loading: {blob.name}")
-            if blob.name.endswith("/"):
-                logger.info(f"skip: {blob.name}")
-                continue
-
-            # バイトデータから numpy 配列を作成
-            image_data = blob.download_as_string()
-            image_array = np.frombuffer(image_data, dtype=np.uint8)
-
-            # cv2.imdecode でバイト配列を画像に変換
-            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-            if image is None:
-                logger.error(f"Can not load: {blob.name}")
-                continue
-            images.append(image)
+        images = load_image(args, blobs=blobs)
 
     logger.info("Detecting faces...")
-
     if args.env == "remote":
         from google.cloud.storage import Blob
 
@@ -125,10 +130,7 @@ def main(args):
                 _, encoded_image = cv2.imencode(".png", clipped_face)
                 png_cliped_face_data = encoded_image.tobytes()
 
-                save_blob_name = (
-                    f"{nursery_id}/{child_id}/clipped/{child_id}-{detect_face_num}.png"
-                )
-
+                save_blob_name = f"{args.nursery_id}/{args.child_id}/clipped/{args.child_id}-{detect_face_num}.png"
                 logger.info(f"uploading: {save_blob_name}")
                 save_blob = Blob(save_blob_name, bucket)
                 save_blob.upload_from_string(
