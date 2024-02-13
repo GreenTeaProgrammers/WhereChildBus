@@ -9,6 +9,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
+	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 )
@@ -22,6 +23,53 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 	return &Interactor{entClient, logger}
 }
 
+func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianRequest) (*pb.CreateGuardianResponse, error) {
+	// パスワードをハッシュ化
+	hashedPassword, err := utils.HashPassword(req.Password)
+	if err != nil {
+		// エラーハンドリング
+		return nil, fmt.Errorf("failed to hash password: %w", err)
+	}
+
+	// トランザクションを開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction: %w", err)
+	}
+	defer tx.Rollback()
+
+	// req.nurseryCodeからnurseryを取得
+	nursery, err := tx.Nursery.Query().
+		Where(nurseryRepo.NurseryCode(req.NurseryCode)).
+		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get nursery: %w", err)
+	}
+
+	// Guardianを作成
+	guardian, err := tx.Guardian.Create().
+		SetEmail(req.Email).
+		SetHashedPassword(string(hashedPassword)).
+		SetName(req.Name).
+		SetPhoneNumber(req.PhoneNumber).
+		SetNursery(nursery).
+		Save(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to create guardian: %w", err)
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	// レスポンスを返す
+	return &pb.CreateGuardianResponse{
+		Guardian: utils.ToPbGuardianResponse(guardian),
+	}, nil
+}
+
 func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginRequest) (*pb.GuardianLoginResponse, error) {
 	// トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
@@ -33,6 +81,7 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 	// Guardianを取得
 	guardian, err := tx.Guardian.Query().
 		Where(guardianRepo.Email(req.Email)).
+		WithNursery().
 		Only(ctx)
 
 	if err != nil {
@@ -53,5 +102,6 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 	return &pb.GuardianLoginResponse{
 		Success:  true,
 		Guardian: utils.ToPbGuardianResponse(guardian),
+		Nursery:  utils.ToPbNurseryResponse(guardian.Edges.Nursery),
 	}, nil
 }

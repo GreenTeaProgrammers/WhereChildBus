@@ -15,6 +15,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
+	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 )
@@ -162,6 +163,33 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 	}
 
 	return &pb.GetChildListByNurseryIDResponse{Children: children}, nil
+}
+
+func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildListByBusIDRequest) (*pb.GetChildListByBusIDResponse, error) {
+	busID, err := uuid.Parse(req.BusId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+	}
+
+	// childBusAssociationテーブルからバスIDに紐づく子供のIDを取得
+	associations, err := i.entClient.ChildBusAssociation.Query().Where(childBusAssociationRepo.BusIDEQ(busID)).All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get child associations: %w", err)
+	}
+
+	var children []*pb.Child
+	for _, association := range associations {
+		child, err := i.entClient.Child.Get(ctx, association.ChildID)
+		if err != nil {
+			i.logger.Error("failed to get child details", "childID", association.ChildID, "error", err)
+			continue // エラーがあった場合はその子供をスキップ
+		}
+
+		pbChild := utils.ToPbChild(child)
+		children = append(children, pbChild)
+	}
+
+	return &pb.GetChildListByBusIDResponse{Children: children}, nil
 }
 
 // getChildList abstracts the common logic for fetching child lists.
