@@ -36,15 +36,15 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get nursery: %w", err)
+		return nil, fmt.Errorf("failed to get nursery")
 	}
 
-	//  フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
+	// フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
 	if !utils.CheckPassword(nursery.HashedPassword, req.Password) {
-		return nil, fmt.Errorf("failed to get nursery: %w", err)
+		return nil, fmt.Errorf("failed to get nursery")
 	}
 
-	//トランザクションをコミット
+	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
 		return nil, fmt.Errorf("failed to commit transaction: %w", err)
 	}

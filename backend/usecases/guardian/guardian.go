@@ -36,17 +36,17 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get guardian: %w", err)
+		return nil, fmt.Errorf("failed to get guardian")
 	}
 
-	//   フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
+	// フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
 	if !utils.CheckPassword(guardian.HashedPassword, req.Password) {
-		return nil, fmt.Errorf("failed to get guardian: %w", err)
+		return nil, fmt.Errorf("failed to get guardian")
 	}
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		return nil, fmt.Errorf("failed to commit transaction: %w")
 	}
 
 	// レスポンスを返す
