@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/utils/current_time_body.dart';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({super.key});
@@ -15,22 +16,25 @@ class _CheckPageState extends State<CheckPage> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[isRideBusToggleButton()],
+        children: <Widget>[
+          CurrentTimeBody(),
+          toggleButtonBody(),
+        ],
       ),
     );
   }
 
-  Widget isRideBusToggleButton() {
+  Widget toggleButtonBody() {
     return Column(
       children: [
-        toggleButtonBody("乗る", true),
+        isRideBusToggleButtonBody("乗る", true),
         const SizedBox(height: 20),
-        toggleButtonBody("乗らない", false),
+        isRideBusToggleButtonBody("乗らない", false),
       ],
     );
   }
 
-  Widget toggleButtonBody(String text, bool isRide) {
+  Widget isRideBusToggleButtonBody(String text, bool isRide) {
     return SizedBox(
       width: 200,
       height: 50,
