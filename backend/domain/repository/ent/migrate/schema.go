@@ -67,7 +67,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
-		{Name: "sex", Type: field.TypeEnum, Enums: []string{"man", "women", "other"}},
+		{Name: "sex", Type: field.TypeEnum, Enums: []string{"man", "woman", "other"}},
 		{Name: "is_ride_morning_bus", Type: field.TypeBool, Default: false},
 		{Name: "is_ride_evening_bus", Type: field.TypeBool, Default: false},
 		{Name: "check_for_missing_items", Type: field.TypeBool, Default: false},
