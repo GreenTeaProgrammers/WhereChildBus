@@ -17,7 +17,7 @@ Future<NurseryLoginResponse> nurseryLogin(String email, String password) async {
     if(kDebugMode) {
       print("リクエスト: ${req}");
     }
-    jk
+
     var res = await client.nurseryLogin(req);
     if (kDebugMode) {
       debugPrint(res.toString());

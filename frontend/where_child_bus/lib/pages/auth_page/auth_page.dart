@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/proto-gen/where_child_bus/v1/nursery.pbgrpc.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
 
+enum NurseryLoginError {
+  unknown,
+  invalidCredentials,
+  serverError,
+  networkError,
+  databaseError,
+  //  他のエラータイプをここに追加
+}
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
@@ -13,6 +21,8 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  NurseryLoginError? _loginError;
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +35,24 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget pageBody() {
+    List<Widget> columnChildren = [
+      titleText(),
+      mailInputField(),
+      passwordInputField(),
+      spacer32(),
+      loginButton(),
+    ];
+
+    if (_loginError != null && _loginError == NurseryLoginError.invalidCredentials) {
+      columnChildren.add(emailOrPasswordNotFound());
+    }
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            titleText(),
-            mailInputField(),
-            passwordInputField(),
-            spacer32(),
-            loginButton(),
-          ],
+          children: columnChildren,
         ),
       ),
     );
@@ -91,6 +107,19 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
+  Widget emailOrPasswordNotFound() {
+    return const Padding(
+      padding:  EdgeInsets.all(8.0),
+      child:  Text(
+        "メールアドレスかパスワードが間違っています",
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: 13,  
+        ),
+      ),
+    );
+  }
+
   login() async {
     try {
       NurseryLoginResponse res = await nurseryLogin(
@@ -105,9 +134,9 @@ class _AuthPageState extends State<AuthPage> {
         print('Login failed');
       }
     } catch (e) {
-      //  エラーハンドリング
-      print('An error occurred: $e');
-      //  エラーメッセージを表示するか、ユーザーに通知するなどの処理を行う
+      setState(() {
+        _loginError = NurseryLoginError.invalidCredentials;
+      });
     }
   }
 
