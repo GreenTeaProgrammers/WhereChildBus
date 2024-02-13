@@ -45,6 +45,7 @@ class _CheckPageState extends State<CheckPage> {
           });
         },
         style: ElevatedButton.styleFrom(
+          backgroundColor: isRideBus != isRide ? Colors.grey : null,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
         ),
