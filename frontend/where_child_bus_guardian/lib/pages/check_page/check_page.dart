@@ -91,6 +91,7 @@ class _CheckPageState extends State<CheckPage> {
     );
   }
 
+  //TODO: 将来的にバックエンドとの通信を行う
   void setRideState(bool isMorning, int index) {
     if (isMorning) {
       isRideMorningBus = index == 0;
