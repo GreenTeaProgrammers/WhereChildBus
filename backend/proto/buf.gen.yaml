@@ -20,7 +20,9 @@ plugins:
     out:
       ../../machine_learning/src/proto-gen/
       # dependencies
-  - plugin: buf.build/protocolbuffers/python
+  - plugin: buf.build/protocolbuffers/python:v25.2
+    out: ../../machine_learning/src/proto-gen/
+  - plugin: buf.build/protocolbuffers/pyi:v25.2
     out: ../../machine_learning/src/proto-gen/
 
   # Dart用の設定 (クライアント側)
