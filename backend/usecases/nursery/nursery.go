@@ -3,7 +3,6 @@ package nursery
 import (
 	"fmt"
 
-	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/exp/slog"
 
 	"context"
@@ -24,13 +23,6 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 }
 
 func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginRequest) (*pb.NurseryLoginResponse, error) {
-	//パスワードをハッシュ化
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	if err != nil {
-		//エラーハンドリング
-		return nil, fmt.Errorf("failed to hash password: %w", err)
-	}
-
 	//トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
@@ -38,17 +30,21 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 	}
 	defer tx.Rollback()
 
-	//Nurseryを取得
+	// Nurseryを取得
 	nursery, err := tx.Nursery.Query().
 		Where(nurseryRepo.Email(req.Email)).
-		Where(nurseryRepo.HashedPassword(string(hashedPassword))).
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get nursery: %w", err)
+		return nil, fmt.Errorf("failed to get nursery")
 	}
 
-	//トランザクションをコミット
+	// フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
+	if !utils.CheckPassword(nursery.HashedPassword, req.Password) {
+		return nil, fmt.Errorf("failed to get nursery")
+	}
+
+	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
 		return nil, fmt.Errorf("failed to commit transaction: %w", err)
 	}

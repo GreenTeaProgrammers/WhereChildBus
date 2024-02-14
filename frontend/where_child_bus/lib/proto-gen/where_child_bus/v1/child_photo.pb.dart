@@ -9,7 +9,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -108,15 +107,6 @@ class DeleteChildPhotoResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.List<$core.String> get ids => $_getList(1);
-}
-
-class ChildPhotoServiceApi {
-  $pb.RpcClient _client;
-  ChildPhotoServiceApi(this._client);
-
-  $async.Future<DeleteChildPhotoResponse> deleteChildPhoto($pb.ClientContext? ctx, DeleteChildPhotoRequest request) =>
-    _client.invoke<DeleteChildPhotoResponse>(ctx, 'ChildPhotoService', 'DeleteChildPhoto', request, DeleteChildPhotoResponse())
-  ;
 }
 
 

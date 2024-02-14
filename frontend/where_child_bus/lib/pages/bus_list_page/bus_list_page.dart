@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 
 class BusListPage extends StatefulWidget {
   const BusListPage({super.key});
@@ -17,15 +18,33 @@ class _BusListPageState extends State<BusListPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: pageBody(),
+      floatingActionButton: addBusButton(),
+    );
+  }
+
+  Widget pageBody() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Expanded(
             child: listViewBuilder(),
           )
         ],
       ),
+    );
+  }
+
+  Widget addBusButton() {
+    return FloatingActionButton(
+      onPressed: (){
+        Navigator.push(
+          context,MaterialPageRoute(builder: (context) => BusEditPage())
+        );
+      },
+      child: const Icon(Icons.add),
     );
   }
 

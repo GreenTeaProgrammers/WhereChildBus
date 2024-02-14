@@ -35,13 +35,13 @@ class Status extends $pb.ProtobufEnum {
 class Sex extends $pb.ProtobufEnum {
   static const Sex SEX_UNSPECIFIED = Sex._(0, _omitEnumNames ? '' : 'SEX_UNSPECIFIED');
   static const Sex SEX_MAN = Sex._(1, _omitEnumNames ? '' : 'SEX_MAN');
-  static const Sex SEX_WOMEN = Sex._(2, _omitEnumNames ? '' : 'SEX_WOMEN');
+  static const Sex SEX_WOMAN = Sex._(2, _omitEnumNames ? '' : 'SEX_WOMAN');
   static const Sex SEX_OTHER = Sex._(3, _omitEnumNames ? '' : 'SEX_OTHER');
 
   static const $core.List<Sex> values = <Sex> [
     SEX_UNSPECIFIED,
     SEX_MAN,
-    SEX_WOMEN,
+    SEX_WOMAN,
     SEX_OTHER,
   ];
 

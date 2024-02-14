@@ -37,7 +37,7 @@ func New(opts ...optionFunc) *grpc.Server {
 	busSrv := grpc_interfaces.NewBusServiceServer(busInteractor)
 	pb.RegisterBusServiceServer(srv, busSrv)
 
-	childInteractor := child.NewInteractor(opt.entClient, opt.logger)
+	childInteractor := child.NewInteractor(opt.entClient, opt.logger, opt.storageClient, opt.bucketName) // NOTE: GCSを使うのでstorageClientとbucketNameを渡す
 	childSrv := grpc_interfaces.NewChildServiceServer(childInteractor)
 	pb.RegisterChildServiceServer(srv, childSrv)
 
