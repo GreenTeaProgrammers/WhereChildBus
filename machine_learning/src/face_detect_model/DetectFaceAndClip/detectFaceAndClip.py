@@ -83,6 +83,28 @@ def save_face_image_to_remote(face, save_blob_name, bucket):
     save_blob.upload_from_string(data=png_cliped_face_data, content_type="image/png")
 
 
+def init_save_dir(save_dir_path):
+    os.makedirs(save_dir_path, exist_ok=True)
+    for file in os.listdir(save_dir_path):
+        file_path = os.path.join(save_dir_path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+
+def init_client():
+    from google.oauth2 import service_account
+    import google.cloud.storage as gcs
+
+    # TODO: GCP Cloud Functions でdeployする際の実装
+    KEY_PATH = os.environ.get("CREDENTIALS_KEY_PATH")
+    credential = service_account.Credentials.from_service_account_file(KEY_PATH)
+
+    PROJECT_ID = os.environ.get("PROJECT_ID")
+
+    client = gcs.Client(PROJECT_ID, credentials=credential)
+    return client
+
+
 def main(args):
     logger.info(f"env: {args.env}")
     with open("src/face_detect_model/config.yaml", "r") as f:
@@ -96,32 +118,19 @@ def main(args):
 
     # 保存先ディレクトリの作成，存在した場合は中身を削除
     if args.env == "local":
-        save_dir_path = args.save_dir_path
-        os.makedirs(save_dir_path, exist_ok=True)
-        for file in os.listdir(save_dir_path):
-            file_path = os.path.join(save_dir_path, file)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+        init_save_dir(args.save_dir_path)
 
     # GCSとの接続
     if args.env == "remote":
-        from google.oauth2 import service_account
-        import google.cloud.storage as gcs
+        client = init_client()
+        if client is not None:
+            BUCKET_NAME = os.environ.get("BUCKET_NAME")
+            bucket = client.bucket(BUCKET_NAME)
+        else:
+            logger.error("Failed to connect to GCS")
+            exit(1)
 
-        # TODO: GCP Cloud Functions でdeployする際の実装
-        key_path = os.environ.get("CREDENTIALS_KEY_PATH")
-        credential = service_account.Credentials.from_service_account_file(key_path)
-
-        PROJECT_ID = os.environ.get("PROJECT_ID")
-        BUCKET_NAME = os.environ.get("BUCKET_NAME")
-
-        SOURCE_BLOB_NAME = f"{args.nursery_id}/{args.child_id}/row/"
-
-        client = gcs.Client(PROJECT_ID, credentials=credential)
-        bucket = client.bucket(BUCKET_NAME)
         logger.info("get bucket success!")
-
-        blobs = bucket.list_blobs(prefix=SOURCE_BLOB_NAME, delimiter="/")
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
@@ -129,6 +138,8 @@ def main(args):
     if args.env == "local":
         images = load_image(args)
     elif args.env == "remote":
+        SOURCE_BLOB_NAME = f"{args.nursery_id}/{args.child_id}/row/"
+        blobs = bucket.list_blobs(prefix=SOURCE_BLOB_NAME, delimiter="/")
         images = load_image(args, blobs=blobs)
 
     logger.info("Detecting faces...")
