@@ -121,9 +121,16 @@ class _AuthPageState extends State<AuthPage> {
 
   login() async {
     BuildContext currentContext = context;
+    NurseryLoginResponse res;
     try {
-      NurseryLoginResponse res = await nurseryLogin(
-          _emailController.text, _passwordController.text);
+      if(kDebugMode) {
+        res = await nurseryLogin(
+            "demo@example.com", "password");
+      } else {
+        res = await nurseryLogin(
+            _emailController.text, _passwordController.text);
+      }
+
       
       if (res.success) {
         print(res.success);
