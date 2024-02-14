@@ -16,7 +16,7 @@ message UpdateStationRequest {
 }
 
 message UpdateStationResponse {
-    Station station = 1;
+        Station station = 1;
 }
 
 message GetStationListByBusIdRequest {
