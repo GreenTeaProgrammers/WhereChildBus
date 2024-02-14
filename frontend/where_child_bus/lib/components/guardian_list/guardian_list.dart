@@ -28,12 +28,66 @@ class _GuardiansListState extends State<GuardianList> {
   }
 
   Widget body() {
-    return Column(
-      children: [
-        addedGuardiansListView(),
-        const SizedBox(height: 15,),
-        unSelectedGuardiansListView(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            height: calculateAddedGuardiansHeight(),
+            child: ReorderableListView(
+              onReorder: (int oldIndex, int newIndex) => onReorder(oldIndex, newIndex),
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: widget.addedGuardians.map((item) {
+                int index = widget.addedGuardians.indexOf(item);
+                return SelectedGuardianListElement(
+                  key: ValueKey(item),
+                  title: item,
+                  subtitle: "サブタイトル ${index + 1}",
+                  order: index + 1,
+                  onButtonPressed: () => removeGuardians(index),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 15),
+          for (int index = 0; index < widget.guardianNames.length; index++)
+            guardianListElement(context, index),
+        ],
+      ),
+    );
+  }
+
+  void onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final item = widget.addedGuardians.removeAt(oldIndex);
+      widget.addedGuardians.insert(newIndex, item);
+    });
+  }
+
+
+  double calculateAddedGuardiansHeight() {
+    // 項目の高さ、項目間のスペース、その他のマージンなどを考慮して高さを計算
+    double itemHeight = 110.0; 
+    int itemCount = widget.addedGuardians.length;
+    return itemHeight * itemCount; 
+  }
+
+  Widget addedGuardiansListViewContent() {
+    return ListView.builder(
+      itemCount: widget.addedGuardians.length,
+      itemBuilder: (context, index) {
+        String item = widget.addedGuardians[index];
+        // 追加された保護者リストの項目を構築
+        return SelectedGuardianListElement(
+          title: item,
+          subtitle: "サブタイトル",
+          order: index + 1,
+          onButtonPressed: () => removeGuardians(index),
+        );
+      },
     );
   }
 
