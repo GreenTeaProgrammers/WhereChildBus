@@ -4,10 +4,10 @@ import 'current_time_widget.dart';
 class CurrentTimeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height * 0.2,
+    return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.15,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               "現在時刻",

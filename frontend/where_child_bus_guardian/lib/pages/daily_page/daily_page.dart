@@ -9,11 +9,11 @@ class DailyPage extends StatefulWidget {
 }
 
 class _DailyPageState extends State<DailyPage> {
+  var isBoarding = false;
   var hasBag = true;
   var hasLunchBox = true;
   var hasWaterBottle = true;
-  var hasUmbrella = true;
-  var isBoarding = true;
+  var hasUmbrella = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,10 @@ class _DailyPageState extends State<DailyPage> {
       children: <Widget>[
         childFaceAndExpression(),
         Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
+            padding: const EdgeInsets.only(top: 20, bottom: 10),
             child: childName()),
+        statusIconAndStatusField(
+            Icons.directions_bus, isBoardingStatusField(context)),
         statusIconAndStatusField(Icons.business_center, childItemList(context)),
       ],
     );
@@ -99,13 +101,35 @@ class _DailyPageState extends State<DailyPage> {
         ));
   }
 
+  Widget isBoardingStatusField(context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.5,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: isBoarding ? Colors.red : Colors.green,
+        ),
+        color: isBoarding ? Colors.red[100] : Colors.green[100],
+      ),
+      child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            isBoarding ? "乗車中" : "降車済",
+            style: TextStyle(
+              fontSize: 16,
+              color: isBoarding ? Colors.red : Colors.green,
+            ),
+            textAlign: TextAlign.center,
+          )),
+    );
+  }
+
   Widget childItemList(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.6,
+      width: MediaQuery.of(context).size.width * 0.5,
       child: Wrap(
         direction: Axis.horizontal,
-        alignment: WrapAlignment.center,
-        spacing: 8.0,
+        alignment: WrapAlignment.spaceBetween,
         runAlignment: WrapAlignment.spaceBetween,
         runSpacing: 4.0,
         children: [
@@ -120,7 +144,7 @@ class _DailyPageState extends State<DailyPage> {
 
   Widget itemText(String itemName, bool hasItem) {
     return Container(
-        width: 90,
+        width: MediaQuery.of(context).size.width * 0.24,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           border: Border.all(
@@ -129,7 +153,7 @@ class _DailyPageState extends State<DailyPage> {
           color: hasItem ? Colors.green[100] : Colors.red[100],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
           child: Text(
             itemName,
             style: TextStyle(
