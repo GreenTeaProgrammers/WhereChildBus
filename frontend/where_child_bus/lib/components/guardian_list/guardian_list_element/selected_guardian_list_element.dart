@@ -30,7 +30,7 @@ class _SelectedGuardianListElementState extends State<SelectedGuardianListElemen
         child: InkWell(
           onTap: widget.onButtonPressed,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal:8.0, vertical: 16),
             child: Row(
               children: [
                 // 並び替え用のドラッグハンドルアイコンを追加
@@ -42,8 +42,9 @@ class _SelectedGuardianListElementState extends State<SelectedGuardianListElemen
                   ),
                 ),
                 NumberIcon(number: widget.order, color: Colors.indigo,), // 順序番号アイコン
-                SizedBox(width: 16),
-                titleText(widget.title,),
+                const SizedBox(width: 16),
+                Expanded(child: titleAndSubTitle(widget.title, widget.subtitle)),
+                removeButton(),
               ],
             ),
           ),
@@ -51,11 +52,24 @@ class _SelectedGuardianListElementState extends State<SelectedGuardianListElemen
       ),
     );
   }
-  Widget addButton() {
-    // ボタンの表示をカスタマイズする場合はここで変更
+
+  Widget removeButton() {
     return IconButton(
       onPressed: widget.onButtonPressed,
-      icon: const Icon(Icons.add),
+      icon: const Icon(Icons.remove),
+    );
+  }
+
+  Widget titleAndSubTitle(String title, String subtitle) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          titleText(title),
+          subTitleText(subtitle),
+        ],
+      ),
     );
   }
 
@@ -64,6 +78,10 @@ class _SelectedGuardianListElementState extends State<SelectedGuardianListElemen
       title,
       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     );
+  }
+
+  Text subTitleText(String subtitle) {
+    return Text(subtitle);
   }
 
   Padding listElementPadding(Widget child) {

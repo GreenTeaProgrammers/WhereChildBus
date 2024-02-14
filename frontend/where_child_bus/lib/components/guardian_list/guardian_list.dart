@@ -31,6 +31,7 @@ class _GuardiansListState extends State<GuardianList> {
     return Column(
       children: [
         addedGuardiansListView(),
+        const SizedBox(height: 15,),
         unSelectedGuardiansListView(),
       ],
     );
@@ -53,7 +54,7 @@ Widget addedGuardiansListView() {
   double screenHeight = MediaQuery.of(context).size.height;
   double maxHeight = screenHeight * 0.5;
 
-  double itemHeight = 100.0;
+  double itemHeight = 110.0;
   double actualHeight = widget.addedGuardians.length * itemHeight;
 
   double listViewHeight = actualHeight > maxHeight ? maxHeight : actualHeight;
@@ -76,11 +77,9 @@ Widget addedGuardiansListView() {
         return SelectedGuardianListElement(
           key: ValueKey(item), // 一意のキーを指定
           title: item, // 保護者の名前
-          subtitle: "サブタイトル $index", // サブタイトル（適宜変更可能）
+          subtitle: "サブタイトル",
           order: index + 1, // 順序番号（1から始まるように+1をしている）
-          onButtonPressed: () {
-            // ボタンが押された時のアクション（必要に応じて実装）
-          },
+          onButtonPressed: () => removeGuardians(index),
         );
       }).toList(),
     ),
@@ -95,9 +94,7 @@ Widget addedGuardiansListView() {
       onButtonPressed: () => addGuardians(index),
     );
   }
-
   
-  //functions
   void addGuardians(int index) {
     setState(() {
       widget.addedGuardians.add(widget.guardianNames[index]);
@@ -106,9 +103,17 @@ Widget addedGuardiansListView() {
     });
   }
 
-  void swap(List list, int index1, int index2) {
-    var temp = list[index1];
-    list[index1] = list[index2];
-    list[index2] = temp;
-  }
+  void removeGuardians(int index) {
+  setState(() {
+    // 追加された保護者リストから保護者を取得し削除
+    String removedGuardian = widget.addedGuardians.removeAt(index);
+
+    //戻すときは、先頭に配置
+    widget.guardianNames.insert(0, removedGuardian);
+    
+    // groupNamesへの追加も必要ですが、どのグループに所属していたかの情報が必要
+    widget.groupNames.add("ダミーグループ");
+  });
+}
+
 }
