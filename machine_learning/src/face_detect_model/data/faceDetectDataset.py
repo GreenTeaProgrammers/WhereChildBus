@@ -36,30 +36,6 @@ class FaceDetectDataset(torch.utils.data.Dataset):
                 image,  # ここではNumPy配列として格納
             ))
 
-    @staticmethod
-    def default_transforms():
-        return transforms.Compose([
-            transforms.ToPILImage(),  # NumPy配列をPIL Imageに変換
-            transforms.Resize((224, 224)),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
-
-    def _is_valid_file(self, file_name):
-        return os.path.splitext(file_name)[1].lower() in self.VALID_EXTENSIONS
-
-    def __len__(self):
-        return len(self.face_data)
-
-    def __getitem__(self, idx):
-        label, image = self.face_data[idx]
-
-        # NumPy配列をPIL Imageに変換し、transformが定義されている場合は適用
-        if self.transform:
-            image = self.transform(image)
-
-        return label, image
 
     def get_label_name_dict(self):
         return self.label_name_dict
@@ -75,3 +51,43 @@ class FaceDetectDataset(torch.utils.data.Dataset):
             return sample_image.shape
         else:
             return None
+
+    @staticmethod
+    def default_transforms():
+        return transforms.Compose([
+            transforms.ToPILImage(),  # NumPy配列をPIL Imageに変換
+            transforms.Resize((224, 224)),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+        
+        
+    def augment_image(self, image, num_variations=5):
+
+        transformations = self.default_transforms()  # デフォルトの変換を使用
+        augmented_images = []
+
+        for _ in range(num_variations):
+            # ここでランダムな変換を適用する
+            # 例: transforms.RandomHorizontalFlip() など、ランダム性を含む変換を追加できる
+            augmented_image = transformations(image)
+            augmented_images.append(augmented_image)
+
+        return torch.stack(augmented_images)  # テンソルのリストをスタックして返す
+
+    def _is_valid_file(self, file_name):
+        return os.path.splitext(file_name)[1].lower() in self.VALID_EXTENSIONS
+
+    def __len__(self):
+        return len(self.face_data)
+
+def __getitem__(self, idx):
+    label, image_np = self.face_data[idx]
+    image = Image.fromarray(image_np)  # NumPy配列をPIL Imageに変換
+
+    # ここでaugment_imageメソッドを使用して画像のバリエーションを生成
+    augmented_images = self.augment_image(image)
+
+    # ラベルと拡張された画像のリストを紐付けて返す
+    return [(label, augmented_image) for augmented_image in augmented_images]
