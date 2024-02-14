@@ -13,6 +13,116 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class DuplicationCheckRequest extends $pb.GeneratedMessage {
+  factory DuplicationCheckRequest({
+    $core.Iterable<$core.String>? childIds,
+  }) {
+    final $result = create();
+    if (childIds != null) {
+      $result.childIds.addAll(childIds);
+    }
+    return $result;
+  }
+  DuplicationCheckRequest._() : super();
+  factory DuplicationCheckRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DuplicationCheckRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DuplicationCheckRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'childIds')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DuplicationCheckRequest clone() => DuplicationCheckRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DuplicationCheckRequest copyWith(void Function(DuplicationCheckRequest) updates) => super.copyWith((message) => updates(message as DuplicationCheckRequest)) as DuplicationCheckRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DuplicationCheckRequest create() => DuplicationCheckRequest._();
+  DuplicationCheckRequest createEmptyInstance() => create();
+  static $pb.PbList<DuplicationCheckRequest> createRepeated() => $pb.PbList<DuplicationCheckRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DuplicationCheckRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DuplicationCheckRequest>(create);
+  static DuplicationCheckRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get childIds => $_getList(0);
+}
+
+class DuplicationCheckResponse extends $pb.GeneratedMessage {
+  factory DuplicationCheckResponse({
+    $core.bool? isDuplicated,
+    $core.Iterable<$core.String>? photoIds,
+    $core.Iterable<$core.List<$core.int>>? duplicatedPhotos,
+  }) {
+    final $result = create();
+    if (isDuplicated != null) {
+      $result.isDuplicated = isDuplicated;
+    }
+    if (photoIds != null) {
+      $result.photoIds.addAll(photoIds);
+    }
+    if (duplicatedPhotos != null) {
+      $result.duplicatedPhotos.addAll(duplicatedPhotos);
+    }
+    return $result;
+  }
+  DuplicationCheckResponse._() : super();
+  factory DuplicationCheckResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DuplicationCheckResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DuplicationCheckResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'isDuplicated')
+    ..pPS(2, _omitFieldNames ? '' : 'photoIds')
+    ..p<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'duplicatedPhotos', $pb.PbFieldType.PY)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DuplicationCheckResponse clone() => DuplicationCheckResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DuplicationCheckResponse copyWith(void Function(DuplicationCheckResponse) updates) => super.copyWith((message) => updates(message as DuplicationCheckResponse)) as DuplicationCheckResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DuplicationCheckResponse create() => DuplicationCheckResponse._();
+  DuplicationCheckResponse createEmptyInstance() => create();
+  static $pb.PbList<DuplicationCheckResponse> createRepeated() => $pb.PbList<DuplicationCheckResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DuplicationCheckResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DuplicationCheckResponse>(create);
+  static DuplicationCheckResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get isDuplicated => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isDuplicated($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsDuplicated() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsDuplicated() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get photoIds => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.List<$core.int>> get duplicatedPhotos => $_getList(2);
+}
+
 class DeleteChildPhotoRequest extends $pb.GeneratedMessage {
   factory DeleteChildPhotoRequest({
     $core.Iterable<$core.String>? ids,

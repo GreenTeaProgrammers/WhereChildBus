@@ -21,10 +21,10 @@ export 'station.pb.dart';
 
 @$pb.GrpcServiceName('where_child_bus.v1.StationService')
 class StationServiceClient extends $grpc.Client {
-  static final _$createStation = $grpc.ClientMethod<$6.CreateStationRequest, $6.CreateStationResponse>(
-      '/where_child_bus.v1.StationService/CreateStation',
-      ($6.CreateStationRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $6.CreateStationResponse.fromBuffer(value));
+  static final _$updateStation = $grpc.ClientMethod<$6.UpdateStationRequest, $6.UpdateStationResponse>(
+      '/where_child_bus.v1.StationService/UpdateStation',
+      ($6.UpdateStationRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.UpdateStationResponse.fromBuffer(value));
   static final _$getStationListByBusId = $grpc.ClientMethod<$6.GetStationListByBusIdRequest, $6.GetStationListByBusIdResponse>(
       '/where_child_bus.v1.StationService/GetStationListByBusId',
       ($6.GetStationListByBusIdRequest value) => value.writeToBuffer(),
@@ -36,8 +36,8 @@ class StationServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$6.CreateStationResponse> createStation($6.CreateStationRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createStation, request, options: options);
+  $grpc.ResponseFuture<$6.UpdateStationResponse> updateStation($6.UpdateStationRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$updateStation, request, options: options);
   }
 
   $grpc.ResponseFuture<$6.GetStationListByBusIdResponse> getStationListByBusId($6.GetStationListByBusIdRequest request, {$grpc.CallOptions? options}) {
@@ -50,13 +50,13 @@ abstract class StationServiceBase extends $grpc.Service {
   $core.String get $name => 'where_child_bus.v1.StationService';
 
   StationServiceBase() {
-    $addMethod($grpc.ServiceMethod<$6.CreateStationRequest, $6.CreateStationResponse>(
-        'CreateStation',
-        createStation_Pre,
+    $addMethod($grpc.ServiceMethod<$6.UpdateStationRequest, $6.UpdateStationResponse>(
+        'UpdateStation',
+        updateStation_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $6.CreateStationRequest.fromBuffer(value),
-        ($6.CreateStationResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $6.UpdateStationRequest.fromBuffer(value),
+        ($6.UpdateStationResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$6.GetStationListByBusIdRequest, $6.GetStationListByBusIdResponse>(
         'GetStationListByBusId',
         getStationListByBusId_Pre,
@@ -66,14 +66,14 @@ abstract class StationServiceBase extends $grpc.Service {
         ($6.GetStationListByBusIdResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$6.CreateStationResponse> createStation_Pre($grpc.ServiceCall call, $async.Future<$6.CreateStationRequest> request) async {
-    return createStation(call, await request);
+  $async.Future<$6.UpdateStationResponse> updateStation_Pre($grpc.ServiceCall call, $async.Future<$6.UpdateStationRequest> request) async {
+    return updateStation(call, await request);
   }
 
   $async.Future<$6.GetStationListByBusIdResponse> getStationListByBusId_Pre($grpc.ServiceCall call, $async.Future<$6.GetStationListByBusIdRequest> request) async {
     return getStationListByBusId(call, await request);
   }
 
-  $async.Future<$6.CreateStationResponse> createStation($grpc.ServiceCall call, $6.CreateStationRequest request);
+  $async.Future<$6.UpdateStationResponse> updateStation($grpc.ServiceCall call, $6.UpdateStationRequest request);
   $async.Future<$6.GetStationListByBusIdResponse> getStationListByBusId($grpc.ServiceCall call, $6.GetStationListByBusIdRequest request);
 }

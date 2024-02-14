@@ -20,15 +20,17 @@ const CreateBusRequest$json = {
     {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'plate_number', '3': 3, '4': 1, '5': 9, '10': 'plateNumber'},
-    {'1': 'child_ids', '3': 4, '4': 3, '5': 9, '10': 'childIds'},
+    {'1': 'morning_guardian_ids', '3': 4, '4': 3, '5': 9, '10': 'morningGuardianIds'},
+    {'1': 'evening_guardian_ids', '3': 5, '4': 3, '5': 9, '10': 'eveningGuardianIds'},
   ],
 };
 
 /// Descriptor for `CreateBusRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBusRequestDescriptor = $convert.base64Decode(
     'ChBDcmVhdGVCdXNSZXF1ZXN0Eh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcnlJZBISCgRuYW'
-    '1lGAIgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgDIAEoCVILcGxhdGVOdW1iZXISGwoJY2hp'
-    'bGRfaWRzGAQgAygJUghjaGlsZElkcw==');
+    '1lGAIgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgDIAEoCVILcGxhdGVOdW1iZXISMAoUbW9y'
+    'bmluZ19ndWFyZGlhbl9pZHMYBCADKAlSEm1vcm5pbmdHdWFyZGlhbklkcxIwChRldmVuaW5nX2'
+    'd1YXJkaWFuX2lkcxgFIAMoCVISZXZlbmluZ0d1YXJkaWFuSWRz');
 
 @$core.Deprecated('Use createBusResponseDescriptor instead')
 const CreateBusResponse$json = {

@@ -20,7 +20,8 @@ class CreateBusRequest extends $pb.GeneratedMessage {
     $core.String? nurseryId,
     $core.String? name,
     $core.String? plateNumber,
-    $core.Iterable<$core.String>? childIds,
+    $core.Iterable<$core.String>? morningGuardianIds,
+    $core.Iterable<$core.String>? eveningGuardianIds,
   }) {
     final $result = create();
     if (nurseryId != null) {
@@ -32,8 +33,11 @@ class CreateBusRequest extends $pb.GeneratedMessage {
     if (plateNumber != null) {
       $result.plateNumber = plateNumber;
     }
-    if (childIds != null) {
-      $result.childIds.addAll(childIds);
+    if (morningGuardianIds != null) {
+      $result.morningGuardianIds.addAll(morningGuardianIds);
+    }
+    if (eveningGuardianIds != null) {
+      $result.eveningGuardianIds.addAll(eveningGuardianIds);
     }
     return $result;
   }
@@ -45,7 +49,8 @@ class CreateBusRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'plateNumber')
-    ..pPS(4, _omitFieldNames ? '' : 'childIds')
+    ..pPS(4, _omitFieldNames ? '' : 'morningGuardianIds')
+    ..pPS(5, _omitFieldNames ? '' : 'eveningGuardianIds')
     ..hasRequiredFields = false
   ;
 
@@ -98,7 +103,10 @@ class CreateBusRequest extends $pb.GeneratedMessage {
   void clearPlateNumber() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.List<$core.String> get childIds => $_getList(3);
+  $core.List<$core.String> get morningGuardianIds => $_getList(3);
+
+  @$pb.TagNumber(5)
+  $core.List<$core.String> get eveningGuardianIds => $_getList(4);
 }
 
 class CreateBusResponse extends $pb.GeneratedMessage {

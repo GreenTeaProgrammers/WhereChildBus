@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	ChildPhotoService_DuplicationCheck_FullMethodName = "/where_child_bus.v1.ChildPhotoService/DuplicationCheck"
 	ChildPhotoService_DeleteChildPhoto_FullMethodName = "/where_child_bus.v1.ChildPhotoService/DeleteChildPhoto"
 )
 
@@ -26,6 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChildPhotoServiceClient interface {
+	DuplicationCheck(ctx context.Context, in *DuplicationCheckRequest, opts ...grpc.CallOption) (*DuplicationCheckResponse, error)
 	DeleteChildPhoto(ctx context.Context, in *DeleteChildPhotoRequest, opts ...grpc.CallOption) (*DeleteChildPhotoResponse, error)
 }
 
@@ -35,6 +37,15 @@ type childPhotoServiceClient struct {
 
 func NewChildPhotoServiceClient(cc grpc.ClientConnInterface) ChildPhotoServiceClient {
 	return &childPhotoServiceClient{cc}
+}
+
+func (c *childPhotoServiceClient) DuplicationCheck(ctx context.Context, in *DuplicationCheckRequest, opts ...grpc.CallOption) (*DuplicationCheckResponse, error) {
+	out := new(DuplicationCheckResponse)
+	err := c.cc.Invoke(ctx, ChildPhotoService_DuplicationCheck_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *childPhotoServiceClient) DeleteChildPhoto(ctx context.Context, in *DeleteChildPhotoRequest, opts ...grpc.CallOption) (*DeleteChildPhotoResponse, error) {
@@ -50,6 +61,7 @@ func (c *childPhotoServiceClient) DeleteChildPhoto(ctx context.Context, in *Dele
 // All implementations should embed UnimplementedChildPhotoServiceServer
 // for forward compatibility
 type ChildPhotoServiceServer interface {
+	DuplicationCheck(context.Context, *DuplicationCheckRequest) (*DuplicationCheckResponse, error)
 	DeleteChildPhoto(context.Context, *DeleteChildPhotoRequest) (*DeleteChildPhotoResponse, error)
 }
 
@@ -57,6 +69,9 @@ type ChildPhotoServiceServer interface {
 type UnimplementedChildPhotoServiceServer struct {
 }
 
+func (UnimplementedChildPhotoServiceServer) DuplicationCheck(context.Context, *DuplicationCheckRequest) (*DuplicationCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DuplicationCheck not implemented")
+}
 func (UnimplementedChildPhotoServiceServer) DeleteChildPhoto(context.Context, *DeleteChildPhotoRequest) (*DeleteChildPhotoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteChildPhoto not implemented")
 }
@@ -70,6 +85,24 @@ type UnsafeChildPhotoServiceServer interface {
 
 func RegisterChildPhotoServiceServer(s grpc.ServiceRegistrar, srv ChildPhotoServiceServer) {
 	s.RegisterService(&ChildPhotoService_ServiceDesc, srv)
+}
+
+func _ChildPhotoService_DuplicationCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DuplicationCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChildPhotoServiceServer).DuplicationCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChildPhotoService_DuplicationCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChildPhotoServiceServer).DuplicationCheck(ctx, req.(*DuplicationCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ChildPhotoService_DeleteChildPhoto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -97,6 +130,10 @@ var ChildPhotoService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "where_child_bus.v1.ChildPhotoService",
 	HandlerType: (*ChildPhotoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "DuplicationCheck",
+			Handler:    _ChildPhotoService_DuplicationCheck_Handler,
+		},
 		{
 			MethodName: "DeleteChildPhoto",
 			Handler:    _ChildPhotoService_DeleteChildPhoto_Handler,

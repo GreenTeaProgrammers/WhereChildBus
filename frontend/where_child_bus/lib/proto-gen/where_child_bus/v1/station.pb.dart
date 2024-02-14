@@ -15,31 +15,31 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'resources.pb.dart' as $8;
 
-class CreateStationRequest extends $pb.GeneratedMessage {
-  factory CreateStationRequest({
+class UpdateStationRequest extends $pb.GeneratedMessage {
+  factory UpdateStationRequest({
     $core.String? guardianId,
-    $core.double? longtitude,
+    $core.double? longitude,
     $core.double? latitude,
   }) {
     final $result = create();
     if (guardianId != null) {
       $result.guardianId = guardianId;
     }
-    if (longtitude != null) {
-      $result.longtitude = longtitude;
+    if (longitude != null) {
+      $result.longitude = longitude;
     }
     if (latitude != null) {
       $result.latitude = latitude;
     }
     return $result;
   }
-  CreateStationRequest._() : super();
-  factory CreateStationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateStationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  UpdateStationRequest._() : super();
+  factory UpdateStationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateStationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateStationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'guardianId')
-    ..a<$core.double>(2, _omitFieldNames ? '' : 'longtitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..a<$core.double>(3, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..hasRequiredFields = false
   ;
@@ -48,22 +48,22 @@ class CreateStationRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  CreateStationRequest clone() => CreateStationRequest()..mergeFromMessage(this);
+  UpdateStationRequest clone() => UpdateStationRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateStationRequest copyWith(void Function(CreateStationRequest) updates) => super.copyWith((message) => updates(message as CreateStationRequest)) as CreateStationRequest;
+  UpdateStationRequest copyWith(void Function(UpdateStationRequest) updates) => super.copyWith((message) => updates(message as UpdateStationRequest)) as UpdateStationRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CreateStationRequest create() => CreateStationRequest._();
-  CreateStationRequest createEmptyInstance() => create();
-  static $pb.PbList<CreateStationRequest> createRepeated() => $pb.PbList<CreateStationRequest>();
+  static UpdateStationRequest create() => UpdateStationRequest._();
+  UpdateStationRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateStationRequest> createRepeated() => $pb.PbList<UpdateStationRequest>();
   @$core.pragma('dart2js:noInline')
-  static CreateStationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateStationRequest>(create);
-  static CreateStationRequest? _defaultInstance;
+  static UpdateStationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateStationRequest>(create);
+  static UpdateStationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get guardianId => $_getSZ(0);
@@ -75,13 +75,13 @@ class CreateStationRequest extends $pb.GeneratedMessage {
   void clearGuardianId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.double get longtitude => $_getN(1);
+  $core.double get longitude => $_getN(1);
   @$pb.TagNumber(2)
-  set longtitude($core.double v) { $_setDouble(1, v); }
+  set longitude($core.double v) { $_setDouble(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasLongtitude() => $_has(1);
+  $core.bool hasLongitude() => $_has(1);
   @$pb.TagNumber(2)
-  void clearLongtitude() => clearField(2);
+  void clearLongitude() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.double get latitude => $_getN(2);
@@ -93,8 +93,8 @@ class CreateStationRequest extends $pb.GeneratedMessage {
   void clearLatitude() => clearField(3);
 }
 
-class CreateStationResponse extends $pb.GeneratedMessage {
-  factory CreateStationResponse({
+class UpdateStationResponse extends $pb.GeneratedMessage {
+  factory UpdateStationResponse({
     $8.Station? station,
   }) {
     final $result = create();
@@ -103,11 +103,11 @@ class CreateStationResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  CreateStationResponse._() : super();
-  factory CreateStationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateStationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  UpdateStationResponse._() : super();
+  factory UpdateStationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateStationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateStationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOM<$8.Station>(1, _omitFieldNames ? '' : 'station', subBuilder: $8.Station.create)
     ..hasRequiredFields = false
   ;
@@ -116,22 +116,22 @@ class CreateStationResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  CreateStationResponse clone() => CreateStationResponse()..mergeFromMessage(this);
+  UpdateStationResponse clone() => UpdateStationResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateStationResponse copyWith(void Function(CreateStationResponse) updates) => super.copyWith((message) => updates(message as CreateStationResponse)) as CreateStationResponse;
+  UpdateStationResponse copyWith(void Function(UpdateStationResponse) updates) => super.copyWith((message) => updates(message as UpdateStationResponse)) as UpdateStationResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static CreateStationResponse create() => CreateStationResponse._();
-  CreateStationResponse createEmptyInstance() => create();
-  static $pb.PbList<CreateStationResponse> createRepeated() => $pb.PbList<CreateStationResponse>();
+  static UpdateStationResponse create() => UpdateStationResponse._();
+  UpdateStationResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateStationResponse> createRepeated() => $pb.PbList<UpdateStationResponse>();
   @$core.pragma('dart2js:noInline')
-  static CreateStationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateStationResponse>(create);
-  static CreateStationResponse? _defaultInstance;
+  static UpdateStationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateStationResponse>(create);
+  static UpdateStationResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $8.Station get station => $_getN(0);

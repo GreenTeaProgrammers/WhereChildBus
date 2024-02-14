@@ -26,7 +26,7 @@ class Nursery extends $pb.GeneratedMessage {
     $core.String? address,
     $core.String? phoneNumber,
     $core.String? email,
-    $core.String? encryptedPassword,
+    $core.String? hashedPassword,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -49,8 +49,8 @@ class Nursery extends $pb.GeneratedMessage {
     if (email != null) {
       $result.email = email;
     }
-    if (encryptedPassword != null) {
-      $result.encryptedPassword = encryptedPassword;
+    if (hashedPassword != null) {
+      $result.hashedPassword = hashedPassword;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -71,7 +71,7 @@ class Nursery extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'address')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
     ..aOS(6, _omitFieldNames ? '' : 'email')
-    ..aOS(7, _omitFieldNames ? '' : 'encryptedPassword')
+    ..aOS(7, _omitFieldNames ? '' : 'hashedPassword')
     ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
     ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
@@ -153,13 +153,13 @@ class Nursery extends $pb.GeneratedMessage {
   void clearEmail() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get encryptedPassword => $_getSZ(6);
+  $core.String get hashedPassword => $_getSZ(6);
   @$pb.TagNumber(7)
-  set encryptedPassword($core.String v) { $_setString(6, v); }
+  set hashedPassword($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasEncryptedPassword() => $_has(6);
+  $core.bool hasHashedPassword() => $_has(6);
   @$pb.TagNumber(7)
-  void clearEncryptedPassword() => clearField(7);
+  void clearHashedPassword() => clearField(7);
 
   @$pb.TagNumber(8)
   $7.Timestamp get createdAt => $_getN(7);
@@ -344,7 +344,9 @@ class Guardian extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? email,
     $core.String? phoneNumber,
-    $core.String? encryptedPassword,
+    $core.String? hashedPassword,
+    $core.bool? isUseMorningBus,
+    $core.bool? isUseEveningBus,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -364,8 +366,14 @@ class Guardian extends $pb.GeneratedMessage {
     if (phoneNumber != null) {
       $result.phoneNumber = phoneNumber;
     }
-    if (encryptedPassword != null) {
-      $result.encryptedPassword = encryptedPassword;
+    if (hashedPassword != null) {
+      $result.hashedPassword = hashedPassword;
+    }
+    if (isUseMorningBus != null) {
+      $result.isUseMorningBus = isUseMorningBus;
+    }
+    if (isUseEveningBus != null) {
+      $result.isUseEveningBus = isUseEveningBus;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -385,9 +393,11 @@ class Guardian extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'email')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
-    ..aOS(6, _omitFieldNames ? '' : 'encryptedPassword')
-    ..aOM<$7.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOS(6, _omitFieldNames ? '' : 'hashedPassword')
+    ..aOB(7, _omitFieldNames ? '' : 'isUseMorningBus')
+    ..aOB(8, _omitFieldNames ? '' : 'isUseEveningBus')
+    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -458,35 +468,53 @@ class Guardian extends $pb.GeneratedMessage {
   void clearPhoneNumber() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get encryptedPassword => $_getSZ(5);
+  $core.String get hashedPassword => $_getSZ(5);
   @$pb.TagNumber(6)
-  set encryptedPassword($core.String v) { $_setString(5, v); }
+  set hashedPassword($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasEncryptedPassword() => $_has(5);
+  $core.bool hasHashedPassword() => $_has(5);
   @$pb.TagNumber(6)
-  void clearEncryptedPassword() => clearField(6);
+  void clearHashedPassword() => clearField(6);
 
   @$pb.TagNumber(7)
-  $7.Timestamp get createdAt => $_getN(6);
+  $core.bool get isUseMorningBus => $_getBF(6);
   @$pb.TagNumber(7)
-  set createdAt($7.Timestamp v) { setField(7, v); }
+  set isUseMorningBus($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasCreatedAt() => $_has(6);
+  $core.bool hasIsUseMorningBus() => $_has(6);
   @$pb.TagNumber(7)
-  void clearCreatedAt() => clearField(7);
-  @$pb.TagNumber(7)
-  $7.Timestamp ensureCreatedAt() => $_ensure(6);
+  void clearIsUseMorningBus() => clearField(7);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get updatedAt => $_getN(7);
+  $core.bool get isUseEveningBus => $_getBF(7);
   @$pb.TagNumber(8)
-  set updatedAt($7.Timestamp v) { setField(8, v); }
+  set isUseEveningBus($core.bool v) { $_setBool(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasUpdatedAt() => $_has(7);
+  $core.bool hasIsUseEveningBus() => $_has(7);
   @$pb.TagNumber(8)
-  void clearUpdatedAt() => clearField(8);
-  @$pb.TagNumber(8)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(7);
+  void clearIsUseEveningBus() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $7.Timestamp get createdAt => $_getN(8);
+  @$pb.TagNumber(9)
+  set createdAt($7.Timestamp v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasCreatedAt() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearCreatedAt() => clearField(9);
+  @$pb.TagNumber(9)
+  $7.Timestamp ensureCreatedAt() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  $7.Timestamp get updatedAt => $_getN(9);
+  @$pb.TagNumber(10)
+  set updatedAt($7.Timestamp v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasUpdatedAt() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearUpdatedAt() => clearField(10);
+  @$pb.TagNumber(10)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(9);
 }
 
 class GuardianResponse extends $pb.GeneratedMessage {
@@ -496,6 +524,8 @@ class GuardianResponse extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? email,
     $core.String? phoneNumber,
+    $core.bool? isUseMorningBus,
+    $core.bool? isUseEveningBus,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -515,6 +545,12 @@ class GuardianResponse extends $pb.GeneratedMessage {
     if (phoneNumber != null) {
       $result.phoneNumber = phoneNumber;
     }
+    if (isUseMorningBus != null) {
+      $result.isUseMorningBus = isUseMorningBus;
+    }
+    if (isUseEveningBus != null) {
+      $result.isUseEveningBus = isUseEveningBus;
+    }
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
@@ -533,8 +569,10 @@ class GuardianResponse extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'email')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
-    ..aOM<$7.Timestamp>(6, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(7, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOB(6, _omitFieldNames ? '' : 'isUseMorningBus')
+    ..aOB(7, _omitFieldNames ? '' : 'isUseEveningBus')
+    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -606,26 +644,44 @@ class GuardianResponse extends $pb.GeneratedMessage {
 
   /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(6)
-  $7.Timestamp get createdAt => $_getN(5);
+  $core.bool get isUseMorningBus => $_getBF(5);
   @$pb.TagNumber(6)
-  set createdAt($7.Timestamp v) { setField(6, v); }
+  set isUseMorningBus($core.bool v) { $_setBool(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasCreatedAt() => $_has(5);
+  $core.bool hasIsUseMorningBus() => $_has(5);
   @$pb.TagNumber(6)
-  void clearCreatedAt() => clearField(6);
-  @$pb.TagNumber(6)
-  $7.Timestamp ensureCreatedAt() => $_ensure(5);
+  void clearIsUseMorningBus() => clearField(6);
 
   @$pb.TagNumber(7)
-  $7.Timestamp get updatedAt => $_getN(6);
+  $core.bool get isUseEveningBus => $_getBF(6);
   @$pb.TagNumber(7)
-  set updatedAt($7.Timestamp v) { setField(7, v); }
+  set isUseEveningBus($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasUpdatedAt() => $_has(6);
+  $core.bool hasIsUseEveningBus() => $_has(6);
   @$pb.TagNumber(7)
-  void clearUpdatedAt() => clearField(7);
-  @$pb.TagNumber(7)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(6);
+  void clearIsUseEveningBus() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $7.Timestamp get createdAt => $_getN(7);
+  @$pb.TagNumber(8)
+  set createdAt($7.Timestamp v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasCreatedAt() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCreatedAt() => clearField(8);
+  @$pb.TagNumber(8)
+  $7.Timestamp ensureCreatedAt() => $_ensure(7);
+
+  @$pb.TagNumber(9)
+  $7.Timestamp get updatedAt => $_getN(8);
+  @$pb.TagNumber(9)
+  set updatedAt($7.Timestamp v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasUpdatedAt() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearUpdatedAt() => clearField(9);
+  @$pb.TagNumber(9)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(8);
 }
 
 class Bus extends $pb.GeneratedMessage {
@@ -637,6 +693,7 @@ class Bus extends $pb.GeneratedMessage {
     Status? status,
     $core.double? latitude,
     $core.double? longitude,
+    $core.bool? enableFaceRecognition,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -662,6 +719,9 @@ class Bus extends $pb.GeneratedMessage {
     if (longitude != null) {
       $result.longitude = longitude;
     }
+    if (enableFaceRecognition != null) {
+      $result.enableFaceRecognition = enableFaceRecognition;
+    }
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
@@ -682,8 +742,9 @@ class Bus extends $pb.GeneratedMessage {
     ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOB(8, _omitFieldNames ? '' : 'enableFaceRecognition')
+    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -773,26 +834,35 @@ class Bus extends $pb.GeneratedMessage {
   void clearLongitude() => clearField(7);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get createdAt => $_getN(7);
+  $core.bool get enableFaceRecognition => $_getBF(7);
   @$pb.TagNumber(8)
-  set createdAt($7.Timestamp v) { setField(8, v); }
+  set enableFaceRecognition($core.bool v) { $_setBool(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasCreatedAt() => $_has(7);
+  $core.bool hasEnableFaceRecognition() => $_has(7);
   @$pb.TagNumber(8)
-  void clearCreatedAt() => clearField(8);
-  @$pb.TagNumber(8)
-  $7.Timestamp ensureCreatedAt() => $_ensure(7);
+  void clearEnableFaceRecognition() => clearField(8);
 
   @$pb.TagNumber(9)
-  $7.Timestamp get updatedAt => $_getN(8);
+  $7.Timestamp get createdAt => $_getN(8);
   @$pb.TagNumber(9)
-  set updatedAt($7.Timestamp v) { setField(9, v); }
+  set createdAt($7.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasUpdatedAt() => $_has(8);
+  $core.bool hasCreatedAt() => $_has(8);
   @$pb.TagNumber(9)
-  void clearUpdatedAt() => clearField(9);
+  void clearCreatedAt() => clearField(9);
   @$pb.TagNumber(9)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(8);
+  $7.Timestamp ensureCreatedAt() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  $7.Timestamp get updatedAt => $_getN(9);
+  @$pb.TagNumber(10)
+  set updatedAt($7.Timestamp v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasUpdatedAt() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearUpdatedAt() => clearField(10);
+  @$pb.TagNumber(10)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(9);
 }
 
 class Child extends $pb.GeneratedMessage {
@@ -803,8 +873,6 @@ class Child extends $pb.GeneratedMessage {
     $core.String? name,
     $core.int? age,
     Sex? sex,
-    $core.bool? isRideMorningBus,
-    $core.bool? isRideEveningBus,
     $core.bool? checkForMissingItems,
     $core.bool? hasBag,
     $core.bool? hasLunchBox,
@@ -832,12 +900,6 @@ class Child extends $pb.GeneratedMessage {
     }
     if (sex != null) {
       $result.sex = sex;
-    }
-    if (isRideMorningBus != null) {
-      $result.isRideMorningBus = isRideMorningBus;
-    }
-    if (isRideEveningBus != null) {
-      $result.isRideEveningBus = isRideEveningBus;
     }
     if (checkForMissingItems != null) {
       $result.checkForMissingItems = checkForMissingItems;
@@ -876,16 +938,14 @@ class Child extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..a<$core.int>(5, _omitFieldNames ? '' : 'age', $pb.PbFieldType.O3)
     ..e<Sex>(6, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: Sex.SEX_UNSPECIFIED, valueOf: Sex.valueOf, enumValues: Sex.values)
-    ..aOB(7, _omitFieldNames ? '' : 'isRideMorningBus')
-    ..aOB(8, _omitFieldNames ? '' : 'isRideEveningBus')
-    ..aOB(9, _omitFieldNames ? '' : 'checkForMissingItems')
-    ..aOB(10, _omitFieldNames ? '' : 'hasBag')
-    ..aOB(11, _omitFieldNames ? '' : 'hasLunchBox')
-    ..aOB(12, _omitFieldNames ? '' : 'hasWaterBottle')
-    ..aOB(13, _omitFieldNames ? '' : 'hasUmbrella')
-    ..aOB(14, _omitFieldNames ? '' : 'hasOther')
-    ..aOM<$7.Timestamp>(15, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(16, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOB(7, _omitFieldNames ? '' : 'checkForMissingItems')
+    ..aOB(8, _omitFieldNames ? '' : 'hasBag')
+    ..aOB(9, _omitFieldNames ? '' : 'hasLunchBox')
+    ..aOB(10, _omitFieldNames ? '' : 'hasWaterBottle')
+    ..aOB(11, _omitFieldNames ? '' : 'hasUmbrella')
+    ..aOB(12, _omitFieldNames ? '' : 'hasOther')
+    ..aOM<$7.Timestamp>(13, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(14, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -965,104 +1025,88 @@ class Child extends $pb.GeneratedMessage {
   void clearSex() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.bool get isRideMorningBus => $_getBF(6);
+  $core.bool get checkForMissingItems => $_getBF(6);
   @$pb.TagNumber(7)
-  set isRideMorningBus($core.bool v) { $_setBool(6, v); }
+  set checkForMissingItems($core.bool v) { $_setBool(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasIsRideMorningBus() => $_has(6);
+  $core.bool hasCheckForMissingItems() => $_has(6);
   @$pb.TagNumber(7)
-  void clearIsRideMorningBus() => clearField(7);
+  void clearCheckForMissingItems() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.bool get isRideEveningBus => $_getBF(7);
+  $core.bool get hasBag => $_getBF(7);
   @$pb.TagNumber(8)
-  set isRideEveningBus($core.bool v) { $_setBool(7, v); }
+  set hasBag($core.bool v) { $_setBool(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasIsRideEveningBus() => $_has(7);
+  $core.bool hasHasBag() => $_has(7);
   @$pb.TagNumber(8)
-  void clearIsRideEveningBus() => clearField(8);
+  void clearHasBag() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.bool get checkForMissingItems => $_getBF(8);
+  $core.bool get hasLunchBox => $_getBF(8);
   @$pb.TagNumber(9)
-  set checkForMissingItems($core.bool v) { $_setBool(8, v); }
+  set hasLunchBox($core.bool v) { $_setBool(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasCheckForMissingItems() => $_has(8);
+  $core.bool hasHasLunchBox() => $_has(8);
   @$pb.TagNumber(9)
-  void clearCheckForMissingItems() => clearField(9);
+  void clearHasLunchBox() => clearField(9);
 
   @$pb.TagNumber(10)
-  $core.bool get hasBag => $_getBF(9);
+  $core.bool get hasWaterBottle => $_getBF(9);
   @$pb.TagNumber(10)
-  set hasBag($core.bool v) { $_setBool(9, v); }
+  set hasWaterBottle($core.bool v) { $_setBool(9, v); }
   @$pb.TagNumber(10)
-  $core.bool hasHasBag() => $_has(9);
+  $core.bool hasHasWaterBottle() => $_has(9);
   @$pb.TagNumber(10)
-  void clearHasBag() => clearField(10);
+  void clearHasWaterBottle() => clearField(10);
 
   @$pb.TagNumber(11)
-  $core.bool get hasLunchBox => $_getBF(10);
+  $core.bool get hasUmbrella => $_getBF(10);
   @$pb.TagNumber(11)
-  set hasLunchBox($core.bool v) { $_setBool(10, v); }
+  set hasUmbrella($core.bool v) { $_setBool(10, v); }
   @$pb.TagNumber(11)
-  $core.bool hasHasLunchBox() => $_has(10);
+  $core.bool hasHasUmbrella() => $_has(10);
   @$pb.TagNumber(11)
-  void clearHasLunchBox() => clearField(11);
+  void clearHasUmbrella() => clearField(11);
 
   @$pb.TagNumber(12)
-  $core.bool get hasWaterBottle => $_getBF(11);
+  $core.bool get hasOther => $_getBF(11);
   @$pb.TagNumber(12)
-  set hasWaterBottle($core.bool v) { $_setBool(11, v); }
+  set hasOther($core.bool v) { $_setBool(11, v); }
   @$pb.TagNumber(12)
-  $core.bool hasHasWaterBottle() => $_has(11);
+  $core.bool hasHasOther() => $_has(11);
   @$pb.TagNumber(12)
-  void clearHasWaterBottle() => clearField(12);
+  void clearHasOther() => clearField(12);
 
   @$pb.TagNumber(13)
-  $core.bool get hasUmbrella => $_getBF(12);
+  $7.Timestamp get createdAt => $_getN(12);
   @$pb.TagNumber(13)
-  set hasUmbrella($core.bool v) { $_setBool(12, v); }
+  set createdAt($7.Timestamp v) { setField(13, v); }
   @$pb.TagNumber(13)
-  $core.bool hasHasUmbrella() => $_has(12);
+  $core.bool hasCreatedAt() => $_has(12);
   @$pb.TagNumber(13)
-  void clearHasUmbrella() => clearField(13);
+  void clearCreatedAt() => clearField(13);
+  @$pb.TagNumber(13)
+  $7.Timestamp ensureCreatedAt() => $_ensure(12);
 
   @$pb.TagNumber(14)
-  $core.bool get hasOther => $_getBF(13);
+  $7.Timestamp get updatedAt => $_getN(13);
   @$pb.TagNumber(14)
-  set hasOther($core.bool v) { $_setBool(13, v); }
+  set updatedAt($7.Timestamp v) { setField(14, v); }
   @$pb.TagNumber(14)
-  $core.bool hasHasOther() => $_has(13);
+  $core.bool hasUpdatedAt() => $_has(13);
   @$pb.TagNumber(14)
-  void clearHasOther() => clearField(14);
-
-  @$pb.TagNumber(15)
-  $7.Timestamp get createdAt => $_getN(14);
-  @$pb.TagNumber(15)
-  set createdAt($7.Timestamp v) { setField(15, v); }
-  @$pb.TagNumber(15)
-  $core.bool hasCreatedAt() => $_has(14);
-  @$pb.TagNumber(15)
-  void clearCreatedAt() => clearField(15);
-  @$pb.TagNumber(15)
-  $7.Timestamp ensureCreatedAt() => $_ensure(14);
-
-  @$pb.TagNumber(16)
-  $7.Timestamp get updatedAt => $_getN(15);
-  @$pb.TagNumber(16)
-  set updatedAt($7.Timestamp v) { setField(16, v); }
-  @$pb.TagNumber(16)
-  $core.bool hasUpdatedAt() => $_has(15);
-  @$pb.TagNumber(16)
-  void clearUpdatedAt() => clearField(16);
-  @$pb.TagNumber(16)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(15);
+  void clearUpdatedAt() => clearField(14);
+  @$pb.TagNumber(14)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(13);
 }
 
 class Station extends $pb.GeneratedMessage {
   factory Station({
     $core.String? id,
     $core.String? guardianId,
+    $core.String? morningNextStationId,
+    $core.String? eveningNextStationId,
     $core.double? latitude,
     $core.double? longitude,
     $core.int? morningOrder,
@@ -1076,6 +1120,12 @@ class Station extends $pb.GeneratedMessage {
     }
     if (guardianId != null) {
       $result.guardianId = guardianId;
+    }
+    if (morningNextStationId != null) {
+      $result.morningNextStationId = morningNextStationId;
+    }
+    if (eveningNextStationId != null) {
+      $result.eveningNextStationId = eveningNextStationId;
     }
     if (latitude != null) {
       $result.latitude = latitude;
@@ -1104,12 +1154,14 @@ class Station extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Station', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'guardianId')
-    ..a<$core.double>(3, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(4, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'morningOrder', $pb.PbFieldType.O3)
-    ..a<$core.int>(6, _omitFieldNames ? '' : 'eveningOrder', $pb.PbFieldType.O3)
-    ..aOM<$7.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOS(3, _omitFieldNames ? '' : 'morningNextStationId')
+    ..aOS(4, _omitFieldNames ? '' : 'eveningNextStationId')
+    ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'morningOrder', $pb.PbFieldType.O3)
+    ..a<$core.int>(8, _omitFieldNames ? '' : 'eveningOrder', $pb.PbFieldType.O3)
+    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1153,62 +1205,80 @@ class Station extends $pb.GeneratedMessage {
   void clearGuardianId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.double get latitude => $_getN(2);
+  $core.String get morningNextStationId => $_getSZ(2);
   @$pb.TagNumber(3)
-  set latitude($core.double v) { $_setDouble(2, v); }
+  set morningNextStationId($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasLatitude() => $_has(2);
+  $core.bool hasMorningNextStationId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearLatitude() => clearField(3);
+  void clearMorningNextStationId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.double get longitude => $_getN(3);
+  $core.String get eveningNextStationId => $_getSZ(3);
   @$pb.TagNumber(4)
-  set longitude($core.double v) { $_setDouble(3, v); }
+  set eveningNextStationId($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasLongitude() => $_has(3);
+  $core.bool hasEveningNextStationId() => $_has(3);
   @$pb.TagNumber(4)
-  void clearLongitude() => clearField(4);
+  void clearEveningNextStationId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.int get morningOrder => $_getIZ(4);
+  $core.double get latitude => $_getN(4);
   @$pb.TagNumber(5)
-  set morningOrder($core.int v) { $_setSignedInt32(4, v); }
+  set latitude($core.double v) { $_setDouble(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasMorningOrder() => $_has(4);
+  $core.bool hasLatitude() => $_has(4);
   @$pb.TagNumber(5)
-  void clearMorningOrder() => clearField(5);
+  void clearLatitude() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.int get eveningOrder => $_getIZ(5);
+  $core.double get longitude => $_getN(5);
   @$pb.TagNumber(6)
-  set eveningOrder($core.int v) { $_setSignedInt32(5, v); }
+  set longitude($core.double v) { $_setDouble(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasEveningOrder() => $_has(5);
+  $core.bool hasLongitude() => $_has(5);
   @$pb.TagNumber(6)
-  void clearEveningOrder() => clearField(6);
+  void clearLongitude() => clearField(6);
 
   @$pb.TagNumber(7)
-  $7.Timestamp get createdAt => $_getN(6);
+  $core.int get morningOrder => $_getIZ(6);
   @$pb.TagNumber(7)
-  set createdAt($7.Timestamp v) { setField(7, v); }
+  set morningOrder($core.int v) { $_setSignedInt32(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasCreatedAt() => $_has(6);
+  $core.bool hasMorningOrder() => $_has(6);
   @$pb.TagNumber(7)
-  void clearCreatedAt() => clearField(7);
-  @$pb.TagNumber(7)
-  $7.Timestamp ensureCreatedAt() => $_ensure(6);
+  void clearMorningOrder() => clearField(7);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get updatedAt => $_getN(7);
+  $core.int get eveningOrder => $_getIZ(7);
   @$pb.TagNumber(8)
-  set updatedAt($7.Timestamp v) { setField(8, v); }
+  set eveningOrder($core.int v) { $_setSignedInt32(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasUpdatedAt() => $_has(7);
+  $core.bool hasEveningOrder() => $_has(7);
   @$pb.TagNumber(8)
-  void clearUpdatedAt() => clearField(8);
-  @$pb.TagNumber(8)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(7);
+  void clearEveningOrder() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $7.Timestamp get createdAt => $_getN(8);
+  @$pb.TagNumber(9)
+  set createdAt($7.Timestamp v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasCreatedAt() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearCreatedAt() => clearField(9);
+  @$pb.TagNumber(9)
+  $7.Timestamp ensureCreatedAt() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  $7.Timestamp get updatedAt => $_getN(9);
+  @$pb.TagNumber(10)
+  set updatedAt($7.Timestamp v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasUpdatedAt() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearUpdatedAt() => clearField(10);
+  @$pb.TagNumber(10)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(9);
 }
 
 class ChildBusAssociation extends $pb.GeneratedMessage {
@@ -1371,8 +1441,6 @@ class ChildPhoto extends $pb.GeneratedMessage {
   factory ChildPhoto({
     $core.String? id,
     $core.String? childId,
-    $core.String? s3Bucket,
-    $core.String? s3Key,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -1382,12 +1450,6 @@ class ChildPhoto extends $pb.GeneratedMessage {
     }
     if (childId != null) {
       $result.childId = childId;
-    }
-    if (s3Bucket != null) {
-      $result.s3Bucket = s3Bucket;
-    }
-    if (s3Key != null) {
-      $result.s3Key = s3Key;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -1404,8 +1466,6 @@ class ChildPhoto extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChildPhoto', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'childId')
-    ..aOS(3, _omitFieldNames ? '' : 's3Bucket')
-    ..aOS(4, _omitFieldNames ? '' : 's3Key')
     ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
     ..aOM<$7.Timestamp>(6, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
@@ -1450,45 +1510,27 @@ class ChildPhoto extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearChildId() => clearField(2);
 
-  @$pb.TagNumber(3)
-  $core.String get s3Bucket => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set s3Bucket($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasS3Bucket() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearS3Bucket() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.String get s3Key => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set s3Key($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasS3Key() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearS3Key() => clearField(4);
-
   @$pb.TagNumber(5)
-  $7.Timestamp get createdAt => $_getN(4);
+  $7.Timestamp get createdAt => $_getN(2);
   @$pb.TagNumber(5)
   set createdAt($7.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
-  $core.bool hasCreatedAt() => $_has(4);
+  $core.bool hasCreatedAt() => $_has(2);
   @$pb.TagNumber(5)
   void clearCreatedAt() => clearField(5);
   @$pb.TagNumber(5)
-  $7.Timestamp ensureCreatedAt() => $_ensure(4);
+  $7.Timestamp ensureCreatedAt() => $_ensure(2);
 
   @$pb.TagNumber(6)
-  $7.Timestamp get updatedAt => $_getN(5);
+  $7.Timestamp get updatedAt => $_getN(3);
   @$pb.TagNumber(6)
   set updatedAt($7.Timestamp v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasUpdatedAt() => $_has(5);
+  $core.bool hasUpdatedAt() => $_has(3);
   @$pb.TagNumber(6)
   void clearUpdatedAt() => clearField(6);
   @$pb.TagNumber(6)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(5);
+  $7.Timestamp ensureUpdatedAt() => $_ensure(3);
 }
 
 class BoardingRecord extends $pb.GeneratedMessage {
