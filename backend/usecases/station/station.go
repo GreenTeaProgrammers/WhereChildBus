@@ -23,7 +23,7 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 	return &Interactor{entClient, logger}
 }
 
-func (i *Interactor) CreateStation(ctx context.Context, req *pb.CreateStationRequest) (*pb.CreateStationResponse, error) {
+func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to start transaction: %w", err)
@@ -32,20 +32,36 @@ func (i *Interactor) CreateStation(ctx context.Context, req *pb.CreateStationReq
 
 	guardianID, err := uuid.Parse(req.GuardianId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse ID: %w", err)
+		return nil, fmt.Errorf("failed to parse guardian ID: %w", err)
 	}
 
+	// ステーションを更新または作成します。
 	station, err := tx.Station.Create().
 		SetGuardianID(guardianID).
 		SetLatitude(req.Latitude).
-		SetLongitude(req.longitude).
+		SetLongitude(req.Longitude).
 		Save(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create station: %w", err)
+		return nil, fmt.Errorf("failed to create or update station: %w", err)
 	}
 
-	return &pb.CreateStationResponse{
-		Station: utils.ToPbStation(station),
+	morningNextStationID, eveningNextStationID, err := getNextStationIDs(ctx, station)
+	if err != nil {
+		return nil, err // エラーハンドリング
+	}
+
+	if err != nil {
+		return nil, err // 夕方のステーション設定中にエラーが発生しました
+	}
+
+	// トランザクションをコミットします。
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	// レスポンスを作成します。
+	return &pb.UpdateStationResponse{
+		Station: utils.ToPbStation(station, morningNextStationID, eveningNextStationID),
 	}, nil
 }
 
@@ -70,8 +86,13 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 	uniqueChildren := make(map[string]*pb.Child)
 
 	for _, station := range stations {
+		morningNextStationID, eveningNextStationID, err := getNextStationIDs(ctx, station)
+		if err != nil {
+			return nil, err // エラーハンドリング
+		}
+
 		// ステーションをプロトコルバッファ形式に変換
-		pbStation := utils.ToPbStation(station)
+		pbStation := utils.ToPbStation(station, morningNextStationID, eveningNextStationID)
 		pbStations = append(pbStations, pbStation)
 
 		if station.Edges.Guardian != nil {
@@ -104,4 +125,36 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 		Guardians: pbGuardians,
 		Children:  pbChildren,
 	}, nil
+}
+
+func getNextStationIDs(ctx context.Context, station *ent.Station) (morningNextStationID, eveningNextStationID string, err error) {
+	morningNextStation, err := station.QueryMorningNextStation().Only(ctx)
+	if err != nil && !ent.IsNotFound(err) {
+		return "", "", fmt.Errorf("failed to query morning next station: %w", err)
+	}
+	if morningNextStation != nil {
+		morningNextStationID = morningNextStation.ID.String()
+	}
+
+	eveningNextStation, err := station.QueryEveningNextStation().Only(ctx)
+	if err != nil && !ent.IsNotFound(err) {
+		return "", "", fmt.Errorf("failed to query evening next station: %w", err)
+	}
+	if eveningNextStation != nil {
+		eveningNextStationID = eveningNextStation.ID.String()
+	}
+
+	return morningNextStationID, eveningNextStationID, nil
+}
+
+func getNextStationID(ctx context.Context, station *ent.Station, queryFunc func(*ent.Station) *ent.StationQuery) (string, error) {
+	nextStation, err := queryFunc(station).Only(ctx)
+	if err != nil {
+		if !ent.IsNotFound(err) {
+			return "", fmt.Errorf("failed to query next station: %w", err)
+		}
+		// 次のステーションが見つからない場合は空文字を返します。
+		return "", nil
+	}
+	return nextStation.ID.String(), nil
 }
