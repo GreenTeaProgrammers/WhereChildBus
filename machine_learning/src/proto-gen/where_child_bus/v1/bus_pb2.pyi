@@ -21,12 +21,10 @@ class CreateBusRequest(_message.Message):
     def __init__(self, nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., morning_guardian_ids: _Optional[_Iterable[str]] = ..., evening_guardian_ids: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class CreateBusResponse(_message.Message):
-    __slots__ = ("bus", "children")
+    __slots__ = ("bus",)
     BUS_FIELD_NUMBER: _ClassVar[int]
-    CHILDREN_FIELD_NUMBER: _ClassVar[int]
     bus: _resources_pb2.Bus
-    children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
-    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...) -> None: ...
+    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
 
 class GetBusListByNurseryIdRequest(_message.Message):
     __slots__ = ("nursery_id",)

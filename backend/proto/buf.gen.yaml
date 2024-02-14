@@ -27,6 +27,6 @@ plugins:
 
   # Dart用の設定 (クライアント側)
   - name: dart
-    out: ../../frontend/where_child_bus/lib/proto-gen/
+    out: ../../frontend/where_child_bus_api/lib/proto-gen/
     opt:
       - grpc

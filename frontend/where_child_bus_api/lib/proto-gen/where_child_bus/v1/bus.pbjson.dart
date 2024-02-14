@@ -37,15 +37,13 @@ const CreateBusResponse$json = {
   '1': 'CreateBusResponse',
   '2': [
     {'1': 'bus', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Bus', '10': 'bus'},
-    {'1': 'children', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
   ],
 };
 
 /// Descriptor for `CreateBusResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBusResponseDescriptor = $convert.base64Decode(
     'ChFDcmVhdGVCdXNSZXNwb25zZRIpCgNidXMYASABKAsyFy53aGVyZV9jaGlsZF9idXMudjEuQn'
-    'VzUgNidXMSNQoIY2hpbGRyZW4YAiADKAsyGS53aGVyZV9jaGlsZF9idXMudjEuQ2hpbGRSCGNo'
-    'aWxkcmVu');
+    'VzUgNidXM=');
 
 @$core.Deprecated('Use getBusListByNurseryIdRequestDescriptor instead')
 const GetBusListByNurseryIdRequest$json = {

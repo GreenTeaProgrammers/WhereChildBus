@@ -112,14 +112,10 @@ class CreateBusRequest extends $pb.GeneratedMessage {
 class CreateBusResponse extends $pb.GeneratedMessage {
   factory CreateBusResponse({
     $8.Bus? bus,
-    $core.Iterable<$8.Child>? children,
   }) {
     final $result = create();
     if (bus != null) {
       $result.bus = bus;
-    }
-    if (children != null) {
-      $result.children.addAll(children);
     }
     return $result;
   }
@@ -129,7 +125,6 @@ class CreateBusResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
-    ..pc<$8.Child>(2, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -164,9 +159,6 @@ class CreateBusResponse extends $pb.GeneratedMessage {
   void clearBus() => clearField(1);
   @$pb.TagNumber(1)
   $8.Bus ensureBus() => $_ensure(0);
-
-  @$pb.TagNumber(2)
-  $core.List<$8.Child> get children => $_getList(1);
 }
 
 class GetBusListByNurseryIdRequest extends $pb.GeneratedMessage {
