@@ -52,44 +52,36 @@ func init() {
 	bus.DefaultID = busDescID.Default.(func() uuid.UUID)
 	childFields := schema.Child{}.Fields()
 	_ = childFields
-	// childDescIsRideMorningBus is the schema descriptor for is_ride_morning_bus field.
-	childDescIsRideMorningBus := childFields[4].Descriptor()
-	// child.DefaultIsRideMorningBus holds the default value on creation for the is_ride_morning_bus field.
-	child.DefaultIsRideMorningBus = childDescIsRideMorningBus.Default.(bool)
-	// childDescIsRideEveningBus is the schema descriptor for is_ride_evening_bus field.
-	childDescIsRideEveningBus := childFields[5].Descriptor()
-	// child.DefaultIsRideEveningBus holds the default value on creation for the is_ride_evening_bus field.
-	child.DefaultIsRideEveningBus = childDescIsRideEveningBus.Default.(bool)
 	// childDescCheckForMissingItems is the schema descriptor for check_for_missing_items field.
-	childDescCheckForMissingItems := childFields[6].Descriptor()
+	childDescCheckForMissingItems := childFields[4].Descriptor()
 	// child.DefaultCheckForMissingItems holds the default value on creation for the check_for_missing_items field.
 	child.DefaultCheckForMissingItems = childDescCheckForMissingItems.Default.(bool)
 	// childDescHasBag is the schema descriptor for has_bag field.
-	childDescHasBag := childFields[7].Descriptor()
+	childDescHasBag := childFields[5].Descriptor()
 	// child.DefaultHasBag holds the default value on creation for the has_bag field.
 	child.DefaultHasBag = childDescHasBag.Default.(bool)
 	// childDescHasLunchBox is the schema descriptor for has_lunch_box field.
-	childDescHasLunchBox := childFields[8].Descriptor()
+	childDescHasLunchBox := childFields[6].Descriptor()
 	// child.DefaultHasLunchBox holds the default value on creation for the has_lunch_box field.
 	child.DefaultHasLunchBox = childDescHasLunchBox.Default.(bool)
 	// childDescHasWaterBottle is the schema descriptor for has_water_bottle field.
-	childDescHasWaterBottle := childFields[9].Descriptor()
+	childDescHasWaterBottle := childFields[7].Descriptor()
 	// child.DefaultHasWaterBottle holds the default value on creation for the has_water_bottle field.
 	child.DefaultHasWaterBottle = childDescHasWaterBottle.Default.(bool)
 	// childDescHasUmbrella is the schema descriptor for has_umbrella field.
-	childDescHasUmbrella := childFields[10].Descriptor()
+	childDescHasUmbrella := childFields[8].Descriptor()
 	// child.DefaultHasUmbrella holds the default value on creation for the has_umbrella field.
 	child.DefaultHasUmbrella = childDescHasUmbrella.Default.(bool)
 	// childDescHasOther is the schema descriptor for has_other field.
-	childDescHasOther := childFields[11].Descriptor()
+	childDescHasOther := childFields[9].Descriptor()
 	// child.DefaultHasOther holds the default value on creation for the has_other field.
 	child.DefaultHasOther = childDescHasOther.Default.(bool)
 	// childDescCreatedAt is the schema descriptor for created_at field.
-	childDescCreatedAt := childFields[12].Descriptor()
+	childDescCreatedAt := childFields[10].Descriptor()
 	// child.DefaultCreatedAt holds the default value on creation for the created_at field.
 	child.DefaultCreatedAt = childDescCreatedAt.Default.(func() time.Time)
 	// childDescUpdatedAt is the schema descriptor for updated_at field.
-	childDescUpdatedAt := childFields[13].Descriptor()
+	childDescUpdatedAt := childFields[11].Descriptor()
 	// child.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	child.DefaultUpdatedAt = childDescUpdatedAt.Default.(func() time.Time)
 	// child.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -100,16 +92,12 @@ func init() {
 	child.DefaultID = childDescID.Default.(func() uuid.UUID)
 	childphotoFields := schema.ChildPhoto{}.Fields()
 	_ = childphotoFields
-	// childphotoDescIsDuplicate is the schema descriptor for is_duplicate field.
-	childphotoDescIsDuplicate := childphotoFields[1].Descriptor()
-	// childphoto.DefaultIsDuplicate holds the default value on creation for the is_duplicate field.
-	childphoto.DefaultIsDuplicate = childphotoDescIsDuplicate.Default.(bool)
 	// childphotoDescCreatedAt is the schema descriptor for created_at field.
-	childphotoDescCreatedAt := childphotoFields[2].Descriptor()
+	childphotoDescCreatedAt := childphotoFields[1].Descriptor()
 	// childphoto.DefaultCreatedAt holds the default value on creation for the created_at field.
 	childphoto.DefaultCreatedAt = childphotoDescCreatedAt.Default.(func() time.Time)
 	// childphotoDescUpdatedAt is the schema descriptor for updated_at field.
-	childphotoDescUpdatedAt := childphotoFields[3].Descriptor()
+	childphotoDescUpdatedAt := childphotoFields[2].Descriptor()
 	// childphoto.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	childphoto.DefaultUpdatedAt = childphotoDescUpdatedAt.Default.(func() time.Time)
 	// childphoto.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -120,12 +108,20 @@ func init() {
 	childphoto.DefaultID = childphotoDescID.Default.(func() uuid.UUID)
 	guardianFields := schema.Guardian{}.Fields()
 	_ = guardianFields
+	// guardianDescIsUseMorningBus is the schema descriptor for is_use_morning_bus field.
+	guardianDescIsUseMorningBus := guardianFields[5].Descriptor()
+	// guardian.DefaultIsUseMorningBus holds the default value on creation for the is_use_morning_bus field.
+	guardian.DefaultIsUseMorningBus = guardianDescIsUseMorningBus.Default.(bool)
+	// guardianDescIsUseEveningBus is the schema descriptor for is_use_evening_bus field.
+	guardianDescIsUseEveningBus := guardianFields[6].Descriptor()
+	// guardian.DefaultIsUseEveningBus holds the default value on creation for the is_use_evening_bus field.
+	guardian.DefaultIsUseEveningBus = guardianDescIsUseEveningBus.Default.(bool)
 	// guardianDescCreatedAt is the schema descriptor for created_at field.
-	guardianDescCreatedAt := guardianFields[5].Descriptor()
+	guardianDescCreatedAt := guardianFields[7].Descriptor()
 	// guardian.DefaultCreatedAt holds the default value on creation for the created_at field.
 	guardian.DefaultCreatedAt = guardianDescCreatedAt.Default.(func() time.Time)
 	// guardianDescUpdatedAt is the schema descriptor for updated_at field.
-	guardianDescUpdatedAt := guardianFields[6].Descriptor()
+	guardianDescUpdatedAt := guardianFields[8].Descriptor()
 	// guardian.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	guardian.DefaultUpdatedAt = guardianDescUpdatedAt.Default.(func() time.Time)
 	// guardian.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -153,11 +149,11 @@ func init() {
 	stationFields := schema.Station{}.Fields()
 	_ = stationFields
 	// stationDescCreatedAt is the schema descriptor for created_at field.
-	stationDescCreatedAt := stationFields[5].Descriptor()
+	stationDescCreatedAt := stationFields[3].Descriptor()
 	// station.DefaultCreatedAt holds the default value on creation for the created_at field.
 	station.DefaultCreatedAt = stationDescCreatedAt.Default.(func() time.Time)
 	// stationDescUpdatedAt is the schema descriptor for updated_at field.
-	stationDescUpdatedAt := stationFields[6].Descriptor()
+	stationDescUpdatedAt := stationFields[4].Descriptor()
 	// station.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	station.DefaultUpdatedAt = stationDescUpdatedAt.Default.(func() time.Time)
 	// station.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

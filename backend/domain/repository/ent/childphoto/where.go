@@ -56,11 +56,6 @@ func IDLTE(id uuid.UUID) predicate.ChildPhoto {
 	return predicate.ChildPhoto(sql.FieldLTE(FieldID, id))
 }
 
-// IsDuplicate applies equality check predicate on the "is_duplicate" field. It's identical to IsDuplicateEQ.
-func IsDuplicate(v bool) predicate.ChildPhoto {
-	return predicate.ChildPhoto(sql.FieldEQ(FieldIsDuplicate, v))
-}
-
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.ChildPhoto {
 	return predicate.ChildPhoto(sql.FieldEQ(FieldCreatedAt, v))
@@ -69,16 +64,6 @@ func CreatedAt(v time.Time) predicate.ChildPhoto {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.ChildPhoto {
 	return predicate.ChildPhoto(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
-// IsDuplicateEQ applies the EQ predicate on the "is_duplicate" field.
-func IsDuplicateEQ(v bool) predicate.ChildPhoto {
-	return predicate.ChildPhoto(sql.FieldEQ(FieldIsDuplicate, v))
-}
-
-// IsDuplicateNEQ applies the NEQ predicate on the "is_duplicate" field.
-func IsDuplicateNEQ(v bool) predicate.ChildPhoto {
-	return predicate.ChildPhoto(sql.FieldNEQ(FieldIsDuplicate, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

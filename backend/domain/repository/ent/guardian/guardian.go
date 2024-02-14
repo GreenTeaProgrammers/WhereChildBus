@@ -23,6 +23,10 @@ const (
 	FieldName = "name"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
 	FieldPhoneNumber = "phone_number"
+	// FieldIsUseMorningBus holds the string denoting the is_use_morning_bus field in the database.
+	FieldIsUseMorningBus = "is_use_morning_bus"
+	// FieldIsUseEveningBus holds the string denoting the is_use_evening_bus field in the database.
+	FieldIsUseEveningBus = "is_use_evening_bus"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -65,6 +69,8 @@ var Columns = []string{
 	FieldHashedPassword,
 	FieldName,
 	FieldPhoneNumber,
+	FieldIsUseMorningBus,
+	FieldIsUseEveningBus,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -91,6 +97,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultIsUseMorningBus holds the default value on creation for the "is_use_morning_bus" field.
+	DefaultIsUseMorningBus bool
+	// DefaultIsUseEveningBus holds the default value on creation for the "is_use_evening_bus" field.
+	DefaultIsUseEveningBus bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -127,6 +137,16 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByPhoneNumber orders the results by the phone_number field.
 func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPhoneNumber, opts...).ToFunc()
+}
+
+// ByIsUseMorningBus orders the results by the is_use_morning_bus field.
+func ByIsUseMorningBus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsUseMorningBus, opts...).ToFunc()
+}
+
+// ByIsUseEveningBus orders the results by the is_use_evening_bus field.
+func ByIsUseEveningBus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsUseEveningBus, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

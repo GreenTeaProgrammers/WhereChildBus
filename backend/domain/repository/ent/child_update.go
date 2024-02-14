@@ -83,34 +83,6 @@ func (cu *ChildUpdate) SetNillableSex(c *child.Sex) *ChildUpdate {
 	return cu
 }
 
-// SetIsRideMorningBus sets the "is_ride_morning_bus" field.
-func (cu *ChildUpdate) SetIsRideMorningBus(b bool) *ChildUpdate {
-	cu.mutation.SetIsRideMorningBus(b)
-	return cu
-}
-
-// SetNillableIsRideMorningBus sets the "is_ride_morning_bus" field if the given value is not nil.
-func (cu *ChildUpdate) SetNillableIsRideMorningBus(b *bool) *ChildUpdate {
-	if b != nil {
-		cu.SetIsRideMorningBus(*b)
-	}
-	return cu
-}
-
-// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
-func (cu *ChildUpdate) SetIsRideEveningBus(b bool) *ChildUpdate {
-	cu.mutation.SetIsRideEveningBus(b)
-	return cu
-}
-
-// SetNillableIsRideEveningBus sets the "is_ride_evening_bus" field if the given value is not nil.
-func (cu *ChildUpdate) SetNillableIsRideEveningBus(b *bool) *ChildUpdate {
-	if b != nil {
-		cu.SetIsRideEveningBus(*b)
-	}
-	return cu
-}
-
 // SetCheckForMissingItems sets the "check_for_missing_items" field.
 func (cu *ChildUpdate) SetCheckForMissingItems(b bool) *ChildUpdate {
 	cu.mutation.SetCheckForMissingItems(b)
@@ -448,12 +420,6 @@ func (cu *ChildUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cu.mutation.Sex(); ok {
 		_spec.SetField(child.FieldSex, field.TypeEnum, value)
 	}
-	if value, ok := cu.mutation.IsRideMorningBus(); ok {
-		_spec.SetField(child.FieldIsRideMorningBus, field.TypeBool, value)
-	}
-	if value, ok := cu.mutation.IsRideEveningBus(); ok {
-		_spec.SetField(child.FieldIsRideEveningBus, field.TypeBool, value)
-	}
 	if value, ok := cu.mutation.CheckForMissingItems(); ok {
 		_spec.SetField(child.FieldCheckForMissingItems, field.TypeBool, value)
 	}
@@ -736,34 +702,6 @@ func (cuo *ChildUpdateOne) SetSex(c child.Sex) *ChildUpdateOne {
 func (cuo *ChildUpdateOne) SetNillableSex(c *child.Sex) *ChildUpdateOne {
 	if c != nil {
 		cuo.SetSex(*c)
-	}
-	return cuo
-}
-
-// SetIsRideMorningBus sets the "is_ride_morning_bus" field.
-func (cuo *ChildUpdateOne) SetIsRideMorningBus(b bool) *ChildUpdateOne {
-	cuo.mutation.SetIsRideMorningBus(b)
-	return cuo
-}
-
-// SetNillableIsRideMorningBus sets the "is_ride_morning_bus" field if the given value is not nil.
-func (cuo *ChildUpdateOne) SetNillableIsRideMorningBus(b *bool) *ChildUpdateOne {
-	if b != nil {
-		cuo.SetIsRideMorningBus(*b)
-	}
-	return cuo
-}
-
-// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
-func (cuo *ChildUpdateOne) SetIsRideEveningBus(b bool) *ChildUpdateOne {
-	cuo.mutation.SetIsRideEveningBus(b)
-	return cuo
-}
-
-// SetNillableIsRideEveningBus sets the "is_ride_evening_bus" field if the given value is not nil.
-func (cuo *ChildUpdateOne) SetNillableIsRideEveningBus(b *bool) *ChildUpdateOne {
-	if b != nil {
-		cuo.SetIsRideEveningBus(*b)
 	}
 	return cuo
 }
@@ -1134,12 +1072,6 @@ func (cuo *ChildUpdateOne) sqlSave(ctx context.Context) (_node *Child, err error
 	}
 	if value, ok := cuo.mutation.Sex(); ok {
 		_spec.SetField(child.FieldSex, field.TypeEnum, value)
-	}
-	if value, ok := cuo.mutation.IsRideMorningBus(); ok {
-		_spec.SetField(child.FieldIsRideMorningBus, field.TypeBool, value)
-	}
-	if value, ok := cuo.mutation.IsRideEveningBus(); ok {
-		_spec.SetField(child.FieldIsRideEveningBus, field.TypeBool, value)
 	}
 	if value, ok := cuo.mutation.CheckForMissingItems(); ok {
 		_spec.SetField(child.FieldCheckForMissingItems, field.TypeBool, value)

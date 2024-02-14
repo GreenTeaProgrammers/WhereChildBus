@@ -85,48 +85,6 @@ func (su *StationUpdate) ClearLongitude() *StationUpdate {
 	return su
 }
 
-// SetMorningOrder sets the "morning_order" field.
-func (su *StationUpdate) SetMorningOrder(i int) *StationUpdate {
-	su.mutation.ResetMorningOrder()
-	su.mutation.SetMorningOrder(i)
-	return su
-}
-
-// SetNillableMorningOrder sets the "morning_order" field if the given value is not nil.
-func (su *StationUpdate) SetNillableMorningOrder(i *int) *StationUpdate {
-	if i != nil {
-		su.SetMorningOrder(*i)
-	}
-	return su
-}
-
-// AddMorningOrder adds i to the "morning_order" field.
-func (su *StationUpdate) AddMorningOrder(i int) *StationUpdate {
-	su.mutation.AddMorningOrder(i)
-	return su
-}
-
-// SetEveningOrder sets the "evening_order" field.
-func (su *StationUpdate) SetEveningOrder(i int) *StationUpdate {
-	su.mutation.ResetEveningOrder()
-	su.mutation.SetEveningOrder(i)
-	return su
-}
-
-// SetNillableEveningOrder sets the "evening_order" field if the given value is not nil.
-func (su *StationUpdate) SetNillableEveningOrder(i *int) *StationUpdate {
-	if i != nil {
-		su.SetEveningOrder(*i)
-	}
-	return su
-}
-
-// AddEveningOrder adds i to the "evening_order" field.
-func (su *StationUpdate) AddEveningOrder(i int) *StationUpdate {
-	su.mutation.AddEveningOrder(i)
-	return su
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (su *StationUpdate) SetCreatedAt(t time.Time) *StationUpdate {
 	su.mutation.SetCreatedAt(t)
@@ -181,6 +139,74 @@ func (su *StationUpdate) AddBus(b ...*Bus) *StationUpdate {
 	return su.AddBuIDs(ids...)
 }
 
+// SetMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by ID.
+func (su *StationUpdate) SetMorningPreviousStationID(id uuid.UUID) *StationUpdate {
+	su.mutation.SetMorningPreviousStationID(id)
+	return su
+}
+
+// SetNillableMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by ID if the given value is not nil.
+func (su *StationUpdate) SetNillableMorningPreviousStationID(id *uuid.UUID) *StationUpdate {
+	if id != nil {
+		su = su.SetMorningPreviousStationID(*id)
+	}
+	return su
+}
+
+// SetMorningPreviousStation sets the "morning_previous_station" edge to the Station entity.
+func (su *StationUpdate) SetMorningPreviousStation(s *Station) *StationUpdate {
+	return su.SetMorningPreviousStationID(s.ID)
+}
+
+// AddMorningNextStationIDs adds the "morning_next_station" edge to the Station entity by IDs.
+func (su *StationUpdate) AddMorningNextStationIDs(ids ...uuid.UUID) *StationUpdate {
+	su.mutation.AddMorningNextStationIDs(ids...)
+	return su
+}
+
+// AddMorningNextStation adds the "morning_next_station" edges to the Station entity.
+func (su *StationUpdate) AddMorningNextStation(s ...*Station) *StationUpdate {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.AddMorningNextStationIDs(ids...)
+}
+
+// SetEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by ID.
+func (su *StationUpdate) SetEveningPreviousStationID(id uuid.UUID) *StationUpdate {
+	su.mutation.SetEveningPreviousStationID(id)
+	return su
+}
+
+// SetNillableEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by ID if the given value is not nil.
+func (su *StationUpdate) SetNillableEveningPreviousStationID(id *uuid.UUID) *StationUpdate {
+	if id != nil {
+		su = su.SetEveningPreviousStationID(*id)
+	}
+	return su
+}
+
+// SetEveningPreviousStation sets the "evening_previous_station" edge to the Station entity.
+func (su *StationUpdate) SetEveningPreviousStation(s *Station) *StationUpdate {
+	return su.SetEveningPreviousStationID(s.ID)
+}
+
+// AddEveningNextStationIDs adds the "evening_next_station" edge to the Station entity by IDs.
+func (su *StationUpdate) AddEveningNextStationIDs(ids ...uuid.UUID) *StationUpdate {
+	su.mutation.AddEveningNextStationIDs(ids...)
+	return su
+}
+
+// AddEveningNextStation adds the "evening_next_station" edges to the Station entity.
+func (su *StationUpdate) AddEveningNextStation(s ...*Station) *StationUpdate {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.AddEveningNextStationIDs(ids...)
+}
+
 // Mutation returns the StationMutation object of the builder.
 func (su *StationUpdate) Mutation() *StationMutation {
 	return su.mutation
@@ -211,6 +237,60 @@ func (su *StationUpdate) RemoveBus(b ...*Bus) *StationUpdate {
 		ids[i] = b[i].ID
 	}
 	return su.RemoveBuIDs(ids...)
+}
+
+// ClearMorningPreviousStation clears the "morning_previous_station" edge to the Station entity.
+func (su *StationUpdate) ClearMorningPreviousStation() *StationUpdate {
+	su.mutation.ClearMorningPreviousStation()
+	return su
+}
+
+// ClearMorningNextStation clears all "morning_next_station" edges to the Station entity.
+func (su *StationUpdate) ClearMorningNextStation() *StationUpdate {
+	su.mutation.ClearMorningNextStation()
+	return su
+}
+
+// RemoveMorningNextStationIDs removes the "morning_next_station" edge to Station entities by IDs.
+func (su *StationUpdate) RemoveMorningNextStationIDs(ids ...uuid.UUID) *StationUpdate {
+	su.mutation.RemoveMorningNextStationIDs(ids...)
+	return su
+}
+
+// RemoveMorningNextStation removes "morning_next_station" edges to Station entities.
+func (su *StationUpdate) RemoveMorningNextStation(s ...*Station) *StationUpdate {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.RemoveMorningNextStationIDs(ids...)
+}
+
+// ClearEveningPreviousStation clears the "evening_previous_station" edge to the Station entity.
+func (su *StationUpdate) ClearEveningPreviousStation() *StationUpdate {
+	su.mutation.ClearEveningPreviousStation()
+	return su
+}
+
+// ClearEveningNextStation clears all "evening_next_station" edges to the Station entity.
+func (su *StationUpdate) ClearEveningNextStation() *StationUpdate {
+	su.mutation.ClearEveningNextStation()
+	return su
+}
+
+// RemoveEveningNextStationIDs removes the "evening_next_station" edge to Station entities by IDs.
+func (su *StationUpdate) RemoveEveningNextStationIDs(ids ...uuid.UUID) *StationUpdate {
+	su.mutation.RemoveEveningNextStationIDs(ids...)
+	return su
+}
+
+// RemoveEveningNextStation removes "evening_next_station" edges to Station entities.
+func (su *StationUpdate) RemoveEveningNextStation(s ...*Station) *StationUpdate {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.RemoveEveningNextStationIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -275,18 +355,6 @@ func (su *StationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.LongitudeCleared() {
 		_spec.ClearField(station.FieldLongitude, field.TypeFloat64)
-	}
-	if value, ok := su.mutation.MorningOrder(); ok {
-		_spec.SetField(station.FieldMorningOrder, field.TypeInt, value)
-	}
-	if value, ok := su.mutation.AddedMorningOrder(); ok {
-		_spec.AddField(station.FieldMorningOrder, field.TypeInt, value)
-	}
-	if value, ok := su.mutation.EveningOrder(); ok {
-		_spec.SetField(station.FieldEveningOrder, field.TypeInt, value)
-	}
-	if value, ok := su.mutation.AddedEveningOrder(); ok {
-		_spec.AddField(station.FieldEveningOrder, field.TypeInt, value)
 	}
 	if value, ok := su.mutation.CreatedAt(); ok {
 		_spec.SetField(station.FieldCreatedAt, field.TypeTime, value)
@@ -368,6 +436,154 @@ func (su *StationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if su.mutation.MorningPreviousStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.MorningPreviousStationTable,
+			Columns: []string{station.MorningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.MorningPreviousStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.MorningPreviousStationTable,
+			Columns: []string{station.MorningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.MorningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.MorningNextStationTable,
+			Columns: []string{station.MorningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedMorningNextStationIDs(); len(nodes) > 0 && !su.mutation.MorningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.MorningNextStationTable,
+			Columns: []string{station.MorningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.MorningNextStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.MorningNextStationTable,
+			Columns: []string{station.MorningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.EveningPreviousStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.EveningPreviousStationTable,
+			Columns: []string{station.EveningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.EveningPreviousStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.EveningPreviousStationTable,
+			Columns: []string{station.EveningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.EveningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.EveningNextStationTable,
+			Columns: []string{station.EveningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedEveningNextStationIDs(); len(nodes) > 0 && !su.mutation.EveningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.EveningNextStationTable,
+			Columns: []string{station.EveningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.EveningNextStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.EveningNextStationTable,
+			Columns: []string{station.EveningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{station.Label}
@@ -442,48 +658,6 @@ func (suo *StationUpdateOne) ClearLongitude() *StationUpdateOne {
 	return suo
 }
 
-// SetMorningOrder sets the "morning_order" field.
-func (suo *StationUpdateOne) SetMorningOrder(i int) *StationUpdateOne {
-	suo.mutation.ResetMorningOrder()
-	suo.mutation.SetMorningOrder(i)
-	return suo
-}
-
-// SetNillableMorningOrder sets the "morning_order" field if the given value is not nil.
-func (suo *StationUpdateOne) SetNillableMorningOrder(i *int) *StationUpdateOne {
-	if i != nil {
-		suo.SetMorningOrder(*i)
-	}
-	return suo
-}
-
-// AddMorningOrder adds i to the "morning_order" field.
-func (suo *StationUpdateOne) AddMorningOrder(i int) *StationUpdateOne {
-	suo.mutation.AddMorningOrder(i)
-	return suo
-}
-
-// SetEveningOrder sets the "evening_order" field.
-func (suo *StationUpdateOne) SetEveningOrder(i int) *StationUpdateOne {
-	suo.mutation.ResetEveningOrder()
-	suo.mutation.SetEveningOrder(i)
-	return suo
-}
-
-// SetNillableEveningOrder sets the "evening_order" field if the given value is not nil.
-func (suo *StationUpdateOne) SetNillableEveningOrder(i *int) *StationUpdateOne {
-	if i != nil {
-		suo.SetEveningOrder(*i)
-	}
-	return suo
-}
-
-// AddEveningOrder adds i to the "evening_order" field.
-func (suo *StationUpdateOne) AddEveningOrder(i int) *StationUpdateOne {
-	suo.mutation.AddEveningOrder(i)
-	return suo
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (suo *StationUpdateOne) SetCreatedAt(t time.Time) *StationUpdateOne {
 	suo.mutation.SetCreatedAt(t)
@@ -538,6 +712,74 @@ func (suo *StationUpdateOne) AddBus(b ...*Bus) *StationUpdateOne {
 	return suo.AddBuIDs(ids...)
 }
 
+// SetMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by ID.
+func (suo *StationUpdateOne) SetMorningPreviousStationID(id uuid.UUID) *StationUpdateOne {
+	suo.mutation.SetMorningPreviousStationID(id)
+	return suo
+}
+
+// SetNillableMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by ID if the given value is not nil.
+func (suo *StationUpdateOne) SetNillableMorningPreviousStationID(id *uuid.UUID) *StationUpdateOne {
+	if id != nil {
+		suo = suo.SetMorningPreviousStationID(*id)
+	}
+	return suo
+}
+
+// SetMorningPreviousStation sets the "morning_previous_station" edge to the Station entity.
+func (suo *StationUpdateOne) SetMorningPreviousStation(s *Station) *StationUpdateOne {
+	return suo.SetMorningPreviousStationID(s.ID)
+}
+
+// AddMorningNextStationIDs adds the "morning_next_station" edge to the Station entity by IDs.
+func (suo *StationUpdateOne) AddMorningNextStationIDs(ids ...uuid.UUID) *StationUpdateOne {
+	suo.mutation.AddMorningNextStationIDs(ids...)
+	return suo
+}
+
+// AddMorningNextStation adds the "morning_next_station" edges to the Station entity.
+func (suo *StationUpdateOne) AddMorningNextStation(s ...*Station) *StationUpdateOne {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.AddMorningNextStationIDs(ids...)
+}
+
+// SetEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by ID.
+func (suo *StationUpdateOne) SetEveningPreviousStationID(id uuid.UUID) *StationUpdateOne {
+	suo.mutation.SetEveningPreviousStationID(id)
+	return suo
+}
+
+// SetNillableEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by ID if the given value is not nil.
+func (suo *StationUpdateOne) SetNillableEveningPreviousStationID(id *uuid.UUID) *StationUpdateOne {
+	if id != nil {
+		suo = suo.SetEveningPreviousStationID(*id)
+	}
+	return suo
+}
+
+// SetEveningPreviousStation sets the "evening_previous_station" edge to the Station entity.
+func (suo *StationUpdateOne) SetEveningPreviousStation(s *Station) *StationUpdateOne {
+	return suo.SetEveningPreviousStationID(s.ID)
+}
+
+// AddEveningNextStationIDs adds the "evening_next_station" edge to the Station entity by IDs.
+func (suo *StationUpdateOne) AddEveningNextStationIDs(ids ...uuid.UUID) *StationUpdateOne {
+	suo.mutation.AddEveningNextStationIDs(ids...)
+	return suo
+}
+
+// AddEveningNextStation adds the "evening_next_station" edges to the Station entity.
+func (suo *StationUpdateOne) AddEveningNextStation(s ...*Station) *StationUpdateOne {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.AddEveningNextStationIDs(ids...)
+}
+
 // Mutation returns the StationMutation object of the builder.
 func (suo *StationUpdateOne) Mutation() *StationMutation {
 	return suo.mutation
@@ -568,6 +810,60 @@ func (suo *StationUpdateOne) RemoveBus(b ...*Bus) *StationUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return suo.RemoveBuIDs(ids...)
+}
+
+// ClearMorningPreviousStation clears the "morning_previous_station" edge to the Station entity.
+func (suo *StationUpdateOne) ClearMorningPreviousStation() *StationUpdateOne {
+	suo.mutation.ClearMorningPreviousStation()
+	return suo
+}
+
+// ClearMorningNextStation clears all "morning_next_station" edges to the Station entity.
+func (suo *StationUpdateOne) ClearMorningNextStation() *StationUpdateOne {
+	suo.mutation.ClearMorningNextStation()
+	return suo
+}
+
+// RemoveMorningNextStationIDs removes the "morning_next_station" edge to Station entities by IDs.
+func (suo *StationUpdateOne) RemoveMorningNextStationIDs(ids ...uuid.UUID) *StationUpdateOne {
+	suo.mutation.RemoveMorningNextStationIDs(ids...)
+	return suo
+}
+
+// RemoveMorningNextStation removes "morning_next_station" edges to Station entities.
+func (suo *StationUpdateOne) RemoveMorningNextStation(s ...*Station) *StationUpdateOne {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.RemoveMorningNextStationIDs(ids...)
+}
+
+// ClearEveningPreviousStation clears the "evening_previous_station" edge to the Station entity.
+func (suo *StationUpdateOne) ClearEveningPreviousStation() *StationUpdateOne {
+	suo.mutation.ClearEveningPreviousStation()
+	return suo
+}
+
+// ClearEveningNextStation clears all "evening_next_station" edges to the Station entity.
+func (suo *StationUpdateOne) ClearEveningNextStation() *StationUpdateOne {
+	suo.mutation.ClearEveningNextStation()
+	return suo
+}
+
+// RemoveEveningNextStationIDs removes the "evening_next_station" edge to Station entities by IDs.
+func (suo *StationUpdateOne) RemoveEveningNextStationIDs(ids ...uuid.UUID) *StationUpdateOne {
+	suo.mutation.RemoveEveningNextStationIDs(ids...)
+	return suo
+}
+
+// RemoveEveningNextStation removes "evening_next_station" edges to Station entities.
+func (suo *StationUpdateOne) RemoveEveningNextStation(s ...*Station) *StationUpdateOne {
+	ids := make([]uuid.UUID, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.RemoveEveningNextStationIDs(ids...)
 }
 
 // Where appends a list predicates to the StationUpdate builder.
@@ -663,18 +959,6 @@ func (suo *StationUpdateOne) sqlSave(ctx context.Context) (_node *Station, err e
 	if suo.mutation.LongitudeCleared() {
 		_spec.ClearField(station.FieldLongitude, field.TypeFloat64)
 	}
-	if value, ok := suo.mutation.MorningOrder(); ok {
-		_spec.SetField(station.FieldMorningOrder, field.TypeInt, value)
-	}
-	if value, ok := suo.mutation.AddedMorningOrder(); ok {
-		_spec.AddField(station.FieldMorningOrder, field.TypeInt, value)
-	}
-	if value, ok := suo.mutation.EveningOrder(); ok {
-		_spec.SetField(station.FieldEveningOrder, field.TypeInt, value)
-	}
-	if value, ok := suo.mutation.AddedEveningOrder(); ok {
-		_spec.AddField(station.FieldEveningOrder, field.TypeInt, value)
-	}
 	if value, ok := suo.mutation.CreatedAt(); ok {
 		_spec.SetField(station.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -748,6 +1032,154 @@ func (suo *StationUpdateOne) sqlSave(ctx context.Context) (_node *Station, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.MorningPreviousStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.MorningPreviousStationTable,
+			Columns: []string{station.MorningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.MorningPreviousStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.MorningPreviousStationTable,
+			Columns: []string{station.MorningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.MorningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.MorningNextStationTable,
+			Columns: []string{station.MorningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedMorningNextStationIDs(); len(nodes) > 0 && !suo.mutation.MorningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.MorningNextStationTable,
+			Columns: []string{station.MorningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.MorningNextStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.MorningNextStationTable,
+			Columns: []string{station.MorningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.EveningPreviousStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.EveningPreviousStationTable,
+			Columns: []string{station.EveningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.EveningPreviousStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   station.EveningPreviousStationTable,
+			Columns: []string{station.EveningPreviousStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.EveningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.EveningNextStationTable,
+			Columns: []string{station.EveningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedEveningNextStationIDs(); len(nodes) > 0 && !suo.mutation.EveningNextStationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.EveningNextStationTable,
+			Columns: []string{station.EveningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.EveningNextStationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   station.EveningNextStationTable,
+			Columns: []string{station.EveningNextStationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

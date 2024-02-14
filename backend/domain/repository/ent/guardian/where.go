@@ -76,6 +76,16 @@ func PhoneNumber(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldEQ(FieldPhoneNumber, v))
 }
 
+// IsUseMorningBus applies equality check predicate on the "is_use_morning_bus" field. It's identical to IsUseMorningBusEQ.
+func IsUseMorningBus(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseMorningBus, v))
+}
+
+// IsUseEveningBus applies equality check predicate on the "is_use_evening_bus" field. It's identical to IsUseEveningBusEQ.
+func IsUseEveningBus(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseEveningBus, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Guardian {
 	return predicate.Guardian(sql.FieldEQ(FieldCreatedAt, v))
@@ -354,6 +364,26 @@ func PhoneNumberEqualFold(v string) predicate.Guardian {
 // PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
 func PhoneNumberContainsFold(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldContainsFold(FieldPhoneNumber, v))
+}
+
+// IsUseMorningBusEQ applies the EQ predicate on the "is_use_morning_bus" field.
+func IsUseMorningBusEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseMorningBus, v))
+}
+
+// IsUseMorningBusNEQ applies the NEQ predicate on the "is_use_morning_bus" field.
+func IsUseMorningBusNEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldIsUseMorningBus, v))
+}
+
+// IsUseEveningBusEQ applies the EQ predicate on the "is_use_evening_bus" field.
+func IsUseEveningBusEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseEveningBus, v))
+}
+
+// IsUseEveningBusNEQ applies the NEQ predicate on the "is_use_evening_bus" field.
+func IsUseEveningBusNEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldIsUseEveningBus, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

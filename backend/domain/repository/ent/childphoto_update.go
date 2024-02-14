@@ -30,20 +30,6 @@ func (cpu *ChildPhotoUpdate) Where(ps ...predicate.ChildPhoto) *ChildPhotoUpdate
 	return cpu
 }
 
-// SetIsDuplicate sets the "is_duplicate" field.
-func (cpu *ChildPhotoUpdate) SetIsDuplicate(b bool) *ChildPhotoUpdate {
-	cpu.mutation.SetIsDuplicate(b)
-	return cpu
-}
-
-// SetNillableIsDuplicate sets the "is_duplicate" field if the given value is not nil.
-func (cpu *ChildPhotoUpdate) SetNillableIsDuplicate(b *bool) *ChildPhotoUpdate {
-	if b != nil {
-		cpu.SetIsDuplicate(*b)
-	}
-	return cpu
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (cpu *ChildPhotoUpdate) SetCreatedAt(t time.Time) *ChildPhotoUpdate {
 	cpu.mutation.SetCreatedAt(t)
@@ -139,9 +125,6 @@ func (cpu *ChildPhotoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := cpu.mutation.IsDuplicate(); ok {
-		_spec.SetField(childphoto.FieldIsDuplicate, field.TypeBool, value)
-	}
 	if value, ok := cpu.mutation.CreatedAt(); ok {
 		_spec.SetField(childphoto.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -195,20 +178,6 @@ type ChildPhotoUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ChildPhotoMutation
-}
-
-// SetIsDuplicate sets the "is_duplicate" field.
-func (cpuo *ChildPhotoUpdateOne) SetIsDuplicate(b bool) *ChildPhotoUpdateOne {
-	cpuo.mutation.SetIsDuplicate(b)
-	return cpuo
-}
-
-// SetNillableIsDuplicate sets the "is_duplicate" field if the given value is not nil.
-func (cpuo *ChildPhotoUpdateOne) SetNillableIsDuplicate(b *bool) *ChildPhotoUpdateOne {
-	if b != nil {
-		cpuo.SetIsDuplicate(*b)
-	}
-	return cpuo
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -335,9 +304,6 @@ func (cpuo *ChildPhotoUpdateOne) sqlSave(ctx context.Context) (_node *ChildPhoto
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := cpuo.mutation.IsDuplicate(); ok {
-		_spec.SetField(childphoto.FieldIsDuplicate, field.TypeBool, value)
 	}
 	if value, ok := cpuo.mutation.CreatedAt(); ok {
 		_spec.SetField(childphoto.FieldCreatedAt, field.TypeTime, value)

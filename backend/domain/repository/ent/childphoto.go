@@ -19,8 +19,6 @@ type ChildPhoto struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// 重複画像があるかどうか
-	IsDuplicate bool `json:"is_duplicate,omitempty"`
 	// レコードの作成日時
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// レコードの最終更新日時
@@ -59,8 +57,6 @@ func (*ChildPhoto) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case childphoto.FieldIsDuplicate:
-			values[i] = new(sql.NullBool)
 		case childphoto.FieldCreatedAt, childphoto.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case childphoto.FieldID:
@@ -87,12 +83,6 @@ func (cp *ChildPhoto) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				cp.ID = *value
-			}
-		case childphoto.FieldIsDuplicate:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field is_duplicate", values[i])
-			} else if value.Valid {
-				cp.IsDuplicate = value.Bool
 			}
 		case childphoto.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -154,9 +144,6 @@ func (cp *ChildPhoto) String() string {
 	var builder strings.Builder
 	builder.WriteString("ChildPhoto(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", cp.ID))
-	builder.WriteString("is_duplicate=")
-	builder.WriteString(fmt.Sprintf("%v", cp.IsDuplicate))
-	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(cp.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")

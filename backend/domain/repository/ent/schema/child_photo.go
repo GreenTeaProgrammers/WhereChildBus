@@ -18,7 +18,6 @@ type ChildPhoto struct {
 func (ChildPhoto) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
-		field.Bool("is_duplicate").Default(false).Comment("重複画像があるかどうか"),
 		field.Time("created_at").Default(time.Now).Comment("レコードの作成日時"),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).Comment("レコードの最終更新日時"),
 	}

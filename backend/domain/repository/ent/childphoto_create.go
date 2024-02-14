@@ -22,20 +22,6 @@ type ChildPhotoCreate struct {
 	hooks    []Hook
 }
 
-// SetIsDuplicate sets the "is_duplicate" field.
-func (cpc *ChildPhotoCreate) SetIsDuplicate(b bool) *ChildPhotoCreate {
-	cpc.mutation.SetIsDuplicate(b)
-	return cpc
-}
-
-// SetNillableIsDuplicate sets the "is_duplicate" field if the given value is not nil.
-func (cpc *ChildPhotoCreate) SetNillableIsDuplicate(b *bool) *ChildPhotoCreate {
-	if b != nil {
-		cpc.SetIsDuplicate(*b)
-	}
-	return cpc
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (cpc *ChildPhotoCreate) SetCreatedAt(t time.Time) *ChildPhotoCreate {
 	cpc.mutation.SetCreatedAt(t)
@@ -132,10 +118,6 @@ func (cpc *ChildPhotoCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cpc *ChildPhotoCreate) defaults() {
-	if _, ok := cpc.mutation.IsDuplicate(); !ok {
-		v := childphoto.DefaultIsDuplicate
-		cpc.mutation.SetIsDuplicate(v)
-	}
 	if _, ok := cpc.mutation.CreatedAt(); !ok {
 		v := childphoto.DefaultCreatedAt()
 		cpc.mutation.SetCreatedAt(v)
@@ -152,9 +134,6 @@ func (cpc *ChildPhotoCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cpc *ChildPhotoCreate) check() error {
-	if _, ok := cpc.mutation.IsDuplicate(); !ok {
-		return &ValidationError{Name: "is_duplicate", err: errors.New(`ent: missing required field "ChildPhoto.is_duplicate"`)}
-	}
 	if _, ok := cpc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ChildPhoto.created_at"`)}
 	}
@@ -195,10 +174,6 @@ func (cpc *ChildPhotoCreate) createSpec() (*ChildPhoto, *sqlgraph.CreateSpec) {
 	if id, ok := cpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
-	}
-	if value, ok := cpc.mutation.IsDuplicate(); ok {
-		_spec.SetField(childphoto.FieldIsDuplicate, field.TypeBool, value)
-		_node.IsDuplicate = value
 	}
 	if value, ok := cpc.mutation.CreatedAt(); ok {
 		_spec.SetField(childphoto.FieldCreatedAt, field.TypeTime, value)

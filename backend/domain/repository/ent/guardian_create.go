@@ -56,6 +56,34 @@ func (gc *GuardianCreate) SetNillablePhoneNumber(s *string) *GuardianCreate {
 	return gc
 }
 
+// SetIsUseMorningBus sets the "is_use_morning_bus" field.
+func (gc *GuardianCreate) SetIsUseMorningBus(b bool) *GuardianCreate {
+	gc.mutation.SetIsUseMorningBus(b)
+	return gc
+}
+
+// SetNillableIsUseMorningBus sets the "is_use_morning_bus" field if the given value is not nil.
+func (gc *GuardianCreate) SetNillableIsUseMorningBus(b *bool) *GuardianCreate {
+	if b != nil {
+		gc.SetIsUseMorningBus(*b)
+	}
+	return gc
+}
+
+// SetIsUseEveningBus sets the "is_use_evening_bus" field.
+func (gc *GuardianCreate) SetIsUseEveningBus(b bool) *GuardianCreate {
+	gc.mutation.SetIsUseEveningBus(b)
+	return gc
+}
+
+// SetNillableIsUseEveningBus sets the "is_use_evening_bus" field if the given value is not nil.
+func (gc *GuardianCreate) SetNillableIsUseEveningBus(b *bool) *GuardianCreate {
+	if b != nil {
+		gc.SetIsUseEveningBus(*b)
+	}
+	return gc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (gc *GuardianCreate) SetCreatedAt(t time.Time) *GuardianCreate {
 	gc.mutation.SetCreatedAt(t)
@@ -186,6 +214,14 @@ func (gc *GuardianCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (gc *GuardianCreate) defaults() {
+	if _, ok := gc.mutation.IsUseMorningBus(); !ok {
+		v := guardian.DefaultIsUseMorningBus
+		gc.mutation.SetIsUseMorningBus(v)
+	}
+	if _, ok := gc.mutation.IsUseEveningBus(); !ok {
+		v := guardian.DefaultIsUseEveningBus
+		gc.mutation.SetIsUseEveningBus(v)
+	}
 	if _, ok := gc.mutation.CreatedAt(); !ok {
 		v := guardian.DefaultCreatedAt()
 		gc.mutation.SetCreatedAt(v)
@@ -210,6 +246,12 @@ func (gc *GuardianCreate) check() error {
 	}
 	if _, ok := gc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Guardian.name"`)}
+	}
+	if _, ok := gc.mutation.IsUseMorningBus(); !ok {
+		return &ValidationError{Name: "is_use_morning_bus", err: errors.New(`ent: missing required field "Guardian.is_use_morning_bus"`)}
+	}
+	if _, ok := gc.mutation.IsUseEveningBus(); !ok {
+		return &ValidationError{Name: "is_use_evening_bus", err: errors.New(`ent: missing required field "Guardian.is_use_evening_bus"`)}
 	}
 	if _, ok := gc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Guardian.created_at"`)}
@@ -267,6 +309,14 @@ func (gc *GuardianCreate) createSpec() (*Guardian, *sqlgraph.CreateSpec) {
 	if value, ok := gc.mutation.PhoneNumber(); ok {
 		_spec.SetField(guardian.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
+	}
+	if value, ok := gc.mutation.IsUseMorningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseMorningBus, field.TypeBool, value)
+		_node.IsUseMorningBus = value
+	}
+	if value, ok := gc.mutation.IsUseEveningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseEveningBus, field.TypeBool, value)
+		_node.IsUseEveningBus = value
 	}
 	if value, ok := gc.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)

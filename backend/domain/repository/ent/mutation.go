@@ -1723,8 +1723,6 @@ type ChildMutation struct {
 	age                         *int
 	addage                      *int
 	sex                         *child.Sex
-	is_ride_morning_bus         *bool
-	is_ride_evening_bus         *bool
 	check_for_missing_items     *bool
 	has_bag                     *bool
 	has_lunch_box               *bool
@@ -1982,78 +1980,6 @@ func (m *ChildMutation) OldSex(ctx context.Context) (v child.Sex, err error) {
 // ResetSex resets all changes to the "sex" field.
 func (m *ChildMutation) ResetSex() {
 	m.sex = nil
-}
-
-// SetIsRideMorningBus sets the "is_ride_morning_bus" field.
-func (m *ChildMutation) SetIsRideMorningBus(b bool) {
-	m.is_ride_morning_bus = &b
-}
-
-// IsRideMorningBus returns the value of the "is_ride_morning_bus" field in the mutation.
-func (m *ChildMutation) IsRideMorningBus() (r bool, exists bool) {
-	v := m.is_ride_morning_bus
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldIsRideMorningBus returns the old "is_ride_morning_bus" field's value of the Child entity.
-// If the Child object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildMutation) OldIsRideMorningBus(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIsRideMorningBus is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIsRideMorningBus requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIsRideMorningBus: %w", err)
-	}
-	return oldValue.IsRideMorningBus, nil
-}
-
-// ResetIsRideMorningBus resets all changes to the "is_ride_morning_bus" field.
-func (m *ChildMutation) ResetIsRideMorningBus() {
-	m.is_ride_morning_bus = nil
-}
-
-// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
-func (m *ChildMutation) SetIsRideEveningBus(b bool) {
-	m.is_ride_evening_bus = &b
-}
-
-// IsRideEveningBus returns the value of the "is_ride_evening_bus" field in the mutation.
-func (m *ChildMutation) IsRideEveningBus() (r bool, exists bool) {
-	v := m.is_ride_evening_bus
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldIsRideEveningBus returns the old "is_ride_evening_bus" field's value of the Child entity.
-// If the Child object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildMutation) OldIsRideEveningBus(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIsRideEveningBus is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIsRideEveningBus requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIsRideEveningBus: %w", err)
-	}
-	return oldValue.IsRideEveningBus, nil
-}
-
-// ResetIsRideEveningBus resets all changes to the "is_ride_evening_bus" field.
-func (m *ChildMutation) ResetIsRideEveningBus() {
-	m.is_ride_evening_bus = nil
 }
 
 // SetCheckForMissingItems sets the "check_for_missing_items" field.
@@ -2618,7 +2544,7 @@ func (m *ChildMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChildMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, child.FieldName)
 	}
@@ -2627,12 +2553,6 @@ func (m *ChildMutation) Fields() []string {
 	}
 	if m.sex != nil {
 		fields = append(fields, child.FieldSex)
-	}
-	if m.is_ride_morning_bus != nil {
-		fields = append(fields, child.FieldIsRideMorningBus)
-	}
-	if m.is_ride_evening_bus != nil {
-		fields = append(fields, child.FieldIsRideEveningBus)
 	}
 	if m.check_for_missing_items != nil {
 		fields = append(fields, child.FieldCheckForMissingItems)
@@ -2672,10 +2592,6 @@ func (m *ChildMutation) Field(name string) (ent.Value, bool) {
 		return m.Age()
 	case child.FieldSex:
 		return m.Sex()
-	case child.FieldIsRideMorningBus:
-		return m.IsRideMorningBus()
-	case child.FieldIsRideEveningBus:
-		return m.IsRideEveningBus()
 	case child.FieldCheckForMissingItems:
 		return m.CheckForMissingItems()
 	case child.FieldHasBag:
@@ -2707,10 +2623,6 @@ func (m *ChildMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldAge(ctx)
 	case child.FieldSex:
 		return m.OldSex(ctx)
-	case child.FieldIsRideMorningBus:
-		return m.OldIsRideMorningBus(ctx)
-	case child.FieldIsRideEveningBus:
-		return m.OldIsRideEveningBus(ctx)
 	case child.FieldCheckForMissingItems:
 		return m.OldCheckForMissingItems(ctx)
 	case child.FieldHasBag:
@@ -2756,20 +2668,6 @@ func (m *ChildMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSex(v)
-		return nil
-	case child.FieldIsRideMorningBus:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetIsRideMorningBus(v)
-		return nil
-	case child.FieldIsRideEveningBus:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetIsRideEveningBus(v)
 		return nil
 	case child.FieldCheckForMissingItems:
 		v, ok := value.(bool)
@@ -2899,12 +2797,6 @@ func (m *ChildMutation) ResetField(name string) error {
 		return nil
 	case child.FieldSex:
 		m.ResetSex()
-		return nil
-	case child.FieldIsRideMorningBus:
-		m.ResetIsRideMorningBus()
-		return nil
-	case child.FieldIsRideEveningBus:
-		m.ResetIsRideEveningBus()
 		return nil
 	case child.FieldCheckForMissingItems:
 		m.ResetCheckForMissingItems()
@@ -3646,7 +3538,6 @@ type ChildPhotoMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	is_duplicate  *bool
 	created_at    *time.Time
 	updated_at    *time.Time
 	clearedFields map[string]struct{}
@@ -3759,42 +3650,6 @@ func (m *ChildPhotoMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetIsDuplicate sets the "is_duplicate" field.
-func (m *ChildPhotoMutation) SetIsDuplicate(b bool) {
-	m.is_duplicate = &b
-}
-
-// IsDuplicate returns the value of the "is_duplicate" field in the mutation.
-func (m *ChildPhotoMutation) IsDuplicate() (r bool, exists bool) {
-	v := m.is_duplicate
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldIsDuplicate returns the old "is_duplicate" field's value of the ChildPhoto entity.
-// If the ChildPhoto object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildPhotoMutation) OldIsDuplicate(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIsDuplicate is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIsDuplicate requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIsDuplicate: %w", err)
-	}
-	return oldValue.IsDuplicate, nil
-}
-
-// ResetIsDuplicate resets all changes to the "is_duplicate" field.
-func (m *ChildPhotoMutation) ResetIsDuplicate() {
-	m.is_duplicate = nil
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -3942,10 +3797,7 @@ func (m *ChildPhotoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChildPhotoMutation) Fields() []string {
-	fields := make([]string, 0, 3)
-	if m.is_duplicate != nil {
-		fields = append(fields, childphoto.FieldIsDuplicate)
-	}
+	fields := make([]string, 0, 2)
 	if m.created_at != nil {
 		fields = append(fields, childphoto.FieldCreatedAt)
 	}
@@ -3960,8 +3812,6 @@ func (m *ChildPhotoMutation) Fields() []string {
 // schema.
 func (m *ChildPhotoMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case childphoto.FieldIsDuplicate:
-		return m.IsDuplicate()
 	case childphoto.FieldCreatedAt:
 		return m.CreatedAt()
 	case childphoto.FieldUpdatedAt:
@@ -3975,8 +3825,6 @@ func (m *ChildPhotoMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ChildPhotoMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case childphoto.FieldIsDuplicate:
-		return m.OldIsDuplicate(ctx)
 	case childphoto.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case childphoto.FieldUpdatedAt:
@@ -3990,13 +3838,6 @@ func (m *ChildPhotoMutation) OldField(ctx context.Context, name string) (ent.Val
 // type.
 func (m *ChildPhotoMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case childphoto.FieldIsDuplicate:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetIsDuplicate(v)
-		return nil
 	case childphoto.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -4060,9 +3901,6 @@ func (m *ChildPhotoMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ChildPhotoMutation) ResetField(name string) error {
 	switch name {
-	case childphoto.FieldIsDuplicate:
-		m.ResetIsDuplicate()
-		return nil
 	case childphoto.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -4150,26 +3988,28 @@ func (m *ChildPhotoMutation) ResetEdge(name string) error {
 // GuardianMutation represents an operation that mutates the Guardian nodes in the graph.
 type GuardianMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *uuid.UUID
-	email           *string
-	hashed_password *string
-	name            *string
-	phone_number    *string
-	created_at      *time.Time
-	updated_at      *time.Time
-	clearedFields   map[string]struct{}
-	children        map[uuid.UUID]struct{}
-	removedchildren map[uuid.UUID]struct{}
-	clearedchildren bool
-	nursery         *uuid.UUID
-	clearednursery  bool
-	station         *uuid.UUID
-	clearedstation  bool
-	done            bool
-	oldValue        func(context.Context) (*Guardian, error)
-	predicates      []predicate.Guardian
+	op                 Op
+	typ                string
+	id                 *uuid.UUID
+	email              *string
+	hashed_password    *string
+	name               *string
+	phone_number       *string
+	is_use_morning_bus *bool
+	is_use_evening_bus *bool
+	created_at         *time.Time
+	updated_at         *time.Time
+	clearedFields      map[string]struct{}
+	children           map[uuid.UUID]struct{}
+	removedchildren    map[uuid.UUID]struct{}
+	clearedchildren    bool
+	nursery            *uuid.UUID
+	clearednursery     bool
+	station            *uuid.UUID
+	clearedstation     bool
+	done               bool
+	oldValue           func(context.Context) (*Guardian, error)
+	predicates         []predicate.Guardian
 }
 
 var _ ent.Mutation = (*GuardianMutation)(nil)
@@ -4433,6 +4273,78 @@ func (m *GuardianMutation) ResetPhoneNumber() {
 	delete(m.clearedFields, guardian.FieldPhoneNumber)
 }
 
+// SetIsUseMorningBus sets the "is_use_morning_bus" field.
+func (m *GuardianMutation) SetIsUseMorningBus(b bool) {
+	m.is_use_morning_bus = &b
+}
+
+// IsUseMorningBus returns the value of the "is_use_morning_bus" field in the mutation.
+func (m *GuardianMutation) IsUseMorningBus() (r bool, exists bool) {
+	v := m.is_use_morning_bus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsUseMorningBus returns the old "is_use_morning_bus" field's value of the Guardian entity.
+// If the Guardian object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GuardianMutation) OldIsUseMorningBus(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsUseMorningBus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsUseMorningBus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsUseMorningBus: %w", err)
+	}
+	return oldValue.IsUseMorningBus, nil
+}
+
+// ResetIsUseMorningBus resets all changes to the "is_use_morning_bus" field.
+func (m *GuardianMutation) ResetIsUseMorningBus() {
+	m.is_use_morning_bus = nil
+}
+
+// SetIsUseEveningBus sets the "is_use_evening_bus" field.
+func (m *GuardianMutation) SetIsUseEveningBus(b bool) {
+	m.is_use_evening_bus = &b
+}
+
+// IsUseEveningBus returns the value of the "is_use_evening_bus" field in the mutation.
+func (m *GuardianMutation) IsUseEveningBus() (r bool, exists bool) {
+	v := m.is_use_evening_bus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsUseEveningBus returns the old "is_use_evening_bus" field's value of the Guardian entity.
+// If the Guardian object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GuardianMutation) OldIsUseEveningBus(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsUseEveningBus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsUseEveningBus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsUseEveningBus: %w", err)
+	}
+	return oldValue.IsUseEveningBus, nil
+}
+
+// ResetIsUseEveningBus resets all changes to the "is_use_evening_bus" field.
+func (m *GuardianMutation) ResetIsUseEveningBus() {
+	m.is_use_evening_bus = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *GuardianMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -4671,7 +4583,7 @@ func (m *GuardianMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GuardianMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 8)
 	if m.email != nil {
 		fields = append(fields, guardian.FieldEmail)
 	}
@@ -4683,6 +4595,12 @@ func (m *GuardianMutation) Fields() []string {
 	}
 	if m.phone_number != nil {
 		fields = append(fields, guardian.FieldPhoneNumber)
+	}
+	if m.is_use_morning_bus != nil {
+		fields = append(fields, guardian.FieldIsUseMorningBus)
+	}
+	if m.is_use_evening_bus != nil {
+		fields = append(fields, guardian.FieldIsUseEveningBus)
 	}
 	if m.created_at != nil {
 		fields = append(fields, guardian.FieldCreatedAt)
@@ -4706,6 +4624,10 @@ func (m *GuardianMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case guardian.FieldPhoneNumber:
 		return m.PhoneNumber()
+	case guardian.FieldIsUseMorningBus:
+		return m.IsUseMorningBus()
+	case guardian.FieldIsUseEveningBus:
+		return m.IsUseEveningBus()
 	case guardian.FieldCreatedAt:
 		return m.CreatedAt()
 	case guardian.FieldUpdatedAt:
@@ -4727,6 +4649,10 @@ func (m *GuardianMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldName(ctx)
 	case guardian.FieldPhoneNumber:
 		return m.OldPhoneNumber(ctx)
+	case guardian.FieldIsUseMorningBus:
+		return m.OldIsUseMorningBus(ctx)
+	case guardian.FieldIsUseEveningBus:
+		return m.OldIsUseEveningBus(ctx)
 	case guardian.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case guardian.FieldUpdatedAt:
@@ -4767,6 +4693,20 @@ func (m *GuardianMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPhoneNumber(v)
+		return nil
+	case guardian.FieldIsUseMorningBus:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsUseMorningBus(v)
+		return nil
+	case guardian.FieldIsUseEveningBus:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsUseEveningBus(v)
 		return nil
 	case guardian.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -4851,6 +4791,12 @@ func (m *GuardianMutation) ResetField(name string) error {
 		return nil
 	case guardian.FieldPhoneNumber:
 		m.ResetPhoneNumber()
+		return nil
+	case guardian.FieldIsUseMorningBus:
+		m.ResetIsUseMorningBus()
+		return nil
+	case guardian.FieldIsUseEveningBus:
+		m.ResetIsUseEveningBus()
 		return nil
 	case guardian.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -5995,28 +5941,34 @@ func (m *NurseryMutation) ResetEdge(name string) error {
 // StationMutation represents an operation that mutates the Station nodes in the graph.
 type StationMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	latitude         *float64
-	addlatitude      *float64
-	longitude        *float64
-	addlongitude     *float64
-	morning_order    *int
-	addmorning_order *int
-	evening_order    *int
-	addevening_order *int
-	created_at       *time.Time
-	updated_at       *time.Time
-	clearedFields    map[string]struct{}
-	guardian         *uuid.UUID
-	clearedguardian  bool
-	bus              map[uuid.UUID]struct{}
-	removedbus       map[uuid.UUID]struct{}
-	clearedbus       bool
-	done             bool
-	oldValue         func(context.Context) (*Station, error)
-	predicates       []predicate.Station
+	op                              Op
+	typ                             string
+	id                              *uuid.UUID
+	latitude                        *float64
+	addlatitude                     *float64
+	longitude                       *float64
+	addlongitude                    *float64
+	created_at                      *time.Time
+	updated_at                      *time.Time
+	clearedFields                   map[string]struct{}
+	guardian                        *uuid.UUID
+	clearedguardian                 bool
+	bus                             map[uuid.UUID]struct{}
+	removedbus                      map[uuid.UUID]struct{}
+	clearedbus                      bool
+	morning_previous_station        *uuid.UUID
+	clearedmorning_previous_station bool
+	morning_next_station            map[uuid.UUID]struct{}
+	removedmorning_next_station     map[uuid.UUID]struct{}
+	clearedmorning_next_station     bool
+	evening_previous_station        *uuid.UUID
+	clearedevening_previous_station bool
+	evening_next_station            map[uuid.UUID]struct{}
+	removedevening_next_station     map[uuid.UUID]struct{}
+	clearedevening_next_station     bool
+	done                            bool
+	oldValue                        func(context.Context) (*Station, error)
+	predicates                      []predicate.Station
 }
 
 var _ ent.Mutation = (*StationMutation)(nil)
@@ -6263,118 +6215,6 @@ func (m *StationMutation) ResetLongitude() {
 	delete(m.clearedFields, station.FieldLongitude)
 }
 
-// SetMorningOrder sets the "morning_order" field.
-func (m *StationMutation) SetMorningOrder(i int) {
-	m.morning_order = &i
-	m.addmorning_order = nil
-}
-
-// MorningOrder returns the value of the "morning_order" field in the mutation.
-func (m *StationMutation) MorningOrder() (r int, exists bool) {
-	v := m.morning_order
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldMorningOrder returns the old "morning_order" field's value of the Station entity.
-// If the Station object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StationMutation) OldMorningOrder(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldMorningOrder is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldMorningOrder requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldMorningOrder: %w", err)
-	}
-	return oldValue.MorningOrder, nil
-}
-
-// AddMorningOrder adds i to the "morning_order" field.
-func (m *StationMutation) AddMorningOrder(i int) {
-	if m.addmorning_order != nil {
-		*m.addmorning_order += i
-	} else {
-		m.addmorning_order = &i
-	}
-}
-
-// AddedMorningOrder returns the value that was added to the "morning_order" field in this mutation.
-func (m *StationMutation) AddedMorningOrder() (r int, exists bool) {
-	v := m.addmorning_order
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetMorningOrder resets all changes to the "morning_order" field.
-func (m *StationMutation) ResetMorningOrder() {
-	m.morning_order = nil
-	m.addmorning_order = nil
-}
-
-// SetEveningOrder sets the "evening_order" field.
-func (m *StationMutation) SetEveningOrder(i int) {
-	m.evening_order = &i
-	m.addevening_order = nil
-}
-
-// EveningOrder returns the value of the "evening_order" field in the mutation.
-func (m *StationMutation) EveningOrder() (r int, exists bool) {
-	v := m.evening_order
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEveningOrder returns the old "evening_order" field's value of the Station entity.
-// If the Station object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StationMutation) OldEveningOrder(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEveningOrder is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEveningOrder requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEveningOrder: %w", err)
-	}
-	return oldValue.EveningOrder, nil
-}
-
-// AddEveningOrder adds i to the "evening_order" field.
-func (m *StationMutation) AddEveningOrder(i int) {
-	if m.addevening_order != nil {
-		*m.addevening_order += i
-	} else {
-		m.addevening_order = &i
-	}
-}
-
-// AddedEveningOrder returns the value that was added to the "evening_order" field in this mutation.
-func (m *StationMutation) AddedEveningOrder() (r int, exists bool) {
-	v := m.addevening_order
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetEveningOrder resets all changes to the "evening_order" field.
-func (m *StationMutation) ResetEveningOrder() {
-	m.evening_order = nil
-	m.addevening_order = nil
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (m *StationMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -6540,6 +6380,192 @@ func (m *StationMutation) ResetBus() {
 	m.removedbus = nil
 }
 
+// SetMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by id.
+func (m *StationMutation) SetMorningPreviousStationID(id uuid.UUID) {
+	m.morning_previous_station = &id
+}
+
+// ClearMorningPreviousStation clears the "morning_previous_station" edge to the Station entity.
+func (m *StationMutation) ClearMorningPreviousStation() {
+	m.clearedmorning_previous_station = true
+}
+
+// MorningPreviousStationCleared reports if the "morning_previous_station" edge to the Station entity was cleared.
+func (m *StationMutation) MorningPreviousStationCleared() bool {
+	return m.clearedmorning_previous_station
+}
+
+// MorningPreviousStationID returns the "morning_previous_station" edge ID in the mutation.
+func (m *StationMutation) MorningPreviousStationID() (id uuid.UUID, exists bool) {
+	if m.morning_previous_station != nil {
+		return *m.morning_previous_station, true
+	}
+	return
+}
+
+// MorningPreviousStationIDs returns the "morning_previous_station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MorningPreviousStationID instead. It exists only for internal usage by the builders.
+func (m *StationMutation) MorningPreviousStationIDs() (ids []uuid.UUID) {
+	if id := m.morning_previous_station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMorningPreviousStation resets all changes to the "morning_previous_station" edge.
+func (m *StationMutation) ResetMorningPreviousStation() {
+	m.morning_previous_station = nil
+	m.clearedmorning_previous_station = false
+}
+
+// AddMorningNextStationIDs adds the "morning_next_station" edge to the Station entity by ids.
+func (m *StationMutation) AddMorningNextStationIDs(ids ...uuid.UUID) {
+	if m.morning_next_station == nil {
+		m.morning_next_station = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.morning_next_station[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMorningNextStation clears the "morning_next_station" edge to the Station entity.
+func (m *StationMutation) ClearMorningNextStation() {
+	m.clearedmorning_next_station = true
+}
+
+// MorningNextStationCleared reports if the "morning_next_station" edge to the Station entity was cleared.
+func (m *StationMutation) MorningNextStationCleared() bool {
+	return m.clearedmorning_next_station
+}
+
+// RemoveMorningNextStationIDs removes the "morning_next_station" edge to the Station entity by IDs.
+func (m *StationMutation) RemoveMorningNextStationIDs(ids ...uuid.UUID) {
+	if m.removedmorning_next_station == nil {
+		m.removedmorning_next_station = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.morning_next_station, ids[i])
+		m.removedmorning_next_station[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMorningNextStation returns the removed IDs of the "morning_next_station" edge to the Station entity.
+func (m *StationMutation) RemovedMorningNextStationIDs() (ids []uuid.UUID) {
+	for id := range m.removedmorning_next_station {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MorningNextStationIDs returns the "morning_next_station" edge IDs in the mutation.
+func (m *StationMutation) MorningNextStationIDs() (ids []uuid.UUID) {
+	for id := range m.morning_next_station {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMorningNextStation resets all changes to the "morning_next_station" edge.
+func (m *StationMutation) ResetMorningNextStation() {
+	m.morning_next_station = nil
+	m.clearedmorning_next_station = false
+	m.removedmorning_next_station = nil
+}
+
+// SetEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by id.
+func (m *StationMutation) SetEveningPreviousStationID(id uuid.UUID) {
+	m.evening_previous_station = &id
+}
+
+// ClearEveningPreviousStation clears the "evening_previous_station" edge to the Station entity.
+func (m *StationMutation) ClearEveningPreviousStation() {
+	m.clearedevening_previous_station = true
+}
+
+// EveningPreviousStationCleared reports if the "evening_previous_station" edge to the Station entity was cleared.
+func (m *StationMutation) EveningPreviousStationCleared() bool {
+	return m.clearedevening_previous_station
+}
+
+// EveningPreviousStationID returns the "evening_previous_station" edge ID in the mutation.
+func (m *StationMutation) EveningPreviousStationID() (id uuid.UUID, exists bool) {
+	if m.evening_previous_station != nil {
+		return *m.evening_previous_station, true
+	}
+	return
+}
+
+// EveningPreviousStationIDs returns the "evening_previous_station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// EveningPreviousStationID instead. It exists only for internal usage by the builders.
+func (m *StationMutation) EveningPreviousStationIDs() (ids []uuid.UUID) {
+	if id := m.evening_previous_station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetEveningPreviousStation resets all changes to the "evening_previous_station" edge.
+func (m *StationMutation) ResetEveningPreviousStation() {
+	m.evening_previous_station = nil
+	m.clearedevening_previous_station = false
+}
+
+// AddEveningNextStationIDs adds the "evening_next_station" edge to the Station entity by ids.
+func (m *StationMutation) AddEveningNextStationIDs(ids ...uuid.UUID) {
+	if m.evening_next_station == nil {
+		m.evening_next_station = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.evening_next_station[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEveningNextStation clears the "evening_next_station" edge to the Station entity.
+func (m *StationMutation) ClearEveningNextStation() {
+	m.clearedevening_next_station = true
+}
+
+// EveningNextStationCleared reports if the "evening_next_station" edge to the Station entity was cleared.
+func (m *StationMutation) EveningNextStationCleared() bool {
+	return m.clearedevening_next_station
+}
+
+// RemoveEveningNextStationIDs removes the "evening_next_station" edge to the Station entity by IDs.
+func (m *StationMutation) RemoveEveningNextStationIDs(ids ...uuid.UUID) {
+	if m.removedevening_next_station == nil {
+		m.removedevening_next_station = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.evening_next_station, ids[i])
+		m.removedevening_next_station[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEveningNextStation returns the removed IDs of the "evening_next_station" edge to the Station entity.
+func (m *StationMutation) RemovedEveningNextStationIDs() (ids []uuid.UUID) {
+	for id := range m.removedevening_next_station {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EveningNextStationIDs returns the "evening_next_station" edge IDs in the mutation.
+func (m *StationMutation) EveningNextStationIDs() (ids []uuid.UUID) {
+	for id := range m.evening_next_station {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEveningNextStation resets all changes to the "evening_next_station" edge.
+func (m *StationMutation) ResetEveningNextStation() {
+	m.evening_next_station = nil
+	m.clearedevening_next_station = false
+	m.removedevening_next_station = nil
+}
+
 // Where appends a list predicates to the StationMutation builder.
 func (m *StationMutation) Where(ps ...predicate.Station) {
 	m.predicates = append(m.predicates, ps...)
@@ -6574,18 +6600,12 @@ func (m *StationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StationMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 4)
 	if m.latitude != nil {
 		fields = append(fields, station.FieldLatitude)
 	}
 	if m.longitude != nil {
 		fields = append(fields, station.FieldLongitude)
-	}
-	if m.morning_order != nil {
-		fields = append(fields, station.FieldMorningOrder)
-	}
-	if m.evening_order != nil {
-		fields = append(fields, station.FieldEveningOrder)
 	}
 	if m.created_at != nil {
 		fields = append(fields, station.FieldCreatedAt)
@@ -6605,10 +6625,6 @@ func (m *StationMutation) Field(name string) (ent.Value, bool) {
 		return m.Latitude()
 	case station.FieldLongitude:
 		return m.Longitude()
-	case station.FieldMorningOrder:
-		return m.MorningOrder()
-	case station.FieldEveningOrder:
-		return m.EveningOrder()
 	case station.FieldCreatedAt:
 		return m.CreatedAt()
 	case station.FieldUpdatedAt:
@@ -6626,10 +6642,6 @@ func (m *StationMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldLatitude(ctx)
 	case station.FieldLongitude:
 		return m.OldLongitude(ctx)
-	case station.FieldMorningOrder:
-		return m.OldMorningOrder(ctx)
-	case station.FieldEveningOrder:
-		return m.OldEveningOrder(ctx)
 	case station.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case station.FieldUpdatedAt:
@@ -6656,20 +6668,6 @@ func (m *StationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLongitude(v)
-		return nil
-	case station.FieldMorningOrder:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetMorningOrder(v)
-		return nil
-	case station.FieldEveningOrder:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEveningOrder(v)
 		return nil
 	case station.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -6699,12 +6697,6 @@ func (m *StationMutation) AddedFields() []string {
 	if m.addlongitude != nil {
 		fields = append(fields, station.FieldLongitude)
 	}
-	if m.addmorning_order != nil {
-		fields = append(fields, station.FieldMorningOrder)
-	}
-	if m.addevening_order != nil {
-		fields = append(fields, station.FieldEveningOrder)
-	}
 	return fields
 }
 
@@ -6717,10 +6709,6 @@ func (m *StationMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedLatitude()
 	case station.FieldLongitude:
 		return m.AddedLongitude()
-	case station.FieldMorningOrder:
-		return m.AddedMorningOrder()
-	case station.FieldEveningOrder:
-		return m.AddedEveningOrder()
 	}
 	return nil, false
 }
@@ -6743,20 +6731,6 @@ func (m *StationMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLongitude(v)
-		return nil
-	case station.FieldMorningOrder:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddMorningOrder(v)
-		return nil
-	case station.FieldEveningOrder:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddEveningOrder(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Station numeric field %s", name)
@@ -6806,12 +6780,6 @@ func (m *StationMutation) ResetField(name string) error {
 	case station.FieldLongitude:
 		m.ResetLongitude()
 		return nil
-	case station.FieldMorningOrder:
-		m.ResetMorningOrder()
-		return nil
-	case station.FieldEveningOrder:
-		m.ResetEveningOrder()
-		return nil
 	case station.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -6824,12 +6792,24 @@ func (m *StationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 6)
 	if m.guardian != nil {
 		edges = append(edges, station.EdgeGuardian)
 	}
 	if m.bus != nil {
 		edges = append(edges, station.EdgeBus)
+	}
+	if m.morning_previous_station != nil {
+		edges = append(edges, station.EdgeMorningPreviousStation)
+	}
+	if m.morning_next_station != nil {
+		edges = append(edges, station.EdgeMorningNextStation)
+	}
+	if m.evening_previous_station != nil {
+		edges = append(edges, station.EdgeEveningPreviousStation)
+	}
+	if m.evening_next_station != nil {
+		edges = append(edges, station.EdgeEveningNextStation)
 	}
 	return edges
 }
@@ -6848,15 +6828,41 @@ func (m *StationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case station.EdgeMorningPreviousStation:
+		if id := m.morning_previous_station; id != nil {
+			return []ent.Value{*id}
+		}
+	case station.EdgeMorningNextStation:
+		ids := make([]ent.Value, 0, len(m.morning_next_station))
+		for id := range m.morning_next_station {
+			ids = append(ids, id)
+		}
+		return ids
+	case station.EdgeEveningPreviousStation:
+		if id := m.evening_previous_station; id != nil {
+			return []ent.Value{*id}
+		}
+	case station.EdgeEveningNextStation:
+		ids := make([]ent.Value, 0, len(m.evening_next_station))
+		for id := range m.evening_next_station {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 6)
 	if m.removedbus != nil {
 		edges = append(edges, station.EdgeBus)
+	}
+	if m.removedmorning_next_station != nil {
+		edges = append(edges, station.EdgeMorningNextStation)
+	}
+	if m.removedevening_next_station != nil {
+		edges = append(edges, station.EdgeEveningNextStation)
 	}
 	return edges
 }
@@ -6871,18 +6877,42 @@ func (m *StationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case station.EdgeMorningNextStation:
+		ids := make([]ent.Value, 0, len(m.removedmorning_next_station))
+		for id := range m.removedmorning_next_station {
+			ids = append(ids, id)
+		}
+		return ids
+	case station.EdgeEveningNextStation:
+		ids := make([]ent.Value, 0, len(m.removedevening_next_station))
+		for id := range m.removedevening_next_station {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 6)
 	if m.clearedguardian {
 		edges = append(edges, station.EdgeGuardian)
 	}
 	if m.clearedbus {
 		edges = append(edges, station.EdgeBus)
+	}
+	if m.clearedmorning_previous_station {
+		edges = append(edges, station.EdgeMorningPreviousStation)
+	}
+	if m.clearedmorning_next_station {
+		edges = append(edges, station.EdgeMorningNextStation)
+	}
+	if m.clearedevening_previous_station {
+		edges = append(edges, station.EdgeEveningPreviousStation)
+	}
+	if m.clearedevening_next_station {
+		edges = append(edges, station.EdgeEveningNextStation)
 	}
 	return edges
 }
@@ -6895,6 +6925,14 @@ func (m *StationMutation) EdgeCleared(name string) bool {
 		return m.clearedguardian
 	case station.EdgeBus:
 		return m.clearedbus
+	case station.EdgeMorningPreviousStation:
+		return m.clearedmorning_previous_station
+	case station.EdgeMorningNextStation:
+		return m.clearedmorning_next_station
+	case station.EdgeEveningPreviousStation:
+		return m.clearedevening_previous_station
+	case station.EdgeEveningNextStation:
+		return m.clearedevening_next_station
 	}
 	return false
 }
@@ -6905,6 +6943,12 @@ func (m *StationMutation) ClearEdge(name string) error {
 	switch name {
 	case station.EdgeGuardian:
 		m.ClearGuardian()
+		return nil
+	case station.EdgeMorningPreviousStation:
+		m.ClearMorningPreviousStation()
+		return nil
+	case station.EdgeEveningPreviousStation:
+		m.ClearEveningPreviousStation()
 		return nil
 	}
 	return fmt.Errorf("unknown Station unique edge %s", name)
@@ -6919,6 +6963,18 @@ func (m *StationMutation) ResetEdge(name string) error {
 		return nil
 	case station.EdgeBus:
 		m.ResetBus()
+		return nil
+	case station.EdgeMorningPreviousStation:
+		m.ResetMorningPreviousStation()
+		return nil
+	case station.EdgeMorningNextStation:
+		m.ResetMorningNextStation()
+		return nil
+	case station.EdgeEveningPreviousStation:
+		m.ResetEveningPreviousStation()
+		return nil
+	case station.EdgeEveningNextStation:
+		m.ResetEveningNextStation()
 		return nil
 	}
 	return fmt.Errorf("unknown Station edge %s", name)
