@@ -55,6 +55,11 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 		SetNursery(nursery).
 		Save(ctx)
 
+	// Stationを作成
+	_, err = tx.Station.Create().
+		SetGuardian(guardian).
+		Save(ctx)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to create guardian: %w", err)
 	}
@@ -95,7 +100,7 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w")
+		return nil, fmt.Errorf("failed to commit transaction: %v", err)
 	}
 
 	// レスポンスを返す
