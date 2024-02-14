@@ -7,16 +7,18 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class CreateBusRequest(_message.Message):
-    __slots__ = ("nursery_id", "name", "plate_number", "child_ids")
+    __slots__ = ("nursery_id", "name", "plate_number", "morning_guardian_ids", "evening_guardian_ids")
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    CHILD_IDS_FIELD_NUMBER: _ClassVar[int]
+    MORNING_GUARDIAN_IDS_FIELD_NUMBER: _ClassVar[int]
+    EVENING_GUARDIAN_IDS_FIELD_NUMBER: _ClassVar[int]
     nursery_id: str
     name: str
     plate_number: str
-    child_ids: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., child_ids: _Optional[_Iterable[str]] = ...) -> None: ...
+    morning_guardian_ids: _containers.RepeatedScalarFieldContainer[str]
+    evening_guardian_ids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., morning_guardian_ids: _Optional[_Iterable[str]] = ..., evening_guardian_ids: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class CreateBusResponse(_message.Message):
     __slots__ = ("bus", "children")

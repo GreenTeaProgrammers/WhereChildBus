@@ -6,17 +6,17 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class CreateStationRequest(_message.Message):
-    __slots__ = ("guardian_id", "longtitude", "latitude")
+class UpdateStationRequest(_message.Message):
+    __slots__ = ("guardian_id", "longitude", "latitude")
     GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
-    LONGTITUDE_FIELD_NUMBER: _ClassVar[int]
+    LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     guardian_id: str
-    longtitude: float
+    longitude: float
     latitude: float
-    def __init__(self, guardian_id: _Optional[str] = ..., longtitude: _Optional[float] = ..., latitude: _Optional[float] = ...) -> None: ...
+    def __init__(self, guardian_id: _Optional[str] = ..., longitude: _Optional[float] = ..., latitude: _Optional[float] = ...) -> None: ...
 
-class CreateStationResponse(_message.Message):
+class UpdateStationResponse(_message.Message):
     __slots__ = ("station",)
     STATION_FIELD_NUMBER: _ClassVar[int]
     station: _resources_pb2.Station

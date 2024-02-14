@@ -11,7 +11,7 @@ message Nursery {
         string address = 4;
         string phone_number = 5;
         string email = 6;
-        string encrypted_password = 7;
+        string hashed_password = 7;
         google.protobuf.Timestamp  created_at = 8;
         google.protobuf.Timestamp  updated_at = 9;
 }
@@ -34,9 +34,11 @@ message Guardian {
         string name = 3;
         string email = 4;
         string phone_number = 5;
-        string encrypted_password = 6;
-        google.protobuf.Timestamp  created_at = 7;
-        google.protobuf.Timestamp  updated_at =8;
+        string hashed_password = 6;
+        bool is_use_morning_bus = 7;
+        bool is_use_evening_bus = 8;
+        google.protobuf.Timestamp  created_at = 9;
+        google.protobuf.Timestamp  updated_at =10;
 }
 
 message GuardianResponse {
@@ -46,8 +48,10 @@ message GuardianResponse {
         string email = 4;
         string phone_number = 5;
         // ハッシュ化されたパスワードは除外
-        google.protobuf.Timestamp created_at = 6;
-        google.protobuf.Timestamp updated_at = 7;
+        bool is_use_morning_bus = 6;
+        bool is_use_evening_bus = 7;
+        google.protobuf.Timestamp created_at = 8;
+        google.protobuf.Timestamp updated_at = 9;
 }
 
 enum Status {
@@ -66,8 +70,9 @@ message Bus {
         //緯度経度
         double latitude = 6;
         double longitude = 7;
-        google.protobuf.Timestamp  created_at = 8;
-        google.protobuf.Timestamp  updated_at = 9;
+        bool enable_face_recognition = 8;
+        google.protobuf.Timestamp  created_at = 9;
+        google.protobuf.Timestamp  updated_at = 10;
 }
 
 enum Sex {
@@ -84,27 +89,27 @@ message Child {
         string name = 4;
         int32 age = 5;
         Sex sex  = 6;
-        bool is_ride_morning_bus = 7;
-        bool is_ride_evening_bus = 8;
-        bool check_for_missing_items = 9;
-        bool has_bag  = 10;
-        bool has_lunch_box = 11;
-        bool has_water_bottle = 12;
-        bool has_umbrella = 13;
-        bool has_other = 14;
-        google.protobuf.Timestamp  created_at = 15;
-        google.protobuf.Timestamp  updated_at = 16;
+        bool check_for_missing_items = 7;
+        bool has_bag  = 8;
+        bool has_lunch_box = 9;
+        bool has_water_bottle = 10;
+        bool has_umbrella = 11;
+        bool has_other = 12;
+        google.protobuf.Timestamp  created_at = 13;
+        google.protobuf.Timestamp  updated_at = 14;
 }
 
 message Station {
         string id = 1;
         string guardian_id = 2;
-        double latitude = 3;
-        double longitude = 4;
-        int32 morning_order = 5;
-        int32 evening_order = 6;
-        google.protobuf.Timestamp  created_at = 7;
-        google.protobuf.Timestamp  updated_at = 8;
+        string morning_next_station_id = 3;
+        string evening_next_station_id = 4;
+        double latitude = 5;
+        double longitude = 6;
+        int32 morning_order = 7;
+        int32 evening_order = 8;
+        google.protobuf.Timestamp  created_at = 9;
+        google.protobuf.Timestamp  updated_at = 10;
 }
 
 enum BusType {
@@ -128,8 +133,6 @@ message BusStationAssociation {
 message ChildPhoto {
         string id = 1;
         string child_id = 2;
-        string s3_bucket = 3;
-        string s3_key = 4;
         google.protobuf.Timestamp  created_at = 5;
         google.protobuf.Timestamp  updated_at = 6;
 }

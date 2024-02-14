@@ -9,7 +9,7 @@ service GuardianService {
         rpc GuardianLogin(GuardianLoginRequest) returns (GuardianLoginResponse);
 }
 
-message CreateGuardianRequest{
+message CreateGuardianRequest {
         string nursery_code = 1;
         string email = 2;
         string password = 3;
