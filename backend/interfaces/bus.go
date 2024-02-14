@@ -17,7 +17,7 @@ func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
 
 // CreateBus implements where_child_busv1.BusServiceServer.
 func (s *busServiceServer) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*pb.CreateBusResponse, error) {
-	panic("unimplemented")
+	return s.interactor.CreateBus(ctx, req)
 }
 
 // GetBusListByNurseryId implements where_child_busv1.BusServiceServer.
