@@ -135,6 +135,20 @@ func (bu *BusUpdate) SetNillableStatus(b *bus.Status) *BusUpdate {
 	return bu
 }
 
+// SetEnableFaceRecognition sets the "enable_face_recognition" field.
+func (bu *BusUpdate) SetEnableFaceRecognition(b bool) *BusUpdate {
+	bu.mutation.SetEnableFaceRecognition(b)
+	return bu
+}
+
+// SetNillableEnableFaceRecognition sets the "enable_face_recognition" field if the given value is not nil.
+func (bu *BusUpdate) SetNillableEnableFaceRecognition(b *bool) *BusUpdate {
+	if b != nil {
+		bu.SetEnableFaceRecognition(*b)
+	}
+	return bu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bu *BusUpdate) SetCreatedAt(t time.Time) *BusUpdate {
 	bu.mutation.SetCreatedAt(t)
@@ -380,6 +394,9 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := bu.mutation.Status(); ok {
 		_spec.SetField(bus.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := bu.mutation.EnableFaceRecognition(); ok {
+		_spec.SetField(bus.FieldEnableFaceRecognition, field.TypeBool, value)
 	}
 	if value, ok := bu.mutation.CreatedAt(); ok {
 		_spec.SetField(bus.FieldCreatedAt, field.TypeTime, value)
@@ -673,6 +690,20 @@ func (buo *BusUpdateOne) SetNillableStatus(b *bus.Status) *BusUpdateOne {
 	return buo
 }
 
+// SetEnableFaceRecognition sets the "enable_face_recognition" field.
+func (buo *BusUpdateOne) SetEnableFaceRecognition(b bool) *BusUpdateOne {
+	buo.mutation.SetEnableFaceRecognition(b)
+	return buo
+}
+
+// SetNillableEnableFaceRecognition sets the "enable_face_recognition" field if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableEnableFaceRecognition(b *bool) *BusUpdateOne {
+	if b != nil {
+		buo.SetEnableFaceRecognition(*b)
+	}
+	return buo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (buo *BusUpdateOne) SetCreatedAt(t time.Time) *BusUpdateOne {
 	buo.mutation.SetCreatedAt(t)
@@ -948,6 +979,9 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 	}
 	if value, ok := buo.mutation.Status(); ok {
 		_spec.SetField(bus.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := buo.mutation.EnableFaceRecognition(); ok {
+		_spec.SetField(bus.FieldEnableFaceRecognition, field.TypeBool, value)
 	}
 	if value, ok := buo.mutation.CreatedAt(); ok {
 		_spec.SetField(bus.FieldCreatedAt, field.TypeTime, value)

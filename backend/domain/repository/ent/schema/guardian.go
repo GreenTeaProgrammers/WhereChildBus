@@ -22,6 +22,8 @@ func (Guardian) Fields() []ent.Field {
 		field.String("hashed_password"),
 		field.String("name"),
 		field.String("phone_number").Optional(),
+		field.Bool("is_use_morning_bus").Default(true).Comment("バスを利用するかどうか"),
+		field.Bool("is_use_evening_bus").Default(true).Comment("バスを利用するかどうか"),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}

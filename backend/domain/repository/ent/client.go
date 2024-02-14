@@ -1655,6 +1655,70 @@ func (c *StationClient) QueryBus(s *Station) *BusQuery {
 	return query
 }
 
+// QueryMorningPreviousStation queries the morning_previous_station edge of a Station.
+func (c *StationClient) QueryMorningPreviousStation(s *Station) *StationQuery {
+	query := (&StationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, id),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, station.MorningPreviousStationTable, station.MorningPreviousStationColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMorningNextStation queries the morning_next_station edge of a Station.
+func (c *StationClient) QueryMorningNextStation(s *Station) *StationQuery {
+	query := (&StationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, id),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, station.MorningNextStationTable, station.MorningNextStationColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEveningPreviousStation queries the evening_previous_station edge of a Station.
+func (c *StationClient) QueryEveningPreviousStation(s *Station) *StationQuery {
+	query := (&StationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, id),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, station.EveningPreviousStationTable, station.EveningPreviousStationColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEveningNextStation queries the evening_next_station edge of a Station.
+func (c *StationClient) QueryEveningNextStation(s *Station) *StationQuery {
+	query := (&StationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, id),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, station.EveningNextStationTable, station.EveningNextStationColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *StationClient) Hooks() []Hook {
 	return c.hooks.Station

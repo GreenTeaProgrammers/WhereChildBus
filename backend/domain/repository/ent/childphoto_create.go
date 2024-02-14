@@ -22,18 +22,6 @@ type ChildPhotoCreate struct {
 	hooks    []Hook
 }
 
-// SetS3Bucket sets the "s3_bucket" field.
-func (cpc *ChildPhotoCreate) SetS3Bucket(s string) *ChildPhotoCreate {
-	cpc.mutation.SetS3Bucket(s)
-	return cpc
-}
-
-// SetS3Key sets the "s3_key" field.
-func (cpc *ChildPhotoCreate) SetS3Key(s string) *ChildPhotoCreate {
-	cpc.mutation.SetS3Key(s)
-	return cpc
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (cpc *ChildPhotoCreate) SetCreatedAt(t time.Time) *ChildPhotoCreate {
 	cpc.mutation.SetCreatedAt(t)
@@ -146,12 +134,6 @@ func (cpc *ChildPhotoCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cpc *ChildPhotoCreate) check() error {
-	if _, ok := cpc.mutation.S3Bucket(); !ok {
-		return &ValidationError{Name: "s3_bucket", err: errors.New(`ent: missing required field "ChildPhoto.s3_bucket"`)}
-	}
-	if _, ok := cpc.mutation.S3Key(); !ok {
-		return &ValidationError{Name: "s3_key", err: errors.New(`ent: missing required field "ChildPhoto.s3_key"`)}
-	}
 	if _, ok := cpc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ChildPhoto.created_at"`)}
 	}
@@ -192,14 +174,6 @@ func (cpc *ChildPhotoCreate) createSpec() (*ChildPhoto, *sqlgraph.CreateSpec) {
 	if id, ok := cpc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
-	}
-	if value, ok := cpc.mutation.S3Bucket(); ok {
-		_spec.SetField(childphoto.FieldS3Bucket, field.TypeString, value)
-		_node.S3Bucket = value
-	}
-	if value, ok := cpc.mutation.S3Key(); ok {
-		_spec.SetField(childphoto.FieldS3Key, field.TypeString, value)
-		_node.S3Key = value
 	}
 	if value, ok := cpc.mutation.CreatedAt(); ok {
 		_spec.SetField(childphoto.FieldCreatedAt, field.TypeTime, value)

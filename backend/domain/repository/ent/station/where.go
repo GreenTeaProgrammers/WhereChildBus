@@ -66,16 +66,6 @@ func Longitude(v float64) predicate.Station {
 	return predicate.Station(sql.FieldEQ(FieldLongitude, v))
 }
 
-// MorningOrder applies equality check predicate on the "morning_order" field. It's identical to MorningOrderEQ.
-func MorningOrder(v int) predicate.Station {
-	return predicate.Station(sql.FieldEQ(FieldMorningOrder, v))
-}
-
-// EveningOrder applies equality check predicate on the "evening_order" field. It's identical to EveningOrderEQ.
-func EveningOrder(v int) predicate.Station {
-	return predicate.Station(sql.FieldEQ(FieldEveningOrder, v))
-}
-
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Station {
 	return predicate.Station(sql.FieldEQ(FieldCreatedAt, v))
@@ -184,86 +174,6 @@ func LongitudeIsNil() predicate.Station {
 // LongitudeNotNil applies the NotNil predicate on the "longitude" field.
 func LongitudeNotNil() predicate.Station {
 	return predicate.Station(sql.FieldNotNull(FieldLongitude))
-}
-
-// MorningOrderEQ applies the EQ predicate on the "morning_order" field.
-func MorningOrderEQ(v int) predicate.Station {
-	return predicate.Station(sql.FieldEQ(FieldMorningOrder, v))
-}
-
-// MorningOrderNEQ applies the NEQ predicate on the "morning_order" field.
-func MorningOrderNEQ(v int) predicate.Station {
-	return predicate.Station(sql.FieldNEQ(FieldMorningOrder, v))
-}
-
-// MorningOrderIn applies the In predicate on the "morning_order" field.
-func MorningOrderIn(vs ...int) predicate.Station {
-	return predicate.Station(sql.FieldIn(FieldMorningOrder, vs...))
-}
-
-// MorningOrderNotIn applies the NotIn predicate on the "morning_order" field.
-func MorningOrderNotIn(vs ...int) predicate.Station {
-	return predicate.Station(sql.FieldNotIn(FieldMorningOrder, vs...))
-}
-
-// MorningOrderGT applies the GT predicate on the "morning_order" field.
-func MorningOrderGT(v int) predicate.Station {
-	return predicate.Station(sql.FieldGT(FieldMorningOrder, v))
-}
-
-// MorningOrderGTE applies the GTE predicate on the "morning_order" field.
-func MorningOrderGTE(v int) predicate.Station {
-	return predicate.Station(sql.FieldGTE(FieldMorningOrder, v))
-}
-
-// MorningOrderLT applies the LT predicate on the "morning_order" field.
-func MorningOrderLT(v int) predicate.Station {
-	return predicate.Station(sql.FieldLT(FieldMorningOrder, v))
-}
-
-// MorningOrderLTE applies the LTE predicate on the "morning_order" field.
-func MorningOrderLTE(v int) predicate.Station {
-	return predicate.Station(sql.FieldLTE(FieldMorningOrder, v))
-}
-
-// EveningOrderEQ applies the EQ predicate on the "evening_order" field.
-func EveningOrderEQ(v int) predicate.Station {
-	return predicate.Station(sql.FieldEQ(FieldEveningOrder, v))
-}
-
-// EveningOrderNEQ applies the NEQ predicate on the "evening_order" field.
-func EveningOrderNEQ(v int) predicate.Station {
-	return predicate.Station(sql.FieldNEQ(FieldEveningOrder, v))
-}
-
-// EveningOrderIn applies the In predicate on the "evening_order" field.
-func EveningOrderIn(vs ...int) predicate.Station {
-	return predicate.Station(sql.FieldIn(FieldEveningOrder, vs...))
-}
-
-// EveningOrderNotIn applies the NotIn predicate on the "evening_order" field.
-func EveningOrderNotIn(vs ...int) predicate.Station {
-	return predicate.Station(sql.FieldNotIn(FieldEveningOrder, vs...))
-}
-
-// EveningOrderGT applies the GT predicate on the "evening_order" field.
-func EveningOrderGT(v int) predicate.Station {
-	return predicate.Station(sql.FieldGT(FieldEveningOrder, v))
-}
-
-// EveningOrderGTE applies the GTE predicate on the "evening_order" field.
-func EveningOrderGTE(v int) predicate.Station {
-	return predicate.Station(sql.FieldGTE(FieldEveningOrder, v))
-}
-
-// EveningOrderLT applies the LT predicate on the "evening_order" field.
-func EveningOrderLT(v int) predicate.Station {
-	return predicate.Station(sql.FieldLT(FieldEveningOrder, v))
-}
-
-// EveningOrderLTE applies the LTE predicate on the "evening_order" field.
-func EveningOrderLTE(v int) predicate.Station {
-	return predicate.Station(sql.FieldLTE(FieldEveningOrder, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -384,6 +294,98 @@ func HasBus() predicate.Station {
 func HasBusWith(preds ...predicate.Bus) predicate.Station {
 	return predicate.Station(func(s *sql.Selector) {
 		step := newBusStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMorningPreviousStation applies the HasEdge predicate on the "morning_previous_station" edge.
+func HasMorningPreviousStation() predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, MorningPreviousStationTable, MorningPreviousStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMorningPreviousStationWith applies the HasEdge predicate on the "morning_previous_station" edge with a given conditions (other predicates).
+func HasMorningPreviousStationWith(preds ...predicate.Station) predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := newMorningPreviousStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMorningNextStation applies the HasEdge predicate on the "morning_next_station" edge.
+func HasMorningNextStation() predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MorningNextStationTable, MorningNextStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMorningNextStationWith applies the HasEdge predicate on the "morning_next_station" edge with a given conditions (other predicates).
+func HasMorningNextStationWith(preds ...predicate.Station) predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := newMorningNextStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEveningPreviousStation applies the HasEdge predicate on the "evening_previous_station" edge.
+func HasEveningPreviousStation() predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, EveningPreviousStationTable, EveningPreviousStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEveningPreviousStationWith applies the HasEdge predicate on the "evening_previous_station" edge with a given conditions (other predicates).
+func HasEveningPreviousStationWith(preds ...predicate.Station) predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := newEveningPreviousStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEveningNextStation applies the HasEdge predicate on the "evening_next_station" edge.
+func HasEveningNextStation() predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EveningNextStationTable, EveningNextStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEveningNextStationWith applies the HasEdge predicate on the "evening_next_station" edge with a given conditions (other predicates).
+func HasEveningNextStationWith(preds ...predicate.Station) predicate.Station {
+	return predicate.Station(func(s *sql.Selector) {
+		step := newEveningNextStationStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

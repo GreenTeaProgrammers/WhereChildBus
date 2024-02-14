@@ -76,6 +76,11 @@ func Longitude(v float64) predicate.Bus {
 	return predicate.Bus(sql.FieldEQ(FieldLongitude, v))
 }
 
+// EnableFaceRecognition applies equality check predicate on the "enable_face_recognition" field. It's identical to EnableFaceRecognitionEQ.
+func EnableFaceRecognition(v bool) predicate.Bus {
+	return predicate.Bus(sql.FieldEQ(FieldEnableFaceRecognition, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Bus {
 	return predicate.Bus(sql.FieldEQ(FieldCreatedAt, v))
@@ -344,6 +349,16 @@ func StatusIn(vs ...Status) predicate.Bus {
 // StatusNotIn applies the NotIn predicate on the "status" field.
 func StatusNotIn(vs ...Status) predicate.Bus {
 	return predicate.Bus(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// EnableFaceRecognitionEQ applies the EQ predicate on the "enable_face_recognition" field.
+func EnableFaceRecognitionEQ(v bool) predicate.Bus {
+	return predicate.Bus(sql.FieldEQ(FieldEnableFaceRecognition, v))
+}
+
+// EnableFaceRecognitionNEQ applies the NEQ predicate on the "enable_face_recognition" field.
+func EnableFaceRecognitionNEQ(v bool) predicate.Bus {
+	return predicate.Bus(sql.FieldNEQ(FieldEnableFaceRecognition, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
