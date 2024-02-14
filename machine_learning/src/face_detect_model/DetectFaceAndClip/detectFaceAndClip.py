@@ -26,12 +26,12 @@ logger = logging.getLogger(__name__)
 def load_image(args, blobs=None):
     """画像の読み込みを行うラッパー関数"""
     if args.env == "local":
-        return load_image_fromm_local(args.img_dir_path)
+        return load_image_from_local(args.img_dir_path)
     elif args.env == "remote":
         return load_image_from_remote(args.nursery_id, args.child_id, blobs)
 
 
-def load_image_fromm_local(img_dir_path):
+def load_image_from_local(img_dir_path):
     images = []
     for image_path in os.listdir(img_dir_path):
         logger.info(f"loading: {image_path}")
