@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from where_child_bus.v1 import resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cwhere_child_bus/v1/bus.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"\xcc\x01\n\x10\x43reateBusRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0cplate_number\x18\x03 \x01(\tR\x0bplateNumber\x12\x30\n\x14morning_guardian_ids\x18\x04 \x03(\tR\x12morningGuardianIds\x12\x30\n\x14\x65vening_guardian_ids\x18\x05 \x03(\tR\x12\x65veningGuardianIds\"u\n\x11\x43reateBusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us\x12\x35\n\x08\x63hildren\x18\x02 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\"=\n\x1cGetBusListByNurseryIdRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\"N\n\x1dGetBusListByNurseryIdResponse\x12-\n\x05\x62uses\x18\x01 \x03(\x0b\x32\x17.where_child_bus.v1.BusR\x05\x62uses2\xe4\x01\n\nBusService\x12X\n\tCreateBus\x12$.where_child_bus.v1.CreateBusRequest\x1a%.where_child_bus.v1.CreateBusResponse\x12|\n\x15GetBusListByNurseryId\x12\x30.where_child_bus.v1.GetBusListByNurseryIdRequest\x1a\x31.where_child_bus.v1.GetBusListByNurseryIdResponseB\xeb\x01\n\x16\x63om.where_child_bus.v1B\x08\x42usProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cwhere_child_bus/v1/bus.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"\xcc\x01\n\x10\x43reateBusRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0cplate_number\x18\x03 \x01(\tR\x0bplateNumber\x12\x30\n\x14morning_guardian_ids\x18\x04 \x03(\tR\x12morningGuardianIds\x12\x30\n\x14\x65vening_guardian_ids\x18\x05 \x03(\tR\x12\x65veningGuardianIds\">\n\x11\x43reateBusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us\"=\n\x1cGetBusListByNurseryIdRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\"N\n\x1dGetBusListByNurseryIdResponse\x12-\n\x05\x62uses\x18\x01 \x03(\x0b\x32\x17.where_child_bus.v1.BusR\x05\x62uses2\xe4\x01\n\nBusService\x12X\n\tCreateBus\x12$.where_child_bus.v1.CreateBusRequest\x1a%.where_child_bus.v1.CreateBusResponse\x12|\n\x15GetBusListByNurseryId\x12\x30.where_child_bus.v1.GetBusListByNurseryIdRequest\x1a\x31.where_child_bus.v1.GetBusListByNurseryIdResponseB\xeb\x01\n\x16\x63om.where_child_bus.v1B\x08\x42usProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,11 +26,11 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_CREATEBUSREQUEST']._serialized_start=89
   _globals['_CREATEBUSREQUEST']._serialized_end=293
   _globals['_CREATEBUSRESPONSE']._serialized_start=295
-  _globals['_CREATEBUSRESPONSE']._serialized_end=412
-  _globals['_GETBUSLISTBYNURSERYIDREQUEST']._serialized_start=414
-  _globals['_GETBUSLISTBYNURSERYIDREQUEST']._serialized_end=475
-  _globals['_GETBUSLISTBYNURSERYIDRESPONSE']._serialized_start=477
-  _globals['_GETBUSLISTBYNURSERYIDRESPONSE']._serialized_end=555
-  _globals['_BUSSERVICE']._serialized_start=558
-  _globals['_BUSSERVICE']._serialized_end=786
+  _globals['_CREATEBUSRESPONSE']._serialized_end=357
+  _globals['_GETBUSLISTBYNURSERYIDREQUEST']._serialized_start=359
+  _globals['_GETBUSLISTBYNURSERYIDREQUEST']._serialized_end=420
+  _globals['_GETBUSLISTBYNURSERYIDRESPONSE']._serialized_start=422
+  _globals['_GETBUSLISTBYNURSERYIDRESPONSE']._serialized_end=500
+  _globals['_BUSSERVICE']._serialized_start=503
+  _globals['_BUSSERVICE']._serialized_end=731
 # @@protoc_insertion_point(module_scope)
