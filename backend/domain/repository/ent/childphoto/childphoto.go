@@ -15,10 +15,6 @@ const (
 	Label = "child_photo"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldS3Bucket holds the string denoting the s3_bucket field in the database.
-	FieldS3Bucket = "s3_bucket"
-	// FieldS3Key holds the string denoting the s3_key field in the database.
-	FieldS3Key = "s3_key"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -39,8 +35,6 @@ const (
 // Columns holds all SQL columns for childphoto fields.
 var Columns = []string{
 	FieldID,
-	FieldS3Bucket,
-	FieldS3Key,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -83,16 +77,6 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
-}
-
-// ByS3Bucket orders the results by the s3_bucket field.
-func ByS3Bucket(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldS3Bucket, opts...).ToFunc()
-}
-
-// ByS3Key orders the results by the s3_key field.
-func ByS3Key(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldS3Key, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

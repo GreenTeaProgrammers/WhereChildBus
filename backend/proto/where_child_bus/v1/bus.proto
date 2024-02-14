@@ -13,7 +13,8 @@ message CreateBusRequest {
         string nursery_id = 1;
         string name = 2;
         string plate_number = 3;
-        repeated string child_ids = 4;
+        repeated string morning_guardian_ids = 4;
+        repeated string evening_guardian_ids = 5;
 }
 
 message CreateBusResponse {
