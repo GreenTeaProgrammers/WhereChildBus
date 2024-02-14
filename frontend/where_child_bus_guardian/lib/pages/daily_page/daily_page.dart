@@ -9,11 +9,12 @@ class DailyPage extends StatefulWidget {
 }
 
 class _DailyPageState extends State<DailyPage> {
-  var isBoarding = false;
-  var hasBag = true;
+  //TODO: 将来的に真偽値を受け取る
+  var isBoarding = true;
+  var hasBag = false;
   var hasLunchBox = true;
   var hasWaterBottle = true;
-  var hasUmbrella = false;
+  var hasUmbrella = true;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +66,7 @@ class _DailyPageState extends State<DailyPage> {
     );
   }
 
-  //TODO: 将来的に表情を受け取る
+  //TODO: 将来的に表情を受け取り、アイコンを表示する
   Widget childExpressionIcon() {
     return const SizedBox(
       width: 100,
@@ -77,7 +78,7 @@ class _DailyPageState extends State<DailyPage> {
     );
   }
 
-  //将来的に名前を受け取る
+  //TODO: 将来的に名前を受け取る
   Widget childName() {
     return const Text(
       "園児1",
