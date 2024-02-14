@@ -567,6 +567,7 @@ type BusMutation struct {
 	longitude                   *float64
 	addlongitude                *float64
 	status                      *bus.Status
+	enable_face_recognition     *bool
 	created_at                  *time.Time
 	updated_at                  *time.Time
 	clearedFields               map[string]struct{}
@@ -951,6 +952,42 @@ func (m *BusMutation) ResetStatus() {
 	m.status = nil
 }
 
+// SetEnableFaceRecognition sets the "enable_face_recognition" field.
+func (m *BusMutation) SetEnableFaceRecognition(b bool) {
+	m.enable_face_recognition = &b
+}
+
+// EnableFaceRecognition returns the value of the "enable_face_recognition" field in the mutation.
+func (m *BusMutation) EnableFaceRecognition() (r bool, exists bool) {
+	v := m.enable_face_recognition
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEnableFaceRecognition returns the old "enable_face_recognition" field's value of the Bus entity.
+// If the Bus object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusMutation) OldEnableFaceRecognition(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEnableFaceRecognition is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEnableFaceRecognition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEnableFaceRecognition: %w", err)
+	}
+	return oldValue.EnableFaceRecognition, nil
+}
+
+// ResetEnableFaceRecognition resets all changes to the "enable_face_recognition" field.
+func (m *BusMutation) ResetEnableFaceRecognition() {
+	m.enable_face_recognition = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *BusMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -1258,7 +1295,7 @@ func (m *BusMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BusMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.name != nil {
 		fields = append(fields, bus.FieldName)
 	}
@@ -1273,6 +1310,9 @@ func (m *BusMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, bus.FieldStatus)
+	}
+	if m.enable_face_recognition != nil {
+		fields = append(fields, bus.FieldEnableFaceRecognition)
 	}
 	if m.created_at != nil {
 		fields = append(fields, bus.FieldCreatedAt)
@@ -1298,6 +1338,8 @@ func (m *BusMutation) Field(name string) (ent.Value, bool) {
 		return m.Longitude()
 	case bus.FieldStatus:
 		return m.Status()
+	case bus.FieldEnableFaceRecognition:
+		return m.EnableFaceRecognition()
 	case bus.FieldCreatedAt:
 		return m.CreatedAt()
 	case bus.FieldUpdatedAt:
@@ -1321,6 +1363,8 @@ func (m *BusMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldLongitude(ctx)
 	case bus.FieldStatus:
 		return m.OldStatus(ctx)
+	case bus.FieldEnableFaceRecognition:
+		return m.OldEnableFaceRecognition(ctx)
 	case bus.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case bus.FieldUpdatedAt:
@@ -1368,6 +1412,13 @@ func (m *BusMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
+		return nil
+	case bus.FieldEnableFaceRecognition:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEnableFaceRecognition(v)
 		return nil
 	case bus.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -1494,6 +1545,9 @@ func (m *BusMutation) ResetField(name string) error {
 		return nil
 	case bus.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case bus.FieldEnableFaceRecognition:
+		m.ResetEnableFaceRecognition()
 		return nil
 	case bus.FieldCreatedAt:
 		m.ResetCreatedAt()

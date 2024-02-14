@@ -44,6 +44,7 @@ var (
 		{Name: "latitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "longitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"stopped", "running", "maintenance"}, Default: "stopped"},
+		{Name: "enable_face_recognition", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "bus_nursery", Type: field.TypeUUID, Nullable: true},
@@ -56,7 +57,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "bus_nurseries_nursery",
-				Columns:    []*schema.Column{BusColumns[8]},
+				Columns:    []*schema.Column{BusColumns[9]},
 				RefColumns: []*schema.Column{NurseriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

@@ -24,6 +24,7 @@ func (Bus) Fields() []ent.Field {
 		field.Float("longitude").Optional().Comment("現在の経度"),
 		field.Enum("status").Default("stopped").Comment("バスのステータス（運行中、停止中など）").
 			Values("stopped", "running", "maintenance"),
+		field.Bool("enable_face_recognition").Default(false).Comment("顔識別が有効かどうか"),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}

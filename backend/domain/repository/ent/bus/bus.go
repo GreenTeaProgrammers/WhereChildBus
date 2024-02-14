@@ -26,6 +26,8 @@ const (
 	FieldLongitude = "longitude"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldEnableFaceRecognition holds the string denoting the enable_face_recognition field in the database.
+	FieldEnableFaceRecognition = "enable_face_recognition"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -76,6 +78,7 @@ var Columns = []string{
 	FieldLatitude,
 	FieldLongitude,
 	FieldStatus,
+	FieldEnableFaceRecognition,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -108,6 +111,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultEnableFaceRecognition holds the default value on creation for the "enable_face_recognition" field.
+	DefaultEnableFaceRecognition bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -176,6 +181,11 @@ func ByLongitude(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByEnableFaceRecognition orders the results by the enable_face_recognition field.
+func ByEnableFaceRecognition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnableFaceRecognition, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.
