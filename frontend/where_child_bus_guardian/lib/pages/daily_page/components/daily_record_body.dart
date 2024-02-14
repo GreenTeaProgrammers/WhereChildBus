@@ -13,7 +13,7 @@ class DailyRecordBody extends StatefulWidget {
 class _DailyRecordBody extends State<DailyRecordBody> {
   //TODO: 将来的にChild型を受け取る
   var isBoarding = true;
-  var hasBag = true;
+  var hasBag = false;
   var hasLunchBox = true;
   var hasWaterBottle = true;
   var hasUmbrella = true;
@@ -116,16 +116,25 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   }
 
   Widget itemText(String itemName, bool hasItem) {
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width * 0.24,
-        decoration: statusFieldDecoration(hasItem),
         child: Padding(
-          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-          child: Text(
-            itemName,
-            style: statusFieldTextStyle(hasItem),
-            textAlign: TextAlign.center,
-          ),
-        ));
+            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  child: hasItem
+                      ? const Icon(Icons.check, color: Colors.green)
+                      : const Icon(Icons.error_outline, color: Colors.red),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  itemName,
+                  style: statusFieldTextStyle(hasItem),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )));
   }
 }

@@ -13,6 +13,6 @@ BoxDecoration statusFieldDecoration(bool isTrue) {
 TextStyle statusFieldTextStyle(bool isTrue) {
   return TextStyle(
     fontSize: 16,
-    color: isTrue ? Colors.green : Colors.red,
+    color: isTrue ? Colors.green[900] : Colors.red[900],
   );
 }
