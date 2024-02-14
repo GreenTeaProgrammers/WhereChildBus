@@ -116,6 +116,19 @@ func ToPbNurseryResponse(t *ent.Nursery) *pb.NurseryResponse {
 	}
 }
 
+func ToPbStation(t *ent.Station) *pb.Station {
+	return &pb.Station{
+		Id:          t.ID.String(),
+		GuardianId:  t.Edges.Guardian.ID.String(),
+		Latitude:    t.Latitude,
+		Longitude:   t.Longitude,
+		MorningOrder: int32(t.MorningOrder),
+		EveningOrder: int32(t.EveningOrder),
+		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
+
 func HashPassword(password string) (string, error) {
 	// 環境変数からペッパーを取得
 	config, _ := config.New()
