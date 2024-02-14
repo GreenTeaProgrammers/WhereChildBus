@@ -9,8 +9,13 @@ class BusGuardianManagePage extends StatefulWidget {
 
 class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
   // サンプルデータのリスト
-  final List<String> guardianNames = ['保護者1', '保護者2', '保護者3'];
-  final List<String> groupNames = ['グループA', 'グループB', 'グループC'];
+  final List<String> morningGuardianNames = ['保護者1', '保護者2', '保護者3'];
+  final List<String> eveningGuardianNames = ['保護者1', '保護者2', '保護者3'];
+  final List<String> morningGroupNames = ['グループA', 'グループB', 'グループC'];
+  final List<String> eveningGroupNames = ['グループA', 'グループB', 'グループC'];
+  List<String> morningAddedGuardians = [];
+  List<String> eveningAddedGuardians = [];
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +50,27 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
             ],
           ),
         ),
-        ConfirmButton(buttonText: "保存"),
+        SizedBox(
+          height: 100,
+          child: ConfirmButton(buttonText: "保存")
+        ),
       ],
     );
   }
 
   Widget morningGuardianList() {
-    return GuardianList(guardianNames: guardianNames, groupNames: groupNames);
+    return GuardianList(
+      guardianNames: morningGuardianNames, 
+      groupNames: morningGroupNames, 
+      addedGuardians: morningAddedGuardians
+    );
   }
 
   Widget eveningGuardianList() {
-    return GuardianList(guardianNames: guardianNames, groupNames: groupNames);
+    return GuardianList(
+      guardianNames: eveningGuardianNames, 
+      groupNames: eveningGroupNames, 
+      addedGuardians: eveningAddedGuardians
+    );
   }
 }

@@ -1,20 +1,23 @@
-
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/components/util/number_icon.dart';
 
-class GuardianListElement extends StatelessWidget {
+class GuardianListElement extends StatefulWidget {
   final String title;
   final String subtitle;
-  final VoidCallback? onTap;
-  final Widget? actionButton; 
+  final VoidCallback? onButtonPressed;
 
   const GuardianListElement({
     Key? key,
     required this.title,
     required this.subtitle,
-    this.onTap,
-    this.actionButton, 
+    this.onButtonPressed,
   }) : super(key: key);
 
+  @override
+  _GuardianListElementState createState() => _GuardianListElementState();
+}
+
+class _GuardianListElementState extends State<GuardianListElement> {
   @override
   Widget build(BuildContext context) {
     return listElementPadding(
@@ -23,20 +26,13 @@ class GuardianListElement extends StatelessWidget {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Material(
           color: Colors.white, // Cardの背景色
-          child: InkWell(
-            onTap: onTap, // タップ時のアクション
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  // Image.asset(imagePath, width: 100, height: 100),
-                  // const SizedBox(width: 16),
-                  Expanded(
-                    child: titleAndSubTitle(title, subtitle),
-                  ),
-                  if (actionButton != null) actionButton!, // アクションボタンを表示
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                titleAndSubTitle(widget.title, widget.subtitle),
+                addButton(),
+              ],
             ),
           ),
         ),
@@ -44,21 +40,34 @@ class GuardianListElement extends StatelessWidget {
     );
   }
 
-  Column titleAndSubTitle(String title, String subtitle) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        titleText(title),
-        subTitleText(subtitle),
-      ],
+  Widget addButton() {
+    return IconButton(
+      onPressed: widget.onButtonPressed,
+      icon: const Icon(Icons.add),
+    );
+  }
+
+  Widget orderIcon(int number) {
+    return NumberIcon(number: number);
+  }
+
+  Widget titleAndSubTitle(String title, String subtitle) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          titleText(title),
+          subTitleText(subtitle),
+        ],
+      ),
     );
   }
 
   Text titleText(String title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     );
   }
 
