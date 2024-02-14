@@ -16,8 +16,8 @@ func NewStationServiceServer(interactor *station.Interactor) pb.StationServiceSe
 }
 
 // CreateStation implements where_child_busv1.StationServiceServer.
-func (s *stationServiceServer) CreateStation(ctx context.Context, req *pb.CreateStationRequest) (*pb.CreateStationResponse, error) {
-	return s.interactor.CreateStation(ctx, req)
+func (s *stationServiceServer) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
+	return s.interactor.UpdateStation(ctx, req)
 }
 
 // GetStationListByBusId implements where_child_busv1.StationServiceServer.
