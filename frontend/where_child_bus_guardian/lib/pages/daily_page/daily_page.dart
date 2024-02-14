@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:where_child_bus_guardian/components/utils/current_time_body.dart';
 
 class DailyPage extends StatefulWidget {
@@ -9,7 +10,9 @@ class DailyPage extends StatefulWidget {
 }
 
 class _DailyPageState extends State<DailyPage> {
-  //TODO: 将来的に真偽値を受け取る
+  //TODO: 将来的にChild型を受け取る
+  final List<String> childNames = ["園児1", "園児2", "園児3"];
+
   var isBoarding = true;
   var hasBag = false;
   var hasLunchBox = true;
@@ -27,19 +30,35 @@ class _DailyPageState extends State<DailyPage> {
           const SizedBox(
             height: 20,
           ),
-          childDailyRecordBody(context)
+          childDailyRecordSlider(context)
         ],
       ),
     );
   }
 
-  Widget childDailyRecordBody(BuildContext context) {
+  Widget childDailyRecordSlider(BuildContext context) {
+    List<Widget> recordList = childNames.map((name) {
+      return childDailyRecordBody(context, name);
+    }).toList();
+    return CarouselSlider(
+      items: recordList,
+      options: CarouselOptions(
+        height: MediaQuery.of(context).size.height * 0.6,
+        initialPage: 0,
+        autoPlay: false,
+        viewportFraction: 1,
+        enableInfiniteScroll: true,
+      ),
+    );
+  }
+
+  Widget childDailyRecordBody(BuildContext context, String name) {
     return Column(
       children: <Widget>[
         childFaceAndExpression(),
         Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 10),
-            child: childName()),
+            child: childName(name)),
         statusIconAndStatusField(
             Icons.directions_bus, isBoardingStatusField(context)),
         statusIconAndStatusField(Icons.business_center, childItemList(context)),
@@ -78,10 +97,9 @@ class _DailyPageState extends State<DailyPage> {
     );
   }
 
-  //TODO: 将来的に名前を受け取る
-  Widget childName() {
-    return const Text(
-      "園児1",
+  Widget childName(String name) {
+    return Text(
+      name,
       style: TextStyle(fontSize: 24),
       textAlign: TextAlign.center,
     );
@@ -105,21 +123,12 @@ class _DailyPageState extends State<DailyPage> {
   Widget isBoardingStatusField(context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(
-          color: isBoarding ? Colors.red : Colors.green,
-        ),
-        color: isBoarding ? Colors.red[100] : Colors.green[100],
-      ),
+      decoration: statusFieldDecoration(!isBoarding),
       child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
             isBoarding ? "乗車中" : "降車済",
-            style: TextStyle(
-              fontSize: 16,
-              color: isBoarding ? Colors.red : Colors.green,
-            ),
+            style: statusFieldTextStyle(!isBoarding),
             textAlign: TextAlign.center,
           )),
     );
@@ -146,23 +155,31 @@ class _DailyPageState extends State<DailyPage> {
   Widget itemText(String itemName, bool hasItem) {
     return Container(
         width: MediaQuery.of(context).size.width * 0.24,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: hasItem ? Colors.green : Colors.red,
-          ),
-          color: hasItem ? Colors.green[100] : Colors.red[100],
-        ),
+        decoration: statusFieldDecoration(hasItem),
         child: Padding(
           padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
           child: Text(
             itemName,
-            style: TextStyle(
-              fontSize: 16,
-              color: hasItem ? Colors.green : Colors.red,
-            ),
+            style: statusFieldTextStyle(hasItem),
             textAlign: TextAlign.center,
           ),
         ));
+  }
+
+  BoxDecoration statusFieldDecoration(bool isTrue) {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(5),
+      border: Border.all(
+        color: isTrue ? Colors.green : Colors.red,
+      ),
+      color: isTrue ? Colors.green[100] : Colors.red[100],
+    );
+  }
+
+  TextStyle statusFieldTextStyle(bool isTrue) {
+    return TextStyle(
+      fontSize: 16,
+      color: isTrue ? Colors.green : Colors.red,
+    );
   }
 }
