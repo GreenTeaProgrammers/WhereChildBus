@@ -15,6 +15,7 @@ class Waypoint {
 final List<Waypoint> waypoints = [
   Waypoint(latitude: 34.7159, longitude: 137.7368, name: "停留所1"),
   Waypoint(latitude: 34.7108, longitude: 137.7261, name: "停留所2"),
+  Waypoint(latitude: 34.7169, longitude: 137.7285, name: "停留所3"),
 ];
 
 class GoogleMapView extends StatefulWidget {
@@ -26,7 +27,7 @@ class GoogleMapView extends StatefulWidget {
 
 class _GoogleMapView extends State<GoogleMapView> {
   final CameraPosition _initialLocation =
-      const CameraPosition(target: LatLng(34.7104, 137.7263), zoom: 14);
+      const CameraPosition(target: LatLng(0.0, 0.0), zoom: 14);
 
   late GoogleMapController mapController;
 
@@ -97,9 +98,14 @@ class _GoogleMapView extends State<GoogleMapView> {
         googleApiKey,
         PointLatLng(nurseryLatitude, nurseryLongitude),
         PointLatLng(nurseryLatitude, nurseryLongitude),
-        travelMode: TravelMode.walking,
+        travelMode: TravelMode.driving,
+        avoidTolls: true,
+        avoidHighways: false,
+        avoidFerries: false,
         wayPoints: polylineWayPoints,
+        optimizeWaypoints: true,
       );
+
       if (result.points.isNotEmpty) {
         result.points.forEach((PointLatLng point) {
           polylineCoordinates.add(LatLng(point.latitude, point.longitude));
@@ -108,6 +114,26 @@ class _GoogleMapView extends State<GoogleMapView> {
       _addPolyline();
     } catch (e) {
       print(e);
+    }
+
+    if (polylineCoordinates.isNotEmpty) {
+      double minLat = polylineCoordinates.first.latitude;
+      double maxLat = polylineCoordinates.first.latitude;
+      double minLng = polylineCoordinates.first.longitude;
+      double maxLng = polylineCoordinates.first.longitude;
+
+      for (LatLng point in polylineCoordinates) {
+        if (point.latitude < minLat) minLat = point.latitude;
+        if (point.latitude > maxLat) maxLat = point.latitude;
+        if (point.longitude < minLng) minLng = point.longitude;
+        if (point.longitude > maxLng) maxLng = point.longitude;
+      }
+
+      LatLngBounds bounds = LatLngBounds(
+        southwest: LatLng(minLat, minLng),
+        northeast: LatLng(maxLat, maxLng),
+      );
+      mapController.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
     }
   }
 }
