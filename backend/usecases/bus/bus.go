@@ -8,12 +8,15 @@ import (
 
 	"context"
 
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 )
 
 type Interactor struct {
@@ -23,6 +26,62 @@ type Interactor struct {
 
 func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 	return &Interactor{entClient, logger}
+}
+
+func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*pb.CreateBusResponse, error) {
+	nurseryID, err := uuid.Parse(req.NurseryId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse nursery ID: %w", err)
+	}
+
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction: %w", err)
+	}
+
+	var commit bool
+	defer func() {
+		if !commit {
+			tx.Rollback()
+		}
+	}()
+
+	bus, err := tx.Bus.Create().
+		SetNurseryID(nurseryID).
+		SetName(req.Name).
+		SetPlateNumber(req.PlateNumber).
+		Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create bus: %w", err)
+	}
+
+	err = setNextStation(ctx, tx, req.MorningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
+		return updateOp.AddMorningNextStation(nextStation)
+	})
+	if err != nil {
+		return nil, err // 朝のステーション設定中にエラーが発生しました
+	}
+
+	err = setNextStation(ctx, tx, req.EveningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
+		return updateOp.AddEveningNextStation(nextStation)
+	})
+	if err != nil {
+		return nil, err // 夕方のステーション設定中にエラーが発生しました
+	}
+
+	//TODO: CloudFunctionにバスの作成を通知
+	cfg, _ := config.New()
+	utils.MakeCloudFunctionRequest(cfg.EndPointCreateBusNotification, "POST")
+
+	// Make sure to commit the transaction since everything succeeded
+	commit = true
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return &pb.CreateBusResponse{
+		Bus: utils.ToPbBus(bus),
+	}, nil
 }
 
 func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusListByNurseryIdRequest) (*pb.GetBusListByNurseryIdResponse, error) {
@@ -69,4 +128,41 @@ func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*e
 	}
 
 	return pbBuses, nil
+}
+
+func setNextStation(ctx context.Context, tx *ent.Tx, guardianIDs []string, setNextStationFunc func(*ent.StationUpdateOne, *ent.Station) *ent.StationUpdateOne) error {
+	for index, guardianID := range guardianIDs {
+		guardianIDParsed, err := uuid.Parse(guardianID)
+		if err != nil {
+			return fmt.Errorf("failed to parse guardian ID '%s': %w", guardianID, err)
+		}
+
+		currentStation, err := tx.Station.Query().
+			Where(station.HasGuardianWith(guardian.IDEQ(guardianIDParsed))).
+			Only(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to find station for guardian ID '%s': %w", guardianID, err)
+		}
+
+		if index < len(guardianIDs)-1 {
+			nextGuardianID := guardianIDs[index+1]
+			nextGuardianIDParsed, err := uuid.Parse(nextGuardianID)
+			if err != nil {
+				return fmt.Errorf("failed to parse next guardian ID '%s': %w", nextGuardianID, err)
+			}
+
+			nextStation, err := tx.Station.Query().
+				Where(station.HasGuardianWith(guardian.IDEQ(nextGuardianIDParsed))).
+				Only(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to find next station for guardian ID '%s': %w", nextGuardianID, err)
+			}
+
+			err = setNextStationFunc(tx.Station.UpdateOne(currentStation), nextStation).Exec(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to set next station for station ID '%s': %w", currentStation.ID, err)
+			}
+		}
+	}
+	return nil
 }
