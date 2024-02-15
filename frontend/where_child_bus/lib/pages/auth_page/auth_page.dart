@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 enum NurseryLoginError {
   unknown,
@@ -138,7 +139,7 @@ class _AuthPageState extends State<AuthPage> {
         Navigator.pushReplacement(
           currentContext,
           MaterialPageRoute(
-            builder: (BuildContext context) => const App(),
+            builder: (BuildContext context) => App(nursery: res.nursery)
           ),
         );
       } else {
