@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
 import "dart:developer" as developer;
 import 'package:where_child_bus/util/api/nursery_create.dart';
+import 'package:where_child_bus/util/validation/create_nursery_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
-import "package:where_child_bus/models/create_nursery_error.dart";
+import '../../models/create_nursery_error.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -33,24 +34,27 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void register() async {
-    //フィールドが全て埋まっているか確認
+    // フィールドが全て埋まっているか確認
     if (!validateFields(
         _emailController.text,
         _phoneNumberController.text,
         _addressController.text,
         _passwordController.text,
         _confirmPasswordController.text)) {
+      setState(() => _createError = CreateNurseryError.fieldsDoNotFilled);
       return;
     }
 
-    //メールアドレスが有効な形式かどうか確認
+    // メールアドレスが有効な形式かどうか確認
     if (!validateEmailFormat(_emailController.text)) {
+      setState(() => _createError = CreateNurseryError.invalidEmail);
       return;
     }
 
-    //パスワードが一致しているかどうか確認
+    // パスワードが一致しているかどうか確認
     if (!validatePasswordsMatch(
         _passwordController.text, _confirmPasswordController.text)) {
+      setState(() => _createError = CreateNurseryError.passwordsDoNotMatch);
       return;
     }
 
@@ -76,42 +80,6 @@ class _RegisterPageState extends State<RegisterPage> {
         _createError = CreateNurseryError.unknown;
       });
     }
-  }
-
-  bool validateFields(String email, String phoneNumber, String address,
-      String password, String confirmPassword) {
-    if (email.isEmpty ||
-        phoneNumber.isEmpty ||
-        address.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      setState(() {
-        _createError = CreateNurseryError.fieldsDoNotFilled;
-      });
-      return false;
-    }
-    return true;
-  }
-
-  bool validateEmailFormat(String email) {
-    RegExp emailValidator = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
-    if (!emailValidator.hasMatch(email)) {
-      setState(() {
-        _createError = CreateNurseryError.invalidEmail;
-      });
-      return false;
-    }
-    return true;
-  }
-
-  bool validatePasswordsMatch(String password, String confirmPassword) {
-    if (password != confirmPassword) {
-      setState(() {
-        _createError = CreateNurseryError.passwordsDoNotMatch;
-      });
-      return false;
-    }
-    return true;
   }
 
   Widget pageBody() {
@@ -211,6 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
             labelText: '住所',
           ),
           controller: _addressController,
+          keyboardType: TextInputType.streetAddress,
         ));
   }
 
