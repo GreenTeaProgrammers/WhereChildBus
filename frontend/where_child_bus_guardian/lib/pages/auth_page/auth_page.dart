@@ -39,7 +39,11 @@ class _AuthPageState extends State<AuthPage> {
       if (res.success) {
         developer.log("$res");
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => App()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => App(
+                      guardian: res.guardian,
+                    )));
       } else {
         setState(() => _loginError = GuardianLoginError.invalidCredentials);
       }
