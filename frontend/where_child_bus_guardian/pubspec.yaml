@@ -18,7 +18,6 @@ dependencies:
   flutter_toggle_tab: ^1.4.1
   carousel_slider: ^4.2.1
   flutter_state_notifier: ^1.0.0
-  flutter_dotenv: ^5.1.0
   where_child_bus_api:
     path: ../where_child_bus_api
 
@@ -32,4 +31,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    # - .env
+    - .env
