@@ -1,4 +1,15 @@
 import 'package:flutter/material.dart';
+import "dart:developer" as developer;
+import 'package:where_child_bus/util/api/nursery_register.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
+
+enum CreateNurseryError {
+  unknown,
+  invalidEmail,
+  emailAlreadyExist,
+  networkError,
+  passwordsDoNotMatch
+}
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -9,35 +20,68 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _addressController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  CreateNurseryError? _createError;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: pageBody(),
       ),
     );
   }
 
-  void register() {}
+  void register() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _createError = CreateNurseryError.passwordsDoNotMatch;
+      });
+      return;
+    }
+
+    try {
+      CreateNurseryResponse res = await createNursery(
+        _emailController.text,
+        _passwordController.text,
+        _phoneNumberController.text,
+        _addressController.text,
+      );
+    } catch (err) {
+      developer.log("Caught error", error: err);
+    }
+  }
 
   Widget pageBody() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          titleText(),
-          mailInputField(),
-          passwordInputField(),
-          confirmPasswordInputField(),
-          const SizedBox(
-            height: 32,
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 32,
+              ),
+              titleText(),
+              mailInputField(),
+              phoneNumberInputField(),
+              addressInputField(),
+              passwordInputField(),
+              confirmPasswordInputField(),
+              const SizedBox(
+                height: 32,
+              ),
+              registerButton(),
+            ],
           ),
-          registerButton(),
-        ],
+        ),
       ),
     );
   }
@@ -64,6 +108,32 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.emailAddress,
       ),
     );
+  }
+
+  Widget phoneNumberInputField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: '電話番号',
+          ),
+          controller: _phoneNumberController,
+          keyboardType: const TextInputType.numberWithOptions(
+              signed: false, decimal: false)),
+    );
+  }
+
+  Widget addressInputField() {
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: '住所',
+          ),
+          controller: _addressController,
+        ));
   }
 
   Widget passwordInputField() {
