@@ -10,7 +10,7 @@ Future<CreateNurseryResponse> createNursery(
   final channel = ClientChannel(
     appConfig.grpcEndpoint,
     port: appConfig.grpcPort,
-    options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+    options: const ChannelOptions(),
   );
 
   final grpcClient = NurseryServiceClient(channel);
