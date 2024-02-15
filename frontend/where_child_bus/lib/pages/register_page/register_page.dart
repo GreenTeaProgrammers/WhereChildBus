@@ -3,15 +3,7 @@ import 'package:where_child_bus/app.dart';
 import "dart:developer" as developer;
 import 'package:where_child_bus/util/api/nursery_register.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
-
-enum CreateNurseryError {
-  unknown,
-  invalidEmail,
-  emailAlreadyExist,
-  networkError,
-  passwordsDoNotMatch,
-  fieldsDoNotFilled,
-}
+import "package:where_child_bus/models/create_nursery_error.dart";
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
