@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/app.dart';
 import "dart:developer" as developer;
 import 'package:where_child_bus/util/api/nursery_register.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
@@ -8,7 +9,8 @@ enum CreateNurseryError {
   invalidEmail,
   emailAlreadyExist,
   networkError,
-  passwordsDoNotMatch
+  passwordsDoNotMatch,
+  fieldsDoNotFilled,
 }
 
 class RegisterPage extends StatefulWidget {
@@ -39,10 +41,24 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void register() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      setState(() {
-        _createError = CreateNurseryError.passwordsDoNotMatch;
-      });
+    //フィールドが全て埋まっているか確認
+    if (!validateFields(
+        _emailController.text,
+        _phoneNumberController.text,
+        _addressController.text,
+        _passwordController.text,
+        _confirmPasswordController.text)) {
+      return;
+    }
+
+    //メールアドレスが有効な形式かどうか確認
+    if (!validateEmailFormat(_emailController.text)) {
+      return;
+    }
+
+    //パスワードが一致しているかどうか確認
+    if (!validatePasswordsMatch(
+        _passwordController.text, _confirmPasswordController.text)) {
       return;
     }
 
@@ -53,9 +69,52 @@ class _RegisterPageState extends State<RegisterPage> {
         _phoneNumberController.text,
         _addressController.text,
       );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const App(res.nursery),
+        ),
+      );
     } catch (err) {
       developer.log("Caught error", error: err);
     }
+  }
+
+  bool validateFields(String email, String phoneNumber, String address,
+      String password, String confirmPassword) {
+    if (email.isEmpty ||
+        phoneNumber.isEmpty ||
+        address.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      setState(() {
+        _createError = CreateNurseryError.fieldsDoNotFilled;
+      });
+      return false;
+    }
+    return true;
+  }
+
+  bool validateEmailFormat(String email) {
+    RegExp emailValidator = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+    if (!emailValidator.hasMatch(email)) {
+      setState(() {
+        _createError = CreateNurseryError.invalidEmail;
+      });
+      return false;
+    }
+    return true;
+  }
+
+  bool validatePasswordsMatch(String password, String confirmPassword) {
+    if (password != confirmPassword) {
+      setState(() {
+        _createError = CreateNurseryError.passwordsDoNotMatch;
+      });
+      return false;
+    }
+    return true;
   }
 
   Widget pageBody() {
@@ -78,12 +137,31 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 32,
               ),
+              if (_createError != null) errorMessage(_createError!),
               registerButton(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget errorMessage(CreateNurseryError createError) {
+    late String errorMessageText;
+    if (createError == CreateNurseryError.passwordsDoNotMatch) {
+      errorMessageText = "パスワードが一致していません";
+    } else if (createError == CreateNurseryError.fieldsDoNotFilled) {
+      errorMessageText = "全てのフィールドを入力してください";
+    } else if (createError == CreateNurseryError.invalidEmail) {
+      errorMessageText = "メールアドレスが有効な形式ではありません";
+    } else {
+      errorMessageText = "不明なエラーです";
+    }
+
+    return Text(errorMessageText,
+        style: const TextStyle(
+          color: Colors.red,
+        ));
   }
 
   Widget titleText() {
@@ -170,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.6,
       child: ElevatedButton(
-        onPressed: () => (),
+        onPressed: () => register(),
         child: const Text('登録'),
       ),
     );
