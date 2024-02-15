@@ -3,7 +3,7 @@
 import grpc
 import grpc.experimental
 
-from machine_learning.v1 import machine_learning_pb2 as machine__learning_dot_v1_dot_machine__learning__pb2
+import machine_learning_pb2 as machine__learning_dot_v1_dot_machine__learning__pb2
 
 
 class MachineLearningServiceStub(object):
