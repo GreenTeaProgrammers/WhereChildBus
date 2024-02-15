@@ -4,14 +4,13 @@ import 'package:grpc/grpc.dart';
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/health_check.pbgrpc.dart";
 import 'package:where_child_bus/config/config.dart';
 
-
 Future<PingResponse> serviceHealthCheck() async {
   final channel = ClientChannel(
     appConfig.grpcEndpoint,
     port: appConfig.grpcPort,
   );
 
-  final grpcClient = HealthcheckServiceClient(channel,
+  final grpcClient = HealthCheckServiceClient(channel,
       options: CallOptions(timeout: const Duration(seconds: 60)));
 
   try {

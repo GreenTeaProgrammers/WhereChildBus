@@ -1,6 +1,5 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
-import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pbgrpc.dart';
 import 'package:where_child_bus_guardian/app.dart';
 import 'package:where_child_bus_guardian/models/guardian_login_error.dart';
 import 'package:where_child_bus_guardian/util/api/guardian.dart';
@@ -91,8 +90,8 @@ class _AuthPageState extends State<AuthPage> {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
-          decoration:
-              InputDecoration(border: OutlineInputBorder(), labelText: label),
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(), labelText: label),
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,

@@ -1,6 +1,5 @@
 import "dart:developer" as developer;
 import 'package:flutter/material.dart';
-import 'package:where_child_bus_guardian/app.dart';
 import 'package:where_child_bus_guardian/config/config.dart';
 import 'package:where_child_bus_guardian/util/api/health_check.dart';
 import 'package:where_child_bus_guardian/pages/auth_page/auth_page.dart';
