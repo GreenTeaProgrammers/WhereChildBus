@@ -73,11 +73,16 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => const App(res.nursery),
+          builder: (BuildContext context) => App(
+            nursery: res.nursery,
+          ),
         ),
       );
     } catch (err) {
       developer.log("Caught error", error: err);
+      setState(() {
+        _createError = CreateNurseryError.unknown;
+      });
     }
   }
 
@@ -158,10 +163,13 @@ class _RegisterPageState extends State<RegisterPage> {
       errorMessageText = "不明なエラーです";
     }
 
-    return Text(errorMessageText,
-        style: const TextStyle(
-          color: Colors.red,
-        ));
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Text(errorMessageText,
+          style: const TextStyle(
+            color: Colors.red,
+          )),
+    );
   }
 
   Widget titleText() {

@@ -12,6 +12,7 @@ enum NurseryLoginError {
   databaseError,
   //  他のエラータイプをここに追加
 }
+
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
@@ -41,7 +42,8 @@ class _AuthPageState extends State<AuthPage> {
       mailInputField(),
       passwordInputField(),
       spacer32(),
-      if (_loginError != null && _loginError == NurseryLoginError.invalidCredentials)
+      if (_loginError != null &&
+          _loginError == NurseryLoginError.invalidCredentials)
         emailOrPasswordNotFound(),
       loginButton(),
     ];
@@ -108,12 +110,12 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget emailOrPasswordNotFound() {
     return const Padding(
-      padding:  EdgeInsets.all(8.0),
-      child:  Text(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
         "メールアドレスかパスワードが間違っています",
         style: TextStyle(
           color: Colors.red,
-          fontSize: 13,  
+          fontSize: 13,
         ),
       ),
     );
@@ -123,22 +125,22 @@ class _AuthPageState extends State<AuthPage> {
     BuildContext currentContext = context;
     NurseryLoginResponse res;
     try {
-      if(kDebugMode) {
-        res = await nurseryLogin(
-            "demo@example.com", "password");
+      if (kDebugMode) {
+        res = await nurseryLogin("demo@example.com", "password");
       } else {
-        res = await nurseryLogin(
-            _emailController.text, _passwordController.text);
+        res =
+            await nurseryLogin(_emailController.text, _passwordController.text);
       }
 
-      
       if (res.success) {
         print(res.success);
         print(res.nursery.name);
         Navigator.pushReplacement(
           currentContext,
           MaterialPageRoute(
-            builder: (BuildContext context) => const App(),
+            builder: (BuildContext context) => App(
+              nursery: res.nursery,
+            ),
           ),
         );
       } else {
