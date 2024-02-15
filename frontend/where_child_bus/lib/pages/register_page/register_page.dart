@@ -93,19 +93,18 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 32,
-              ),
+              const SizedBox(height: 32),
               titleText(),
-              nameInputField(),
-              mailInputField(),
-              phoneNumberInputField(),
-              addressInputField(),
-              passwordInputField(),
-              confirmPasswordInputField(),
-              const SizedBox(
-                height: 32,
-              ),
+              inputField(_nameController, '保育園名'),
+              inputField(_emailController, 'メールアドレス',
+                  keyboardType: TextInputType.emailAddress),
+              inputField(_phoneNumberController, '電話番号',
+                  keyboardType: TextInputType.phone),
+              inputField(_addressController, '住所'),
+              inputField(_passwordController, 'パスワード', isObscure: true),
+              inputField(_confirmPasswordController, 'パスワードの確認',
+                  isObscure: true),
+              const SizedBox(height: 32),
               if (_createError != null) errorMessage(_createError!),
               registerButton(),
             ],
@@ -115,129 +114,49 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget errorMessage(CreateNurseryError createError) {
-    late String errorMessageText;
-    if (createError == CreateNurseryError.passwordsDoNotMatch) {
-      errorMessageText = "パスワードが一致していません";
-    } else if (createError == CreateNurseryError.fieldsDoNotFilled) {
-      errorMessageText = "全てのフィールドを入力してください";
-    } else if (createError == CreateNurseryError.invalidEmail) {
-      errorMessageText = "メールアドレスが有効な形式ではありません";
-    } else {
-      errorMessageText = "不明なエラーです";
-    }
+  Widget titleText() => const Padding(
+        padding: EdgeInsets.only(bottom: 32),
+        child: Text('WhereChildBus',
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+      );
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Text(errorMessageText,
-          style: const TextStyle(
-            color: Colors.red,
-          )),
-    );
-  }
-
-  Widget titleText() {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 32),
-      child: Text(
-        'WhereChildBus',
-        style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget nameInputField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: '保育園名',
-        ),
-        controller: _nameController,
-        keyboardType: TextInputType.emailAddress,
-      ),
-    );
-  }
-
-  Widget mailInputField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'メールアドレス',
-        ),
-        controller: _emailController,
-        keyboardType: TextInputType.emailAddress,
-      ),
-    );
-  }
-
-  Widget phoneNumberInputField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: '電話番号',
-          ),
-          controller: _phoneNumberController,
-          keyboardType: const TextInputType.numberWithOptions(
-              signed: false, decimal: false)),
-    );
-  }
-
-  Widget addressInputField() {
-    return Padding(
+  Widget inputField(TextEditingController controller, String label,
+          {TextInputType keyboardType = TextInputType.text,
+          bool isObscure = false}) =>
+      Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: '住所',
-          ),
-          controller: _addressController,
-          keyboardType: TextInputType.streetAddress,
-        ));
-  }
-
-  Widget passwordInputField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'パスワード',
+          controller: controller,
+          decoration:
+              InputDecoration(border: OutlineInputBorder(), labelText: label),
+          keyboardType: keyboardType,
+          obscureText: isObscure,
         ),
-        controller: _passwordController,
-        obscureText: true,
-        keyboardType: TextInputType.visiblePassword,
-      ),
-    );
-  }
+      );
 
-  Widget confirmPasswordInputField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'パスワードの確認',
+  Widget errorMessage(CreateNurseryError error) => Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Text(
+          createNurseryErrorMessage(error),
+          style: const TextStyle(color: Colors.red),
         ),
-        controller: _confirmPasswordController,
-        obscureText: true,
-        keyboardType: TextInputType.visiblePassword,
-      ),
-    );
-  }
+      );
 
-  Widget registerButton() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.6,
-      child: ElevatedButton(
-        onPressed: () => register(),
-        child: const Text('登録'),
-      ),
-    );
+  Widget registerButton() => SizedBox(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: ElevatedButton(onPressed: register, child: const Text('登録')),
+      );
+}
+
+String createNurseryErrorMessage(CreateNurseryError error) {
+  switch (error) {
+    case CreateNurseryError.passwordsDoNotMatch:
+      return "パスワードが一致していません";
+    case CreateNurseryError.fieldsDoNotFilled:
+      return "全てのフィールドを入力してください";
+    case CreateNurseryError.invalidEmail:
+      return "メールアドレスが有効な形式ではありません";
+    default:
+      return "不明なエラーです";
   }
 }
