@@ -1,10 +1,11 @@
-bool validateFields(String email, String phoneNumber, String address,
-    String password, String confirmPassword) {
+bool validateFields(String name, String email, String phoneNumber,
+    String address, String password, String confirmPassword) {
   return email.isNotEmpty &&
       phoneNumber.isNotEmpty &&
       address.isNotEmpty &&
       password.isNotEmpty &&
-      confirmPassword.isNotEmpty;
+      confirmPassword.isNotEmpty &&
+      name.isNotEmpty;
 }
 
 bool validateEmailFormat(String email) {

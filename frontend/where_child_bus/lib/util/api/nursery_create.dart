@@ -5,8 +5,8 @@ import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pbgrpc.dart";
 
-Future<CreateNurseryResponse> createNursery(
-    String email, String password, String phoneNumber, String address) async {
+Future<CreateNurseryResponse> createNursery(String email, String password,
+    String phoneNumber, String address, String name) async {
   final channel = ClientChannel(
     appConfig.grpcEndpoint,
     port: appConfig.grpcPort,
@@ -21,6 +21,7 @@ Future<CreateNurseryResponse> createNursery(
       password: password,
       phoneNumber: phoneNumber,
       address: address,
+      name: name,
     );
 
     if (kDebugMode) {

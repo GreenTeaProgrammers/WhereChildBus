@@ -14,6 +14,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _addressController = TextEditingController();
@@ -36,6 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void register() async {
     // フィールドが全て埋まっているか確認
     if (!validateFields(
+        _nameController.text,
         _emailController.text,
         _phoneNumberController.text,
         _addressController.text,
@@ -60,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       CreateNurseryResponse res = await createNursery(
+        _nameController.text,
         _emailController.text,
         _passwordController.text,
         _phoneNumberController.text,
@@ -94,6 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 32,
               ),
               titleText(),
+              nameInputField(),
               mailInputField(),
               phoneNumberInputField(),
               addressInputField(),
@@ -138,6 +142,20 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Text(
         'WhereChildBus',
         style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget nameInputField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: '保育園名',
+        ),
+        controller: _nameController,
+        keyboardType: TextInputType.emailAddress,
       ),
     );
   }
