@@ -2,6 +2,7 @@ import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:where_child_bus_guardian/app.dart';
 import 'package:where_child_bus_guardian/config/config.dart';
+import 'package:where_child_bus_guardian/util/api/health_check.dart';
 import 'package:where_child_bus_guardian/pages/auth_page/auth_page.dart';
 
 void main() async {
@@ -9,6 +10,7 @@ void main() async {
 
   try {
     await appConfig.loadConfig();
+    await serviceHealthCheck();
   } catch (error) {
     developer.log("アプリの立ち上げに失敗しました", error: error);
   }
