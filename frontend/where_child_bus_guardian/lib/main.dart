@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus_guardian/app.dart';
+import './components/utils/google_map_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +16,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Widget googleMap = const GoogleMapView();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +26,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const App(),
+      home: App(googleMap: googleMap),
     );
   }
 }

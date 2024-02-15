@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../styles/styles.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  final Widget googleMap;
+
+  const MapPage({super.key, required this.googleMap});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -16,16 +18,8 @@ class _MapPageState extends State<MapPage> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[mapBody(), pageBottomBody()],
+        children: <Widget>[widget.googleMap, pageBottomBody()],
       ),
-    );
-  }
-
-  Widget mapBody() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.5,
-      color: Colors.grey,
     );
   }
 
