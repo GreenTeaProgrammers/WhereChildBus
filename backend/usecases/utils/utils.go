@@ -17,7 +17,6 @@ func ToPbChild(t *ent.Child) *pb.Child {
 	sex := convertSexToPbSex(t.Sex)
 	return &pb.Child{
 		Id:                   t.ID.String(),
-		NurseryId:            t.Edges.Nursery.ID.String(),
 		GuardianId:           t.Edges.Guardian.ID.String(),
 		Name:                 t.Name,
 		Age:                  int32(t.Age),
