@@ -122,8 +122,9 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        BusEditPage(busStations: busStations)));
+                    builder: (context) => BusEditPage(
+                          bus: widget.bus,
+                        )));
           },
           style: editButtonStyle(),
           child: const Text("Edit",

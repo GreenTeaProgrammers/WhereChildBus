@@ -1,29 +1,38 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_child_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_guardian_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
-import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/guardians_list.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusEditPage extends StatefulWidget {
-  final List<String> busStations;
-  static const defaultBusStations = ["バス停が登録されていません"];
+  Bus? bus;
 
-  BusEditPage({this.busStations = defaultBusStations});
+  BusEditPage({super.key, this.bus});
 
   @override
-  _BusEditPage createState() => _BusEditPage(busStations: busStations);
+  _BusEditPage createState() => _BusEditPage();
 }
 
 class _BusEditPage extends State<BusEditPage> {
-  final List<String> busStations;
   final ImagePicker _picker = ImagePicker();
+  final TextEditingController _busNameController = TextEditingController();
+  final TextEditingController _busNumberController = TextEditingController();
+
   String? _selectedImagePath;
   bool _isPickingImage = false;
 
-  _BusEditPage({required this.busStations});
+  @override
+  void initState() {
+    super.initState();
+    if (widget.bus != null) {
+      setState(() {
+        _busNameController.text = widget.bus!.name;
+        _busNumberController.text = widget.bus!.plateNumber;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +45,10 @@ class _BusEditPage extends State<BusEditPage> {
   Widget pageBody(BuildContext context) {
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          inputFieldsAndThumbnail(context),
+          // inputFieldsAndThumbnail(context),
+          inputFields(),
           manageChildrenButton(),
           ConfirmButton(buttonText: "保存"),
         ],
@@ -62,16 +72,21 @@ class _BusEditPage extends State<BusEditPage> {
   }
 
   Widget inputFields() {
-    return const Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InputElement(
-            inputFieldTitle: "バス名",
-            labelText: "バス名を入力してください",
-            hintText: "バス名を入力してください"),
+          inputFieldTitle: "バス名",
+          labelText: "バス名を入力してください",
+          hintText: "バス名を入力してください",
+          controller: _busNameController,
+        ),
         InputElement(
-            inputFieldTitle: "ナンバー",
-            labelText: "ナンバーを入力してください",
-            hintText: "ナンバーを入力してください"),
+          inputFieldTitle: "ナンバー",
+          labelText: "ナンバーを入力してください",
+          hintText: "ナンバーを入力してください",
+          controller: _busNumberController,
+        ),
       ],
     );
   }
