@@ -4,13 +4,24 @@ import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/con
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_passenger_page/bus_passenger_page.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BottomSheetWidget extends StatelessWidget {
-  final busStations = ["station1", "station2", "station3","station4","station5","station6", "station7", "station8", "station7", "station7"];
-  final String busName;
+  final busStations = [
+    "station1",
+    "station2",
+    "station3",
+    "station4",
+    "station5",
+    "station6",
+    "station7",
+    "station8",
+    "station7",
+    "station7"
+  ];
+  final Bus bus;
 
-  //将来的にはコンストラクタでバス型を受け取る
-  BottomSheetWidget({required this.busName});
+  BottomSheetWidget({super.key, required this.bus});
 
   @override
   Widget build(BuildContext context) {
@@ -23,36 +34,32 @@ class BottomSheetWidget extends StatelessWidget {
           topRight: Radius.circular(10),
         ),
       ),
-      child: Stack(
-        children: [
-          modalBody(context),
-          editButton(context),
-        ]
-      ),
+      child: Stack(children: [
+        modalBody(context),
+        editButton(context),
+      ]),
     );
   }
 
   Widget modalBody(BuildContext context) {
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // titleText(),
-          modalHeader(busName, "test"),
-          StationsList(busStationsList: busStations),
-          ConfirmButton(
-            buttonText: "乗客情報", 
-            onTap: () => moveToBusPassengerPage(context),
-          ),
-        ],
-      )
-    );
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // titleText(),
+        modalHeader(bus.name, "test"),
+        StationsList(busStationsList: busStations),
+        ConfirmButton(
+          buttonText: "乗客情報",
+          onTap: () => moveToBusPassengerPage(context),
+        ),
+      ],
+    ));
   }
 
   moveToBusPassengerPage(BuildContext context) {
     Navigator.push(
-      context,MaterialPageRoute(builder: (context) => BusPassengerPage()) 
-    );
+        context, MaterialPageRoute(builder: (context) => BusPassengerPage()));
   }
 
   Widget editButton(BuildContext context) {
@@ -63,17 +70,17 @@ class BottomSheetWidget extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             Navigator.push(
-                context,MaterialPageRoute(builder: (context) => BusEditPage(busStations: busStations))
-              );
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        BusEditPage(busStations: busStations)));
           },
           style: editButtonStyle(),
-          child: const Text(
-            "Edit",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-            )
-          ),
+          child: const Text("Edit",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              )),
         ),
       ),
     );
@@ -85,7 +92,7 @@ class BottomSheetWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          busThumbnail(),
+          busThumbnail(bus.status),
           courseAndOperator(busCourseName, busOperatorName),
         ],
       ),
@@ -98,7 +105,7 @@ class BottomSheetWidget extends StatelessWidget {
       itemCount: busStationsList.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.fromLTRB(50,  10,  0,  0),
+          padding: const EdgeInsets.fromLTRB(50, 10, 0, 0),
           child: stationsListElement(busStationsList[index]),
         );
       },
@@ -110,14 +117,14 @@ class BottomSheetWidget extends StatelessWidget {
       stationName,
       textAlign: TextAlign.left,
       style: const TextStyle(
-        fontSize:  18,
+        fontSize: 18,
       ),
     );
   }
 
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
-      padding: const EdgeInsets.only(left:30),
+      padding: const EdgeInsets.only(left: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -145,24 +152,29 @@ class BottomSheetWidget extends StatelessWidget {
   }
 
   Widget operatorNameText(String name) {
-    return Text(
-      "担当：$name",
-      style: const TextStyle(
-        color: Colors.grey,
-      )
-    );
+    return Text("担当：$name",
+        style: const TextStyle(
+          color: Colors.grey,
+        ));
   }
 
-  //TODO:本来は画像を受蹴取って表示する
-  Widget busThumbnail() {
-    return const SizedBox(
+  Widget busThumbnail(Status busStatus) {
+    late String imagePath;
+    if (busStatus == Status.STATUS_RUNNING) {
+      imagePath = "assets/images/bus_operating.png";
+    } else {
+      imagePath = "assets/images/bus_not_operating.png";
+    }
+
+    return SizedBox(
         width: 100,
         height: 100,
-        child: Card(
-          child: Text(
-            "ここにサムネイル",
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
           ),
-        ),
-    );
+        ));
   }
 }

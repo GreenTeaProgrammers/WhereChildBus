@@ -92,16 +92,15 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget listViewBuilder() {
     return ListView.builder(
-      //TODO: 実際にはAPIからデータを取得
       itemCount: buses.length,
       itemBuilder: (BuildContext context, int index) {
-        return busListCard(buses[index].name, buses[index].status);
+        return busListCard(buses[index]);
       },
     );
   }
 
   //TODO: 将来的にBus型を受け取る, 将来的にモーダルにバスを渡す
-  Widget busListCard(String name, Status busStatus) {
+  Widget busListCard(Bus bus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -121,14 +120,14 @@ class _BusListPageState extends State<BusListPage> {
                   barrierColor: Colors.black.withOpacity(0.5),
                   builder: (context) {
                     return BottomSheetWidget(
-                      busName: name,
+                      bus: bus,
                     );
                   });
             },
             child: Row(
               children: [
-                busPhoto(busStatus),
-                busNameAndDescription(name, busStatus),
+                busPhoto(bus.status),
+                busNameAndDescription(bus.name, bus.status),
               ],
             ),
           ),
