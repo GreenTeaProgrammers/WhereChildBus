@@ -55,6 +55,16 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		return nil, fmt.Errorf("failed to create bus: %w", err)
 	}
 
+	// Nurseryエッジを持つBusを取得
+	bus, err = tx.Bus.Query().
+		Where(busRepo.IDEQ(bus.ID)).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get bus: %w", err)
+	}
+
 	err = setNextStation(ctx, tx, req.MorningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
 		return updateOp.AddMorningNextStation(nextStation)
 	})
@@ -91,7 +101,9 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	}
 
 	buses, err := i.getBusList(ctx, func(tx *ent.Tx) (*ent.BusQuery, error) {
-		return tx.Bus.Query().Where(busRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))), nil
+		return tx.Bus.Query().
+			Where(busRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))).
+			WithNursery(), nil
 	})
 
 	if err != nil {

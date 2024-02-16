@@ -41,6 +41,7 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		SetLatitude(req.Latitude).
 		SetLongitude(req.Longitude).
 		Save(ctx)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to create or update station: %w", err)
 	}
@@ -74,9 +75,11 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 	stations, err := i.entClient.Station.Query().
 		Where(stationRepo.HasBusWith(busRepo.ID(busID))).
 		WithGuardian(func(q *ent.GuardianQuery) {
-			q.WithChildren() // Guardian に紐づく Children も取得
+			// Guardian に紐づく Children と Nursery も取得
+			q.WithChildren()
 		}).
 		All(ctx)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to get stations with guardians and children: %w", err)
 	}
@@ -88,23 +91,27 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 	for _, station := range stations {
 		morningNextStationID, eveningNextStationID, err := getNextStationIDs(ctx, station)
 		if err != nil {
-			return nil, err // エラーハンドリング
+			// エラーメッセージにステーションIDを追加して明確にする
+			return nil, fmt.Errorf("error getting next station IDs for station %v: %w", station.ID, err)
 		}
 
-		// ステーションをプロトコルバッファ形式に変換
 		pbStation := utils.ToPbStation(station, morningNextStationID, eveningNextStationID)
 		pbStations = append(pbStations, pbStation)
 
 		if station.Edges.Guardian != nil {
 			guardian := station.Edges.Guardian
-			pbGuardian := utils.ToPbGuardianResponse(guardian)
+			if err != nil {
+				// 適切なエラーハンドリング
+				return nil, fmt.Errorf("error querying nursery for guardian with ID %v: %w", guardian.ID, err)
+			}
 			guardianID := guardian.ID.String()
-			uniqueGuardians[guardianID] = pbGuardian // ガーディアンを一意に保持
+			pbGuardian := utils.ToPbGuardianResponse(guardian)
+			uniqueGuardians[guardianID] = pbGuardian
 
 			for _, child := range guardian.Edges.Children {
-				pbChild := utils.ToPbChild(child)
 				childID := child.ID.String()
-				uniqueChildren[childID] = pbChild // 子供を一意に保持
+				pbChild := utils.ToPbChild(child)
+				uniqueChildren[childID] = pbChild
 			}
 		}
 	}
@@ -145,16 +152,4 @@ func getNextStationIDs(ctx context.Context, station *ent.Station) (morningNextSt
 	}
 
 	return morningNextStationID, eveningNextStationID, nil
-}
-
-func getNextStationID(ctx context.Context, station *ent.Station, queryFunc func(*ent.Station) *ent.StationQuery) (string, error) {
-	nextStation, err := queryFunc(station).Only(ctx)
-	if err != nil {
-		if !ent.IsNotFound(err) {
-			return "", fmt.Errorf("failed to query next station: %w", err)
-		}
-		// 次のステーションが見つからない場合は空文字を返します。
-		return "", nil
-	}
-	return nextStation.ID.String(), nil
 }

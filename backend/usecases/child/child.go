@@ -76,6 +76,11 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		return nil, fmt.Errorf("failed to create child: %w", err)
 	}
 
+	child, err = tx.Child.Query().
+		Where(childRepo.IDEQ(child.ID)).
+		WithGuardian().
+		Only(ctx)
+
 	// アップロードされた写真のIDを追跡するスライス
 	var uploadedPhotoIDs []uuid.UUID
 

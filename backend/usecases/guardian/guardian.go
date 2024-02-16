@@ -55,6 +55,19 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 		SetNursery(nursery).
 		Save(ctx)
 
+	if err != nil {
+		return nil, fmt.Errorf("failed to create guardian: %w", err)
+	}
+
+	guardian, err = tx.Guardian.Query().
+		Where(guardianRepo.IDEQ(guardian.ID)).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guardian: %w", err)
+	}
+
 	// Stationを作成
 	_, err = tx.Station.Create().
 		SetGuardian(guardian).
@@ -106,7 +119,7 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 	// レスポンスを返す
 	return &pb.GuardianLoginResponse{
 		Success:  true,
-		Guardian: utils.ToPbGuardianResponse(guardian),
+		Guardian: utils.ToPbGuardianResponse(guardian), // NurseryID を引数として渡す
 		Nursery:  utils.ToPbNurseryResponse(guardian.Edges.Nursery),
 	}, nil
 }
