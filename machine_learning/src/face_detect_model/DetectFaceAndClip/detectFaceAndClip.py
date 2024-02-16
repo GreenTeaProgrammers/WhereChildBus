@@ -5,6 +5,9 @@ import numpy as np
 import argparse
 import logging
 from dotenv import load_dotenv
+from google.oauth2 import service_account
+import google.cloud.storage as gcs
+from google.cloud.storage import Blob, Bucket
 
 
 from detectFaceUtil import (
@@ -23,19 +26,19 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def load_image(args, blobs=None):
+def load_image(args: argparse.Namespace, blobs=None):
     """画像の読み込みを行うラッパー関数"""
     if args.env == "local":
-        return load_image_from_local(args.img_dir_path)
+        return load_image_from_local(args.image_dir_path)
     elif args.env == "remote":
         return load_image_from_remote(args.nursery_id, args.child_id, blobs)
 
 
-def load_image_from_local(img_dir_path):
+def load_image_from_local(image_dir_path: str):
     images = []
-    for image_path in os.listdir(img_dir_path):
+    for image_path in os.listdir(image_dir_path):
         logger.info(f"loading: {image_path}")
-        image = cv2.imread(img_dir_path + image_path)
+        image = cv2.imread(image_dir_path + image_path)
         if image is None:
             logger.error(f"Can not find or load : {image_path}")
             continue
@@ -43,7 +46,7 @@ def load_image_from_local(img_dir_path):
     return images
 
 
-def load_image_from_remote(nursery_id, child_id, blobs):
+def load_image_from_remote(nursery_id: str, child_id: str, blobs: list):
     images = []
     for blob in blobs:
         logger.info(f"loading: {blob.name}")
@@ -64,7 +67,7 @@ def load_image_from_remote(nursery_id, child_id, blobs):
     return images
 
 
-def init_save_dir(save_dir_path):
+def init_save_dir(save_dir_path: str):
     os.makedirs(save_dir_path, exist_ok=True)
     for file in os.listdir(save_dir_path):
         file_path = os.path.join(save_dir_path, file)
@@ -73,9 +76,6 @@ def init_save_dir(save_dir_path):
 
 
 def init_client():
-    from google.oauth2 import service_account
-    import google.cloud.storage as gcs
-
     # NOTE: gcloud auth application-default loginにて事前に認証
     credential = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     PROJECT_ID = os.environ.get("PROJECT_ID")
@@ -88,7 +88,7 @@ def init_client():
         return client
 
 
-def get_bucket(client):
+def get_bucket(client: gcs.Client):
     # NOTE: 環境変数からバケット名を取得
     BUCKET_NAME = os.environ.get("BUCKET_NAME")
     bucket = client.bucket(BUCKET_NAME)
@@ -100,7 +100,7 @@ def get_bucket(client):
         exit(1)
 
 
-def get_blobs(bucket, blob_name):
+def get_blobs(bucket: Bucket, blob_name: str):
     blobs = list(bucket.list_blobs(prefix=blob_name))
 
     # blobsの中身に対するエラーハンドリング
@@ -115,7 +115,7 @@ def get_blobs(bucket, blob_name):
         exit(1)
 
 
-def save_face_image_to_local(face, save_dir, save_file_name):
+def save_face_image_to_local(face: np.ndarray, save_dir: str, save_file_name: str):
     """クリップされた顔画像を保存する"""
     os.makedirs(save_dir, exist_ok=True)
 
@@ -123,18 +123,25 @@ def save_face_image_to_local(face, save_dir, save_file_name):
     cv2.imwrite(save_path, face)
 
 
-def save_face_image_to_remote(face, save_blob_name, bucket):
-    from google.cloud.storage import Blob
-
-    """クリップされた顔画像をGCSに保存する"""
-    _, encoded_image = cv2.imencode(".png", face)
+def decode_face_image_from_ndaarray(face_image: np.ndarray):
+    _, encoded_image = cv2.imencode(".png", face_image)
     png_cliped_face_data = encoded_image.tobytes()
+    return png_cliped_face_data
+
+
+def save_face_image_to_remote(
+    face_image: np.ndarray,
+    save_blob_name: str,
+    bucket: Bucket,
+):
+    """クリップされた顔画像をGCSに保存する"""
+    png_cliped_face_data = decode_face_image_from_ndaarray(face_image)
 
     save_blob = Blob(save_blob_name, bucket)
     save_blob.upload_from_string(data=png_cliped_face_data, content_type="image/png")
 
 
-def detect_face_and_clip(args, config):
+def detect_face_and_clip(args: argparse.Namespace, config: dict):
     face_cascade_path = config["face_detect"]["cascade_path"]
     image_size = (
         config["face_detect"]["clip_size"]["height"],
@@ -190,7 +197,7 @@ def detect_face_and_clip(args, config):
             detect_face_num += 1
 
 
-def main(args):
+def main(args: argparse.Namespace):
     logger.info(f"env: {args.env}")
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
@@ -206,7 +213,7 @@ if __name__ == "__main__":
 
     local_parser = env_subparsers.add_parser("local")
     local_parser.add_argument(
-        "--img_dir_path",
+        "--image_dir_path",
         type=str,
         help="画像のディレクトリパス",
         required=True,
