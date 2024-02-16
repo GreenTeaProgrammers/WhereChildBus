@@ -4,7 +4,7 @@ package machine_learning.v1;
 
 service MachineLearningService {
         rpc Train(TrainRequest) returns (TrainResponse);
-        rpc Eval(EvalRequest) returns (EvalResponse);
+        rpc Eval(stream EvalRequest) returns (stream EvalResponse);
         rpc FaceDetectAndClip(FaceAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
