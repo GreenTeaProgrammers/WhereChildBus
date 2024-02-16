@@ -1,3 +1,5 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
@@ -18,6 +20,10 @@ class BottomSheetWidget extends StatefulWidget {
 
 class _BottomSheetWidgetState extends State<BottomSheetWidget> {
   List<GuardianResponse> guardians = [];
+  bool _isLoading = true;
+  bool _isFailLoading = false;
+
+  //削除する
   final busStations = [
     "station1",
     "station2",
@@ -39,9 +45,19 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
 
   Future<void> _loadGuardians() async {
     var res = await getGuardiansByBusId(widget.bus.id);
-    setState(() {
-      guardians = res;
-    });
+    try {
+      if (mounted) {
+        setState(() {
+          guardians = res;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      }
+      setState(() => {_isLoading = false, _isFailLoading = true});
+    }
   }
 
   @override
@@ -69,9 +85,16 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       children: [
         // titleText(),
         modalHeader(widget.bus.name, "test"),
-        GuardiansList(
-          guardiansList: [],
-        ),
+        _isLoading
+            ? const Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : GuardiansList(
+                guardiansList: [],
+              ),
         ConfirmButton(
           buttonText: "乗客情報",
           onTap: () => moveToBusPassengerPage(context),
@@ -111,7 +134,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
 
   Widget modalHeader(String busCourseName, String busOperatorName) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 50, 0, 10),
+      padding: const EdgeInsets.fromLTRB(20, 50, 0, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
