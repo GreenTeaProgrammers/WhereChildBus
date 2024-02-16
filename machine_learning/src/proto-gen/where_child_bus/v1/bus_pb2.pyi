@@ -51,3 +51,51 @@ class ChangeBusStatusResponse(_message.Message):
     BUS_FIELD_NUMBER: _ClassVar[int]
     bus: _resources_pb2.Bus
     def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
+
+class SendLocationContinuousRequest(_message.Message):
+    __slots__ = ("bus_id", "latitude", "longitude", "timestamp")
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    LATITUDE_FIELD_NUMBER: _ClassVar[int]
+    LONGITUDE_FIELD_NUMBER: _ClassVar[int]
+    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    latitude: float
+    longitude: float
+    timestamp: int
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
+
+class SendLocationContinuousResponse(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TrackBusContinuousRequest(_message.Message):
+    __slots__ = ("bus_id",)
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
+
+class TrackBusContinuousResponse(_message.Message):
+    __slots__ = ("bus_id", "latitude", "longitude", "timestamp")
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    LATITUDE_FIELD_NUMBER: _ClassVar[int]
+    LONGITUDE_FIELD_NUMBER: _ClassVar[int]
+    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    latitude: float
+    longitude: float
+    timestamp: int
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
+
+class StreamBusVideoRequest(_message.Message):
+    __slots__ = ("bus_id", "video_chunk", "timestamp")
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    VIDEO_CHUNK_FIELD_NUMBER: _ClassVar[int]
+    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    video_chunk: bytes
+    timestamp: int
+    def __init__(self, bus_id: _Optional[str] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[int] = ...) -> None: ...
+
+class StreamBusVideoResponse(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...

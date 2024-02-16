@@ -19,9 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	BusService_CreateBus_FullMethodName             = "/where_child_bus.v1.BusService/CreateBus"
-	BusService_GetBusListByNurseryId_FullMethodName = "/where_child_bus.v1.BusService/GetBusListByNurseryId"
-	BusService_ChangeBusStatus_FullMethodName       = "/where_child_bus.v1.BusService/ChangeBusStatus"
+	BusService_CreateBus_FullMethodName              = "/where_child_bus.v1.BusService/CreateBus"
+	BusService_GetBusListByNurseryId_FullMethodName  = "/where_child_bus.v1.BusService/GetBusListByNurseryId"
+	BusService_ChangeBusStatus_FullMethodName        = "/where_child_bus.v1.BusService/ChangeBusStatus"
+	BusService_SendLocationContinuous_FullMethodName = "/where_child_bus.v1.BusService/SendLocationContinuous"
+	BusService_TrackBusContinuous_FullMethodName     = "/where_child_bus.v1.BusService/TrackBusContinuous"
+	BusService_StreamBusVideo_FullMethodName         = "/where_child_bus.v1.BusService/StreamBusVideo"
 )
 
 // BusServiceClient is the client API for BusService service.
@@ -31,6 +34,9 @@ type BusServiceClient interface {
 	CreateBus(ctx context.Context, in *CreateBusRequest, opts ...grpc.CallOption) (*CreateBusResponse, error)
 	GetBusListByNurseryId(ctx context.Context, in *GetBusListByNurseryIdRequest, opts ...grpc.CallOption) (*GetBusListByNurseryIdResponse, error)
 	ChangeBusStatus(ctx context.Context, in *ChangeBusStatusRequest, opts ...grpc.CallOption) (*ChangeBusStatusResponse, error)
+	SendLocationContinuous(ctx context.Context, opts ...grpc.CallOption) (BusService_SendLocationContinuousClient, error)
+	TrackBusContinuous(ctx context.Context, in *TrackBusContinuousRequest, opts ...grpc.CallOption) (BusService_TrackBusContinuousClient, error)
+	StreamBusVideo(ctx context.Context, opts ...grpc.CallOption) (BusService_StreamBusVideoClient, error)
 }
 
 type busServiceClient struct {
@@ -68,6 +74,106 @@ func (c *busServiceClient) ChangeBusStatus(ctx context.Context, in *ChangeBusSta
 	return out, nil
 }
 
+func (c *busServiceClient) SendLocationContinuous(ctx context.Context, opts ...grpc.CallOption) (BusService_SendLocationContinuousClient, error) {
+	stream, err := c.cc.NewStream(ctx, &BusService_ServiceDesc.Streams[0], BusService_SendLocationContinuous_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &busServiceSendLocationContinuousClient{stream}
+	return x, nil
+}
+
+type BusService_SendLocationContinuousClient interface {
+	Send(*SendLocationContinuousRequest) error
+	CloseAndRecv() (*SendLocationContinuousResponse, error)
+	grpc.ClientStream
+}
+
+type busServiceSendLocationContinuousClient struct {
+	grpc.ClientStream
+}
+
+func (x *busServiceSendLocationContinuousClient) Send(m *SendLocationContinuousRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *busServiceSendLocationContinuousClient) CloseAndRecv() (*SendLocationContinuousResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(SendLocationContinuousResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *busServiceClient) TrackBusContinuous(ctx context.Context, in *TrackBusContinuousRequest, opts ...grpc.CallOption) (BusService_TrackBusContinuousClient, error) {
+	stream, err := c.cc.NewStream(ctx, &BusService_ServiceDesc.Streams[1], BusService_TrackBusContinuous_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &busServiceTrackBusContinuousClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type BusService_TrackBusContinuousClient interface {
+	Recv() (*TrackBusContinuousResponse, error)
+	grpc.ClientStream
+}
+
+type busServiceTrackBusContinuousClient struct {
+	grpc.ClientStream
+}
+
+func (x *busServiceTrackBusContinuousClient) Recv() (*TrackBusContinuousResponse, error) {
+	m := new(TrackBusContinuousResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *busServiceClient) StreamBusVideo(ctx context.Context, opts ...grpc.CallOption) (BusService_StreamBusVideoClient, error) {
+	stream, err := c.cc.NewStream(ctx, &BusService_ServiceDesc.Streams[2], BusService_StreamBusVideo_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &busServiceStreamBusVideoClient{stream}
+	return x, nil
+}
+
+type BusService_StreamBusVideoClient interface {
+	Send(*StreamBusVideoRequest) error
+	CloseAndRecv() (*StreamBusVideoResponse, error)
+	grpc.ClientStream
+}
+
+type busServiceStreamBusVideoClient struct {
+	grpc.ClientStream
+}
+
+func (x *busServiceStreamBusVideoClient) Send(m *StreamBusVideoRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *busServiceStreamBusVideoClient) CloseAndRecv() (*StreamBusVideoResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(StreamBusVideoResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // BusServiceServer is the server API for BusService service.
 // All implementations should embed UnimplementedBusServiceServer
 // for forward compatibility
@@ -75,6 +181,9 @@ type BusServiceServer interface {
 	CreateBus(context.Context, *CreateBusRequest) (*CreateBusResponse, error)
 	GetBusListByNurseryId(context.Context, *GetBusListByNurseryIdRequest) (*GetBusListByNurseryIdResponse, error)
 	ChangeBusStatus(context.Context, *ChangeBusStatusRequest) (*ChangeBusStatusResponse, error)
+	SendLocationContinuous(BusService_SendLocationContinuousServer) error
+	TrackBusContinuous(*TrackBusContinuousRequest, BusService_TrackBusContinuousServer) error
+	StreamBusVideo(BusService_StreamBusVideoServer) error
 }
 
 // UnimplementedBusServiceServer should be embedded to have forward compatible implementations.
@@ -89,6 +198,15 @@ func (UnimplementedBusServiceServer) GetBusListByNurseryId(context.Context, *Get
 }
 func (UnimplementedBusServiceServer) ChangeBusStatus(context.Context, *ChangeBusStatusRequest) (*ChangeBusStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangeBusStatus not implemented")
+}
+func (UnimplementedBusServiceServer) SendLocationContinuous(BusService_SendLocationContinuousServer) error {
+	return status.Errorf(codes.Unimplemented, "method SendLocationContinuous not implemented")
+}
+func (UnimplementedBusServiceServer) TrackBusContinuous(*TrackBusContinuousRequest, BusService_TrackBusContinuousServer) error {
+	return status.Errorf(codes.Unimplemented, "method TrackBusContinuous not implemented")
+}
+func (UnimplementedBusServiceServer) StreamBusVideo(BusService_StreamBusVideoServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamBusVideo not implemented")
 }
 
 // UnsafeBusServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -156,6 +274,79 @@ func _BusService_ChangeBusStatus_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BusService_SendLocationContinuous_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BusServiceServer).SendLocationContinuous(&busServiceSendLocationContinuousServer{stream})
+}
+
+type BusService_SendLocationContinuousServer interface {
+	SendAndClose(*SendLocationContinuousResponse) error
+	Recv() (*SendLocationContinuousRequest, error)
+	grpc.ServerStream
+}
+
+type busServiceSendLocationContinuousServer struct {
+	grpc.ServerStream
+}
+
+func (x *busServiceSendLocationContinuousServer) SendAndClose(m *SendLocationContinuousResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *busServiceSendLocationContinuousServer) Recv() (*SendLocationContinuousRequest, error) {
+	m := new(SendLocationContinuousRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _BusService_TrackBusContinuous_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(TrackBusContinuousRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(BusServiceServer).TrackBusContinuous(m, &busServiceTrackBusContinuousServer{stream})
+}
+
+type BusService_TrackBusContinuousServer interface {
+	Send(*TrackBusContinuousResponse) error
+	grpc.ServerStream
+}
+
+type busServiceTrackBusContinuousServer struct {
+	grpc.ServerStream
+}
+
+func (x *busServiceTrackBusContinuousServer) Send(m *TrackBusContinuousResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _BusService_StreamBusVideo_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BusServiceServer).StreamBusVideo(&busServiceStreamBusVideoServer{stream})
+}
+
+type BusService_StreamBusVideoServer interface {
+	SendAndClose(*StreamBusVideoResponse) error
+	Recv() (*StreamBusVideoRequest, error)
+	grpc.ServerStream
+}
+
+type busServiceStreamBusVideoServer struct {
+	grpc.ServerStream
+}
+
+func (x *busServiceStreamBusVideoServer) SendAndClose(m *StreamBusVideoResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *busServiceStreamBusVideoServer) Recv() (*StreamBusVideoRequest, error) {
+	m := new(StreamBusVideoRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // BusService_ServiceDesc is the grpc.ServiceDesc for BusService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +367,22 @@ var BusService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BusService_ChangeBusStatus_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SendLocationContinuous",
+			Handler:       _BusService_SendLocationContinuous_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "TrackBusContinuous",
+			Handler:       _BusService_TrackBusContinuous_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "StreamBusVideo",
+			Handler:       _BusService_StreamBusVideo_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "where_child_bus/v1/bus.proto",
 }
