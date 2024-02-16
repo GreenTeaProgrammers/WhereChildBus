@@ -62,12 +62,20 @@ class _BusListPageState extends State<BusListPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (_isFailLoading) loadFailText(),
+                if (buses.isEmpty) busNotRegisteredText(),
                 Expanded(
                   child: listViewBuilder(),
                 )
               ],
             ),
           );
+  }
+
+  Widget busNotRegisteredText() {
+    return const Padding(
+      padding: EdgeInsets.all(20),
+      child: Text("バスが登録されていません"),
+    );
   }
 
   Widget addBusButton() {
