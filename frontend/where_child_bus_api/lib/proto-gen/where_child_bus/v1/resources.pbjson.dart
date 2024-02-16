@@ -29,6 +29,21 @@ final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
     'CgZTdGF0dXMSFgoSU1RBVFVTX1VOU1BFQ0lGSUVEEAASEgoOU1RBVFVTX1NUT1BQRUQQARISCg'
     '5TVEFUVVNfUlVOTklORxACEhcKE1NUQVRVU19NQUlOVEVJTkFOQ0UQAw==');
 
+@$core.Deprecated('Use videoTypeDescriptor instead')
+const VideoType$json = {
+  '1': 'VideoType',
+  '2': [
+    {'1': 'VIDEO_TYPE_UNSPECIFIED', '2': 0},
+    {'1': 'VIDEO_TYPE_GET_ON', '2': 1},
+    {'1': 'VIDEO_TYPE_GET_OFF', '2': 2},
+  ],
+};
+
+/// Descriptor for `VideoType`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List videoTypeDescriptor = $convert.base64Decode(
+    'CglWaWRlb1R5cGUSGgoWVklERU9fVFlQRV9VTlNQRUNJRklFRBAAEhUKEVZJREVPX1RZUEVfR0'
+    'VUX09OEAESFgoSVklERU9fVFlQRV9HRVRfT0ZGEAI=');
+
 @$core.Deprecated('Use sexDescriptor instead')
 const Sex$json = {
   '1': 'Sex',

@@ -8,6 +8,10 @@ service BusService {
         rpc CreateBus(CreateBusRequest) returns (CreateBusResponse);
         rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
         rpc ChangeBusStatus(ChangeBusStatusRequest) returns (ChangeBusStatusResponse);
+
+        rpc SendLocationContinuous(stream SendLocationContinuousRequest) returns (SendLocationContinuousResponse);
+        rpc TrackBusContinuous(TrackBusContinuousRequest) returns (stream TrackBusContinuousResponse);
+        rpc StreamBusVideo(stream StreamBusVideoRequest) returns (StreamBusVideoResponse);
 }
 
 message CreateBusRequest {
@@ -39,3 +43,36 @@ message ChangeBusStatusResponse {
         Bus bus = 1;
 }
 
+// Updated and newly defined messages for the adjusted RPCs
+message SendLocationContinuousRequest {
+        string bus_id = 1;
+        double latitude = 2;
+        double longitude = 3;
+        int64 timestamp = 4; // Unix timestamp
+}
+
+message SendLocationContinuousResponse {
+  // Custom empty response type to conform to Protobuf style guide
+}
+
+message TrackBusContinuousRequest {
+        string bus_id = 1;
+}
+
+message TrackBusContinuousResponse {
+        string bus_id = 1;
+        double latitude = 2;
+        double longitude = 3;
+        int64 timestamp = 4; // Unix timestamp
+}
+
+message StreamBusVideoRequest {
+        string bus_id = 1;
+        VideoType video_type = 2;
+        bytes video_chunk = 3; // Chunk of video data
+        int64 timestamp = 4; // Unix timestamp
+}
+
+message StreamBusVideoResponse {
+  // Custom empty response type to conform to Protobuf style guide
+}

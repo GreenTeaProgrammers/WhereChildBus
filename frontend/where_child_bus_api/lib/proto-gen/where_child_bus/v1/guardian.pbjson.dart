@@ -75,3 +75,28 @@ final $typed_data.Uint8List guardianLoginResponseDescriptor = $convert.base64Dec
     'ZGlhbhI9CgdudXJzZXJ5GAMgASgLMiMud2hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXNwb2'
     '5zZVIHbnVyc2VyeQ==');
 
+@$core.Deprecated('Use getGuardianListByBusIdRequestDescriptor instead')
+const GetGuardianListByBusIdRequest$json = {
+  '1': 'GetGuardianListByBusIdRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+  ],
+};
+
+/// Descriptor for `GetGuardianListByBusIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGuardianListByBusIdRequestDescriptor = $convert.base64Decode(
+    'Ch1HZXRHdWFyZGlhbkxpc3RCeUJ1c0lkUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lk');
+
+@$core.Deprecated('Use getGuardianListByBusIdResponseDescriptor instead')
+const GetGuardianListByBusIdResponse$json = {
+  '1': 'GetGuardianListByBusIdResponse',
+  '2': [
+    {'1': 'guardians', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardians'},
+  ],
+};
+
+/// Descriptor for `GetGuardianListByBusIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGuardianListByBusIdResponseDescriptor = $convert.base64Decode(
+    'Ch5HZXRHdWFyZGlhbkxpc3RCeUJ1c0lkUmVzcG9uc2USQgoJZ3VhcmRpYW5zGAEgAygLMiQud2'
+    'hlcmVfY2hpbGRfYnVzLnYxLkd1YXJkaWFuUmVzcG9uc2VSCWd1YXJkaWFucw==');
+

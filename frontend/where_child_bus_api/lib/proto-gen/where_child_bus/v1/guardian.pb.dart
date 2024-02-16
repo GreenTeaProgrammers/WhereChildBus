@@ -319,6 +319,100 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   $8.NurseryResponse ensureNursery() => $_ensure(2);
 }
 
+class GetGuardianListByBusIdRequest extends $pb.GeneratedMessage {
+  factory GetGuardianListByBusIdRequest({
+    $core.String? busId,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    return $result;
+  }
+  GetGuardianListByBusIdRequest._() : super();
+  factory GetGuardianListByBusIdRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetGuardianListByBusIdRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGuardianListByBusIdRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetGuardianListByBusIdRequest clone() => GetGuardianListByBusIdRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetGuardianListByBusIdRequest copyWith(void Function(GetGuardianListByBusIdRequest) updates) => super.copyWith((message) => updates(message as GetGuardianListByBusIdRequest)) as GetGuardianListByBusIdRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetGuardianListByBusIdRequest create() => GetGuardianListByBusIdRequest._();
+  GetGuardianListByBusIdRequest createEmptyInstance() => create();
+  static $pb.PbList<GetGuardianListByBusIdRequest> createRepeated() => $pb.PbList<GetGuardianListByBusIdRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetGuardianListByBusIdRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetGuardianListByBusIdRequest>(create);
+  static GetGuardianListByBusIdRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+}
+
+class GetGuardianListByBusIdResponse extends $pb.GeneratedMessage {
+  factory GetGuardianListByBusIdResponse({
+    $core.Iterable<$8.GuardianResponse>? guardians,
+  }) {
+    final $result = create();
+    if (guardians != null) {
+      $result.guardians.addAll(guardians);
+    }
+    return $result;
+  }
+  GetGuardianListByBusIdResponse._() : super();
+  factory GetGuardianListByBusIdResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetGuardianListByBusIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGuardianListByBusIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..pc<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetGuardianListByBusIdResponse clone() => GetGuardianListByBusIdResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetGuardianListByBusIdResponse copyWith(void Function(GetGuardianListByBusIdResponse) updates) => super.copyWith((message) => updates(message as GetGuardianListByBusIdResponse)) as GetGuardianListByBusIdResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetGuardianListByBusIdResponse create() => GetGuardianListByBusIdResponse._();
+  GetGuardianListByBusIdResponse createEmptyInstance() => create();
+  static $pb.PbList<GetGuardianListByBusIdResponse> createRepeated() => $pb.PbList<GetGuardianListByBusIdResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetGuardianListByBusIdResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetGuardianListByBusIdResponse>(create);
+  static GetGuardianListByBusIdResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$8.GuardianResponse> get guardians => $_getList(0);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

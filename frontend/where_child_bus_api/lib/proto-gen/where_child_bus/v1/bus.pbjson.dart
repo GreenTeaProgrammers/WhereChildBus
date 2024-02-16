@@ -98,3 +98,85 @@ final $typed_data.Uint8List changeBusStatusResponseDescriptor = $convert.base64D
     'ChdDaGFuZ2VCdXNTdGF0dXNSZXNwb25zZRIpCgNidXMYASABKAsyFy53aGVyZV9jaGlsZF9idX'
     'MudjEuQnVzUgNidXM=');
 
+@$core.Deprecated('Use sendLocationContinuousRequestDescriptor instead')
+const SendLocationContinuousRequest$json = {
+  '1': 'SendLocationContinuousRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'timestamp', '3': 4, '4': 1, '5': 3, '10': 'timestamp'},
+  ],
+};
+
+/// Descriptor for `SendLocationContinuousRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendLocationContinuousRequestDescriptor = $convert.base64Decode(
+    'Ch1TZW5kTG9jYXRpb25Db250aW51b3VzUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lkEh'
+    'oKCGxhdGl0dWRlGAIgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYAyABKAFSCWxvbmdpdHVk'
+    'ZRIcCgl0aW1lc3RhbXAYBCABKANSCXRpbWVzdGFtcA==');
+
+@$core.Deprecated('Use sendLocationContinuousResponseDescriptor instead')
+const SendLocationContinuousResponse$json = {
+  '1': 'SendLocationContinuousResponse',
+};
+
+/// Descriptor for `SendLocationContinuousResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendLocationContinuousResponseDescriptor = $convert.base64Decode(
+    'Ch5TZW5kTG9jYXRpb25Db250aW51b3VzUmVzcG9uc2U=');
+
+@$core.Deprecated('Use trackBusContinuousRequestDescriptor instead')
+const TrackBusContinuousRequest$json = {
+  '1': 'TrackBusContinuousRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+  ],
+};
+
+/// Descriptor for `TrackBusContinuousRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List trackBusContinuousRequestDescriptor = $convert.base64Decode(
+    'ChlUcmFja0J1c0NvbnRpbnVvdXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQ=');
+
+@$core.Deprecated('Use trackBusContinuousResponseDescriptor instead')
+const TrackBusContinuousResponse$json = {
+  '1': 'TrackBusContinuousResponse',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'timestamp', '3': 4, '4': 1, '5': 3, '10': 'timestamp'},
+  ],
+};
+
+/// Descriptor for `TrackBusContinuousResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List trackBusContinuousResponseDescriptor = $convert.base64Decode(
+    'ChpUcmFja0J1c0NvbnRpbnVvdXNSZXNwb25zZRIVCgZidXNfaWQYASABKAlSBWJ1c0lkEhoKCG'
+    'xhdGl0dWRlGAIgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYAyABKAFSCWxvbmdpdHVkZRIc'
+    'Cgl0aW1lc3RhbXAYBCABKANSCXRpbWVzdGFtcA==');
+
+@$core.Deprecated('Use streamBusVideoRequestDescriptor instead')
+const StreamBusVideoRequest$json = {
+  '1': 'StreamBusVideoRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'video_type', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.VideoType', '10': 'videoType'},
+    {'1': 'video_chunk', '3': 3, '4': 1, '5': 12, '10': 'videoChunk'},
+    {'1': 'timestamp', '3': 4, '4': 1, '5': 3, '10': 'timestamp'},
+  ],
+};
+
+/// Descriptor for `StreamBusVideoRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List streamBusVideoRequestDescriptor = $convert.base64Decode(
+    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBI8Cgp2aWRlb1'
+    '90eXBlGAIgASgOMh0ud2hlcmVfY2hpbGRfYnVzLnYxLlZpZGVvVHlwZVIJdmlkZW9UeXBlEh8K'
+    'C3ZpZGVvX2NodW5rGAMgASgMUgp2aWRlb0NodW5rEhwKCXRpbWVzdGFtcBgEIAEoA1IJdGltZX'
+    'N0YW1w');
+
+@$core.Deprecated('Use streamBusVideoResponseDescriptor instead')
+const StreamBusVideoResponse$json = {
+  '1': 'StreamBusVideoResponse',
+};
+
+/// Descriptor for `StreamBusVideoResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List streamBusVideoResponseDescriptor = $convert.base64Decode(
+    'ChZTdHJlYW1CdXNWaWRlb1Jlc3BvbnNl');
+

@@ -29,6 +29,10 @@ class GuardianServiceClient extends $grpc.Client {
       '/where_child_bus.v1.GuardianService/GuardianLogin',
       ($3.GuardianLoginRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.GuardianLoginResponse.fromBuffer(value));
+  static final _$getGuardianListByBusId = $grpc.ClientMethod<$3.GetGuardianListByBusIdRequest, $3.GetGuardianListByBusIdResponse>(
+      '/where_child_bus.v1.GuardianService/GetGuardianListByBusId',
+      ($3.GetGuardianListByBusIdRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.GetGuardianListByBusIdResponse.fromBuffer(value));
 
   GuardianServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +46,10 @@ class GuardianServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$3.GuardianLoginResponse> guardianLogin($3.GuardianLoginRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$guardianLogin, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$3.GetGuardianListByBusIdResponse> getGuardianListByBusId($3.GetGuardianListByBusIdRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getGuardianListByBusId, request, options: options);
   }
 }
 
@@ -64,6 +72,13 @@ abstract class GuardianServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $3.GuardianLoginRequest.fromBuffer(value),
         ($3.GuardianLoginResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetGuardianListByBusIdRequest, $3.GetGuardianListByBusIdResponse>(
+        'GetGuardianListByBusId',
+        getGuardianListByBusId_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $3.GetGuardianListByBusIdRequest.fromBuffer(value),
+        ($3.GetGuardianListByBusIdResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$3.CreateGuardianResponse> createGuardian_Pre($grpc.ServiceCall call, $async.Future<$3.CreateGuardianRequest> request) async {
@@ -74,6 +89,11 @@ abstract class GuardianServiceBase extends $grpc.Service {
     return guardianLogin(call, await request);
   }
 
+  $async.Future<$3.GetGuardianListByBusIdResponse> getGuardianListByBusId_Pre($grpc.ServiceCall call, $async.Future<$3.GetGuardianListByBusIdRequest> request) async {
+    return getGuardianListByBusId(call, await request);
+  }
+
   $async.Future<$3.CreateGuardianResponse> createGuardian($grpc.ServiceCall call, $3.CreateGuardianRequest request);
   $async.Future<$3.GuardianLoginResponse> guardianLogin($grpc.ServiceCall call, $3.GuardianLoginRequest request);
+  $async.Future<$3.GetGuardianListByBusIdResponse> getGuardianListByBusId($grpc.ServiceCall call, $3.GetGuardianListByBusIdRequest request);
 }

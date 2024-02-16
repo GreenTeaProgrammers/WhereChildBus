@@ -30,6 +30,21 @@ class BusServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.FromString,
                 )
+        self.SendLocationContinuous = channel.stream_unary(
+                '/where_child_bus.v1.BusService/SendLocationContinuous',
+                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.SendLocationContinuousRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.SendLocationContinuousResponse.FromString,
+                )
+        self.TrackBusContinuous = channel.unary_stream(
+                '/where_child_bus.v1.BusService/TrackBusContinuous',
+                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousResponse.FromString,
+                )
+        self.StreamBusVideo = channel.stream_unary(
+                '/where_child_bus.v1.BusService/StreamBusVideo',
+                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoResponse.FromString,
+                )
 
 
 class BusServiceServicer(object):
@@ -53,6 +68,24 @@ class BusServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SendLocationContinuous(self, request_iterator, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TrackBusContinuous(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamBusVideo(self, request_iterator, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BusServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -70,6 +103,21 @@ def add_BusServiceServicer_to_server(servicer, server):
                     servicer.ChangeBusStatus,
                     request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.SerializeToString,
+            ),
+            'SendLocationContinuous': grpc.stream_unary_rpc_method_handler(
+                    servicer.SendLocationContinuous,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.SendLocationContinuousRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_bus__pb2.SendLocationContinuousResponse.SerializeToString,
+            ),
+            'TrackBusContinuous': grpc.unary_stream_rpc_method_handler(
+                    servicer.TrackBusContinuous,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousResponse.SerializeToString,
+            ),
+            'StreamBusVideo': grpc.stream_unary_rpc_method_handler(
+                    servicer.StreamBusVideo,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -129,5 +177,56 @@ class BusService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusService/ChangeBusStatus',
             where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.SerializeToString,
             where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SendLocationContinuous(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/where_child_bus.v1.BusService/SendLocationContinuous',
+            where__child__bus_dot_v1_dot_bus__pb2.SendLocationContinuousRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__pb2.SendLocationContinuousResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TrackBusContinuous(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/where_child_bus.v1.BusService/TrackBusContinuous',
+            where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def StreamBusVideo(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/where_child_bus.v1.BusService/StreamBusVideo',
+            where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
