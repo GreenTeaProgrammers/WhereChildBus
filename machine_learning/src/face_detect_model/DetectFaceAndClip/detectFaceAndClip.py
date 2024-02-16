@@ -64,6 +64,57 @@ def load_image_from_remote(nursery_id, child_id, blobs):
     return images
 
 
+def init_save_dir(save_dir_path):
+    os.makedirs(save_dir_path, exist_ok=True)
+    for file in os.listdir(save_dir_path):
+        file_path = os.path.join(save_dir_path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+
+def init_client():
+    from google.oauth2 import service_account
+    import google.cloud.storage as gcs
+
+    # NOTE: gcloud auth application-default loginにて事前に認証
+    credential = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    PROJECT_ID = os.environ.get("PROJECT_ID")
+
+    client = gcs.Client(PROJECT_ID, credentials=credential)
+    if client is None:
+        logger.error("Failed to initialize client.")
+        exit(1)
+    else:
+        return client
+
+
+def get_bucket(client):
+    # NOTE: 環境変数からバケット名を取得
+    BUCKET_NAME = os.environ.get("BUCKET_NAME")
+    bucket = client.bucket(BUCKET_NAME)
+
+    if bucket.exists():
+        return bucket
+    else:
+        logger.error("Failed to " + BUCKET_NAME + " does not exist.")
+        exit(1)
+
+
+def get_blobs(bucket, blob_name):
+    blobs = list(bucket.list_blobs(prefix=blob_name))
+
+    # blobsの中身に対するエラーハンドリング
+    try:
+        if len(blobs) == 0:  # 最初の要素がない場合、イテレータは空
+            logger.error(f"No blobs found with prefix '{blob_name}' in the bucket.")
+            exit(1)
+        else:
+            return blobs
+    except Exception as e:
+        logger.error(f"Failed to get blobs from '{blob_name}' due to an error: {e}")
+        exit(1)
+
+
 def save_face_image_to_local(face, save_dir, save_file_name):
     """クリップされた顔画像を保存する"""
     os.makedirs(save_dir, exist_ok=True)
@@ -83,33 +134,7 @@ def save_face_image_to_remote(face, save_blob_name, bucket):
     save_blob.upload_from_string(data=png_cliped_face_data, content_type="image/png")
 
 
-def init_save_dir(save_dir_path):
-    os.makedirs(save_dir_path, exist_ok=True)
-    for file in os.listdir(save_dir_path):
-        file_path = os.path.join(save_dir_path, file)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
-
-
-def init_client():
-    from google.oauth2 import service_account
-    import google.cloud.storage as gcs
-
-    # TODO: GCP Cloud Functions でdeployする際の実装
-    KEY_PATH = os.environ.get("CREDENTIALS_KEY_PATH")
-    credential = service_account.Credentials.from_service_account_file(KEY_PATH)
-
-    PROJECT_ID = os.environ.get("PROJECT_ID")
-
-    client = gcs.Client(PROJECT_ID, credentials=credential)
-    return client
-
-
-def main(args):
-    logger.info(f"env: {args.env}")
-    with open("src/face_detect_model/config.yaml", "r") as f:
-        config = yaml.safe_load(f)
-
+def detect_face_and_clip(args, config):
     face_cascade_path = config["face_detect"]["cascade_path"]
     image_size = (
         config["face_detect"]["clip_size"]["height"],
@@ -123,14 +148,7 @@ def main(args):
     # GCSとの接続
     if args.env == "remote":
         client = init_client()
-        if client is not None:
-            BUCKET_NAME = os.environ.get("BUCKET_NAME")
-            bucket = client.bucket(BUCKET_NAME)
-        else:
-            logger.error("Failed to connect to GCS")
-            exit(1)
-
-        logger.info("get bucket success!")
+        bucket = get_bucket(client)
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
@@ -138,8 +156,8 @@ def main(args):
     if args.env == "local":
         images = load_image(args)
     elif args.env == "remote":
-        SOURCE_BLOB_NAME = f"{args.nursery_id}/{args.child_id}/row/"
-        blobs = bucket.list_blobs(prefix=SOURCE_BLOB_NAME, delimiter="/")
+        SOURCE_BLOB_NAME = f"{args.nursery_id}/{args.child_id}/raw/"
+        blobs = get_blobs(bucket, SOURCE_BLOB_NAME)
         images = load_image(args, blobs=blobs)
 
     logger.info("Detecting faces...")
@@ -162,12 +180,23 @@ def main(args):
             if args.env == "local":
                 save_file_name = f"{detect_face_num}.png"
                 logger.info(f"save: {save_file_name}")
-                save_face_image_to_local(clipped_face, save_dir_path, save_file_name)
+                save_face_image_to_local(
+                    clipped_face, args.save_dir_path, save_file_name
+                )
             elif args.env == "remote":
                 save_blob_name = f"{args.nursery_id}/{args.child_id}/clipped/{args.child_id}-{detect_face_num}.png"
                 logger.info(f"save: {save_blob_name}")
                 save_face_image_to_remote(clipped_face, save_blob_name, bucket)
             detect_face_num += 1
+
+
+def main(args):
+    logger.info(f"env: {args.env}")
+    with open("src/face_detect_model/config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
+    detect_face_and_clip(args, config)
+
     logger.info("Done")
 
 
