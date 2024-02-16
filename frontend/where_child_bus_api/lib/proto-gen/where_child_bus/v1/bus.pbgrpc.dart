@@ -29,6 +29,10 @@ class BusServiceClient extends $grpc.Client {
       '/where_child_bus.v1.BusService/GetBusListByNurseryId',
       ($0.GetBusListByNurseryIdRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetBusListByNurseryIdResponse.fromBuffer(value));
+  static final _$changeBusStatus = $grpc.ClientMethod<$0.ChangeBusStatusRequest, $0.ChangeBusStatusResponse>(
+      '/where_child_bus.v1.BusService/ChangeBusStatus',
+      ($0.ChangeBusStatusRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.ChangeBusStatusResponse.fromBuffer(value));
 
   BusServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +46,10 @@ class BusServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($0.GetBusListByNurseryIdRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBusListByNurseryId, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ChangeBusStatusResponse> changeBusStatus($0.ChangeBusStatusRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$changeBusStatus, request, options: options);
   }
 }
 
@@ -64,6 +72,13 @@ abstract class BusServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetBusListByNurseryIdRequest.fromBuffer(value),
         ($0.GetBusListByNurseryIdResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ChangeBusStatusRequest, $0.ChangeBusStatusResponse>(
+        'ChangeBusStatus',
+        changeBusStatus_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.ChangeBusStatusRequest.fromBuffer(value),
+        ($0.ChangeBusStatusResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateBusResponse> createBus_Pre($grpc.ServiceCall call, $async.Future<$0.CreateBusRequest> request) async {
@@ -74,6 +89,11 @@ abstract class BusServiceBase extends $grpc.Service {
     return getBusListByNurseryId(call, await request);
   }
 
+  $async.Future<$0.ChangeBusStatusResponse> changeBusStatus_Pre($grpc.ServiceCall call, $async.Future<$0.ChangeBusStatusRequest> request) async {
+    return changeBusStatus(call, await request);
+  }
+
   $async.Future<$0.CreateBusResponse> createBus($grpc.ServiceCall call, $0.CreateBusRequest request);
   $async.Future<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($grpc.ServiceCall call, $0.GetBusListByNurseryIdRequest request);
+  $async.Future<$0.ChangeBusStatusResponse> changeBusStatus($grpc.ServiceCall call, $0.ChangeBusStatusRequest request);
 }

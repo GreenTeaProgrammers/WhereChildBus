@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	BusService_CreateBus_FullMethodName             = "/where_child_bus.v1.BusService/CreateBus"
 	BusService_GetBusListByNurseryId_FullMethodName = "/where_child_bus.v1.BusService/GetBusListByNurseryId"
+	BusService_ChangeBusStatus_FullMethodName       = "/where_child_bus.v1.BusService/ChangeBusStatus"
 )
 
 // BusServiceClient is the client API for BusService service.
@@ -29,6 +30,7 @@ const (
 type BusServiceClient interface {
 	CreateBus(ctx context.Context, in *CreateBusRequest, opts ...grpc.CallOption) (*CreateBusResponse, error)
 	GetBusListByNurseryId(ctx context.Context, in *GetBusListByNurseryIdRequest, opts ...grpc.CallOption) (*GetBusListByNurseryIdResponse, error)
+	ChangeBusStatus(ctx context.Context, in *ChangeBusStatusRequest, opts ...grpc.CallOption) (*ChangeBusStatusResponse, error)
 }
 
 type busServiceClient struct {
@@ -57,12 +59,22 @@ func (c *busServiceClient) GetBusListByNurseryId(ctx context.Context, in *GetBus
 	return out, nil
 }
 
+func (c *busServiceClient) ChangeBusStatus(ctx context.Context, in *ChangeBusStatusRequest, opts ...grpc.CallOption) (*ChangeBusStatusResponse, error) {
+	out := new(ChangeBusStatusResponse)
+	err := c.cc.Invoke(ctx, BusService_ChangeBusStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BusServiceServer is the server API for BusService service.
 // All implementations should embed UnimplementedBusServiceServer
 // for forward compatibility
 type BusServiceServer interface {
 	CreateBus(context.Context, *CreateBusRequest) (*CreateBusResponse, error)
 	GetBusListByNurseryId(context.Context, *GetBusListByNurseryIdRequest) (*GetBusListByNurseryIdResponse, error)
+	ChangeBusStatus(context.Context, *ChangeBusStatusRequest) (*ChangeBusStatusResponse, error)
 }
 
 // UnimplementedBusServiceServer should be embedded to have forward compatible implementations.
@@ -74,6 +86,9 @@ func (UnimplementedBusServiceServer) CreateBus(context.Context, *CreateBusReques
 }
 func (UnimplementedBusServiceServer) GetBusListByNurseryId(context.Context, *GetBusListByNurseryIdRequest) (*GetBusListByNurseryIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBusListByNurseryId not implemented")
+}
+func (UnimplementedBusServiceServer) ChangeBusStatus(context.Context, *ChangeBusStatusRequest) (*ChangeBusStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeBusStatus not implemented")
 }
 
 // UnsafeBusServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -123,6 +138,24 @@ func _BusService_GetBusListByNurseryId_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BusService_ChangeBusStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeBusStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusServiceServer).ChangeBusStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BusService_ChangeBusStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusServiceServer).ChangeBusStatus(ctx, req.(*ChangeBusStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BusService_ServiceDesc is the grpc.ServiceDesc for BusService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -137,6 +170,10 @@ var BusService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBusListByNurseryId",
 			Handler:    _BusService_GetBusListByNurseryId_Handler,
+		},
+		{
+			MethodName: "ChangeBusStatus",
+			Handler:    _BusService_ChangeBusStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

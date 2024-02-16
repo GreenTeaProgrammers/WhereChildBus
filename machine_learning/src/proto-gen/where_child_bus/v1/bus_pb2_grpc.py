@@ -3,8 +3,7 @@
 import grpc
 import grpc.experimental
 
-
-from where_child_bus.v1 import bus_pb2 as where__child__bus_dot_v1_dot_bus__pb2
+import bus_pb2 as where__child__bus_dot_v1_dot_bus__pb2
 
 
 class BusServiceStub(object):
@@ -26,6 +25,11 @@ class BusServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdResponse.FromString,
                 )
+        self.ChangeBusStatus = channel.unary_unary(
+                '/where_child_bus.v1.BusService/ChangeBusStatus',
+                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.FromString,
+                )
 
 
 class BusServiceServicer(object):
@@ -43,6 +47,12 @@ class BusServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ChangeBusStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BusServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -55,6 +65,11 @@ def add_BusServiceServicer_to_server(servicer, server):
                     servicer.GetBusListByNurseryId,
                     request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdResponse.SerializeToString,
+            ),
+            'ChangeBusStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.ChangeBusStatus,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -97,5 +112,22 @@ class BusService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusService/GetBusListByNurseryId',
             where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdRequest.SerializeToString,
             where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ChangeBusStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusService/ChangeBusStatus',
+            where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
