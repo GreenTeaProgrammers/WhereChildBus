@@ -224,7 +224,7 @@ func (x *PredResponse) GetChildId() []string {
 	return nil
 }
 
-type FaceDetectAndClipResponse struct {
+type FaceDetectAndClipRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -233,64 +233,10 @@ type FaceDetectAndClipResponse struct {
 	ChildId   string `protobuf:"bytes,2,opt,name=child_id,json=childId,proto3" json:"child_id,omitempty"`
 }
 
-func (x *FaceDetectAndClipResponse) Reset() {
-	*x = FaceDetectAndClipResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *FaceDetectAndClipResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*FaceDetectAndClipResponse) ProtoMessage() {}
-
-func (x *FaceDetectAndClipResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use FaceDetectAndClipResponse.ProtoReflect.Descriptor instead.
-func (*FaceDetectAndClipResponse) Descriptor() ([]byte, []int) {
-	return file_machine_learning_v1_machine_learning_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *FaceDetectAndClipResponse) GetNurseryId() string {
-	if x != nil {
-		return x.NurseryId
-	}
-	return ""
-}
-
-func (x *FaceDetectAndClipResponse) GetChildId() string {
-	if x != nil {
-		return x.ChildId
-	}
-	return ""
-}
-
-type FaceDetectAndClipRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	IsStarted bool `protobuf:"varint,1,opt,name=is_started,json=isStarted,proto3" json:"is_started,omitempty"`
-}
-
 func (x *FaceDetectAndClipRequest) Reset() {
 	*x = FaceDetectAndClipRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[5]
+		mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -303,7 +249,7 @@ func (x *FaceDetectAndClipRequest) String() string {
 func (*FaceDetectAndClipRequest) ProtoMessage() {}
 
 func (x *FaceDetectAndClipRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[5]
+	mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -316,10 +262,64 @@ func (x *FaceDetectAndClipRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FaceDetectAndClipRequest.ProtoReflect.Descriptor instead.
 func (*FaceDetectAndClipRequest) Descriptor() ([]byte, []int) {
+	return file_machine_learning_v1_machine_learning_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *FaceDetectAndClipRequest) GetNurseryId() string {
+	if x != nil {
+		return x.NurseryId
+	}
+	return ""
+}
+
+func (x *FaceDetectAndClipRequest) GetChildId() string {
+	if x != nil {
+		return x.ChildId
+	}
+	return ""
+}
+
+type FaceDetectAndClipResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	IsStarted bool `protobuf:"varint,1,opt,name=is_started,json=isStarted,proto3" json:"is_started,omitempty"`
+}
+
+func (x *FaceDetectAndClipResponse) Reset() {
+	*x = FaceDetectAndClipResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FaceDetectAndClipResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FaceDetectAndClipResponse) ProtoMessage() {}
+
+func (x *FaceDetectAndClipResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FaceDetectAndClipResponse.ProtoReflect.Descriptor instead.
+func (*FaceDetectAndClipResponse) Descriptor() ([]byte, []int) {
 	return file_machine_learning_v1_machine_learning_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *FaceDetectAndClipRequest) GetIsStarted() bool {
+func (x *FaceDetectAndClipResponse) GetIsStarted() bool {
 	if x != nil {
 		return x.IsStarted
 	}
@@ -347,14 +347,14 @@ var file_machine_learning_v1_machine_learning_proto_rawDesc = []byte{
 	0x09, 0x52, 0x05, 0x62, 0x75, 0x73, 0x49, 0x64, 0x22, 0x29, 0x0a, 0x0c, 0x50, 0x72, 0x65, 0x64,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x63, 0x68, 0x69, 0x6c,
 	0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x63, 0x68, 0x69, 0x6c,
-	0x64, 0x49, 0x64, 0x22, 0x55, 0x0a, 0x19, 0x46, 0x61, 0x63, 0x65, 0x44, 0x65, 0x74, 0x65, 0x63,
-	0x74, 0x41, 0x6e, 0x64, 0x43, 0x6c, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x1d, 0x0a, 0x0a, 0x6e, 0x75, 0x72, 0x73, 0x65, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6e, 0x75, 0x72, 0x73, 0x65, 0x72, 0x79, 0x49, 0x64, 0x12,
-	0x19, 0x0a, 0x08, 0x63, 0x68, 0x69, 0x6c, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x07, 0x63, 0x68, 0x69, 0x6c, 0x64, 0x49, 0x64, 0x22, 0x39, 0x0a, 0x18, 0x46, 0x61,
-	0x63, 0x65, 0x44, 0x65, 0x74, 0x65, 0x63, 0x74, 0x41, 0x6e, 0x64, 0x43, 0x6c, 0x69, 0x70, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x73, 0x5f, 0x73, 0x74, 0x61,
+	0x64, 0x49, 0x64, 0x22, 0x54, 0x0a, 0x18, 0x46, 0x61, 0x63, 0x65, 0x44, 0x65, 0x74, 0x65, 0x63,
+	0x74, 0x41, 0x6e, 0x64, 0x43, 0x6c, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x1d, 0x0a, 0x0a, 0x6e, 0x75, 0x72, 0x73, 0x65, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x09, 0x6e, 0x75, 0x72, 0x73, 0x65, 0x72, 0x79, 0x49, 0x64, 0x12, 0x19,
+	0x0a, 0x08, 0x63, 0x68, 0x69, 0x6c, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x63, 0x68, 0x69, 0x6c, 0x64, 0x49, 0x64, 0x22, 0x3a, 0x0a, 0x19, 0x46, 0x61, 0x63,
+	0x65, 0x44, 0x65, 0x74, 0x65, 0x63, 0x74, 0x41, 0x6e, 0x64, 0x43, 0x6c, 0x69, 0x70, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x73, 0x5f, 0x73, 0x74, 0x61,
 	0x72, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x69, 0x73, 0x53, 0x74,
 	0x61, 0x72, 0x74, 0x65, 0x64, 0x32, 0xad, 0x02, 0x0a, 0x16, 0x4d, 0x61, 0x63, 0x68, 0x69, 0x6e,
 	0x65, 0x4c, 0x65, 0x61, 0x72, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
@@ -413,16 +413,16 @@ var file_machine_learning_v1_machine_learning_proto_goTypes = []interface{}{
 	(*TrainResponse)(nil),             // 1: machine_learning.v1.TrainResponse
 	(*PredRequest)(nil),               // 2: machine_learning.v1.PredRequest
 	(*PredResponse)(nil),              // 3: machine_learning.v1.PredResponse
-	(*FaceDetectAndClipResponse)(nil), // 4: machine_learning.v1.FaceDetectAndClipResponse
-	(*FaceDetectAndClipRequest)(nil),  // 5: machine_learning.v1.FaceDetectAndClipRequest
+	(*FaceDetectAndClipRequest)(nil),  // 4: machine_learning.v1.FaceDetectAndClipRequest
+	(*FaceDetectAndClipResponse)(nil), // 5: machine_learning.v1.FaceDetectAndClipResponse
 }
 var file_machine_learning_v1_machine_learning_proto_depIdxs = []int32{
 	0, // 0: machine_learning.v1.MachineLearningService.Train:input_type -> machine_learning.v1.TrainRequest
 	2, // 1: machine_learning.v1.MachineLearningService.Pred:input_type -> machine_learning.v1.PredRequest
-	5, // 2: machine_learning.v1.MachineLearningService.FaceDetectAndClip:input_type -> machine_learning.v1.FaceDetectAndClipRequest
+	4, // 2: machine_learning.v1.MachineLearningService.FaceDetectAndClip:input_type -> machine_learning.v1.FaceDetectAndClipRequest
 	1, // 3: machine_learning.v1.MachineLearningService.Train:output_type -> machine_learning.v1.TrainResponse
 	3, // 4: machine_learning.v1.MachineLearningService.Pred:output_type -> machine_learning.v1.PredResponse
-	4, // 5: machine_learning.v1.MachineLearningService.FaceDetectAndClip:output_type -> machine_learning.v1.FaceDetectAndClipResponse
+	5, // 5: machine_learning.v1.MachineLearningService.FaceDetectAndClip:output_type -> machine_learning.v1.FaceDetectAndClipResponse
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -485,7 +485,7 @@ func file_machine_learning_v1_machine_learning_proto_init() {
 			}
 		}
 		file_machine_learning_v1_machine_learning_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FaceDetectAndClipResponse); i {
+			switch v := v.(*FaceDetectAndClipRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -497,7 +497,7 @@ func file_machine_learning_v1_machine_learning_proto_init() {
 			}
 		}
 		file_machine_learning_v1_machine_learning_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FaceDetectAndClipRequest); i {
+			switch v := v.(*FaceDetectAndClipResponse); i {
 			case 0:
 				return &v.state
 			case 1:

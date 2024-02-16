@@ -27,12 +27,12 @@ message PredResponse {
         repeated string child_id = 1;
 }
 
-message FaceDetectAndClipResponse {
+message FaceDetectAndClipRequest {
         string nursery_id = 1;
         string child_id = 2;
 }
 
-message FaceDetectAndClipRequest {
+message FaceDetectAndClipResponse {
         bool is_started = 1;
 }
 
