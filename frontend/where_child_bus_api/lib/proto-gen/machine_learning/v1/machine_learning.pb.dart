@@ -135,8 +135,8 @@ class TrainResponse extends $pb.GeneratedMessage {
   void clearIsStarted() => clearField(1);
 }
 
-class EvalRequest extends $pb.GeneratedMessage {
-  factory EvalRequest({
+class PredRequest extends $pb.GeneratedMessage {
+  factory PredRequest({
     $core.String? busId,
   }) {
     final $result = create();
@@ -145,11 +145,11 @@ class EvalRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  EvalRequest._() : super();
-  factory EvalRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory EvalRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PredRequest._() : super();
+  factory PredRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PredRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EvalRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..hasRequiredFields = false
   ;
@@ -158,22 +158,22 @@ class EvalRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  EvalRequest clone() => EvalRequest()..mergeFromMessage(this);
+  PredRequest clone() => PredRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  EvalRequest copyWith(void Function(EvalRequest) updates) => super.copyWith((message) => updates(message as EvalRequest)) as EvalRequest;
+  PredRequest copyWith(void Function(PredRequest) updates) => super.copyWith((message) => updates(message as PredRequest)) as PredRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static EvalRequest create() => EvalRequest._();
-  EvalRequest createEmptyInstance() => create();
-  static $pb.PbList<EvalRequest> createRepeated() => $pb.PbList<EvalRequest>();
+  static PredRequest create() => PredRequest._();
+  PredRequest createEmptyInstance() => create();
+  static $pb.PbList<PredRequest> createRepeated() => $pb.PbList<PredRequest>();
   @$core.pragma('dart2js:noInline')
-  static EvalRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EvalRequest>(create);
-  static EvalRequest? _defaultInstance;
+  static PredRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PredRequest>(create);
+  static PredRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get busId => $_getSZ(0);
@@ -185,8 +185,8 @@ class EvalRequest extends $pb.GeneratedMessage {
   void clearBusId() => clearField(1);
 }
 
-class EvalResponse extends $pb.GeneratedMessage {
-  factory EvalResponse({
+class PredResponse extends $pb.GeneratedMessage {
+  factory PredResponse({
     $core.Iterable<$core.String>? childId,
   }) {
     final $result = create();
@@ -195,11 +195,11 @@ class EvalResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  EvalResponse._() : super();
-  factory EvalResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory EvalResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PredResponse._() : super();
+  factory PredResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PredResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EvalResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
     ..pPS(1, _omitFieldNames ? '' : 'childId')
     ..hasRequiredFields = false
   ;
@@ -208,22 +208,22 @@ class EvalResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  EvalResponse clone() => EvalResponse()..mergeFromMessage(this);
+  PredResponse clone() => PredResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  EvalResponse copyWith(void Function(EvalResponse) updates) => super.copyWith((message) => updates(message as EvalResponse)) as EvalResponse;
+  PredResponse copyWith(void Function(PredResponse) updates) => super.copyWith((message) => updates(message as PredResponse)) as PredResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static EvalResponse create() => EvalResponse._();
-  EvalResponse createEmptyInstance() => create();
-  static $pb.PbList<EvalResponse> createRepeated() => $pb.PbList<EvalResponse>();
+  static PredResponse create() => PredResponse._();
+  PredResponse createEmptyInstance() => create();
+  static $pb.PbList<PredResponse> createRepeated() => $pb.PbList<PredResponse>();
   @$core.pragma('dart2js:noInline')
-  static EvalResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EvalResponse>(create);
-  static EvalResponse? _defaultInstance;
+  static PredResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PredResponse>(create);
+  static PredResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.String> get childId => $_getList(0);

@@ -130,7 +130,7 @@ func (x *TrainResponse) GetIsStarted() bool {
 	return false
 }
 
-type EvalRequest struct {
+type PredRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -138,8 +138,8 @@ type EvalRequest struct {
 	BusId string `protobuf:"bytes,1,opt,name=bus_id,json=busId,proto3" json:"bus_id,omitempty"` // TODO: add video data
 }
 
-func (x *EvalRequest) Reset() {
-	*x = EvalRequest{}
+func (x *PredRequest) Reset() {
+	*x = PredRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -147,13 +147,13 @@ func (x *EvalRequest) Reset() {
 	}
 }
 
-func (x *EvalRequest) String() string {
+func (x *PredRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EvalRequest) ProtoMessage() {}
+func (*PredRequest) ProtoMessage() {}
 
-func (x *EvalRequest) ProtoReflect() protoreflect.Message {
+func (x *PredRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -165,19 +165,19 @@ func (x *EvalRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EvalRequest.ProtoReflect.Descriptor instead.
-func (*EvalRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PredRequest.ProtoReflect.Descriptor instead.
+func (*PredRequest) Descriptor() ([]byte, []int) {
 	return file_machine_learning_v1_machine_learning_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *EvalRequest) GetBusId() string {
+func (x *PredRequest) GetBusId() string {
 	if x != nil {
 		return x.BusId
 	}
 	return ""
 }
 
-type EvalResponse struct {
+type PredResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -185,8 +185,8 @@ type EvalResponse struct {
 	ChildId []string `protobuf:"bytes,1,rep,name=child_id,json=childId,proto3" json:"child_id,omitempty"`
 }
 
-func (x *EvalResponse) Reset() {
-	*x = EvalResponse{}
+func (x *PredResponse) Reset() {
+	*x = PredResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -194,13 +194,13 @@ func (x *EvalResponse) Reset() {
 	}
 }
 
-func (x *EvalResponse) String() string {
+func (x *PredResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EvalResponse) ProtoMessage() {}
+func (*PredResponse) ProtoMessage() {}
 
-func (x *EvalResponse) ProtoReflect() protoreflect.Message {
+func (x *PredResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_machine_learning_v1_machine_learning_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -212,12 +212,12 @@ func (x *EvalResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EvalResponse.ProtoReflect.Descriptor instead.
-func (*EvalResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PredResponse.ProtoReflect.Descriptor instead.
+func (*PredResponse) Descriptor() ([]byte, []int) {
 	return file_machine_learning_v1_machine_learning_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *EvalResponse) GetChildId() []string {
+func (x *PredResponse) GetChildId() []string {
 	if x != nil {
 		return x.ChildId
 	}
@@ -342,9 +342,9 @@ var file_machine_learning_v1_machine_learning_proto_rawDesc = []byte{
 	0x49, 0x64, 0x22, 0x2e, 0x0a, 0x0d, 0x54, 0x72, 0x61, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x73, 0x5f, 0x73, 0x74, 0x61, 0x72, 0x74, 0x65,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x69, 0x73, 0x53, 0x74, 0x61, 0x72, 0x74,
-	0x65, 0x64, 0x22, 0x24, 0x0a, 0x0b, 0x45, 0x76, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x65, 0x64, 0x22, 0x24, 0x0a, 0x0b, 0x50, 0x72, 0x65, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
 	0x74, 0x12, 0x15, 0x0a, 0x06, 0x62, 0x75, 0x73, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x05, 0x62, 0x75, 0x73, 0x49, 0x64, 0x22, 0x29, 0x0a, 0x0c, 0x45, 0x76, 0x61, 0x6c,
+	0x09, 0x52, 0x05, 0x62, 0x75, 0x73, 0x49, 0x64, 0x22, 0x29, 0x0a, 0x0c, 0x50, 0x72, 0x65, 0x64,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x63, 0x68, 0x69, 0x6c,
 	0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x63, 0x68, 0x69, 0x6c,
 	0x64, 0x49, 0x64, 0x22, 0x55, 0x0a, 0x19, 0x46, 0x61, 0x63, 0x65, 0x44, 0x65, 0x74, 0x65, 0x63,
@@ -363,11 +363,11 @@ var file_machine_learning_v1_machine_learning_proto_rawDesc = []byte{
 	0x54, 0x72, 0x61, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x22, 0x2e, 0x6d,
 	0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x5f, 0x6c, 0x65, 0x61, 0x72, 0x6e, 0x69, 0x6e, 0x67, 0x2e,
 	0x76, 0x31, 0x2e, 0x54, 0x72, 0x61, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x4f, 0x0a, 0x04, 0x45, 0x76, 0x61, 0x6c, 0x12, 0x20, 0x2e, 0x6d, 0x61, 0x63, 0x68, 0x69,
-	0x6e, 0x65, 0x5f, 0x6c, 0x65, 0x61, 0x72, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x45,
-	0x76, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x6d, 0x61, 0x63,
+	0x12, 0x4f, 0x0a, 0x04, 0x50, 0x72, 0x65, 0x64, 0x12, 0x20, 0x2e, 0x6d, 0x61, 0x63, 0x68, 0x69,
+	0x6e, 0x65, 0x5f, 0x6c, 0x65, 0x61, 0x72, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50,
+	0x72, 0x65, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x6d, 0x61, 0x63,
 	0x68, 0x69, 0x6e, 0x65, 0x5f, 0x6c, 0x65, 0x61, 0x72, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x45, 0x76, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30,
+	0x2e, 0x50, 0x72, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30,
 	0x01, 0x12, 0x72, 0x0a, 0x11, 0x46, 0x61, 0x63, 0x65, 0x44, 0x65, 0x74, 0x65, 0x63, 0x74, 0x41,
 	0x6e, 0x64, 0x43, 0x6c, 0x69, 0x70, 0x12, 0x2d, 0x2e, 0x6d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65,
 	0x5f, 0x6c, 0x65, 0x61, 0x72, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x61, 0x63,
@@ -411,17 +411,17 @@ var file_machine_learning_v1_machine_learning_proto_msgTypes = make([]protoimpl.
 var file_machine_learning_v1_machine_learning_proto_goTypes = []interface{}{
 	(*TrainRequest)(nil),              // 0: machine_learning.v1.TrainRequest
 	(*TrainResponse)(nil),             // 1: machine_learning.v1.TrainResponse
-	(*EvalRequest)(nil),               // 2: machine_learning.v1.EvalRequest
-	(*EvalResponse)(nil),              // 3: machine_learning.v1.EvalResponse
+	(*PredRequest)(nil),               // 2: machine_learning.v1.PredRequest
+	(*PredResponse)(nil),              // 3: machine_learning.v1.PredResponse
 	(*FaceDetectAndClipResponse)(nil), // 4: machine_learning.v1.FaceDetectAndClipResponse
 	(*FaceDetectAndClipRequest)(nil),  // 5: machine_learning.v1.FaceDetectAndClipRequest
 }
 var file_machine_learning_v1_machine_learning_proto_depIdxs = []int32{
 	0, // 0: machine_learning.v1.MachineLearningService.Train:input_type -> machine_learning.v1.TrainRequest
-	2, // 1: machine_learning.v1.MachineLearningService.Eval:input_type -> machine_learning.v1.EvalRequest
+	2, // 1: machine_learning.v1.MachineLearningService.Pred:input_type -> machine_learning.v1.PredRequest
 	5, // 2: machine_learning.v1.MachineLearningService.FaceDetectAndClip:input_type -> machine_learning.v1.FaceDetectAndClipRequest
 	1, // 3: machine_learning.v1.MachineLearningService.Train:output_type -> machine_learning.v1.TrainResponse
-	3, // 4: machine_learning.v1.MachineLearningService.Eval:output_type -> machine_learning.v1.EvalResponse
+	3, // 4: machine_learning.v1.MachineLearningService.Pred:output_type -> machine_learning.v1.PredResponse
 	4, // 5: machine_learning.v1.MachineLearningService.FaceDetectAndClip:output_type -> machine_learning.v1.FaceDetectAndClipResponse
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
@@ -461,7 +461,7 @@ func file_machine_learning_v1_machine_learning_proto_init() {
 			}
 		}
 		file_machine_learning_v1_machine_learning_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EvalRequest); i {
+			switch v := v.(*PredRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -473,7 +473,7 @@ func file_machine_learning_v1_machine_learning_proto_init() {
 			}
 		}
 		file_machine_learning_v1_machine_learning_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EvalResponse); i {
+			switch v := v.(*PredResponse); i {
 			case 0:
 				return &v.state
 			case 1:

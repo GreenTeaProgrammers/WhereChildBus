@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*machine_learning/v1/machine_learning.proto\x12\x13machine_learning.v1\"_\n\x0cTrainRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x03(\tR\x07\x63hildId\x12\x15\n\x06\x62us_id\x18\x03 \x01(\tR\x05\x62usId\".\n\rTrainResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted\"$\n\x0b\x45valRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\")\n\x0c\x45valResponse\x12\x19\n\x08\x63hild_id\x18\x01 \x03(\tR\x07\x63hildId\"U\n\x19\x46\x61\x63\x65\x44\x65tectAndClipResponse\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x01(\tR\x07\x63hildId\"9\n\x18\x46\x61\x63\x65\x44\x65tectAndClipRequest\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted2\xad\x02\n\x16MachineLearningService\x12N\n\x05Train\x12!.machine_learning.v1.TrainRequest\x1a\".machine_learning.v1.TrainResponse\x12O\n\x04\x45val\x12 .machine_learning.v1.EvalRequest\x1a!.machine_learning.v1.EvalResponse(\x01\x30\x01\x12r\n\x11\x46\x61\x63\x65\x44\x65tectAndClip\x12-.machine_learning.v1.FaceDetectAndClipRequest\x1a..machine_learning.v1.FaceDetectAndClipResponseB\x82\x02\n\x17\x63om.machine_learning.v1B\x14MachineLearningProtoP\x01Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\xa2\x02\x03MXX\xaa\x02\x12MachineLearning.V1\xca\x02\x12MachineLearning\\V1\xe2\x02\x1eMachineLearning\\V1\\GPBMetadata\xea\x02\x13MachineLearning::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*machine_learning/v1/machine_learning.proto\x12\x13machine_learning.v1\"_\n\x0cTrainRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x03(\tR\x07\x63hildId\x12\x15\n\x06\x62us_id\x18\x03 \x01(\tR\x05\x62usId\".\n\rTrainResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted\"$\n\x0bPredRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\")\n\x0cPredResponse\x12\x19\n\x08\x63hild_id\x18\x01 \x03(\tR\x07\x63hildId\"U\n\x19\x46\x61\x63\x65\x44\x65tectAndClipResponse\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x01(\tR\x07\x63hildId\"9\n\x18\x46\x61\x63\x65\x44\x65tectAndClipRequest\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted2\xad\x02\n\x16MachineLearningService\x12N\n\x05Train\x12!.machine_learning.v1.TrainRequest\x1a\".machine_learning.v1.TrainResponse\x12O\n\x04Pred\x12 .machine_learning.v1.PredRequest\x1a!.machine_learning.v1.PredResponse(\x01\x30\x01\x12r\n\x11\x46\x61\x63\x65\x44\x65tectAndClip\x12-.machine_learning.v1.FaceDetectAndClipRequest\x1a..machine_learning.v1.FaceDetectAndClipResponseB\x82\x02\n\x17\x63om.machine_learning.v1B\x14MachineLearningProtoP\x01Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\xa2\x02\x03MXX\xaa\x02\x12MachineLearning.V1\xca\x02\x12MachineLearning\\V1\xe2\x02\x1eMachineLearning\\V1\\GPBMetadata\xea\x02\x13MachineLearning::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,10 +26,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_TRAINREQUEST']._serialized_end=162
   _globals['_TRAINRESPONSE']._serialized_start=164
   _globals['_TRAINRESPONSE']._serialized_end=210
-  _globals['_EVALREQUEST']._serialized_start=212
-  _globals['_EVALREQUEST']._serialized_end=248
-  _globals['_EVALRESPONSE']._serialized_start=250
-  _globals['_EVALRESPONSE']._serialized_end=291
+  _globals['_PREDREQUEST']._serialized_start=212
+  _globals['_PREDREQUEST']._serialized_end=248
+  _globals['_PREDRESPONSE']._serialized_start=250
+  _globals['_PREDRESPONSE']._serialized_end=291
   _globals['_FACEDETECTANDCLIPRESPONSE']._serialized_start=293
   _globals['_FACEDETECTANDCLIPRESPONSE']._serialized_end=378
   _globals['_FACEDETECTANDCLIPREQUEST']._serialized_start=380

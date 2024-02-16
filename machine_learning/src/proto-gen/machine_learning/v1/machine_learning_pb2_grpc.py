@@ -22,10 +22,10 @@ class MachineLearningServiceStub(object):
             request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.SerializeToString,
             response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainResponse.FromString,
         )
-        self.Eval = channel.stream_stream(
-            "/machine_learning.v1.MachineLearningService/Eval",
-            request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.EvalRequest.SerializeToString,
-            response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.EvalResponse.FromString,
+        self.Pred = channel.stream_stream(
+            "/machine_learning.v1.MachineLearningService/Pred",
+            request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredRequest.SerializeToString,
+            response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.FromString,
         )
         self.FaceDetectAndClip = channel.unary_unary(
             "/machine_learning.v1.MachineLearningService/FaceDetectAndClip",
@@ -43,7 +43,7 @@ class MachineLearningServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
-    def Eval(self, request_iterator, context):
+    def Pred(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -63,10 +63,10 @@ def add_MachineLearningServiceServicer_to_server(servicer, server):
             request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.FromString,
             response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainResponse.SerializeToString,
         ),
-        "Eval": grpc.stream_stream_rpc_method_handler(
-            servicer.Eval,
-            request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.EvalRequest.FromString,
-            response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.EvalResponse.SerializeToString,
+        "Pred": grpc.stream_stream_rpc_method_handler(
+            servicer.Pred,
+            request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredRequest.FromString,
+            response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.SerializeToString,
         ),
         "FaceDetectAndClip": grpc.unary_unary_rpc_method_handler(
             servicer.FaceDetectAndClip,
@@ -114,7 +114,7 @@ class MachineLearningService(object):
         )
 
     @staticmethod
-    def Eval(
+    def Pred(
         request_iterator,
         target,
         options=(),
@@ -129,9 +129,9 @@ class MachineLearningService(object):
         return grpc.experimental.stream_stream(
             request_iterator,
             target,
-            "/machine_learning.v1.MachineLearningService/Eval",
-            machine__learning_dot_v1_dot_machine__learning__pb2.EvalRequest.SerializeToString,
-            machine__learning_dot_v1_dot_machine__learning__pb2.EvalResponse.FromString,
+            "/machine_learning.v1.MachineLearningService/Pred",
+            machine__learning_dot_v1_dot_machine__learning__pb2.PredRequest.SerializeToString,
+            machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.FromString,
             options,
             channel_credentials,
             insecure,

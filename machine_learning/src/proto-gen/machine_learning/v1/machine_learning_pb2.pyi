@@ -21,13 +21,13 @@ class TrainResponse(_message.Message):
     is_started: bool
     def __init__(self, is_started: bool = ...) -> None: ...
 
-class EvalRequest(_message.Message):
+class PredRequest(_message.Message):
     __slots__ = ("bus_id",)
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
 
-class EvalResponse(_message.Message):
+class PredResponse(_message.Message):
     __slots__ = ("child_id",)
     CHILD_ID_FIELD_NUMBER: _ClassVar[int]
     child_id: _containers.RepeatedScalarFieldContainer[str]
