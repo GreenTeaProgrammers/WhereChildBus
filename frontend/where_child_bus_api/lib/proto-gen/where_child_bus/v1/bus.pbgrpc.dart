@@ -29,6 +29,22 @@ class BusServiceClient extends $grpc.Client {
       '/where_child_bus.v1.BusService/GetBusListByNurseryId',
       ($0.GetBusListByNurseryIdRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetBusListByNurseryIdResponse.fromBuffer(value));
+  static final _$changeBusStatus = $grpc.ClientMethod<$0.ChangeBusStatusRequest, $0.ChangeBusStatusResponse>(
+      '/where_child_bus.v1.BusService/ChangeBusStatus',
+      ($0.ChangeBusStatusRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.ChangeBusStatusResponse.fromBuffer(value));
+  static final _$sendLocationContinuous = $grpc.ClientMethod<$0.SendLocationContinuousRequest, $0.SendLocationContinuousResponse>(
+      '/where_child_bus.v1.BusService/SendLocationContinuous',
+      ($0.SendLocationContinuousRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.SendLocationContinuousResponse.fromBuffer(value));
+  static final _$trackBusContinuous = $grpc.ClientMethod<$0.TrackBusContinuousRequest, $0.TrackBusContinuousResponse>(
+      '/where_child_bus.v1.BusService/TrackBusContinuous',
+      ($0.TrackBusContinuousRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.TrackBusContinuousResponse.fromBuffer(value));
+  static final _$streamBusVideo = $grpc.ClientMethod<$0.StreamBusVideoRequest, $0.StreamBusVideoResponse>(
+      '/where_child_bus.v1.BusService/StreamBusVideo',
+      ($0.StreamBusVideoRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.StreamBusVideoResponse.fromBuffer(value));
 
   BusServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +58,22 @@ class BusServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($0.GetBusListByNurseryIdRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBusListByNurseryId, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ChangeBusStatusResponse> changeBusStatus($0.ChangeBusStatusRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$changeBusStatus, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.SendLocationContinuousResponse> sendLocationContinuous($async.Stream<$0.SendLocationContinuousRequest> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$sendLocationContinuous, request, options: options).single;
+  }
+
+  $grpc.ResponseStream<$0.TrackBusContinuousResponse> trackBusContinuous($0.TrackBusContinuousRequest request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$trackBusContinuous, $async.Stream.fromIterable([request]), options: options);
+  }
+
+  $grpc.ResponseFuture<$0.StreamBusVideoResponse> streamBusVideo($async.Stream<$0.StreamBusVideoRequest> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$streamBusVideo, request, options: options).single;
   }
 }
 
@@ -64,6 +96,34 @@ abstract class BusServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetBusListByNurseryIdRequest.fromBuffer(value),
         ($0.GetBusListByNurseryIdResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ChangeBusStatusRequest, $0.ChangeBusStatusResponse>(
+        'ChangeBusStatus',
+        changeBusStatus_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.ChangeBusStatusRequest.fromBuffer(value),
+        ($0.ChangeBusStatusResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SendLocationContinuousRequest, $0.SendLocationContinuousResponse>(
+        'SendLocationContinuous',
+        sendLocationContinuous,
+        true,
+        false,
+        ($core.List<$core.int> value) => $0.SendLocationContinuousRequest.fromBuffer(value),
+        ($0.SendLocationContinuousResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TrackBusContinuousRequest, $0.TrackBusContinuousResponse>(
+        'TrackBusContinuous',
+        trackBusContinuous_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) => $0.TrackBusContinuousRequest.fromBuffer(value),
+        ($0.TrackBusContinuousResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.StreamBusVideoRequest, $0.StreamBusVideoResponse>(
+        'StreamBusVideo',
+        streamBusVideo,
+        true,
+        false,
+        ($core.List<$core.int> value) => $0.StreamBusVideoRequest.fromBuffer(value),
+        ($0.StreamBusVideoResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateBusResponse> createBus_Pre($grpc.ServiceCall call, $async.Future<$0.CreateBusRequest> request) async {
@@ -74,6 +134,18 @@ abstract class BusServiceBase extends $grpc.Service {
     return getBusListByNurseryId(call, await request);
   }
 
+  $async.Future<$0.ChangeBusStatusResponse> changeBusStatus_Pre($grpc.ServiceCall call, $async.Future<$0.ChangeBusStatusRequest> request) async {
+    return changeBusStatus(call, await request);
+  }
+
+  $async.Stream<$0.TrackBusContinuousResponse> trackBusContinuous_Pre($grpc.ServiceCall call, $async.Future<$0.TrackBusContinuousRequest> request) async* {
+    yield* trackBusContinuous(call, await request);
+  }
+
   $async.Future<$0.CreateBusResponse> createBus($grpc.ServiceCall call, $0.CreateBusRequest request);
   $async.Future<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($grpc.ServiceCall call, $0.GetBusListByNurseryIdRequest request);
+  $async.Future<$0.ChangeBusStatusResponse> changeBusStatus($grpc.ServiceCall call, $0.ChangeBusStatusRequest request);
+  $async.Future<$0.SendLocationContinuousResponse> sendLocationContinuous($grpc.ServiceCall call, $async.Stream<$0.SendLocationContinuousRequest> request);
+  $async.Stream<$0.TrackBusContinuousResponse> trackBusContinuous($grpc.ServiceCall call, $0.TrackBusContinuousRequest request);
+  $async.Future<$0.StreamBusVideoResponse> streamBusVideo($grpc.ServiceCall call, $async.Stream<$0.StreamBusVideoRequest> request);
 }

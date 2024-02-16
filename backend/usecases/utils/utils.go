@@ -17,7 +17,6 @@ func ToPbChild(t *ent.Child) *pb.Child {
 	sex := convertSexToPbSex(t.Sex)
 	return &pb.Child{
 		Id:                   t.ID.String(),
-		NurseryId:            t.Edges.Nursery.ID.String(),
 		GuardianId:           t.Edges.Guardian.ID.String(),
 		Name:                 t.Name,
 		Age:                  int32(t.Age),
@@ -44,6 +43,20 @@ func convertSexToPbSex(sex child.Sex) pb.Sex {
 	default:
 		return pb.Sex_SEX_UNSPECIFIED
 	}
+}
+
+func ConvertPbStatusToEntStatus(pbStatus pb.Status) (*bus.Status, error) {
+        switch pbStatus {
+        case pb.Status_STATUS_RUNNING:
+                status := bus.StatusRunning
+                return &status, nil
+        case pb.Status_STATUS_STOPPED:
+                status := bus.StatusStopped
+                return &status, nil
+        default:
+                // 不正な値の場合はエラーを返す
+                return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
+        }
 }
 
 func ToPbBus(t *ent.Bus) *pb.Bus {

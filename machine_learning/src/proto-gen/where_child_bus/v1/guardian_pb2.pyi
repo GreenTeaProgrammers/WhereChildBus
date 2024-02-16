@@ -1,7 +1,8 @@
 from where_child_bus.v1 import resources_pb2 as _resources_pb2
+from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Optional, Union as _Union
+from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -42,3 +43,15 @@ class GuardianLoginResponse(_message.Message):
     guardian: _resources_pb2.GuardianResponse
     nursery: _resources_pb2.NurseryResponse
     def __init__(self, success: bool = ..., guardian: _Optional[_Union[_resources_pb2.GuardianResponse, _Mapping]] = ..., nursery: _Optional[_Union[_resources_pb2.NurseryResponse, _Mapping]] = ...) -> None: ...
+
+class GetGuardianListByBusIdRequest(_message.Message):
+    __slots__ = ("bus_id",)
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
+
+class GetGuardianListByBusIdResponse(_message.Message):
+    __slots__ = ("guardians",)
+    GUARDIANS_FIELD_NUMBER: _ClassVar[int]
+    guardians: _containers.RepeatedCompositeFieldContainer[_resources_pb2.GuardianResponse]
+    def __init__(self, guardians: _Optional[_Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]] = ...) -> None: ...

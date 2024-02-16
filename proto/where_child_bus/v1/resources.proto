@@ -61,6 +61,12 @@ enum Status {
         STATUS_MAINTEINANCE = 3;
 }
 
+enum VideoType {
+        VIDEO_TYPE_UNSPECIFIED = 0;
+        VIDEO_TYPE_GET_ON = 1;
+        VIDEO_TYPE_GET_OFF = 2;
+}
+
 message Bus {
         string id = 1;
         string nursery_id = 2;

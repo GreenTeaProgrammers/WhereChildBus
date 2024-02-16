@@ -15,16 +15,24 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'machine_learning.pb.dart' as $0;
+import 'machine_learning.pb.dart' as $1;
 
 export 'machine_learning.pb.dart';
 
 @$pb.GrpcServiceName('machine_learning.v1.MachineLearningService')
 class MachineLearningServiceClient extends $grpc.Client {
-  static final _$ping = $grpc.ClientMethod<$0.PingRequest, $0.PingResponse>(
-      '/machine_learning.v1.MachineLearningService/Ping',
-      ($0.PingRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.PingResponse.fromBuffer(value));
+  static final _$train = $grpc.ClientMethod<$1.TrainRequest, $1.TrainResponse>(
+      '/machine_learning.v1.MachineLearningService/Train',
+      ($1.TrainRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.TrainResponse.fromBuffer(value));
+  static final _$pred = $grpc.ClientMethod<$1.PredRequest, $1.PredResponse>(
+      '/machine_learning.v1.MachineLearningService/Pred',
+      ($1.PredRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.PredResponse.fromBuffer(value));
+  static final _$faceDetectAndClip = $grpc.ClientMethod<$1.FaceDetectAndClipRequest, $1.FaceDetectAndClipResponse>(
+      '/machine_learning.v1.MachineLearningService/FaceDetectAndClip',
+      ($1.FaceDetectAndClipRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.FaceDetectAndClipResponse.fromBuffer(value));
 
   MachineLearningServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -32,8 +40,16 @@ class MachineLearningServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.PingResponse> ping($0.PingRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$ping, request, options: options);
+  $grpc.ResponseFuture<$1.TrainResponse> train($1.TrainRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$train, request, options: options);
+  }
+
+  $grpc.ResponseStream<$1.PredResponse> pred($async.Stream<$1.PredRequest> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$pred, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.FaceDetectAndClipResponse> faceDetectAndClip($1.FaceDetectAndClipRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$faceDetectAndClip, request, options: options);
   }
 }
 
@@ -42,18 +58,38 @@ abstract class MachineLearningServiceBase extends $grpc.Service {
   $core.String get $name => 'machine_learning.v1.MachineLearningService';
 
   MachineLearningServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.PingRequest, $0.PingResponse>(
-        'Ping',
-        ping_Pre,
+    $addMethod($grpc.ServiceMethod<$1.TrainRequest, $1.TrainResponse>(
+        'Train',
+        train_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.PingRequest.fromBuffer(value),
-        ($0.PingResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $1.TrainRequest.fromBuffer(value),
+        ($1.TrainResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.PredRequest, $1.PredResponse>(
+        'Pred',
+        pred,
+        true,
+        true,
+        ($core.List<$core.int> value) => $1.PredRequest.fromBuffer(value),
+        ($1.PredResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.FaceDetectAndClipRequest, $1.FaceDetectAndClipResponse>(
+        'FaceDetectAndClip',
+        faceDetectAndClip_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.FaceDetectAndClipRequest.fromBuffer(value),
+        ($1.FaceDetectAndClipResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.PingResponse> ping_Pre($grpc.ServiceCall call, $async.Future<$0.PingRequest> request) async {
-    return ping(call, await request);
+  $async.Future<$1.TrainResponse> train_Pre($grpc.ServiceCall call, $async.Future<$1.TrainRequest> request) async {
+    return train(call, await request);
   }
 
-  $async.Future<$0.PingResponse> ping($grpc.ServiceCall call, $0.PingRequest request);
+  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip_Pre($grpc.ServiceCall call, $async.Future<$1.FaceDetectAndClipRequest> request) async {
+    return faceDetectAndClip(call, await request);
+  }
+
+  $async.Future<$1.TrainResponse> train($grpc.ServiceCall call, $1.TrainRequest request);
+  $async.Stream<$1.PredResponse> pred($grpc.ServiceCall call, $async.Stream<$1.PredRequest> request);
+  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip($grpc.ServiceCall call, $1.FaceDetectAndClipRequest request);
 }

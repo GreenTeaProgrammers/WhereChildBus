@@ -66,15 +66,20 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 	// 子供のレコードを作成
 	child, err := tx.Child.
 		Create().
-		SetNurseryID(nurseryID).
 		SetGuardianID(guardianID).
 		SetName(req.Name).
 		SetAge(age).
 		SetSex(*sex).
 		Save(ctx)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to create child: %w", err)
 	}
+
+	child, err = tx.Child.Query().
+		Where(childRepo.IDEQ(child.ID)).
+		WithGuardian().
+		Only(ctx)
 
 	// アップロードされた写真のIDを追跡するスライス
 	var uploadedPhotoIDs []uuid.UUID
@@ -138,7 +143,9 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 	}
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
-		return tx.Child.Query().Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))), nil
+		return tx.Child.Query().
+		Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
+		WithGuardian(), nil
 	})
 
 	if err != nil {
@@ -154,8 +161,12 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 		return nil, fmt.Errorf("failed to parse nursery ID '%s': %w", req.NurseryId, err)
 	}
 
+	// 子供と保育園の間に親を介在させるためのクエリを修正
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
-		return tx.Child.Query().Where(childRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))), nil
+		// 子供のクエリを作成する際に、親を介した保育園の条件を追加
+		return tx.Child.Query().
+			Where(childRepo.HasGuardianWith(guardianRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID)))).
+			WithGuardian(), nil
 	})
 
 	if err != nil {
@@ -171,25 +182,22 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
 	}
 
-	// childBusAssociationテーブルからバスIDに紐づく子供のIDを取得
-	associations, err := i.entClient.ChildBusAssociation.Query().Where(childBusAssociationRepo.BusIDEQ(busID)).All(ctx)
+	// バスIDに紐づく子供のIDを中間テーブルを通じて取得
+	children, err := i.entClient.Child.Query().
+		Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
+		WithGuardian().
+		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get child associations: %w", err)
+		return nil, fmt.Errorf("failed to get children by bus ID: %w", err)
 	}
 
-	var children []*pb.Child
-	for _, association := range associations {
-		child, err := i.entClient.Child.Get(ctx, association.ChildID)
-		if err != nil {
-			i.logger.Error("failed to get child details", "childID", association.ChildID, "error", err)
-			continue // エラーがあった場合はその子供をスキップ
-		}
-
-		pbChild := utils.ToPbChild(child)
-		children = append(children, pbChild)
+	// 子供の情報をプロトコルバッファ形式に変換
+	pbChildren := make([]*pb.Child, 0, len(children))
+	for _, child := range children {
+		pbChildren = append(pbChildren, utils.ToPbChild(child))
 	}
 
-	return &pb.GetChildListByBusIDResponse{Children: children}, nil
+	return &pb.GetChildListByBusIDResponse{Children: pbChildren}, nil
 }
 
 // getChildList abstracts the common logic for fetching child lists.

@@ -14,9 +14,11 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
+	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
+	childbusassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
+	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
+	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 )
 
 type Interactor struct {
@@ -51,8 +53,19 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		SetName(req.Name).
 		SetPlateNumber(req.PlateNumber).
 		Save(ctx)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to create bus: %w", err)
+	}
+
+	// Nurseryエッジを持つBusを取得
+	bus, err = tx.Bus.Query().
+		Where(busRepo.IDEQ(bus.ID)).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get bus: %w", err)
 	}
 
 	err = setNextStation(ctx, tx, req.MorningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
@@ -67,6 +80,49 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	})
 	if err != nil {
 		return nil, err // 夕方のステーション設定中にエラーが発生しました
+	}
+	// 以下のコードはリファクタリング後のメインの処理フローです。
+
+	morningGuardianIDs, err := parseGuardianIDs(req.MorningGuardianIds)
+	if err != nil {
+		return nil, err // エラーハンドリングは簡潔に
+	}
+
+	eveningGuardianIDs, err := parseGuardianIDs(req.EveningGuardianIds)
+	if err != nil {
+		return nil, err // エラーハンドリングは簡潔に
+	}
+
+	// ステーションの取得処理は変更なし
+	stations, err := tx.Station.Query().
+		Where(stationRepo.HasGuardianWith(guardianRepo.IDIn(morningGuardianIDs...))).
+		Where(stationRepo.HasGuardianWith(guardianRepo.IDIn(eveningGuardianIDs...))).
+		All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get stations: %w", err)
+	}
+
+	// 子供たちの処理を関数を用いて簡潔に
+	morningChildren := tx.Child.Query().
+		Where(childRepo.HasGuardianWith(guardianRepo.IDIn(morningGuardianIDs...))).AllX(ctx)
+	if err := createChildBusAssociations(ctx, tx, morningChildren, bus, childbusassociationRepo.BusTypeMorning); err != nil {
+		return nil, err
+	}
+
+	eveningChildren := tx.Child.Query().
+		Where(childRepo.HasGuardianWith(guardianRepo.IDIn(eveningGuardianIDs...))).AllX(ctx)
+	if err := createChildBusAssociations(ctx, tx, eveningChildren, bus, childbusassociationRepo.BusTypeEvening); err != nil {
+		return nil, err
+	}
+
+	// ステーションの更新処理は変更なし
+	for _, station := range stations {
+		_, err = tx.Bus.UpdateOne(bus).
+			AddStations(station).
+			Save(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to update bus with stations: %w", err)
+		}
 	}
 
 	//TODO: CloudFunctionにバスの作成を通知
@@ -84,6 +140,34 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	}, nil
 }
 
+// parseGuardianIDs は、指定されたガーディアンIDの文字列のスライスをUUIDのスライスに変換します。
+func parseGuardianIDs(ids []string) ([]uuid.UUID, error) {
+	parsedIDs := make([]uuid.UUID, len(ids))
+	for i, id := range ids {
+		parsedID, err := uuid.Parse(id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse guardian ID '%s': %w", id, err)
+		}
+		parsedIDs[i] = parsedID
+	}
+	return parsedIDs, nil
+}
+
+// createChildBusAssociations は、指定された子供たちに対してBusChildAssociationを作成します。
+func createChildBusAssociations(ctx context.Context, tx *ent.Tx, children []*ent.Child, bus *ent.Bus, busType childbusassociationRepo.BusType) error {
+	for _, child := range children {
+		_, err := tx.ChildBusAssociation.Create().
+			SetChild(child).
+			SetBus(bus).
+			SetBusType(busType).
+			Save(ctx) // ctxを関数の引数から渡す
+		if err != nil {
+			return fmt.Errorf("failed to create bus child association: %w", err)
+		}
+	}
+	return nil
+}
+
 func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusListByNurseryIdRequest) (*pb.GetBusListByNurseryIdResponse, error) {
 	nurseryID, err := uuid.Parse(req.NurseryId)
 	if err != nil {
@@ -91,7 +175,9 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	}
 
 	buses, err := i.getBusList(ctx, func(tx *ent.Tx) (*ent.BusQuery, error) {
-		return tx.Bus.Query().Where(busRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))), nil
+		return tx.Bus.Query().
+			Where(busRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))).
+			WithNursery(), nil
 	})
 
 	if err != nil {
@@ -99,6 +185,46 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	}
 
 	return &pb.GetBusListByNurseryIdResponse{Buses: buses}, nil
+}
+
+func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatusRequest) (*pb.ChangeBusStatusResponse, error) {
+	busID, err := uuid.Parse(req.BusId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+	}
+
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction: %w", err)
+	}
+
+	status, err := utils.ConvertPbStatusToEntStatus(req.Status)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert status: %w", err)
+	}
+
+	bus, err := tx.Bus.UpdateOneID(busID).
+		SetStatus(*status).
+		Save(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to update bus: %w", err)
+	}
+
+	// Nurseryエッジを持つBusを取得
+	bus, err = tx.Bus.Query().
+		Where(busRepo.IDEQ(bus.ID)).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get bus: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
 }
 
 func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.BusQuery, error)) ([]*pb.Bus, error) {
@@ -138,7 +264,7 @@ func setNextStation(ctx context.Context, tx *ent.Tx, guardianIDs []string, setNe
 		}
 
 		currentStation, err := tx.Station.Query().
-			Where(station.HasGuardianWith(guardian.IDEQ(guardianIDParsed))).
+			Where(stationRepo.HasGuardianWith(guardianRepo.IDEQ(guardianIDParsed))).
 			Only(ctx)
 		if err != nil {
 			return fmt.Errorf("failed to find station for guardian ID '%s': %w", guardianID, err)
@@ -152,7 +278,7 @@ func setNextStation(ctx context.Context, tx *ent.Tx, guardianIDs []string, setNe
 			}
 
 			nextStation, err := tx.Station.Query().
-				Where(station.HasGuardianWith(guardian.IDEQ(nextGuardianIDParsed))).
+				Where(stationRepo.HasGuardianWith(guardianRepo.IDEQ(nextGuardianIDParsed))).
 				Only(ctx)
 			if err != nil {
 				return fmt.Errorf("failed to find next station for guardian ID '%s': %w", nextGuardianID, err)

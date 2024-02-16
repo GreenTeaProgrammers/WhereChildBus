@@ -2,6 +2,8 @@ package nursery
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"golang.org/x/exp/slog"
 
@@ -30,11 +32,29 @@ func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryReq
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
 
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction: %w", err)
+	}
+	defer tx.Rollback()
+
+	// nurseryコード(レコードに存在しない)
+	// 生成したコードが既存のコードと重複していないか確認
+	var code string
+	for {
+		code = generateCode()
+		_, err := tx.Nursery.Query().Where(nurseryRepo.NurseryCode(code)).Only(ctx)
+		if err != nil {
+			break
+		}
+	}
+
 	//Nurseryを作成
-	nursery, err := i.entClient.Nursery.Create().
+	nursery, err := tx.Nursery.Create().
 		SetName(req.Name).
 		SetEmail(req.Email).
 		SetHashedPassword(string(hashedPassword)).
+		SetNurseryCode(code).
 		SetPhoneNumber(req.PhoneNumber).
 		SetAddress(req.Address).
 		Save(ctx)
@@ -42,6 +62,10 @@ func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryReq
 	if err != nil {
 		//エラーハンドリング
 		return nil, fmt.Errorf("failed to create nursery: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
 	}
 
 	return &pb.CreateNurseryResponse{
@@ -80,4 +104,17 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 		Success: true,
 		Nursery: utils.ToPbNurseryResponse(nursery),
 	}, nil
+}
+
+// コード生成
+func generateCode() string {
+	rand.Seed(time.Now().UnixNano()) // 現在時刻をシード値として乱数生成器を初期化
+
+	code := ""               // 空の文字列でコードを初期化
+	for i := 0; i < 7; i++ { // 7桁のコードを生成
+		digit := rand.Intn(10)           // 0から9までの乱数を生成
+		code += fmt.Sprintf("%d", digit) // 数字を文字列に変換してコードに追加
+	}
+
+	return code
 }

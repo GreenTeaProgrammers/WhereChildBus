@@ -13,6 +13,12 @@ class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     STATUS_RUNNING: _ClassVar[Status]
     STATUS_MAINTEINANCE: _ClassVar[Status]
 
+class VideoType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    VIDEO_TYPE_UNSPECIFIED: _ClassVar[VideoType]
+    VIDEO_TYPE_GET_ON: _ClassVar[VideoType]
+    VIDEO_TYPE_GET_OFF: _ClassVar[VideoType]
+
 class Sex(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     SEX_UNSPECIFIED: _ClassVar[Sex]
@@ -29,6 +35,9 @@ STATUS_UNSPECIFIED: Status
 STATUS_STOPPED: Status
 STATUS_RUNNING: Status
 STATUS_MAINTEINANCE: Status
+VIDEO_TYPE_UNSPECIFIED: VideoType
+VIDEO_TYPE_GET_ON: VideoType
+VIDEO_TYPE_GET_OFF: VideoType
 SEX_UNSPECIFIED: Sex
 SEX_MAN: Sex
 SEX_WOMAN: Sex
