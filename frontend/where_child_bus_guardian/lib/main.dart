@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:where_child_bus_guardian/app.dart';
 import './components/utils/google_map_view.dart';
 
-void main() async {
+Future main() async {
+  await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());

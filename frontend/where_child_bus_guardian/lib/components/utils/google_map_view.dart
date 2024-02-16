@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
@@ -38,7 +39,7 @@ class _GoogleMapView extends State<GoogleMapView> {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleApiKey = "AIzaSyBC2_JlaB3eKncYG6meIQsqlzqgAqfhVLI";
+  String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
 
   @override
   void initState() {
@@ -50,8 +51,6 @@ class _GoogleMapView extends State<GoogleMapView> {
       _addMarker(LatLng(waypoint.latitude, waypoint.longitude), waypoint.name,
           BitmapDescriptor.defaultMarkerWithHue(90));
     });
-
-    _getPolyline(waypoints);
   }
 
   @override
@@ -64,6 +63,7 @@ class _GoogleMapView extends State<GoogleMapView> {
           mapType: MapType.normal,
           onMapCreated: (GoogleMapController controller) {
             mapController = controller;
+            _getPolyline(waypoints);
           },
           markers: Set<Marker>.of(markers.values),
           polylines: Set<Polyline>.of(polylines.values),
