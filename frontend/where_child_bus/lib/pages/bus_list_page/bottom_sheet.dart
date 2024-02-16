@@ -6,7 +6,16 @@ import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.
 import 'package:where_child_bus/pages/bus_list_page/bus_passenger_page/bus_passenger_page.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
-class BottomSheetWidget extends StatelessWidget {
+class BottomSheetWidget extends StatefulWidget {
+  final Bus bus;
+
+  const BottomSheetWidget({super.key, required this.bus});
+
+  @override
+  _BottomSheetWidgetState createState() => _BottomSheetWidgetState();
+}
+
+class _BottomSheetWidgetState extends State<BottomSheetWidget> {
   final busStations = [
     "station1",
     "station2",
@@ -19,9 +28,6 @@ class BottomSheetWidget extends StatelessWidget {
     "station7",
     "station7"
   ];
-  final Bus bus;
-
-  BottomSheetWidget({super.key, required this.bus});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class BottomSheetWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // titleText(),
-        modalHeader(bus.name, "test"),
+        modalHeader(widget.bus.name, "test"),
         StationsList(busStationsList: busStations),
         ConfirmButton(
           buttonText: "乗客情報",
@@ -92,7 +98,7 @@ class BottomSheetWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          busThumbnail(bus.status),
+          busThumbnail(widget.bus.status),
           courseAndOperator(busCourseName, busOperatorName),
         ],
       ),
