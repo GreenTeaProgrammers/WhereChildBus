@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
@@ -26,7 +25,6 @@ type NurseryQuery struct {
 	order         []nursery.OrderOption
 	inters        []Interceptor
 	predicates    []predicate.Nursery
-	withChildren  *ChildQuery
 	withGuardians *GuardianQuery
 	withBuses     *BusQuery
 	// intermediate query (i.e. traversal path).
@@ -63,28 +61,6 @@ func (nq *NurseryQuery) Unique(unique bool) *NurseryQuery {
 func (nq *NurseryQuery) Order(o ...nursery.OrderOption) *NurseryQuery {
 	nq.order = append(nq.order, o...)
 	return nq
-}
-
-// QueryChildren chains the current query on the "children" edge.
-func (nq *NurseryQuery) QueryChildren() *ChildQuery {
-	query := (&ChildClient{config: nq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := nq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(nursery.Table, nursery.FieldID, selector),
-			sqlgraph.To(child.Table, child.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, nursery.ChildrenTable, nursery.ChildrenColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // QueryGuardians chains the current query on the "guardians" edge.
@@ -323,24 +299,12 @@ func (nq *NurseryQuery) Clone() *NurseryQuery {
 		order:         append([]nursery.OrderOption{}, nq.order...),
 		inters:        append([]Interceptor{}, nq.inters...),
 		predicates:    append([]predicate.Nursery{}, nq.predicates...),
-		withChildren:  nq.withChildren.Clone(),
 		withGuardians: nq.withGuardians.Clone(),
 		withBuses:     nq.withBuses.Clone(),
 		// clone intermediate query.
 		sql:  nq.sql.Clone(),
 		path: nq.path,
 	}
-}
-
-// WithChildren tells the query-builder to eager-load the nodes that are connected to
-// the "children" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NurseryQuery) WithChildren(opts ...func(*ChildQuery)) *NurseryQuery {
-	query := (&ChildClient{config: nq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	nq.withChildren = query
-	return nq
 }
 
 // WithGuardians tells the query-builder to eager-load the nodes that are connected to
@@ -443,8 +407,7 @@ func (nq *NurseryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Nurs
 	var (
 		nodes       = []*Nursery{}
 		_spec       = nq.querySpec()
-		loadedTypes = [3]bool{
-			nq.withChildren != nil,
+		loadedTypes = [2]bool{
 			nq.withGuardians != nil,
 			nq.withBuses != nil,
 		}
@@ -467,13 +430,6 @@ func (nq *NurseryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Nurs
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := nq.withChildren; query != nil {
-		if err := nq.loadChildren(ctx, query, nodes,
-			func(n *Nursery) { n.Edges.Children = []*Child{} },
-			func(n *Nursery, e *Child) { n.Edges.Children = append(n.Edges.Children, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := nq.withGuardians; query != nil {
 		if err := nq.loadGuardians(ctx, query, nodes,
 			func(n *Nursery) { n.Edges.Guardians = []*Guardian{} },
@@ -491,37 +447,6 @@ func (nq *NurseryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Nurs
 	return nodes, nil
 }
 
-func (nq *NurseryQuery) loadChildren(ctx context.Context, query *ChildQuery, nodes []*Nursery, init func(*Nursery), assign func(*Nursery, *Child)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*Nursery)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Child(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(nursery.ChildrenColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.child_nursery
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "child_nursery" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "child_nursery" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (nq *NurseryQuery) loadGuardians(ctx context.Context, query *GuardianQuery, nodes []*Nursery, init func(*Nursery), assign func(*Nursery, *Guardian)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[uuid.UUID]*Nursery)

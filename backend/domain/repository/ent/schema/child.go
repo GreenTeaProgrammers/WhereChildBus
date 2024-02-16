@@ -41,8 +41,6 @@ func (Child) Edges() []ent.Edge {
 			Ref("children").
 			Unique(),
 		edge.To("childBusAssociations", ChildBusAssociation.Type),
-		edge.To("nursery", Nursery.Type).
-			Unique(),
 		edge.To("boarding_record", BoardingRecord.Type),
 		edge.To("photos", ChildPhoto.Type),
 	}

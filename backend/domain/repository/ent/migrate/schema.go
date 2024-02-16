@@ -77,7 +77,6 @@ var (
 		{Name: "has_other", Type: field.TypeBool, Default: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "child_nursery", Type: field.TypeUUID, Nullable: true},
 		{Name: "guardian_children", Type: field.TypeUUID, Nullable: true},
 	}
 	// ChildsTable holds the schema information for the "childs" table.
@@ -87,14 +86,8 @@ var (
 		PrimaryKey: []*schema.Column{ChildsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "childs_nurseries_nursery",
-				Columns:    []*schema.Column{ChildsColumns[12]},
-				RefColumns: []*schema.Column{NurseriesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "childs_guardians_children",
-				Columns:    []*schema.Column{ChildsColumns[13]},
+				Columns:    []*schema.Column{ChildsColumns[12]},
 				RefColumns: []*schema.Column{GuardiansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -151,7 +144,7 @@ var (
 	// GuardiansColumns holds the columns for the "guardians" table.
 	GuardiansColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "email", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "hashed_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
@@ -179,7 +172,7 @@ var (
 	NurseriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "nursery_code", Type: field.TypeString, Unique: true},
-		{Name: "email", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "hashed_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "address", Type: field.TypeString, Nullable: true},
@@ -273,8 +266,7 @@ func init() {
 	BoardingRecordsTable.ForeignKeys[0].RefTable = BusTable
 	BoardingRecordsTable.ForeignKeys[1].RefTable = ChildsTable
 	BusTable.ForeignKeys[0].RefTable = NurseriesTable
-	ChildsTable.ForeignKeys[0].RefTable = NurseriesTable
-	ChildsTable.ForeignKeys[1].RefTable = GuardiansTable
+	ChildsTable.ForeignKeys[0].RefTable = GuardiansTable
 	ChildBusAssociationsTable.ForeignKeys[0].RefTable = BusTable
 	ChildBusAssociationsTable.ForeignKeys[1].RefTable = ChildsTable
 	ChildPhotosTable.ForeignKeys[0].RefTable = ChildsTable
