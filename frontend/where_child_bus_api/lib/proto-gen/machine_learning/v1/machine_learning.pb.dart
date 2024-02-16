@@ -293,8 +293,8 @@ class FaceDetectAndClipResponse extends $pb.GeneratedMessage {
   void clearChildId() => clearField(2);
 }
 
-class FaceAndClipRequest extends $pb.GeneratedMessage {
-  factory FaceAndClipRequest({
+class FaceDetectAndClipRequest extends $pb.GeneratedMessage {
+  factory FaceDetectAndClipRequest({
     $core.bool? isStarted,
   }) {
     final $result = create();
@@ -303,11 +303,11 @@ class FaceAndClipRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  FaceAndClipRequest._() : super();
-  factory FaceAndClipRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FaceAndClipRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  FaceDetectAndClipRequest._() : super();
+  factory FaceDetectAndClipRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory FaceDetectAndClipRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceAndClipRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceDetectAndClipRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'isStarted')
     ..hasRequiredFields = false
   ;
@@ -316,22 +316,22 @@ class FaceAndClipRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  FaceAndClipRequest clone() => FaceAndClipRequest()..mergeFromMessage(this);
+  FaceDetectAndClipRequest clone() => FaceDetectAndClipRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  FaceAndClipRequest copyWith(void Function(FaceAndClipRequest) updates) => super.copyWith((message) => updates(message as FaceAndClipRequest)) as FaceAndClipRequest;
+  FaceDetectAndClipRequest copyWith(void Function(FaceDetectAndClipRequest) updates) => super.copyWith((message) => updates(message as FaceDetectAndClipRequest)) as FaceDetectAndClipRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static FaceAndClipRequest create() => FaceAndClipRequest._();
-  FaceAndClipRequest createEmptyInstance() => create();
-  static $pb.PbList<FaceAndClipRequest> createRepeated() => $pb.PbList<FaceAndClipRequest>();
+  static FaceDetectAndClipRequest create() => FaceDetectAndClipRequest._();
+  FaceDetectAndClipRequest createEmptyInstance() => create();
+  static $pb.PbList<FaceDetectAndClipRequest> createRepeated() => $pb.PbList<FaceDetectAndClipRequest>();
   @$core.pragma('dart2js:noInline')
-  static FaceAndClipRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceAndClipRequest>(create);
-  static FaceAndClipRequest? _defaultInstance;
+  static FaceDetectAndClipRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceDetectAndClipRequest>(create);
+  static FaceDetectAndClipRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get isStarted => $_getBF(0);

@@ -30,7 +30,7 @@ const (
 type MachineLearningServiceClient interface {
 	Train(ctx context.Context, in *TrainRequest, opts ...grpc.CallOption) (*TrainResponse, error)
 	Eval(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_EvalClient, error)
-	FaceDetectAndClip(ctx context.Context, in *FaceAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error)
+	FaceDetectAndClip(ctx context.Context, in *FaceDetectAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error)
 }
 
 type machineLearningServiceClient struct {
@@ -81,7 +81,7 @@ func (x *machineLearningServiceEvalClient) Recv() (*EvalResponse, error) {
 	return m, nil
 }
 
-func (c *machineLearningServiceClient) FaceDetectAndClip(ctx context.Context, in *FaceAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error) {
+func (c *machineLearningServiceClient) FaceDetectAndClip(ctx context.Context, in *FaceDetectAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error) {
 	out := new(FaceDetectAndClipResponse)
 	err := c.cc.Invoke(ctx, MachineLearningService_FaceDetectAndClip_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -96,7 +96,7 @@ func (c *machineLearningServiceClient) FaceDetectAndClip(ctx context.Context, in
 type MachineLearningServiceServer interface {
 	Train(context.Context, *TrainRequest) (*TrainResponse, error)
 	Eval(MachineLearningService_EvalServer) error
-	FaceDetectAndClip(context.Context, *FaceAndClipRequest) (*FaceDetectAndClipResponse, error)
+	FaceDetectAndClip(context.Context, *FaceDetectAndClipRequest) (*FaceDetectAndClipResponse, error)
 }
 
 // UnimplementedMachineLearningServiceServer should be embedded to have forward compatible implementations.
@@ -109,7 +109,7 @@ func (UnimplementedMachineLearningServiceServer) Train(context.Context, *TrainRe
 func (UnimplementedMachineLearningServiceServer) Eval(MachineLearningService_EvalServer) error {
 	return status.Errorf(codes.Unimplemented, "method Eval not implemented")
 }
-func (UnimplementedMachineLearningServiceServer) FaceDetectAndClip(context.Context, *FaceAndClipRequest) (*FaceDetectAndClipResponse, error) {
+func (UnimplementedMachineLearningServiceServer) FaceDetectAndClip(context.Context, *FaceDetectAndClipRequest) (*FaceDetectAndClipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FaceDetectAndClip not implemented")
 }
 
@@ -169,7 +169,7 @@ func (x *machineLearningServiceEvalServer) Recv() (*EvalRequest, error) {
 }
 
 func _MachineLearningService_FaceDetectAndClip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FaceAndClipRequest)
+	in := new(FaceDetectAndClipRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -181,7 +181,7 @@ func _MachineLearningService_FaceDetectAndClip_Handler(srv interface{}, ctx cont
 		FullMethod: MachineLearningService_FaceDetectAndClip_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineLearningServiceServer).FaceDetectAndClip(ctx, req.(*FaceAndClipRequest))
+		return srv.(MachineLearningServiceServer).FaceDetectAndClip(ctx, req.(*FaceDetectAndClipRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -29,9 +29,9 @@ class MachineLearningServiceClient extends $grpc.Client {
       '/machine_learning.v1.MachineLearningService/Eval',
       ($1.EvalRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.EvalResponse.fromBuffer(value));
-  static final _$faceDetectAndClip = $grpc.ClientMethod<$1.FaceAndClipRequest, $1.FaceDetectAndClipResponse>(
+  static final _$faceDetectAndClip = $grpc.ClientMethod<$1.FaceDetectAndClipRequest, $1.FaceDetectAndClipResponse>(
       '/machine_learning.v1.MachineLearningService/FaceDetectAndClip',
-      ($1.FaceAndClipRequest value) => value.writeToBuffer(),
+      ($1.FaceDetectAndClipRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.FaceDetectAndClipResponse.fromBuffer(value));
 
   MachineLearningServiceClient($grpc.ClientChannel channel,
@@ -48,7 +48,7 @@ class MachineLearningServiceClient extends $grpc.Client {
     return $createStreamingCall(_$eval, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.FaceDetectAndClipResponse> faceDetectAndClip($1.FaceAndClipRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$1.FaceDetectAndClipResponse> faceDetectAndClip($1.FaceDetectAndClipRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$faceDetectAndClip, request, options: options);
   }
 }
@@ -72,12 +72,12 @@ abstract class MachineLearningServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $1.EvalRequest.fromBuffer(value),
         ($1.EvalResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.FaceAndClipRequest, $1.FaceDetectAndClipResponse>(
+    $addMethod($grpc.ServiceMethod<$1.FaceDetectAndClipRequest, $1.FaceDetectAndClipResponse>(
         'FaceDetectAndClip',
         faceDetectAndClip_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $1.FaceAndClipRequest.fromBuffer(value),
+        ($core.List<$core.int> value) => $1.FaceDetectAndClipRequest.fromBuffer(value),
         ($1.FaceDetectAndClipResponse value) => value.writeToBuffer()));
   }
 
@@ -85,11 +85,11 @@ abstract class MachineLearningServiceBase extends $grpc.Service {
     return train(call, await request);
   }
 
-  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip_Pre($grpc.ServiceCall call, $async.Future<$1.FaceAndClipRequest> request) async {
+  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip_Pre($grpc.ServiceCall call, $async.Future<$1.FaceDetectAndClipRequest> request) async {
     return faceDetectAndClip(call, await request);
   }
 
   $async.Future<$1.TrainResponse> train($grpc.ServiceCall call, $1.TrainRequest request);
   $async.Stream<$1.EvalResponse> eval($grpc.ServiceCall call, $async.Stream<$1.EvalRequest> request);
-  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip($grpc.ServiceCall call, $1.FaceAndClipRequest request);
+  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip($grpc.ServiceCall call, $1.FaceDetectAndClipRequest request);
 }

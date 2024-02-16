@@ -5,7 +5,7 @@ package machine_learning.v1;
 service MachineLearningService {
         rpc Train(TrainRequest) returns (TrainResponse);
         rpc Eval(stream EvalRequest) returns (stream EvalResponse);
-        rpc FaceDetectAndClip(FaceAndClipRequest) returns (FaceDetectAndClipResponse);
+        rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
 message TrainRequest {
@@ -32,7 +32,7 @@ message FaceDetectAndClipResponse {
         string child_id = 2;
 }
 
-message FaceAndClipRequest {
+message FaceDetectAndClipRequest {
         bool is_started = 1;
 }
 

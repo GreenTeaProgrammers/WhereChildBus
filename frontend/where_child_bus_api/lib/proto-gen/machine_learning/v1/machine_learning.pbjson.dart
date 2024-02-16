@@ -78,15 +78,16 @@ final $typed_data.Uint8List faceDetectAndClipResponseDescriptor = $convert.base6
     'ChlGYWNlRGV0ZWN0QW5kQ2xpcFJlc3BvbnNlEh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcn'
     'lJZBIZCghjaGlsZF9pZBgCIAEoCVIHY2hpbGRJZA==');
 
-@$core.Deprecated('Use faceAndClipRequestDescriptor instead')
-const FaceAndClipRequest$json = {
-  '1': 'FaceAndClipRequest',
+@$core.Deprecated('Use faceDetectAndClipRequestDescriptor instead')
+const FaceDetectAndClipRequest$json = {
+  '1': 'FaceDetectAndClipRequest',
   '2': [
     {'1': 'is_started', '3': 1, '4': 1, '5': 8, '10': 'isStarted'},
   ],
 };
 
-/// Descriptor for `FaceAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List faceAndClipRequestDescriptor = $convert.base64Decode(
-    'ChJGYWNlQW5kQ2xpcFJlcXVlc3QSHQoKaXNfc3RhcnRlZBgBIAEoCFIJaXNTdGFydGVk');
+/// Descriptor for `FaceDetectAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List faceDetectAndClipRequestDescriptor = $convert.base64Decode(
+    'ChhGYWNlRGV0ZWN0QW5kQ2xpcFJlcXVlc3QSHQoKaXNfc3RhcnRlZBgBIAEoCFIJaXNTdGFydG'
+    'Vk');
 

@@ -41,7 +41,7 @@ class FaceDetectAndClipResponse(_message.Message):
     child_id: str
     def __init__(self, nursery_id: _Optional[str] = ..., child_id: _Optional[str] = ...) -> None: ...
 
-class FaceAndClipRequest(_message.Message):
+class FaceDetectAndClipRequest(_message.Message):
     __slots__ = ("is_started",)
     IS_STARTED_FIELD_NUMBER: _ClassVar[int]
     is_started: bool
