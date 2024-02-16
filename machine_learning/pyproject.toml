@@ -12,6 +12,8 @@ dependencies = [
     "tqdm>=4.66.2",
     "google-cloud-storage>=2.14.0",
     "python-dotenv>=1.0.1",
+    "grpcio>=1.60.1",
+    "grpcio_reflection>=1.60.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -31,4 +33,5 @@ dev-dependencies = []
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/wherechildbus"]
+packages = ["src/face_detect_model", "src/proto_gen"]
+
