@@ -29,6 +29,7 @@ class _BusListPageState extends State<BusListPage> {
   ];
 
   List<Bus> buses = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -39,12 +40,18 @@ class _BusListPageState extends State<BusListPage> {
   Future<void> _loadBusList() async {
     String nurseryId = widget.nursery.id;
     List<Bus> busList = await getBusList(nurseryId);
-    setState(() {
-      buses = busList;
-    });
-
-    if (kDebugMode) {
-      developer.log("バス：$buses");
+    try {
+      if (mounted) {
+        setState(() {
+          buses = busList;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      }
+      setState(() => _isLoading = false);
     }
   }
 
@@ -57,16 +64,20 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Widget pageBody() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: listViewBuilder(),
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
           )
-        ],
-      ),
-    );
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: listViewBuilder(),
+                )
+              ],
+            ),
+          );
   }
 
   Widget addBusButton() {
