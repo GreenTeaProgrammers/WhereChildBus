@@ -1,6 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/guardians_list.dart';
@@ -23,20 +24,6 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
   bool _isLoading = true;
   bool _isFailLoading = false;
 
-  //削除する
-  final busStations = [
-    "station1",
-    "station2",
-    "station3",
-    "station4",
-    "station5",
-    "station6",
-    "station7",
-    "station8",
-    "station7",
-    "station7"
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -44,8 +31,8 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
   }
 
   Future<void> _loadGuardians() async {
-    var res = await getGuardiansByBusId(widget.bus.id);
     try {
+      var res = await getGuardiansByBusId(widget.bus.id);
       if (mounted) {
         setState(() {
           guardians = res;
@@ -54,9 +41,11 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       }
     } catch (e) {
       if (kDebugMode) {
-        developer.log("バスリストのロード中にエラーが発生しました: $e");
+        developer.log("保護者リストのロード中にエラーが発生しました: $e");
       }
-      setState(() => {_isLoading = false, _isFailLoading = true});
+      if (mounted) {
+        setState(() => {_isLoading = false, _isFailLoading = true});
+      }
     }
   }
 
@@ -85,7 +74,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       children: [
         // titleText(),
         modalHeader(widget.bus.name, "test"),
-        guardiansListView(),
+        _isFailLoading ? loadingFailText() : guardiansListView(),
         ConfirmButton(
           buttonText: "乗客情報",
           onTap: () => moveToBusPassengerPage(context),
@@ -124,6 +113,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                 MaterialPageRoute(
                     builder: (context) => BusEditPage(
                           bus: widget.bus,
+                          busEditPageType: BusEditPageType.update,
                         )));
           },
           style: editButtonStyle(),
@@ -159,6 +149,16 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
           courseNameText(courseName),
           operatorNameText(operatorName),
         ],
+      ),
+    );
+  }
+
+  Widget loadingFailText() {
+    return const Text(
+      "保護者リストの読み込みに失敗しました",
+      style: TextStyle(
+        color: Colors.red,
+        fontSize: 16,
       ),
     );
   }

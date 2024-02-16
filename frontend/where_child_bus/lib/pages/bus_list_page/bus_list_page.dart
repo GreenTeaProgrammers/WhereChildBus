@@ -1,8 +1,10 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
+import 'package:where_child_bus/pages/bus_list_page/service/create_bus.dart';
 import 'package:where_child_bus/pages/bus_list_page/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -82,7 +84,11 @@ class _BusListPageState extends State<BusListPage> {
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BusEditPage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => BusEditPage(
+                      busEditPageType: BusEditPageType.create,
+                    )));
       },
       child: const Icon(Icons.add),
     );

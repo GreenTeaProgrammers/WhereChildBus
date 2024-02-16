@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_guardian_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
@@ -8,8 +9,9 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 
 class BusEditPage extends StatefulWidget {
   Bus? bus;
+  final BusEditPageType busEditPageType;
 
-  BusEditPage({super.key, this.bus});
+  BusEditPage({super.key, this.bus, required this.busEditPageType});
 
   @override
   _BusEditPage createState() => _BusEditPage();
@@ -50,7 +52,9 @@ class _BusEditPage extends State<BusEditPage> {
           // inputFieldsAndThumbnail(context),
           inputFields(),
           manageChildrenButton(),
-          ConfirmButton(buttonText: "保存"),
+          ConfirmButton(
+            buttonText: "保存",
+          ),
         ],
       ),
     );
