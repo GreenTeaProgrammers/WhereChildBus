@@ -35,6 +35,9 @@ class _GoogleMapView extends State<GoogleMapView> {
   //TODO: 将来的に保育園の緯度経度を受け取る
   double nurseryLatitude = 34.7056, nurseryLongitude = 137.7343;
 
+  //TODO: 将来的にバスの現在位置を受け取る
+  double busLatitude = 34.7057, busLongitude = 137.7317;
+
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -46,6 +49,9 @@ class _GoogleMapView extends State<GoogleMapView> {
     super.initState();
     _addMarker(LatLng(nurseryLatitude, nurseryLongitude), "保育園",
         BitmapDescriptor.defaultMarker);
+
+    _addMarker(LatLng(busLatitude, busLongitude), "バス",
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue));
 
     waypoints.forEach((Waypoint waypoint) {
       _addMarker(LatLng(waypoint.latitude, waypoint.longitude), waypoint.name,
