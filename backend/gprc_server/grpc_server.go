@@ -9,6 +9,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/nursery"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/station"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"golang.org/x/exp/slog"
 	"google.golang.org/grpc"
@@ -22,11 +23,16 @@ func New(opts ...optionFunc) *grpc.Server {
 	}
 
 	serverOptions := make([]grpc.ServerOption, 0)
+
 	// set logging interceptor
 	serverOptions = append(serverOptions,
 		grpc.ChainUnaryInterceptor(logging.UnaryServerInterceptor(interceptorLogger(opt.logger))),
 		grpc.ChainStreamInterceptor(logging.StreamServerInterceptor(interceptorLogger(opt.logger))),
 	)
+
+	// set maximum message sizes
+	maxMsgSize := 100 * 1024 * 1024 // 100MB
+	serverOptions = append(serverOptions, grpc.MaxRecvMsgSize(maxMsgSize), grpc.MaxSendMsgSize(maxMsgSize))
 
 	srv := grpc.NewServer(serverOptions...)
 	if opt.useReflection {
@@ -51,6 +57,10 @@ func New(opts ...optionFunc) *grpc.Server {
 	nurseryInteractor := nursery.NewInteractor(opt.entClient, opt.logger)
 	nurserySrv := grpc_interfaces.NewNurseryServiceServer(nurseryInteractor)
 	pb.RegisterNurseryServiceServer(srv, nurserySrv)
+
+	stationInteractor := station.NewInteractor(opt.entClient, opt.logger)
+	stationSrv := grpc_interfaces.NewStationServiceServer(stationInteractor)
+	pb.RegisterStationServiceServer(srv, stationSrv)
 
 	return srv
 }
