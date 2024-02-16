@@ -16,8 +16,6 @@ class BusListPage extends StatefulWidget {
 }
 
 class _BusListPageState extends State<BusListPage> {
-  //TODO: 将来的には動的にデータを受け取る。そのためのメソッドが増える
-  final items = ["バス1", "バス2", "バス3", "バス4", "バス5", "バス5", "バス5", "バス5", "バス5"];
   final busesOperatingState = [
     true,
     false,
@@ -84,15 +82,15 @@ class _BusListPageState extends State<BusListPage> {
   Widget listViewBuilder() {
     return ListView.builder(
       //TODO: 実際にはAPIからデータを取得
-      itemCount: items.length,
+      itemCount: buses.length,
       itemBuilder: (BuildContext context, int index) {
-        return busListCard(items[index], busesOperatingState[index]);
+        return busListCard(buses[index].name, buses[index].status);
       },
     );
   }
 
   //TODO: 将来的にBus型を受け取る, 将来的にモーダルにバスを渡す
-  Widget busListCard(String name, bool isBusOperating) {
+  Widget busListCard(String name, Status busStatus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -118,8 +116,8 @@ class _BusListPageState extends State<BusListPage> {
             },
             child: Row(
               children: [
-                busPhoto(isBusOperating),
-                busNameAndDescription(name),
+                busPhoto(busStatus),
+                busNameAndDescription(name, busStatus),
               ],
             ),
           ),
@@ -128,10 +126,13 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busPhoto(bool isBusOperating) {
-    String imagePath = isBusOperating
-        ? "assets/images/bus_operating.png"
-        : "assets/images/bus_not_operating.png";
+  Widget busPhoto(Status busStatus) {
+    late String imagePath;
+    if (busStatus == Status.STATUS_RUNNING) {
+      imagePath = "assets/images/bus_operating.png";
+    } else {
+      imagePath = "assets/images/bus_not_operating.png";
+    }
 
     return SizedBox(
         width: 100,
@@ -156,7 +157,15 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busDescription(String description) {
+  Widget busDescription(Status busStatus) {
+    late String description;
+    if (busStatus == Status.STATUS_RUNNING) {
+      description = "運行中";
+    } else if (busStatus == Status.STATUS_MAINTEINANCE) {
+      description = "メンテナンス中";
+    } else {
+      description = "停止中";
+    }
     return Text(
       description,
       style: const TextStyle(
@@ -169,13 +178,13 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   //TODO: 将来的には説明文も引数として受け取る
-  Widget busNameAndDescription(String name) {
+  Widget busNameAndDescription(String name, Status busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         //TODO:動的になる
-        children: [busName(name), busDescription("テストの説明文")],
+        children: [busName(name), busDescription(busStatus)],
       ),
     );
   }
