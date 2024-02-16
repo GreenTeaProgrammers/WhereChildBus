@@ -33,7 +33,7 @@ class PredResponse(_message.Message):
     child_id: _containers.RepeatedScalarFieldContainer[str]
     def __init__(self, child_id: _Optional[_Iterable[str]] = ...) -> None: ...
 
-class FaceDetectAndClipResponse(_message.Message):
+class FaceDetectAndClipRequest(_message.Message):
     __slots__ = ("nursery_id", "child_id")
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     CHILD_ID_FIELD_NUMBER: _ClassVar[int]
@@ -41,7 +41,7 @@ class FaceDetectAndClipResponse(_message.Message):
     child_id: str
     def __init__(self, nursery_id: _Optional[str] = ..., child_id: _Optional[str] = ...) -> None: ...
 
-class FaceDetectAndClipRequest(_message.Message):
+class FaceDetectAndClipResponse(_message.Message):
     __slots__ = ("is_started",)
     IS_STARTED_FIELD_NUMBER: _ClassVar[int]
     is_started: bool

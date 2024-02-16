@@ -229,8 +229,8 @@ class PredResponse extends $pb.GeneratedMessage {
   $core.List<$core.String> get childId => $_getList(0);
 }
 
-class FaceDetectAndClipResponse extends $pb.GeneratedMessage {
-  factory FaceDetectAndClipResponse({
+class FaceDetectAndClipRequest extends $pb.GeneratedMessage {
+  factory FaceDetectAndClipRequest({
     $core.String? nurseryId,
     $core.String? childId,
   }) {
@@ -243,72 +243,13 @@ class FaceDetectAndClipResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  FaceDetectAndClipResponse._() : super();
-  factory FaceDetectAndClipResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FaceDetectAndClipResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceDetectAndClipResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
-    ..aOS(2, _omitFieldNames ? '' : 'childId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  FaceDetectAndClipResponse clone() => FaceDetectAndClipResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  FaceDetectAndClipResponse copyWith(void Function(FaceDetectAndClipResponse) updates) => super.copyWith((message) => updates(message as FaceDetectAndClipResponse)) as FaceDetectAndClipResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static FaceDetectAndClipResponse create() => FaceDetectAndClipResponse._();
-  FaceDetectAndClipResponse createEmptyInstance() => create();
-  static $pb.PbList<FaceDetectAndClipResponse> createRepeated() => $pb.PbList<FaceDetectAndClipResponse>();
-  @$core.pragma('dart2js:noInline')
-  static FaceDetectAndClipResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceDetectAndClipResponse>(create);
-  static FaceDetectAndClipResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get nurseryId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set nurseryId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasNurseryId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearNurseryId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get childId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set childId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasChildId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearChildId() => clearField(2);
-}
-
-class FaceDetectAndClipRequest extends $pb.GeneratedMessage {
-  factory FaceDetectAndClipRequest({
-    $core.bool? isStarted,
-  }) {
-    final $result = create();
-    if (isStarted != null) {
-      $result.isStarted = isStarted;
-    }
-    return $result;
-  }
   FaceDetectAndClipRequest._() : super();
   factory FaceDetectAndClipRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory FaceDetectAndClipRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceDetectAndClipRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOB(1, _omitFieldNames ? '' : 'isStarted')
+    ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
+    ..aOS(2, _omitFieldNames ? '' : 'childId')
     ..hasRequiredFields = false
   ;
 
@@ -332,6 +273,65 @@ class FaceDetectAndClipRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static FaceDetectAndClipRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceDetectAndClipRequest>(create);
   static FaceDetectAndClipRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get nurseryId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set nurseryId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNurseryId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNurseryId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get childId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set childId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasChildId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearChildId() => clearField(2);
+}
+
+class FaceDetectAndClipResponse extends $pb.GeneratedMessage {
+  factory FaceDetectAndClipResponse({
+    $core.bool? isStarted,
+  }) {
+    final $result = create();
+    if (isStarted != null) {
+      $result.isStarted = isStarted;
+    }
+    return $result;
+  }
+  FaceDetectAndClipResponse._() : super();
+  factory FaceDetectAndClipResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory FaceDetectAndClipResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceDetectAndClipResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'isStarted')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  FaceDetectAndClipResponse clone() => FaceDetectAndClipResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  FaceDetectAndClipResponse copyWith(void Function(FaceDetectAndClipResponse) updates) => super.copyWith((message) => updates(message as FaceDetectAndClipResponse)) as FaceDetectAndClipResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static FaceDetectAndClipResponse create() => FaceDetectAndClipResponse._();
+  FaceDetectAndClipResponse createEmptyInstance() => create();
+  static $pb.PbList<FaceDetectAndClipResponse> createRepeated() => $pb.PbList<FaceDetectAndClipResponse>();
+  @$core.pragma('dart2js:noInline')
+  static FaceDetectAndClipResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceDetectAndClipResponse>(create);
+  static FaceDetectAndClipResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get isStarted => $_getBF(0);

@@ -64,30 +64,30 @@ const PredResponse$json = {
 final $typed_data.Uint8List predResponseDescriptor = $convert.base64Decode(
     'CgxQcmVkUmVzcG9uc2USGQoIY2hpbGRfaWQYASADKAlSB2NoaWxkSWQ=');
 
-@$core.Deprecated('Use faceDetectAndClipResponseDescriptor instead')
-const FaceDetectAndClipResponse$json = {
-  '1': 'FaceDetectAndClipResponse',
+@$core.Deprecated('Use faceDetectAndClipRequestDescriptor instead')
+const FaceDetectAndClipRequest$json = {
+  '1': 'FaceDetectAndClipRequest',
   '2': [
     {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'child_id', '3': 2, '4': 1, '5': 9, '10': 'childId'},
   ],
 };
 
-/// Descriptor for `FaceDetectAndClipResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List faceDetectAndClipResponseDescriptor = $convert.base64Decode(
-    'ChlGYWNlRGV0ZWN0QW5kQ2xpcFJlc3BvbnNlEh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcn'
-    'lJZBIZCghjaGlsZF9pZBgCIAEoCVIHY2hpbGRJZA==');
+/// Descriptor for `FaceDetectAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List faceDetectAndClipRequestDescriptor = $convert.base64Decode(
+    'ChhGYWNlRGV0ZWN0QW5kQ2xpcFJlcXVlc3QSHQoKbnVyc2VyeV9pZBgBIAEoCVIJbnVyc2VyeU'
+    'lkEhkKCGNoaWxkX2lkGAIgASgJUgdjaGlsZElk');
 
-@$core.Deprecated('Use faceDetectAndClipRequestDescriptor instead')
-const FaceDetectAndClipRequest$json = {
-  '1': 'FaceDetectAndClipRequest',
+@$core.Deprecated('Use faceDetectAndClipResponseDescriptor instead')
+const FaceDetectAndClipResponse$json = {
+  '1': 'FaceDetectAndClipResponse',
   '2': [
     {'1': 'is_started', '3': 1, '4': 1, '5': 8, '10': 'isStarted'},
   ],
 };
 
-/// Descriptor for `FaceDetectAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List faceDetectAndClipRequestDescriptor = $convert.base64Decode(
-    'ChhGYWNlRGV0ZWN0QW5kQ2xpcFJlcXVlc3QSHQoKaXNfc3RhcnRlZBgBIAEoCFIJaXNTdGFydG'
-    'Vk');
+/// Descriptor for `FaceDetectAndClipResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List faceDetectAndClipResponseDescriptor = $convert.base64Decode(
+    'ChlGYWNlRGV0ZWN0QW5kQ2xpcFJlc3BvbnNlEh0KCmlzX3N0YXJ0ZWQYASABKAhSCWlzU3Rhcn'
+    'RlZA==');
 
