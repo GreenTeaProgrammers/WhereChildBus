@@ -16,20 +16,9 @@ class BusListPage extends StatefulWidget {
 }
 
 class _BusListPageState extends State<BusListPage> {
-  final busesOperatingState = [
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
-
   List<Bus> buses = [];
   bool _isLoading = true;
+  bool _isFailLoading = false;
 
   @override
   void initState() {
@@ -51,7 +40,7 @@ class _BusListPageState extends State<BusListPage> {
       if (kDebugMode) {
         developer.log("バスリストのロード中にエラーが発生しました: $e");
       }
-      setState(() => _isLoading = false);
+      setState(() => {_isLoading = false, _isFailLoading = true});
     }
   }
 
@@ -72,6 +61,7 @@ class _BusListPageState extends State<BusListPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if (_isFailLoading) loadFailText(),
                 Expanded(
                   child: listViewBuilder(),
                 )
@@ -99,7 +89,6 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  //TODO: 将来的にBus型を受け取る, 将来的にモーダルにバスを渡す
   Widget busListCard(Bus bus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -187,15 +176,20 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  //TODO: 将来的には説明文も引数として受け取る
   Widget busNameAndDescription(String name, Status busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        //TODO:動的になる
         children: [busName(name), busDescription(busStatus)],
       ),
+    );
+  }
+
+  Widget loadFailText() {
+    return const Text(
+      "バスのロードに失敗しました",
+      style: TextStyle(color: Colors.red, fontSize: 16),
     );
   }
 }
