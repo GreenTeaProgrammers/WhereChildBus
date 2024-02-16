@@ -4,8 +4,8 @@ package machine_learning.v1;
 
 service MachineLearningService {
         rpc Train(TrainRequest) returns (TrainResponse);
-        rpc Eval(stream EvalRequest) returns (stream EvalResponse);
-        rpc FaceDetectAndClip(FaceAndClipRequest) returns (FaceDetectAndClipResponse);
+        rpc Pred(stream PredRequest) returns (stream PredResponse);
+        rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
 message TrainRequest {
@@ -18,12 +18,12 @@ message TrainResponse {
         bool is_started = 1;
 }
 
-message EvalRequest {
+message PredRequest {
         string bus_id = 1;
         // TODO: add video data
 }
 
-message EvalResponse {
+message PredResponse {
         repeated string child_id = 1;
 }
 
@@ -32,7 +32,7 @@ message FaceDetectAndClipResponse {
         string child_id = 2;
 }
 
-message FaceAndClipRequest {
+message FaceDetectAndClipRequest {
         bool is_started = 1;
 }
 

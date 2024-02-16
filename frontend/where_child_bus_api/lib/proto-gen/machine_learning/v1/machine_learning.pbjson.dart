@@ -40,29 +40,29 @@ const TrainResponse$json = {
 final $typed_data.Uint8List trainResponseDescriptor = $convert.base64Decode(
     'Cg1UcmFpblJlc3BvbnNlEh0KCmlzX3N0YXJ0ZWQYASABKAhSCWlzU3RhcnRlZA==');
 
-@$core.Deprecated('Use evalRequestDescriptor instead')
-const EvalRequest$json = {
-  '1': 'EvalRequest',
+@$core.Deprecated('Use predRequestDescriptor instead')
+const PredRequest$json = {
+  '1': 'PredRequest',
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
   ],
 };
 
-/// Descriptor for `EvalRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List evalRequestDescriptor = $convert.base64Decode(
-    'CgtFdmFsUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lk');
+/// Descriptor for `PredRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List predRequestDescriptor = $convert.base64Decode(
+    'CgtQcmVkUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lk');
 
-@$core.Deprecated('Use evalResponseDescriptor instead')
-const EvalResponse$json = {
-  '1': 'EvalResponse',
+@$core.Deprecated('Use predResponseDescriptor instead')
+const PredResponse$json = {
+  '1': 'PredResponse',
   '2': [
     {'1': 'child_id', '3': 1, '4': 3, '5': 9, '10': 'childId'},
   ],
 };
 
-/// Descriptor for `EvalResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List evalResponseDescriptor = $convert.base64Decode(
-    'CgxFdmFsUmVzcG9uc2USGQoIY2hpbGRfaWQYASADKAlSB2NoaWxkSWQ=');
+/// Descriptor for `PredResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List predResponseDescriptor = $convert.base64Decode(
+    'CgxQcmVkUmVzcG9uc2USGQoIY2hpbGRfaWQYASADKAlSB2NoaWxkSWQ=');
 
 @$core.Deprecated('Use faceDetectAndClipResponseDescriptor instead')
 const FaceDetectAndClipResponse$json = {
@@ -78,15 +78,16 @@ final $typed_data.Uint8List faceDetectAndClipResponseDescriptor = $convert.base6
     'ChlGYWNlRGV0ZWN0QW5kQ2xpcFJlc3BvbnNlEh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcn'
     'lJZBIZCghjaGlsZF9pZBgCIAEoCVIHY2hpbGRJZA==');
 
-@$core.Deprecated('Use faceAndClipRequestDescriptor instead')
-const FaceAndClipRequest$json = {
-  '1': 'FaceAndClipRequest',
+@$core.Deprecated('Use faceDetectAndClipRequestDescriptor instead')
+const FaceDetectAndClipRequest$json = {
+  '1': 'FaceDetectAndClipRequest',
   '2': [
     {'1': 'is_started', '3': 1, '4': 1, '5': 8, '10': 'isStarted'},
   ],
 };
 
-/// Descriptor for `FaceAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List faceAndClipRequestDescriptor = $convert.base64Decode(
-    'ChJGYWNlQW5kQ2xpcFJlcXVlc3QSHQoKaXNfc3RhcnRlZBgBIAEoCFIJaXNTdGFydGVk');
+/// Descriptor for `FaceDetectAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List faceDetectAndClipRequestDescriptor = $convert.base64Decode(
+    'ChhGYWNlRGV0ZWN0QW5kQ2xpcFJlcXVlc3QSHQoKaXNfc3RhcnRlZBgBIAEoCFIJaXNTdGFydG'
+    'Vk');
 
