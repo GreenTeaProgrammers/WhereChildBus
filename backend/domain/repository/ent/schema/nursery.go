@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"math/rand"
 	"time"
 
 	"entgo.io/ent"
@@ -16,16 +15,12 @@ type Nursery struct {
 	ent.Schema
 }
 
-func init() {
-	rand.Seed(time.Now().UnixNano()) // 乱数生成器のシードを設定
-}
-
 // Fields of the Nursery.
 func (Nursery) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
 		field.String("nursery_code").Unique().Comment("ユニークな数字(文字列)のコード"),
-		field.String("email"),
+		field.String("email").Unique(),
 		field.String("hashed_password"),
 		field.String("name"),
 		field.String("address").Optional(),
@@ -38,7 +33,6 @@ func (Nursery) Fields() []ent.Field {
 // Edges of the Nursery.
 func (Nursery) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("children", Child.Type).Ref("nursery"),
 		edge.From("guardians", Guardian.Type).Ref("nursery"),
 		edge.From("buses", Bus.Type).Ref("nursery"),
 	}

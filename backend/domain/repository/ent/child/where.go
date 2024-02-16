@@ -417,29 +417,6 @@ func HasChildBusAssociationsWith(preds ...predicate.ChildBusAssociation) predica
 	})
 }
 
-// HasNursery applies the HasEdge predicate on the "nursery" edge.
-func HasNursery() predicate.Child {
-	return predicate.Child(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, NurseryTable, NurseryColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasNurseryWith applies the HasEdge predicate on the "nursery" edge with a given conditions (other predicates).
-func HasNurseryWith(preds ...predicate.Nursery) predicate.Child {
-	return predicate.Child(func(s *sql.Selector) {
-		step := newNurseryStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasBoardingRecord applies the HasEdge predicate on the "boarding_record" edge.
 func HasBoardingRecord() predicate.Child {
 	return predicate.Child(func(s *sql.Selector) {
