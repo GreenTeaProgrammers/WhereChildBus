@@ -87,14 +87,16 @@ class TrackBusContinuousResponse(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
-    __slots__ = ("bus_id", "video_chunk", "timestamp")
+    __slots__ = ("bus_id", "video_type", "video_chunk", "timestamp")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    VIDEO_TYPE_FIELD_NUMBER: _ClassVar[int]
     VIDEO_CHUNK_FIELD_NUMBER: _ClassVar[int]
     TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
+    video_type: _resources_pb2.VideoType
     video_chunk: bytes
     timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    def __init__(self, bus_id: _Optional[str] = ..., video_type: _Optional[_Union[_resources_pb2.VideoType, str]] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[int] = ...) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
     __slots__ = ()

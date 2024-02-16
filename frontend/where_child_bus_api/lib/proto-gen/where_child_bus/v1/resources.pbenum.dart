@@ -32,6 +32,23 @@ class Status extends $pb.ProtobufEnum {
   const Status._($core.int v, $core.String n) : super(v, n);
 }
 
+class VideoType extends $pb.ProtobufEnum {
+  static const VideoType VIDEO_TYPE_UNSPECIFIED = VideoType._(0, _omitEnumNames ? '' : 'VIDEO_TYPE_UNSPECIFIED');
+  static const VideoType VIDEO_TYPE_GET_ON = VideoType._(1, _omitEnumNames ? '' : 'VIDEO_TYPE_GET_ON');
+  static const VideoType VIDEO_TYPE_GET_OFF = VideoType._(2, _omitEnumNames ? '' : 'VIDEO_TYPE_GET_OFF');
+
+  static const $core.List<VideoType> values = <VideoType> [
+    VIDEO_TYPE_UNSPECIFIED,
+    VIDEO_TYPE_GET_ON,
+    VIDEO_TYPE_GET_OFF,
+  ];
+
+  static final $core.Map<$core.int, VideoType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static VideoType? valueOf($core.int value) => _byValue[value];
+
+  const VideoType._($core.int v, $core.String n) : super(v, n);
+}
+
 class Sex extends $pb.ProtobufEnum {
   static const Sex SEX_UNSPECIFIED = Sex._(0, _omitEnumNames ? '' : 'SEX_UNSPECIFIED');
   static const Sex SEX_MAN = Sex._(1, _omitEnumNames ? '' : 'SEX_MAN');
