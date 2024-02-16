@@ -42,30 +42,19 @@ type Nursery struct {
 
 // NurseryEdges holds the relations/edges for other nodes in the graph.
 type NurseryEdges struct {
-	// Children holds the value of the children edge.
-	Children []*Child `json:"children,omitempty"`
 	// Guardians holds the value of the guardians edge.
 	Guardians []*Guardian `json:"guardians,omitempty"`
 	// Buses holds the value of the buses edge.
 	Buses []*Bus `json:"buses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
-}
-
-// ChildrenOrErr returns the Children value or an error if the edge
-// was not loaded in eager-loading.
-func (e NurseryEdges) ChildrenOrErr() ([]*Child, error) {
-	if e.loadedTypes[0] {
-		return e.Children, nil
-	}
-	return nil, &NotLoadedError{edge: "children"}
+	loadedTypes [2]bool
 }
 
 // GuardiansOrErr returns the Guardians value or an error if the edge
 // was not loaded in eager-loading.
 func (e NurseryEdges) GuardiansOrErr() ([]*Guardian, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[0] {
 		return e.Guardians, nil
 	}
 	return nil, &NotLoadedError{edge: "guardians"}
@@ -74,7 +63,7 @@ func (e NurseryEdges) GuardiansOrErr() ([]*Guardian, error) {
 // BusesOrErr returns the Buses value or an error if the edge
 // was not loaded in eager-loading.
 func (e NurseryEdges) BusesOrErr() ([]*Bus, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		return e.Buses, nil
 	}
 	return nil, &NotLoadedError{edge: "buses"}
@@ -171,11 +160,6 @@ func (n *Nursery) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (n *Nursery) Value(name string) (ent.Value, error) {
 	return n.selectValues.Get(name)
-}
-
-// QueryChildren queries the "children" edge of the Nursery entity.
-func (n *Nursery) QueryChildren() *ChildQuery {
-	return NewNurseryClient(n.config).QueryChildren(n)
 }
 
 // QueryGuardians queries the "guardians" edge of the Nursery entity.

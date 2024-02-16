@@ -15,7 +15,6 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/google/uuid"
 )
 
@@ -202,25 +201,6 @@ func (cc *ChildCreate) AddChildBusAssociations(c ...*ChildBusAssociation) *Child
 		ids[i] = c[i].ID
 	}
 	return cc.AddChildBusAssociationIDs(ids...)
-}
-
-// SetNurseryID sets the "nursery" edge to the Nursery entity by ID.
-func (cc *ChildCreate) SetNurseryID(id uuid.UUID) *ChildCreate {
-	cc.mutation.SetNurseryID(id)
-	return cc
-}
-
-// SetNillableNurseryID sets the "nursery" edge to the Nursery entity by ID if the given value is not nil.
-func (cc *ChildCreate) SetNillableNurseryID(id *uuid.UUID) *ChildCreate {
-	if id != nil {
-		cc = cc.SetNurseryID(*id)
-	}
-	return cc
-}
-
-// SetNursery sets the "nursery" edge to the Nursery entity.
-func (cc *ChildCreate) SetNursery(n *Nursery) *ChildCreate {
-	return cc.SetNurseryID(n.ID)
 }
 
 // AddBoardingRecordIDs adds the "boarding_record" edge to the BoardingRecord entity by IDs.
@@ -476,23 +456,6 @@ func (cc *ChildCreate) createSpec() (*Child, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.NurseryIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   child.NurseryTable,
-			Columns: []string{child.NurseryColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(nursery.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.child_nursery = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.BoardingRecordIDs(); len(nodes) > 0 {

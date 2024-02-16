@@ -1737,8 +1737,6 @@ type ChildMutation struct {
 	childBusAssociations        map[int]struct{}
 	removedchildBusAssociations map[int]struct{}
 	clearedchildBusAssociations bool
-	nursery                     *uuid.UUID
-	clearednursery              bool
 	boarding_record             map[uuid.UUID]struct{}
 	removedboarding_record      map[uuid.UUID]struct{}
 	clearedboarding_record      bool
@@ -2363,45 +2361,6 @@ func (m *ChildMutation) ResetChildBusAssociations() {
 	m.removedchildBusAssociations = nil
 }
 
-// SetNurseryID sets the "nursery" edge to the Nursery entity by id.
-func (m *ChildMutation) SetNurseryID(id uuid.UUID) {
-	m.nursery = &id
-}
-
-// ClearNursery clears the "nursery" edge to the Nursery entity.
-func (m *ChildMutation) ClearNursery() {
-	m.clearednursery = true
-}
-
-// NurseryCleared reports if the "nursery" edge to the Nursery entity was cleared.
-func (m *ChildMutation) NurseryCleared() bool {
-	return m.clearednursery
-}
-
-// NurseryID returns the "nursery" edge ID in the mutation.
-func (m *ChildMutation) NurseryID() (id uuid.UUID, exists bool) {
-	if m.nursery != nil {
-		return *m.nursery, true
-	}
-	return
-}
-
-// NurseryIDs returns the "nursery" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// NurseryID instead. It exists only for internal usage by the builders.
-func (m *ChildMutation) NurseryIDs() (ids []uuid.UUID) {
-	if id := m.nursery; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetNursery resets all changes to the "nursery" edge.
-func (m *ChildMutation) ResetNursery() {
-	m.nursery = nil
-	m.clearednursery = false
-}
-
 // AddBoardingRecordIDs adds the "boarding_record" edge to the BoardingRecord entity by ids.
 func (m *ChildMutation) AddBoardingRecordIDs(ids ...uuid.UUID) {
 	if m.boarding_record == nil {
@@ -2828,15 +2787,12 @@ func (m *ChildMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ChildMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 4)
 	if m.guardian != nil {
 		edges = append(edges, child.EdgeGuardian)
 	}
 	if m.childBusAssociations != nil {
 		edges = append(edges, child.EdgeChildBusAssociations)
-	}
-	if m.nursery != nil {
-		edges = append(edges, child.EdgeNursery)
 	}
 	if m.boarding_record != nil {
 		edges = append(edges, child.EdgeBoardingRecord)
@@ -2861,10 +2817,6 @@ func (m *ChildMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case child.EdgeNursery:
-		if id := m.nursery; id != nil {
-			return []ent.Value{*id}
-		}
 	case child.EdgeBoardingRecord:
 		ids := make([]ent.Value, 0, len(m.boarding_record))
 		for id := range m.boarding_record {
@@ -2883,7 +2835,7 @@ func (m *ChildMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ChildMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 4)
 	if m.removedchildBusAssociations != nil {
 		edges = append(edges, child.EdgeChildBusAssociations)
 	}
@@ -2924,15 +2876,12 @@ func (m *ChildMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ChildMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 4)
 	if m.clearedguardian {
 		edges = append(edges, child.EdgeGuardian)
 	}
 	if m.clearedchildBusAssociations {
 		edges = append(edges, child.EdgeChildBusAssociations)
-	}
-	if m.clearednursery {
-		edges = append(edges, child.EdgeNursery)
 	}
 	if m.clearedboarding_record {
 		edges = append(edges, child.EdgeBoardingRecord)
@@ -2951,8 +2900,6 @@ func (m *ChildMutation) EdgeCleared(name string) bool {
 		return m.clearedguardian
 	case child.EdgeChildBusAssociations:
 		return m.clearedchildBusAssociations
-	case child.EdgeNursery:
-		return m.clearednursery
 	case child.EdgeBoardingRecord:
 		return m.clearedboarding_record
 	case child.EdgePhotos:
@@ -2968,9 +2915,6 @@ func (m *ChildMutation) ClearEdge(name string) error {
 	case child.EdgeGuardian:
 		m.ClearGuardian()
 		return nil
-	case child.EdgeNursery:
-		m.ClearNursery()
-		return nil
 	}
 	return fmt.Errorf("unknown Child unique edge %s", name)
 }
@@ -2984,9 +2928,6 @@ func (m *ChildMutation) ResetEdge(name string) error {
 		return nil
 	case child.EdgeChildBusAssociations:
 		m.ResetChildBusAssociations()
-		return nil
-	case child.EdgeNursery:
-		m.ResetNursery()
 		return nil
 	case child.EdgeBoardingRecord:
 		m.ResetBoardingRecord()
@@ -4943,9 +4884,6 @@ type NurseryMutation struct {
 	created_at       *time.Time
 	updated_at       *time.Time
 	clearedFields    map[string]struct{}
-	children         map[uuid.UUID]struct{}
-	removedchildren  map[uuid.UUID]struct{}
-	clearedchildren  bool
 	guardians        map[uuid.UUID]struct{}
 	removedguardians map[uuid.UUID]struct{}
 	clearedguardians bool
@@ -5375,60 +5313,6 @@ func (m *NurseryMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
-// AddChildIDs adds the "children" edge to the Child entity by ids.
-func (m *NurseryMutation) AddChildIDs(ids ...uuid.UUID) {
-	if m.children == nil {
-		m.children = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		m.children[ids[i]] = struct{}{}
-	}
-}
-
-// ClearChildren clears the "children" edge to the Child entity.
-func (m *NurseryMutation) ClearChildren() {
-	m.clearedchildren = true
-}
-
-// ChildrenCleared reports if the "children" edge to the Child entity was cleared.
-func (m *NurseryMutation) ChildrenCleared() bool {
-	return m.clearedchildren
-}
-
-// RemoveChildIDs removes the "children" edge to the Child entity by IDs.
-func (m *NurseryMutation) RemoveChildIDs(ids ...uuid.UUID) {
-	if m.removedchildren == nil {
-		m.removedchildren = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		delete(m.children, ids[i])
-		m.removedchildren[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedChildren returns the removed IDs of the "children" edge to the Child entity.
-func (m *NurseryMutation) RemovedChildrenIDs() (ids []uuid.UUID) {
-	for id := range m.removedchildren {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ChildrenIDs returns the "children" edge IDs in the mutation.
-func (m *NurseryMutation) ChildrenIDs() (ids []uuid.UUID) {
-	for id := range m.children {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetChildren resets all changes to the "children" edge.
-func (m *NurseryMutation) ResetChildren() {
-	m.children = nil
-	m.clearedchildren = false
-	m.removedchildren = nil
-}
-
 // AddGuardianIDs adds the "guardians" edge to the Guardian entity by ids.
 func (m *NurseryMutation) AddGuardianIDs(ids ...uuid.UUID) {
 	if m.guardians == nil {
@@ -5804,10 +5688,7 @@ func (m *NurseryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NurseryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
-	if m.children != nil {
-		edges = append(edges, nursery.EdgeChildren)
-	}
+	edges := make([]string, 0, 2)
 	if m.guardians != nil {
 		edges = append(edges, nursery.EdgeGuardians)
 	}
@@ -5821,12 +5702,6 @@ func (m *NurseryMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *NurseryMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case nursery.EdgeChildren:
-		ids := make([]ent.Value, 0, len(m.children))
-		for id := range m.children {
-			ids = append(ids, id)
-		}
-		return ids
 	case nursery.EdgeGuardians:
 		ids := make([]ent.Value, 0, len(m.guardians))
 		for id := range m.guardians {
@@ -5845,10 +5720,7 @@ func (m *NurseryMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NurseryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
-	if m.removedchildren != nil {
-		edges = append(edges, nursery.EdgeChildren)
-	}
+	edges := make([]string, 0, 2)
 	if m.removedguardians != nil {
 		edges = append(edges, nursery.EdgeGuardians)
 	}
@@ -5862,12 +5734,6 @@ func (m *NurseryMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *NurseryMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case nursery.EdgeChildren:
-		ids := make([]ent.Value, 0, len(m.removedchildren))
-		for id := range m.removedchildren {
-			ids = append(ids, id)
-		}
-		return ids
 	case nursery.EdgeGuardians:
 		ids := make([]ent.Value, 0, len(m.removedguardians))
 		for id := range m.removedguardians {
@@ -5886,10 +5752,7 @@ func (m *NurseryMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NurseryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
-	if m.clearedchildren {
-		edges = append(edges, nursery.EdgeChildren)
-	}
+	edges := make([]string, 0, 2)
 	if m.clearedguardians {
 		edges = append(edges, nursery.EdgeGuardians)
 	}
@@ -5903,8 +5766,6 @@ func (m *NurseryMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *NurseryMutation) EdgeCleared(name string) bool {
 	switch name {
-	case nursery.EdgeChildren:
-		return m.clearedchildren
 	case nursery.EdgeGuardians:
 		return m.clearedguardians
 	case nursery.EdgeBuses:
@@ -5925,9 +5786,6 @@ func (m *NurseryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *NurseryMutation) ResetEdge(name string) error {
 	switch name {
-	case nursery.EdgeChildren:
-		m.ResetChildren()
-		return nil
 	case nursery.EdgeGuardians:
 		m.ResetGuardians()
 		return nil
