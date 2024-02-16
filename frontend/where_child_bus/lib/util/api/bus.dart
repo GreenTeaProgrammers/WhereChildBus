@@ -4,32 +4,50 @@ import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart";
 
-Future<GetBusListByNurseryIdResponse> getBusListByNurseryId(
-    String nurseryId) async {
+Future<T> performGrpcCall<T>(
+    Future<T> Function(BusServiceClient) grpcCall) async {
   final channel = ClientChannel(
     appConfig.grpcEndpoint,
     port: appConfig.grpcPort,
   );
-
   final grpcClient = BusServiceClient(channel);
 
   try {
-    var req = GetBusListByNurseryIdRequest(nurseryId: nurseryId);
-
+    final result = await grpcCall(grpcClient);
     if (kDebugMode) {
-      developer.log("リクエスト: $req");
+      developer.log("レスポンス: $result");
     }
-
-    var res = await grpcClient.getBusListByNurseryId(req);
-    if (kDebugMode) {
-      developer.log("レスポンス: $res");
-    }
-
-    await channel.shutdown();
-    return res;
+    return result;
   } catch (error) {
-    await channel.shutdown();
     developer.log("Caught Error:", error: error);
     return Future.error(error);
+  } finally {
+    await channel.shutdown();
   }
+}
+
+Future<GetBusListByNurseryIdResponse> getBusListByNurseryId(
+    String nurseryId) async {
+  return performGrpcCall((client) async {
+    var req = GetBusListByNurseryIdRequest(nurseryId: nurseryId);
+    return client.getBusListByNurseryId(req);
+  });
+}
+
+Future<CreateBusResponse> createBus(
+    String nurseryId,
+    String name,
+    String plateNumber,
+    Iterable<String> morningGuardianIds,
+    Iterable<String> eveningGuardianIds) async {
+  return performGrpcCall((client) async {
+    var req = CreateBusRequest(
+      nurseryId: nurseryId,
+      name: name,
+      plateNumber: plateNumber,
+      morningGuardianIds: morningGuardianIds.toList(),
+      eveningGuardianIds: eveningGuardianIds.toList(),
+    );
+    return client.createBus(req);
+  });
 }
