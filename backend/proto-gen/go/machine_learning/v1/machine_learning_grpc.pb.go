@@ -19,14 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MachineLearningService_Ping_FullMethodName = "/machine_learning.v1.MachineLearningService/Ping"
+	MachineLearningService_Train_FullMethodName             = "/machine_learning.v1.MachineLearningService/Train"
+	MachineLearningService_Eval_FullMethodName              = "/machine_learning.v1.MachineLearningService/Eval"
+	MachineLearningService_FaceDetectAndClip_FullMethodName = "/machine_learning.v1.MachineLearningService/FaceDetectAndClip"
 )
 
 // MachineLearningServiceClient is the client API for MachineLearningService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MachineLearningServiceClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Train(ctx context.Context, in *TrainRequest, opts ...grpc.CallOption) (*TrainResponse, error)
+	Eval(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_EvalClient, error)
+	FaceDetectAndClip(ctx context.Context, in *FaceAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error)
 }
 
 type machineLearningServiceClient struct {
@@ -37,9 +41,49 @@ func NewMachineLearningServiceClient(cc grpc.ClientConnInterface) MachineLearnin
 	return &machineLearningServiceClient{cc}
 }
 
-func (c *machineLearningServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, MachineLearningService_Ping_FullMethodName, in, out, opts...)
+func (c *machineLearningServiceClient) Train(ctx context.Context, in *TrainRequest, opts ...grpc.CallOption) (*TrainResponse, error) {
+	out := new(TrainResponse)
+	err := c.cc.Invoke(ctx, MachineLearningService_Train_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *machineLearningServiceClient) Eval(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_EvalClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MachineLearningService_ServiceDesc.Streams[0], MachineLearningService_Eval_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &machineLearningServiceEvalClient{stream}
+	return x, nil
+}
+
+type MachineLearningService_EvalClient interface {
+	Send(*EvalRequest) error
+	Recv() (*EvalResponse, error)
+	grpc.ClientStream
+}
+
+type machineLearningServiceEvalClient struct {
+	grpc.ClientStream
+}
+
+func (x *machineLearningServiceEvalClient) Send(m *EvalRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *machineLearningServiceEvalClient) Recv() (*EvalResponse, error) {
+	m := new(EvalResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *machineLearningServiceClient) FaceDetectAndClip(ctx context.Context, in *FaceAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error) {
+	out := new(FaceDetectAndClipResponse)
+	err := c.cc.Invoke(ctx, MachineLearningService_FaceDetectAndClip_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,15 +94,23 @@ func (c *machineLearningServiceClient) Ping(ctx context.Context, in *PingRequest
 // All implementations should embed UnimplementedMachineLearningServiceServer
 // for forward compatibility
 type MachineLearningServiceServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Train(context.Context, *TrainRequest) (*TrainResponse, error)
+	Eval(MachineLearningService_EvalServer) error
+	FaceDetectAndClip(context.Context, *FaceAndClipRequest) (*FaceDetectAndClipResponse, error)
 }
 
 // UnimplementedMachineLearningServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedMachineLearningServiceServer struct {
 }
 
-func (UnimplementedMachineLearningServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedMachineLearningServiceServer) Train(context.Context, *TrainRequest) (*TrainResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Train not implemented")
+}
+func (UnimplementedMachineLearningServiceServer) Eval(MachineLearningService_EvalServer) error {
+	return status.Errorf(codes.Unimplemented, "method Eval not implemented")
+}
+func (UnimplementedMachineLearningServiceServer) FaceDetectAndClip(context.Context, *FaceAndClipRequest) (*FaceDetectAndClipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FaceDetectAndClip not implemented")
 }
 
 // UnsafeMachineLearningServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -72,20 +124,64 @@ func RegisterMachineLearningServiceServer(s grpc.ServiceRegistrar, srv MachineLe
 	s.RegisterService(&MachineLearningService_ServiceDesc, srv)
 }
 
-func _MachineLearningService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _MachineLearningService_Train_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TrainRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MachineLearningServiceServer).Ping(ctx, in)
+		return srv.(MachineLearningServiceServer).Train(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MachineLearningService_Ping_FullMethodName,
+		FullMethod: MachineLearningService_Train_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineLearningServiceServer).Ping(ctx, req.(*PingRequest))
+		return srv.(MachineLearningServiceServer).Train(ctx, req.(*TrainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MachineLearningService_Eval_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MachineLearningServiceServer).Eval(&machineLearningServiceEvalServer{stream})
+}
+
+type MachineLearningService_EvalServer interface {
+	Send(*EvalResponse) error
+	Recv() (*EvalRequest, error)
+	grpc.ServerStream
+}
+
+type machineLearningServiceEvalServer struct {
+	grpc.ServerStream
+}
+
+func (x *machineLearningServiceEvalServer) Send(m *EvalResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *machineLearningServiceEvalServer) Recv() (*EvalRequest, error) {
+	m := new(EvalRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _MachineLearningService_FaceDetectAndClip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FaceAndClipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MachineLearningServiceServer).FaceDetectAndClip(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MachineLearningService_FaceDetectAndClip_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MachineLearningServiceServer).FaceDetectAndClip(ctx, req.(*FaceAndClipRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -98,10 +194,21 @@ var MachineLearningService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MachineLearningServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _MachineLearningService_Ping_Handler,
+			MethodName: "Train",
+			Handler:    _MachineLearningService_Train_Handler,
+		},
+		{
+			MethodName: "FaceDetectAndClip",
+			Handler:    _MachineLearningService_FaceDetectAndClip_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Eval",
+			Handler:       _MachineLearningService_Eval_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "machine_learning/v1/machine_learning.proto",
 }

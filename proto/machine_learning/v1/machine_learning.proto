@@ -3,13 +3,36 @@ syntax = "proto3";
 package machine_learning.v1;
 
 service MachineLearningService {
-        rpc Ping(PingRequest) returns (PingResponse);
+        rpc Train(TrainRequest) returns (TrainResponse);
+        rpc Eval(stream EvalRequest) returns (stream EvalResponse);
+        rpc FaceDetectAndClip(FaceAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
-message PingRequest {
-        string message = 1;
+message TrainRequest {
+        string nursery_id = 1;
+        repeated string child_id = 2;
+        string bus_id = 3;
 }
 
-message PingResponse {
-        string message = 1;
+message TrainResponse {
+        bool is_started = 1;
 }
+
+message EvalRequest {
+        string bus_id = 1;
+        // TODO: add video data
+}
+
+message EvalResponse {
+        repeated string child_id = 1;
+}
+
+message FaceDetectAndClipResponse {
+        string nursery_id = 1;
+        string child_id = 2;
+}
+
+message FaceAndClipRequest {
+        bool is_started = 1;
+}
+

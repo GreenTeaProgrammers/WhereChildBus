@@ -13,27 +13,80 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use pingRequestDescriptor instead')
-const PingRequest$json = {
-  '1': 'PingRequest',
+@$core.Deprecated('Use trainRequestDescriptor instead')
+const TrainRequest$json = {
+  '1': 'TrainRequest',
   '2': [
-    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'child_id', '3': 2, '4': 3, '5': 9, '10': 'childId'},
+    {'1': 'bus_id', '3': 3, '4': 1, '5': 9, '10': 'busId'},
   ],
 };
 
-/// Descriptor for `PingRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pingRequestDescriptor = $convert.base64Decode(
-    'CgtQaW5nUmVxdWVzdBIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+/// Descriptor for `TrainRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List trainRequestDescriptor = $convert.base64Decode(
+    'CgxUcmFpblJlcXVlc3QSHQoKbnVyc2VyeV9pZBgBIAEoCVIJbnVyc2VyeUlkEhkKCGNoaWxkX2'
+    'lkGAIgAygJUgdjaGlsZElkEhUKBmJ1c19pZBgDIAEoCVIFYnVzSWQ=');
 
-@$core.Deprecated('Use pingResponseDescriptor instead')
-const PingResponse$json = {
-  '1': 'PingResponse',
+@$core.Deprecated('Use trainResponseDescriptor instead')
+const TrainResponse$json = {
+  '1': 'TrainResponse',
   '2': [
-    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'is_started', '3': 1, '4': 1, '5': 8, '10': 'isStarted'},
   ],
 };
 
-/// Descriptor for `PingResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pingResponseDescriptor = $convert.base64Decode(
-    'CgxQaW5nUmVzcG9uc2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
+/// Descriptor for `TrainResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List trainResponseDescriptor = $convert.base64Decode(
+    'Cg1UcmFpblJlc3BvbnNlEh0KCmlzX3N0YXJ0ZWQYASABKAhSCWlzU3RhcnRlZA==');
+
+@$core.Deprecated('Use evalRequestDescriptor instead')
+const EvalRequest$json = {
+  '1': 'EvalRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+  ],
+};
+
+/// Descriptor for `EvalRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List evalRequestDescriptor = $convert.base64Decode(
+    'CgtFdmFsUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lk');
+
+@$core.Deprecated('Use evalResponseDescriptor instead')
+const EvalResponse$json = {
+  '1': 'EvalResponse',
+  '2': [
+    {'1': 'child_id', '3': 1, '4': 3, '5': 9, '10': 'childId'},
+  ],
+};
+
+/// Descriptor for `EvalResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List evalResponseDescriptor = $convert.base64Decode(
+    'CgxFdmFsUmVzcG9uc2USGQoIY2hpbGRfaWQYASADKAlSB2NoaWxkSWQ=');
+
+@$core.Deprecated('Use faceDetectAndClipResponseDescriptor instead')
+const FaceDetectAndClipResponse$json = {
+  '1': 'FaceDetectAndClipResponse',
+  '2': [
+    {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'child_id', '3': 2, '4': 1, '5': 9, '10': 'childId'},
+  ],
+};
+
+/// Descriptor for `FaceDetectAndClipResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List faceDetectAndClipResponseDescriptor = $convert.base64Decode(
+    'ChlGYWNlRGV0ZWN0QW5kQ2xpcFJlc3BvbnNlEh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcn'
+    'lJZBIZCghjaGlsZF9pZBgCIAEoCVIHY2hpbGRJZA==');
+
+@$core.Deprecated('Use faceAndClipRequestDescriptor instead')
+const FaceAndClipRequest$json = {
+  '1': 'FaceAndClipRequest',
+  '2': [
+    {'1': 'is_started', '3': 1, '4': 1, '5': 8, '10': 'isStarted'},
+  ],
+};
+
+/// Descriptor for `FaceAndClipRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List faceAndClipRequestDescriptor = $convert.base64Decode(
+    'ChJGYWNlQW5kQ2xpcFJlcXVlc3QSHQoKaXNfc3RhcnRlZBgBIAEoCFIJaXNTdGFydGVk');
 
