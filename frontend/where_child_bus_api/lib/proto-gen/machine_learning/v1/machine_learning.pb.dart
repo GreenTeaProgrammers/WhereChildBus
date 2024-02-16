@@ -13,22 +13,32 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class PingRequest extends $pb.GeneratedMessage {
-  factory PingRequest({
-    $core.String? message,
+class TrainRequest extends $pb.GeneratedMessage {
+  factory TrainRequest({
+    $core.String? nurseryId,
+    $core.Iterable<$core.String>? childId,
+    $core.String? busId,
   }) {
     final $result = create();
-    if (message != null) {
-      $result.message = message;
+    if (nurseryId != null) {
+      $result.nurseryId = nurseryId;
+    }
+    if (childId != null) {
+      $result.childId.addAll(childId);
+    }
+    if (busId != null) {
+      $result.busId = busId;
     }
     return $result;
   }
-  PingRequest._() : super();
-  factory PingRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PingRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  TrainRequest._() : super();
+  factory TrainRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TrainRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PingRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'message')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
+    ..pPS(2, _omitFieldNames ? '' : 'childId')
+    ..aOS(3, _omitFieldNames ? '' : 'busId')
     ..hasRequiredFields = false
   ;
 
@@ -36,49 +46,61 @@ class PingRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  PingRequest clone() => PingRequest()..mergeFromMessage(this);
+  TrainRequest clone() => TrainRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  PingRequest copyWith(void Function(PingRequest) updates) => super.copyWith((message) => updates(message as PingRequest)) as PingRequest;
+  TrainRequest copyWith(void Function(TrainRequest) updates) => super.copyWith((message) => updates(message as TrainRequest)) as TrainRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static PingRequest create() => PingRequest._();
-  PingRequest createEmptyInstance() => create();
-  static $pb.PbList<PingRequest> createRepeated() => $pb.PbList<PingRequest>();
+  static TrainRequest create() => TrainRequest._();
+  TrainRequest createEmptyInstance() => create();
+  static $pb.PbList<TrainRequest> createRepeated() => $pb.PbList<TrainRequest>();
   @$core.pragma('dart2js:noInline')
-  static PingRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PingRequest>(create);
-  static PingRequest? _defaultInstance;
+  static TrainRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TrainRequest>(create);
+  static TrainRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get message => $_getSZ(0);
+  $core.String get nurseryId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set message($core.String v) { $_setString(0, v); }
+  set nurseryId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasMessage() => $_has(0);
+  $core.bool hasNurseryId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearMessage() => clearField(1);
+  void clearNurseryId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get childId => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.String get busId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set busId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasBusId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBusId() => clearField(3);
 }
 
-class PingResponse extends $pb.GeneratedMessage {
-  factory PingResponse({
-    $core.String? message,
+class TrainResponse extends $pb.GeneratedMessage {
+  factory TrainResponse({
+    $core.bool? isStarted,
   }) {
     final $result = create();
-    if (message != null) {
-      $result.message = message;
+    if (isStarted != null) {
+      $result.isStarted = isStarted;
     }
     return $result;
   }
-  PingResponse._() : super();
-  factory PingResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PingResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  TrainResponse._() : super();
+  factory TrainResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TrainResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PingResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'message')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'isStarted')
     ..hasRequiredFields = false
   ;
 
@@ -86,31 +108,239 @@ class PingResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  PingResponse clone() => PingResponse()..mergeFromMessage(this);
+  TrainResponse clone() => TrainResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  PingResponse copyWith(void Function(PingResponse) updates) => super.copyWith((message) => updates(message as PingResponse)) as PingResponse;
+  TrainResponse copyWith(void Function(TrainResponse) updates) => super.copyWith((message) => updates(message as TrainResponse)) as TrainResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static PingResponse create() => PingResponse._();
-  PingResponse createEmptyInstance() => create();
-  static $pb.PbList<PingResponse> createRepeated() => $pb.PbList<PingResponse>();
+  static TrainResponse create() => TrainResponse._();
+  TrainResponse createEmptyInstance() => create();
+  static $pb.PbList<TrainResponse> createRepeated() => $pb.PbList<TrainResponse>();
   @$core.pragma('dart2js:noInline')
-  static PingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PingResponse>(create);
-  static PingResponse? _defaultInstance;
+  static TrainResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TrainResponse>(create);
+  static TrainResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get message => $_getSZ(0);
+  $core.bool get isStarted => $_getBF(0);
   @$pb.TagNumber(1)
-  set message($core.String v) { $_setString(0, v); }
+  set isStarted($core.bool v) { $_setBool(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasMessage() => $_has(0);
+  $core.bool hasIsStarted() => $_has(0);
   @$pb.TagNumber(1)
-  void clearMessage() => clearField(1);
+  void clearIsStarted() => clearField(1);
+}
+
+class EvalRequest extends $pb.GeneratedMessage {
+  factory EvalRequest({
+    $core.String? busId,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    return $result;
+  }
+  EvalRequest._() : super();
+  factory EvalRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory EvalRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EvalRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  EvalRequest clone() => EvalRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  EvalRequest copyWith(void Function(EvalRequest) updates) => super.copyWith((message) => updates(message as EvalRequest)) as EvalRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static EvalRequest create() => EvalRequest._();
+  EvalRequest createEmptyInstance() => create();
+  static $pb.PbList<EvalRequest> createRepeated() => $pb.PbList<EvalRequest>();
+  @$core.pragma('dart2js:noInline')
+  static EvalRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EvalRequest>(create);
+  static EvalRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+}
+
+class EvalResponse extends $pb.GeneratedMessage {
+  factory EvalResponse({
+    $core.Iterable<$core.String>? childId,
+  }) {
+    final $result = create();
+    if (childId != null) {
+      $result.childId.addAll(childId);
+    }
+    return $result;
+  }
+  EvalResponse._() : super();
+  factory EvalResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory EvalResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EvalResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'childId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  EvalResponse clone() => EvalResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  EvalResponse copyWith(void Function(EvalResponse) updates) => super.copyWith((message) => updates(message as EvalResponse)) as EvalResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static EvalResponse create() => EvalResponse._();
+  EvalResponse createEmptyInstance() => create();
+  static $pb.PbList<EvalResponse> createRepeated() => $pb.PbList<EvalResponse>();
+  @$core.pragma('dart2js:noInline')
+  static EvalResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EvalResponse>(create);
+  static EvalResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get childId => $_getList(0);
+}
+
+class FaceDetectAndClipResponse extends $pb.GeneratedMessage {
+  factory FaceDetectAndClipResponse({
+    $core.String? nurseryId,
+    $core.String? childId,
+  }) {
+    final $result = create();
+    if (nurseryId != null) {
+      $result.nurseryId = nurseryId;
+    }
+    if (childId != null) {
+      $result.childId = childId;
+    }
+    return $result;
+  }
+  FaceDetectAndClipResponse._() : super();
+  factory FaceDetectAndClipResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory FaceDetectAndClipResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceDetectAndClipResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
+    ..aOS(2, _omitFieldNames ? '' : 'childId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  FaceDetectAndClipResponse clone() => FaceDetectAndClipResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  FaceDetectAndClipResponse copyWith(void Function(FaceDetectAndClipResponse) updates) => super.copyWith((message) => updates(message as FaceDetectAndClipResponse)) as FaceDetectAndClipResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static FaceDetectAndClipResponse create() => FaceDetectAndClipResponse._();
+  FaceDetectAndClipResponse createEmptyInstance() => create();
+  static $pb.PbList<FaceDetectAndClipResponse> createRepeated() => $pb.PbList<FaceDetectAndClipResponse>();
+  @$core.pragma('dart2js:noInline')
+  static FaceDetectAndClipResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceDetectAndClipResponse>(create);
+  static FaceDetectAndClipResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get nurseryId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set nurseryId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNurseryId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNurseryId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get childId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set childId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasChildId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearChildId() => clearField(2);
+}
+
+class FaceAndClipRequest extends $pb.GeneratedMessage {
+  factory FaceAndClipRequest({
+    $core.bool? isStarted,
+  }) {
+    final $result = create();
+    if (isStarted != null) {
+      $result.isStarted = isStarted;
+    }
+    return $result;
+  }
+  FaceAndClipRequest._() : super();
+  factory FaceAndClipRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory FaceAndClipRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FaceAndClipRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'isStarted')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  FaceAndClipRequest clone() => FaceAndClipRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  FaceAndClipRequest copyWith(void Function(FaceAndClipRequest) updates) => super.copyWith((message) => updates(message as FaceAndClipRequest)) as FaceAndClipRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static FaceAndClipRequest create() => FaceAndClipRequest._();
+  FaceAndClipRequest createEmptyInstance() => create();
+  static $pb.PbList<FaceAndClipRequest> createRepeated() => $pb.PbList<FaceAndClipRequest>();
+  @$core.pragma('dart2js:noInline')
+  static FaceAndClipRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FaceAndClipRequest>(create);
+  static FaceAndClipRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get isStarted => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isStarted($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsStarted() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsStarted() => clearField(1);
 }
 
 
