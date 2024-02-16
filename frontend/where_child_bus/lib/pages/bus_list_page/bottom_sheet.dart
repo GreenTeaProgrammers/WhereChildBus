@@ -85,22 +85,26 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       children: [
         // titleText(),
         modalHeader(widget.bus.name, "test"),
-        _isLoading
-            ? const Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : GuardiansList(
-                guardiansList: [],
-              ),
+        guardiansListView(),
         ConfirmButton(
           buttonText: "乗客情報",
           onTap: () => moveToBusPassengerPage(context),
         ),
       ],
     ));
+  }
+
+  Widget guardiansListView() {
+    return _isLoading
+        ? const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : GuardiansList(
+            guardiansList: [],
+          );
   }
 
   moveToBusPassengerPage(BuildContext context) {
