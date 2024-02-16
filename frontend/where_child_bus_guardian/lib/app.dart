@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_guardian/pages/check_page/check_page.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/daily_page.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
 
 class App extends StatefulWidget {
-  const App({super.key});
+  GuardianResponse guardian;
+
+  App({super.key, required this.guardian});
 
   @override
   State<App> createState() => _AppState();
