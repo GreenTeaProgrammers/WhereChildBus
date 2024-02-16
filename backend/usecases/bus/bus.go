@@ -188,6 +188,46 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	return &pb.GetBusListByNurseryIdResponse{Buses: buses}, nil
 }
 
+func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatusRequest) (*pb.ChangeBusStatusResponse, error) {
+        busID, err := uuid.Parse(req.BusId)
+        if err != nil {
+                return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+        }
+
+        tx, err := i.entClient.Tx(ctx)
+        if err != nil {
+                return nil, fmt.Errorf("failed to start transaction: %w", err)
+        }
+
+        status, err := utils.ConvertPbStatusToEntStatus(req.Status)
+        if err != nil {
+                return nil, fmt.Errorf("failed to convert status: %w", err)
+        }
+
+        bus, err := tx.Bus.UpdateOneID(busID).
+                SetStatus(*status).
+                Save(ctx)
+
+        if err != nil {
+                return nil, fmt.Errorf("failed to update bus: %w", err)
+        }
+
+        // Nurseryエッジを持つBusを取得
+        bus, err = tx.Bus.Query().
+                Where(busRepo.IDEQ(bus.ID)).
+                WithNursery().
+                Only(ctx)
+
+        if err != nil {
+                return nil, fmt.Errorf("failed to get bus: %w", err)
+        }
+
+        if err := tx.Commit(); err != nil {
+                return nil, fmt.Errorf("failed to commit transaction: %w", err)
+        }
+        return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
+}
+
 func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.BusQuery, error)) ([]*pb.Bus, error) {
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {

@@ -45,6 +45,20 @@ func convertSexToPbSex(sex child.Sex) pb.Sex {
 	}
 }
 
+func ConvertPbStatusToEntStatus(pbStatus pb.Status) (*bus.Status, error) {
+        switch pbStatus {
+        case pb.Status_STATUS_RUNNING:
+                status := bus.StatusRunning
+                return &status, nil
+        case pb.Status_STATUS_STOPPED:
+                status := bus.StatusStopped
+                return &status, nil
+        default:
+                // 不正な値の場合はエラーを返す
+                return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
+        }
+}
+
 func ToPbBus(t *ent.Bus) *pb.Bus {
 	status := convertStatusToPbStatus(t.Status)
 	return &pb.Bus{
