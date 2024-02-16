@@ -9,7 +9,6 @@ import (
 
 	"context"
 
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
@@ -128,8 +127,6 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 
 	// 最後にCloudFunctionに通知を送信
 	// TODO: 将来的に子供作成の通知にする
-	cfg, err := config.New()
-	utils.MakeCloudFunctionRequest(cfg.EndPointPingRequest, "POST")
 
 	return &pb.CreateChildResponse{
 		Child: utils.ToPbChild(child),
@@ -144,8 +141,8 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
 		return tx.Child.Query().
-		Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
-		WithGuardian(), nil
+			Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
+			WithGuardian(), nil
 	})
 
 	if err != nil {
