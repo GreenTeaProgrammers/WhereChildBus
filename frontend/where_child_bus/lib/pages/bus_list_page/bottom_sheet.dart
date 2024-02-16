@@ -7,7 +7,7 @@ import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/con
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/guardians_list.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_passenger_page/bus_passenger_page.dart';
-import 'package:where_child_bus/pages/bus_list_page/service/get_stations_list_by_bus_id.dart';
+import 'package:where_child_bus/pages/bus_list_page/service/get_guardians_list_by_bus_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BottomSheetWidget extends StatefulWidget {
@@ -32,10 +32,10 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
 
   Future<void> _loadGuardians() async {
     try {
-      var res = await getGuardiansByBusId(widget.bus.id);
+      var res = await getGuardiansListByBusIdService(widget.bus.id);
       if (mounted) {
         setState(() {
-          guardians = res;
+          guardians = res.guardians;
           _isLoading = false;
         });
       }
@@ -72,7 +72,6 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // titleText(),
         modalHeader(widget.bus.name, "test"),
         _isFailLoading ? loadingFailText() : guardiansListView(),
         ConfirmButton(
@@ -92,7 +91,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
             ),
           )
         : GuardiansList(
-            guardiansList: [],
+            guardiansList: guardians,
           );
   }
 

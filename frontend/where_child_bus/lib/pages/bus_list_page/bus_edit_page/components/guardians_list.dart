@@ -11,7 +11,6 @@ class GuardiansList extends StatelessWidget {
     return Expanded(child: guardiansListView(context, guardiansList));
   }
 
-  //将来的にはStationのListを参照
   Widget guardiansListView(
       BuildContext context, List<GuardianResponse> guardiansList) {
     return ListView.builder(
