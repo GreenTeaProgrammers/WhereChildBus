@@ -24,3 +24,8 @@ func (s *busServiceServer) CreateBus(ctx context.Context, req *pb.CreateBusReque
 func (s *busServiceServer) GetBusListByNurseryId(ctx context.Context, req *pb.GetBusListByNurseryIdRequest) (*pb.GetBusListByNurseryIdResponse, error) {
 	return s.interactor.GetBusListByNurseryID(ctx, req)
 }
+
+// ChangeBusStatus implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatusRequest) (*pb.ChangeBusStatusResponse, error) {
+        return s.interactor.ChangeBusStatus(ctx, req)
+}

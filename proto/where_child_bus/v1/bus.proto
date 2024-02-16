@@ -7,6 +7,7 @@ import "where_child_bus/v1/resources.proto";
 service BusService {
         rpc CreateBus(CreateBusRequest) returns (CreateBusResponse);
         rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
+        rpc ChangeBusStatus(ChangeBusStatusRequest) returns (ChangeBusStatusResponse);
 }
 
 message CreateBusRequest {
@@ -28,3 +29,13 @@ message GetBusListByNurseryIdRequest {
 message GetBusListByNurseryIdResponse {
         repeated Bus buses = 1;
 }
+
+message ChangeBusStatusRequest {
+        string bus_id = 1;
+        Status status = 2;
+}
+
+message ChangeBusStatusResponse {
+        Bus bus = 1;
+}
+

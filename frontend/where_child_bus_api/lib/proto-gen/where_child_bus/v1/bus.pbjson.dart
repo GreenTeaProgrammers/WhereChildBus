@@ -71,3 +71,30 @@ final $typed_data.Uint8List getBusListByNurseryIdResponseDescriptor = $convert.b
     'Ch1HZXRCdXNMaXN0QnlOdXJzZXJ5SWRSZXNwb25zZRItCgVidXNlcxgBIAMoCzIXLndoZXJlX2'
     'NoaWxkX2J1cy52MS5CdXNSBWJ1c2Vz');
 
+@$core.Deprecated('Use changeBusStatusRequestDescriptor instead')
+const ChangeBusStatusRequest$json = {
+  '1': 'ChangeBusStatusRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'status', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.Status', '10': 'status'},
+  ],
+};
+
+/// Descriptor for `ChangeBusStatusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List changeBusStatusRequestDescriptor = $convert.base64Decode(
+    'ChZDaGFuZ2VCdXNTdGF0dXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSMgoGc3RhdH'
+    'VzGAIgASgOMhoud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXR1c1IGc3RhdHVz');
+
+@$core.Deprecated('Use changeBusStatusResponseDescriptor instead')
+const ChangeBusStatusResponse$json = {
+  '1': 'ChangeBusStatusResponse',
+  '2': [
+    {'1': 'bus', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Bus', '10': 'bus'},
+  ],
+};
+
+/// Descriptor for `ChangeBusStatusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List changeBusStatusResponseDescriptor = $convert.base64Decode(
+    'ChdDaGFuZ2VCdXNTdGF0dXNSZXNwb25zZRIpCgNidXMYASABKAsyFy53aGVyZV9jaGlsZF9idX'
+    'MudjEuQnVzUgNidXM=');
+

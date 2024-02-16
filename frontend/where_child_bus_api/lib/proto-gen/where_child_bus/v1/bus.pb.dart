@@ -14,6 +14,7 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'resources.pb.dart' as $8;
+import 'resources.pbenum.dart' as $8;
 
 class CreateBusRequest extends $pb.GeneratedMessage {
   factory CreateBusRequest({
@@ -253,6 +254,122 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$8.Bus> get buses => $_getList(0);
+}
+
+class ChangeBusStatusRequest extends $pb.GeneratedMessage {
+  factory ChangeBusStatusRequest({
+    $core.String? busId,
+    $8.Status? status,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    if (status != null) {
+      $result.status = status;
+    }
+    return $result;
+  }
+  ChangeBusStatusRequest._() : super();
+  factory ChangeBusStatusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChangeBusStatusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChangeBusStatusRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..e<$8.Status>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $8.Status.STATUS_UNSPECIFIED, valueOf: $8.Status.valueOf, enumValues: $8.Status.values)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ChangeBusStatusRequest clone() => ChangeBusStatusRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ChangeBusStatusRequest copyWith(void Function(ChangeBusStatusRequest) updates) => super.copyWith((message) => updates(message as ChangeBusStatusRequest)) as ChangeBusStatusRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ChangeBusStatusRequest create() => ChangeBusStatusRequest._();
+  ChangeBusStatusRequest createEmptyInstance() => create();
+  static $pb.PbList<ChangeBusStatusRequest> createRepeated() => $pb.PbList<ChangeBusStatusRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ChangeBusStatusRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChangeBusStatusRequest>(create);
+  static ChangeBusStatusRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $8.Status get status => $_getN(1);
+  @$pb.TagNumber(2)
+  set status($8.Status v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasStatus() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearStatus() => clearField(2);
+}
+
+class ChangeBusStatusResponse extends $pb.GeneratedMessage {
+  factory ChangeBusStatusResponse({
+    $8.Bus? bus,
+  }) {
+    final $result = create();
+    if (bus != null) {
+      $result.bus = bus;
+    }
+    return $result;
+  }
+  ChangeBusStatusResponse._() : super();
+  factory ChangeBusStatusResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChangeBusStatusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChangeBusStatusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ChangeBusStatusResponse clone() => ChangeBusStatusResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ChangeBusStatusResponse copyWith(void Function(ChangeBusStatusResponse) updates) => super.copyWith((message) => updates(message as ChangeBusStatusResponse)) as ChangeBusStatusResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ChangeBusStatusResponse create() => ChangeBusStatusResponse._();
+  ChangeBusStatusResponse createEmptyInstance() => create();
+  static $pb.PbList<ChangeBusStatusResponse> createRepeated() => $pb.PbList<ChangeBusStatusResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ChangeBusStatusResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChangeBusStatusResponse>(create);
+  static ChangeBusStatusResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.Bus get bus => $_getN(0);
+  @$pb.TagNumber(1)
+  set bus($8.Bus v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBus() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Bus ensureBus() => $_ensure(0);
 }
 
 

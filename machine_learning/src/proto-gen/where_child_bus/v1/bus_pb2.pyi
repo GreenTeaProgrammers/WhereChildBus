@@ -37,3 +37,17 @@ class GetBusListByNurseryIdResponse(_message.Message):
     BUSES_FIELD_NUMBER: _ClassVar[int]
     buses: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Bus]
     def __init__(self, buses: _Optional[_Iterable[_Union[_resources_pb2.Bus, _Mapping]]] = ...) -> None: ...
+
+class ChangeBusStatusRequest(_message.Message):
+    __slots__ = ("bus_id", "status")
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    status: _resources_pb2.Status
+    def __init__(self, bus_id: _Optional[str] = ..., status: _Optional[_Union[_resources_pb2.Status, str]] = ...) -> None: ...
+
+class ChangeBusStatusResponse(_message.Message):
+    __slots__ = ("bus",)
+    BUS_FIELD_NUMBER: _ClassVar[int]
+    bus: _resources_pb2.Bus
+    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
