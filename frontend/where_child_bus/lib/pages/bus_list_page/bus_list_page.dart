@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
-import 'package:where_child_bus/pages/bus_list_page/service/get_bus_list_by_nursery_id.dart';
+import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusListPage extends StatefulWidget {
