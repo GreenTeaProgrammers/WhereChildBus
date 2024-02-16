@@ -6,6 +6,8 @@ secrets/
 
 src/face_detect_model/pickle/*
 src/face_detect_model/DetectFaceAndClip/img
+src/face_detect_model/DetectFaceAndClip/detce_img
+
 ### macOS ###
 # General
 .DS_Store
