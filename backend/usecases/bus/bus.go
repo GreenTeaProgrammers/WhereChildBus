@@ -40,19 +40,18 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger, mlClient mlv1.Mac
 func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*pb.CreateBusResponse, error) {
 	nurseryID, err := uuid.Parse(req.NurseryId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse nursery ID: %w", err)
+		i.logger.Error("failed to parse nursery ID", "error", err)
+		return nil, err
 	}
 
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
 
-	var commit bool
 	defer func() {
-		if !commit {
-			tx.Rollback()
-		}
+		tx.Rollback()
 	}()
 
 	bus, err := tx.Bus.Create().
@@ -62,7 +61,8 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		Save(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to create bus: %w", err)
+		i.logger.Error("failed to create bus", "error", err)
+		return nil, err
 	}
 
 	// Nurseryエッジを持つBusを取得
@@ -72,17 +72,18 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get bus: %w", err)
+		i.logger.Error("failed to get bus", "error", err)
+		return nil, err
 	}
 
-	err = setNextStation(ctx, tx, req.MorningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
+	err = setNextStation(*i.logger, ctx, tx, req.MorningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
 		return updateOp.AddMorningNextStation(nextStation)
 	})
 	if err != nil {
 		return nil, err // 朝のステーション設定中にエラーが発生しました
 	}
 
-	err = setNextStation(ctx, tx, req.EveningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
+	err = setNextStation(*i.logger, ctx, tx, req.EveningGuardianIds, func(updateOp *ent.StationUpdateOne, nextStation *ent.Station) *ent.StationUpdateOne {
 		return updateOp.AddEveningNextStation(nextStation)
 	})
 	if err != nil {
@@ -90,12 +91,12 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	}
 	// 以下のコードはリファクタリング後のメインの処理フローです。
 
-	morningGuardianIDs, err := parseGuardianIDs(req.MorningGuardianIds)
+	morningGuardianIDs, err := parseGuardianIDs(*i.logger, req.MorningGuardianIds)
 	if err != nil {
 		return nil, err // エラーハンドリングは簡潔に
 	}
 
-	eveningGuardianIDs, err := parseGuardianIDs(req.EveningGuardianIds)
+	eveningGuardianIDs, err := parseGuardianIDs(*i.logger, req.EveningGuardianIds)
 	if err != nil {
 		return nil, err // エラーハンドリングは簡潔に
 	}
@@ -106,19 +107,20 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		Where(stationRepo.HasGuardianWith(guardianRepo.IDIn(eveningGuardianIDs...))).
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get stations: %w", err)
+		i.logger.Error("failed to get stations", "error", err)
+		return nil, err
 	}
 
 	// 子供たちの処理を関数を用いて簡潔に
 	morningChildren := tx.Child.Query().
 		Where(childRepo.HasGuardianWith(guardianRepo.IDIn(morningGuardianIDs...))).AllX(ctx)
-	if err := createChildBusAssociations(ctx, tx, morningChildren, bus, childbusassociationRepo.BusTypeMorning); err != nil {
+	if err := createChildBusAssociations(*i.logger, ctx, tx, morningChildren, bus, childbusassociationRepo.BusTypeMorning); err != nil {
 		return nil, err
 	}
 
 	eveningChildren := tx.Child.Query().
 		Where(childRepo.HasGuardianWith(guardianRepo.IDIn(eveningGuardianIDs...))).AllX(ctx)
-	if err := createChildBusAssociations(ctx, tx, eveningChildren, bus, childbusassociationRepo.BusTypeEvening); err != nil {
+	if err := createChildBusAssociations(*i.logger, ctx, tx, eveningChildren, bus, childbusassociationRepo.BusTypeEvening); err != nil {
 		return nil, err
 	}
 
@@ -166,10 +168,9 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	// 	return nil, err
 	// }
 
-	// Make sure to commit the transaction since everything succeeded
-	commit = true
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	return &pb.CreateBusResponse{
@@ -177,38 +178,11 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	}, nil
 }
 
-// parseGuardianIDs は、指定されたガーディアンIDの文字列のスライスをUUIDのスライスに変換します。
-func parseGuardianIDs(ids []string) ([]uuid.UUID, error) {
-	parsedIDs := make([]uuid.UUID, len(ids))
-	for i, id := range ids {
-		parsedID, err := uuid.Parse(id)
-		if err != nil {
-			return nil, fmt.Errorf("failed to parse guardian ID '%s': %w", id, err)
-		}
-		parsedIDs[i] = parsedID
-	}
-	return parsedIDs, nil
-}
-
-// createChildBusAssociations は、指定された子供たちに対してBusChildAssociationを作成します。
-func createChildBusAssociations(ctx context.Context, tx *ent.Tx, children []*ent.Child, bus *ent.Bus, busType childbusassociationRepo.BusType) error {
-	for _, child := range children {
-		_, err := tx.ChildBusAssociation.Create().
-			SetChild(child).
-			SetBus(bus).
-			SetBusType(busType).
-			Save(ctx) // ctxを関数の引数から渡す
-		if err != nil {
-			return fmt.Errorf("failed to create bus child association: %w", err)
-		}
-	}
-	return nil
-}
-
 func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusListByNurseryIdRequest) (*pb.GetBusListByNurseryIdResponse, error) {
 	nurseryID, err := uuid.Parse(req.NurseryId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse nursery ID '%s': %w", req.NurseryId, err)
+		i.logger.Error("failed to parse nursery ID", "error", err)
+		return nil, err
 	}
 
 	buses, err := i.getBusList(ctx, func(tx *ent.Tx) (*ent.BusQuery, error) {
@@ -218,6 +192,7 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	})
 
 	if err != nil {
+		i.logger.Error("failed to get bus list", "error", err)
 		return nil, err
 	}
 
@@ -227,17 +202,20 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatusRequest) (*pb.ChangeBusStatusResponse, error) {
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+		i.logger.Error("failed to parse bus ID", "error", err)
+		return nil, err
 	}
 
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
 
 	status, err := utils.ConvertPbStatusToEntStatus(req.Status)
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert status: %w", err)
+		i.logger.Error("failed to convert status", "error", err)
+		return nil, err
 	}
 
 	bus, err := tx.Bus.UpdateOneID(busID).
@@ -245,7 +223,8 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		Save(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to update bus: %w", err)
+		i.logger.Error("failed to update bus", "error", err)
+		return nil, err
 	}
 
 	// Nurseryエッジを持つBusを取得
@@ -255,11 +234,13 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get bus: %w", err)
+		i.logger.Error("failed to get bus", "error", err)
+		return nil, err
 	}
 
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
 }
@@ -463,18 +444,21 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.BusQuery, error)) ([]*pb.Bus, error) {
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
 	defer tx.Rollback()
 
 	query, err := queryFunc(tx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create query: %w", err)
+		i.logger.Error("failed to create query", "error", err)
+		return nil, err
 	}
 
 	entBuses, err := query.All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to execute query: %w", err)
+		i.logger.Error("failed to execute query", "error", err)
+		return nil, err
 	}
 
 	pbBuses := make([]*pb.Bus, len(entBuses))
@@ -483,43 +467,79 @@ func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*e
 	}
 
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	return pbBuses, nil
 }
 
-func setNextStation(ctx context.Context, tx *ent.Tx, guardianIDs []string, setNextStationFunc func(*ent.StationUpdateOne, *ent.Station) *ent.StationUpdateOne) error {
+// parseGuardianIDs は、指定されたガーディアンIDの文字列のスライスをUUIDのスライスに変換します。
+func parseGuardianIDs(logger slog.Logger, ids []string) ([]uuid.UUID, error) {
+	parsedIDs := make([]uuid.UUID, len(ids))
+	for i, id := range ids {
+		parsedID, err := uuid.Parse(id)
+		if err != nil {
+			logger.Error("failed to parse guardian ID", "error", err)
+			return nil, err
+		}
+		parsedIDs[i] = parsedID
+	}
+	return parsedIDs, nil
+}
+
+// createChildBusAssociations は、指定された子供たちに対してBusChildAssociationを作成します。
+func createChildBusAssociations(logger slog.Logger, ctx context.Context, tx *ent.Tx, children []*ent.Child, bus *ent.Bus, busType childbusassociationRepo.BusType) error {
+	for _, child := range children {
+		_, err := tx.ChildBusAssociation.Create().
+			SetChild(child).
+			SetBus(bus).
+			SetBusType(busType).
+			Save(ctx) // ctxを関数の引数から渡す
+		if err != nil {
+			logger.Error("failed to create bus child association", "error", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func setNextStation(logger slog.Logger, ctx context.Context, tx *ent.Tx, guardianIDs []string, setNextStationFunc func(*ent.StationUpdateOne, *ent.Station) *ent.StationUpdateOne) error {
 	for index, guardianID := range guardianIDs {
 		guardianIDParsed, err := uuid.Parse(guardianID)
 		if err != nil {
-			return fmt.Errorf("failed to parse guardian ID '%s': %w", guardianID, err)
+			logger.Error("failed to parse guardian ID", "error", err)
+			return err
 		}
 
 		currentStation, err := tx.Station.Query().
 			Where(stationRepo.HasGuardianWith(guardianRepo.IDEQ(guardianIDParsed))).
 			Only(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to find station for guardian ID '%s': %w", guardianID, err)
+			logger.Error("failed to find station for guardian ID", "error", err)
+			return err
 		}
 
 		if index < len(guardianIDs)-1 {
 			nextGuardianID := guardianIDs[index+1]
 			nextGuardianIDParsed, err := uuid.Parse(nextGuardianID)
 			if err != nil {
-				return fmt.Errorf("failed to parse next guardian ID '%s': %w", nextGuardianID, err)
+				logger.Error("failed to parse next guardian ID", "error", err)
+				return err
 			}
 
 			nextStation, err := tx.Station.Query().
 				Where(stationRepo.HasGuardianWith(guardianRepo.IDEQ(nextGuardianIDParsed))).
 				Only(ctx)
 			if err != nil {
-				return fmt.Errorf("failed to find next station for guardian ID '%s': %w", nextGuardianID, err)
+				logger.Error("failed to find next station for guardian ID", "error", err)
+				return err
 			}
 
 			err = setNextStationFunc(tx.Station.UpdateOne(currentStation), nextStation).Exec(ctx)
 			if err != nil {
-				return fmt.Errorf("failed to set next station for station ID '%s': %w", currentStation.ID, err)
+				logger.Error("failed to set next station for station ID", "error", err)
+				return err
 			}
 		}
 	}
