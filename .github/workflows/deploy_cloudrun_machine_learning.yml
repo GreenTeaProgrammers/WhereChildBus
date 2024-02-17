@@ -23,17 +23,17 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --tag=gcr.io/${{ secrets.GCP_PROJECT_NAME }}/${{ secrets.GCP_IMAGE_NAME }}:latest \
+            --tag=gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
             --file=./Dockerfile \
             --platform linux/amd64 .
 
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_NAME }}/${{ secrets.GCP_IMAGE_NAME }}:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ secrets.GCP_IMAGE_NAME }} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_NAME }}/${{ secrets.GCP_IMAGE_NAME }}:latest \
+          gcloud run deploy ${{ secrets.GCP_IMAGE_NAME_FOR_ML }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
             --region ${{ secrets.REGION }} \
             --platform managed
