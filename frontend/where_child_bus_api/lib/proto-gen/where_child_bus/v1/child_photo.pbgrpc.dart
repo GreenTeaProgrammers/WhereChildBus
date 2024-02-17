@@ -29,6 +29,10 @@ class ChildPhotoServiceClient extends $grpc.Client {
       '/where_child_bus.v1.ChildPhotoService/DeleteChildPhoto',
       ($2.DeleteChildPhotoRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.DeleteChildPhotoResponse.fromBuffer(value));
+  static final _$getChildPhoto = $grpc.ClientMethod<$2.GetChildPhotoRequest, $2.GetChildPhotoResponse>(
+      '/where_child_bus.v1.ChildPhotoService/GetChildPhoto',
+      ($2.GetChildPhotoRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.GetChildPhotoResponse.fromBuffer(value));
 
   ChildPhotoServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +46,10 @@ class ChildPhotoServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$2.DeleteChildPhotoResponse> deleteChildPhoto($2.DeleteChildPhotoRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteChildPhoto, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$2.GetChildPhotoResponse> getChildPhoto($2.GetChildPhotoRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getChildPhoto, request, options: options);
   }
 }
 
@@ -64,6 +72,13 @@ abstract class ChildPhotoServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $2.DeleteChildPhotoRequest.fromBuffer(value),
         ($2.DeleteChildPhotoResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetChildPhotoRequest, $2.GetChildPhotoResponse>(
+        'GetChildPhoto',
+        getChildPhoto_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $2.GetChildPhotoRequest.fromBuffer(value),
+        ($2.GetChildPhotoResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$2.DuplicationCheckResponse> duplicationCheck_Pre($grpc.ServiceCall call, $async.Future<$2.DuplicationCheckRequest> request) async {
@@ -74,6 +89,11 @@ abstract class ChildPhotoServiceBase extends $grpc.Service {
     return deleteChildPhoto(call, await request);
   }
 
+  $async.Future<$2.GetChildPhotoResponse> getChildPhoto_Pre($grpc.ServiceCall call, $async.Future<$2.GetChildPhotoRequest> request) async {
+    return getChildPhoto(call, await request);
+  }
+
   $async.Future<$2.DuplicationCheckResponse> duplicationCheck($grpc.ServiceCall call, $2.DuplicationCheckRequest request);
   $async.Future<$2.DeleteChildPhotoResponse> deleteChildPhoto($grpc.ServiceCall call, $2.DeleteChildPhotoRequest request);
+  $async.Future<$2.GetChildPhotoResponse> getChildPhoto($grpc.ServiceCall call, $2.GetChildPhotoRequest request);
 }

@@ -67,3 +67,42 @@ final $typed_data.Uint8List deleteChildPhotoResponseDescriptor = $convert.base64
     'ChhEZWxldGVDaGlsZFBob3RvUmVzcG9uc2USJgoPaXNfc3VjY2Vzc19saXN0GAEgAygIUg1pc1'
     'N1Y2Nlc3NMaXN0EhAKA2lkcxgCIAMoCVIDaWRz');
 
+@$core.Deprecated('Use getChildPhotoRequestDescriptor instead')
+const GetChildPhotoRequest$json = {
+  '1': 'GetChildPhotoRequest',
+  '2': [
+    {'1': 'child_id', '3': 1, '4': 1, '5': 9, '10': 'childId'},
+  ],
+};
+
+/// Descriptor for `GetChildPhotoRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getChildPhotoRequestDescriptor = $convert.base64Decode(
+    'ChRHZXRDaGlsZFBob3RvUmVxdWVzdBIZCghjaGlsZF9pZBgBIAEoCVIHY2hpbGRJZA==');
+
+@$core.Deprecated('Use childPhotoResponseDescriptor instead')
+const ChildPhotoResponse$json = {
+  '1': 'ChildPhotoResponse',
+  '2': [
+    {'1': 'child_photo_id', '3': 1, '4': 1, '5': 9, '10': 'childPhotoId'},
+    {'1': 'photo', '3': 2, '4': 1, '5': 12, '10': 'photo'},
+  ],
+};
+
+/// Descriptor for `ChildPhotoResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List childPhotoResponseDescriptor = $convert.base64Decode(
+    'ChJDaGlsZFBob3RvUmVzcG9uc2USJAoOY2hpbGRfcGhvdG9faWQYASABKAlSDGNoaWxkUGhvdG'
+    '9JZBIUCgVwaG90bxgCIAEoDFIFcGhvdG8=');
+
+@$core.Deprecated('Use getChildPhotoResponseDescriptor instead')
+const GetChildPhotoResponse$json = {
+  '1': 'GetChildPhotoResponse',
+  '2': [
+    {'1': 'child_photos', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhotoResponse', '10': 'childPhotos'},
+  ],
+};
+
+/// Descriptor for `GetChildPhotoResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getChildPhotoResponseDescriptor = $convert.base64Decode(
+    'ChVHZXRDaGlsZFBob3RvUmVzcG9uc2USSQoMY2hpbGRfcGhvdG9zGAEgAygLMiYud2hlcmVfY2'
+    'hpbGRfYnVzLnYxLkNoaWxkUGhvdG9SZXNwb25zZVILY2hpbGRQaG90b3M=');
+

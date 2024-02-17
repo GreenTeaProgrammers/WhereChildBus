@@ -68,9 +68,10 @@ message TrackBusContinuousResponse {
 
 message StreamBusVideoRequest {
         string bus_id = 1;
-        VideoType video_type = 2;
-        bytes video_chunk = 3; // Chunk of video data
-        int64 timestamp = 4; // Unix timestamp
+        BusType bus_type = 2;
+        VideoType video_type = 3;
+        bytes video_chunk = 4; // Chunk of video data
+        int64 timestamp = 5; // Unix timestamp
 }
 
 message StreamBusVideoResponse {

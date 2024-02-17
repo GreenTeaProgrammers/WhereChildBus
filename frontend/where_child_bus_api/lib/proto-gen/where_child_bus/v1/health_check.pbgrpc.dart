@@ -20,19 +20,19 @@ import 'health_check.pb.dart' as $4;
 export 'health_check.pb.dart';
 
 @$pb.GrpcServiceName('where_child_bus.v1.HealthcheckService')
-class HealthCheckServiceClient extends $grpc.Client {
+class HealthcheckServiceClient extends $grpc.Client {
   static final _$ping = $grpc.ClientMethod<$4.PingRequest, $4.PingResponse>(
       '/where_child_bus.v1.HealthcheckService/Ping',
       ($4.PingRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $4.PingResponse.fromBuffer(value));
 
-  HealthCheckServiceClient($grpc.ClientChannel channel,
+  HealthcheckServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
-      : super(channel, options: options, interceptors: interceptors);
+      : super(channel, options: options,
+        interceptors: interceptors);
 
-  $grpc.ResponseFuture<$4.PingResponse> ping($4.PingRequest request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$4.PingResponse> ping($4.PingRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$ping, request, options: options);
   }
 }
@@ -51,11 +51,9 @@ abstract class HealthcheckServiceBase extends $grpc.Service {
         ($4.PingResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$4.PingResponse> ping_Pre(
-      $grpc.ServiceCall call, $async.Future<$4.PingRequest> request) async {
+  $async.Future<$4.PingResponse> ping_Pre($grpc.ServiceCall call, $async.Future<$4.PingRequest> request) async {
     return ping(call, await request);
   }
 
-  $async.Future<$4.PingResponse> ping(
-      $grpc.ServiceCall call, $4.PingRequest request);
+  $async.Future<$4.PingResponse> ping($grpc.ServiceCall call, $4.PingRequest request);
 }

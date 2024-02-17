@@ -8,10 +8,23 @@ service MachineLearningService {
         rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
+enum BusType {
+        BUS_TYPE_UNSPECIFIED = 0;
+        BUS_TYPE_MORNING = 1;
+        BUS_TYPE_EVENING = 2;
+}
+
+enum VideoType {
+        VIDEO_TYPE_UNSPECIFIED = 0;
+        VIDEO_TYPE_GET_ON = 1;
+        VIDEO_TYPE_GET_OFF = 2;
+}
+
 message TrainRequest {
         string nursery_id = 1;
-        repeated string child_id = 2;
-        string bus_id = 3;
+        string bus_id = 2;
+        repeated string child_ids = 3;
+        BusType bus_type = 4;
 }
 
 message TrainResponse {
@@ -20,7 +33,10 @@ message TrainResponse {
 
 message PredRequest {
         string bus_id = 1;
-        // TODO: add video data
+        BusType bus_type = 2;
+        VideoType video_type = 3;
+        bytes video_chunk = 4; // Chunk of video data
+        int64 timestamp = 5; // Unix timestamp
 }
 
 message PredResponse {

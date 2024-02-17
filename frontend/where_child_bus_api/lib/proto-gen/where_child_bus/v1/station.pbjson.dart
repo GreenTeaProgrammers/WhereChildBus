@@ -61,6 +61,7 @@ const GetStationListByBusIdResponse$json = {
     {'1': 'stations', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Station', '10': 'stations'},
     {'1': 'guardians', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardians'},
     {'1': 'children', '3': 3, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+    {'1': 'photos', '3': 4, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
   ],
 };
 
@@ -69,5 +70,6 @@ final $typed_data.Uint8List getStationListByBusIdResponseDescriptor = $convert.b
     'Ch1HZXRTdGF0aW9uTGlzdEJ5QnVzSWRSZXNwb25zZRI3CghzdGF0aW9ucxgBIAMoCzIbLndoZX'
     'JlX2NoaWxkX2J1cy52MS5TdGF0aW9uUghzdGF0aW9ucxJCCglndWFyZGlhbnMYAiADKAsyJC53'
     'aGVyZV9jaGlsZF9idXMudjEuR3VhcmRpYW5SZXNwb25zZVIJZ3VhcmRpYW5zEjUKCGNoaWxkcm'
-    'VuGAMgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbg==');
+    'VuGAMgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MY'
+    'BCADKAsyHi53aGVyZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
 

@@ -1441,6 +1441,7 @@ class ChildPhoto extends $pb.GeneratedMessage {
   factory ChildPhoto({
     $core.String? id,
     $core.String? childId,
+    $core.List<$core.int>? photo,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -1450,6 +1451,9 @@ class ChildPhoto extends $pb.GeneratedMessage {
     }
     if (childId != null) {
       $result.childId = childId;
+    }
+    if (photo != null) {
+      $result.photo = photo;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -1466,8 +1470,9 @@ class ChildPhoto extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChildPhoto', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'childId')
-    ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(6, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'photo', $pb.PbFieldType.OY)
+    ..aOM<$7.Timestamp>(4, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1510,27 +1515,36 @@ class ChildPhoto extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearChildId() => clearField(2);
 
-  @$pb.TagNumber(5)
-  $7.Timestamp get createdAt => $_getN(2);
-  @$pb.TagNumber(5)
-  set createdAt($7.Timestamp v) { setField(5, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasCreatedAt() => $_has(2);
-  @$pb.TagNumber(5)
-  void clearCreatedAt() => clearField(5);
-  @$pb.TagNumber(5)
-  $7.Timestamp ensureCreatedAt() => $_ensure(2);
+  @$pb.TagNumber(3)
+  $core.List<$core.int> get photo => $_getN(2);
+  @$pb.TagNumber(3)
+  set photo($core.List<$core.int> v) { $_setBytes(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasPhoto() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPhoto() => clearField(3);
 
-  @$pb.TagNumber(6)
-  $7.Timestamp get updatedAt => $_getN(3);
-  @$pb.TagNumber(6)
-  set updatedAt($7.Timestamp v) { setField(6, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasUpdatedAt() => $_has(3);
-  @$pb.TagNumber(6)
-  void clearUpdatedAt() => clearField(6);
-  @$pb.TagNumber(6)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(3);
+  @$pb.TagNumber(4)
+  $7.Timestamp get createdAt => $_getN(3);
+  @$pb.TagNumber(4)
+  set createdAt($7.Timestamp v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCreatedAt() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCreatedAt() => clearField(4);
+  @$pb.TagNumber(4)
+  $7.Timestamp ensureCreatedAt() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  $7.Timestamp get updatedAt => $_getN(4);
+  @$pb.TagNumber(5)
+  set updatedAt($7.Timestamp v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUpdatedAt() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUpdatedAt() => clearField(5);
+  @$pb.TagNumber(5)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(4);
 }
 
 class BoardingRecord extends $pb.GeneratedMessage {
