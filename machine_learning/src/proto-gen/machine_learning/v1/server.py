@@ -8,7 +8,12 @@ import health_check_pb2
 import health_check_pb2_grpc
 import machine_learning_pb2
 import machine_learning_pb2_grpc
-from grpc_reflection.v1alpha import reflection
+
+import logging
+import os
+from concurrent import futures
+
+import grpc
 
 from face_detect_model.DetectFaceAndClip.detectFaceAndClip import main
 
@@ -58,31 +63,22 @@ class MachineLearningServiceServicer(
 
 
 def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    bind_address = f"[::]:8080"
+    server = grpc.server(futures.ThreadPoolExecutor())
     health_check_pb2_grpc.add_HealthcheckServiceServicer_to_server(
         HealthCheckServiceServer(), server
     )
     machine_learning_pb2_grpc.add_MachineLearningServiceServicer_to_server(
         MachineLearningServiceServicer(), server
     )
-
-    # Reflection APIの設定
-    SERVICE_NAMES = (
-        machine_learning_pb2.DESCRIPTOR.services_by_name[
-            "MachineLearningService"
-        ].full_name,
-        health_check_pb2.DESCRIPTOR.services_by_name["HealthcheckService"].full_name,
-        reflection.SERVICE_NAME,
-    )
-    reflection.enable_server_reflection(SERVICE_NAMES, server)
-
-    server.add_insecure_port("[::]:8080")
+    server.add_insecure_port(bind_address)
     server.start()
-    logging.info("Server started at [::]:8080")
+    logging.info("Listening on %s.", bind_address)
     server.wait_for_termination()
 
 
 if __name__ == "__main__":
+    logging.info("Called server.py")
     # NOTE: https://github.com/grpc/grpc/issues/17321
     # gRPCのPython環境でloggingを使う場合、server起動前にlogging.basicConfig()を実行する必要がある
     logging.basicConfig(

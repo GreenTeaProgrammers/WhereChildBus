@@ -30,7 +30,7 @@ def load_image(args: argparse.Namespace, blobs=None):
     if args.env == "local":
         return load_image_from_local(args.image_dir_path)
     elif args.env == "remote":
-        return load_image_from_remote(args.nursery_id, args.child_id, blobs)
+        return load_image_from_remote(blobs)
 
 
 def load_image_from_local(image_dir_path: str):
