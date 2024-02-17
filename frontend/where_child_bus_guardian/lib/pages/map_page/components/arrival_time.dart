@@ -29,15 +29,39 @@ class _ArrivalTime extends State<ArrivalTime> {
   String arrivalTime = '';
 
   @override
+  void initState() {
+    super.initState();
+    setArrivalTime();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    setTravelTime();
     return Text(
       arrivalTime,
       style: const TextStyle(fontSize: 30),
     );
   }
 
-  getTravelTime(double startLat, double startLng, double endLat, double endLng,
+  void setArrivalTime() async {
+    int durationInSeconds = await getArrivalTime(
+        widget.nurseryLatitude,
+        widget.nurseryLongitude,
+        widget.guardianLatitude,
+        widget.guardianLongitude,
+        widget.waypoints);
+
+    DateTime nurseryToBusStopTime =
+        widget.departureTime.add(Duration(seconds: durationInSeconds));
+
+    String formattedArrivalTime =
+        '${nurseryToBusStopTime.hour.toString().padLeft(2, '0')}:${nurseryToBusStopTime.minute.toString().padLeft(2, '0')}';
+
+    setState(() {
+      arrivalTime = formattedArrivalTime;
+    });
+  }
+
+  getArrivalTime(double startLat, double startLng, double endLat, double endLng,
       List<Waypoint> waypoints) async {
     String apiKey = dotenv.get("GOOGLE_MAP_API_KEY");
     String url = '';
@@ -50,7 +74,7 @@ class _ArrivalTime extends State<ArrivalTime> {
           point.latitude == guardianLatitude &&
           point.longitude == guardianLongitude);
       if (guardianIndex != -1) {
-        waypoints = waypoints.sublist(0, guardianIndex);
+        waypoints = waypoints.sublist(0, guardianIndex + 1);
       }
 
       String waypointsString = waypoints
@@ -75,24 +99,5 @@ class _ArrivalTime extends State<ArrivalTime> {
     } else {
       print('Failed to fetch directions.');
     }
-  }
-
-  void setTravelTime() async {
-    int durationInSeconds = await getTravelTime(
-        widget.nurseryLatitude,
-        widget.nurseryLongitude,
-        widget.guardianLatitude,
-        widget.guardianLongitude,
-        widget.waypoints);
-
-    DateTime nurseryToBusStopTime =
-        widget.departureTime.add(Duration(seconds: durationInSeconds));
-
-    String formattedArrivalTime =
-        '${nurseryToBusStopTime.hour.toString().padLeft(2, '0')}:${nurseryToBusStopTime.minute.toString().padLeft(2, '0')}';
-
-    setState(() {
-      arrivalTime = formattedArrivalTime;
-    });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
+import 'package:where_child_bus_guardian/pages/map_page/components/bus_to_bus_stop_time.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/arrival_time.dart';
 import '../styles/styles.dart';
 
@@ -85,13 +86,13 @@ class _MapPageState extends State<MapPage> {
         children: <Widget>[
           fieldTitleAndTime(
               "到着まで",
-              ArrivalTime(
-                  waypoints: waypoints,
-                  nurseryLatitude: nurseryLatitude,
-                  nurseryLongitude: nurseryLongitude,
-                  guardianLatitude: guardianLatitude,
-                  guardianLongitude: guardianLongitude,
-                  departureTime: departureTime)),
+              BusToBusStopTime(
+                waypoints: waypoints,
+                busLatitude: busLatitude,
+                busLongitude: busLongitude,
+                guardianLatitude: guardianLatitude,
+                guardianLongitude: guardianLongitude,
+              )),
           fieldTitleAndTime(
               "到着予定時刻",
               ArrivalTime(
@@ -100,7 +101,7 @@ class _MapPageState extends State<MapPage> {
                   nurseryLongitude: nurseryLongitude,
                   guardianLatitude: guardianLatitude,
                   guardianLongitude: guardianLongitude,
-                  departureTime: departureTime))
+                  departureTime: departureTime)),
         ]);
   }
 

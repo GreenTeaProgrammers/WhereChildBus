@@ -50,19 +50,23 @@ class _GoogleMapView extends State<GoogleMapView> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: GoogleMap(
-          initialCameraPosition: _initialLocation,
-          mapType: MapType.normal,
-          onMapCreated: (GoogleMapController controller) {
-            mapController = controller;
-            _getPolyline(widget.waypoints);
-          },
-          markers: Set<Marker>.of(markers.values),
-          polylines: Set<Polyline>.of(polylines.values),
-        ));
+    return Padding(
+        padding: EdgeInsets.only(right: 10.0, left: 10.0),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: GoogleMap(
+                  initialCameraPosition: _initialLocation,
+                  mapType: MapType.normal,
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController = controller;
+                    _getPolyline(widget.waypoints);
+                  },
+                  markers: Set<Marker>.of(markers.values),
+                  polylines: Set<Polyline>.of(polylines.values),
+                ))));
   }
 
   _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
