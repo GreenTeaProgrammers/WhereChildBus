@@ -1,7 +1,9 @@
 package bus
 
 import (
+	"errors"
 	"fmt"
+	"io"
 
 	"github.com/google/uuid"
 	"golang.org/x/exp/slog"
@@ -256,6 +258,40 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		return nil, fmt.Errorf("failed to commit transaction: %w", err)
 	}
 	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
+}
+
+func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			// ストリームの終了
+			return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
+		}
+		if err != nil {
+			i.logger.Error("failed to receive location", err)
+			// 一時的なエラーの場合は、エラーをログに記録し、処理を続行する
+			continue
+		}
+
+		busID, err := uuid.Parse(req.BusId)
+		if err != nil {
+			i.logger.Error("failed to parse bus ID", err)
+			// バスIDの解析に失敗した場合は、エラーをログに記録し、処理を続行する
+			continue
+		}
+
+		// トランザクションを使用せずに直接更新
+		_, err = i.entClient.Bus.UpdateOneID(busID).
+			SetLatitude(req.Latitude).
+			SetLongitude(req.Longitude).
+			Save(context.Background())
+
+		if err != nil {
+			i.logger.Error("failed to update bus location", err)
+			// 更新に失敗した場合は、エラーをログに記録し、処理を続行する
+			continue
+		}
+	}
 }
 
 func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.BusQuery, error)) ([]*pb.Bus, error) {

@@ -11,9 +11,13 @@ type busServiceServer struct {
 	interactor *bus.Interactor
 }
 
+func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
+	return &busServiceServer{interactor}
+}
+
 // SendLocationContinuous implements where_child_busv1.BusServiceServer.
-func (*busServiceServer) SendLocationContinuous(pb.BusService_SendLocationContinuousServer) error {
-	panic("unimplemented")
+func (s *busServiceServer) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
+	return s.interactor.SendLocationContinuous(stream)
 }
 
 // StreamBusVideo implements where_child_busv1.BusServiceServer.
@@ -24,10 +28,6 @@ func (*busServiceServer) StreamBusVideo(pb.BusService_StreamBusVideoServer) erro
 // TrackBusContinuous implements where_child_busv1.BusServiceServer.
 func (*busServiceServer) TrackBusContinuous(*pb.TrackBusContinuousRequest, pb.BusService_TrackBusContinuousServer) error {
 	panic("unimplemented")
-}
-
-func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
-	return &busServiceServer{interactor}
 }
 
 // CreateBus implements where_child_busv1.BusServiceServer.
