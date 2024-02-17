@@ -9,26 +9,29 @@ import (
 
 	"context"
 
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
+	childPhotoRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
+
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 )
 
 type Interactor struct {
-	entClient     *ent.Client
-	logger        *slog.Logger
-	StorageClient *storage.Client
-	BucketName    string
+	entClient       *ent.Client
+	logger          *slog.Logger
+	StorageClient   *storage.Client
+	MLServiceClient mlv1.MachineLearningServiceClient
+	BucketName      string
 }
 
-func NewInteractor(entClient *ent.Client, logger *slog.Logger, storageClient *storage.Client, bucketName string) *Interactor {
-	return &Interactor{entClient, logger, storageClient, bucketName}
+func NewInteractor(entClient *ent.Client, logger *slog.Logger, storageClient *storage.Client, mlClient mlv1.MachineLearningServiceClient, bucketName string) *Interactor {
+	return &Interactor{entClient, logger, storageClient, mlClient, bucketName}
 }
 
 func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest) (*pb.CreateChildResponse, error) {
@@ -120,16 +123,22 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		}
 	}
 
+	// TODO: 顔検出と切り抜きのリクエストを送信
+	// res, err := i.MLServiceClient.FaceDetectAndClip(ctx, &mlv1.FaceDetectAndClipRequest{
+	// 	NurseryId: nurseryID.String(),
+	// 	ChildId:   child.ID.String(),
+	// })
+
+	// if !res.IsStarted && err != nil {
+	// 	i.logger.Error("failed to start face detection and clipping", "error", err)
+	// 	return nil, err
+	// }
+
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
 		return nil, fmt.Errorf("failed to commit transaction: %w", err)
 	}
 	commit = true // トランザクションが成功した
-
-	// 最後にCloudFunctionに通知を送信
-	// TODO: 将来的に子供作成の通知にする
-	cfg, err := config.New()
-	utils.MakeCloudFunctionRequest(cfg.EndPointPingRequest, "POST")
 
 	return &pb.CreateChildResponse{
 		Child: utils.ToPbChild(child),
@@ -144,15 +153,36 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
 		return tx.Child.Query().
-		Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
-		WithGuardian(), nil
+			Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
+			WithGuardian(), nil
 	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.GetChildListByGuardianIDResponse{Children: children}, nil
+	var childPhotoList []*pb.ChildPhoto
+	for _, child := range children {
+		childPhotoRecordList, err := i.entClient.ChildPhoto.Query().
+			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).
+			All(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get child photo list", "error", err)
+			return nil, err
+		}
+
+		for _, photo := range childPhotoRecordList {
+			childPhotoList = append(childPhotoList, &pb.ChildPhoto{
+				ChildId: child.Id,
+				Id:      photo.ID.String(),
+			})
+		}
+	}
+
+	return &pb.GetChildListByGuardianIDResponse{
+		Children: children,
+		Photos:   childPhotoList}, nil
 }
 
 func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
@@ -170,10 +200,33 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 	})
 
 	if err != nil {
+		i.logger.Error("failed to get children by nursery ID", "error", err)
 		return nil, err
 	}
 
-	return &pb.GetChildListByNurseryIDResponse{Children: children}, nil
+	// 子供の写真を取得
+	var photos []*pb.ChildPhoto
+	for _, child := range children {
+		photoRecordList, err := i.entClient.ChildPhoto.Query().
+			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).All(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get child photo list", "error", err)
+			return nil, err
+		}
+
+		for _, photo := range photoRecordList {
+			photos = append(photos, &pb.ChildPhoto{
+				ChildId: child.Id,
+				Id:      photo.ID.String(),
+			})
+		}
+	}
+
+	return &pb.GetChildListByNurseryIDResponse{
+		Children: children,
+		Photos:   photos,
+	}, nil
 }
 
 func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildListByBusIDRequest) (*pb.GetChildListByBusIDResponse, error) {
@@ -182,22 +235,40 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
 	}
 
-	// バスIDに紐づく子供のIDを中間テーブルを通じて取得
-	children, err := i.entClient.Child.Query().
-		Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
-		WithGuardian().
-		All(ctx)
+	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
+		return tx.Child.Query().
+			Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
+			WithGuardian(), nil
+	})
+
 	if err != nil {
-		return nil, fmt.Errorf("failed to get children by bus ID: %w", err)
+		i.logger.Error("failed to get children by bus ID", "error", err)
+		return nil, err
 	}
 
-	// 子供の情報をプロトコルバッファ形式に変換
-	pbChildren := make([]*pb.Child, 0, len(children))
+	// 子供の写真を取得
+	var photos []*pb.ChildPhoto
 	for _, child := range children {
-		pbChildren = append(pbChildren, utils.ToPbChild(child))
+		photoRecordList, err := i.entClient.ChildPhoto.Query().
+			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).All(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get child photo list", "error", err)
+			return nil, err
+		}
+
+		for _, photo := range photoRecordList {
+			photos = append(photos, &pb.ChildPhoto{
+				ChildId: child.Id,
+				Id:      photo.ID.String(),
+			})
+		}
 	}
 
-	return &pb.GetChildListByBusIDResponse{Children: pbChildren}, nil
+	return &pb.GetChildListByBusIDResponse{
+		Children: children,
+		Photos:   photos,
+	}, nil
 }
 
 // getChildList abstracts the common logic for fetching child lists.
