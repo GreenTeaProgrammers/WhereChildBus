@@ -26,10 +26,10 @@ RUN echo "DSN=$DSN" > .env \
     && echo "DB_NAME=$DB_NAME" >> .env \
     && echo "PORT=$PORT" >> .env \
     && echo "MODE_DEV=$MODE_DEV" >> .env \
-    && echo "GOOGLE_APPLICATION_CREDENTIALS" >> .env \
-    && echo "STORAGE_BUCKET_NAME" >> .env \
-    && echo "PASSWORD_PEPPER" >> .env \
-    %% echo "ML_ADDR" >> .env
+    && echo "GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS" >> .env \
+    && echo "STORAGE_BUCKET_NAME=$STORAGE_BUCKET_NAME" >> .env \
+    && echo "PASSWORD_PEPPER=$PASSWORD_PEPPER" >> .env \
+    %% echo "ML_ADDR=$ML_ADDR" >> .env
 
 RUN go mod download
 
