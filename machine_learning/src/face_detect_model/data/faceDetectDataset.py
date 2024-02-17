@@ -37,7 +37,7 @@ class FaceDetectDataset(torch.utils.data.Dataset):
 
             self.face_data.append((label, default_transform(image_pil)))
             
-            augmented_images = self.augment_image(image_pil, num_variations=5)
+            augmented_images = self.augment_image(image_pil, num_variations=100)
             for aug_img in augmented_images:
                 self.face_data.append((label, aug_img))
 
@@ -50,7 +50,7 @@ class FaceDetectDataset(torch.utils.data.Dataset):
     def get_augment_transform(self):
         return transforms.Compose([
             transforms.RandomApply([transforms.Resize((256, 256))], p=0.5),
-            transforms.RandomCrop((224, 224), p=0.5),
+            transforms.RandomCrop((100, 100)),
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomVerticalFlip(p=0.5),
             transforms.RandomApply([transforms.RandomRotation(degrees=180)], p=0.5),
