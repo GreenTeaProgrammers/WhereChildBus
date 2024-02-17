@@ -16,7 +16,7 @@ from face_detect_model.DetectFaceAndClip.detectFaceAndClip import main
 class HealthCheckServiceServer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
-    def Ping(self, request, context):
+    def Ping(self, request: health_check_pb2.PingRequest, context):
         print("RECV: %s" % request.name)
         message = "Hello, %s!" % request.name
         print("SEND: %s" % message)
@@ -27,14 +27,18 @@ class MachineLearningServiceServicer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
     # TODO: implement Predict
-    def Predict(self, request, context):
+    def Predict(self, request: machine_learning_pb2.PredRequest, context):
         pass
 
     # TODO: implement Train
-    def Train(self, request, context):
+    def Train(self, request: machine_learning_pb2.TrainRequest, context):
         pass
 
-    def FaceDetectAndClip(self, request, context):
+    def FaceDetectAndClip(
+        self,
+        request: machine_learning_pb2.FaceDetectAndClipRequest,
+        context,
+    ):
         parser = argparse.ArgumentParser()
         args = parser.parse_args()
 
