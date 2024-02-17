@@ -262,9 +262,13 @@ class PredRequest extends $pb.GeneratedMessage {
 
 class PredResponse extends $pb.GeneratedMessage {
   factory PredResponse({
+    $core.bool? isDetected,
     $core.Iterable<$core.String>? childIds,
   }) {
     final $result = create();
+    if (isDetected != null) {
+      $result.isDetected = isDetected;
+    }
     if (childIds != null) {
       $result.childIds.addAll(childIds);
     }
@@ -275,7 +279,8 @@ class PredResponse extends $pb.GeneratedMessage {
   factory PredResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'childIds')
+    ..aOB(1, _omitFieldNames ? '' : 'isDetected')
+    ..pPS(2, _omitFieldNames ? '' : 'childIds')
     ..hasRequiredFields = false
   ;
 
@@ -301,7 +306,16 @@ class PredResponse extends $pb.GeneratedMessage {
   static PredResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.String> get childIds => $_getList(0);
+  $core.bool get isDetected => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isDetected($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsDetected() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsDetected() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get childIds => $_getList(1);
 }
 
 class FaceDetectAndClipRequest extends $pb.GeneratedMessage {
