@@ -17,6 +17,8 @@ ARG STORAGE_BUCKET_NAME
 ARG PASSWORD_PEPPER
 ARG ML_ADDR
 
+ARG INSIDE_OF_CREDENTIALS
+
 
 # .env ファイルを生成
 RUN echo "DSN=$DSN" > .env \
@@ -30,6 +32,10 @@ RUN echo "DSN=$DSN" > .env \
     && echo "STORAGE_BUCKET_NAME=$STORAGE_BUCKET_NAME" >> .env \
     && echo "PASSWORD_PEPPER=$PASSWORD_PEPPER" >> .env \
     && echo "ML_ADDR=$ML_ADDR" >> .env
+
+# secretsディレクトリのgcp-credentials.jsonを作成
+RUN mkdir secrets
+RUN echo "$INSIDE_OF_CREDENTIALS" > secrets/gcp-credentials.json
 
 RUN go mod download
 

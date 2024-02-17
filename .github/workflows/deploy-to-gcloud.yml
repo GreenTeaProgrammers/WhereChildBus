@@ -45,7 +45,8 @@ jobs:
             --build-arg GOOGLE_APPLICATION_CREDENTIALS="${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" \
             --build-arg STORAGE_BUCKET_NAME="${{ secrets.STORAGE_BUCKET_NAME }}" \
             --build-arg PASSWORD_PEPPER="${{ secrets.PASSWORD_PEPPER }}" \
-            --build-arg ML_ADDR="${{ secrets.ML_ADDR }}"
+            --build-arg ML_ADDR="${{ secrets.ML_ADDR }}" \
+            --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
 
       - name: Push Docker Image to Google Container Registry
         run: |
