@@ -44,23 +44,22 @@ class MachineLearningServiceServicer(
         request: machine_learning_pb2.FaceDetectAndClipRequest,
         context,
     ):
-        pass
-        # parser = argparse.ArgumentParser()
-        # args = parser.parse_args()
+        parser = argparse.ArgumentParser()
+        args = parser.parse_args()
 
-        # args.nursery_id = request.nursery_id
-        # args.child_id = request.child_id
-        # args.env = "remote"
-        # # mainメソッドを別スレッドで実行
-        # try:
-        #     thread = threading.Thread(target=main, args=(args,))
-        #     thread.start()
-        #     is_started = True
-        # except Exception as e:
-        #     logging.error(e)
-        #     is_started = False
+        args.nursery_id = request.nursery_id
+        args.child_id = request.child_id
+        args.env = "remote"
+        # mainメソッドを別スレッドで実行
+        try:
+            thread = threading.Thread(target=main, args=(args,))
+            thread.start()
+            is_started = True
+        except Exception as e:
+            logging.error(e)
+            is_started = False
 
-        # return machine_learning_pb2.FaceDetectAndClipResponse(is_started=is_started)
+        return machine_learning_pb2.FaceDetectAndClipResponse(is_started=is_started)
 
 
 def serve():
@@ -77,8 +76,9 @@ def serve():
     logging.info("Listening on %s.", bind_address)
     server.wait_for_termination()
 
+
 if __name__ == "__main__":
-    print("Called server.py")
+    logging.info("Called server.py")
     # NOTE: https://github.com/grpc/grpc/issues/17321
     # gRPCのPython環境でloggingを使う場合、server起動前にlogging.basicConfig()を実行する必要がある
     logging.basicConfig(
