@@ -113,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flinq:
+    dependency: transitive
+    description:
+      name: flinq
+      sha256: "828d6cc2f2525f2c1fbf1803f1a526f4c6592068b70f46609131d0cc0562f514"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -176,6 +184,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  google_directions_api:
+    dependency: "direct main"
+    description:
+      name: google_directions_api
+      sha256: a901c60830b442652c8285631aa11bba3e84c43e77ddf9a2797f8e6398fa5043
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.0"
   google_maps:
     dependency: transitive
     description:
@@ -224,6 +240,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.4+3"
+  google_polyline_algorithm:
+    dependency: transitive
+    description:
+      name: google_polyline_algorithm
+      sha256: "357874f00d3f93c3ba1bf4b4d9a154aa9ee87147c068238c1e8392012b686a03"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   googleapis_auth:
     dependency: transitive
     description:

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:where_child_bus_guardian/app.dart';
-import './components/utils/google_map_view.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -18,7 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Widget googleMap = const GoogleMapView();
+  // Widget googleMap = const GoogleMapView();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: App(googleMap: googleMap),
+      home: App(),
     );
   }
 }

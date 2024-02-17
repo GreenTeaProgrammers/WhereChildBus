@@ -2,25 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
-class Waypoint {
-  final double latitude;
-  final double longitude;
-  final String name;
-
-  Waypoint(
-      {required this.latitude, required this.longitude, required this.name});
-}
-
-//TODO: 将来的に停留所のデータを受け取る
-final List<Waypoint> waypoints = [
-  Waypoint(latitude: 34.7159, longitude: 137.7368, name: "停留所1"),
-  Waypoint(latitude: 34.7108, longitude: 137.7261, name: "停留所2"),
-  Waypoint(latitude: 34.7169, longitude: 137.7285, name: "停留所3"),
-];
+import '../../pages/map_page/map_page.dart';
 
 class GoogleMapView extends StatefulWidget {
-  const GoogleMapView({super.key});
+  final List<Waypoint> waypoints;
+  double nurseryLatitude, nurseryLongitude;
+  double busLatitude, busLongitude;
+
+  GoogleMapView(
+      {super.key,
+      required this.waypoints,
+      required this.nurseryLatitude,
+      required this.nurseryLongitude,
+      required this.busLatitude,
+      required this.busLongitude});
 
   @override
   State<GoogleMapView> createState() => _GoogleMapView();
@@ -32,12 +27,6 @@ class _GoogleMapView extends State<GoogleMapView> {
 
   late GoogleMapController mapController;
 
-  //TODO: 将来的に保育園の緯度経度を受け取る
-  double nurseryLatitude = 34.7056, nurseryLongitude = 137.7343;
-
-  //TODO: 将来的にバスの現在位置を受け取る
-  double busLatitude = 34.7057, busLongitude = 137.7317;
-
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -47,13 +36,13 @@ class _GoogleMapView extends State<GoogleMapView> {
   @override
   void initState() {
     super.initState();
-    _addMarker(LatLng(nurseryLatitude, nurseryLongitude), "保育園",
+    _addMarker(LatLng(widget.nurseryLatitude, widget.nurseryLongitude), "保育園",
         BitmapDescriptor.defaultMarker);
 
-    _addMarker(LatLng(busLatitude, busLongitude), "バス",
+    _addMarker(LatLng(widget.busLatitude, widget.busLongitude), "バス",
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue));
 
-    waypoints.forEach((Waypoint waypoint) {
+    widget.waypoints.forEach((Waypoint waypoint) {
       _addMarker(LatLng(waypoint.latitude, waypoint.longitude), waypoint.name,
           BitmapDescriptor.defaultMarkerWithHue(90));
     });
@@ -69,7 +58,7 @@ class _GoogleMapView extends State<GoogleMapView> {
           mapType: MapType.normal,
           onMapCreated: (GoogleMapController controller) {
             mapController = controller;
-            _getPolyline(waypoints);
+            _getPolyline(widget.waypoints);
           },
           markers: Set<Marker>.of(markers.values),
           polylines: Set<Polyline>.of(polylines.values),
@@ -102,14 +91,13 @@ class _GoogleMapView extends State<GoogleMapView> {
     try {
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey,
-        PointLatLng(nurseryLatitude, nurseryLongitude),
-        PointLatLng(nurseryLatitude, nurseryLongitude),
+        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
         travelMode: TravelMode.driving,
         avoidTolls: true,
         avoidHighways: false,
         avoidFerries: false,
         wayPoints: polylineWayPoints,
-        optimizeWaypoints: true,
       );
 
       if (result.points.isNotEmpty) {

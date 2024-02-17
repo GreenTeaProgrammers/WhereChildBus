@@ -20,6 +20,7 @@ dependencies:
   flutter_state_notifier: ^1.0.0
   google_maps_flutter: ^2.5.3
   flutter_polyline_points: ^2.0.0
+  google_directions_api: ^0.10.0
 
 dev_dependencies:
   flutter_test:

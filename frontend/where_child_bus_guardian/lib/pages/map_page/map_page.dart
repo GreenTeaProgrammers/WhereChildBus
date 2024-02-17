@@ -1,10 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
+import 'package:where_child_bus_guardian/pages/map_page/components/arrival_time.dart';
 import '../styles/styles.dart';
 
-class MapPage extends StatefulWidget {
-  final Widget googleMap;
+class Waypoint {
+  final double latitude;
+  final double longitude;
+  final String name;
 
-  const MapPage({super.key, required this.googleMap});
+  Waypoint(
+      {required this.latitude, required this.longitude, required this.name});
+}
+
+//TODO: 将来的に停留所のデータを受け取る
+final List<Waypoint> waypoints = [
+  Waypoint(latitude: 34.7108, longitude: 137.7261, name: "停留所1"),
+  Waypoint(latitude: 34.7169, longitude: 137.7285, name: "停留所2"),
+  Waypoint(latitude: 34.7159, longitude: 137.7368, name: "停留所3"),
+];
+
+//TODO: 将来的に保育園の緯度経度を受け取る
+double nurseryLatitude = 34.7056, nurseryLongitude = 137.7343;
+
+//TODO: 将来的にバスの現在位置を受け取る
+double busLatitude = 34.7057, busLongitude = 137.7317;
+
+//TODO: 将来的には保護者に結び付く停留所の緯度経度を受け取る
+double guardianLatitude = 34.7108, guardianLongitude = 137.7261;
+
+//TODO: 将来的には出発時刻を受け取る
+DateTime departureTime = DateTime.now();
+
+class MapPage extends StatefulWidget {
+  const MapPage({super.key});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -18,7 +46,16 @@ class _MapPageState extends State<MapPage> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[widget.googleMap, pageBottomBody()],
+        children: <Widget>[
+          GoogleMapView(
+            waypoints: waypoints,
+            nurseryLatitude: nurseryLatitude,
+            nurseryLongitude: nurseryLongitude,
+            busLatitude: busLatitude,
+            busLongitude: busLongitude,
+          ),
+          pageBottomBody()
+        ],
       ),
     );
   }
@@ -46,19 +83,32 @@ class _MapPageState extends State<MapPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          fieldTitleAndTime("到着まで", "n分"),
-          fieldTitleAndTime("到着予定時刻", "HH:MM")
+          fieldTitleAndTime(
+              "到着まで",
+              ArrivalTime(
+                  waypoints: waypoints,
+                  nurseryLatitude: nurseryLatitude,
+                  nurseryLongitude: nurseryLongitude,
+                  guardianLatitude: guardianLatitude,
+                  guardianLongitude: guardianLongitude,
+                  departureTime: departureTime)),
+          fieldTitleAndTime(
+              "到着予定時刻",
+              ArrivalTime(
+                  waypoints: waypoints,
+                  nurseryLatitude: nurseryLatitude,
+                  nurseryLongitude: nurseryLongitude,
+                  guardianLatitude: guardianLatitude,
+                  guardianLongitude: guardianLongitude,
+                  departureTime: departureTime))
         ]);
   }
 
-  Widget fieldTitleAndTime(String title, String time) {
+  Widget fieldTitleAndTime(String title, Widget time) {
     return Column(
       children: <Widget>[
         Text(title),
-        Text(
-          time,
-          style: const TextStyle(fontSize: 30),
-        )
+        time,
       ],
     );
   }
