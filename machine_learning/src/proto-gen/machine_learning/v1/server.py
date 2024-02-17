@@ -17,9 +17,9 @@ class HealthCheckServiceServer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
     def Ping(self, request: health_check_pb2.PingRequest, context):
-        print("RECV: %s" % request.name)
+        logging.info("RECV: %s" % request.name)
         message = "Hello, %s!" % request.name
-        print("SEND: %s" % message)
+        logging.info("SEND: %s" % message)
         return health_check_pb2.PingResponse(message=message)
 
 
@@ -85,5 +85,8 @@ def serve():
 if __name__ == "__main__":
     # NOTE: https://github.com/grpc/grpc/issues/17321
     # gRPCのPython環境でloggingを使う場合、server起動前にlogging.basicConfig()を実行する必要がある
-    logging.basicConfig()
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
     serve()
