@@ -1,12 +1,19 @@
+import argparse
 import logging
+import threading
 from concurrent import futures
 
 import grpc
-
 import health_check_pb2
 import health_check_pb2_grpc
 import machine_learning_pb2
 import machine_learning_pb2_grpc
+
+import logging
+import os
+from concurrent import futures
+
+import grpc
 
 from face_detect_model.DetectFaceAndClip.detectFaceAndClip import main
 
@@ -37,22 +44,23 @@ class MachineLearningServiceServicer(
         request: machine_learning_pb2.FaceDetectAndClipRequest,
         context,
     ):
-        parser = argparse.ArgumentParser()
-        args = parser.parse_args()
+        pass
+        # parser = argparse.ArgumentParser()
+        # args = parser.parse_args()
 
-        args.nursery_id = request.nursery_id
-        args.child_id = request.child_id
-        args.env = "remote"
-        # mainメソッドを別スレッドで実行
-        try:
-            thread = threading.Thread(target=main, args=(args,))
-            thread.start()
-            is_started = True
-        except Exception as e:
-            logging.error(e)
-            is_started = False
+        # args.nursery_id = request.nursery_id
+        # args.child_id = request.child_id
+        # args.env = "remote"
+        # # mainメソッドを別スレッドで実行
+        # try:
+        #     thread = threading.Thread(target=main, args=(args,))
+        #     thread.start()
+        #     is_started = True
+        # except Exception as e:
+        #     logging.error(e)
+        #     is_started = False
 
-        return machine_learning_pb2.FaceDetectAndClipResponse(is_started=is_started)
+        # return machine_learning_pb2.FaceDetectAndClipResponse(is_started=is_started)
 
 
 def serve():
