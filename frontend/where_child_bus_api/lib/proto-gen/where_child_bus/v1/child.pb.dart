@@ -235,10 +235,14 @@ class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
 class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse({
     $core.Iterable<$8.Child>? children,
+    $core.Iterable<$8.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (children != null) {
       $result.children.addAll(children);
+    }
+    if (photos != null) {
+      $result.photos.addAll(photos);
     }
     return $result;
   }
@@ -248,6 +252,7 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByNurseryIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
+    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -274,6 +279,9 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$8.Child> get children => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<$8.ChildPhoto> get photos => $_getList(1);
 }
 
 class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
@@ -329,10 +337,14 @@ class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
 class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse({
     $core.Iterable<$8.Child>? children,
+    $core.Iterable<$8.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (children != null) {
       $result.children.addAll(children);
+    }
+    if (photos != null) {
+      $result.photos.addAll(photos);
     }
     return $result;
   }
@@ -342,6 +354,7 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByGuardianIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
+    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -368,6 +381,9 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$8.Child> get children => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<$8.ChildPhoto> get photos => $_getList(1);
 }
 
 class GetChildListByBusIDRequest extends $pb.GeneratedMessage {
@@ -423,10 +439,14 @@ class GetChildListByBusIDRequest extends $pb.GeneratedMessage {
 class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByBusIDResponse({
     $core.Iterable<$8.Child>? children,
+    $core.Iterable<$8.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (children != null) {
       $result.children.addAll(children);
+    }
+    if (photos != null) {
+      $result.photos.addAll(photos);
     }
     return $result;
   }
@@ -436,6 +456,7 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByBusIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
+    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -462,6 +483,9 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$8.Child> get children => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<$8.ChildPhoto> get photos => $_getList(1);
 }
 
 

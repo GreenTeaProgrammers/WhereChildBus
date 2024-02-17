@@ -200,6 +200,7 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
     $core.Iterable<$8.Station>? stations,
     $core.Iterable<$8.GuardianResponse>? guardians,
     $core.Iterable<$8.Child>? children,
+    $core.Iterable<$8.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (stations != null) {
@@ -211,6 +212,9 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
     if (children != null) {
       $result.children.addAll(children);
     }
+    if (photos != null) {
+      $result.photos.addAll(photos);
+    }
     return $result;
   }
   GetStationListByBusIdResponse._() : super();
@@ -221,6 +225,7 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
     ..pc<$8.Station>(1, _omitFieldNames ? '' : 'stations', $pb.PbFieldType.PM, subBuilder: $8.Station.create)
     ..pc<$8.GuardianResponse>(2, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
     ..pc<$8.Child>(3, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
+    ..pc<$8.ChildPhoto>(4, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -253,6 +258,9 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.List<$8.Child> get children => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $core.List<$8.ChildPhoto> get photos => $_getList(3);
 }
 
 
