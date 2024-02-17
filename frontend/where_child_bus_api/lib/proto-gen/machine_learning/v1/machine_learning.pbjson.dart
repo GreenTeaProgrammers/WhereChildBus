@@ -95,13 +95,13 @@ final $typed_data.Uint8List predRequestDescriptor = $convert.base64Decode(
 const PredResponse$json = {
   '1': 'PredResponse',
   '2': [
-    {'1': 'child_id', '3': 1, '4': 3, '5': 9, '10': 'childId'},
+    {'1': 'child_ids', '3': 1, '4': 3, '5': 9, '10': 'childIds'},
   ],
 };
 
 /// Descriptor for `PredResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List predResponseDescriptor = $convert.base64Decode(
-    'CgxQcmVkUmVzcG9uc2USGQoIY2hpbGRfaWQYASADKAlSB2NoaWxkSWQ=');
+    'CgxQcmVkUmVzcG9uc2USGwoJY2hpbGRfaWRzGAEgAygJUghjaGlsZElkcw==');
 
 @$core.Deprecated('Use faceDetectAndClipRequestDescriptor instead')
 const FaceDetectAndClipRequest$json = {

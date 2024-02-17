@@ -57,10 +57,10 @@ class PredRequest(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ..., bus_type: _Optional[_Union[BusType, str]] = ..., video_type: _Optional[_Union[VideoType, str]] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[int] = ...) -> None: ...
 
 class PredResponse(_message.Message):
-    __slots__ = ("child_id",)
-    CHILD_ID_FIELD_NUMBER: _ClassVar[int]
-    child_id: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, child_id: _Optional[_Iterable[str]] = ...) -> None: ...
+    __slots__ = ("child_ids",)
+    CHILD_IDS_FIELD_NUMBER: _ClassVar[int]
+    child_ids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, child_ids: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class FaceDetectAndClipRequest(_message.Message):
     __slots__ = ("nursery_id", "child_id")

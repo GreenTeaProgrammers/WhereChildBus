@@ -262,11 +262,11 @@ class PredRequest extends $pb.GeneratedMessage {
 
 class PredResponse extends $pb.GeneratedMessage {
   factory PredResponse({
-    $core.Iterable<$core.String>? childId,
+    $core.Iterable<$core.String>? childIds,
   }) {
     final $result = create();
-    if (childId != null) {
-      $result.childId.addAll(childId);
+    if (childIds != null) {
+      $result.childIds.addAll(childIds);
     }
     return $result;
   }
@@ -275,7 +275,7 @@ class PredResponse extends $pb.GeneratedMessage {
   factory PredResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'childId')
+    ..pPS(1, _omitFieldNames ? '' : 'childIds')
     ..hasRequiredFields = false
   ;
 
@@ -301,7 +301,7 @@ class PredResponse extends $pb.GeneratedMessage {
   static PredResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.String> get childId => $_getList(0);
+  $core.List<$core.String> get childIds => $_getList(0);
 }
 
 class FaceDetectAndClipRequest extends $pb.GeneratedMessage {

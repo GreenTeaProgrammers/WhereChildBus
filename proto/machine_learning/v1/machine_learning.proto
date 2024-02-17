@@ -40,7 +40,7 @@ message PredRequest {
 }
 
 message PredResponse {
-        repeated string child_id = 1;
+        repeated string child_ids = 1;
 }
 
 message FaceDetectAndClipRequest {
