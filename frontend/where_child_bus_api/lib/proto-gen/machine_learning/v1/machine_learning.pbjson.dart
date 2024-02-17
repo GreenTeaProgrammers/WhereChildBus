@@ -13,36 +13,6 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use busTypeDescriptor instead')
-const BusType$json = {
-  '1': 'BusType',
-  '2': [
-    {'1': 'BUS_TYPE_UNSPECIFIED', '2': 0},
-    {'1': 'BUS_TYPE_MORNING', '2': 1},
-    {'1': 'BUS_TYPE_EVENING', '2': 2},
-  ],
-};
-
-/// Descriptor for `BusType`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List busTypeDescriptor = $convert.base64Decode(
-    'CgdCdXNUeXBlEhgKFEJVU19UWVBFX1VOU1BFQ0lGSUVEEAASFAoQQlVTX1RZUEVfTU9STklORx'
-    'ABEhQKEEJVU19UWVBFX0VWRU5JTkcQAg==');
-
-@$core.Deprecated('Use videoTypeDescriptor instead')
-const VideoType$json = {
-  '1': 'VideoType',
-  '2': [
-    {'1': 'VIDEO_TYPE_UNSPECIFIED', '2': 0},
-    {'1': 'VIDEO_TYPE_GET_ON', '2': 1},
-    {'1': 'VIDEO_TYPE_GET_OFF', '2': 2},
-  ],
-};
-
-/// Descriptor for `VideoType`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List videoTypeDescriptor = $convert.base64Decode(
-    'CglWaWRlb1R5cGUSGgoWVklERU9fVFlQRV9VTlNQRUNJRklFRBAAEhUKEVZJREVPX1RZUEVfR0'
-    'VUX09OEAESFgoSVklERU9fVFlQRV9HRVRfT0ZGEAI=');
-
 @$core.Deprecated('Use trainRequestDescriptor instead')
 const TrainRequest$json = {
   '1': 'TrainRequest',
@@ -50,15 +20,15 @@ const TrainRequest$json = {
     {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'bus_id', '3': 2, '4': 1, '5': 9, '10': 'busId'},
     {'1': 'child_ids', '3': 3, '4': 3, '5': 9, '10': 'childIds'},
-    {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.machine_learning.v1.BusType', '10': 'busType'},
+    {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
   ],
 };
 
 /// Descriptor for `TrainRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List trainRequestDescriptor = $convert.base64Decode(
     'CgxUcmFpblJlcXVlc3QSHQoKbnVyc2VyeV9pZBgBIAEoCVIJbnVyc2VyeUlkEhUKBmJ1c19pZB'
-    'gCIAEoCVIFYnVzSWQSGwoJY2hpbGRfaWRzGAMgAygJUghjaGlsZElkcxI3CghidXNfdHlwZRgE'
-    'IAEoDjIcLm1hY2hpbmVfbGVhcm5pbmcudjEuQnVzVHlwZVIHYnVzVHlwZQ==');
+    'gCIAEoCVIFYnVzSWQSGwoJY2hpbGRfaWRzGAMgAygJUghjaGlsZElkcxI2CghidXNfdHlwZRgE'
+    'IAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBl');
 
 @$core.Deprecated('Use trainResponseDescriptor instead')
 const TrainResponse$json = {
@@ -71,25 +41,6 @@ const TrainResponse$json = {
 /// Descriptor for `TrainResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List trainResponseDescriptor = $convert.base64Decode(
     'Cg1UcmFpblJlc3BvbnNlEh0KCmlzX3N0YXJ0ZWQYASABKAhSCWlzU3RhcnRlZA==');
-
-@$core.Deprecated('Use predRequestDescriptor instead')
-const PredRequest$json = {
-  '1': 'PredRequest',
-  '2': [
-    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'bus_type', '3': 2, '4': 1, '5': 14, '6': '.machine_learning.v1.BusType', '10': 'busType'},
-    {'1': 'video_type', '3': 3, '4': 1, '5': 14, '6': '.machine_learning.v1.VideoType', '10': 'videoType'},
-    {'1': 'video_chunk', '3': 4, '4': 1, '5': 12, '10': 'videoChunk'},
-    {'1': 'timestamp', '3': 5, '4': 1, '5': 3, '10': 'timestamp'},
-  ],
-};
-
-/// Descriptor for `PredRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List predRequestDescriptor = $convert.base64Decode(
-    'CgtQcmVkUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lkEjcKCGJ1c190eXBlGAIgASgOMh'
-    'wubWFjaGluZV9sZWFybmluZy52MS5CdXNUeXBlUgdidXNUeXBlEj0KCnZpZGVvX3R5cGUYAyAB'
-    'KA4yHi5tYWNoaW5lX2xlYXJuaW5nLnYxLlZpZGVvVHlwZVIJdmlkZW9UeXBlEh8KC3ZpZGVvX2'
-    'NodW5rGAQgASgMUgp2aWRlb0NodW5rEhwKCXRpbWVzdGFtcBgFIAEoA1IJdGltZXN0YW1w');
 
 @$core.Deprecated('Use predResponseDescriptor instead')
 const PredResponse$json = {

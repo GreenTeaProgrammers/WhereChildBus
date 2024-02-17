@@ -3,7 +3,7 @@
 import grpc
 import grpc.experimental
 
-import bus_pb2 as where__child__bus_dot_v1_dot_bus__pb2
+from where_child_bus.v1 import bus_pb2 as where__child__bus_dot_v1_dot_bus__pb2
 
 
 class BusServiceStub(object):

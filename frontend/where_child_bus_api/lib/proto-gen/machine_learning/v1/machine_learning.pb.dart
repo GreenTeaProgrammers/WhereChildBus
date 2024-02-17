@@ -11,19 +11,16 @@
 
 import 'dart:core' as $core;
 
-import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'machine_learning.pbenum.dart';
-
-export 'machine_learning.pbenum.dart';
+import '../../where_child_bus/v1/resources.pbenum.dart' as $3;
 
 class TrainRequest extends $pb.GeneratedMessage {
   factory TrainRequest({
     $core.String? nurseryId,
     $core.String? busId,
     $core.Iterable<$core.String>? childIds,
-    BusType? busType,
+    $3.BusType? busType,
   }) {
     final $result = create();
     if (nurseryId != null) {
@@ -48,7 +45,7 @@ class TrainRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(2, _omitFieldNames ? '' : 'busId')
     ..pPS(3, _omitFieldNames ? '' : 'childIds')
-    ..e<BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: BusType.BUS_TYPE_UNSPECIFIED, valueOf: BusType.valueOf, enumValues: BusType.values)
+    ..e<$3.BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $3.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $3.BusType.valueOf, enumValues: $3.BusType.values)
     ..hasRequiredFields = false
   ;
 
@@ -95,9 +92,9 @@ class TrainRequest extends $pb.GeneratedMessage {
   $core.List<$core.String> get childIds => $_getList(2);
 
   @$pb.TagNumber(4)
-  BusType get busType => $_getN(3);
+  $3.BusType get busType => $_getN(3);
   @$pb.TagNumber(4)
-  set busType(BusType v) { setField(4, v); }
+  set busType($3.BusType v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasBusType() => $_has(3);
   @$pb.TagNumber(4)
@@ -152,112 +149,6 @@ class TrainResponse extends $pb.GeneratedMessage {
   $core.bool hasIsStarted() => $_has(0);
   @$pb.TagNumber(1)
   void clearIsStarted() => clearField(1);
-}
-
-class PredRequest extends $pb.GeneratedMessage {
-  factory PredRequest({
-    $core.String? busId,
-    BusType? busType,
-    VideoType? videoType,
-    $core.List<$core.int>? videoChunk,
-    $fixnum.Int64? timestamp,
-  }) {
-    final $result = create();
-    if (busId != null) {
-      $result.busId = busId;
-    }
-    if (busType != null) {
-      $result.busType = busType;
-    }
-    if (videoType != null) {
-      $result.videoType = videoType;
-    }
-    if (videoChunk != null) {
-      $result.videoChunk = videoChunk;
-    }
-    if (timestamp != null) {
-      $result.timestamp = timestamp;
-    }
-    return $result;
-  }
-  PredRequest._() : super();
-  factory PredRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PredRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..e<BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: BusType.BUS_TYPE_UNSPECIFIED, valueOf: BusType.valueOf, enumValues: BusType.values)
-    ..e<VideoType>(3, _omitFieldNames ? '' : 'videoType', $pb.PbFieldType.OE, defaultOrMaker: VideoType.VIDEO_TYPE_UNSPECIFIED, valueOf: VideoType.valueOf, enumValues: VideoType.values)
-    ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.OY)
-    ..aInt64(5, _omitFieldNames ? '' : 'timestamp')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PredRequest clone() => PredRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PredRequest copyWith(void Function(PredRequest) updates) => super.copyWith((message) => updates(message as PredRequest)) as PredRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static PredRequest create() => PredRequest._();
-  PredRequest createEmptyInstance() => create();
-  static $pb.PbList<PredRequest> createRepeated() => $pb.PbList<PredRequest>();
-  @$core.pragma('dart2js:noInline')
-  static PredRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PredRequest>(create);
-  static PredRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get busId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set busId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasBusId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearBusId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  BusType get busType => $_getN(1);
-  @$pb.TagNumber(2)
-  set busType(BusType v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasBusType() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearBusType() => clearField(2);
-
-  @$pb.TagNumber(3)
-  VideoType get videoType => $_getN(2);
-  @$pb.TagNumber(3)
-  set videoType(VideoType v) { setField(3, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasVideoType() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearVideoType() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.List<$core.int> get videoChunk => $_getN(3);
-  @$pb.TagNumber(4)
-  set videoChunk($core.List<$core.int> v) { $_setBytes(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasVideoChunk() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearVideoChunk() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $fixnum.Int64 get timestamp => $_getI64(4);
-  @$pb.TagNumber(5)
-  set timestamp($fixnum.Int64 v) { $_setInt64(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasTimestamp() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearTimestamp() => clearField(5);
 }
 
 class PredResponse extends $pb.GeneratedMessage {
