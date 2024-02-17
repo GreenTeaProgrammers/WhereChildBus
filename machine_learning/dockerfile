@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0
 
 COPY ./src /machine-learning/src
+COPY ./secrets /machine-learning/secrets
 
 ENV PYTHONPATH "${PYTHONPATH}:/machine-learning/src/"
 
