@@ -10,9 +10,12 @@ import (
 	"syscall"
 
 	"cloud.google.com/go/storage"
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/exp/slog"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
@@ -77,6 +80,15 @@ func main() {
 
 	log.Println("Connected to Cloud Storage!")
 
+	// 機械学習gRPCサーバーへの接続を開始
+	log.Println("Connecting to ML gRPC server...")
+	conn, err := grpc.Dial(config.MLAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+	mlClient := mlv1.NewMachineLearningServiceClient(conn)
+
 	// loggerを作成
 	logger := slog.Default()
 
@@ -87,6 +99,7 @@ func main() {
 		grpc_server.WithReflection(config.ModeDev),
 		grpc_server.WithStorageClient(storageClient),
 		grpc_server.WithBucketName(config.StorageBucketName),
+		grpc_server.WithMLClient(mlClient),
 	)
 	lsnr, err := net.Listen("tcp", ":"+config.GrpcPort)
 	if err != nil {

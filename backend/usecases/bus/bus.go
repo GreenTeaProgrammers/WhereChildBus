@@ -8,7 +8,6 @@ import (
 
 	"context"
 
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
@@ -19,15 +18,17 @@ import (
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 )
 
 type Interactor struct {
-	entClient *ent.Client
-	logger    *slog.Logger
+	entClient       *ent.Client
+	logger          *slog.Logger
+	MLServiceClient mlv1.MachineLearningServiceClient
 }
 
-func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
-	return &Interactor{entClient, logger}
+func NewInteractor(entClient *ent.Client, logger *slog.Logger, mlClient mlv1.MachineLearningServiceClient) *Interactor {
+	return &Interactor{entClient, logger, mlClient}
 }
 
 func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*pb.CreateBusResponse, error) {
@@ -121,13 +122,43 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 			AddStations(station).
 			Save(ctx)
 		if err != nil {
+			i.logger.Error("failed to update bus with stations", err)
 			return nil, fmt.Errorf("failed to update bus with stations: %w", err)
 		}
 	}
 
-	//TODO: CloudFunctionにバスの作成を通知
-	cfg, _ := config.New()
-	utils.MakeCloudFunctionRequest(cfg.EndPointCreateBusNotification, "POST")
+	morningChildIds := make([]string, len(morningChildren))
+	for i, child := range morningChildren {
+		morningChildIds[i] = child.ID.String()
+	}
+
+	//TODO: MLgRPCにバスの作成を通知
+	// _, err = i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
+	// 	BusId:    bus.ID.String(),
+	// 	BusType:  mlv1.BusType_BUS_TYPE_MORNING,
+	// 	ChildIds: morningChildIds,
+	// })
+
+	// if err != nil {
+	// 	i.logger.Error("failed to train ML model", err)
+	// 	return nil, err
+	// }
+
+	// eveningChildIds := make([]string, len(eveningChildren))
+	// for i, child := range eveningChildren {
+	// 	eveningChildIds[i] = child.ID.String()
+	// }
+
+	// _, err = i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
+	// 	BusId:    bus.ID.String(),
+	// 	BusType:  mlv1.BusType_BUS_TYPE_EVENING,
+	// 	ChildIds: eveningChildIds,
+	// })
+
+	// if err != nil {
+	// 	i.logger.Error("failed to train ML model", err)
+	// 	return nil, err
+	// }
 
 	// Make sure to commit the transaction since everything succeeded
 	commit = true
