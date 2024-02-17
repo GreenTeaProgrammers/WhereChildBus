@@ -1,8 +1,15 @@
 package bus
 
 import (
+	"errors"
+	"fmt"
+	"io"
+	"log"
+	"time"
+
 	"github.com/google/uuid"
 	"golang.org/x/exp/slog"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"context"
 
@@ -10,21 +17,24 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	boardingrecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childbusassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 )
 
 type Interactor struct {
-	entClient *ent.Client
-	logger    *slog.Logger
+	entClient       *ent.Client
+	logger          *slog.Logger
+	MLServiceClient mlv1.MachineLearningServiceClient
 }
 
-func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
-	return &Interactor{entClient, logger}
+func NewInteractor(entClient *ent.Client, logger *slog.Logger, mlClient mlv1.MachineLearningServiceClient) *Interactor {
+	return &Interactor{entClient, logger, mlClient}
 }
 
 func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*pb.CreateBusResponse, error) {
@@ -120,12 +130,43 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 			AddStations(station).
 			Save(ctx)
 		if err != nil {
-			i.logger.Error("failed to update bus with stations", "error", err)
-			return nil, err
+			i.logger.Error("failed to update bus with stations", err)
+			return nil, fmt.Errorf("failed to update bus with stations: %w", err)
 		}
 	}
 
-	//TODO: CloudFunctionにバスの作成を通知
+	morningChildIds := make([]string, len(morningChildren))
+	for i, child := range morningChildren {
+		morningChildIds[i] = child.ID.String()
+	}
+
+	//TODO: MLgRPCにバスの作成を通知
+	// _, err = i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
+	// 	BusId:    bus.ID.String(),
+	// 	BusType:  mlv1.BusType_BUS_TYPE_MORNING,
+	// 	ChildIds: morningChildIds,
+	// })
+
+	// if err != nil {
+	// 	i.logger.Error("failed to train ML model", err)
+	// 	return nil, err
+	// }
+
+	// eveningChildIds := make([]string, len(eveningChildren))
+	// for i, child := range eveningChildren {
+	// 	eveningChildIds[i] = child.ID.String()
+	// }
+
+	// _, err = i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
+	// 	BusId:    bus.ID.String(),
+	// 	BusType:  mlv1.BusType_BUS_TYPE_EVENING,
+	// 	ChildIds: eveningChildIds,
+	// })
+
+	// if err != nil {
+	// 	i.logger.Error("failed to train ML model", err)
+	// 	return nil, err
+	// }
 
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
@@ -202,6 +243,202 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		return nil, err
 	}
 	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
+}
+
+func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			// ストリームの終了
+			return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
+		}
+		if err != nil {
+			i.logger.Error("failed to receive location", err)
+			// 一時的なエラーの場合は、エラーをログに記録し、処理を続行する
+			continue
+		}
+
+		busID, err := uuid.Parse(req.BusId)
+		if err != nil {
+			i.logger.Error("failed to parse bus ID", err)
+			// バスIDの解析に失敗した場合は、エラーをログに記録し、処理を続行する
+			continue
+		}
+
+		// トランザクションを使用せずに直接更新
+		_, err = i.entClient.Bus.UpdateOneID(busID).
+			SetLatitude(req.Latitude).
+			SetLongitude(req.Longitude).
+			Save(context.Background())
+
+		if err != nil {
+			i.logger.Error("failed to update bus location", err)
+			// 更新に失敗した場合は、エラーをログに記録し、処理を続行する
+			continue
+		}
+	}
+}
+
+func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, stream pb.BusService_TrackBusContinuousServer) error {
+	busID, err := uuid.Parse(req.BusId)
+	if err != nil {
+		return fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+	}
+
+	for {
+		bus, err := i.entClient.Bus.Query().
+			Where(busRepo.IDEQ(busID)).
+			WithNursery().
+			Only(context.Background())
+
+		if err != nil {
+			return fmt.Errorf("failed to get bus: %w", err)
+		}
+
+		if err := stream.Send(&pb.TrackBusContinuousResponse{
+			BusId:     req.BusId,
+			Latitude:  bus.Latitude,
+			Longitude: bus.Longitude,
+			Timestamp: &timestamppb.Timestamp{Seconds: time.Now().Unix()},
+		}); err != nil {
+			return fmt.Errorf("failed to send bus: %w", err)
+		}
+	}
+}
+
+func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) error {
+	MLStream, err := i.MLServiceClient.Pred(context.Background())
+	if err != nil {
+		return err
+	}
+
+	var busID string
+	var videoType pb.VideoType
+
+	// Go サーバーから受け取ったメッセージをPythonサーバーに転送
+	for {
+		in, err := stream.Recv()
+		if err == io.EOF {
+			// ストリームの終了
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		// バスID、バスタイプ、ビデオタイプを保持
+		busID = in.BusId
+		videoType = in.VideoType
+
+		// Python サーバーへ送信
+		err = MLStream.Send(&pb.StreamBusVideoRequest{
+			BusId:      in.BusId,
+			BusType:    in.BusType,
+			VideoType:  in.VideoType,
+			VideoChunk: in.VideoChunk,
+			Timestamp:  in.Timestamp,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	// Python サーバーからのレスポンスを待つ
+	for {
+		resp, err := MLStream.Recv()
+		if err == io.EOF {
+			// ストリームの終了
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		if !resp.IsDetected {
+			// 検出されなかった場合は、次のループに進む
+			continue
+		}
+
+		var pbChildren []*pb.Child
+		busUUID := uuid.MustParse(busID)
+		for _, childId := range resp.ChildIds {
+			childUUID := uuid.MustParse(childId)
+			// まず既存のレコードを検索
+			exists, err := i.entClient.BoardingRecord.Query().
+				Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(childId)))).
+				Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(uuid.MustParse(busID)))).
+				Exist(context.Background())
+
+			if err != nil {
+				// エラーハンドリング
+				log.Printf("Failed to query existing boarding record: %v", err)
+				return err
+			}
+
+			// 既存のレコードがない場合にのみ新しいレコードを作成
+			if !exists {
+				_, err = i.entClient.BoardingRecord.Create().
+					SetChildID(childUUID).
+					SetBusID(busUUID).
+					SetTimestamp(time.Now()).
+					Save(context.Background())
+				if err != nil {
+					// レコード作成時のエラーハンドリング
+					i.logger.Error("Failed to create new boarding record: %v", err)
+					return err
+				}
+				// レコード作成成功
+			}
+
+			switch videoType {
+			case pb.VideoType_VIDEO_TYPE_GET_ON:
+				// 乗車時の検出の場合
+				_, err = i.entClient.BoardingRecord.Update().
+					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 乗車レコードを更新
+					Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).       // 乗車レコードを更新
+					SetIsBoarding(true).                                               // 乗車フラグを立てる
+					SetTimestamp(time.Now()).                                          // 乗車時刻を記録
+					Save(context.Background())
+			case pb.VideoType_VIDEO_TYPE_GET_OFF:
+				// 降車時の検出の場合
+				_, err = i.entClient.BoardingRecord.Update().
+					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 降車レコードを更新
+					Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).       // 降車レコードを更新
+					SetIsBoarding(false).                                              // 降車フラグを立てる
+					SetTimestamp(time.Now()).                                          // 降車時刻を記録
+					Save(context.Background())
+			default:
+				return fmt.Errorf("invalid video type: %v", videoType)
+			}
+
+			if err != nil {
+				// レコード更新時のエラーハンドリング
+				i.logger.Error("Failed to update boarding record: %v", err)
+				return err
+			}
+			// レコード更新成功
+
+			child, err := i.entClient.Child.Query().
+				Where(childRepo.IDEQ(childUUID)).
+				WithGuardian().
+				All(context.Background())
+			if err != nil {
+				i.logger.Error("Failed to get child: %v", err)
+				return err
+			}
+			pbChildren = append(pbChildren, utils.ToPbChild(child[0]))
+		}
+		// 元のクライアントにレスポンスを返す
+		err = stream.SendMsg(&pb.StreamBusVideoResponse{
+			IsDetected: resp.IsDetected,
+			Children:   pbChildren, // ChildIDsをChildrenオブジェクトに変換する必要がある
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.BusQuery, error)) ([]*pb.Bus, error) {
