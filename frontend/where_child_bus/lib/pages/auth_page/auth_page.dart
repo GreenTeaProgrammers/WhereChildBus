@@ -148,9 +148,11 @@ class _AuthPageState extends State<AuthPage> {
         print('Login failed');
       }
     } catch (e) {
-      setState(() {
-        _loginError = NurseryLoginError.invalidCredentials;
-      });
+      if (mounted) {
+        setState(() {
+          _loginError = NurseryLoginError.invalidCredentials;
+        });
+      }
     }
   }
 
