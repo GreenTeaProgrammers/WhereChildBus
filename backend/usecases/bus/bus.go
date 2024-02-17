@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,6 +17,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	boardingrecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childbusassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
@@ -321,6 +323,141 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 			return fmt.Errorf("failed to send bus: %w", err)
 		}
 	}
+}
+
+func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) error {
+	MLStream, err := i.MLServiceClient.Pred(context.Background())
+	if err != nil {
+		return err
+	}
+
+	var busID string
+	var videoType pb.VideoType
+
+	// Go サーバーから受け取ったメッセージをPythonサーバーに転送
+	for {
+		in, err := stream.Recv()
+		if err == io.EOF {
+			// ストリームの終了
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		// バスID、バスタイプ、ビデオタイプを保持
+		busID = in.BusId
+		videoType = in.VideoType
+
+		// Python サーバーへ送信
+		err = MLStream.Send(&pb.StreamBusVideoRequest{
+			BusId:      in.BusId,
+			BusType:    in.BusType,
+			VideoType:  in.VideoType,
+			VideoChunk: in.VideoChunk,
+			Timestamp:  in.Timestamp,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	// Python サーバーからのレスポンスを待つ
+	for {
+		resp, err := MLStream.Recv()
+		if err == io.EOF {
+			// ストリームの終了
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		if !resp.IsDetected {
+			// 検出されなかった場合は、次のループに進む
+			continue
+		}
+
+		var pbChildren []*pb.Child
+		busUUID := uuid.MustParse(busID)
+		for _, childId := range resp.ChildIds {
+			childUUID := uuid.MustParse(childId)
+			// まず既存のレコードを検索
+			exists, err := i.entClient.BoardingRecord.Query().
+				Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(childId)))).
+				Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(uuid.MustParse(busID)))).
+				Exist(context.Background())
+
+			if err != nil {
+				// エラーハンドリング
+				log.Printf("Failed to query existing boarding record: %v", err)
+				return err
+			}
+
+			// 既存のレコードがない場合にのみ新しいレコードを作成
+			if !exists {
+				_, err = i.entClient.BoardingRecord.Create().
+					SetChildID(childUUID).
+					SetBusID(busUUID).
+					SetTimestamp(time.Now()).
+					Save(context.Background())
+				if err != nil {
+					// レコード作成時のエラーハンドリング
+					i.logger.Error("Failed to create new boarding record: %v", err)
+					return err
+				}
+				// レコード作成成功
+			}
+
+			switch videoType {
+			case pb.VideoType_VIDEO_TYPE_GET_ON:
+				// 乗車時の検出の場合
+				_, err = i.entClient.BoardingRecord.Update().
+					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 乗車レコードを更新
+					Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).       // 乗車レコードを更新
+					SetIsBoarding(true).                                               // 乗車フラグを立てる
+					SetTimestamp(time.Now()).                                          // 乗車時刻を記録
+					Save(context.Background())
+			case pb.VideoType_VIDEO_TYPE_GET_OFF:
+				// 降車時の検出の場合
+				_, err = i.entClient.BoardingRecord.Update().
+					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 降車レコードを更新
+					Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).       // 降車レコードを更新
+					SetIsBoarding(false).                                              // 降車フラグを立てる
+					SetTimestamp(time.Now()).                                          // 降車時刻を記録
+					Save(context.Background())
+			default:
+				return fmt.Errorf("invalid video type: %v", videoType)
+			}
+
+			if err != nil {
+				// レコード更新時のエラーハンドリング
+				i.logger.Error("Failed to update boarding record: %v", err)
+				return err
+			}
+			// レコード更新成功
+
+			child, err := i.entClient.Child.Query().
+				Where(childRepo.IDEQ(childUUID)).
+				WithGuardian().
+				All(context.Background())
+			if err != nil {
+				i.logger.Error("Failed to get child: %v", err)
+				return err
+			}
+			pbChildren = append(pbChildren, utils.ToPbChild(child[0]))
+		}
+		// 元のクライアントにレスポンスを返す
+		err = stream.SendMsg(&pb.StreamBusVideoResponse{
+			IsDetected: resp.IsDetected,
+			Children:   pbChildren, // ChildIDsをChildrenオブジェクトに変換する必要がある
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.BusQuery, error)) ([]*pb.Bus, error) {

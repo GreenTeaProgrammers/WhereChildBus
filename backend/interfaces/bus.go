@@ -20,14 +20,14 @@ func (s *busServiceServer) SendLocationContinuous(stream pb.BusService_SendLocat
 	return s.interactor.SendLocationContinuous(stream)
 }
 
-// StreamBusVideo implements where_child_busv1.BusServiceServer.
-func (*busServiceServer) StreamBusVideo(pb.BusService_StreamBusVideoServer) error {
-	panic("unimplemented")
+// TrackBusContinuous implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) TrackBusContinuous(req *pb.TrackBusContinuousRequest, stream pb.BusService_TrackBusContinuousServer) error {
+	return s.interactor.TrackBusContinuous(req, stream)
 }
 
-// TrackBusContinuous implements where_child_busv1.BusServiceServer.
-func (*busServiceServer) TrackBusContinuous(*pb.TrackBusContinuousRequest, pb.BusService_TrackBusContinuousServer) error {
-	panic("unimplemented")
+// StreamBusVideo implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) error {
+	return s.interactor.StreamBusVideo(stream)
 }
 
 // CreateBus implements where_child_busv1.BusServiceServer.
