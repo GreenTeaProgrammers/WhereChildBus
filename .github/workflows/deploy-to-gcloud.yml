@@ -41,7 +41,7 @@ jobs:
             --build-arg DB_ADDR="${{ secrets.DB_ADDR }}" \
             --build-arg DB_NAME="${{ secrets.DB_NAME }}" \
             --build-arg PORT="${{ secrets.PORT }}" \
-            --build-arg MODE_DEV="${{ secrets.MODE_DEV }} \
+            --build-arg MODE_DEV="${{ secrets.MODE_DEV }}" \
             --build-arg GOOGLE_APPLICATION_CREDENTIALS="${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" \
             --build-arg STORAGE_BUCKET_NAME="${{ secrets.STORAGE_BUCKET_NAME }}" \
             --build-arg PASSWORD_PEPPER="${{ secrets.PASSWORD_PEPPER }}" \
