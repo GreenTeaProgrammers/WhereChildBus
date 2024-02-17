@@ -29,7 +29,7 @@ RUN echo "DSN=$DSN" > .env \
     && echo "GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS" >> .env \
     && echo "STORAGE_BUCKET_NAME=$STORAGE_BUCKET_NAME" >> .env \
     && echo "PASSWORD_PEPPER=$PASSWORD_PEPPER" >> .env \
-    %% echo "ML_ADDR=$ML_ADDR" >> .env
+    && echo "ML_ADDR=$ML_ADDR" >> .env
 
 RUN go mod download
 
