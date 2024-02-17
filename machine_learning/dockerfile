@@ -1,0 +1,12 @@
+FROM python:3.11.6-slim
+
+WORKDIR /machine-learning
+COPY ./requirements.lock /machine-learning/
+
+RUN sed '/-e/d' requirements.lock > requirements.txt
+RUN pip install -r requirements.txt
+
+COPY ./src ./src
+
+# TODO: server.pyをproto-genから切り出し
+ENTRYPOINT ["python", "/machine-learning/src/proto-gen/machine_learning/v1/server.py"]
