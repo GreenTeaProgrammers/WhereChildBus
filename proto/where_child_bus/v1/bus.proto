@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service BusService {
+        rpc CreateBus(CreateBusRequest) returns (CreateBusResponse);
+        rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
+        rpc ChangeBusStatus(ChangeBusStatusRequest) returns (ChangeBusStatusResponse);
+
+        rpc SendLocationContinuous(stream SendLocationContinuousRequest) returns (SendLocationContinuousResponse);
+        rpc TrackBusContinuous(TrackBusContinuousRequest) returns (stream TrackBusContinuousResponse);
+        rpc StreamBusVideo(stream StreamBusVideoRequest) returns (StreamBusVideoResponse);
+}
+
+message CreateBusRequest {
+        string nursery_id = 1;
+        string name = 2;
+        string plate_number = 3;
+        repeated string morning_guardian_ids = 4;
+        repeated string evening_guardian_ids = 5;
+}
+
+message CreateBusResponse {
+        Bus bus = 1;
+}
+
+message GetBusListByNurseryIdRequest {
+        string nursery_id = 1;
+}
+
+message GetBusListByNurseryIdResponse {
+        repeated Bus buses = 1;
+}
+
+message ChangeBusStatusRequest {
+        string bus_id = 1;
+        Status status = 2;
+}
+
+message ChangeBusStatusResponse {
+        Bus bus = 1;
+}
+
+// Updated and newly defined messages for the adjusted RPCs
+message SendLocationContinuousRequest {
+        string bus_id = 1;
+        double latitude = 2;
+        double longitude = 3;
+        int64 timestamp = 4; // Unix timestamp
+}
+
+message SendLocationContinuousResponse {
+  // Custom empty response type to conform to Protobuf style guide
+}
+
+message TrackBusContinuousRequest {
+        string bus_id = 1;
+}
+
+message TrackBusContinuousResponse {
+        string bus_id = 1;
+        double latitude = 2;
+        double longitude = 3;
+        int64 timestamp = 4; // Unix timestamp
+}
+
+message StreamBusVideoRequest {
+        string bus_id = 1;
+        BusType bus_type = 2;
+        VideoType video_type = 3;
+        bytes video_chunk = 4; // Chunk of video data
+        int64 timestamp = 5; // Unix timestamp
+}
+
+message StreamBusVideoResponse {
+  // Custom empty response type to conform to Protobuf style guide
+}

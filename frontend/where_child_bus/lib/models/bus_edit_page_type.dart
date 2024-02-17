@@ -1,0 +1,4 @@
+enum BusEditPageType {
+  create,
+  update,
+}

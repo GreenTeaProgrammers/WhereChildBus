@@ -22,10 +22,6 @@ const (
 	FieldAge = "age"
 	// FieldSex holds the string denoting the sex field in the database.
 	FieldSex = "sex"
-	// FieldIsRideMorningBus holds the string denoting the is_ride_morning_bus field in the database.
-	FieldIsRideMorningBus = "is_ride_morning_bus"
-	// FieldIsRideEveningBus holds the string denoting the is_ride_evening_bus field in the database.
-	FieldIsRideEveningBus = "is_ride_evening_bus"
 	// FieldCheckForMissingItems holds the string denoting the check_for_missing_items field in the database.
 	FieldCheckForMissingItems = "check_for_missing_items"
 	// FieldHasBag holds the string denoting the has_bag field in the database.
@@ -46,8 +42,6 @@ const (
 	EdgeGuardian = "guardian"
 	// EdgeChildBusAssociations holds the string denoting the childbusassociations edge name in mutations.
 	EdgeChildBusAssociations = "childBusAssociations"
-	// EdgeNursery holds the string denoting the nursery edge name in mutations.
-	EdgeNursery = "nursery"
 	// EdgeBoardingRecord holds the string denoting the boarding_record edge name in mutations.
 	EdgeBoardingRecord = "boarding_record"
 	// EdgePhotos holds the string denoting the photos edge name in mutations.
@@ -68,13 +62,6 @@ const (
 	ChildBusAssociationsInverseTable = "child_bus_associations"
 	// ChildBusAssociationsColumn is the table column denoting the childBusAssociations relation/edge.
 	ChildBusAssociationsColumn = "child_id"
-	// NurseryTable is the table that holds the nursery relation/edge.
-	NurseryTable = "childs"
-	// NurseryInverseTable is the table name for the Nursery entity.
-	// It exists in this package in order to avoid circular dependency with the "nursery" package.
-	NurseryInverseTable = "nurseries"
-	// NurseryColumn is the table column denoting the nursery relation/edge.
-	NurseryColumn = "child_nursery"
 	// BoardingRecordTable is the table that holds the boarding_record relation/edge.
 	BoardingRecordTable = "boarding_records"
 	// BoardingRecordInverseTable is the table name for the BoardingRecord entity.
@@ -97,8 +84,6 @@ var Columns = []string{
 	FieldName,
 	FieldAge,
 	FieldSex,
-	FieldIsRideMorningBus,
-	FieldIsRideEveningBus,
 	FieldCheckForMissingItems,
 	FieldHasBag,
 	FieldHasLunchBox,
@@ -112,7 +97,6 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "childs"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"child_nursery",
 	"guardian_children",
 }
 
@@ -132,10 +116,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultIsRideMorningBus holds the default value on creation for the "is_ride_morning_bus" field.
-	DefaultIsRideMorningBus bool
-	// DefaultIsRideEveningBus holds the default value on creation for the "is_ride_evening_bus" field.
-	DefaultIsRideEveningBus bool
 	// DefaultCheckForMissingItems holds the default value on creation for the "check_for_missing_items" field.
 	DefaultCheckForMissingItems bool
 	// DefaultHasBag holds the default value on creation for the "has_bag" field.
@@ -205,16 +185,6 @@ func BySex(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSex, opts...).ToFunc()
 }
 
-// ByIsRideMorningBus orders the results by the is_ride_morning_bus field.
-func ByIsRideMorningBus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIsRideMorningBus, opts...).ToFunc()
-}
-
-// ByIsRideEveningBus orders the results by the is_ride_evening_bus field.
-func ByIsRideEveningBus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIsRideEveningBus, opts...).ToFunc()
-}
-
 // ByCheckForMissingItems orders the results by the check_for_missing_items field.
 func ByCheckForMissingItems(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCheckForMissingItems, opts...).ToFunc()
@@ -276,13 +246,6 @@ func ByChildBusAssociations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
-// ByNurseryField orders the results by nursery field.
-func ByNurseryField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newNurseryStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByBoardingRecordCount orders the results by boarding_record count.
 func ByBoardingRecordCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -322,13 +285,6 @@ func newChildBusAssociationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ChildBusAssociationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ChildBusAssociationsTable, ChildBusAssociationsColumn),
-	)
-}
-func newNurseryStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(NurseryInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, NurseryTable, NurseryColumn),
 	)
 }
 func newBoardingRecordStep() *sqlgraph.Step {

@@ -19,10 +19,6 @@ const (
 	FieldLatitude = "latitude"
 	// FieldLongitude holds the string denoting the longitude field in the database.
 	FieldLongitude = "longitude"
-	// FieldMorningOrder holds the string denoting the morning_order field in the database.
-	FieldMorningOrder = "morning_order"
-	// FieldEveningOrder holds the string denoting the evening_order field in the database.
-	FieldEveningOrder = "evening_order"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -31,6 +27,14 @@ const (
 	EdgeGuardian = "guardian"
 	// EdgeBus holds the string denoting the bus edge name in mutations.
 	EdgeBus = "bus"
+	// EdgeMorningPreviousStation holds the string denoting the morning_previous_station edge name in mutations.
+	EdgeMorningPreviousStation = "morning_previous_station"
+	// EdgeMorningNextStation holds the string denoting the morning_next_station edge name in mutations.
+	EdgeMorningNextStation = "morning_next_station"
+	// EdgeEveningPreviousStation holds the string denoting the evening_previous_station edge name in mutations.
+	EdgeEveningPreviousStation = "evening_previous_station"
+	// EdgeEveningNextStation holds the string denoting the evening_next_station edge name in mutations.
+	EdgeEveningNextStation = "evening_next_station"
 	// Table holds the table name of the station in the database.
 	Table = "stations"
 	// GuardianTable is the table that holds the guardian relation/edge.
@@ -45,6 +49,22 @@ const (
 	// BusInverseTable is the table name for the Bus entity.
 	// It exists in this package in order to avoid circular dependency with the "bus" package.
 	BusInverseTable = "bus"
+	// MorningPreviousStationTable is the table that holds the morning_previous_station relation/edge.
+	MorningPreviousStationTable = "stations"
+	// MorningPreviousStationColumn is the table column denoting the morning_previous_station relation/edge.
+	MorningPreviousStationColumn = "station_morning_next_station"
+	// MorningNextStationTable is the table that holds the morning_next_station relation/edge.
+	MorningNextStationTable = "stations"
+	// MorningNextStationColumn is the table column denoting the morning_next_station relation/edge.
+	MorningNextStationColumn = "station_morning_next_station"
+	// EveningPreviousStationTable is the table that holds the evening_previous_station relation/edge.
+	EveningPreviousStationTable = "stations"
+	// EveningPreviousStationColumn is the table column denoting the evening_previous_station relation/edge.
+	EveningPreviousStationColumn = "station_evening_next_station"
+	// EveningNextStationTable is the table that holds the evening_next_station relation/edge.
+	EveningNextStationTable = "stations"
+	// EveningNextStationColumn is the table column denoting the evening_next_station relation/edge.
+	EveningNextStationColumn = "station_evening_next_station"
 )
 
 // Columns holds all SQL columns for station fields.
@@ -52,8 +72,6 @@ var Columns = []string{
 	FieldID,
 	FieldLatitude,
 	FieldLongitude,
-	FieldMorningOrder,
-	FieldEveningOrder,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -62,6 +80,8 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"guardian_station",
+	"station_morning_next_station",
+	"station_evening_next_station",
 }
 
 var (
@@ -114,16 +134,6 @@ func ByLongitude(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLongitude, opts...).ToFunc()
 }
 
-// ByMorningOrder orders the results by the morning_order field.
-func ByMorningOrder(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMorningOrder, opts...).ToFunc()
-}
-
-// ByEveningOrder orders the results by the evening_order field.
-func ByEveningOrder(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEveningOrder, opts...).ToFunc()
-}
-
 // ByCreatedAt orders the results by the created_at field.
 func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
@@ -154,6 +164,48 @@ func ByBus(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newBusStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMorningPreviousStationField orders the results by morning_previous_station field.
+func ByMorningPreviousStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMorningPreviousStationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByMorningNextStationCount orders the results by morning_next_station count.
+func ByMorningNextStationCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMorningNextStationStep(), opts...)
+	}
+}
+
+// ByMorningNextStation orders the results by morning_next_station terms.
+func ByMorningNextStation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMorningNextStationStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEveningPreviousStationField orders the results by evening_previous_station field.
+func ByEveningPreviousStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEveningPreviousStationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEveningNextStationCount orders the results by evening_next_station count.
+func ByEveningNextStationCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEveningNextStationStep(), opts...)
+	}
+}
+
+// ByEveningNextStation orders the results by evening_next_station terms.
+func ByEveningNextStation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEveningNextStationStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newGuardianStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -166,5 +218,33 @@ func newBusStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BusInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, BusTable, BusPrimaryKey...),
+	)
+}
+func newMorningPreviousStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, MorningPreviousStationTable, MorningPreviousStationColumn),
+	)
+}
+func newMorningNextStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MorningNextStationTable, MorningNextStationColumn),
+	)
+}
+func newEveningPreviousStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EveningPreviousStationTable, EveningPreviousStationColumn),
+	)
+}
+func newEveningNextStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EveningNextStationTable, EveningNextStationColumn),
 	)
 }

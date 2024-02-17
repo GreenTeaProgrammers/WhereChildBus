@@ -31,21 +31,12 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// EdgeChildren holds the string denoting the children edge name in mutations.
-	EdgeChildren = "children"
 	// EdgeGuardians holds the string denoting the guardians edge name in mutations.
 	EdgeGuardians = "guardians"
 	// EdgeBuses holds the string denoting the buses edge name in mutations.
 	EdgeBuses = "buses"
 	// Table holds the table name of the nursery in the database.
 	Table = "nurseries"
-	// ChildrenTable is the table that holds the children relation/edge.
-	ChildrenTable = "childs"
-	// ChildrenInverseTable is the table name for the Child entity.
-	// It exists in this package in order to avoid circular dependency with the "child" package.
-	ChildrenInverseTable = "childs"
-	// ChildrenColumn is the table column denoting the children relation/edge.
-	ChildrenColumn = "child_nursery"
 	// GuardiansTable is the table that holds the guardians relation/edge.
 	GuardiansTable = "guardians"
 	// GuardiansInverseTable is the table name for the Guardian entity.
@@ -144,20 +135,6 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
-// ByChildrenCount orders the results by children count.
-func ByChildrenCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newChildrenStep(), opts...)
-	}
-}
-
-// ByChildren orders the results by children terms.
-func ByChildren(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newChildrenStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByGuardiansCount orders the results by guardians count.
 func ByGuardiansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -184,13 +161,6 @@ func ByBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
-}
-func newChildrenStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ChildrenInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, ChildrenTable, ChildrenColumn),
-	)
 }
 func newGuardiansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

@@ -29,6 +29,8 @@ type Bus struct {
 	Longitude float64 `json:"longitude,omitempty"`
 	// バスのステータス（運行中、停止中など）
 	Status bus.Status `json:"status,omitempty"`
+	// 顔識別が有効かどうか
+	EnableFaceRecognition bool `json:"enable_face_recognition,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -100,6 +102,8 @@ func (*Bus) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case bus.FieldEnableFaceRecognition:
+			values[i] = new(sql.NullBool)
 		case bus.FieldLatitude, bus.FieldLongitude:
 			values[i] = new(sql.NullFloat64)
 		case bus.FieldName, bus.FieldPlateNumber, bus.FieldStatus:
@@ -160,6 +164,12 @@ func (b *Bus) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				b.Status = bus.Status(value.String)
+			}
+		case bus.FieldEnableFaceRecognition:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field enable_face_recognition", values[i])
+			} else if value.Valid {
+				b.EnableFaceRecognition = value.Bool
 			}
 		case bus.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -250,6 +260,9 @@ func (b *Bus) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", b.Status))
+	builder.WriteString(", ")
+	builder.WriteString("enable_face_recognition=")
+	builder.WriteString(fmt.Sprintf("%v", b.EnableFaceRecognition))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(b.CreatedAt.Format(time.ANSIC))

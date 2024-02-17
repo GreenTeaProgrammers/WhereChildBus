@@ -28,6 +28,10 @@ type Guardian struct {
 	Name string `json:"name,omitempty"`
 	// PhoneNumber holds the value of the "phone_number" field.
 	PhoneNumber string `json:"phone_number,omitempty"`
+	// バスを利用するかどうか
+	IsUseMorningBus bool `json:"is_use_morning_bus,omitempty"`
+	// バスを利用するかどうか
+	IsUseEveningBus bool `json:"is_use_evening_bus,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -92,6 +96,8 @@ func (*Guardian) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case guardian.FieldIsUseMorningBus, guardian.FieldIsUseEveningBus:
+			values[i] = new(sql.NullBool)
 		case guardian.FieldEmail, guardian.FieldHashedPassword, guardian.FieldName, guardian.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case guardian.FieldCreatedAt, guardian.FieldUpdatedAt:
@@ -144,6 +150,18 @@ func (gu *Guardian) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
 				gu.PhoneNumber = value.String
+			}
+		case guardian.FieldIsUseMorningBus:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_use_morning_bus", values[i])
+			} else if value.Valid {
+				gu.IsUseMorningBus = value.Bool
+			}
+		case guardian.FieldIsUseEveningBus:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_use_evening_bus", values[i])
+			} else if value.Valid {
+				gu.IsUseEveningBus = value.Bool
 			}
 		case guardian.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -226,6 +244,12 @@ func (gu *Guardian) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
 	builder.WriteString(gu.PhoneNumber)
+	builder.WriteString(", ")
+	builder.WriteString("is_use_morning_bus=")
+	builder.WriteString(fmt.Sprintf("%v", gu.IsUseMorningBus))
+	builder.WriteString(", ")
+	builder.WriteString("is_use_evening_bus=")
+	builder.WriteString(fmt.Sprintf("%v", gu.IsUseEveningBus))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(gu.CreatedAt.Format(time.ANSIC))

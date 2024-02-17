@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n$where_child_bus/v1/child_photo.proto\x12\x12where_child_bus.v1\"+\n\x17\x44\x65leteChildPhotoRequest\x12\x10\n\x03ids\x18\x01 \x03(\tR\x03ids\"T\n\x18\x44\x65leteChildPhotoResponse\x12&\n\x0fis_success_list\x18\x01 \x03(\x08R\risSuccessList\x12\x10\n\x03ids\x18\x02 \x03(\tR\x03ids2\x82\x01\n\x11\x43hildPhotoService\x12m\n\x10\x44\x65leteChildPhoto\x12+.where_child_bus.v1.DeleteChildPhotoRequest\x1a,.where_child_bus.v1.DeleteChildPhotoResponseB\xf2\x01\n\x16\x63om.where_child_bus.v1B\x0f\x43hildPhotoProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n$where_child_bus/v1/child_photo.proto\x12\x12where_child_bus.v1\"6\n\x17\x44uplicationCheckRequest\x12\x1b\n\tchild_ids\x18\x01 \x03(\tR\x08\x63hildIds\"\x89\x01\n\x18\x44uplicationCheckResponse\x12#\n\ris_duplicated\x18\x01 \x01(\x08R\x0cisDuplicated\x12\x1b\n\tphoto_ids\x18\x02 \x03(\tR\x08photoIds\x12+\n\x11\x64uplicated_photos\x18\x03 \x03(\x0cR\x10\x64uplicatedPhotos\"+\n\x17\x44\x65leteChildPhotoRequest\x12\x10\n\x03ids\x18\x01 \x03(\tR\x03ids\"T\n\x18\x44\x65leteChildPhotoResponse\x12&\n\x0fis_success_list\x18\x01 \x03(\x08R\risSuccessList\x12\x10\n\x03ids\x18\x02 \x03(\tR\x03ids\"1\n\x14GetChildPhotoRequest\x12\x19\n\x08\x63hild_id\x18\x01 \x01(\tR\x07\x63hildId\"P\n\x12\x43hildPhotoResponse\x12$\n\x0e\x63hild_photo_id\x18\x01 \x01(\tR\x0c\x63hildPhotoId\x12\x14\n\x05photo\x18\x02 \x01(\x0cR\x05photo\"b\n\x15GetChildPhotoResponse\x12I\n\x0c\x63hild_photos\x18\x01 \x03(\x0b\x32&.where_child_bus.v1.ChildPhotoResponseR\x0b\x63hildPhotos2\xd7\x02\n\x11\x43hildPhotoService\x12m\n\x10\x44uplicationCheck\x12+.where_child_bus.v1.DuplicationCheckRequest\x1a,.where_child_bus.v1.DuplicationCheckResponse\x12m\n\x10\x44\x65leteChildPhoto\x12+.where_child_bus.v1.DeleteChildPhotoRequest\x1a,.where_child_bus.v1.DeleteChildPhotoResponse\x12\x64\n\rGetChildPhoto\x12(.where_child_bus.v1.GetChildPhotoRequest\x1a).where_child_bus.v1.GetChildPhotoResponseB\xf2\x01\n\x16\x63om.where_child_bus.v1B\x0f\x43hildPhotoProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,10 +22,20 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'where_child_bus.v1.child_ph
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\026com.where_child_bus.v1B\017ChildPhotoProtoP\001Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\242\002\003WXX\252\002\020WhereChildBus.V1\312\002\020WhereChildBus\\V1\342\002\034WhereChildBus\\V1\\GPBMetadata\352\002\021WhereChildBus::V1'
-  _globals['_DELETECHILDPHOTOREQUEST']._serialized_start=60
-  _globals['_DELETECHILDPHOTOREQUEST']._serialized_end=103
-  _globals['_DELETECHILDPHOTORESPONSE']._serialized_start=105
-  _globals['_DELETECHILDPHOTORESPONSE']._serialized_end=189
-  _globals['_CHILDPHOTOSERVICE']._serialized_start=192
-  _globals['_CHILDPHOTOSERVICE']._serialized_end=322
+  _globals['_DUPLICATIONCHECKREQUEST']._serialized_start=60
+  _globals['_DUPLICATIONCHECKREQUEST']._serialized_end=114
+  _globals['_DUPLICATIONCHECKRESPONSE']._serialized_start=117
+  _globals['_DUPLICATIONCHECKRESPONSE']._serialized_end=254
+  _globals['_DELETECHILDPHOTOREQUEST']._serialized_start=256
+  _globals['_DELETECHILDPHOTOREQUEST']._serialized_end=299
+  _globals['_DELETECHILDPHOTORESPONSE']._serialized_start=301
+  _globals['_DELETECHILDPHOTORESPONSE']._serialized_end=385
+  _globals['_GETCHILDPHOTOREQUEST']._serialized_start=387
+  _globals['_GETCHILDPHOTOREQUEST']._serialized_end=436
+  _globals['_CHILDPHOTORESPONSE']._serialized_start=438
+  _globals['_CHILDPHOTORESPONSE']._serialized_end=518
+  _globals['_GETCHILDPHOTORESPONSE']._serialized_start=520
+  _globals['_GETCHILDPHOTORESPONSE']._serialized_end=618
+  _globals['_CHILDPHOTOSERVICE']._serialized_start=621
+  _globals['_CHILDPHOTOSERVICE']._serialized_end=964
 # @@protoc_insertion_point(module_scope)

@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/google/uuid"
@@ -116,21 +115,6 @@ func (nc *NurseryCreate) SetNillableID(u *uuid.UUID) *NurseryCreate {
 		nc.SetID(*u)
 	}
 	return nc
-}
-
-// AddChildIDs adds the "children" edge to the Child entity by IDs.
-func (nc *NurseryCreate) AddChildIDs(ids ...uuid.UUID) *NurseryCreate {
-	nc.mutation.AddChildIDs(ids...)
-	return nc
-}
-
-// AddChildren adds the "children" edges to the Child entity.
-func (nc *NurseryCreate) AddChildren(c ...*Child) *NurseryCreate {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return nc.AddChildIDs(ids...)
 }
 
 // AddGuardianIDs adds the "guardians" edge to the Guardian entity by IDs.
@@ -298,22 +282,6 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.UpdatedAt(); ok {
 		_spec.SetField(nursery.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if nodes := nc.mutation.ChildrenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := nc.mutation.GuardiansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

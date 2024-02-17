@@ -17,13 +17,10 @@ func ToPbChild(t *ent.Child) *pb.Child {
 	sex := convertSexToPbSex(t.Sex)
 	return &pb.Child{
 		Id:                   t.ID.String(),
-		NurseryId:            t.Edges.Nursery.ID.String(),
 		GuardianId:           t.Edges.Guardian.ID.String(),
 		Name:                 t.Name,
 		Age:                  int32(t.Age),
 		Sex:                  sex,
-		IsRideMorningBus:     t.IsRideMorningBus,
-		IsRideEveningBus:     t.IsRideEveningBus,
 		CheckForMissingItems: t.CheckForMissingItems,
 		HasBag:               t.HasBag,
 		HasLunchBox:          t.HasLunchBox,
@@ -48,18 +45,33 @@ func convertSexToPbSex(sex child.Sex) pb.Sex {
 	}
 }
 
+func ConvertPbStatusToEntStatus(pbStatus pb.Status) (*bus.Status, error) {
+        switch pbStatus {
+        case pb.Status_STATUS_RUNNING:
+                status := bus.StatusRunning
+                return &status, nil
+        case pb.Status_STATUS_STOPPED:
+                status := bus.StatusStopped
+                return &status, nil
+        default:
+                // 不正な値の場合はエラーを返す
+                return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
+        }
+}
+
 func ToPbBus(t *ent.Bus) *pb.Bus {
 	status := convertStatusToPbStatus(t.Status)
 	return &pb.Bus{
-		Id:          t.ID.String(),
-		NurseryId:   t.Edges.Nursery.ID.String(),
-		Name:        t.Name,
-		PlateNumber: t.PlateNumber,
-		Latitude:    t.Latitude,
-		Longitude:   t.Longitude,
-		Status:      status,
-		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
-		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+		Id:                    t.ID.String(),
+		NurseryId:             t.Edges.Nursery.ID.String(),
+		Name:                  t.Name,
+		PlateNumber:           t.PlateNumber,
+		Status:                status,
+		Latitude:              t.Latitude,
+		Longitude:             t.Longitude,
+		EnableFaceRecognition: t.EnableFaceRecognition,
+		CreatedAt:             &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:             &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 
@@ -93,13 +105,15 @@ func convertStatusToPbStatus(status bus.Status) pb.Status {
 
 func ToPbGuardianResponse(t *ent.Guardian) *pb.GuardianResponse {
 	return &pb.GuardianResponse{
-		Id:          t.ID.String(),
-		NurseryId:   t.Edges.Nursery.ID.String(),
-		Email:       t.Email,
-		PhoneNumber: t.PhoneNumber,
-		Name:        t.Name,
-		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
-		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+		Id:              t.ID.String(),
+		NurseryId:       t.Edges.Nursery.ID.String(),
+		Email:           t.Email,
+		PhoneNumber:     t.PhoneNumber,
+		Name:            t.Name,
+		IsUseMorningBus: t.IsUseMorningBus,
+		IsUseEveningBus: t.IsUseEveningBus,
+		CreatedAt:       &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:       &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 
@@ -113,6 +127,19 @@ func ToPbNurseryResponse(t *ent.Nursery) *pb.NurseryResponse {
 		PhoneNumber: t.PhoneNumber,
 		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
 		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
+
+func ToPbStation(t *ent.Station, morningNextStationID, eveningNextStationID string) *pb.Station {
+	return &pb.Station{
+		Id:                   t.ID.String(),
+		GuardianId:           t.Edges.Guardian.ID.String(),
+		MorningNextStationId: morningNextStationID,
+		EveningNextStationId: eveningNextStationID,
+		Latitude:             t.Latitude,
+		Longitude:            t.Longitude,
+		CreatedAt:            &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:            &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 

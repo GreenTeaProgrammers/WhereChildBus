@@ -6,8 +6,14 @@ class InputElement extends StatelessWidget {
   final String inputFieldTitle;
   final String labelText;
   final String hintText;
+  final TextEditingController controller;
 
-  const InputElement({super.key, required this.inputFieldTitle, required this.labelText, required this.hintText});
+  const InputElement(
+      {super.key,
+      required this.inputFieldTitle,
+      required this.labelText,
+      required this.hintText,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,11 @@ class InputElement extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InputFieldTitle(title: inputFieldTitle),
-          InputField(labelText: labelText, hintText: hintText),
+          InputField(
+            labelText: labelText,
+            hintText: hintText,
+            controller: controller,
+          ),
         ],
       ),
     );

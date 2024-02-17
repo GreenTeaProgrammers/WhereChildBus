@@ -16,11 +16,16 @@ func NewGuardianServiceServer(interactor *guardian.Interactor) pb.GuardianServic
 }
 
 // CreateGuardian implements where_child_busv1.GuardianServiceServer.
-func (*guardianServiceServer) CreateGuardian(context.Context, *pb.CreateGuardianRequest) (*pb.CreateGuardianResponse, error) {
-	panic("unimplemented")
+func (s *guardianServiceServer) CreateGuardian(ctx context.Context, req *pb.CreateGuardianRequest) (*pb.CreateGuardianResponse, error) {
+	return s.interactor.CreateGuardian(ctx, req)
 }
 
 // GuardianLogin implements where_child_busv1.GuardianServiceServer.
 func (s *guardianServiceServer) GuardianLogin(ctx context.Context, req *pb.GuardianLoginRequest) (*pb.GuardianLoginResponse, error) {
 	return s.interactor.GuardianLogin(ctx, req)
+}
+
+// GetGuardianListByBusId implements where_child_busv1.GuardianServiceServer.
+func (s *guardianServiceServer) GetGuardianListByBusId(ctx context.Context, req *pb.GetGuardianListByBusIdRequest) (*pb.GetGuardianListByBusIdResponse, error) {
+	return s.interactor.GetGuardianListByBusID(ctx, req)
 }

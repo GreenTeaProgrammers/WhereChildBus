@@ -15,7 +15,6 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/google/uuid"
 )
 
@@ -41,34 +40,6 @@ func (cc *ChildCreate) SetAge(i int) *ChildCreate {
 // SetSex sets the "sex" field.
 func (cc *ChildCreate) SetSex(c child.Sex) *ChildCreate {
 	cc.mutation.SetSex(c)
-	return cc
-}
-
-// SetIsRideMorningBus sets the "is_ride_morning_bus" field.
-func (cc *ChildCreate) SetIsRideMorningBus(b bool) *ChildCreate {
-	cc.mutation.SetIsRideMorningBus(b)
-	return cc
-}
-
-// SetNillableIsRideMorningBus sets the "is_ride_morning_bus" field if the given value is not nil.
-func (cc *ChildCreate) SetNillableIsRideMorningBus(b *bool) *ChildCreate {
-	if b != nil {
-		cc.SetIsRideMorningBus(*b)
-	}
-	return cc
-}
-
-// SetIsRideEveningBus sets the "is_ride_evening_bus" field.
-func (cc *ChildCreate) SetIsRideEveningBus(b bool) *ChildCreate {
-	cc.mutation.SetIsRideEveningBus(b)
-	return cc
-}
-
-// SetNillableIsRideEveningBus sets the "is_ride_evening_bus" field if the given value is not nil.
-func (cc *ChildCreate) SetNillableIsRideEveningBus(b *bool) *ChildCreate {
-	if b != nil {
-		cc.SetIsRideEveningBus(*b)
-	}
 	return cc
 }
 
@@ -232,25 +203,6 @@ func (cc *ChildCreate) AddChildBusAssociations(c ...*ChildBusAssociation) *Child
 	return cc.AddChildBusAssociationIDs(ids...)
 }
 
-// SetNurseryID sets the "nursery" edge to the Nursery entity by ID.
-func (cc *ChildCreate) SetNurseryID(id uuid.UUID) *ChildCreate {
-	cc.mutation.SetNurseryID(id)
-	return cc
-}
-
-// SetNillableNurseryID sets the "nursery" edge to the Nursery entity by ID if the given value is not nil.
-func (cc *ChildCreate) SetNillableNurseryID(id *uuid.UUID) *ChildCreate {
-	if id != nil {
-		cc = cc.SetNurseryID(*id)
-	}
-	return cc
-}
-
-// SetNursery sets the "nursery" edge to the Nursery entity.
-func (cc *ChildCreate) SetNursery(n *Nursery) *ChildCreate {
-	return cc.SetNurseryID(n.ID)
-}
-
 // AddBoardingRecordIDs adds the "boarding_record" edge to the BoardingRecord entity by IDs.
 func (cc *ChildCreate) AddBoardingRecordIDs(ids ...uuid.UUID) *ChildCreate {
 	cc.mutation.AddBoardingRecordIDs(ids...)
@@ -316,14 +268,6 @@ func (cc *ChildCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cc *ChildCreate) defaults() {
-	if _, ok := cc.mutation.IsRideMorningBus(); !ok {
-		v := child.DefaultIsRideMorningBus
-		cc.mutation.SetIsRideMorningBus(v)
-	}
-	if _, ok := cc.mutation.IsRideEveningBus(); !ok {
-		v := child.DefaultIsRideEveningBus
-		cc.mutation.SetIsRideEveningBus(v)
-	}
 	if _, ok := cc.mutation.CheckForMissingItems(); !ok {
 		v := child.DefaultCheckForMissingItems
 		cc.mutation.SetCheckForMissingItems(v)
@@ -377,12 +321,6 @@ func (cc *ChildCreate) check() error {
 		if err := child.SexValidator(v); err != nil {
 			return &ValidationError{Name: "sex", err: fmt.Errorf(`ent: validator failed for field "Child.sex": %w`, err)}
 		}
-	}
-	if _, ok := cc.mutation.IsRideMorningBus(); !ok {
-		return &ValidationError{Name: "is_ride_morning_bus", err: errors.New(`ent: missing required field "Child.is_ride_morning_bus"`)}
-	}
-	if _, ok := cc.mutation.IsRideEveningBus(); !ok {
-		return &ValidationError{Name: "is_ride_evening_bus", err: errors.New(`ent: missing required field "Child.is_ride_evening_bus"`)}
 	}
 	if _, ok := cc.mutation.CheckForMissingItems(); !ok {
 		return &ValidationError{Name: "check_for_missing_items", err: errors.New(`ent: missing required field "Child.check_for_missing_items"`)}
@@ -455,14 +393,6 @@ func (cc *ChildCreate) createSpec() (*Child, *sqlgraph.CreateSpec) {
 		_spec.SetField(child.FieldSex, field.TypeEnum, value)
 		_node.Sex = value
 	}
-	if value, ok := cc.mutation.IsRideMorningBus(); ok {
-		_spec.SetField(child.FieldIsRideMorningBus, field.TypeBool, value)
-		_node.IsRideMorningBus = value
-	}
-	if value, ok := cc.mutation.IsRideEveningBus(); ok {
-		_spec.SetField(child.FieldIsRideEveningBus, field.TypeBool, value)
-		_node.IsRideEveningBus = value
-	}
 	if value, ok := cc.mutation.CheckForMissingItems(); ok {
 		_spec.SetField(child.FieldCheckForMissingItems, field.TypeBool, value)
 		_node.CheckForMissingItems = value
@@ -526,23 +456,6 @@ func (cc *ChildCreate) createSpec() (*Child, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.NurseryIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   child.NurseryTable,
-			Columns: []string{child.NurseryColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(nursery.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.child_nursery = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.BoardingRecordIDs(); len(nodes) > 0 {

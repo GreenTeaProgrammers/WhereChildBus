@@ -586,29 +586,6 @@ func UpdatedAtLTE(v time.Time) predicate.Nursery {
 	return predicate.Nursery(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
-// HasChildren applies the HasEdge predicate on the "children" edge.
-func HasChildren() predicate.Nursery {
-	return predicate.Nursery(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, ChildrenTable, ChildrenColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasChildrenWith applies the HasEdge predicate on the "children" edge with a given conditions (other predicates).
-func HasChildrenWith(preds ...predicate.Child) predicate.Nursery {
-	return predicate.Nursery(func(s *sql.Selector) {
-		step := newChildrenStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasGuardians applies the HasEdge predicate on the "guardians" edge.
 func HasGuardians() predicate.Nursery {
 	return predicate.Nursery(func(s *sql.Selector) {
