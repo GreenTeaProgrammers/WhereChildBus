@@ -23,7 +23,9 @@ class _AppState extends State<App> {
         title: Text(['園児一覧', '送迎バスコース一覧', '連絡情報設定'][_selectedIndex]),
       ),
       body: [
-        const StudentListPage(),
+        ChildListPage(
+          nursery: widget.nursery,
+        ),
         BusListPage(
           nursery: widget.nursery,
         ),
