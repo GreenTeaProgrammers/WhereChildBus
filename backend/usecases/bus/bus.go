@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/exp/slog"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"context"
 
@@ -290,6 +292,33 @@ func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationCon
 			i.logger.Error("failed to update bus location", err)
 			// 更新に失敗した場合は、エラーをログに記録し、処理を続行する
 			continue
+		}
+	}
+}
+
+func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, stream pb.BusService_TrackBusContinuousServer) error {
+	busID, err := uuid.Parse(req.BusId)
+	if err != nil {
+		return fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+	}
+
+	for {
+		bus, err := i.entClient.Bus.Query().
+			Where(busRepo.IDEQ(busID)).
+			WithNursery().
+			Only(context.Background())
+
+		if err != nil {
+			return fmt.Errorf("failed to get bus: %w", err)
+		}
+
+		if err := stream.Send(&pb.TrackBusContinuousResponse{
+			BusId:     req.BusId,
+			Latitude:  bus.Latitude,
+			Longitude: bus.Longitude,
+			Timestamp: &timestamppb.Timestamp{Seconds: time.Now().Unix()},
+		}); err != nil {
+			return fmt.Errorf("failed to send bus: %w", err)
 		}
 	}
 }
