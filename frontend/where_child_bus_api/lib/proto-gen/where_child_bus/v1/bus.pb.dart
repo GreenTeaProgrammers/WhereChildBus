@@ -753,12 +753,26 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
 }
 
 class StreamBusVideoResponse extends $pb.GeneratedMessage {
-  factory StreamBusVideoResponse() => create();
+  factory StreamBusVideoResponse({
+    $core.bool? isDetected,
+    $core.Iterable<$8.Child>? children,
+  }) {
+    final $result = create();
+    if (isDetected != null) {
+      $result.isDetected = isDetected;
+    }
+    if (children != null) {
+      $result.children.addAll(children);
+    }
+    return $result;
+  }
   StreamBusVideoResponse._() : super();
   factory StreamBusVideoResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory StreamBusVideoResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamBusVideoResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'isDetected')
+    ..pc<$8.Child>(2, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -782,6 +796,18 @@ class StreamBusVideoResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static StreamBusVideoResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StreamBusVideoResponse>(create);
   static StreamBusVideoResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get isDetected => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isDetected($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsDetected() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsDetected() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$8.Child> get children => $_getList(1);
 }
 
 

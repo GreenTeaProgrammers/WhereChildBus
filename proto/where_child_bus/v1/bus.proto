@@ -76,5 +76,6 @@ message StreamBusVideoRequest {
 }
 
 message StreamBusVideoResponse {
-  // Custom empty response type to conform to Protobuf style guide
+        bool is_detected = 1;
+        repeated Child children = 2;
 }

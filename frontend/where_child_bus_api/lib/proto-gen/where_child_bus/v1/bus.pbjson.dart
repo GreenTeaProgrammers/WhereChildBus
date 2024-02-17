@@ -178,9 +178,15 @@ final $typed_data.Uint8List streamBusVideoRequestDescriptor = $convert.base64Dec
 @$core.Deprecated('Use streamBusVideoResponseDescriptor instead')
 const StreamBusVideoResponse$json = {
   '1': 'StreamBusVideoResponse',
+  '2': [
+    {'1': 'is_detected', '3': 1, '4': 1, '5': 8, '10': 'isDetected'},
+    {'1': 'children', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+  ],
 };
 
 /// Descriptor for `StreamBusVideoResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamBusVideoResponseDescriptor = $convert.base64Decode(
-    'ChZTdHJlYW1CdXNWaWRlb1Jlc3BvbnNl');
+    'ChZTdHJlYW1CdXNWaWRlb1Jlc3BvbnNlEh8KC2lzX2RldGVjdGVkGAEgASgIUgppc0RldGVjdG'
+    'VkEjUKCGNoaWxkcmVuGAIgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJl'
+    'bg==');
 

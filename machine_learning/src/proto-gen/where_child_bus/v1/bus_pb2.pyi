@@ -102,5 +102,9 @@ class StreamBusVideoRequest(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., video_type: _Optional[_Union[_resources_pb2.VideoType, str]] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+    __slots__ = ("is_detected", "children")
+    IS_DETECTED_FIELD_NUMBER: _ClassVar[int]
+    CHILDREN_FIELD_NUMBER: _ClassVar[int]
+    is_detected: bool
+    children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
+    def __init__(self, is_detected: bool = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...) -> None: ...
