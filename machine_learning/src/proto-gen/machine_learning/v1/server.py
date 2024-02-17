@@ -1,14 +1,12 @@
-import argparse
 import logging
-import threading
 from concurrent import futures
 
 import grpc
+
 import health_check_pb2
 import health_check_pb2_grpc
 import machine_learning_pb2
 import machine_learning_pb2_grpc
-from grpc_reflection.v1alpha import reflection
 
 from face_detect_model.DetectFaceAndClip.detectFaceAndClip import main
 
