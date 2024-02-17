@@ -1,4 +1,5 @@
 from where_child_bus.v1 import resources_pb2 as _resources_pb2
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
@@ -61,8 +62,8 @@ class SendLocationContinuousRequest(_message.Message):
     bus_id: str
     latitude: float
     longitude: float
-    timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    timestamp: _timestamp_pb2.Timestamp
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class SendLocationContinuousResponse(_message.Message):
     __slots__ = ()
@@ -83,8 +84,8 @@ class TrackBusContinuousResponse(_message.Message):
     bus_id: str
     latitude: float
     longitude: float
-    timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    timestamp: _timestamp_pb2.Timestamp
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
     __slots__ = ("bus_id", "bus_type", "video_type", "video_chunk", "timestamp")
@@ -97,8 +98,8 @@ class StreamBusVideoRequest(_message.Message):
     bus_type: _resources_pb2.BusType
     video_type: _resources_pb2.VideoType
     video_chunk: bytes
-    timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., video_type: _Optional[_Union[_resources_pb2.VideoType, str]] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    timestamp: _timestamp_pb2.Timestamp
+    def __init__(self, bus_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., video_type: _Optional[_Union[_resources_pb2.VideoType, str]] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
     __slots__ = ()

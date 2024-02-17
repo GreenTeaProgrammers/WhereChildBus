@@ -11,9 +11,9 @@
 
 import 'dart:core' as $core;
 
-import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../google/protobuf/timestamp.pb.dart' as $7;
 import 'resources.pb.dart' as $8;
 import 'resources.pbenum.dart' as $8;
 
@@ -379,7 +379,7 @@ class SendLocationContinuousRequest extends $pb.GeneratedMessage {
     $core.String? busId,
     $core.double? latitude,
     $core.double? longitude,
-    $fixnum.Int64? timestamp,
+    $7.Timestamp? timestamp,
   }) {
     final $result = create();
     if (busId != null) {
@@ -404,7 +404,7 @@ class SendLocationContinuousRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aInt64(4, _omitFieldNames ? '' : 'timestamp')
+    ..aOM<$7.Timestamp>(4, _omitFieldNames ? '' : 'timestamp', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -457,13 +457,15 @@ class SendLocationContinuousRequest extends $pb.GeneratedMessage {
   void clearLongitude() => clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get timestamp => $_getI64(3);
+  $7.Timestamp get timestamp => $_getN(3);
   @$pb.TagNumber(4)
-  set timestamp($fixnum.Int64 v) { $_setInt64(3, v); }
+  set timestamp($7.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasTimestamp() => $_has(3);
   @$pb.TagNumber(4)
   void clearTimestamp() => clearField(4);
+  @$pb.TagNumber(4)
+  $7.Timestamp ensureTimestamp() => $_ensure(3);
 }
 
 class SendLocationContinuousResponse extends $pb.GeneratedMessage {
@@ -553,7 +555,7 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
     $core.String? busId,
     $core.double? latitude,
     $core.double? longitude,
-    $fixnum.Int64? timestamp,
+    $7.Timestamp? timestamp,
   }) {
     final $result = create();
     if (busId != null) {
@@ -578,7 +580,7 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aInt64(4, _omitFieldNames ? '' : 'timestamp')
+    ..aOM<$7.Timestamp>(4, _omitFieldNames ? '' : 'timestamp', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -631,13 +633,15 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
   void clearLongitude() => clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get timestamp => $_getI64(3);
+  $7.Timestamp get timestamp => $_getN(3);
   @$pb.TagNumber(4)
-  set timestamp($fixnum.Int64 v) { $_setInt64(3, v); }
+  set timestamp($7.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasTimestamp() => $_has(3);
   @$pb.TagNumber(4)
   void clearTimestamp() => clearField(4);
+  @$pb.TagNumber(4)
+  $7.Timestamp ensureTimestamp() => $_ensure(3);
 }
 
 class StreamBusVideoRequest extends $pb.GeneratedMessage {
@@ -646,7 +650,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     $8.BusType? busType,
     $8.VideoType? videoType,
     $core.List<$core.int>? videoChunk,
-    $fixnum.Int64? timestamp,
+    $7.Timestamp? timestamp,
   }) {
     final $result = create();
     if (busId != null) {
@@ -675,7 +679,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     ..e<$8.BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
     ..e<$8.VideoType>(3, _omitFieldNames ? '' : 'videoType', $pb.PbFieldType.OE, defaultOrMaker: $8.VideoType.VIDEO_TYPE_UNSPECIFIED, valueOf: $8.VideoType.valueOf, enumValues: $8.VideoType.values)
     ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.OY)
-    ..aInt64(5, _omitFieldNames ? '' : 'timestamp')
+    ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'timestamp', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -737,13 +741,15 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
   void clearVideoChunk() => clearField(4);
 
   @$pb.TagNumber(5)
-  $fixnum.Int64 get timestamp => $_getI64(4);
+  $7.Timestamp get timestamp => $_getN(4);
   @$pb.TagNumber(5)
-  set timestamp($fixnum.Int64 v) { $_setInt64(4, v); }
+  set timestamp($7.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasTimestamp() => $_has(4);
   @$pb.TagNumber(5)
   void clearTimestamp() => clearField(5);
+  @$pb.TagNumber(5)
+  $7.Timestamp ensureTimestamp() => $_ensure(4);
 }
 
 class StreamBusVideoResponse extends $pb.GeneratedMessage {
