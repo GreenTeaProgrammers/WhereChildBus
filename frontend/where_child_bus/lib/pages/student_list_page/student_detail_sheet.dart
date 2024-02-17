@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
-class StudentDetailSheet extends StatelessWidget {
-  final String childName;
+class StudentDetailSheet extends StatefulWidget {
+  final Child child;
 
-  //将来的にはChild型を受け取る。
-  const StudentDetailSheet({super.key, required this.childName});
+  const StudentDetailSheet({Key? key, required this.child}) : super(key: key);
 
+  @override
+  _StudentDetailSheetState createState() => _StudentDetailSheetState();
+}
+
+class _StudentDetailSheetState extends State<StudentDetailSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +44,6 @@ class StudentDetailSheet extends StatelessWidget {
         alignment: Alignment.topRight,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-          //将来的に編集画面へ遷移する。
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => StudentEditPage()));
@@ -57,13 +61,13 @@ class StudentDetailSheet extends StatelessWidget {
       const SizedBox(
         width: 50,
       ),
-      Text(childName,
+      Text(widget.child.name,
           style: const TextStyle(color: Colors.black, fontSize: 24)),
     ]);
   }
 
-  //TODO: 将来的に画像を受け取る。
   Widget childFaceImage() {
+    // 画像を受け取る処理を将来的に実装
     return const SizedBox(
       width: 100,
       height: 100,
@@ -73,8 +77,8 @@ class StudentDetailSheet extends StatelessWidget {
     );
   }
 
-  //TODO: 将来的にはデータを受け取る。
   Widget childDetailList() {
+    // 詳細リストのデータを受け取る処理を将来的に実装
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,

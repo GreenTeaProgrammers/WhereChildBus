@@ -49,7 +49,9 @@ class _ChildListState extends State<ChildList> {
     await showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
-          return StudentDetailSheet(childName: widget.children[index].name);
+          return StudentDetailSheet(
+            child: widget.children[index],
+          );
         });
   }
 }
