@@ -24,7 +24,9 @@ class _AppState extends State<App> {
       ),
       body: [
         const StudentListPage(),
-        const BusListPage(),
+        BusListPage(
+          nursery: widget.nursery,
+        ),
         const NotificationPage()
       ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

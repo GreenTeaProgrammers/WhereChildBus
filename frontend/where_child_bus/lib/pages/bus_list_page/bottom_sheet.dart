@@ -1,16 +1,53 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
-import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/stations_list.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/guardians_list.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/styles/styles.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_passenger_page/bus_passenger_page.dart';
+import 'package:where_child_bus/service/get_guardians_list_by_bus_id.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
-class BottomSheetWidget extends StatelessWidget {
-  final busStations = ["station1", "station2", "station3","station4","station5","station6", "station7", "station8", "station7", "station7"];
-  final String busName;
+class BottomSheetWidget extends StatefulWidget {
+  final Bus bus;
 
-  //将来的にはコンストラクタでバス型を受け取る
-  BottomSheetWidget({required this.busName});
+  const BottomSheetWidget({super.key, required this.bus});
+
+  @override
+  _BottomSheetWidgetState createState() => _BottomSheetWidgetState();
+}
+
+class _BottomSheetWidgetState extends State<BottomSheetWidget> {
+  List<GuardianResponse> guardians = [];
+  bool _isLoading = true;
+  bool _isFailLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGuardians();
+  }
+
+  Future<void> _loadGuardians() async {
+    try {
+      var res = await getGuardiansListByBusIdService(widget.bus.id);
+      if (mounted) {
+        setState(() {
+          guardians = res.guardians;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("保護者リストのロード中にエラーが発生しました: $e");
+      }
+      if (mounted) {
+        setState(() => {_isLoading = false, _isFailLoading = true});
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,36 +60,44 @@ class BottomSheetWidget extends StatelessWidget {
           topRight: Radius.circular(10),
         ),
       ),
-      child: Stack(
-        children: [
-          modalBody(context),
-          editButton(context),
-        ]
-      ),
+      child: Stack(children: [
+        modalBody(context),
+        editButton(context),
+      ]),
     );
   }
 
   Widget modalBody(BuildContext context) {
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // titleText(),
-          modalHeader(busName, "test"),
-          StationsList(busStationsList: busStations),
-          ConfirmButton(
-            buttonText: "乗客情報", 
-            onTap: () => moveToBusPassengerPage(context),
-          ),
-        ],
-      )
-    );
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        modalHeader(widget.bus.name, "test"),
+        _isFailLoading ? loadingFailText() : guardiansListView(),
+        ConfirmButton(
+          buttonText: "乗客情報",
+          onTap: () => moveToBusPassengerPage(context),
+        ),
+      ],
+    ));
+  }
+
+  Widget guardiansListView() {
+    return _isLoading
+        ? const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : GuardiansList(
+            guardiansList: guardians,
+          );
   }
 
   moveToBusPassengerPage(BuildContext context) {
     Navigator.push(
-      context,MaterialPageRoute(builder: (context) => BusPassengerPage()) 
-    );
+        context, MaterialPageRoute(builder: (context) => BusPassengerPage()));
   }
 
   Widget editButton(BuildContext context) {
@@ -63,17 +108,19 @@ class BottomSheetWidget extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             Navigator.push(
-                context,MaterialPageRoute(builder: (context) => BusEditPage(busStations: busStations))
-              );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BusEditPage(
+                          bus: widget.bus,
+                          busEditPageType: BusEditPageType.update,
+                        )));
           },
           style: editButtonStyle(),
-          child: const Text(
-            "Edit",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-            )
-          ),
+          child: const Text("Edit",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              )),
         ),
       ),
     );
@@ -81,49 +128,36 @@ class BottomSheetWidget extends StatelessWidget {
 
   Widget modalHeader(String busCourseName, String busOperatorName) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 50, 0, 10),
+      padding: const EdgeInsets.fromLTRB(20, 50, 0, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          busThumbnail(),
+          busThumbnail(widget.bus.status),
           courseAndOperator(busCourseName, busOperatorName),
         ],
       ),
     );
   }
 
-  //将来的にはStationのListを参照
-  Widget stationsList(BuildContext context, List<String> busStationsList) {
-    return ListView.builder(
-      itemCount: busStationsList.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(50,  10,  0,  0),
-          child: stationsListElement(busStationsList[index]),
-        );
-      },
-    );
-  }
-
-  Widget stationsListElement(String stationName) {
-    return Text(
-      stationName,
-      textAlign: TextAlign.left,
-      style: const TextStyle(
-        fontSize:  18,
-      ),
-    );
-  }
-
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
-      padding: const EdgeInsets.only(left:30),
+      padding: const EdgeInsets.only(left: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           courseNameText(courseName),
           operatorNameText(operatorName),
         ],
+      ),
+    );
+  }
+
+  Widget loadingFailText() {
+    return const Text(
+      "保護者リストの読み込みに失敗しました",
+      style: TextStyle(
+        color: Colors.red,
+        fontSize: 16,
       ),
     );
   }
@@ -145,24 +179,29 @@ class BottomSheetWidget extends StatelessWidget {
   }
 
   Widget operatorNameText(String name) {
-    return Text(
-      "担当：$name",
-      style: const TextStyle(
-        color: Colors.grey,
-      )
-    );
+    return Text("担当：$name",
+        style: const TextStyle(
+          color: Colors.grey,
+        ));
   }
 
-  //TODO:本来は画像を受蹴取って表示する
-  Widget busThumbnail() {
-    return const SizedBox(
+  Widget busThumbnail(Status busStatus) {
+    late String imagePath;
+    if (busStatus == Status.STATUS_RUNNING) {
+      imagePath = "assets/images/bus_operating.png";
+    } else {
+      imagePath = "assets/images/bus_not_operating.png";
+    }
+
+    return SizedBox(
         width: 100,
         height: 100,
-        child: Card(
-          child: Text(
-            "ここにサムネイル",
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
           ),
-        ),
-    );
+        ));
   }
 }
