@@ -3,7 +3,6 @@
 import grpc
 import grpc.experimental
 
-
 from where_child_bus.v1 import child_photo_pb2 as where__child__bus_dot_v1_dot_child__photo__pb2
 
 
@@ -26,6 +25,11 @@ class ChildPhotoServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_child__photo__pb2.DeleteChildPhotoRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_child__photo__pb2.DeleteChildPhotoResponse.FromString,
                 )
+        self.GetChildPhoto = channel.unary_unary(
+                '/where_child_bus.v1.ChildPhotoService/GetChildPhoto',
+                request_serializer=where__child__bus_dot_v1_dot_child__photo__pb2.GetChildPhotoRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_child__photo__pb2.GetChildPhotoResponse.FromString,
+                )
 
 
 class ChildPhotoServiceServicer(object):
@@ -43,6 +47,12 @@ class ChildPhotoServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetChildPhoto(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ChildPhotoServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -55,6 +65,11 @@ def add_ChildPhotoServiceServicer_to_server(servicer, server):
                     servicer.DeleteChildPhoto,
                     request_deserializer=where__child__bus_dot_v1_dot_child__photo__pb2.DeleteChildPhotoRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_child__photo__pb2.DeleteChildPhotoResponse.SerializeToString,
+            ),
+            'GetChildPhoto': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetChildPhoto,
+                    request_deserializer=where__child__bus_dot_v1_dot_child__photo__pb2.GetChildPhotoRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_child__photo__pb2.GetChildPhotoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -97,5 +112,22 @@ class ChildPhotoService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildPhotoService/DeleteChildPhoto',
             where__child__bus_dot_v1_dot_child__photo__pb2.DeleteChildPhotoRequest.SerializeToString,
             where__child__bus_dot_v1_dot_child__photo__pb2.DeleteChildPhotoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetChildPhoto(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildPhotoService/GetChildPhoto',
+            where__child__bus_dot_v1_dot_child__photo__pb2.GetChildPhotoRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_child__photo__pb2.GetChildPhotoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

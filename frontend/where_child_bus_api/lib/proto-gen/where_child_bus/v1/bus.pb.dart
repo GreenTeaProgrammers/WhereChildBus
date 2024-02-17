@@ -643,6 +643,7 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
 class StreamBusVideoRequest extends $pb.GeneratedMessage {
   factory StreamBusVideoRequest({
     $core.String? busId,
+    $8.BusType? busType,
     $8.VideoType? videoType,
     $core.List<$core.int>? videoChunk,
     $fixnum.Int64? timestamp,
@@ -650,6 +651,9 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     final $result = create();
     if (busId != null) {
       $result.busId = busId;
+    }
+    if (busType != null) {
+      $result.busType = busType;
     }
     if (videoType != null) {
       $result.videoType = videoType;
@@ -668,9 +672,10 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamBusVideoRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..e<$8.VideoType>(2, _omitFieldNames ? '' : 'videoType', $pb.PbFieldType.OE, defaultOrMaker: $8.VideoType.VIDEO_TYPE_UNSPECIFIED, valueOf: $8.VideoType.valueOf, enumValues: $8.VideoType.values)
-    ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.OY)
-    ..aInt64(4, _omitFieldNames ? '' : 'timestamp')
+    ..e<$8.BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
+    ..e<$8.VideoType>(3, _omitFieldNames ? '' : 'videoType', $pb.PbFieldType.OE, defaultOrMaker: $8.VideoType.VIDEO_TYPE_UNSPECIFIED, valueOf: $8.VideoType.valueOf, enumValues: $8.VideoType.values)
+    ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.OY)
+    ..aInt64(5, _omitFieldNames ? '' : 'timestamp')
     ..hasRequiredFields = false
   ;
 
@@ -705,31 +710,40 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
   void clearBusId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $8.VideoType get videoType => $_getN(1);
+  $8.BusType get busType => $_getN(1);
   @$pb.TagNumber(2)
-  set videoType($8.VideoType v) { setField(2, v); }
+  set busType($8.BusType v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasVideoType() => $_has(1);
+  $core.bool hasBusType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearVideoType() => clearField(2);
+  void clearBusType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.int> get videoChunk => $_getN(2);
+  $8.VideoType get videoType => $_getN(2);
   @$pb.TagNumber(3)
-  set videoChunk($core.List<$core.int> v) { $_setBytes(2, v); }
+  set videoType($8.VideoType v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasVideoChunk() => $_has(2);
+  $core.bool hasVideoType() => $_has(2);
   @$pb.TagNumber(3)
-  void clearVideoChunk() => clearField(3);
+  void clearVideoType() => clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get timestamp => $_getI64(3);
+  $core.List<$core.int> get videoChunk => $_getN(3);
   @$pb.TagNumber(4)
-  set timestamp($fixnum.Int64 v) { $_setInt64(3, v); }
+  set videoChunk($core.List<$core.int> v) { $_setBytes(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTimestamp() => $_has(3);
+  $core.bool hasVideoChunk() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTimestamp() => clearField(4);
+  void clearVideoChunk() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get timestamp => $_getI64(4);
+  @$pb.TagNumber(5)
+  set timestamp($fixnum.Int64 v) { $_setInt64(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasTimestamp() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearTimestamp() => clearField(5);
 }
 
 class StreamBusVideoResponse extends $pb.GeneratedMessage {

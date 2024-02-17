@@ -64,13 +64,15 @@ const GetChildListByNurseryIDResponse$json = {
   '1': 'GetChildListByNurseryIDResponse',
   '2': [
     {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
   ],
 };
 
 /// Descriptor for `GetChildListByNurseryIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByNurseryIDResponseDescriptor = $convert.base64Decode(
     'Ch9HZXRDaGlsZExpc3RCeU51cnNlcnlJRFJlc3BvbnNlEjUKCGNoaWxkcmVuGAEgAygLMhkud2'
-    'hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbg==');
+    'hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MYAiADKAsyHi53aGVy'
+    'ZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
 
 @$core.Deprecated('Use getChildListByGuardianIDRequestDescriptor instead')
 const GetChildListByGuardianIDRequest$json = {
@@ -90,13 +92,15 @@ const GetChildListByGuardianIDResponse$json = {
   '1': 'GetChildListByGuardianIDResponse',
   '2': [
     {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
   ],
 };
 
 /// Descriptor for `GetChildListByGuardianIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByGuardianIDResponseDescriptor = $convert.base64Decode(
     'CiBHZXRDaGlsZExpc3RCeUd1YXJkaWFuSURSZXNwb25zZRI1CghjaGlsZHJlbhgBIAMoCzIZLn'
-    'doZXJlX2NoaWxkX2J1cy52MS5DaGlsZFIIY2hpbGRyZW4=');
+    'doZXJlX2NoaWxkX2J1cy52MS5DaGlsZFIIY2hpbGRyZW4SNgoGcGhvdG9zGAIgAygLMh4ud2hl'
+    'cmVfY2hpbGRfYnVzLnYxLkNoaWxkUGhvdG9SBnBob3Rvcw==');
 
 @$core.Deprecated('Use getChildListByBusIDRequestDescriptor instead')
 const GetChildListByBusIDRequest$json = {
@@ -115,11 +119,13 @@ const GetChildListByBusIDResponse$json = {
   '1': 'GetChildListByBusIDResponse',
   '2': [
     {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
   ],
 };
 
 /// Descriptor for `GetChildListByBusIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByBusIDResponseDescriptor = $convert.base64Decode(
     'ChtHZXRDaGlsZExpc3RCeUJ1c0lEUmVzcG9uc2USNQoIY2hpbGRyZW4YASADKAsyGS53aGVyZV'
-    '9jaGlsZF9idXMudjEuQ2hpbGRSCGNoaWxkcmVu');
+    '9jaGlsZF9idXMudjEuQ2hpbGRSCGNoaWxkcmVuEjYKBnBob3RvcxgCIAMoCzIeLndoZXJlX2No'
+    'aWxkX2J1cy52MS5DaGlsZFBob3RvUgZwaG90b3M=');
 

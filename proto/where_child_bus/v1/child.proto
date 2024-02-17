@@ -30,6 +30,7 @@ message GetChildListByNurseryIDRequest {
 
 message GetChildListByNurseryIDResponse {
         repeated Child children = 1;
+        repeated ChildPhoto photos = 2;
 }
 
 message GetChildListByGuardianIDRequest {
@@ -38,6 +39,7 @@ message GetChildListByGuardianIDRequest {
 
 message GetChildListByGuardianIDResponse {
         repeated Child children = 1;
+        repeated ChildPhoto photos = 2;
 }
 
 message GetChildListByBusIDRequest {
@@ -46,4 +48,5 @@ message GetChildListByBusIDRequest {
 
 message GetChildListByBusIDResponse {
         repeated Child children = 1;
+        repeated ChildPhoto photos = 2;
 }
