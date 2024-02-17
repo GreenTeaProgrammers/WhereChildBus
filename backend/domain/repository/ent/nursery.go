@@ -22,8 +22,8 @@ type Nursery struct {
 	NurseryCode string `json:"nursery_code,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
-	// EncryptedPassword holds the value of the "encrypted_password" field.
-	EncryptedPassword string `json:"encrypted_password,omitempty"`
+	// HashedPassword holds the value of the "hashed_password" field.
+	HashedPassword string `json:"hashed_password,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Address holds the value of the "address" field.
@@ -42,30 +42,19 @@ type Nursery struct {
 
 // NurseryEdges holds the relations/edges for other nodes in the graph.
 type NurseryEdges struct {
-	// Children holds the value of the children edge.
-	Children []*Child `json:"children,omitempty"`
 	// Guardians holds the value of the guardians edge.
 	Guardians []*Guardian `json:"guardians,omitempty"`
 	// Buses holds the value of the buses edge.
 	Buses []*Bus `json:"buses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
-}
-
-// ChildrenOrErr returns the Children value or an error if the edge
-// was not loaded in eager-loading.
-func (e NurseryEdges) ChildrenOrErr() ([]*Child, error) {
-	if e.loadedTypes[0] {
-		return e.Children, nil
-	}
-	return nil, &NotLoadedError{edge: "children"}
+	loadedTypes [2]bool
 }
 
 // GuardiansOrErr returns the Guardians value or an error if the edge
 // was not loaded in eager-loading.
 func (e NurseryEdges) GuardiansOrErr() ([]*Guardian, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[0] {
 		return e.Guardians, nil
 	}
 	return nil, &NotLoadedError{edge: "guardians"}
@@ -74,7 +63,7 @@ func (e NurseryEdges) GuardiansOrErr() ([]*Guardian, error) {
 // BusesOrErr returns the Buses value or an error if the edge
 // was not loaded in eager-loading.
 func (e NurseryEdges) BusesOrErr() ([]*Bus, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		return e.Buses, nil
 	}
 	return nil, &NotLoadedError{edge: "buses"}
@@ -85,7 +74,7 @@ func (*Nursery) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case nursery.FieldNurseryCode, nursery.FieldEmail, nursery.FieldEncryptedPassword, nursery.FieldName, nursery.FieldAddress, nursery.FieldPhoneNumber:
+		case nursery.FieldNurseryCode, nursery.FieldEmail, nursery.FieldHashedPassword, nursery.FieldName, nursery.FieldAddress, nursery.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case nursery.FieldCreatedAt, nursery.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -124,11 +113,11 @@ func (n *Nursery) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.Email = value.String
 			}
-		case nursery.FieldEncryptedPassword:
+		case nursery.FieldHashedPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field encrypted_password", values[i])
+				return fmt.Errorf("unexpected type %T for field hashed_password", values[i])
 			} else if value.Valid {
-				n.EncryptedPassword = value.String
+				n.HashedPassword = value.String
 			}
 		case nursery.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -173,11 +162,6 @@ func (n *Nursery) Value(name string) (ent.Value, error) {
 	return n.selectValues.Get(name)
 }
 
-// QueryChildren queries the "children" edge of the Nursery entity.
-func (n *Nursery) QueryChildren() *ChildQuery {
-	return NewNurseryClient(n.config).QueryChildren(n)
-}
-
 // QueryGuardians queries the "guardians" edge of the Nursery entity.
 func (n *Nursery) QueryGuardians() *GuardianQuery {
 	return NewNurseryClient(n.config).QueryGuardians(n)
@@ -217,8 +201,8 @@ func (n *Nursery) String() string {
 	builder.WriteString("email=")
 	builder.WriteString(n.Email)
 	builder.WriteString(", ")
-	builder.WriteString("encrypted_password=")
-	builder.WriteString(n.EncryptedPassword)
+	builder.WriteString("hashed_password=")
+	builder.WriteString(n.HashedPassword)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(n.Name)

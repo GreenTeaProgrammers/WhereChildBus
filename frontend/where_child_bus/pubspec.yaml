@@ -10,6 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  grpc: ^3.2.4
+  protobuf: ^3.1.0
+  flutter_dotenv: ^5.1.0
+  image_picker: ^1.0.7
+  where_child_bus_api:
+    path: ../where_child_bus_api
 
   cupertino_icons: ^1.0.2
 
@@ -23,3 +29,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - .env
+

@@ -299,12 +299,12 @@ func (cpq *ChildPhotoQuery) WithChild(opts ...func(*ChildQuery)) *ChildPhotoQuer
 // Example:
 //
 //	var v []struct {
-//		S3Bucket string `json:"s3_bucket,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.ChildPhoto.Query().
-//		GroupBy(childphoto.FieldS3Bucket).
+//		GroupBy(childphoto.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (cpq *ChildPhotoQuery) GroupBy(field string, fields ...string) *ChildPhotoGroupBy {
@@ -322,11 +322,11 @@ func (cpq *ChildPhotoQuery) GroupBy(field string, fields ...string) *ChildPhotoG
 // Example:
 //
 //	var v []struct {
-//		S3Bucket string `json:"s3_bucket,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.ChildPhoto.Query().
-//		Select(childphoto.FieldS3Bucket).
+//		Select(childphoto.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (cpq *ChildPhotoQuery) Select(fields ...string) *ChildPhotoSelect {
 	cpq.ctx.Fields = append(cpq.ctx.Fields, fields...)

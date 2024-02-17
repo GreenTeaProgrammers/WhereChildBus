@@ -21,9 +21,7 @@ func (Child) Fields() []ent.Field {
 		field.String("name"),
 		field.Int("age"),
 		field.Enum("sex").
-			Values("man", "women", "other"),
-		field.Bool("is_ride_morning_bus").Default(false).Comment("朝のバスに乗るかどうか"),
-		field.Bool("is_ride_evening_bus").Default(false).Comment("放課後のバスに乗るかどうか"),
+			Values("man", "woman", "other"),
 		field.Bool("check_for_missing_items").Default(false).Comment("持ち物が欠けていないかをチェックするかどうか"),
 		// ?: 持ち物エンティティを作成する?
 		field.Bool("has_bag").Default(true),
@@ -43,8 +41,6 @@ func (Child) Edges() []ent.Edge {
 			Ref("children").
 			Unique(),
 		edge.To("childBusAssociations", ChildBusAssociation.Type),
-		edge.To("nursery", Nursery.Type).
-			Unique(),
 		edge.To("boarding_record", BoardingRecord.Type),
 		edge.To("photos", ChildPhoto.Type),
 	}

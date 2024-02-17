@@ -46,16 +46,16 @@ func (gu *GuardianUpdate) SetNillableEmail(s *string) *GuardianUpdate {
 	return gu
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (gu *GuardianUpdate) SetEncryptedPassword(s string) *GuardianUpdate {
-	gu.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (gu *GuardianUpdate) SetHashedPassword(s string) *GuardianUpdate {
+	gu.mutation.SetHashedPassword(s)
 	return gu
 }
 
-// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
-func (gu *GuardianUpdate) SetNillableEncryptedPassword(s *string) *GuardianUpdate {
+// SetNillableHashedPassword sets the "hashed_password" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableHashedPassword(s *string) *GuardianUpdate {
 	if s != nil {
-		gu.SetEncryptedPassword(*s)
+		gu.SetHashedPassword(*s)
 	}
 	return gu
 }
@@ -91,6 +91,34 @@ func (gu *GuardianUpdate) SetNillablePhoneNumber(s *string) *GuardianUpdate {
 // ClearPhoneNumber clears the value of the "phone_number" field.
 func (gu *GuardianUpdate) ClearPhoneNumber() *GuardianUpdate {
 	gu.mutation.ClearPhoneNumber()
+	return gu
+}
+
+// SetIsUseMorningBus sets the "is_use_morning_bus" field.
+func (gu *GuardianUpdate) SetIsUseMorningBus(b bool) *GuardianUpdate {
+	gu.mutation.SetIsUseMorningBus(b)
+	return gu
+}
+
+// SetNillableIsUseMorningBus sets the "is_use_morning_bus" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableIsUseMorningBus(b *bool) *GuardianUpdate {
+	if b != nil {
+		gu.SetIsUseMorningBus(*b)
+	}
+	return gu
+}
+
+// SetIsUseEveningBus sets the "is_use_evening_bus" field.
+func (gu *GuardianUpdate) SetIsUseEveningBus(b bool) *GuardianUpdate {
+	gu.mutation.SetIsUseEveningBus(b)
+	return gu
+}
+
+// SetNillableIsUseEveningBus sets the "is_use_evening_bus" field if the given value is not nil.
+func (gu *GuardianUpdate) SetNillableIsUseEveningBus(b *bool) *GuardianUpdate {
+	if b != nil {
+		gu.SetIsUseEveningBus(*b)
+	}
 	return gu
 }
 
@@ -253,8 +281,8 @@ func (gu *GuardianUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := gu.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := gu.mutation.EncryptedPassword(); ok {
-		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
+	if value, ok := gu.mutation.HashedPassword(); ok {
+		_spec.SetField(guardian.FieldHashedPassword, field.TypeString, value)
 	}
 	if value, ok := gu.mutation.Name(); ok {
 		_spec.SetField(guardian.FieldName, field.TypeString, value)
@@ -264,6 +292,12 @@ func (gu *GuardianUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if gu.mutation.PhoneNumberCleared() {
 		_spec.ClearField(guardian.FieldPhoneNumber, field.TypeString)
+	}
+	if value, ok := gu.mutation.IsUseMorningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseMorningBus, field.TypeBool, value)
+	}
+	if value, ok := gu.mutation.IsUseEveningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseEveningBus, field.TypeBool, value)
 	}
 	if value, ok := gu.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)
@@ -408,16 +442,16 @@ func (guo *GuardianUpdateOne) SetNillableEmail(s *string) *GuardianUpdateOne {
 	return guo
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (guo *GuardianUpdateOne) SetEncryptedPassword(s string) *GuardianUpdateOne {
-	guo.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (guo *GuardianUpdateOne) SetHashedPassword(s string) *GuardianUpdateOne {
+	guo.mutation.SetHashedPassword(s)
 	return guo
 }
 
-// SetNillableEncryptedPassword sets the "encrypted_password" field if the given value is not nil.
-func (guo *GuardianUpdateOne) SetNillableEncryptedPassword(s *string) *GuardianUpdateOne {
+// SetNillableHashedPassword sets the "hashed_password" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableHashedPassword(s *string) *GuardianUpdateOne {
 	if s != nil {
-		guo.SetEncryptedPassword(*s)
+		guo.SetHashedPassword(*s)
 	}
 	return guo
 }
@@ -453,6 +487,34 @@ func (guo *GuardianUpdateOne) SetNillablePhoneNumber(s *string) *GuardianUpdateO
 // ClearPhoneNumber clears the value of the "phone_number" field.
 func (guo *GuardianUpdateOne) ClearPhoneNumber() *GuardianUpdateOne {
 	guo.mutation.ClearPhoneNumber()
+	return guo
+}
+
+// SetIsUseMorningBus sets the "is_use_morning_bus" field.
+func (guo *GuardianUpdateOne) SetIsUseMorningBus(b bool) *GuardianUpdateOne {
+	guo.mutation.SetIsUseMorningBus(b)
+	return guo
+}
+
+// SetNillableIsUseMorningBus sets the "is_use_morning_bus" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableIsUseMorningBus(b *bool) *GuardianUpdateOne {
+	if b != nil {
+		guo.SetIsUseMorningBus(*b)
+	}
+	return guo
+}
+
+// SetIsUseEveningBus sets the "is_use_evening_bus" field.
+func (guo *GuardianUpdateOne) SetIsUseEveningBus(b bool) *GuardianUpdateOne {
+	guo.mutation.SetIsUseEveningBus(b)
+	return guo
+}
+
+// SetNillableIsUseEveningBus sets the "is_use_evening_bus" field if the given value is not nil.
+func (guo *GuardianUpdateOne) SetNillableIsUseEveningBus(b *bool) *GuardianUpdateOne {
+	if b != nil {
+		guo.SetIsUseEveningBus(*b)
+	}
 	return guo
 }
 
@@ -645,8 +707,8 @@ func (guo *GuardianUpdateOne) sqlSave(ctx context.Context) (_node *Guardian, err
 	if value, ok := guo.mutation.Email(); ok {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := guo.mutation.EncryptedPassword(); ok {
-		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
+	if value, ok := guo.mutation.HashedPassword(); ok {
+		_spec.SetField(guardian.FieldHashedPassword, field.TypeString, value)
 	}
 	if value, ok := guo.mutation.Name(); ok {
 		_spec.SetField(guardian.FieldName, field.TypeString, value)
@@ -656,6 +718,12 @@ func (guo *GuardianUpdateOne) sqlSave(ctx context.Context) (_node *Guardian, err
 	}
 	if guo.mutation.PhoneNumberCleared() {
 		_spec.ClearField(guardian.FieldPhoneNumber, field.TypeString)
+	}
+	if value, ok := guo.mutation.IsUseMorningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseMorningBus, field.TypeBool, value)
+	}
+	if value, ok := guo.mutation.IsUseEveningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseEveningBus, field.TypeBool, value)
 	}
 	if value, ok := guo.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)

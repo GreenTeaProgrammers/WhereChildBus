@@ -23,19 +23,17 @@ type Station struct {
 	Latitude float64 `json:"latitude,omitempty"`
 	// Longitude holds the value of the "longitude" field.
 	Longitude float64 `json:"longitude,omitempty"`
-	// 朝のバス停の順番
-	MorningOrder int `json:"morning_order,omitempty"`
-	// 帰りのバス停の順番
-	EveningOrder int `json:"evening_order,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StationQuery when eager-loading is set.
-	Edges            StationEdges `json:"edges"`
-	guardian_station *uuid.UUID
-	selectValues     sql.SelectValues
+	Edges                        StationEdges `json:"edges"`
+	guardian_station             *uuid.UUID
+	station_morning_next_station *uuid.UUID
+	station_evening_next_station *uuid.UUID
+	selectValues                 sql.SelectValues
 }
 
 // StationEdges holds the relations/edges for other nodes in the graph.
@@ -44,9 +42,17 @@ type StationEdges struct {
 	Guardian *Guardian `json:"guardian,omitempty"`
 	// Bus holds the value of the bus edge.
 	Bus []*Bus `json:"bus,omitempty"`
+	// MorningPreviousStation holds the value of the morning_previous_station edge.
+	MorningPreviousStation *Station `json:"morning_previous_station,omitempty"`
+	// MorningNextStation holds the value of the morning_next_station edge.
+	MorningNextStation []*Station `json:"morning_next_station,omitempty"`
+	// EveningPreviousStation holds the value of the evening_previous_station edge.
+	EveningPreviousStation *Station `json:"evening_previous_station,omitempty"`
+	// EveningNextStation holds the value of the evening_next_station edge.
+	EveningNextStation []*Station `json:"evening_next_station,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [6]bool
 }
 
 // GuardianOrErr returns the Guardian value or an error if the edge
@@ -71,6 +77,50 @@ func (e StationEdges) BusOrErr() ([]*Bus, error) {
 	return nil, &NotLoadedError{edge: "bus"}
 }
 
+// MorningPreviousStationOrErr returns the MorningPreviousStation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e StationEdges) MorningPreviousStationOrErr() (*Station, error) {
+	if e.loadedTypes[2] {
+		if e.MorningPreviousStation == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: station.Label}
+		}
+		return e.MorningPreviousStation, nil
+	}
+	return nil, &NotLoadedError{edge: "morning_previous_station"}
+}
+
+// MorningNextStationOrErr returns the MorningNextStation value or an error if the edge
+// was not loaded in eager-loading.
+func (e StationEdges) MorningNextStationOrErr() ([]*Station, error) {
+	if e.loadedTypes[3] {
+		return e.MorningNextStation, nil
+	}
+	return nil, &NotLoadedError{edge: "morning_next_station"}
+}
+
+// EveningPreviousStationOrErr returns the EveningPreviousStation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e StationEdges) EveningPreviousStationOrErr() (*Station, error) {
+	if e.loadedTypes[4] {
+		if e.EveningPreviousStation == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: station.Label}
+		}
+		return e.EveningPreviousStation, nil
+	}
+	return nil, &NotLoadedError{edge: "evening_previous_station"}
+}
+
+// EveningNextStationOrErr returns the EveningNextStation value or an error if the edge
+// was not loaded in eager-loading.
+func (e StationEdges) EveningNextStationOrErr() ([]*Station, error) {
+	if e.loadedTypes[5] {
+		return e.EveningNextStation, nil
+	}
+	return nil, &NotLoadedError{edge: "evening_next_station"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Station) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -78,13 +128,15 @@ func (*Station) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case station.FieldLatitude, station.FieldLongitude:
 			values[i] = new(sql.NullFloat64)
-		case station.FieldMorningOrder, station.FieldEveningOrder:
-			values[i] = new(sql.NullInt64)
 		case station.FieldCreatedAt, station.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case station.FieldID:
 			values[i] = new(uuid.UUID)
 		case station.ForeignKeys[0]: // guardian_station
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case station.ForeignKeys[1]: // station_morning_next_station
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case station.ForeignKeys[2]: // station_evening_next_station
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -119,18 +171,6 @@ func (s *Station) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Longitude = value.Float64
 			}
-		case station.FieldMorningOrder:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field morning_order", values[i])
-			} else if value.Valid {
-				s.MorningOrder = int(value.Int64)
-			}
-		case station.FieldEveningOrder:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field evening_order", values[i])
-			} else if value.Valid {
-				s.EveningOrder = int(value.Int64)
-			}
 		case station.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -149,6 +189,20 @@ func (s *Station) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.guardian_station = new(uuid.UUID)
 				*s.guardian_station = *value.S.(*uuid.UUID)
+			}
+		case station.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field station_morning_next_station", values[i])
+			} else if value.Valid {
+				s.station_morning_next_station = new(uuid.UUID)
+				*s.station_morning_next_station = *value.S.(*uuid.UUID)
+			}
+		case station.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field station_evening_next_station", values[i])
+			} else if value.Valid {
+				s.station_evening_next_station = new(uuid.UUID)
+				*s.station_evening_next_station = *value.S.(*uuid.UUID)
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -171,6 +225,26 @@ func (s *Station) QueryGuardian() *GuardianQuery {
 // QueryBus queries the "bus" edge of the Station entity.
 func (s *Station) QueryBus() *BusQuery {
 	return NewStationClient(s.config).QueryBus(s)
+}
+
+// QueryMorningPreviousStation queries the "morning_previous_station" edge of the Station entity.
+func (s *Station) QueryMorningPreviousStation() *StationQuery {
+	return NewStationClient(s.config).QueryMorningPreviousStation(s)
+}
+
+// QueryMorningNextStation queries the "morning_next_station" edge of the Station entity.
+func (s *Station) QueryMorningNextStation() *StationQuery {
+	return NewStationClient(s.config).QueryMorningNextStation(s)
+}
+
+// QueryEveningPreviousStation queries the "evening_previous_station" edge of the Station entity.
+func (s *Station) QueryEveningPreviousStation() *StationQuery {
+	return NewStationClient(s.config).QueryEveningPreviousStation(s)
+}
+
+// QueryEveningNextStation queries the "evening_next_station" edge of the Station entity.
+func (s *Station) QueryEveningNextStation() *StationQuery {
+	return NewStationClient(s.config).QueryEveningNextStation(s)
 }
 
 // Update returns a builder for updating this Station.
@@ -201,12 +275,6 @@ func (s *Station) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("longitude=")
 	builder.WriteString(fmt.Sprintf("%v", s.Longitude))
-	builder.WriteString(", ")
-	builder.WriteString("morning_order=")
-	builder.WriteString(fmt.Sprintf("%v", s.MorningOrder))
-	builder.WriteString(", ")
-	builder.WriteString("evening_order=")
-	builder.WriteString(fmt.Sprintf("%v", s.EveningOrder))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(s.CreatedAt.Format(time.ANSIC))

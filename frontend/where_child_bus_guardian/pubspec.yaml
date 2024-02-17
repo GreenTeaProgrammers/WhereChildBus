@@ -1,0 +1,34 @@
+name: where_child_bus_guardian
+description: "WhereChildBus Guardian"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  grpc: ^3.2.4
+  protobuf: ^3.1.0
+  flutter_dotenv: ^5.1.0
+
+  cupertino_icons: ^1.0.2
+  flutter_toggle_tab: ^1.4.1
+  carousel_slider: ^4.2.1
+  flutter_state_notifier: ^1.0.0
+  where_child_bus_api:
+    path: ../where_child_bus_api
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - .env

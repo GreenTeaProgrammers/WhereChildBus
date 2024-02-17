@@ -87,6 +87,20 @@ func (bc *BusCreate) SetNillableStatus(b *bus.Status) *BusCreate {
 	return bc
 }
 
+// SetEnableFaceRecognition sets the "enable_face_recognition" field.
+func (bc *BusCreate) SetEnableFaceRecognition(b bool) *BusCreate {
+	bc.mutation.SetEnableFaceRecognition(b)
+	return bc
+}
+
+// SetNillableEnableFaceRecognition sets the "enable_face_recognition" field if the given value is not nil.
+func (bc *BusCreate) SetNillableEnableFaceRecognition(b *bool) *BusCreate {
+	if b != nil {
+		bc.SetEnableFaceRecognition(*b)
+	}
+	return bc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bc *BusCreate) SetCreatedAt(t time.Time) *BusCreate {
 	bc.mutation.SetCreatedAt(t)
@@ -232,6 +246,10 @@ func (bc *BusCreate) defaults() {
 		v := bus.DefaultStatus
 		bc.mutation.SetStatus(v)
 	}
+	if _, ok := bc.mutation.EnableFaceRecognition(); !ok {
+		v := bus.DefaultEnableFaceRecognition
+		bc.mutation.SetEnableFaceRecognition(v)
+	}
 	if _, ok := bc.mutation.CreatedAt(); !ok {
 		v := bus.DefaultCreatedAt()
 		bc.mutation.SetCreatedAt(v)
@@ -258,6 +276,9 @@ func (bc *BusCreate) check() error {
 		if err := bus.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Bus.status": %w`, err)}
 		}
+	}
+	if _, ok := bc.mutation.EnableFaceRecognition(); !ok {
+		return &ValidationError{Name: "enable_face_recognition", err: errors.New(`ent: missing required field "Bus.enable_face_recognition"`)}
 	}
 	if _, ok := bc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Bus.created_at"`)}
@@ -319,6 +340,10 @@ func (bc *BusCreate) createSpec() (*Bus, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.Status(); ok {
 		_spec.SetField(bus.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := bc.mutation.EnableFaceRecognition(); ok {
+		_spec.SetField(bus.FieldEnableFaceRecognition, field.TypeBool, value)
+		_node.EnableFaceRecognition = value
 	}
 	if value, ok := bc.mutation.CreatedAt(); ok {
 		_spec.SetField(bus.FieldCreatedAt, field.TypeTime, value)

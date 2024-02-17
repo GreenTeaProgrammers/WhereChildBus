@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"cloud.google.com/go/storage"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/exp/slog"
@@ -19,9 +20,10 @@ import (
 )
 
 func main() {
+	// コンフィグを読み込む
 	config, _ := config.New()
 
-	// Open a connection to the database
+	// MySQLへの接続をテスト
 	db, err := sql.Open("mysql", config.DSN)
 	if err != nil {
 		log.Fatal("failed to open db connection", err)
@@ -31,7 +33,9 @@ func main() {
 	if err := db.Ping(); err != nil {
 		log.Fatalf("Failed to ping PlanetScale: %v", err)
 	}
-	log.Println("Successfully connected to PlanetScale!")
+
+	// PlanetScaleへの接続を開始
+	log.Println("Connecting to PlanetScale...")
 
 	mysqlConfig := &mysql.Config{
 		User:                 config.DBUser,
@@ -45,15 +49,15 @@ func main() {
 		InterpolateParams:    true,
 	}
 
-	log.Println("Connecting to PlanetScale...")
-
 	entClient, err := ent.Open("mysql", mysqlConfig.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("Running migration...")
+	log.Println("Successfully connected to PlanetScale!")
 
+	// マイグレーションを実行
+	log.Println("Running migration...")
 	defer entClient.Close()
 	if err := entClient.Schema.Create(context.Background()); err != nil {
 		log.Println("Migration failed!")
@@ -62,12 +66,27 @@ func main() {
 
 	log.Println("Migration done!")
 
-	logger := slog.Default()
-	srv := grpc_server.New(
+	// Cloud Storageへの接続を開始
+	log.Println("Connecting to Cloud Storage...")
+	ctx := context.Background()
+	storageClient, err := storage.NewClient(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create Cloud Storage client: %v", err)
+	}
+	defer storageClient.Close()
 
+	log.Println("Connected to Cloud Storage!")
+
+	// loggerを作成
+	logger := slog.Default()
+
+	// gRPCサーバーを起動
+	srv := grpc_server.New(
 		grpc_server.WithLogger(logger),
 		grpc_server.WithEntClient(entClient),
 		grpc_server.WithReflection(config.ModeDev),
+		grpc_server.WithStorageClient(storageClient),
+		grpc_server.WithBucketName(config.StorageBucketName),
 	)
 	lsnr, err := net.Listen("tcp", ":"+config.GrpcPort)
 	if err != nil {

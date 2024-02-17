@@ -21,13 +21,17 @@ import (
 // StationQuery is the builder for querying Station entities.
 type StationQuery struct {
 	config
-	ctx          *QueryContext
-	order        []station.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.Station
-	withGuardian *GuardianQuery
-	withBus      *BusQuery
-	withFKs      bool
+	ctx                        *QueryContext
+	order                      []station.OrderOption
+	inters                     []Interceptor
+	predicates                 []predicate.Station
+	withGuardian               *GuardianQuery
+	withBus                    *BusQuery
+	withMorningPreviousStation *StationQuery
+	withMorningNextStation     *StationQuery
+	withEveningPreviousStation *StationQuery
+	withEveningNextStation     *StationQuery
+	withFKs                    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -101,6 +105,94 @@ func (sq *StationQuery) QueryBus() *BusQuery {
 			sqlgraph.From(station.Table, station.FieldID, selector),
 			sqlgraph.To(bus.Table, bus.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, station.BusTable, station.BusPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMorningPreviousStation chains the current query on the "morning_previous_station" edge.
+func (sq *StationQuery) QueryMorningPreviousStation() *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, selector),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, station.MorningPreviousStationTable, station.MorningPreviousStationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMorningNextStation chains the current query on the "morning_next_station" edge.
+func (sq *StationQuery) QueryMorningNextStation() *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, selector),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, station.MorningNextStationTable, station.MorningNextStationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEveningPreviousStation chains the current query on the "evening_previous_station" edge.
+func (sq *StationQuery) QueryEveningPreviousStation() *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, selector),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, station.EveningPreviousStationTable, station.EveningPreviousStationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEveningNextStation chains the current query on the "evening_next_station" edge.
+func (sq *StationQuery) QueryEveningNextStation() *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(station.Table, station.FieldID, selector),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, station.EveningNextStationTable, station.EveningNextStationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -295,13 +387,17 @@ func (sq *StationQuery) Clone() *StationQuery {
 		return nil
 	}
 	return &StationQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]station.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Station{}, sq.predicates...),
-		withGuardian: sq.withGuardian.Clone(),
-		withBus:      sq.withBus.Clone(),
+		config:                     sq.config,
+		ctx:                        sq.ctx.Clone(),
+		order:                      append([]station.OrderOption{}, sq.order...),
+		inters:                     append([]Interceptor{}, sq.inters...),
+		predicates:                 append([]predicate.Station{}, sq.predicates...),
+		withGuardian:               sq.withGuardian.Clone(),
+		withBus:                    sq.withBus.Clone(),
+		withMorningPreviousStation: sq.withMorningPreviousStation.Clone(),
+		withMorningNextStation:     sq.withMorningNextStation.Clone(),
+		withEveningPreviousStation: sq.withEveningPreviousStation.Clone(),
+		withEveningNextStation:     sq.withEveningNextStation.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
@@ -327,6 +423,50 @@ func (sq *StationQuery) WithBus(opts ...func(*BusQuery)) *StationQuery {
 		opt(query)
 	}
 	sq.withBus = query
+	return sq
+}
+
+// WithMorningPreviousStation tells the query-builder to eager-load the nodes that are connected to
+// the "morning_previous_station" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StationQuery) WithMorningPreviousStation(opts ...func(*StationQuery)) *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withMorningPreviousStation = query
+	return sq
+}
+
+// WithMorningNextStation tells the query-builder to eager-load the nodes that are connected to
+// the "morning_next_station" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StationQuery) WithMorningNextStation(opts ...func(*StationQuery)) *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withMorningNextStation = query
+	return sq
+}
+
+// WithEveningPreviousStation tells the query-builder to eager-load the nodes that are connected to
+// the "evening_previous_station" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StationQuery) WithEveningPreviousStation(opts ...func(*StationQuery)) *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withEveningPreviousStation = query
+	return sq
+}
+
+// WithEveningNextStation tells the query-builder to eager-load the nodes that are connected to
+// the "evening_next_station" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StationQuery) WithEveningNextStation(opts ...func(*StationQuery)) *StationQuery {
+	query := (&StationClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withEveningNextStation = query
 	return sq
 }
 
@@ -409,12 +549,16 @@ func (sq *StationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Stat
 		nodes       = []*Station{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [6]bool{
 			sq.withGuardian != nil,
 			sq.withBus != nil,
+			sq.withMorningPreviousStation != nil,
+			sq.withMorningNextStation != nil,
+			sq.withEveningPreviousStation != nil,
+			sq.withEveningNextStation != nil,
 		}
 	)
-	if sq.withGuardian != nil {
+	if sq.withGuardian != nil || sq.withMorningPreviousStation != nil || sq.withEveningPreviousStation != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -448,6 +592,32 @@ func (sq *StationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Stat
 		if err := sq.loadBus(ctx, query, nodes,
 			func(n *Station) { n.Edges.Bus = []*Bus{} },
 			func(n *Station, e *Bus) { n.Edges.Bus = append(n.Edges.Bus, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withMorningPreviousStation; query != nil {
+		if err := sq.loadMorningPreviousStation(ctx, query, nodes, nil,
+			func(n *Station, e *Station) { n.Edges.MorningPreviousStation = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withMorningNextStation; query != nil {
+		if err := sq.loadMorningNextStation(ctx, query, nodes,
+			func(n *Station) { n.Edges.MorningNextStation = []*Station{} },
+			func(n *Station, e *Station) { n.Edges.MorningNextStation = append(n.Edges.MorningNextStation, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withEveningPreviousStation; query != nil {
+		if err := sq.loadEveningPreviousStation(ctx, query, nodes, nil,
+			func(n *Station, e *Station) { n.Edges.EveningPreviousStation = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withEveningNextStation; query != nil {
+		if err := sq.loadEveningNextStation(ctx, query, nodes,
+			func(n *Station) { n.Edges.EveningNextStation = []*Station{} },
+			func(n *Station, e *Station) { n.Edges.EveningNextStation = append(n.Edges.EveningNextStation, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -544,6 +714,132 @@ func (sq *StationQuery) loadBus(ctx context.Context, query *BusQuery, nodes []*S
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (sq *StationQuery) loadMorningPreviousStation(ctx context.Context, query *StationQuery, nodes []*Station, init func(*Station), assign func(*Station, *Station)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Station)
+	for i := range nodes {
+		if nodes[i].station_morning_next_station == nil {
+			continue
+		}
+		fk := *nodes[i].station_morning_next_station
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(station.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "station_morning_next_station" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *StationQuery) loadMorningNextStation(ctx context.Context, query *StationQuery, nodes []*Station, init func(*Station), assign func(*Station, *Station)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Station)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Station(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(station.MorningNextStationColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.station_morning_next_station
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "station_morning_next_station" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "station_morning_next_station" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *StationQuery) loadEveningPreviousStation(ctx context.Context, query *StationQuery, nodes []*Station, init func(*Station), assign func(*Station, *Station)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Station)
+	for i := range nodes {
+		if nodes[i].station_evening_next_station == nil {
+			continue
+		}
+		fk := *nodes[i].station_evening_next_station
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(station.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "station_evening_next_station" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *StationQuery) loadEveningNextStation(ctx context.Context, query *StationQuery, nodes []*Station, init func(*Station), assign func(*Station, *Station)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Station)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Station(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(station.EveningNextStationColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.station_evening_next_station
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "station_evening_next_station" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "station_evening_next_station" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

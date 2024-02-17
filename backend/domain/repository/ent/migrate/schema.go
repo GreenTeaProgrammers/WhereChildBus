@@ -44,6 +44,7 @@ var (
 		{Name: "latitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "longitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"stopped", "running", "maintenance"}, Default: "stopped"},
+		{Name: "enable_face_recognition", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "bus_nursery", Type: field.TypeUUID, Nullable: true},
@@ -56,7 +57,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "bus_nurseries_nursery",
-				Columns:    []*schema.Column{BusColumns[8]},
+				Columns:    []*schema.Column{BusColumns[9]},
 				RefColumns: []*schema.Column{NurseriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -67,9 +68,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
-		{Name: "sex", Type: field.TypeEnum, Enums: []string{"man", "women", "other"}},
-		{Name: "is_ride_morning_bus", Type: field.TypeBool, Default: false},
-		{Name: "is_ride_evening_bus", Type: field.TypeBool, Default: false},
+		{Name: "sex", Type: field.TypeEnum, Enums: []string{"man", "woman", "other"}},
 		{Name: "check_for_missing_items", Type: field.TypeBool, Default: false},
 		{Name: "has_bag", Type: field.TypeBool, Default: true},
 		{Name: "has_lunch_box", Type: field.TypeBool, Default: true},
@@ -78,7 +77,6 @@ var (
 		{Name: "has_other", Type: field.TypeBool, Default: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "child_nursery", Type: field.TypeUUID, Nullable: true},
 		{Name: "guardian_children", Type: field.TypeUUID, Nullable: true},
 	}
 	// ChildsTable holds the schema information for the "childs" table.
@@ -88,14 +86,8 @@ var (
 		PrimaryKey: []*schema.Column{ChildsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "childs_nurseries_nursery",
-				Columns:    []*schema.Column{ChildsColumns[14]},
-				RefColumns: []*schema.Column{NurseriesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "childs_guardians_children",
-				Columns:    []*schema.Column{ChildsColumns[15]},
+				Columns:    []*schema.Column{ChildsColumns[12]},
 				RefColumns: []*schema.Column{GuardiansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -131,8 +123,6 @@ var (
 	// ChildPhotosColumns holds the columns for the "child_photos" table.
 	ChildPhotosColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "s3_bucket", Type: field.TypeString},
-		{Name: "s3_key", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "child_photos", Type: field.TypeUUID, Nullable: true},
@@ -145,7 +135,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "child_photos_childs_photos",
-				Columns:    []*schema.Column{ChildPhotosColumns[5]},
+				Columns:    []*schema.Column{ChildPhotosColumns[3]},
 				RefColumns: []*schema.Column{ChildsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -154,10 +144,12 @@ var (
 	// GuardiansColumns holds the columns for the "guardians" table.
 	GuardiansColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "email", Type: field.TypeString},
-		{Name: "encrypted_password", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
+		{Name: "hashed_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
+		{Name: "is_use_morning_bus", Type: field.TypeBool, Default: true},
+		{Name: "is_use_evening_bus", Type: field.TypeBool, Default: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_nursery", Type: field.TypeUUID, Nullable: true},
@@ -170,7 +162,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "guardians_nurseries_nursery",
-				Columns:    []*schema.Column{GuardiansColumns[7]},
+				Columns:    []*schema.Column{GuardiansColumns[9]},
 				RefColumns: []*schema.Column{NurseriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -180,8 +172,8 @@ var (
 	NurseriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "nursery_code", Type: field.TypeString, Unique: true},
-		{Name: "email", Type: field.TypeString},
-		{Name: "encrypted_password", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
+		{Name: "hashed_password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
@@ -199,11 +191,11 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "latitude", Type: field.TypeFloat64, Nullable: true},
 		{Name: "longitude", Type: field.TypeFloat64, Nullable: true},
-		{Name: "morning_order", Type: field.TypeInt},
-		{Name: "evening_order", Type: field.TypeInt},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_station", Type: field.TypeUUID, Unique: true, Nullable: true},
+		{Name: "station_morning_next_station", Type: field.TypeUUID, Nullable: true},
+		{Name: "station_evening_next_station", Type: field.TypeUUID, Nullable: true},
 	}
 	// StationsTable holds the schema information for the "stations" table.
 	StationsTable = &schema.Table{
@@ -213,8 +205,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stations_guardians_station",
-				Columns:    []*schema.Column{StationsColumns[7]},
+				Columns:    []*schema.Column{StationsColumns[5]},
 				RefColumns: []*schema.Column{GuardiansColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "stations_stations_morning_next_station",
+				Columns:    []*schema.Column{StationsColumns[6]},
+				RefColumns: []*schema.Column{StationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "stations_stations_evening_next_station",
+				Columns:    []*schema.Column{StationsColumns[7]},
+				RefColumns: []*schema.Column{StationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -262,13 +266,14 @@ func init() {
 	BoardingRecordsTable.ForeignKeys[0].RefTable = BusTable
 	BoardingRecordsTable.ForeignKeys[1].RefTable = ChildsTable
 	BusTable.ForeignKeys[0].RefTable = NurseriesTable
-	ChildsTable.ForeignKeys[0].RefTable = NurseriesTable
-	ChildsTable.ForeignKeys[1].RefTable = GuardiansTable
+	ChildsTable.ForeignKeys[0].RefTable = GuardiansTable
 	ChildBusAssociationsTable.ForeignKeys[0].RefTable = BusTable
 	ChildBusAssociationsTable.ForeignKeys[1].RefTable = ChildsTable
 	ChildPhotosTable.ForeignKeys[0].RefTable = ChildsTable
 	GuardiansTable.ForeignKeys[0].RefTable = NurseriesTable
 	StationsTable.ForeignKeys[0].RefTable = GuardiansTable
+	StationsTable.ForeignKeys[1].RefTable = StationsTable
+	StationsTable.ForeignKeys[2].RefTable = StationsTable
 	BusStationsTable.ForeignKeys[0].RefTable = BusTable
 	BusStationsTable.ForeignKeys[1].RefTable = StationsTable
 }

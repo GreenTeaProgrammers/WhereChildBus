@@ -30,9 +30,9 @@ func (gc *GuardianCreate) SetEmail(s string) *GuardianCreate {
 	return gc
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (gc *GuardianCreate) SetEncryptedPassword(s string) *GuardianCreate {
-	gc.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (gc *GuardianCreate) SetHashedPassword(s string) *GuardianCreate {
+	gc.mutation.SetHashedPassword(s)
 	return gc
 }
 
@@ -52,6 +52,34 @@ func (gc *GuardianCreate) SetPhoneNumber(s string) *GuardianCreate {
 func (gc *GuardianCreate) SetNillablePhoneNumber(s *string) *GuardianCreate {
 	if s != nil {
 		gc.SetPhoneNumber(*s)
+	}
+	return gc
+}
+
+// SetIsUseMorningBus sets the "is_use_morning_bus" field.
+func (gc *GuardianCreate) SetIsUseMorningBus(b bool) *GuardianCreate {
+	gc.mutation.SetIsUseMorningBus(b)
+	return gc
+}
+
+// SetNillableIsUseMorningBus sets the "is_use_morning_bus" field if the given value is not nil.
+func (gc *GuardianCreate) SetNillableIsUseMorningBus(b *bool) *GuardianCreate {
+	if b != nil {
+		gc.SetIsUseMorningBus(*b)
+	}
+	return gc
+}
+
+// SetIsUseEveningBus sets the "is_use_evening_bus" field.
+func (gc *GuardianCreate) SetIsUseEveningBus(b bool) *GuardianCreate {
+	gc.mutation.SetIsUseEveningBus(b)
+	return gc
+}
+
+// SetNillableIsUseEveningBus sets the "is_use_evening_bus" field if the given value is not nil.
+func (gc *GuardianCreate) SetNillableIsUseEveningBus(b *bool) *GuardianCreate {
+	if b != nil {
+		gc.SetIsUseEveningBus(*b)
 	}
 	return gc
 }
@@ -186,6 +214,14 @@ func (gc *GuardianCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (gc *GuardianCreate) defaults() {
+	if _, ok := gc.mutation.IsUseMorningBus(); !ok {
+		v := guardian.DefaultIsUseMorningBus
+		gc.mutation.SetIsUseMorningBus(v)
+	}
+	if _, ok := gc.mutation.IsUseEveningBus(); !ok {
+		v := guardian.DefaultIsUseEveningBus
+		gc.mutation.SetIsUseEveningBus(v)
+	}
 	if _, ok := gc.mutation.CreatedAt(); !ok {
 		v := guardian.DefaultCreatedAt()
 		gc.mutation.SetCreatedAt(v)
@@ -205,11 +241,17 @@ func (gc *GuardianCreate) check() error {
 	if _, ok := gc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Guardian.email"`)}
 	}
-	if _, ok := gc.mutation.EncryptedPassword(); !ok {
-		return &ValidationError{Name: "encrypted_password", err: errors.New(`ent: missing required field "Guardian.encrypted_password"`)}
+	if _, ok := gc.mutation.HashedPassword(); !ok {
+		return &ValidationError{Name: "hashed_password", err: errors.New(`ent: missing required field "Guardian.hashed_password"`)}
 	}
 	if _, ok := gc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Guardian.name"`)}
+	}
+	if _, ok := gc.mutation.IsUseMorningBus(); !ok {
+		return &ValidationError{Name: "is_use_morning_bus", err: errors.New(`ent: missing required field "Guardian.is_use_morning_bus"`)}
+	}
+	if _, ok := gc.mutation.IsUseEveningBus(); !ok {
+		return &ValidationError{Name: "is_use_evening_bus", err: errors.New(`ent: missing required field "Guardian.is_use_evening_bus"`)}
 	}
 	if _, ok := gc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Guardian.created_at"`)}
@@ -256,9 +298,9 @@ func (gc *GuardianCreate) createSpec() (*Guardian, *sqlgraph.CreateSpec) {
 		_spec.SetField(guardian.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := gc.mutation.EncryptedPassword(); ok {
-		_spec.SetField(guardian.FieldEncryptedPassword, field.TypeString, value)
-		_node.EncryptedPassword = value
+	if value, ok := gc.mutation.HashedPassword(); ok {
+		_spec.SetField(guardian.FieldHashedPassword, field.TypeString, value)
+		_node.HashedPassword = value
 	}
 	if value, ok := gc.mutation.Name(); ok {
 		_spec.SetField(guardian.FieldName, field.TypeString, value)
@@ -267,6 +309,14 @@ func (gc *GuardianCreate) createSpec() (*Guardian, *sqlgraph.CreateSpec) {
 	if value, ok := gc.mutation.PhoneNumber(); ok {
 		_spec.SetField(guardian.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
+	}
+	if value, ok := gc.mutation.IsUseMorningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseMorningBus, field.TypeBool, value)
+		_node.IsUseMorningBus = value
+	}
+	if value, ok := gc.mutation.IsUseEveningBus(); ok {
+		_spec.SetField(guardian.FieldIsUseEveningBus, field.TypeBool, value)
+		_node.IsUseEveningBus = value
 	}
 	if value, ok := gc.mutation.CreatedAt(); ok {
 		_spec.SetField(guardian.FieldCreatedAt, field.TypeTime, value)

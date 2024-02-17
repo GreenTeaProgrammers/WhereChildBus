@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:where_child_bus/app.dart';
+import 'package:where_child_bus/config/config.dart';
+import 'package:where_child_bus/pages/auth_page/auth_page.dart';
+import 'package:where_child_bus/util/api/health_check.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await appConfig.loadConfig();
+    await serviceHealthCheck();
+  } catch (e) {
+    print("Failed to initialize the app");
+  }
   runApp(const MyApp());
 }
 
@@ -20,8 +30,11 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white, // AppBarの背景色を白に設定
+        ),
       ),
-      home: const App(),
+      home: const AuthPage(),
     );
   }
 }

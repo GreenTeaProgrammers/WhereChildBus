@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_list_page.dart';
 import 'package:where_child_bus/pages/notification_page/notification_page.dart';
 import 'package:where_child_bus/pages/student_list_page/student_list_page.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class App extends StatefulWidget {
-  const App({super.key});
+  NurseryResponse nursery;
+
+  App({super.key, required this.nursery});
 
   @override
   State<App> createState() => _AppState();
@@ -21,7 +24,9 @@ class _AppState extends State<App> {
       ),
       body: [
         const StudentListPage(),
-        const BusListPage(),
+        BusListPage(
+          nursery: widget.nursery,
+        ),
         const NotificationPage()
       ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

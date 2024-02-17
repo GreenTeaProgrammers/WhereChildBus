@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/google/uuid"
@@ -30,23 +29,15 @@ func (nc *NurseryCreate) SetNurseryCode(s string) *NurseryCreate {
 	return nc
 }
 
-// SetNillableNurseryCode sets the "nursery_code" field if the given value is not nil.
-func (nc *NurseryCreate) SetNillableNurseryCode(s *string) *NurseryCreate {
-	if s != nil {
-		nc.SetNurseryCode(*s)
-	}
-	return nc
-}
-
 // SetEmail sets the "email" field.
 func (nc *NurseryCreate) SetEmail(s string) *NurseryCreate {
 	nc.mutation.SetEmail(s)
 	return nc
 }
 
-// SetEncryptedPassword sets the "encrypted_password" field.
-func (nc *NurseryCreate) SetEncryptedPassword(s string) *NurseryCreate {
-	nc.mutation.SetEncryptedPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (nc *NurseryCreate) SetHashedPassword(s string) *NurseryCreate {
+	nc.mutation.SetHashedPassword(s)
 	return nc
 }
 
@@ -126,21 +117,6 @@ func (nc *NurseryCreate) SetNillableID(u *uuid.UUID) *NurseryCreate {
 	return nc
 }
 
-// AddChildIDs adds the "children" edge to the Child entity by IDs.
-func (nc *NurseryCreate) AddChildIDs(ids ...uuid.UUID) *NurseryCreate {
-	nc.mutation.AddChildIDs(ids...)
-	return nc
-}
-
-// AddChildren adds the "children" edges to the Child entity.
-func (nc *NurseryCreate) AddChildren(c ...*Child) *NurseryCreate {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return nc.AddChildIDs(ids...)
-}
-
 // AddGuardianIDs adds the "guardians" edge to the Guardian entity by IDs.
 func (nc *NurseryCreate) AddGuardianIDs(ids ...uuid.UUID) *NurseryCreate {
 	nc.mutation.AddGuardianIDs(ids...)
@@ -206,10 +182,6 @@ func (nc *NurseryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (nc *NurseryCreate) defaults() {
-	if _, ok := nc.mutation.NurseryCode(); !ok {
-		v := nursery.DefaultNurseryCode()
-		nc.mutation.SetNurseryCode(v)
-	}
 	if _, ok := nc.mutation.CreatedAt(); !ok {
 		v := nursery.DefaultCreatedAt()
 		nc.mutation.SetCreatedAt(v)
@@ -232,8 +204,8 @@ func (nc *NurseryCreate) check() error {
 	if _, ok := nc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Nursery.email"`)}
 	}
-	if _, ok := nc.mutation.EncryptedPassword(); !ok {
-		return &ValidationError{Name: "encrypted_password", err: errors.New(`ent: missing required field "Nursery.encrypted_password"`)}
+	if _, ok := nc.mutation.HashedPassword(); !ok {
+		return &ValidationError{Name: "hashed_password", err: errors.New(`ent: missing required field "Nursery.hashed_password"`)}
 	}
 	if _, ok := nc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Nursery.name"`)}
@@ -287,9 +259,9 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 		_spec.SetField(nursery.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := nc.mutation.EncryptedPassword(); ok {
-		_spec.SetField(nursery.FieldEncryptedPassword, field.TypeString, value)
-		_node.EncryptedPassword = value
+	if value, ok := nc.mutation.HashedPassword(); ok {
+		_spec.SetField(nursery.FieldHashedPassword, field.TypeString, value)
+		_node.HashedPassword = value
 	}
 	if value, ok := nc.mutation.Name(); ok {
 		_spec.SetField(nursery.FieldName, field.TypeString, value)
@@ -310,22 +282,6 @@ func (nc *NurseryCreate) createSpec() (*Nursery, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.UpdatedAt(); ok {
 		_spec.SetField(nursery.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if nodes := nc.mutation.ChildrenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := nc.mutation.GuardiansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

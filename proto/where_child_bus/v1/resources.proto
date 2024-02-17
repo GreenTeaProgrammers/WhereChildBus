@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Nursery {
+        string id = 1;
+        string nursery_code = 2;
+        string name = 3;
+        string address = 4;
+        string phone_number = 5;
+        string email = 6;
+        string hashed_password = 7;
+        google.protobuf.Timestamp  created_at = 8;
+        google.protobuf.Timestamp  updated_at = 9;
+}
+
+message NurseryResponse {
+        string id = 1;
+        string nursery_code = 2;
+        string name = 3;
+        string address = 4;
+        string phone_number = 5;
+        string email = 6;
+        // ハッシュ化されたパスワードは除外
+        google.protobuf.Timestamp created_at = 7;
+        google.protobuf.Timestamp updated_at = 8;
+}
+
+message Guardian {
+        string id = 1;
+        string nursery_id = 2;
+        string name = 3;
+        string email = 4;
+        string phone_number = 5;
+        string hashed_password = 6;
+        bool is_use_morning_bus = 7;
+        bool is_use_evening_bus = 8;
+        google.protobuf.Timestamp  created_at = 9;
+        google.protobuf.Timestamp  updated_at =10;
+}
+
+message GuardianResponse {
+        string id = 1;
+        string nursery_id = 2;
+        string name = 3;
+        string email = 4;
+        string phone_number = 5;
+        // ハッシュ化されたパスワードは除外
+        bool is_use_morning_bus = 6;
+        bool is_use_evening_bus = 7;
+        google.protobuf.Timestamp created_at = 8;
+        google.protobuf.Timestamp updated_at = 9;
+}
+
+enum Status {
+        STATUS_UNSPECIFIED = 0;
+        STATUS_STOPPED = 1;
+        STATUS_RUNNING = 2;
+        STATUS_MAINTEINANCE = 3;
+}
+
+enum VideoType {
+        VIDEO_TYPE_UNSPECIFIED = 0;
+        VIDEO_TYPE_GET_ON = 1;
+        VIDEO_TYPE_GET_OFF = 2;
+}
+
+message Bus {
+        string id = 1;
+        string nursery_id = 2;
+        string name = 3;
+        string plate_number = 4;
+        Status status = 5;
+        //緯度経度
+        double latitude = 6;
+        double longitude = 7;
+        bool enable_face_recognition = 8;
+        google.protobuf.Timestamp  created_at = 9;
+        google.protobuf.Timestamp  updated_at = 10;
+}
+
+enum Sex {
+        SEX_UNSPECIFIED = 0;
+        SEX_MAN = 1;
+        SEX_WOMAN = 2;
+        SEX_OTHER = 3;
+}
+
+message Child {
+        string id = 1;
+        string nursery_id = 2;
+        string guardian_id = 3;
+        string name = 4;
+        int32 age = 5;
+        Sex sex  = 6;
+        bool check_for_missing_items = 7;
+        bool has_bag  = 8;
+        bool has_lunch_box = 9;
+        bool has_water_bottle = 10;
+        bool has_umbrella = 11;
+        bool has_other = 12;
+        google.protobuf.Timestamp  created_at = 13;
+        google.protobuf.Timestamp  updated_at = 14;
+}
+
+message Station {
+        string id = 1;
+        string guardian_id = 2;
+        string morning_next_station_id = 3;
+        string evening_next_station_id = 4;
+        double latitude = 5;
+        double longitude = 6;
+        int32 morning_order = 7;
+        int32 evening_order = 8;
+        google.protobuf.Timestamp  created_at = 9;
+        google.protobuf.Timestamp  updated_at = 10;
+}
+
+enum BusType {
+        BUS_TYPE_UNSPECIFIED = 0;
+        BUS_TYPE_MORNING = 1;
+        BUS_TYPE_EVENING = 2;
+}
+
+message ChildBusAssociation {
+        string id = 1;
+        string bus_id = 2;
+        string child_id = 3;
+        BusType bus_type = 4;
+}
+
+message BusStationAssociation {
+        string bus_id = 1;
+        string station_id = 2;
+}
+
+message ChildPhoto {
+        string id = 1;
+        string child_id = 2;
+        bytes photo  = 3;
+        google.protobuf.Timestamp  created_at = 4;
+        google.protobuf.Timestamp  updated_at = 5;
+}
+
+message BoardingRecord {
+        string id = 1;
+        string child_id = 2;
+        string bus_id = 3;
+        bool is_boarding = 4;
+        google.protobuf.Timestamp  timestamp = 5;
+}

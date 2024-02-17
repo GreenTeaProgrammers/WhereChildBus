@@ -20,8 +20,6 @@ func (Station) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
 		field.Float("latitude").Optional(),
 		field.Float("longitude").Optional(),
-		field.Int("morning_order").Comment("朝のバス停の順番"),
-		field.Int("evening_order").Comment("帰りのバス停の順番"),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}
@@ -35,5 +33,13 @@ func (Station) Edges() []ent.Edge {
 			Unique(),
 		edge.From("bus", Bus.Type).
 			Ref("stations"),
+		// 朝の次のステーションへの自己参照エッジ
+		edge.To("morning_next_station", Station.Type).
+			From("morning_previous_station").
+			Unique(),
+		// 夕方の次のステーションへの自己参照エッジ
+		edge.To("evening_next_station", Station.Type).
+			From("evening_previous_station").
+			Unique(),
 	}
 }

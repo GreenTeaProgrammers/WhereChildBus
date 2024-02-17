@@ -19,8 +19,8 @@ const (
 	FieldNurseryCode = "nursery_code"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldEncryptedPassword holds the string denoting the encrypted_password field in the database.
-	FieldEncryptedPassword = "encrypted_password"
+	// FieldHashedPassword holds the string denoting the hashed_password field in the database.
+	FieldHashedPassword = "hashed_password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldAddress holds the string denoting the address field in the database.
@@ -31,21 +31,12 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// EdgeChildren holds the string denoting the children edge name in mutations.
-	EdgeChildren = "children"
 	// EdgeGuardians holds the string denoting the guardians edge name in mutations.
 	EdgeGuardians = "guardians"
 	// EdgeBuses holds the string denoting the buses edge name in mutations.
 	EdgeBuses = "buses"
 	// Table holds the table name of the nursery in the database.
 	Table = "nurseries"
-	// ChildrenTable is the table that holds the children relation/edge.
-	ChildrenTable = "childs"
-	// ChildrenInverseTable is the table name for the Child entity.
-	// It exists in this package in order to avoid circular dependency with the "child" package.
-	ChildrenInverseTable = "childs"
-	// ChildrenColumn is the table column denoting the children relation/edge.
-	ChildrenColumn = "child_nursery"
 	// GuardiansTable is the table that holds the guardians relation/edge.
 	GuardiansTable = "guardians"
 	// GuardiansInverseTable is the table name for the Guardian entity.
@@ -67,7 +58,7 @@ var Columns = []string{
 	FieldID,
 	FieldNurseryCode,
 	FieldEmail,
-	FieldEncryptedPassword,
+	FieldHashedPassword,
 	FieldName,
 	FieldAddress,
 	FieldPhoneNumber,
@@ -86,8 +77,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultNurseryCode holds the default value on creation for the "nursery_code" field.
-	DefaultNurseryCode func() string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -116,9 +105,9 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
-// ByEncryptedPassword orders the results by the encrypted_password field.
-func ByEncryptedPassword(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEncryptedPassword, opts...).ToFunc()
+// ByHashedPassword orders the results by the hashed_password field.
+func ByHashedPassword(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHashedPassword, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -144,20 +133,6 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
-// ByChildrenCount orders the results by children count.
-func ByChildrenCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newChildrenStep(), opts...)
-	}
-}
-
-// ByChildren orders the results by children terms.
-func ByChildren(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newChildrenStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
 }
 
 // ByGuardiansCount orders the results by guardians count.
@@ -186,13 +161,6 @@ func ByBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
-}
-func newChildrenStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ChildrenInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, ChildrenTable, ChildrenColumn),
-	)
 }
 func newGuardiansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

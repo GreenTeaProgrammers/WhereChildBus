@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service NurseryService {
+        rpc CreateNursery(CreateNurseryRequest) returns (CreateNurseryResponse);
+        rpc NurseryLogin(NurseryLoginRequest) returns (NurseryLoginResponse);
+}
+
+message CreateNurseryRequest {
+        string email = 1;
+        string password = 2;
+        string name = 3;
+        string phone_number = 4;
+        string address = 5;
+}
+
+message CreateNurseryResponse {
+        NurseryResponse nursery = 1;
+}
+
+message NurseryLoginRequest {;
+        string email = 1;
+        string password = 2;
+}
+
+message NurseryLoginResponse {
+        bool success = 1;
+        NurseryResponse nursery = 2;
+}

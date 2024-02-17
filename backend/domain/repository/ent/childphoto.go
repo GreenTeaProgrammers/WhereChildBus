@@ -19,10 +19,6 @@ type ChildPhoto struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// AWS S3のバケット名
-	S3Bucket string `json:"s3_bucket,omitempty"`
-	// S3内の画像ファイルのキー（ファイルパス含む）
-	S3Key string `json:"s3_key,omitempty"`
 	// レコードの作成日時
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// レコードの最終更新日時
@@ -61,8 +57,6 @@ func (*ChildPhoto) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case childphoto.FieldS3Bucket, childphoto.FieldS3Key:
-			values[i] = new(sql.NullString)
 		case childphoto.FieldCreatedAt, childphoto.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case childphoto.FieldID:
@@ -89,18 +83,6 @@ func (cp *ChildPhoto) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				cp.ID = *value
-			}
-		case childphoto.FieldS3Bucket:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field s3_bucket", values[i])
-			} else if value.Valid {
-				cp.S3Bucket = value.String
-			}
-		case childphoto.FieldS3Key:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field s3_key", values[i])
-			} else if value.Valid {
-				cp.S3Key = value.String
 			}
 		case childphoto.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -162,12 +144,6 @@ func (cp *ChildPhoto) String() string {
 	var builder strings.Builder
 	builder.WriteString("ChildPhoto(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", cp.ID))
-	builder.WriteString("s3_bucket=")
-	builder.WriteString(cp.S3Bucket)
-	builder.WriteString(", ")
-	builder.WriteString("s3_key=")
-	builder.WriteString(cp.S3Key)
-	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(cp.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")

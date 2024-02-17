@@ -1,45 +1,108 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/models/bus_edit_page_type.dart';
+import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
+import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
+import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusListPage extends StatefulWidget {
-  const BusListPage({super.key});
+  final NurseryResponse nursery;
+
+  const BusListPage({super.key, required this.nursery});
 
   @override
   State<BusListPage> createState() => _BusListPageState();
 }
 
-
 class _BusListPageState extends State<BusListPage> {
-  //TODO: 将来的には動的にデータを受け取る。そのためのメソッドが増える
-  final items = ["バス1", "バス2", "バス3", "バス4", "バス5", "バス5", "バス5", "バス5", "バス5"];
-  final busesOperatingState = [true, false, true, false, false, false, false, false, false];
+  List<Bus> buses = [];
+  bool _isLoading = true;
+  bool _isFailLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadBusList();
+  }
+
+  Future<void> _loadBusList() async {
+    String nurseryId = widget.nursery.id;
+    List<Bus> busList = await getBusList(nurseryId);
+    try {
+      if (mounted) {
+        setState(() {
+          buses = busList;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      }
+      setState(() => {_isLoading = false, _isFailLoading = true});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: listViewBuilder(),
+    return Scaffold(
+      body: pageBody(),
+      floatingActionButton: addBusButton(),
+    );
+  }
+
+  Widget pageBody() {
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
           )
-        ],
-      ),
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_isFailLoading) loadFailText(),
+                if (buses.isEmpty) busNotRegisteredText(),
+                Expanded(
+                  child: listViewBuilder(),
+                )
+              ],
+            ),
+          );
+  }
+
+  Widget busNotRegisteredText() {
+    return const Padding(
+      padding: EdgeInsets.all(20),
+      child: Text("バスが登録されていません"),
+    );
+  }
+
+  Widget addBusButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BusEditPage(
+                      busEditPageType: BusEditPageType.create,
+                    )));
+      },
+      child: const Icon(Icons.add),
     );
   }
 
   Widget listViewBuilder() {
     return ListView.builder(
-      //TODO: 実際にはAPIからデータを取得
-      itemCount: items.length,
+      itemCount: buses.length,
       itemBuilder: (BuildContext context, int index) {
-        return busListCard(items[index], busesOperatingState[index]);
+        return busListCard(buses[index]);
       },
     );
   }
 
-  //TODO: 将来的にBus型を受け取る
-  Widget busListCard(String name, bool isBusOperating) {
+  Widget busListCard(Bus bus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -48,33 +111,51 @@ class _BusListPageState extends State<BusListPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Material(
           color: Colors.white,
-          child: Row(
-            children: [
-              busPhoto(isBusOperating),
-              busNameAndDescription(name),
-            ],
+          child: InkWell(
+            onTap: () async {
+              await showModalBottomSheet<void>(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: false,
+                  enableDrag: true,
+                  isDismissible: true,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  builder: (context) {
+                    return BottomSheetWidget(
+                      bus: bus,
+                    );
+                  });
+            },
+            child: Row(
+              children: [
+                busPhoto(bus.status),
+                busNameAndDescription(bus.name, bus.status),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget busPhoto(bool isBusOperating) {
-    String imagePath = isBusOperating
-          ? "assets/images/bus_operating.png"
-          : "assets/images/bus_not_operating.png";
+  Widget busPhoto(Status busStatus) {
+    late String imagePath;
+    if (busStatus == Status.STATUS_RUNNING) {
+      imagePath = "assets/images/bus_operating.png";
+    } else {
+      imagePath = "assets/images/bus_not_operating.png";
+    }
 
     return SizedBox(
-      width: 100,
-      height: 100,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Image.asset(
-          imagePath,
-          fit:BoxFit.cover,
-        ),
-      )
-    );
+        width: 100,
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+          ),
+        ));
   }
 
   Widget busName(name) {
@@ -88,7 +169,15 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busDescription(String description) {
+  Widget busDescription(Status busStatus) {
+    late String description;
+    if (busStatus == Status.STATUS_RUNNING) {
+      description = "運行中";
+    } else if (busStatus == Status.STATUS_MAINTEINANCE) {
+      description = "メンテナンス中";
+    } else {
+      description = "停止中";
+    }
     return Text(
       description,
       style: const TextStyle(
@@ -100,18 +189,20 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  //TODO: 将来的には説明文も引数として受け取る
-  Widget busNameAndDescription(String name) {
+  Widget busNameAndDescription(String name, Status busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, 
-        //TODO:動的になる
-        children: [
-          busName(name),
-          busDescription("テストの説明文")
-        ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [busName(name), busDescription(busStatus)],
       ),
+    );
+  }
+
+  Widget loadFailText() {
+    return const Text(
+      "バスのロードに失敗しました",
+      style: TextStyle(color: Colors.red, fontSize: 16),
     );
   }
 }

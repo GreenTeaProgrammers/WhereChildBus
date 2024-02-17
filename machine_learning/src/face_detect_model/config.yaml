@@ -1,13 +1,31 @@
 model:
   hidden_size: 120
-  in_channels: 1
+  in_channels: 3
   Conv2d:
     kernel_size: 3
+    out_channels_1: 16
+    out_channels_2: 32
   pooling:
     kernel_size: 2
     stride: 2
+face_detect:
+  cascade_path: "haarcascade_frontalface_default.xml"
+  scale_factor: 1.2
+  min_neighbors: 5
+  min_size: { width: 50, height: 50 }
+  clip_size: { width: 100, height: 100 }
+dataset:
+  root_path: "src/face_detect_model/data/detect_img"
+  ratio:
+    train: 0.7
+    valid: 0.1
+    test: 0.2
 train:
-  epoch: 3
-  train_batch_size: 128
-  valid_batch_size: 64
+  epoch: 100
+  learning_rate: 0.001
+  train_batch_size: 1
+  valid_batch_size: 1
   test_batch_size: 1
+  validate_interval: 10
+  save_model_dir: "src/face_detect_model/pickle/mock_model/"
+  test_model_path: "src/face_detect_model/pickle/mock_model/best_model.pth"

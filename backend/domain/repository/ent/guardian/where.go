@@ -61,9 +61,9 @@ func Email(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldEQ(FieldEmail, v))
 }
 
-// EncryptedPassword applies equality check predicate on the "encrypted_password" field. It's identical to EncryptedPasswordEQ.
-func EncryptedPassword(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEQ(FieldEncryptedPassword, v))
+// HashedPassword applies equality check predicate on the "hashed_password" field. It's identical to HashedPasswordEQ.
+func HashedPassword(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldHashedPassword, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -74,6 +74,16 @@ func Name(v string) predicate.Guardian {
 // PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
 func PhoneNumber(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldEQ(FieldPhoneNumber, v))
+}
+
+// IsUseMorningBus applies equality check predicate on the "is_use_morning_bus" field. It's identical to IsUseMorningBusEQ.
+func IsUseMorningBus(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseMorningBus, v))
+}
+
+// IsUseEveningBus applies equality check predicate on the "is_use_evening_bus" field. It's identical to IsUseEveningBusEQ.
+func IsUseEveningBus(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseEveningBus, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -151,69 +161,69 @@ func EmailContainsFold(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldContainsFold(FieldEmail, v))
 }
 
-// EncryptedPasswordEQ applies the EQ predicate on the "encrypted_password" field.
-func EncryptedPasswordEQ(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEQ(FieldEncryptedPassword, v))
+// HashedPasswordEQ applies the EQ predicate on the "hashed_password" field.
+func HashedPasswordEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordNEQ applies the NEQ predicate on the "encrypted_password" field.
-func EncryptedPasswordNEQ(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldNEQ(FieldEncryptedPassword, v))
+// HashedPasswordNEQ applies the NEQ predicate on the "hashed_password" field.
+func HashedPasswordNEQ(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordIn applies the In predicate on the "encrypted_password" field.
-func EncryptedPasswordIn(vs ...string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldIn(FieldEncryptedPassword, vs...))
+// HashedPasswordIn applies the In predicate on the "hashed_password" field.
+func HashedPasswordIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldIn(FieldHashedPassword, vs...))
 }
 
-// EncryptedPasswordNotIn applies the NotIn predicate on the "encrypted_password" field.
-func EncryptedPasswordNotIn(vs ...string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldNotIn(FieldEncryptedPassword, vs...))
+// HashedPasswordNotIn applies the NotIn predicate on the "hashed_password" field.
+func HashedPasswordNotIn(vs ...string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNotIn(FieldHashedPassword, vs...))
 }
 
-// EncryptedPasswordGT applies the GT predicate on the "encrypted_password" field.
-func EncryptedPasswordGT(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldGT(FieldEncryptedPassword, v))
+// HashedPasswordGT applies the GT predicate on the "hashed_password" field.
+func HashedPasswordGT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGT(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordGTE applies the GTE predicate on the "encrypted_password" field.
-func EncryptedPasswordGTE(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldGTE(FieldEncryptedPassword, v))
+// HashedPasswordGTE applies the GTE predicate on the "hashed_password" field.
+func HashedPasswordGTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldGTE(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordLT applies the LT predicate on the "encrypted_password" field.
-func EncryptedPasswordLT(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldLT(FieldEncryptedPassword, v))
+// HashedPasswordLT applies the LT predicate on the "hashed_password" field.
+func HashedPasswordLT(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLT(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordLTE applies the LTE predicate on the "encrypted_password" field.
-func EncryptedPasswordLTE(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldLTE(FieldEncryptedPassword, v))
+// HashedPasswordLTE applies the LTE predicate on the "hashed_password" field.
+func HashedPasswordLTE(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldLTE(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordContains applies the Contains predicate on the "encrypted_password" field.
-func EncryptedPasswordContains(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldContains(FieldEncryptedPassword, v))
+// HashedPasswordContains applies the Contains predicate on the "hashed_password" field.
+func HashedPasswordContains(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContains(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordHasPrefix applies the HasPrefix predicate on the "encrypted_password" field.
-func EncryptedPasswordHasPrefix(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldHasPrefix(FieldEncryptedPassword, v))
+// HashedPasswordHasPrefix applies the HasPrefix predicate on the "hashed_password" field.
+func HashedPasswordHasPrefix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasPrefix(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordHasSuffix applies the HasSuffix predicate on the "encrypted_password" field.
-func EncryptedPasswordHasSuffix(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldHasSuffix(FieldEncryptedPassword, v))
+// HashedPasswordHasSuffix applies the HasSuffix predicate on the "hashed_password" field.
+func HashedPasswordHasSuffix(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldHasSuffix(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordEqualFold applies the EqualFold predicate on the "encrypted_password" field.
-func EncryptedPasswordEqualFold(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldEqualFold(FieldEncryptedPassword, v))
+// HashedPasswordEqualFold applies the EqualFold predicate on the "hashed_password" field.
+func HashedPasswordEqualFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEqualFold(FieldHashedPassword, v))
 }
 
-// EncryptedPasswordContainsFold applies the ContainsFold predicate on the "encrypted_password" field.
-func EncryptedPasswordContainsFold(v string) predicate.Guardian {
-	return predicate.Guardian(sql.FieldContainsFold(FieldEncryptedPassword, v))
+// HashedPasswordContainsFold applies the ContainsFold predicate on the "hashed_password" field.
+func HashedPasswordContainsFold(v string) predicate.Guardian {
+	return predicate.Guardian(sql.FieldContainsFold(FieldHashedPassword, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -354,6 +364,26 @@ func PhoneNumberEqualFold(v string) predicate.Guardian {
 // PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
 func PhoneNumberContainsFold(v string) predicate.Guardian {
 	return predicate.Guardian(sql.FieldContainsFold(FieldPhoneNumber, v))
+}
+
+// IsUseMorningBusEQ applies the EQ predicate on the "is_use_morning_bus" field.
+func IsUseMorningBusEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseMorningBus, v))
+}
+
+// IsUseMorningBusNEQ applies the NEQ predicate on the "is_use_morning_bus" field.
+func IsUseMorningBusNEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldIsUseMorningBus, v))
+}
+
+// IsUseEveningBusEQ applies the EQ predicate on the "is_use_evening_bus" field.
+func IsUseEveningBusEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldEQ(FieldIsUseEveningBus, v))
+}
+
+// IsUseEveningBusNEQ applies the NEQ predicate on the "is_use_evening_bus" field.
+func IsUseEveningBusNEQ(v bool) predicate.Guardian {
+	return predicate.Guardian(sql.FieldNEQ(FieldIsUseEveningBus, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

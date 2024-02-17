@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/google/uuid"
 )
 
@@ -26,10 +25,6 @@ type Child struct {
 	Age int `json:"age,omitempty"`
 	// Sex holds the value of the "sex" field.
 	Sex child.Sex `json:"sex,omitempty"`
-	// 朝のバスに乗るかどうか
-	IsRideMorningBus bool `json:"is_ride_morning_bus,omitempty"`
-	// 放課後のバスに乗るかどうか
-	IsRideEveningBus bool `json:"is_ride_evening_bus,omitempty"`
 	// 持ち物が欠けていないかをチェックするかどうか
 	CheckForMissingItems bool `json:"check_for_missing_items,omitempty"`
 	// HasBag holds the value of the "has_bag" field.
@@ -49,7 +44,6 @@ type Child struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ChildQuery when eager-loading is set.
 	Edges             ChildEdges `json:"edges"`
-	child_nursery     *uuid.UUID
 	guardian_children *uuid.UUID
 	selectValues      sql.SelectValues
 }
@@ -60,15 +54,13 @@ type ChildEdges struct {
 	Guardian *Guardian `json:"guardian,omitempty"`
 	// ChildBusAssociations holds the value of the childBusAssociations edge.
 	ChildBusAssociations []*ChildBusAssociation `json:"childBusAssociations,omitempty"`
-	// Nursery holds the value of the nursery edge.
-	Nursery *Nursery `json:"nursery,omitempty"`
 	// BoardingRecord holds the value of the boarding_record edge.
 	BoardingRecord []*BoardingRecord `json:"boarding_record,omitempty"`
 	// Photos holds the value of the photos edge.
 	Photos []*ChildPhoto `json:"photos,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [4]bool
 }
 
 // GuardianOrErr returns the Guardian value or an error if the edge
@@ -93,23 +85,10 @@ func (e ChildEdges) ChildBusAssociationsOrErr() ([]*ChildBusAssociation, error) 
 	return nil, &NotLoadedError{edge: "childBusAssociations"}
 }
 
-// NurseryOrErr returns the Nursery value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e ChildEdges) NurseryOrErr() (*Nursery, error) {
-	if e.loadedTypes[2] {
-		if e.Nursery == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: nursery.Label}
-		}
-		return e.Nursery, nil
-	}
-	return nil, &NotLoadedError{edge: "nursery"}
-}
-
 // BoardingRecordOrErr returns the BoardingRecord value or an error if the edge
 // was not loaded in eager-loading.
 func (e ChildEdges) BoardingRecordOrErr() ([]*BoardingRecord, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.BoardingRecord, nil
 	}
 	return nil, &NotLoadedError{edge: "boarding_record"}
@@ -118,7 +97,7 @@ func (e ChildEdges) BoardingRecordOrErr() ([]*BoardingRecord, error) {
 // PhotosOrErr returns the Photos value or an error if the edge
 // was not loaded in eager-loading.
 func (e ChildEdges) PhotosOrErr() ([]*ChildPhoto, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.Photos, nil
 	}
 	return nil, &NotLoadedError{edge: "photos"}
@@ -129,7 +108,7 @@ func (*Child) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case child.FieldIsRideMorningBus, child.FieldIsRideEveningBus, child.FieldCheckForMissingItems, child.FieldHasBag, child.FieldHasLunchBox, child.FieldHasWaterBottle, child.FieldHasUmbrella, child.FieldHasOther:
+		case child.FieldCheckForMissingItems, child.FieldHasBag, child.FieldHasLunchBox, child.FieldHasWaterBottle, child.FieldHasUmbrella, child.FieldHasOther:
 			values[i] = new(sql.NullBool)
 		case child.FieldAge:
 			values[i] = new(sql.NullInt64)
@@ -139,9 +118,7 @@ func (*Child) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case child.FieldID:
 			values[i] = new(uuid.UUID)
-		case child.ForeignKeys[0]: // child_nursery
-			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
-		case child.ForeignKeys[1]: // guardian_children
+		case child.ForeignKeys[0]: // guardian_children
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -181,18 +158,6 @@ func (c *Child) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sex", values[i])
 			} else if value.Valid {
 				c.Sex = child.Sex(value.String)
-			}
-		case child.FieldIsRideMorningBus:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field is_ride_morning_bus", values[i])
-			} else if value.Valid {
-				c.IsRideMorningBus = value.Bool
-			}
-		case child.FieldIsRideEveningBus:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field is_ride_evening_bus", values[i])
-			} else if value.Valid {
-				c.IsRideEveningBus = value.Bool
 			}
 		case child.FieldCheckForMissingItems:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -244,13 +209,6 @@ func (c *Child) assignValues(columns []string, values []any) error {
 			}
 		case child.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field child_nursery", values[i])
-			} else if value.Valid {
-				c.child_nursery = new(uuid.UUID)
-				*c.child_nursery = *value.S.(*uuid.UUID)
-			}
-		case child.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field guardian_children", values[i])
 			} else if value.Valid {
 				c.guardian_children = new(uuid.UUID)
@@ -277,11 +235,6 @@ func (c *Child) QueryGuardian() *GuardianQuery {
 // QueryChildBusAssociations queries the "childBusAssociations" edge of the Child entity.
 func (c *Child) QueryChildBusAssociations() *ChildBusAssociationQuery {
 	return NewChildClient(c.config).QueryChildBusAssociations(c)
-}
-
-// QueryNursery queries the "nursery" edge of the Child entity.
-func (c *Child) QueryNursery() *NurseryQuery {
-	return NewChildClient(c.config).QueryNursery(c)
 }
 
 // QueryBoardingRecord queries the "boarding_record" edge of the Child entity.
@@ -325,12 +278,6 @@ func (c *Child) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sex=")
 	builder.WriteString(fmt.Sprintf("%v", c.Sex))
-	builder.WriteString(", ")
-	builder.WriteString("is_ride_morning_bus=")
-	builder.WriteString(fmt.Sprintf("%v", c.IsRideMorningBus))
-	builder.WriteString(", ")
-	builder.WriteString("is_ride_evening_bus=")
-	builder.WriteString(fmt.Sprintf("%v", c.IsRideEveningBus))
 	builder.WriteString(", ")
 	builder.WriteString("check_for_missing_items=")
 	builder.WriteString(fmt.Sprintf("%v", c.CheckForMissingItems))

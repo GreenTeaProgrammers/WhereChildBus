@@ -66,16 +66,6 @@ func Age(v int) predicate.Child {
 	return predicate.Child(sql.FieldEQ(FieldAge, v))
 }
 
-// IsRideMorningBus applies equality check predicate on the "is_ride_morning_bus" field. It's identical to IsRideMorningBusEQ.
-func IsRideMorningBus(v bool) predicate.Child {
-	return predicate.Child(sql.FieldEQ(FieldIsRideMorningBus, v))
-}
-
-// IsRideEveningBus applies equality check predicate on the "is_ride_evening_bus" field. It's identical to IsRideEveningBusEQ.
-func IsRideEveningBus(v bool) predicate.Child {
-	return predicate.Child(sql.FieldEQ(FieldIsRideEveningBus, v))
-}
-
 // CheckForMissingItems applies equality check predicate on the "check_for_missing_items" field. It's identical to CheckForMissingItemsEQ.
 func CheckForMissingItems(v bool) predicate.Child {
 	return predicate.Child(sql.FieldEQ(FieldCheckForMissingItems, v))
@@ -239,26 +229,6 @@ func SexIn(vs ...Sex) predicate.Child {
 // SexNotIn applies the NotIn predicate on the "sex" field.
 func SexNotIn(vs ...Sex) predicate.Child {
 	return predicate.Child(sql.FieldNotIn(FieldSex, vs...))
-}
-
-// IsRideMorningBusEQ applies the EQ predicate on the "is_ride_morning_bus" field.
-func IsRideMorningBusEQ(v bool) predicate.Child {
-	return predicate.Child(sql.FieldEQ(FieldIsRideMorningBus, v))
-}
-
-// IsRideMorningBusNEQ applies the NEQ predicate on the "is_ride_morning_bus" field.
-func IsRideMorningBusNEQ(v bool) predicate.Child {
-	return predicate.Child(sql.FieldNEQ(FieldIsRideMorningBus, v))
-}
-
-// IsRideEveningBusEQ applies the EQ predicate on the "is_ride_evening_bus" field.
-func IsRideEveningBusEQ(v bool) predicate.Child {
-	return predicate.Child(sql.FieldEQ(FieldIsRideEveningBus, v))
-}
-
-// IsRideEveningBusNEQ applies the NEQ predicate on the "is_ride_evening_bus" field.
-func IsRideEveningBusNEQ(v bool) predicate.Child {
-	return predicate.Child(sql.FieldNEQ(FieldIsRideEveningBus, v))
 }
 
 // CheckForMissingItemsEQ applies the EQ predicate on the "check_for_missing_items" field.
@@ -439,29 +409,6 @@ func HasChildBusAssociations() predicate.Child {
 func HasChildBusAssociationsWith(preds ...predicate.ChildBusAssociation) predicate.Child {
 	return predicate.Child(func(s *sql.Selector) {
 		step := newChildBusAssociationsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasNursery applies the HasEdge predicate on the "nursery" edge.
-func HasNursery() predicate.Child {
-	return predicate.Child(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, NurseryTable, NurseryColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasNurseryWith applies the HasEdge predicate on the "nursery" edge with a given conditions (other predicates).
-func HasNurseryWith(preds ...predicate.Nursery) predicate.Child {
-	return predicate.Child(func(s *sql.Selector) {
-		step := newNurseryStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
