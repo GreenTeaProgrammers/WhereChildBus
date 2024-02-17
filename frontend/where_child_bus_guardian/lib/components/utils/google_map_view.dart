@@ -51,7 +51,7 @@ class _GoogleMapView extends State<GoogleMapView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(right: 10.0, left: 10.0),
+        padding: const EdgeInsets.only(right: 10.0, left: 10.0),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: SizedBox(
