@@ -1,7 +1,9 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/child_list.dart';
-import 'package:where_child_bus/pages/student_list_page/student_detail_sheet.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
+import 'package:where_child_bus/service/get_child_list_by_nursery_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class ChildListPage extends StatefulWidget {
@@ -14,6 +16,10 @@ class ChildListPage extends StatefulWidget {
 }
 
 class _ChildListPageState extends State<ChildListPage> {
+  List<Child> children = [];
+  bool _isLoading = false;
+  bool _isFailLoading = false;
+
   //TODO: 将来的には動的にデータを受け取る。
   final List<String> name = <String>[
     "園児1",
@@ -38,15 +44,42 @@ class _ChildListPageState extends State<ChildListPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadChildren();
+  }
+
+  Future<void> _loadChildren() async {
+    try {
+      _isLoading = true;
+      List<Child> childList =
+          await getChildListByNurseryIdService(widget.nursery.id);
+      if (mounted) {
+        setState(() {
+          children = childList;
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        developer.log("子供のロード中にエラーが発生しました");
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isFailLoading = true;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: ChildList(
-        childNames: name,
-        groupNames: group,
-        images: image,
-      ),
+      body: pageBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -55,5 +88,13 @@ class _ChildListPageState extends State<ChildListPage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Widget pageBody() {
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : ChildList(children: children, images: image);
   }
 }
