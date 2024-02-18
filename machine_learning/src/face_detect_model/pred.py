@@ -88,6 +88,7 @@ def get_model_input_shape(tensor):
 
 def pred_child_from_tensor(model, input_image_tensor):
     output = model(input_image_tensor.unsqueeze(0))
+    logger.info(f"Predicted present: {torch.nn.functional.softmax(output, dim=1)}")
     pred = output.argmax(dim=1)
     return pred
 
@@ -114,7 +115,7 @@ def pred_child_from_images(args, config):
     idx_to_label_dict = load_pickle_to_gcs(bucket, idx_to_label_dict_bucket_path)
     model_class_num = len(idx_to_label_dict)
 
-    clipped_faces = get_cliped_faces_from_images(args.video_chunks, config)
+    clipped_faces = get_cliped_faces_from_images(args.video_chunk, config)
     input_image_tensors = convert_to_tensor_from_images(clipped_faces)
 
     model_bucket_path = (
@@ -152,10 +153,9 @@ if __name__ == "__main__":
     parser.add_argument("--bus_type", type=int, required=True)
 
     args = parser.parse_args()
-    args.video_chunks = [
+    args.video_chunk = [
         open("/Users/mizuki/Desktop/test.jpg", "rb").read(),
         open("/Users/mizuki/Desktop/test1.jpg", "rb").read(),
     ]
 
-    # TODO: main関数に対してmodelを渡すように実装を変換
     main(args)
