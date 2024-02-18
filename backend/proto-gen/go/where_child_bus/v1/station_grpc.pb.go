@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	StationService_UpdateStation_FullMethodName         = "/where_child_bus.v1.StationService/UpdateStation"
-	StationService_GetStationListByBusId_FullMethodName = "/where_child_bus.v1.StationService/GetStationListByBusId"
+	StationService_UpdateStationLocationByGuardianId_FullMethodName = "/where_child_bus.v1.StationService/UpdateStationLocationByGuardianId"
+	StationService_GetStationListByBusId_FullMethodName             = "/where_child_bus.v1.StationService/GetStationListByBusId"
 )
 
 // StationServiceClient is the client API for StationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StationServiceClient interface {
-	UpdateStation(ctx context.Context, in *UpdateStationRequest, opts ...grpc.CallOption) (*UpdateStationResponse, error)
+	UpdateStationLocationByGuardianId(ctx context.Context, in *UpdateStationLocationByGuardianIdRequest, opts ...grpc.CallOption) (*UpdateStationLocationByGuardianIdResponse, error)
 	GetStationListByBusId(ctx context.Context, in *GetStationListByBusIdRequest, opts ...grpc.CallOption) (*GetStationListByBusIdResponse, error)
 }
 
@@ -39,9 +39,9 @@ func NewStationServiceClient(cc grpc.ClientConnInterface) StationServiceClient {
 	return &stationServiceClient{cc}
 }
 
-func (c *stationServiceClient) UpdateStation(ctx context.Context, in *UpdateStationRequest, opts ...grpc.CallOption) (*UpdateStationResponse, error) {
-	out := new(UpdateStationResponse)
-	err := c.cc.Invoke(ctx, StationService_UpdateStation_FullMethodName, in, out, opts...)
+func (c *stationServiceClient) UpdateStationLocationByGuardianId(ctx context.Context, in *UpdateStationLocationByGuardianIdRequest, opts ...grpc.CallOption) (*UpdateStationLocationByGuardianIdResponse, error) {
+	out := new(UpdateStationLocationByGuardianIdResponse)
+	err := c.cc.Invoke(ctx, StationService_UpdateStationLocationByGuardianId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (c *stationServiceClient) GetStationListByBusId(ctx context.Context, in *Ge
 // All implementations should embed UnimplementedStationServiceServer
 // for forward compatibility
 type StationServiceServer interface {
-	UpdateStation(context.Context, *UpdateStationRequest) (*UpdateStationResponse, error)
+	UpdateStationLocationByGuardianId(context.Context, *UpdateStationLocationByGuardianIdRequest) (*UpdateStationLocationByGuardianIdResponse, error)
 	GetStationListByBusId(context.Context, *GetStationListByBusIdRequest) (*GetStationListByBusIdResponse, error)
 }
 
@@ -69,8 +69,8 @@ type StationServiceServer interface {
 type UnimplementedStationServiceServer struct {
 }
 
-func (UnimplementedStationServiceServer) UpdateStation(context.Context, *UpdateStationRequest) (*UpdateStationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateStation not implemented")
+func (UnimplementedStationServiceServer) UpdateStationLocationByGuardianId(context.Context, *UpdateStationLocationByGuardianIdRequest) (*UpdateStationLocationByGuardianIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStationLocationByGuardianId not implemented")
 }
 func (UnimplementedStationServiceServer) GetStationListByBusId(context.Context, *GetStationListByBusIdRequest) (*GetStationListByBusIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStationListByBusId not implemented")
@@ -87,20 +87,20 @@ func RegisterStationServiceServer(s grpc.ServiceRegistrar, srv StationServiceSer
 	s.RegisterService(&StationService_ServiceDesc, srv)
 }
 
-func _StationService_UpdateStation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateStationRequest)
+func _StationService_UpdateStationLocationByGuardianId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStationLocationByGuardianIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StationServiceServer).UpdateStation(ctx, in)
+		return srv.(StationServiceServer).UpdateStationLocationByGuardianId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StationService_UpdateStation_FullMethodName,
+		FullMethod: StationService_UpdateStationLocationByGuardianId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StationServiceServer).UpdateStation(ctx, req.(*UpdateStationRequest))
+		return srv.(StationServiceServer).UpdateStationLocationByGuardianId(ctx, req.(*UpdateStationLocationByGuardianIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -131,8 +131,8 @@ var StationService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*StationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UpdateStation",
-			Handler:    _StationService_UpdateStation_Handler,
+			MethodName: "UpdateStationLocationByGuardianId",
+			Handler:    _StationService_UpdateStationLocationByGuardianId_Handler,
 		},
 		{
 			MethodName: "GetStationListByBusId",
