@@ -13,36 +13,37 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use statusDescriptor instead')
-const Status$json = {
-  '1': 'Status',
+@$core.Deprecated('Use busStatusDescriptor instead')
+const BusStatus$json = {
+  '1': 'BusStatus',
   '2': [
-    {'1': 'STATUS_UNSPECIFIED', '2': 0},
-    {'1': 'STATUS_STOPPED', '2': 1},
-    {'1': 'STATUS_RUNNING', '2': 2},
-    {'1': 'STATUS_MAINTEINANCE', '2': 3},
+    {'1': 'BUS_STATUS_UNSPECIFIED', '2': 0},
+    {'1': 'BUS_STATUS_STOPPED', '2': 1},
+    {'1': 'BUS_STATUS_RUNNING', '2': 2},
+    {'1': 'BUS_STATUS_MAINTENANCE', '2': 3},
   ],
 };
 
-/// Descriptor for `Status`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
-    'CgZTdGF0dXMSFgoSU1RBVFVTX1VOU1BFQ0lGSUVEEAASEgoOU1RBVFVTX1NUT1BQRUQQARISCg'
-    '5TVEFUVVNfUlVOTklORxACEhcKE1NUQVRVU19NQUlOVEVJTkFOQ0UQAw==');
+/// Descriptor for `BusStatus`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List busStatusDescriptor = $convert.base64Decode(
+    'CglCdXNTdGF0dXMSGgoWQlVTX1NUQVRVU19VTlNQRUNJRklFRBAAEhYKEkJVU19TVEFUVVNfU1'
+    'RPUFBFRBABEhYKEkJVU19TVEFUVVNfUlVOTklORxACEhoKFkJVU19TVEFUVVNfTUFJTlRFTkFO'
+    'Q0UQAw==');
 
-@$core.Deprecated('Use videoTypeDescriptor instead')
-const VideoType$json = {
-  '1': 'VideoType',
+@$core.Deprecated('Use vehicleEventDescriptor instead')
+const VehicleEvent$json = {
+  '1': 'VehicleEvent',
   '2': [
-    {'1': 'VIDEO_TYPE_UNSPECIFIED', '2': 0},
-    {'1': 'VIDEO_TYPE_GET_ON', '2': 1},
-    {'1': 'VIDEO_TYPE_GET_OFF', '2': 2},
+    {'1': 'VEHICLE_EVENT_UNSPECIFIED', '2': 0},
+    {'1': 'VEHICLE_EVENT_GET_ON', '2': 1},
+    {'1': 'VEHICLE_EVENT_GET_OFF', '2': 2},
   ],
 };
 
-/// Descriptor for `VideoType`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List videoTypeDescriptor = $convert.base64Decode(
-    'CglWaWRlb1R5cGUSGgoWVklERU9fVFlQRV9VTlNQRUNJRklFRBAAEhUKEVZJREVPX1RZUEVfR0'
-    'VUX09OEAESFgoSVklERU9fVFlQRV9HRVRfT0ZGEAI=');
+/// Descriptor for `VehicleEvent`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List vehicleEventDescriptor = $convert.base64Decode(
+    'CgxWZWhpY2xlRXZlbnQSHQoZVkVISUNMRV9FVkVOVF9VTlNQRUNJRklFRBAAEhgKFFZFSElDTE'
+    'VfRVZFTlRfR0VUX09OEAESGQoVVkVISUNMRV9FVkVOVF9HRVRfT0ZGEAI=');
 
 @$core.Deprecated('Use sexDescriptor instead')
 const Sex$json = {
@@ -185,7 +186,7 @@ const Bus$json = {
     {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
     {'1': 'plate_number', '3': 4, '4': 1, '5': 9, '10': 'plateNumber'},
-    {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.where_child_bus.v1.Status', '10': 'status'},
+    {'1': 'bus_status', '3': 5, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusStatus', '10': 'busStatus'},
     {'1': 'latitude', '3': 6, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 7, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'enable_face_recognition', '3': 8, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
@@ -197,13 +198,13 @@ const Bus$json = {
 /// Descriptor for `Bus`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List busDescriptor = $convert.base64Decode(
     'CgNCdXMSDgoCaWQYASABKAlSAmlkEh0KCm51cnNlcnlfaWQYAiABKAlSCW51cnNlcnlJZBISCg'
-    'RuYW1lGAMgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgEIAEoCVILcGxhdGVOdW1iZXISMgoG'
-    'c3RhdHVzGAUgASgOMhoud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXR1c1IGc3RhdHVzEhoKCGxhdG'
-    'l0dWRlGAYgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYByABKAFSCWxvbmdpdHVkZRI2Chdl'
-    'bmFibGVfZmFjZV9yZWNvZ25pdGlvbhgIIAEoCFIVZW5hYmxlRmFjZVJlY29nbml0aW9uEjkKCm'
-    'NyZWF0ZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQS'
-    'OQoKdXBkYXRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZW'
-    'RBdA==');
+    'RuYW1lGAMgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgEIAEoCVILcGxhdGVOdW1iZXISPAoK'
+    'YnVzX3N0YXR1cxgFIAEoDjIdLndoZXJlX2NoaWxkX2J1cy52MS5CdXNTdGF0dXNSCWJ1c1N0YX'
+    'R1cxIaCghsYXRpdHVkZRgGIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAcgASgBUglsb25n'
+    'aXR1ZGUSNgoXZW5hYmxlX2ZhY2VfcmVjb2duaXRpb24YCCABKAhSFWVuYWJsZUZhY2VSZWNvZ2'
+    '5pdGlvbhI5CgpjcmVhdGVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJ'
+    'Y3JlYXRlZEF0EjkKCnVwZGF0ZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW'
+    '1wUgl1cGRhdGVkQXQ=');
 
 @$core.Deprecated('Use childDescriptor instead')
 const Child$json = {

@@ -36,7 +36,7 @@ message GetBusListByNurseryIdResponse {
 
 message ChangeBusStatusRequest {
         string bus_id = 1;
-        Status status = 2;
+        BusStatus bus_status = 2;
 }
 
 message ChangeBusStatusResponse {
@@ -68,7 +68,7 @@ message StreamBusVideoRequest {
         string bus_id = 1;
         string nursery_id = 2;
         BusType bus_type = 3;
-        VideoType video_type = 4;
+        VehicleEvent vehicle_event = 4;
         bytes video_chunk = 5; // Chunk of video data
 }
 

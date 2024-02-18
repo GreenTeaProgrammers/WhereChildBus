@@ -259,14 +259,14 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
 class ChangeBusStatusRequest extends $pb.GeneratedMessage {
   factory ChangeBusStatusRequest({
     $core.String? busId,
-    $8.Status? status,
+    $8.BusStatus? busStatus,
   }) {
     final $result = create();
     if (busId != null) {
       $result.busId = busId;
     }
-    if (status != null) {
-      $result.status = status;
+    if (busStatus != null) {
+      $result.busStatus = busStatus;
     }
     return $result;
   }
@@ -276,7 +276,7 @@ class ChangeBusStatusRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChangeBusStatusRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..e<$8.Status>(2, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: $8.Status.STATUS_UNSPECIFIED, valueOf: $8.Status.valueOf, enumValues: $8.Status.values)
+    ..e<$8.BusStatus>(2, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: $8.BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: $8.BusStatus.valueOf, enumValues: $8.BusStatus.values)
     ..hasRequiredFields = false
   ;
 
@@ -311,13 +311,13 @@ class ChangeBusStatusRequest extends $pb.GeneratedMessage {
   void clearBusId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $8.Status get status => $_getN(1);
+  $8.BusStatus get busStatus => $_getN(1);
   @$pb.TagNumber(2)
-  set status($8.Status v) { setField(2, v); }
+  set busStatus($8.BusStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasStatus() => $_has(1);
+  $core.bool hasBusStatus() => $_has(1);
   @$pb.TagNumber(2)
-  void clearStatus() => clearField(2);
+  void clearBusStatus() => clearField(2);
 }
 
 class ChangeBusStatusResponse extends $pb.GeneratedMessage {
@@ -616,7 +616,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     $core.String? busId,
     $core.String? nurseryId,
     $8.BusType? busType,
-    $8.VideoType? videoType,
+    $8.VehicleEvent? vehicleEvent,
     $core.List<$core.int>? videoChunk,
   }) {
     final $result = create();
@@ -629,8 +629,8 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     if (busType != null) {
       $result.busType = busType;
     }
-    if (videoType != null) {
-      $result.videoType = videoType;
+    if (vehicleEvent != null) {
+      $result.vehicleEvent = vehicleEvent;
     }
     if (videoChunk != null) {
       $result.videoChunk = videoChunk;
@@ -645,7 +645,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..e<$8.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
-    ..e<$8.VideoType>(4, _omitFieldNames ? '' : 'videoType', $pb.PbFieldType.OE, defaultOrMaker: $8.VideoType.VIDEO_TYPE_UNSPECIFIED, valueOf: $8.VideoType.valueOf, enumValues: $8.VideoType.values)
+    ..e<$8.VehicleEvent>(4, _omitFieldNames ? '' : 'vehicleEvent', $pb.PbFieldType.OE, defaultOrMaker: $8.VehicleEvent.VEHICLE_EVENT_UNSPECIFIED, valueOf: $8.VehicleEvent.valueOf, enumValues: $8.VehicleEvent.values)
     ..a<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -699,13 +699,13 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
   void clearBusType() => clearField(3);
 
   @$pb.TagNumber(4)
-  $8.VideoType get videoType => $_getN(3);
+  $8.VehicleEvent get vehicleEvent => $_getN(3);
   @$pb.TagNumber(4)
-  set videoType($8.VideoType v) { setField(4, v); }
+  set vehicleEvent($8.VehicleEvent v) { setField(4, v); }
   @$pb.TagNumber(4)
-  $core.bool hasVideoType() => $_has(3);
+  $core.bool hasVehicleEvent() => $_has(3);
   @$pb.TagNumber(4)
-  void clearVideoType() => clearField(4);
+  void clearVehicleEvent() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.List<$core.int> get videoChunk => $_getN(4);
