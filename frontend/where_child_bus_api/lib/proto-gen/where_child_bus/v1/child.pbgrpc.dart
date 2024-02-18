@@ -48,8 +48,8 @@ class ChildServiceClient extends $grpc.Client {
     return $createUnaryCall(_$createChild, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($1.GetChildListByNurseryIDRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getChildListByNurseryID, request, options: options);
+  $grpc.ResponseStream<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($1.GetChildListByNurseryIDRequest request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$getChildListByNurseryID, $async.Stream.fromIterable([request]), options: options);
   }
 
   $grpc.ResponseFuture<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($1.GetChildListByGuardianIDRequest request, {$grpc.CallOptions? options}) {
@@ -77,7 +77,7 @@ abstract class ChildServiceBase extends $grpc.Service {
         'GetChildListByNurseryID',
         getChildListByNurseryID_Pre,
         false,
-        false,
+        true,
         ($core.List<$core.int> value) => $1.GetChildListByNurseryIDRequest.fromBuffer(value),
         ($1.GetChildListByNurseryIDResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.GetChildListByGuardianIDRequest, $1.GetChildListByGuardianIDResponse>(
@@ -100,8 +100,8 @@ abstract class ChildServiceBase extends $grpc.Service {
     return createChild(call, await request);
   }
 
-  $async.Future<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByNurseryIDRequest> request) async {
-    return getChildListByNurseryID(call, await request);
+  $async.Stream<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByNurseryIDRequest> request) async* {
+    yield* getChildListByNurseryID(call, await request);
   }
 
   $async.Future<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByGuardianIDRequest> request) async {
@@ -113,7 +113,7 @@ abstract class ChildServiceBase extends $grpc.Service {
   }
 
   $async.Future<$1.CreateChildResponse> createChild($grpc.ServiceCall call, $1.CreateChildRequest request);
-  $async.Future<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($grpc.ServiceCall call, $1.GetChildListByNurseryIDRequest request);
+  $async.Stream<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($grpc.ServiceCall call, $1.GetChildListByNurseryIDRequest request);
   $async.Future<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($grpc.ServiceCall call, $1.GetChildListByGuardianIDRequest request);
   $async.Future<$1.GetChildListByBusIDResponse> getChildListByBusID($grpc.ServiceCall call, $1.GetChildListByBusIDRequest request);
 }

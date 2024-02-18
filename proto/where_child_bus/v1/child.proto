@@ -6,7 +6,7 @@ import "where_child_bus/v1/resources.proto";
 
 service ChildService {
         rpc CreateChild(CreateChildRequest) returns (CreateChildResponse);
-        rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (GetChildListByNurseryIDResponse);
+        rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (stream GetChildListByNurseryIDResponse);
         rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
         rpc GetChildListByBusID(GetChildListByBusIDRequest) returns (GetChildListByBusIDResponse);
 }
@@ -29,8 +29,8 @@ message GetChildListByNurseryIDRequest {
 }
 
 message GetChildListByNurseryIDResponse {
-        repeated Child children = 1;
-        repeated ChildPhoto photos = 2;
+        Child child = 1;
+        ChildPhoto photo = 2;
 }
 
 message GetChildListByGuardianIDRequest {
