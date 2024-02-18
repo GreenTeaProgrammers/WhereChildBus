@@ -35,12 +35,12 @@ class GetChildListByNurseryIDRequest(_message.Message):
     def __init__(self, nursery_id: _Optional[str] = ...) -> None: ...
 
 class GetChildListByNurseryIDResponse(_message.Message):
-    __slots__ = ("children", "photos")
-    CHILDREN_FIELD_NUMBER: _ClassVar[int]
-    PHOTOS_FIELD_NUMBER: _ClassVar[int]
-    children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
-    photos: _containers.RepeatedCompositeFieldContainer[_resources_pb2.ChildPhoto]
-    def __init__(self, children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ..., photos: _Optional[_Iterable[_Union[_resources_pb2.ChildPhoto, _Mapping]]] = ...) -> None: ...
+    __slots__ = ("child", "photo")
+    CHILD_FIELD_NUMBER: _ClassVar[int]
+    PHOTO_FIELD_NUMBER: _ClassVar[int]
+    child: _resources_pb2.Child
+    photo: _resources_pb2.ChildPhoto
+    def __init__(self, child: _Optional[_Union[_resources_pb2.Child, _Mapping]] = ..., photo: _Optional[_Union[_resources_pb2.ChildPhoto, _Mapping]] = ...) -> None: ...
 
 class GetChildListByGuardianIDRequest(_message.Message):
     __slots__ = ("guardian_id",)

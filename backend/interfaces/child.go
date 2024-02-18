@@ -11,6 +11,11 @@ type childServiceServer struct {
 	interactor *child.Interactor
 }
 
+// GetChildListByNurseryID implements where_child_busv1.ChildServiceServer.
+func (s *childServiceServer) GetChildListByNurseryID(req *pb.GetChildListByNurseryIDRequest, stream pb.ChildService_GetChildListByNurseryIDServer) error {
+	return s.interactor.GetChildListByNurseryID(req, stream)
+}
+
 func NewChildServiceServer(interactor *child.Interactor) pb.ChildServiceServer {
 	return &childServiceServer{interactor}
 }
@@ -28,9 +33,4 @@ func (s *childServiceServer) CreateChild(ctx context.Context, req *pb.CreateChil
 // GetChildListByGuardianID implements where_child_busv1.ChildServiceServer.
 func (s *childServiceServer) GetChildListByGuardianID(ctx context.Context, req *pb.GetChildListByGuardianIDRequest) (*pb.GetChildListByGuardianIDResponse, error) {
 	return s.interactor.GetChildListByGuardianID(ctx, req)
-}
-
-// GetChildListByNurseryID implements where_child_busv1.ChildServiceServer.
-func (s *childServiceServer) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
-	return s.interactor.GetChildListByNurseryID(ctx, req)
 }

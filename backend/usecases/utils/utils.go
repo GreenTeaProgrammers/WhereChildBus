@@ -145,6 +145,16 @@ func ToPbStation(t *ent.Station, morningNextStationID, eveningNextStationID stri
 	}
 }
 
+func ToPbChildPhoto(t *ent.ChildPhoto, photo_data []byte) *pb.ChildPhoto {
+	return &pb.ChildPhoto{
+		Id:        t.ID.String(),
+		ChildId:   t.Edges.Child.ID.String(),
+		PhotoData: photo_data,
+		CreatedAt: &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt: &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
+
 func HashPassword(password string) (string, error) {
 	// 環境変数からペッパーを取得
 	config, _ := config.New()
