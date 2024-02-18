@@ -165,8 +165,8 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 		return nil, err
 	}
 
-	nursery, err := i.entClient.Guardian.Query().
-		Where(guardianRepo.HasNurseryWith(nurseryRepo.HasGuardiansWith(guardianRepo.IDEQ(guardianID)))).
+	nursery, err := i.entClient.Nursery.Query().
+		Where(nurseryRepo.HasGuardiansWith(guardianRepo.ID(guardianID))).
 		Only(ctx)
 
 	if err != nil {
