@@ -23,15 +23,6 @@ class _ChildListPageState extends State<ChildListPage> {
   bool _isLoading = false;
   bool _isFailLoading = false;
 
-  //TODO: 将来的には動的にデータを受け取る。
-  final List<String> image = <String>[
-    "1",
-    "2",
-    "1",
-    "1",
-    "2",
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -66,8 +57,6 @@ class _ChildListPageState extends State<ChildListPage> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       body: pageBody(),
       floatingActionButton: FloatingActionButton(

@@ -1,13 +1,16 @@
 import "dart:developer" as developer;
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/components/util/image_from_byte.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
 import 'package:where_child_bus/service/get_guardians_list_by_child_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class StudentDetailSheet extends StatefulWidget {
   final Child child;
+  final ChildPhoto image;
 
-  const StudentDetailSheet({Key? key, required this.child}) : super(key: key);
+  const StudentDetailSheet({Key? key, required this.child, required this.image})
+      : super(key: key);
 
   @override
   _StudentDetailSheetState createState() => _StudentDetailSheetState();
@@ -109,14 +112,8 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
   }
 
   Widget childFaceImage() {
-    // 画像を受け取る処理を将来的に実装
-    return const SizedBox(
-      width: 100,
-      height: 100,
-      child: Card(
-        color: Colors.grey,
-      ),
-    );
+    return ImageFromBytes(
+        imageData: widget.image.photoData, height: 100, width: 100);
   }
 
   Widget childDetailList() {

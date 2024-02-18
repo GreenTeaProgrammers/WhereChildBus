@@ -51,6 +51,7 @@ class _ChildListState extends State<ChildList> {
         builder: (BuildContext context) {
           return StudentDetailSheet(
             child: widget.children[index],
+            image: widget.images[index],
           );
         });
   }
