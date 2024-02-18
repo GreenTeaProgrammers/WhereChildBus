@@ -28,6 +28,9 @@ jobs:
             --file=./machine_learning/Dockerfile \
             --platform linux/amd64 ./machine_learning
 
+      - name: Authenticate Docker to GCP
+        run: gcloud auth configure-docker
+
       - name: Push Docker image to Artifact Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest
