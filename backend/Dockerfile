@@ -73,5 +73,9 @@ COPY --from=builder /srv/grpc/secrets /app/secrets
 RUN ls -la /app/secrets
 RUN echo "gcp-credentials.json is: $(cat /app/secrets/gcp-credentials.json)"
 
+# /appディレクトリ以下の全てのサブファイルディレクトリも含めた構造を出力
+RUN ls -laR /app
+
+
 # アプリケーションの起動
 ENTRYPOINT ["/app/server"]
