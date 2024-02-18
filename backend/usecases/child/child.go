@@ -147,11 +147,12 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 	}, nil
 }
 
-func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetChildListByGuardianIDRequest) (*pb.GetChildListByGuardianIDResponse, error) {
+func (i *Interactor) GetChildListByGuardianID(req *pb.GetChildListByGuardianIDRequest, stream pb.ChildService_GetChildListByGuardianIDServer) error {
+	ctx := context.Background()
 	guardianID, err := uuid.Parse(req.GuardianId)
 	if err != nil {
 		i.logger.Error("failed to parse guardian ID", "error", err)
-		return nil, err
+		return err
 	}
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
@@ -162,7 +163,7 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 
 	if err != nil {
 		i.logger.Error("failed to get children by guardian ID", "error", err)
-		return nil, err
+		return err
 	}
 
 	nursery, err := i.entClient.Nursery.Query().
@@ -171,12 +172,17 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 
 	if err != nil {
 		i.logger.Error("failed to get nursery by guardian ID", "error", err)
-		return nil, err
+		return err
 	}
 
+	stream.Send(&pb.GetChildListByGuardianIDResponse{
+		ResponseType: &pb.GetChildListByGuardianIDResponse_Children{
+			Children: &pb.Children{
+				Children: children,
+			},
+		},
+	})
 	nurseryID := nursery.ID.String()
-	var childPhotoList []*pb.ChildPhoto
-
 	// 子供ごとに処理
 	for _, child := range children {
 		// データベースから子供の写真のメタデータを取得
@@ -186,7 +192,7 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 
 		if err != nil {
 			i.logger.Error("failed to get child photo list", "error", err)
-			return nil, err
+			return err
 		}
 
 		// 写真メタデータリストをループ
@@ -195,29 +201,25 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 			photo_data, err := i.getPhotoFromGCS(ctx, nurseryID, child.Id, photoMetadata.ID.String())
 			if err != nil {
 				i.logger.Error("failed to get photo from GCS", "error", err)
-				return nil, err
+				return err
 			}
 
-			// 結果リストに追加
-			childPhotoList = append(childPhotoList, &pb.ChildPhoto{
-				ChildId:   child.Id,
-				Id:        photoMetadata.ID.String(), // 修正: GCSから取得した写真のIDではなく、メタデータのIDを使用
-				PhotoData: photo_data,
+			stream.Send(&pb.GetChildListByGuardianIDResponse{
+				ResponseType: &pb.GetChildListByGuardianIDResponse_Photo{
+					Photo: utils.ToPbChildPhoto(photoMetadata, photo_data),
+				},
 			})
 		}
 	}
-
-	return &pb.GetChildListByGuardianIDResponse{
-		Children: children,
-		Photos:   childPhotoList,
-	}, nil
+	return nil
 }
 
-func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
+func (i *Interactor) GetChildListByNurseryID(req *pb.GetChildListByNurseryIDRequest, stream pb.ChildService_GetChildListByNurseryIDServer) error {
+	ctx := context.Background()
 	nurseryID, err := uuid.Parse(req.NurseryId)
 	if err != nil {
 		i.logger.Error("failed to parse nursery ID", "error", err)
-		return nil, err
+		return err
 	}
 
 	// 子供と保育園の間に親を介在させるためのクエリを修正
@@ -230,11 +232,18 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 
 	if err != nil {
 		i.logger.Error("failed to get children by nursery ID", "error", err)
-		return nil, err
+		return err
 	}
 
+	stream.Send(&pb.GetChildListByNurseryIDResponse{
+		ResponseType: &pb.GetChildListByNurseryIDResponse_Children{
+			Children: &pb.Children{
+				Children: children,
+			},
+		},
+	})
+
 	// 子供の写真を取得
-	var photos []*pb.ChildPhoto
 	for _, child := range children {
 		// 子供の写真のメタデータを取得
 		childPhotoRecordList, err := i.entClient.ChildPhoto.Query().
@@ -242,7 +251,7 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 
 		if err != nil {
 			i.logger.Error("failed to get child photo list", "error", err)
-			return nil, err
+			return err
 		}
 
 		// 写真メタデータリストをループ
@@ -251,29 +260,26 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 			photo_data, err := i.getPhotoFromGCS(ctx, nurseryID.String(), child.Id, photoMetadata.ID.String())
 			if err != nil {
 				i.logger.Error("failed to get photo from GCS", "error", err)
-				return nil, err
+				return err
 			}
 
 			// 結果リストに追加
-			photos = append(photos, &pb.ChildPhoto{
-				ChildId:   child.Id,
-				Id:        photoMetadata.ID.String(), // 修正: GCSから取得した写真のIDではなく、メタデータのIDを使用
-				PhotoData: photo_data,
+			stream.Send(&pb.GetChildListByNurseryIDResponse{
+				ResponseType: &pb.GetChildListByNurseryIDResponse_Photo{
+					Photo: utils.ToPbChildPhoto(photoMetadata, photo_data),
+				},
 			})
 		}
 	}
-
-	return &pb.GetChildListByNurseryIDResponse{
-		Children: children,
-		Photos:   photos,
-	}, nil
+	return nil
 }
 
-func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildListByBusIDRequest) (*pb.GetChildListByBusIDResponse, error) {
+func (i *Interactor) GetChildListByBusID(req *pb.GetChildListByBusIDRequest, stream pb.ChildService_GetChildListByBusIDServer) error {
+	ctx := context.Background()
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
 		i.logger.Error("failed to parse bus ID", "error", err)
-		return nil, err
+		return err
 	}
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
@@ -285,43 +291,52 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 
 	if err != nil {
 		i.logger.Error("failed to get children by bus ID", "error", err)
-		return nil, err
+		return err
 	}
 
-	nursery := i.entClient.Nursery.Query().
+	stream.Send(&pb.GetChildListByBusIDResponse{
+		ResponseType: &pb.GetChildListByBusIDResponse_Children{
+			Children: &pb.Children{
+				Children: children,
+			},
+		},
+	})
+
+	nursery, err := i.entClient.Nursery.Query().
 		Where(nurseryRepo.HasBusesWith(busRepo.ID(busID))).
-		OnlyX(ctx)
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get nursery by bus ID", "error", err)
+		return err
+	}
 
 	// 子供の写真を取得
-	var photos []*pb.ChildPhoto
 	for _, child := range children {
 		photoRecordList, err := i.entClient.ChildPhoto.Query().
 			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).All(ctx)
 
 		if err != nil {
 			i.logger.Error("failed to get child photo list", "error", err)
-			return nil, err
+			return err
 		}
 
 		for _, photo := range photoRecordList {
 			photo_data, err := i.getPhotoFromGCS(ctx, nursery.ID.String(), child.Id, photo.ID.String())
 			if err != nil {
 				i.logger.Error("failed to get photo from GCS", "error", err)
-				return nil, err
+				return err
 			}
 
-			photos = append(photos, &pb.ChildPhoto{
-				ChildId:   child.Id,
-				Id:        photo.ID.String(),
-				PhotoData: photo_data,
+			stream.Send(&pb.GetChildListByBusIDResponse{
+				ResponseType: &pb.GetChildListByBusIDResponse_Photo{
+					Photo: utils.ToPbChildPhoto(photo, photo_data),
+				},
 			})
 		}
 	}
 
-	return &pb.GetChildListByBusIDResponse{
-		Children: children,
-		Photos:   photos,
-	}, nil
+	return nil
 }
 
 // getChildList abstracts the common logic for fetching child lists.

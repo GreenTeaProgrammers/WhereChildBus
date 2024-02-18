@@ -185,3 +185,13 @@ func RollbackTx(tx *ent.Tx, logger *slog.Logger) {
 		logger.Error("failed to rollback transaction", "error", err)
 	}
 }
+
+func ToPbChildPhoto(t *ent.ChildPhoto, photo_data []byte) *pb.ChildPhoto {
+	return &pb.ChildPhoto{
+		Id:        t.ID.String(),
+		ChildId:   t.Edges.Child.ID.String(),
+		PhotoData: photo_data,
+		CreatedAt: &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt: &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
