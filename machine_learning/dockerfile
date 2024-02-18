@@ -10,8 +10,9 @@ WORKDIR /machine-learning
 
 # 必要なパッケージのインストール
 COPY ./requirements.lock /machine-learning/
-RUN sed '/-e/d' requirements.lock > requirements.txt && \
-    pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+
+RUN sed '/-e/d' requirements.lock > requirements.txt
+RUN pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 # 必要なライブラリをインストール
 RUN apt-get update && apt-get install -y \
