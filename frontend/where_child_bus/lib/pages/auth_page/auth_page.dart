@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
+import 'package:where_child_bus/util/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
 
 enum NurseryLoginError {
@@ -135,12 +136,11 @@ class _AuthPageState extends State<AuthPage> {
       if (res.success) {
         print(res.success);
         print(res.nursery.name);
+        NurseryData().setNursery(res.nursery);
         Navigator.pushReplacement(
           currentContext,
           MaterialPageRoute(
-            builder: (BuildContext context) => App(
-              nursery: res.nursery,
-            ),
+            builder: (BuildContext context) => App(),
           ),
         );
       } else {
@@ -148,9 +148,11 @@ class _AuthPageState extends State<AuthPage> {
         print('Login failed');
       }
     } catch (e) {
-      setState(() {
-        _loginError = NurseryLoginError.invalidCredentials;
-      });
+      if (mounted) {
+        setState(() {
+          _loginError = NurseryLoginError.invalidCredentials;
+        });
+      }
     }
   }
 

@@ -1,46 +1,30 @@
 syntax = "proto3";
 
 package machine_learning.v1;
+import "where_child_bus/v1/bus.proto";
+import "where_child_bus/v1/resources.proto";
 
 service MachineLearningService {
         rpc Train(TrainRequest) returns (TrainResponse);
-        rpc Pred(stream PredRequest) returns (stream PredResponse);
+        rpc Pred(stream where_child_bus.v1.StreamBusVideoRequest) returns (stream PredResponse);
         rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
-enum BusType {
-        BUS_TYPE_UNSPECIFIED = 0;
-        BUS_TYPE_MORNING = 1;
-        BUS_TYPE_EVENING = 2;
-}
-
-enum VideoType {
-        VIDEO_TYPE_UNSPECIFIED = 0;
-        VIDEO_TYPE_GET_ON = 1;
-        VIDEO_TYPE_GET_OFF = 2;
-}
 
 message TrainRequest {
         string nursery_id = 1;
         string bus_id = 2;
         repeated string child_ids = 3;
-        BusType bus_type = 4;
+        where_child_bus.v1.BusType bus_type = 4;
 }
 
 message TrainResponse {
         bool is_started = 1;
 }
 
-message PredRequest {
-        string bus_id = 1;
-        BusType bus_type = 2;
-        VideoType video_type = 3;
-        bytes video_chunk = 4; // Chunk of video data
-        int64 timestamp = 5; // Unix timestamp
-}
-
 message PredResponse {
-        repeated string child_ids = 1;
+        bool is_detected = 1;
+        repeated string child_ids = 2;
 }
 
 message FaceDetectAndClipRequest {
@@ -51,4 +35,3 @@ message FaceDetectAndClipRequest {
 message FaceDetectAndClipResponse {
         bool is_started = 1;
 }
-

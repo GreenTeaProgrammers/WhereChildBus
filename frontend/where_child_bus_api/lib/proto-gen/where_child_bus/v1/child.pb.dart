@@ -488,6 +488,106 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   $core.List<$8.ChildPhoto> get photos => $_getList(1);
 }
 
+class CheckIsChildInBusRequest extends $pb.GeneratedMessage {
+  factory CheckIsChildInBusRequest({
+    $core.String? childId,
+  }) {
+    final $result = create();
+    if (childId != null) {
+      $result.childId = childId;
+    }
+    return $result;
+  }
+  CheckIsChildInBusRequest._() : super();
+  factory CheckIsChildInBusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CheckIsChildInBusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CheckIsChildInBusRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'childId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CheckIsChildInBusRequest clone() => CheckIsChildInBusRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CheckIsChildInBusRequest copyWith(void Function(CheckIsChildInBusRequest) updates) => super.copyWith((message) => updates(message as CheckIsChildInBusRequest)) as CheckIsChildInBusRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CheckIsChildInBusRequest create() => CheckIsChildInBusRequest._();
+  CheckIsChildInBusRequest createEmptyInstance() => create();
+  static $pb.PbList<CheckIsChildInBusRequest> createRepeated() => $pb.PbList<CheckIsChildInBusRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CheckIsChildInBusRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CheckIsChildInBusRequest>(create);
+  static CheckIsChildInBusRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get childId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set childId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildId() => clearField(1);
+}
+
+class CheckIsChildInBusResponse extends $pb.GeneratedMessage {
+  factory CheckIsChildInBusResponse({
+    $core.bool? isInBus,
+  }) {
+    final $result = create();
+    if (isInBus != null) {
+      $result.isInBus = isInBus;
+    }
+    return $result;
+  }
+  CheckIsChildInBusResponse._() : super();
+  factory CheckIsChildInBusResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CheckIsChildInBusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CheckIsChildInBusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'isInBus')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CheckIsChildInBusResponse clone() => CheckIsChildInBusResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CheckIsChildInBusResponse copyWith(void Function(CheckIsChildInBusResponse) updates) => super.copyWith((message) => updates(message as CheckIsChildInBusResponse)) as CheckIsChildInBusResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CheckIsChildInBusResponse create() => CheckIsChildInBusResponse._();
+  CheckIsChildInBusResponse createEmptyInstance() => create();
+  static $pb.PbList<CheckIsChildInBusResponse> createRepeated() => $pb.PbList<CheckIsChildInBusResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CheckIsChildInBusResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CheckIsChildInBusResponse>(create);
+  static CheckIsChildInBusResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get isInBus => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isInBus($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsInBus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsInBus() => clearField(1);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
