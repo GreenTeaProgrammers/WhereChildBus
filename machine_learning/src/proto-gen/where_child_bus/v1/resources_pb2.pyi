@@ -235,16 +235,18 @@ class BusStationAssociation(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ..., station_id: _Optional[str] = ...) -> None: ...
 
 class ChildPhoto(_message.Message):
-    __slots__ = ("id", "child_id", "created_at", "updated_at")
+    __slots__ = ("id", "child_id", "photo_data", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     CHILD_ID_FIELD_NUMBER: _ClassVar[int]
+    PHOTO_DATA_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
     child_id: str
+    photo_data: bytes
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., photo_data: _Optional[bytes] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class BoardingRecord(_message.Message):
     __slots__ = ("id", "child_id", "bus_id", "is_boarding", "timestamp")

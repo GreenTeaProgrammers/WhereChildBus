@@ -7,6 +7,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
@@ -22,7 +23,7 @@ func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 	return &Interactor{entClient, logger}
 }
 
-func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
+func (i *Interactor) UpdateStationLocationByGuardianID(ctx context.Context, req *pb.UpdateStationLocationByGuardianIdRequest) (*pb.UpdateStationLocationByGuardianIdResponse, error) {
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
 		i.logger.Error("failed to start transaction", "error", err)
@@ -36,13 +37,35 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		return nil, err
 	}
 
-	// ステーションを更新または作成します。
-	station, err := tx.Station.Create().
-		SetGuardianID(guardianID).
-		SetLatitude(req.Latitude).
-		SetLongitude(req.Longitude).
-		Save(ctx)
+	station, err := tx.Station.Query().
+		Where(stationRepo.HasGuardianWith(guardianRepo.ID(guardianID))).
+		Only(ctx)
 
+	if ent.IsNotFound(err) {
+		// エンティティが見つからない場合、新しく作成します。
+		station, err = tx.Station.Create().
+			SetGuardianID(guardianID).
+			SetLatitude(req.Latitude).
+			SetLongitude(req.Longitude).
+			Save(ctx)
+		if err != nil {
+			i.logger.Error("failed to create station", "error", err)
+			return nil, err
+		}
+	} else if err != nil {
+		i.logger.Error("failed to get station", "error", err)
+		return nil, err
+	} else {
+		// エンティティが見つかった場合、更新します。
+		station, err = station.Update().
+			SetLatitude(req.Latitude).
+			SetLongitude(req.Longitude).
+			Save(ctx)
+		if err != nil {
+			i.logger.Error("failed to update station", "error", err)
+			return nil, err
+		}
+	}
 	if err != nil {
 		i.logger.Error("failed to create or update station", "error", err)
 		return nil, err
@@ -61,7 +84,7 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 	}
 
 	// レスポンスを作成します。
-	return &pb.UpdateStationResponse{
+	return &pb.UpdateStationLocationByGuardianIdResponse{
 		Station: utils.ToPbStation(station, morningNextStationID, eveningNextStationID),
 	}, nil
 }
