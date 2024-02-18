@@ -9,6 +9,7 @@ service ChildService {
         rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (GetChildListByNurseryIDResponse);
         rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
         rpc GetChildListByBusID(GetChildListByBusIDRequest) returns (GetChildListByBusIDResponse);
+        rpc CheckIsChildInBus(CheckIsChildInBusRequest) returns (CheckIsChildInBusResponse);
 }
 
 message CreateChildRequest {
@@ -49,4 +50,12 @@ message GetChildListByBusIDRequest {
 message GetChildListByBusIDResponse {
         repeated Child children = 1;
         repeated ChildPhoto photos = 2;
+}
+
+message CheckIsChildInBusRequest {
+        string child_id = 1;
+}
+
+message CheckIsChildInBusResponse {
+        bool is_in_bus = 1;
 }

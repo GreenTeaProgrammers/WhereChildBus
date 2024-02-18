@@ -129,3 +129,28 @@ final $typed_data.Uint8List getChildListByBusIDResponseDescriptor = $convert.bas
     '9jaGlsZF9idXMudjEuQ2hpbGRSCGNoaWxkcmVuEjYKBnBob3RvcxgCIAMoCzIeLndoZXJlX2No'
     'aWxkX2J1cy52MS5DaGlsZFBob3RvUgZwaG90b3M=');
 
+@$core.Deprecated('Use checkIsChildInBusRequestDescriptor instead')
+const CheckIsChildInBusRequest$json = {
+  '1': 'CheckIsChildInBusRequest',
+  '2': [
+    {'1': 'child_id', '3': 1, '4': 1, '5': 9, '10': 'childId'},
+  ],
+};
+
+/// Descriptor for `CheckIsChildInBusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List checkIsChildInBusRequestDescriptor = $convert.base64Decode(
+    'ChhDaGVja0lzQ2hpbGRJbkJ1c1JlcXVlc3QSGQoIY2hpbGRfaWQYASABKAlSB2NoaWxkSWQ=');
+
+@$core.Deprecated('Use checkIsChildInBusResponseDescriptor instead')
+const CheckIsChildInBusResponse$json = {
+  '1': 'CheckIsChildInBusResponse',
+  '2': [
+    {'1': 'is_in_bus', '3': 1, '4': 1, '5': 8, '10': 'isInBus'},
+  ],
+};
+
+/// Descriptor for `CheckIsChildInBusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List checkIsChildInBusResponseDescriptor = $convert.base64Decode(
+    'ChlDaGVja0lzQ2hpbGRJbkJ1c1Jlc3BvbnNlEhoKCWlzX2luX2J1cxgBIAEoCFIHaXNJbkJ1cw'
+    '==');
+
