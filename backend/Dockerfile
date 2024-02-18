@@ -59,7 +59,7 @@ RUN apk --no-cache add ca-certificates
 
 # ビルドステージからバイナリと.envファイルをコピー
 COPY --from=builder /go/bin/server /server
-COPY --from=builder /srv/grpc/.env /
+COPY --from=builder /srv/grpc/.env ./.env
 COPY --from=builder /srv/grpc/secrets /secrets
 
 # アプリケーションの起動
