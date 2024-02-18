@@ -100,3 +100,55 @@ final $typed_data.Uint8List getGuardianListByBusIdResponseDescriptor = $convert.
     'Ch5HZXRHdWFyZGlhbkxpc3RCeUJ1c0lkUmVzcG9uc2USQgoJZ3VhcmRpYW5zGAEgAygLMiQud2'
     'hlcmVfY2hpbGRfYnVzLnYxLkd1YXJkaWFuUmVzcG9uc2VSCWd1YXJkaWFucw==');
 
+@$core.Deprecated('Use getGuardianByChildIdRequestDescriptor instead')
+const GetGuardianByChildIdRequest$json = {
+  '1': 'GetGuardianByChildIdRequest',
+  '2': [
+    {'1': 'child_id', '3': 1, '4': 1, '5': 9, '10': 'childId'},
+  ],
+};
+
+/// Descriptor for `GetGuardianByChildIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGuardianByChildIdRequestDescriptor = $convert.base64Decode(
+    'ChtHZXRHdWFyZGlhbkJ5Q2hpbGRJZFJlcXVlc3QSGQoIY2hpbGRfaWQYASABKAlSB2NoaWxkSW'
+    'Q=');
+
+@$core.Deprecated('Use getGuardianByChildIdResponseDescriptor instead')
+const GetGuardianByChildIdResponse$json = {
+  '1': 'GetGuardianByChildIdResponse',
+  '2': [
+    {'1': 'guardian', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardian'},
+  ],
+};
+
+/// Descriptor for `GetGuardianByChildIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGuardianByChildIdResponseDescriptor = $convert.base64Decode(
+    'ChxHZXRHdWFyZGlhbkJ5Q2hpbGRJZFJlc3BvbnNlEkAKCGd1YXJkaWFuGAEgASgLMiQud2hlcm'
+    'VfY2hpbGRfYnVzLnYxLkd1YXJkaWFuUmVzcG9uc2VSCGd1YXJkaWFu');
+
+@$core.Deprecated('Use getGuardianListByNurseryIdRequestDescriptor instead')
+const GetGuardianListByNurseryIdRequest$json = {
+  '1': 'GetGuardianListByNurseryIdRequest',
+  '2': [
+    {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
+  ],
+};
+
+/// Descriptor for `GetGuardianListByNurseryIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGuardianListByNurseryIdRequestDescriptor = $convert.base64Decode(
+    'CiFHZXRHdWFyZGlhbkxpc3RCeU51cnNlcnlJZFJlcXVlc3QSHQoKbnVyc2VyeV9pZBgBIAEoCV'
+    'IJbnVyc2VyeUlk');
+
+@$core.Deprecated('Use getGuardianListByNurseryIdResponseDescriptor instead')
+const GetGuardianListByNurseryIdResponse$json = {
+  '1': 'GetGuardianListByNurseryIdResponse',
+  '2': [
+    {'1': 'guardians', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardians'},
+  ],
+};
+
+/// Descriptor for `GetGuardianListByNurseryIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGuardianListByNurseryIdResponseDescriptor = $convert.base64Decode(
+    'CiJHZXRHdWFyZGlhbkxpc3RCeU51cnNlcnlJZFJlc3BvbnNlEkIKCWd1YXJkaWFucxgBIAMoCz'
+    'IkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUglndWFyZGlhbnM=');
+

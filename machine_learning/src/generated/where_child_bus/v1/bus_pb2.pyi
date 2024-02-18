@@ -39,12 +39,12 @@ class GetBusListByNurseryIdResponse(_message.Message):
     def __init__(self, buses: _Optional[_Iterable[_Union[_resources_pb2.Bus, _Mapping]]] = ...) -> None: ...
 
 class ChangeBusStatusRequest(_message.Message):
-    __slots__ = ("bus_id", "status")
+    __slots__ = ("bus_id", "bus_status")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
-    STATUS_FIELD_NUMBER: _ClassVar[int]
+    BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
-    status: _resources_pb2.Status
-    def __init__(self, bus_id: _Optional[str] = ..., status: _Optional[_Union[_resources_pb2.Status, str]] = ...) -> None: ...
+    bus_status: _resources_pb2.BusStatus
+    def __init__(self, bus_id: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...) -> None: ...
 
 class ChangeBusStatusResponse(_message.Message):
     __slots__ = ("bus",)
@@ -53,16 +53,14 @@ class ChangeBusStatusResponse(_message.Message):
     def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
 
 class SendLocationContinuousRequest(_message.Message):
-    __slots__ = ("bus_id", "latitude", "longitude", "timestamp")
+    __slots__ = ("bus_id", "latitude", "longitude")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
-    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     latitude: float
     longitude: float
-    timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ...) -> None: ...
 
 class SendLocationContinuousResponse(_message.Message):
     __slots__ = ()
@@ -75,31 +73,33 @@ class TrackBusContinuousRequest(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
 
 class TrackBusContinuousResponse(_message.Message):
-    __slots__ = ("bus_id", "latitude", "longitude", "timestamp")
+    __slots__ = ("bus_id", "latitude", "longitude")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
-    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     latitude: float
     longitude: float
-    timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ...) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
-    __slots__ = ("bus_id", "bus_type", "video_type", "video_chunk", "timestamp")
+    __slots__ = ("bus_id", "nursery_id", "bus_type", "vehicle_event", "video_chunk")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
-    VIDEO_TYPE_FIELD_NUMBER: _ClassVar[int]
+    VEHICLE_EVENT_FIELD_NUMBER: _ClassVar[int]
     VIDEO_CHUNK_FIELD_NUMBER: _ClassVar[int]
-    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
+    nursery_id: str
     bus_type: _resources_pb2.BusType
-    video_type: _resources_pb2.VideoType
-    video_chunk: bytes
-    timestamp: int
-    def __init__(self, bus_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., video_type: _Optional[_Union[_resources_pb2.VideoType, str]] = ..., video_chunk: _Optional[bytes] = ..., timestamp: _Optional[int] = ...) -> None: ...
+    vehicle_event: _resources_pb2.VehicleEvent
+    video_chunk: _containers.RepeatedScalarFieldContainer[bytes]
+    def __init__(self, bus_id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ..., video_chunk: _Optional[_Iterable[bytes]] = ...) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+    __slots__ = ("is_detected", "children")
+    IS_DETECTED_FIELD_NUMBER: _ClassVar[int]
+    CHILDREN_FIELD_NUMBER: _ClassVar[int]
+    is_detected: bool
+    children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
+    def __init__(self, is_detected: bool = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...) -> None: ...

@@ -690,7 +690,7 @@ class Bus extends $pb.GeneratedMessage {
     $core.String? nurseryId,
     $core.String? name,
     $core.String? plateNumber,
-    Status? status,
+    BusStatus? busStatus,
     $core.double? latitude,
     $core.double? longitude,
     $core.bool? enableFaceRecognition,
@@ -710,8 +710,8 @@ class Bus extends $pb.GeneratedMessage {
     if (plateNumber != null) {
       $result.plateNumber = plateNumber;
     }
-    if (status != null) {
-      $result.status = status;
+    if (busStatus != null) {
+      $result.busStatus = busStatus;
     }
     if (latitude != null) {
       $result.latitude = latitude;
@@ -739,7 +739,7 @@ class Bus extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'plateNumber')
-    ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
+    ..e<BusStatus>(5, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: BusStatus.valueOf, enumValues: BusStatus.values)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..aOB(8, _omitFieldNames ? '' : 'enableFaceRecognition')
@@ -806,13 +806,13 @@ class Bus extends $pb.GeneratedMessage {
   void clearPlateNumber() => clearField(4);
 
   @$pb.TagNumber(5)
-  Status get status => $_getN(4);
+  BusStatus get busStatus => $_getN(4);
   @$pb.TagNumber(5)
-  set status(Status v) { setField(5, v); }
+  set busStatus(BusStatus v) { setField(5, v); }
   @$pb.TagNumber(5)
-  $core.bool hasStatus() => $_has(4);
+  $core.bool hasBusStatus() => $_has(4);
   @$pb.TagNumber(5)
-  void clearStatus() => clearField(5);
+  void clearBusStatus() => clearField(5);
 
   /// 緯度経度
   @$pb.TagNumber(6)
@@ -1441,7 +1441,7 @@ class ChildPhoto extends $pb.GeneratedMessage {
   factory ChildPhoto({
     $core.String? id,
     $core.String? childId,
-    $core.List<$core.int>? photo,
+    $core.List<$core.int>? photoData,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -1452,8 +1452,8 @@ class ChildPhoto extends $pb.GeneratedMessage {
     if (childId != null) {
       $result.childId = childId;
     }
-    if (photo != null) {
-      $result.photo = photo;
+    if (photoData != null) {
+      $result.photoData = photoData;
     }
     if (createdAt != null) {
       $result.createdAt = createdAt;
@@ -1470,7 +1470,7 @@ class ChildPhoto extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChildPhoto', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'childId')
-    ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'photo', $pb.PbFieldType.OY)
+    ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'photoData', $pb.PbFieldType.OY)
     ..aOM<$7.Timestamp>(4, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
     ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
@@ -1516,13 +1516,13 @@ class ChildPhoto extends $pb.GeneratedMessage {
   void clearChildId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.int> get photo => $_getN(2);
+  $core.List<$core.int> get photoData => $_getN(2);
   @$pb.TagNumber(3)
-  set photo($core.List<$core.int> v) { $_setBytes(2, v); }
+  set photoData($core.List<$core.int> v) { $_setBytes(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasPhoto() => $_has(2);
+  $core.bool hasPhotoData() => $_has(2);
   @$pb.TagNumber(3)
-  void clearPhoto() => clearField(3);
+  void clearPhotoData() => clearField(3);
 
   @$pb.TagNumber(4)
   $7.Timestamp get createdAt => $_getN(3);

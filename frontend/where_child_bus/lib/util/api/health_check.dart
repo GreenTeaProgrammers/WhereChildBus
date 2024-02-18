@@ -10,7 +10,7 @@ Future<PingResponse> serviceHealthCheck() async {
     port: appConfig.grpcPort,
   );
 
-  final grpcClient = HealthCheckServiceClient(channel,
+  final grpcClient = HealthcheckServiceClient(channel,
       options: CallOptions(timeout: const Duration(seconds: 60)));
 
   try {

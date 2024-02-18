@@ -8,21 +8,17 @@ import (
 )
 
 type Config struct {
-	DSN                                string `envconfig:"DSN" required:"true"`
-	DBUser                             string `envconfig:"DB_USER_NAME" required:"true"`
-	DBPassword                         string `envconfig:"DB_PASSWORD" required:"true"`
-	DBAddress                          string `envconfig:"DB_ADDR" required:"true"`
-	DBName                             string `envconfig:"DB_NAME" required:"true"`
-	GrpcPort                           string `envconfig:"PORT" default:"50051"`
-	ModeDev                            bool   `envconfig:"MODE_DEV" default:"true"`
-	GoogleApplicationCredentials       string `envconfig:"GOOGLE_APPLICATION_CREDENTIALS" required:"true"`
-	StorageBucketName                  string `envconfig:"STORAGE_BUCKET_NAME" required:"true"`
-	PasswordPepper                     string `envconfig:"PASSWORD_PEPPER" required:"true"`
-	EndPointPingRequest                string `envconfig:"ENDPOINT_PING_REQUEST" required:"true"`
-	EndPointCreateChildNotification    string `envconfig:"ENDPOINT_CREATE_CHILD_NOTIFICATION" required:"true"`
-	EndPointCreateBusNotification      string `envconfig:"ENDPOINT_CREATE_BUS_NOTIFICATION" required:"true"`
-	EndPointChildGetOnBusNotification  string `envconfig:"ENDPOINT_CHILD_GET_ON_BUS_NOTIFICATION" required:"true"`
-	EndPointChildGetOffBusNotification string `envconfig:"ENDPOINT_CHILD_GET_OFF_BUS_NOTIFICATION" required:"true"`
+	DSN                          string `envconfig:"DSN" required:"true"`
+	DBUser                       string `envconfig:"DB_USER_NAME" required:"true"`
+	DBPassword                   string `envconfig:"DB_PASSWORD" required:"true"`
+	DBAddress                    string `envconfig:"DB_ADDR" required:"true"`
+	DBName                       string `envconfig:"DB_NAME" required:"true"`
+	GrpcPort                     string `envconfig:"PORT" default:"50051"`
+	ModeDev                      bool   `envconfig:"MODE_DEV" default:"true"`
+	GoogleApplicationCredentials string `envconfig:"GOOGLE_APPLICATION_CREDENTIALS" required:"true"`
+	StorageBucketName            string `envconfig:"STORAGE_BUCKET_NAME" required:"true"`
+	PasswordPepper               string `envconfig:"PASSWORD_PEPPER" required:"true"`
+	MLAddress                    string `envconfig:"ML_ADDR" required:"true"`
 }
 
 func New() (*Config, error) {

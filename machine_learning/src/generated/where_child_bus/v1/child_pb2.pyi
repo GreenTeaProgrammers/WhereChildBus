@@ -69,3 +69,15 @@ class GetChildListByBusIDResponse(_message.Message):
     children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
     photos: _containers.RepeatedCompositeFieldContainer[_resources_pb2.ChildPhoto]
     def __init__(self, children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ..., photos: _Optional[_Iterable[_Union[_resources_pb2.ChildPhoto, _Mapping]]] = ...) -> None: ...
+
+class CheckIsChildInBusRequest(_message.Message):
+    __slots__ = ("child_id",)
+    CHILD_ID_FIELD_NUMBER: _ClassVar[int]
+    child_id: str
+    def __init__(self, child_id: _Optional[str] = ...) -> None: ...
+
+class CheckIsChildInBusResponse(_message.Message):
+    __slots__ = ("is_in_bus",)
+    IS_IN_BUS_FIELD_NUMBER: _ClassVar[int]
+    is_in_bus: bool
+    def __init__(self, is_in_bus: bool = ...) -> None: ...

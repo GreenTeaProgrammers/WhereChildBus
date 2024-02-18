@@ -6,18 +6,18 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+class BusStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    STATUS_UNSPECIFIED: _ClassVar[Status]
-    STATUS_STOPPED: _ClassVar[Status]
-    STATUS_RUNNING: _ClassVar[Status]
-    STATUS_MAINTEINANCE: _ClassVar[Status]
+    BUS_STATUS_UNSPECIFIED: _ClassVar[BusStatus]
+    BUS_STATUS_STOPPED: _ClassVar[BusStatus]
+    BUS_STATUS_RUNNING: _ClassVar[BusStatus]
+    BUS_STATUS_MAINTENANCE: _ClassVar[BusStatus]
 
-class VideoType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+class VehicleEvent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    VIDEO_TYPE_UNSPECIFIED: _ClassVar[VideoType]
-    VIDEO_TYPE_GET_ON: _ClassVar[VideoType]
-    VIDEO_TYPE_GET_OFF: _ClassVar[VideoType]
+    VEHICLE_EVENT_UNSPECIFIED: _ClassVar[VehicleEvent]
+    VEHICLE_EVENT_GET_ON: _ClassVar[VehicleEvent]
+    VEHICLE_EVENT_GET_OFF: _ClassVar[VehicleEvent]
 
 class Sex(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -31,13 +31,13 @@ class BusType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     BUS_TYPE_UNSPECIFIED: _ClassVar[BusType]
     BUS_TYPE_MORNING: _ClassVar[BusType]
     BUS_TYPE_EVENING: _ClassVar[BusType]
-STATUS_UNSPECIFIED: Status
-STATUS_STOPPED: Status
-STATUS_RUNNING: Status
-STATUS_MAINTEINANCE: Status
-VIDEO_TYPE_UNSPECIFIED: VideoType
-VIDEO_TYPE_GET_ON: VideoType
-VIDEO_TYPE_GET_OFF: VideoType
+BUS_STATUS_UNSPECIFIED: BusStatus
+BUS_STATUS_STOPPED: BusStatus
+BUS_STATUS_RUNNING: BusStatus
+BUS_STATUS_MAINTENANCE: BusStatus
+VEHICLE_EVENT_UNSPECIFIED: VehicleEvent
+VEHICLE_EVENT_GET_ON: VehicleEvent
+VEHICLE_EVENT_GET_OFF: VehicleEvent
 SEX_UNSPECIFIED: Sex
 SEX_MAN: Sex
 SEX_WOMAN: Sex
@@ -135,12 +135,12 @@ class GuardianResponse(_message.Message):
     def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., email: _Optional[str] = ..., phone_number: _Optional[str] = ..., is_use_morning_bus: bool = ..., is_use_evening_bus: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Bus(_message.Message):
-    __slots__ = ("id", "nursery_id", "name", "plate_number", "status", "latitude", "longitude", "enable_face_recognition", "created_at", "updated_at")
+    __slots__ = ("id", "nursery_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    STATUS_FIELD_NUMBER: _ClassVar[int]
+    BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
@@ -150,13 +150,13 @@ class Bus(_message.Message):
     nursery_id: str
     name: str
     plate_number: str
-    status: Status
+    bus_status: BusStatus
     latitude: float
     longitude: float
     enable_face_recognition: bool
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., status: _Optional[_Union[Status, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Child(_message.Message):
     __slots__ = ("id", "nursery_id", "guardian_id", "name", "age", "sex", "check_for_missing_items", "has_bag", "has_lunch_box", "has_water_bottle", "has_umbrella", "has_other", "created_at", "updated_at")
@@ -235,18 +235,18 @@ class BusStationAssociation(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ..., station_id: _Optional[str] = ...) -> None: ...
 
 class ChildPhoto(_message.Message):
-    __slots__ = ("id", "child_id", "photo", "created_at", "updated_at")
+    __slots__ = ("id", "child_id", "photo_data", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     CHILD_ID_FIELD_NUMBER: _ClassVar[int]
-    PHOTO_FIELD_NUMBER: _ClassVar[int]
+    PHOTO_DATA_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
     child_id: str
-    photo: bytes
+    photo_data: bytes
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., photo: _Optional[bytes] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., photo_data: _Optional[bytes] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class BoardingRecord(_message.Message):
     __slots__ = ("id", "child_id", "bus_id", "is_boarding", "timestamp")

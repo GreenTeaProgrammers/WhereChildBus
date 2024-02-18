@@ -3,6 +3,7 @@ package grpc_server
 import (
 	"cloud.google.com/go/storage"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 	"golang.org/x/exp/slog"
 )
 
@@ -12,6 +13,7 @@ type option struct {
 	storageClient *storage.Client
 	bucketName    string
 	useReflection bool
+	MLClient      mlv1.MachineLearningServiceClient
 }
 
 func defaultOption() *option {
@@ -50,5 +52,11 @@ func WithStorageClient(s *storage.Client) optionFunc {
 func WithBucketName(b string) optionFunc {
 	return func(o *option) {
 		o.bucketName = b
+	}
+}
+
+func WithMLClient(c mlv1.MachineLearningServiceClient) optionFunc {
+	return func(o *option) {
+		o.MLClient = c
 	}
 }
