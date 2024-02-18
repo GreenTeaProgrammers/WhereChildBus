@@ -129,8 +129,8 @@ class _BusListPageState extends State<BusListPage> {
             },
             child: Row(
               children: [
-                busPhoto(bus.status),
-                busNameAndDescription(bus.name, bus.status),
+                busPhoto(bus.busStatus),
+                busNameAndDescription(bus.name, bus.busStatus),
               ],
             ),
           ),
@@ -139,9 +139,9 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busPhoto(Status busStatus) {
+  Widget busPhoto(BusStatus busStatus) {
     late String imagePath;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       imagePath = "assets/images/bus_operating.png";
     } else {
       imagePath = "assets/images/bus_not_operating.png";
@@ -170,11 +170,11 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busDescription(Status busStatus) {
+  Widget busDescription(BusStatus busStatus) {
     late String description;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       description = "運行中";
-    } else if (busStatus == Status.STATUS_MAINTEINANCE) {
+    } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
       description = "メンテナンス中";
     } else {
       description = "停止中";
@@ -190,7 +190,7 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busNameAndDescription(String name, Status busStatus) {
+  Widget busNameAndDescription(String name, BusStatus busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
