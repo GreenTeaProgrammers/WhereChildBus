@@ -40,3 +40,11 @@ message GetGuardianListByBusIdRequest {
 message GetGuardianListByBusIdResponse {
         repeated GuardianResponse guardians = 1;
 }
+
+message GetGuardianByChildIdRequest {
+        string child_id = 1;
+}
+
+message GetGuardianByChildIdResponse {
+        GuardianResponse guardian = 1;
+}
