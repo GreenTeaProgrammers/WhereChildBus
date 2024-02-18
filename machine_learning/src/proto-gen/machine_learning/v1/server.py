@@ -21,6 +21,9 @@ from face_detect_model.DetectFaceAndClip.detectFaceAndClip import (
 from face_detect_model.main import (
     main as train_fn,
 )
+from face_detect_model.pred import (
+    main as pred_fn,
+)
 
 
 class HealthCheckServiceServer(
@@ -37,10 +40,24 @@ class MachineLearningServiceServicer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
     # TODO: implement Predict
-    def Predict(self, request: machine_learning_pb2.PredRequest, context):
-        pass
+    def Predict(self, request_iterator: machine_learning_pb2.PredRequest, context):
+        for req in request_iterator:
+            parser = argparse.ArgumentParser()
+            args = parser.parse_args()
 
-    # TODO: implement Train
+            args.bus_id = req.bus_id
+            args.bus_type = req.bus_type
+            args.video_type = req.video_type
+            args.video_chunk = req.video_chunk
+            args.timestamp = req.timestamp
+
+            try:
+                child_ids = pred_fn(args)
+            except Exception as e:
+                logging.error(e)
+                child_ids = []
+            yield machine_learning_pb2.PredResponse(child_ids=child_ids)
+
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
         parser = argparse.ArgumentParser()
         args = parser.parse_args()
