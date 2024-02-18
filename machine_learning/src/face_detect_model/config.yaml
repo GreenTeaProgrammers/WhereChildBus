@@ -16,17 +16,17 @@ face_detect:
   clip_size: { width: 100, height: 100 }
 dataset:
   augmentation:
-    num_variations: 15
+    num_variations: 30
   ratio:
     train: 0.8
     valid: 0.1
     test: 0.1
 train:
-  epoch: 3
+  epoch: 5
   learning_rate: 0.0005
   train_batch_size: 1
   valid_batch_size: 1
   test_batch_size: 1
-  validate_interval: 3
+  validate_interval: 6
   save_model_dir: "src/face_detect_model/pickle/mock_model/"
   test_model_path: "src/face_detect_model/pickle/mock_model/best_model.pth"
