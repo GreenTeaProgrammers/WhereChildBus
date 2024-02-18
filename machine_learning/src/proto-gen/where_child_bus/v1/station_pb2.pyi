@@ -6,7 +6,7 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class UpdateStationRequest(_message.Message):
+class UpdateStationLocationByGuardianIdRequest(_message.Message):
     __slots__ = ("guardian_id", "longitude", "latitude")
     GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
@@ -16,7 +16,7 @@ class UpdateStationRequest(_message.Message):
     latitude: float
     def __init__(self, guardian_id: _Optional[str] = ..., longitude: _Optional[float] = ..., latitude: _Optional[float] = ...) -> None: ...
 
-class UpdateStationResponse(_message.Message):
+class UpdateStationLocationByGuardianIdResponse(_message.Message):
     __slots__ = ("station",)
     STATION_FIELD_NUMBER: _ClassVar[int]
     station: _resources_pb2.Station
