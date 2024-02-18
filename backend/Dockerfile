@@ -24,8 +24,6 @@ RUN echo "DSN=$DSN" > .env \
 
 RUN go mod download
 
-RUN go mod download
-
 ARG VERS="3.11.4"
 ARG ARCH="linux-x86_64"
 
