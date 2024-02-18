@@ -123,6 +123,7 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget childItemList(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.14,
       child: Wrap(
         direction: Axis.horizontal,
         alignment: WrapAlignment.spaceBetween,
@@ -139,25 +140,35 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   }
 
   Widget itemText(String itemName, bool hasItem) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.24,
-        child: Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                  child: hasItem
-                      ? const Icon(Icons.check, color: Colors.green)
-                      : const Icon(Icons.error_outline, color: Colors.red),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  itemName,
-                  style: statusFieldTextStyle(hasItem),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            )));
+    return Material(
+        color: hasItem ? Colors.green[100] : Colors.red[100],
+        borderRadius: BorderRadius.circular(5),
+        elevation: 5,
+        child: InkWell(
+            onTap: () {
+              //TODO: ここにアイテムの所持状況を変更する処理を追加
+            },
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.24,
+                child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10.0, bottom: 10.0, left: 8.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                          child: hasItem
+                              ? const Icon(Icons.check, color: Colors.green)
+                              : const Icon(Icons.error_outline,
+                                  color: Colors.red),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          itemName,
+                          style: statusFieldTextStyle(hasItem),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )))));
   }
 }
