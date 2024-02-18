@@ -7,6 +7,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
@@ -172,4 +173,39 @@ func (i *Interactor) GetGuardianListByBusID(ctx context.Context, req *pb.GetGuar
 	}
 
 	return &pb.GetGuardianListByBusIdResponse{Guardians: pbGuardians}, nil
+}
+
+func (i *Interactor) GetGuardianByChildID(ctx context.Context, req *pb.GetGuardianByChildIdRequest) (*pb.GetGuardianByChildIdResponse, error) {
+	childID, err := uuid.Parse(req.ChildId)
+	if err != nil {
+		i.logger.Error("failed to parse child ID", "error", err)
+		return nil, err
+	}
+	// トランザクションを開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	// Guardianを取得
+	guardians, err := tx.Guardian.Query().
+		Where(guardianRepo.HasChildrenWith(childRepo.ID(childID))).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get guardians by child ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	pbGuardian := utils.ToPbGuardianResponse(guardians)
+	return &pb.GetGuardianByChildIdResponse{Guardian: pbGuardian}, nil
 }
