@@ -93,8 +93,8 @@ class StreamBusVideoRequest(_message.Message):
     nursery_id: str
     bus_type: _resources_pb2.BusType
     vehicle_event: _resources_pb2.VehicleEvent
-    video_chunk: bytes
-    def __init__(self, bus_id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ..., video_chunk: _Optional[bytes] = ...) -> None: ...
+    video_chunk: _containers.RepeatedScalarFieldContainer[bytes]
+    def __init__(self, bus_id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ..., video_chunk: _Optional[_Iterable[bytes]] = ...) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
     __slots__ = ("is_detected", "children")

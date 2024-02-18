@@ -617,7 +617,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     $core.String? nurseryId,
     $8.BusType? busType,
     $8.VehicleEvent? vehicleEvent,
-    $core.List<$core.int>? videoChunk,
+    $core.Iterable<$core.List<$core.int>>? videoChunk,
   }) {
     final $result = create();
     if (busId != null) {
@@ -633,7 +633,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
       $result.vehicleEvent = vehicleEvent;
     }
     if (videoChunk != null) {
-      $result.videoChunk = videoChunk;
+      $result.videoChunk.addAll(videoChunk);
     }
     return $result;
   }
@@ -646,7 +646,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..e<$8.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
     ..e<$8.VehicleEvent>(4, _omitFieldNames ? '' : 'vehicleEvent', $pb.PbFieldType.OE, defaultOrMaker: $8.VehicleEvent.VEHICLE_EVENT_UNSPECIFIED, valueOf: $8.VehicleEvent.valueOf, enumValues: $8.VehicleEvent.values)
-    ..a<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.OY)
+    ..p<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.PY)
     ..hasRequiredFields = false
   ;
 
@@ -708,13 +708,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
   void clearVehicleEvent() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<$core.int> get videoChunk => $_getN(4);
-  @$pb.TagNumber(5)
-  set videoChunk($core.List<$core.int> v) { $_setBytes(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasVideoChunk() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearVideoChunk() => clearField(5);
+  $core.List<$core.List<$core.int>> get videoChunk => $_getList(4);
 }
 
 class StreamBusVideoResponse extends $pb.GeneratedMessage {

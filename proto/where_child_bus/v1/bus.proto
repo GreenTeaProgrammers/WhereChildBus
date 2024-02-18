@@ -69,7 +69,7 @@ message StreamBusVideoRequest {
         string nursery_id = 2;
         BusType bus_type = 3;
         VehicleEvent vehicle_event = 4;
-        bytes video_chunk = 5; // Chunk of video data
+        repeated bytes video_chunk = 5; // Chunk of video data
 }
 
 message StreamBusVideoResponse {
