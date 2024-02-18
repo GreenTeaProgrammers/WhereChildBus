@@ -19,6 +19,8 @@ ARG ML_ADDR
 
 ARG INSIDE_OF_CREDENTIALS
 
+RUN echo "Port is: $PORT" && echo "Mode is: $MODE_DEV"
+
 
 # .env ファイルを生成
 RUN echo "DSN=$DSN" > .env \
