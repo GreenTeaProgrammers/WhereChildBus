@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import '../styles/styles.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class DailyRecordBody extends StatefulWidget {
-  final String childName;
+  final Child child;
 
-  const DailyRecordBody({super.key, required this.childName});
+  const DailyRecordBody({super.key, required this.child});
 
   @override
   State<DailyRecordBody> createState() => _DailyRecordBody();
 }
 
 class _DailyRecordBody extends State<DailyRecordBody> {
-  //TODO: 将来的にChild型を受け取る
-  var isBoarding = true;
-  var hasBag = false;
-  var hasLunchBox = true;
-  var hasWaterBottle = true;
-  var hasUmbrella = true;
+  //TODO: 将来的にAPIからデータを受け取る
+  var isBoarding = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,7 @@ class _DailyRecordBody extends State<DailyRecordBody> {
         Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 10),
             child: Text(
-              widget.childName,
+              widget.child.name,
               style: TextStyle(fontSize: 24),
               textAlign: TextAlign.center,
             )),
@@ -106,10 +103,10 @@ class _DailyRecordBody extends State<DailyRecordBody> {
         runAlignment: WrapAlignment.spaceBetween,
         runSpacing: 4.0,
         children: [
-          itemText("かばん", hasBag),
-          itemText("お弁当", hasLunchBox),
-          itemText("水筒", hasWaterBottle),
-          itemText("傘", hasUmbrella),
+          itemText("かばん", widget.child.hasBag),
+          itemText("お弁当", widget.child.hasLunchBox),
+          itemText("水筒", widget.child.hasWaterBottle),
+          itemText("傘", widget.child.hasUmbrella),
         ],
       ),
     );

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/components/daily_record_body.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class DailyRecordSlider extends StatefulWidget {
-  final List<String> childNames;
+  final List<Child> children;
 
-  const DailyRecordSlider({super.key, required this.childNames});
+  const DailyRecordSlider({super.key, required this.children});
 
   @override
   State<DailyRecordSlider> createState() => _DailyRecordSlider();
@@ -16,8 +17,8 @@ class _DailyRecordSlider extends State<DailyRecordSlider> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> recordList = widget.childNames.map((childName) {
-      return DailyRecordBody(childName: childName);
+    List<Widget> recordList = widget.children.map((child) {
+      return DailyRecordBody(child: child);
     }).toList();
 
     return Column(

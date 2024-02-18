@@ -23,7 +23,9 @@ class _AppState extends State<App> {
         title: Text(['日々の記録', '地図', '乗車確認'][_selectedIndex]),
       ),
       body: [
-        const DailyPage(),
+        DailyPage(
+          guardian: widget.guardian,
+        ),
         const MapPage(),
         const CheckPage()
       ][_selectedIndex],
