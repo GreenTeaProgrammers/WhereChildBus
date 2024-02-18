@@ -14,6 +14,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	boardingRecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
@@ -144,6 +145,34 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 
 	return &pb.CreateChildResponse{
 		Child: utils.ToPbChild(child),
+	}, nil
+}
+
+func (i *Interactor) CheckIsChildInBus(ctx context.Context, req *pb.CheckIsChildInBusRequest) (*pb.CheckIsChildInBusResponse, error) {
+	childID, err := uuid.Parse(req.ChildId)
+	if err != nil {
+		i.logger.Error("failed to parse child ID", "error", err)
+		return nil, err
+
+	}
+
+	boardingRecord, err := i.entClient.BoardingRecord.Query().
+		Where(boardingRecordRepo.HasChildWith(childRepo.IDEQ(childID))).
+		Only(ctx)
+
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return &pb.CheckIsChildInBusResponse{
+				IsInBus: false,
+			}, nil
+		} else {
+			i.logger.Error("failed to check if child is in bus", "error", err)
+			return nil, err
+		}
+	}
+
+	return &pb.CheckIsChildInBusResponse{
+		IsInBus: boardingRecord.IsBoarding,
 	}, nil
 }
 

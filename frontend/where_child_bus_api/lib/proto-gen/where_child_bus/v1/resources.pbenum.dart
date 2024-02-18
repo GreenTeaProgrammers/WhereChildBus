@@ -13,40 +13,40 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class Status extends $pb.ProtobufEnum {
-  static const Status STATUS_UNSPECIFIED = Status._(0, _omitEnumNames ? '' : 'STATUS_UNSPECIFIED');
-  static const Status STATUS_STOPPED = Status._(1, _omitEnumNames ? '' : 'STATUS_STOPPED');
-  static const Status STATUS_RUNNING = Status._(2, _omitEnumNames ? '' : 'STATUS_RUNNING');
-  static const Status STATUS_MAINTEINANCE = Status._(3, _omitEnumNames ? '' : 'STATUS_MAINTEINANCE');
+class BusStatus extends $pb.ProtobufEnum {
+  static const BusStatus BUS_STATUS_UNSPECIFIED = BusStatus._(0, _omitEnumNames ? '' : 'BUS_STATUS_UNSPECIFIED');
+  static const BusStatus BUS_STATUS_STOPPED = BusStatus._(1, _omitEnumNames ? '' : 'BUS_STATUS_STOPPED');
+  static const BusStatus BUS_STATUS_RUNNING = BusStatus._(2, _omitEnumNames ? '' : 'BUS_STATUS_RUNNING');
+  static const BusStatus BUS_STATUS_MAINTENANCE = BusStatus._(3, _omitEnumNames ? '' : 'BUS_STATUS_MAINTENANCE');
 
-  static const $core.List<Status> values = <Status> [
-    STATUS_UNSPECIFIED,
-    STATUS_STOPPED,
-    STATUS_RUNNING,
-    STATUS_MAINTEINANCE,
+  static const $core.List<BusStatus> values = <BusStatus> [
+    BUS_STATUS_UNSPECIFIED,
+    BUS_STATUS_STOPPED,
+    BUS_STATUS_RUNNING,
+    BUS_STATUS_MAINTENANCE,
   ];
 
-  static final $core.Map<$core.int, Status> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Status? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, BusStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static BusStatus? valueOf($core.int value) => _byValue[value];
 
-  const Status._($core.int v, $core.String n) : super(v, n);
+  const BusStatus._($core.int v, $core.String n) : super(v, n);
 }
 
-class VideoType extends $pb.ProtobufEnum {
-  static const VideoType VIDEO_TYPE_UNSPECIFIED = VideoType._(0, _omitEnumNames ? '' : 'VIDEO_TYPE_UNSPECIFIED');
-  static const VideoType VIDEO_TYPE_GET_ON = VideoType._(1, _omitEnumNames ? '' : 'VIDEO_TYPE_GET_ON');
-  static const VideoType VIDEO_TYPE_GET_OFF = VideoType._(2, _omitEnumNames ? '' : 'VIDEO_TYPE_GET_OFF');
+class VehicleEvent extends $pb.ProtobufEnum {
+  static const VehicleEvent VEHICLE_EVENT_UNSPECIFIED = VehicleEvent._(0, _omitEnumNames ? '' : 'VEHICLE_EVENT_UNSPECIFIED');
+  static const VehicleEvent VEHICLE_EVENT_GET_ON = VehicleEvent._(1, _omitEnumNames ? '' : 'VEHICLE_EVENT_GET_ON');
+  static const VehicleEvent VEHICLE_EVENT_GET_OFF = VehicleEvent._(2, _omitEnumNames ? '' : 'VEHICLE_EVENT_GET_OFF');
 
-  static const $core.List<VideoType> values = <VideoType> [
-    VIDEO_TYPE_UNSPECIFIED,
-    VIDEO_TYPE_GET_ON,
-    VIDEO_TYPE_GET_OFF,
+  static const $core.List<VehicleEvent> values = <VehicleEvent> [
+    VEHICLE_EVENT_UNSPECIFIED,
+    VEHICLE_EVENT_GET_ON,
+    VEHICLE_EVENT_GET_OFF,
   ];
 
-  static final $core.Map<$core.int, VideoType> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static VideoType? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, VehicleEvent> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static VehicleEvent? valueOf($core.int value) => _byValue[value];
 
-  const VideoType._($core.int v, $core.String n) : super(v, n);
+  const VehicleEvent._($core.int v, $core.String n) : super(v, n);
 }
 
 class Sex extends $pb.ProtobufEnum {

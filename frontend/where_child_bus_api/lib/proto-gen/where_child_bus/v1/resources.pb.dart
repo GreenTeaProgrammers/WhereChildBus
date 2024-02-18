@@ -690,7 +690,7 @@ class Bus extends $pb.GeneratedMessage {
     $core.String? nurseryId,
     $core.String? name,
     $core.String? plateNumber,
-    Status? status,
+    BusStatus? busStatus,
     $core.double? latitude,
     $core.double? longitude,
     $core.bool? enableFaceRecognition,
@@ -710,8 +710,8 @@ class Bus extends $pb.GeneratedMessage {
     if (plateNumber != null) {
       $result.plateNumber = plateNumber;
     }
-    if (status != null) {
-      $result.status = status;
+    if (busStatus != null) {
+      $result.busStatus = busStatus;
     }
     if (latitude != null) {
       $result.latitude = latitude;
@@ -739,7 +739,7 @@ class Bus extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..aOS(4, _omitFieldNames ? '' : 'plateNumber')
-    ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
+    ..e<BusStatus>(5, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: BusStatus.valueOf, enumValues: BusStatus.values)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..aOB(8, _omitFieldNames ? '' : 'enableFaceRecognition')
@@ -806,13 +806,13 @@ class Bus extends $pb.GeneratedMessage {
   void clearPlateNumber() => clearField(4);
 
   @$pb.TagNumber(5)
-  Status get status => $_getN(4);
+  BusStatus get busStatus => $_getN(4);
   @$pb.TagNumber(5)
-  set status(Status v) { setField(5, v); }
+  set busStatus(BusStatus v) { setField(5, v); }
   @$pb.TagNumber(5)
-  $core.bool hasStatus() => $_has(4);
+  $core.bool hasBusStatus() => $_has(4);
   @$pb.TagNumber(5)
-  void clearStatus() => clearField(5);
+  void clearBusStatus() => clearField(5);
 
   /// 緯度経度
   @$pb.TagNumber(6)
