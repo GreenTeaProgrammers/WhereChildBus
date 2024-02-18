@@ -49,11 +49,7 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-
-	defer func() {
-		tx.Rollback()
-	}()
-
+	defer utils.RollbackTx(tx, i.logger)
 	bus, err := tx.Bus.Create().
 		SetNurseryID(nurseryID).
 		SetName(req.Name).
@@ -447,7 +443,7 @@ func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*e
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	query, err := queryFunc(tx)
 	if err != nil {

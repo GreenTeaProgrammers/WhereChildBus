@@ -54,9 +54,7 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		return nil, err
 	}
 	// 成功した場合にロールバックを防ぐためのフラグ
-	defer func() {
-		tx.Rollback()
-	}()
+	defer utils.RollbackTx(tx, i.logger)
 
 	sex, err := utils.ConvertPbSexToEntSex(req.Sex)
 	if err != nil {
@@ -284,7 +282,7 @@ func (i *Interactor) getChildList(ctx context.Context, queryFunc func(*ent.Tx) (
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback() // Rollback is safe to call even if the tx is already committed.
+	defer utils.RollbackTx(tx, i.logger)
 
 	query, err := queryFunc(tx)
 	if err != nil {

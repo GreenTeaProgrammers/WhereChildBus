@@ -37,7 +37,7 @@ func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryReq
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// nurseryコード(レコードに存在しない)
 	// 生成したコードが既存のコードと重複していないか確認
@@ -83,7 +83,7 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// Nurseryを取得
 	nursery, err := tx.Nursery.Query().
