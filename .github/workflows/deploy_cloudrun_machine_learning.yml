@@ -23,6 +23,8 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
+            --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }} \
+            --build-arg BUCKET_NAME=${{ secrets.BUCKET_NAME }} \
             --tag=gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
             --file=./machine_learning/Dockerfile \
             --platform linux/amd64 ./machine_learning
