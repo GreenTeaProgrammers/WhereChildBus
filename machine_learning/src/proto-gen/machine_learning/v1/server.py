@@ -5,11 +5,12 @@ from concurrent import futures
 
 import grpc
 from grpc_reflection.v1alpha import reflection
-import health_check_pb2
-import health_check_pb2_grpc
-import machine_learning_pb2
-import machine_learning_pb2_grpc
 
+from generated.machine_learning.v1 import health_check_pb2
+from generated.machine_learning.v1 import health_check_pb2_grpc
+from generated.machine_learning.v1 import machine_learning_pb2
+from generated.machine_learning.v1 import machine_learning_pb2_grpc
+from generated.where_child_bus.v1 import bus_pb2
 
 import logging
 from concurrent import futures
@@ -39,7 +40,6 @@ class HealthCheckServiceServer(
 class MachineLearningServiceServicer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
-    # TODO: implement Predict
     def Predict(self, request_iterator: machine_learning_pb2.PredRequest, context):
         for req in request_iterator:
             parser = argparse.ArgumentParser()
