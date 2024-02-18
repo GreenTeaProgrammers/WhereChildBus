@@ -70,5 +70,8 @@ COPY --from=builder /srv/grpc/.env /app/.env
 # secretsディレクトリを/appディレクトリにコピー
 COPY --from=builder /srv/grpc/secrets /app/secrets
 
+RUN ls -la /app/secrets
+RUN echo "gcp-credentials.json is: $(cat /app/secrets/gcp-credentials.json)"
+
 # アプリケーションの起動
 ENTRYPOINT ["/app/server"]
