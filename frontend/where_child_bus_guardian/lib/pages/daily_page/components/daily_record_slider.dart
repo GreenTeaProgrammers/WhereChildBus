@@ -46,7 +46,7 @@ class _DailyRecordSlider extends State<DailyRecordSlider> {
         initialPage: 0,
         autoPlay: false,
         viewportFraction: 1,
-        enableInfiniteScroll: true,
+        enableInfiniteScroll: recordList.length > 1 ? true : false,
         onPageChanged: ((index, reason) {
           setState(() {
             currentIndex = index;
