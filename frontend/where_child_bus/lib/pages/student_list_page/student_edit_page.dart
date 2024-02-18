@@ -13,8 +13,6 @@ class StudentEditPage extends StatefulWidget {
 
 class _StudentEditPageState extends State<StudentEditPage> {
   List<GuardianResponse> guardiansList = [];
-  final List<String> busName = <String>["バス1", "バス2", "バス3"];
-  final List<String> busStop = <String>["停留所1", "停留所2", "停留所3"];
 
   @override
   void initState() {
@@ -31,10 +29,7 @@ class _StudentEditPageState extends State<StudentEditPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(),
-        body: InputFormBody(
-          busName: busName,
-          busStop: busStop,
-        ),
+        body: InputFormBody(child: widget.child),
       ),
     );
   }

@@ -86,7 +86,9 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
           style: ElevatedButton.styleFrom(shape: const CircleBorder()),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => StudentEditPage()));
+                builder: (BuildContext context) => StudentEditPage(
+                      child: widget.child,
+                    )));
           },
           child: const Icon(Icons.edit),
         ),

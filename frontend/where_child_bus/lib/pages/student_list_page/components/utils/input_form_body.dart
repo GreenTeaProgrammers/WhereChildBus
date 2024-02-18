@@ -12,17 +12,17 @@ import 'select_value_box.dart';
 import 'submit_button.dart';
 
 class InputFormBody extends StatefulWidget {
-  final List<String> busName;
-  final List<String> busStop;
+  Child? child;
 
-  const InputFormBody({required this.busName, required this.busStop, Key? key})
-      : super(key: key);
+  InputFormBody({Key? key, this.child}) : super(key: key);
 
   @override
   State<InputFormBody> createState() => _InputFormBodyState();
 }
 
 class _InputFormBodyState extends State<InputFormBody> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
   late Future<void> _loadDataFuture; // 非同期処理の結果を保持する変数
   List<GuardianResponse> guardians = [];
   List<Bus> buses = [];
@@ -32,7 +32,10 @@ class _InputFormBodyState extends State<InputFormBody> {
   @override
   void initState() {
     super.initState();
-    // initState内で非同期処理をトリガーし、結果を変数に格納
+    if (widget.child != null) {
+      _nameController.text = widget.child!.name;
+      _ageController.text = widget.child!.age.toString();
+    }
     _loadDataFuture = _loadBusesAndGuardians();
   }
 
@@ -143,16 +146,17 @@ class _InputFormBodyState extends State<InputFormBody> {
   ) {
     return Column(
       children: [
+        inputLabelAndTextField(context, "園児氏名", "園児氏名を入力してください",
+            TextInputType.name, _nameController),
         inputLabelAndTextField(
-            context, "園児氏名", "園児氏名を入力してください", TextInputType.name),
-        inputLabelAndTextField(
-            context, "年齢", "年齢を入力してください", TextInputType.number),
+            context, "年齢", "年齢を入力してください", TextInputType.number, _ageController),
         inputLabelAndSelectBox(
           context,
           "保護者",
           guardians.map((guardian) => guardian.name).toList(),
         ),
-        inputLabelAndSelectBox(context, "利用バス", widget.busName),
+        inputLabelAndSelectBox(
+            context, "利用バス", buses.map((bus) => bus.name).toList()),
         Container(
           margin: const EdgeInsets.only(top: 20.0),
           width: MediaQuery.of(context).size.width * 0.6,
@@ -162,13 +166,17 @@ class _InputFormBodyState extends State<InputFormBody> {
     );
   }
 
-  Widget inputLabelAndTextField(
-      BuildContext context, String label, String hintText, TextInputType type) {
+  Widget inputLabelAndTextField(BuildContext context, String label,
+      String hintText, TextInputType type, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         InputValueLabel(label: label),
-        TextInputField(hintText: hintText, type: type)
+        TextInputField(
+          hintText: hintText,
+          type: type,
+          controller: controller,
+        )
       ],
     );
   }
