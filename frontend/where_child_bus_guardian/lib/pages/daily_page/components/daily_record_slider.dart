@@ -5,11 +5,15 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 
 class DailyRecordSlider extends StatefulWidget {
   final List<Child> children;
+  final List<ChildPhoto> images;
+  final VoidCallback? callback;
 
-  const DailyRecordSlider({super.key, required this.children});
+  const DailyRecordSlider(
+      {Key? key, required this.children, required this.images, this.callback})
+      : super(key: key);
 
   @override
-  State<DailyRecordSlider> createState() => _DailyRecordSlider();
+  _DailyRecordSlider createState() => _DailyRecordSlider();
 }
 
 class _DailyRecordSlider extends State<DailyRecordSlider> {
@@ -18,7 +22,11 @@ class _DailyRecordSlider extends State<DailyRecordSlider> {
   @override
   Widget build(BuildContext context) {
     List<Widget> recordList = widget.children.map((child) {
-      return DailyRecordBody(child: child);
+      int imageIndex = widget.children.indexOf(child);
+      return DailyRecordBody(
+        child: child,
+        image: widget.images[imageIndex],
+      );
     }).toList();
 
     return Column(

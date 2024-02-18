@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../styles/styles.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
+import 'package:where_child_bus_guardian/components/utils/image_from_byte.dart';
 
 class DailyRecordBody extends StatefulWidget {
   final Child child;
+  final ChildPhoto image;
 
-  const DailyRecordBody({super.key, required this.child});
+  const DailyRecordBody({Key? key, required this.child, required this.image})
+      : super(key: key);
 
   @override
   State<DailyRecordBody> createState() => _DailyRecordBody();
@@ -37,19 +40,14 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget childFaceAndExpression() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[childFaceImage(), childExpressionIcon()],
-    );
-  }
-
-  //TODO: 将来的に画像を受け取る
-  Widget childFaceImage() {
-    return const SizedBox(
-      width: 150,
-      height: 150,
-      child: Card(
-        color: Colors.grey,
-        child: Text("ここに子供の写真が入る"),
-      ),
+      children: <Widget>[
+        ImageFromBytes(
+          imageData: widget.image.photoData,
+          height: 150,
+          width: 150,
+        ),
+        childExpressionIcon()
+      ],
     );
   }
 

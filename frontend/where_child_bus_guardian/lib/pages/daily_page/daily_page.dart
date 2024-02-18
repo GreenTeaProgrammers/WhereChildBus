@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus_guardian/components/utils/current_time_body.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/components/daily_record_slider.dart';
 import 'package:where_child_bus_guardian/service/get_child_list_by_guardian_id.dart';
+import 'package:where_child_bus_guardian/util/guardian_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pb.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class DailyPage extends StatefulWidget {
-  final GuardianResponse guardian;
-
-  const DailyPage({super.key, required this.guardian});
+  const DailyPage({super.key});
 
   @override
   State<DailyPage> createState() => _DailyPageState();
@@ -17,6 +18,7 @@ class DailyPage extends StatefulWidget {
 
 class _DailyPageState extends State<DailyPage> {
   List<Child> children = [];
+  List<ChildPhoto> photos = [];
   bool _isLoading = true;
   bool _isFailLoading = false;
 
@@ -27,12 +29,15 @@ class _DailyPageState extends State<DailyPage> {
   }
 
   Future<void> _loadChildList() async {
-    String guardianId = widget.guardian.id;
-    List<Child> childList = await getChildList(guardianId);
     try {
+      _isLoading = true;
+      GetChildListByGuardianIDResponse res =
+          await getChildListByGuardianIdService(
+              GuardianData().getGuardian().id);
       if (mounted) {
         setState(() {
-          children = childList;
+          children = res.children;
+          photos = res.photos;
           _isLoading = false;
         });
       }
@@ -61,7 +66,7 @@ class _DailyPageState extends State<DailyPage> {
                 ),
                 if (_isFailLoading) loadFailText(),
                 if (children.isEmpty) noChildDataText(),
-                DailyRecordSlider(children: children),
+                DailyRecordSlider(children: children, images: photos),
               ],
             ),
           );

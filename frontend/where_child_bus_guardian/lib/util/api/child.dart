@@ -24,7 +24,7 @@ Future<T> performGrpcCall<T>(
   }
 }
 
-Future<GetChildListByGuardianIDResponse> getChildListByGuardianID(
+Future<GetChildListByGuardianIDResponse> getChildListByGuardianId(
     String guardianId) async {
   return performGrpcCall((client) async {
     var req = GetChildListByGuardianIDRequest(guardianId: guardianId);
