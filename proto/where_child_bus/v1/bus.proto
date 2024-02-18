@@ -3,7 +3,6 @@ syntax = "proto3";
 package where_child_bus.v1;
 
 import "where_child_bus/v1/resources.proto";
-import "google/protobuf/timestamp.proto";
 
 service BusService {
         rpc CreateBus(CreateBusRequest) returns (CreateBusResponse);
@@ -37,7 +36,7 @@ message GetBusListByNurseryIdResponse {
 
 message ChangeBusStatusRequest {
         string bus_id = 1;
-        Status status = 2;
+        BusStatus bus_status = 2;
 }
 
 message ChangeBusStatusResponse {
@@ -49,7 +48,6 @@ message SendLocationContinuousRequest {
         string bus_id = 1;
         double latitude = 2;
         double longitude = 3;
-        google.protobuf.Timestamp timestamp = 4; // Unix timestamp
 }
 
 message SendLocationContinuousResponse {
@@ -64,15 +62,14 @@ message TrackBusContinuousResponse {
         string bus_id = 1;
         double latitude = 2;
         double longitude = 3;
-        google.protobuf.Timestamp timestamp = 4; // Unix timestamp
 }
 
 message StreamBusVideoRequest {
         string bus_id = 1;
-        BusType bus_type = 2;
-        VideoType video_type = 3;
-        bytes video_chunk = 4; // Chunk of video data
-        google.protobuf.Timestamp timestamp = 5; // Unix timestamp
+        string nursery_id = 2;
+        BusType bus_type = 3;
+        VehicleEvent vehicle_event = 4;
+        repeated bytes video_chunk = 5; // Chunk of video data
 }
 
 message StreamBusVideoResponse {

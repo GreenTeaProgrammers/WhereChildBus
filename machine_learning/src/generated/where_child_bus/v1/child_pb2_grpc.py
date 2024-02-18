@@ -34,6 +34,11 @@ class ChildServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDResponse.FromString,
                 )
+        self.CheckIsChildInBus = channel.unary_unary(
+                '/where_child_bus.v1.ChildService/CheckIsChildInBus',
+                request_serializer=where__child__bus_dot_v1_dot_child__pb2.CheckIsChildInBusRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_child__pb2.CheckIsChildInBusResponse.FromString,
+                )
 
 
 class ChildServiceServicer(object):
@@ -63,6 +68,12 @@ class ChildServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CheckIsChildInBus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ChildServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -85,6 +96,11 @@ def add_ChildServiceServicer_to_server(servicer, server):
                     servicer.GetChildListByBusID,
                     request_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDResponse.SerializeToString,
+            ),
+            'CheckIsChildInBus': grpc.unary_unary_rpc_method_handler(
+                    servicer.CheckIsChildInBus,
+                    request_deserializer=where__child__bus_dot_v1_dot_child__pb2.CheckIsChildInBusRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_child__pb2.CheckIsChildInBusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -161,5 +177,22 @@ class ChildService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildService/GetChildListByBusID',
             where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDRequest.SerializeToString,
             where__child__bus_dot_v1_dot_child__pb2.GetChildListByBusIDResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CheckIsChildInBus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildService/CheckIsChildInBus',
+            where__child__bus_dot_v1_dot_child__pb2.CheckIsChildInBusRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_child__pb2.CheckIsChildInBusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
