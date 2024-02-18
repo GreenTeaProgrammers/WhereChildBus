@@ -35,7 +35,8 @@ RUN echo "DSN=$DSN" > .env \
 
 # secretsディレクトリのgcp-credentials.jsonを作成
 RUN mkdir secrets
-RUN echo "$INSIDE_OF_CREDENTIALS" > secrets/gcp-credentials.json
+RUN touch secrets/gcp-credentials.json
+RUN echo "$INSIDE_OF_CREDENTIALS" >> secrets/gcp-credentials.json
 
 RUN go mod download
 
