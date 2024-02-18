@@ -1,12 +1,13 @@
 import yaml
 import argparse
 import torch
+import os
 
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.trainer import Trainer
-from face_detect_model.util import logger
-from face_detect_model.gcp_util import init_client
+from face_detect_model.util import logger, save_pickle_to_gcs
+from face_detect_model.gcp_util import init_client, get_bucket
 from dotenv import load_dotenv
 
 load_dotenv("secrets/.env")
@@ -40,6 +41,20 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
     logger.info("model Initializing")
     num_classes = dataset.get_label_num()
     image_shape = dataset.get_image_shape()
+
+    idx_to_label = dataset.get_idx_label_dict()
+    if args.mode == "train":
+        bucket = get_bucket(
+            client,
+            os.environ.get("BUCKET_NAME_FOR_MODEL"),
+        )
+        save_pickle_to_gcs(
+            bucket=bucket,
+            upload_model_path=f"{args.nursery_id}/{args.bus_id}/{args.bus_type}_idx_to_label.pth",
+            obj=idx_to_label,
+        )
+        logger.info("idx_to_label is saved")
+
     face_detect_model = FaceDetectModel(
         config, num_classes=num_classes, input_dim=image_shape
     )
