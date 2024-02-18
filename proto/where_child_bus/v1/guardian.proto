@@ -9,6 +9,7 @@ service GuardianService {
         rpc GuardianLogin(GuardianLoginRequest) returns (GuardianLoginResponse);
         rpc GetGuardianListByBusId(GetGuardianListByBusIdRequest) returns (GetGuardianListByBusIdResponse);
         rpc GetGuardianByChildId(GetGuardianByChildIdRequest) returns (GetGuardianByChildIdResponse);
+        rpc GetGuardianListByNurseryId(GetGuardianListByNurseryIdRequest) returns (GetGuardianListByNurseryIdResponse);
 }
 
 message CreateGuardianRequest {
@@ -48,4 +49,12 @@ message GetGuardianByChildIdRequest {
 
 message GetGuardianByChildIdResponse {
         GuardianResponse guardian = 1;
+}
+
+message GetGuardianListByNurseryIdRequest {
+        string nursery_id = 1;
+}
+
+message GetGuardianListByNurseryIdResponse {
+        repeated GuardianResponse guardians = 1;
 }

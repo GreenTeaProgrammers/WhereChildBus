@@ -37,6 +37,10 @@ class GuardianServiceClient extends $grpc.Client {
       '/where_child_bus.v1.GuardianService/GetGuardianByChildId',
       ($3.GetGuardianByChildIdRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.GetGuardianByChildIdResponse.fromBuffer(value));
+  static final _$getGuardianListByNurseryId = $grpc.ClientMethod<$3.GetGuardianListByNurseryIdRequest, $3.GetGuardianListByNurseryIdResponse>(
+      '/where_child_bus.v1.GuardianService/GetGuardianListByNurseryId',
+      ($3.GetGuardianListByNurseryIdRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.GetGuardianListByNurseryIdResponse.fromBuffer(value));
 
   GuardianServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -58,6 +62,10 @@ class GuardianServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$3.GetGuardianByChildIdResponse> getGuardianByChildId($3.GetGuardianByChildIdRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getGuardianByChildId, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$3.GetGuardianListByNurseryIdResponse> getGuardianListByNurseryId($3.GetGuardianListByNurseryIdRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getGuardianListByNurseryId, request, options: options);
   }
 }
 
@@ -94,6 +102,13 @@ abstract class GuardianServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $3.GetGuardianByChildIdRequest.fromBuffer(value),
         ($3.GetGuardianByChildIdResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetGuardianListByNurseryIdRequest, $3.GetGuardianListByNurseryIdResponse>(
+        'GetGuardianListByNurseryId',
+        getGuardianListByNurseryId_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $3.GetGuardianListByNurseryIdRequest.fromBuffer(value),
+        ($3.GetGuardianListByNurseryIdResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$3.CreateGuardianResponse> createGuardian_Pre($grpc.ServiceCall call, $async.Future<$3.CreateGuardianRequest> request) async {
@@ -112,8 +127,13 @@ abstract class GuardianServiceBase extends $grpc.Service {
     return getGuardianByChildId(call, await request);
   }
 
+  $async.Future<$3.GetGuardianListByNurseryIdResponse> getGuardianListByNurseryId_Pre($grpc.ServiceCall call, $async.Future<$3.GetGuardianListByNurseryIdRequest> request) async {
+    return getGuardianListByNurseryId(call, await request);
+  }
+
   $async.Future<$3.CreateGuardianResponse> createGuardian($grpc.ServiceCall call, $3.CreateGuardianRequest request);
   $async.Future<$3.GuardianLoginResponse> guardianLogin($grpc.ServiceCall call, $3.GuardianLoginRequest request);
   $async.Future<$3.GetGuardianListByBusIdResponse> getGuardianListByBusId($grpc.ServiceCall call, $3.GetGuardianListByBusIdRequest request);
   $async.Future<$3.GetGuardianByChildIdResponse> getGuardianByChildId($grpc.ServiceCall call, $3.GetGuardianByChildIdRequest request);
+  $async.Future<$3.GetGuardianListByNurseryIdResponse> getGuardianListByNurseryId($grpc.ServiceCall call, $3.GetGuardianListByNurseryIdRequest request);
 }
