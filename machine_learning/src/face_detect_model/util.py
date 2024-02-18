@@ -36,6 +36,19 @@ def get_child_id(blob_name: str):
     return child_id
 
 
+# TODO: gRPC用に生成されたファイルを用いることができないか検証し，置換
+def switch_to_bus_type(bus_type_num: int):
+    bus_type_str = "BUS_TYPE_"
+    if bus_type_num == 0:
+        return bus_type_str + "UNSPECIFIED"
+    elif bus_type_num == 1:
+        return bus_type_str + "MORNING"
+    elif bus_type_num == 2:
+        return bus_type_str + "EVENING"
+    else:
+        raise ValueError(f"Invalid bus_type: {bus_type_num}")
+
+
 def load_image_from_remote(blobs: list):
     images = []
     for blob in blobs:
@@ -64,11 +77,9 @@ def _is_valid_file(file_name):
     return os.path.splitext(file_name)[1].lower() in VALID_EXTENSIONS
 
 
-def save_model_to_gcs(
-    bucket: Bucket, upload_model_path: str, model_instance: torch.nn.Module
-):
+def save_pickle_to_gcs(bucket: Bucket, upload_model_path: str, obj: object):
     logger.info(f"Saving model to {upload_model_path}")
     blob = bucket.blob(upload_model_path)
     with blob.open("wb", ignore_flush=True) as f:
-        torch.save(model_instance.state_dict(), f)
+        torch.save(obj, f)
     logger.info(f"Model saved to {upload_model_path}")
