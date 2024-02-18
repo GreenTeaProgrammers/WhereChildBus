@@ -16,14 +16,14 @@ face_detect:
   clip_size: { width: 100, height: 100 }
 dataset:
   augmentation:
-    num_variations: 10
+    num_variations: 15
   ratio:
     train: 0.8
     valid: 0.1
     test: 0.1
 train:
   epoch: 3
-  learning_rate: 0.001
+  learning_rate: 0.0005
   train_batch_size: 1
   valid_batch_size: 1
   test_batch_size: 1
