@@ -8,6 +8,7 @@ service GuardianService {
         rpc CreateGuardian(CreateGuardianRequest) returns (CreateGuardianResponse);
         rpc GuardianLogin(GuardianLoginRequest) returns (GuardianLoginResponse);
         rpc GetGuardianListByBusId(GetGuardianListByBusIdRequest) returns (GetGuardianListByBusIdResponse);
+        rpc GetGuardianByChildId(GetGuardianByChildIdRequest) returns (GetGuardianByChildIdResponse);
 }
 
 message CreateGuardianRequest {
