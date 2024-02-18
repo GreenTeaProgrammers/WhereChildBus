@@ -15,24 +15,25 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'machine_learning.pb.dart' as $1;
+import '../../where_child_bus/v1/bus.pb.dart' as $1;
+import 'machine_learning.pb.dart' as $2;
 
 export 'machine_learning.pb.dart';
 
 @$pb.GrpcServiceName('machine_learning.v1.MachineLearningService')
 class MachineLearningServiceClient extends $grpc.Client {
-  static final _$train = $grpc.ClientMethod<$1.TrainRequest, $1.TrainResponse>(
+  static final _$train = $grpc.ClientMethod<$2.TrainRequest, $2.TrainResponse>(
       '/machine_learning.v1.MachineLearningService/Train',
-      ($1.TrainRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.TrainResponse.fromBuffer(value));
-  static final _$pred = $grpc.ClientMethod<$1.PredRequest, $1.PredResponse>(
+      ($2.TrainRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.TrainResponse.fromBuffer(value));
+  static final _$pred = $grpc.ClientMethod<$1.StreamBusVideoRequest, $2.PredResponse>(
       '/machine_learning.v1.MachineLearningService/Pred',
-      ($1.PredRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.PredResponse.fromBuffer(value));
-  static final _$faceDetectAndClip = $grpc.ClientMethod<$1.FaceDetectAndClipRequest, $1.FaceDetectAndClipResponse>(
+      ($1.StreamBusVideoRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.PredResponse.fromBuffer(value));
+  static final _$faceDetectAndClip = $grpc.ClientMethod<$2.FaceDetectAndClipRequest, $2.FaceDetectAndClipResponse>(
       '/machine_learning.v1.MachineLearningService/FaceDetectAndClip',
-      ($1.FaceDetectAndClipRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.FaceDetectAndClipResponse.fromBuffer(value));
+      ($2.FaceDetectAndClipRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.FaceDetectAndClipResponse.fromBuffer(value));
 
   MachineLearningServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -40,15 +41,15 @@ class MachineLearningServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$1.TrainResponse> train($1.TrainRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$2.TrainResponse> train($2.TrainRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$train, request, options: options);
   }
 
-  $grpc.ResponseStream<$1.PredResponse> pred($async.Stream<$1.PredRequest> request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseStream<$2.PredResponse> pred($async.Stream<$1.StreamBusVideoRequest> request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$pred, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.FaceDetectAndClipResponse> faceDetectAndClip($1.FaceDetectAndClipRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$2.FaceDetectAndClipResponse> faceDetectAndClip($2.FaceDetectAndClipRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$faceDetectAndClip, request, options: options);
   }
 }
@@ -58,38 +59,38 @@ abstract class MachineLearningServiceBase extends $grpc.Service {
   $core.String get $name => 'machine_learning.v1.MachineLearningService';
 
   MachineLearningServiceBase() {
-    $addMethod($grpc.ServiceMethod<$1.TrainRequest, $1.TrainResponse>(
+    $addMethod($grpc.ServiceMethod<$2.TrainRequest, $2.TrainResponse>(
         'Train',
         train_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $1.TrainRequest.fromBuffer(value),
-        ($1.TrainResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.PredRequest, $1.PredResponse>(
+        ($core.List<$core.int> value) => $2.TrainRequest.fromBuffer(value),
+        ($2.TrainResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.StreamBusVideoRequest, $2.PredResponse>(
         'Pred',
         pred,
         true,
         true,
-        ($core.List<$core.int> value) => $1.PredRequest.fromBuffer(value),
-        ($1.PredResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.FaceDetectAndClipRequest, $1.FaceDetectAndClipResponse>(
+        ($core.List<$core.int> value) => $1.StreamBusVideoRequest.fromBuffer(value),
+        ($2.PredResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.FaceDetectAndClipRequest, $2.FaceDetectAndClipResponse>(
         'FaceDetectAndClip',
         faceDetectAndClip_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $1.FaceDetectAndClipRequest.fromBuffer(value),
-        ($1.FaceDetectAndClipResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $2.FaceDetectAndClipRequest.fromBuffer(value),
+        ($2.FaceDetectAndClipResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$1.TrainResponse> train_Pre($grpc.ServiceCall call, $async.Future<$1.TrainRequest> request) async {
+  $async.Future<$2.TrainResponse> train_Pre($grpc.ServiceCall call, $async.Future<$2.TrainRequest> request) async {
     return train(call, await request);
   }
 
-  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip_Pre($grpc.ServiceCall call, $async.Future<$1.FaceDetectAndClipRequest> request) async {
+  $async.Future<$2.FaceDetectAndClipResponse> faceDetectAndClip_Pre($grpc.ServiceCall call, $async.Future<$2.FaceDetectAndClipRequest> request) async {
     return faceDetectAndClip(call, await request);
   }
 
-  $async.Future<$1.TrainResponse> train($grpc.ServiceCall call, $1.TrainRequest request);
-  $async.Stream<$1.PredResponse> pred($grpc.ServiceCall call, $async.Stream<$1.PredRequest> request);
-  $async.Future<$1.FaceDetectAndClipResponse> faceDetectAndClip($grpc.ServiceCall call, $1.FaceDetectAndClipRequest request);
+  $async.Future<$2.TrainResponse> train($grpc.ServiceCall call, $2.TrainRequest request);
+  $async.Stream<$2.PredResponse> pred($grpc.ServiceCall call, $async.Stream<$1.StreamBusVideoRequest> request);
+  $async.Future<$2.FaceDetectAndClipResponse> faceDetectAndClip($grpc.ServiceCall call, $2.FaceDetectAndClipRequest request);
 }

@@ -1,17 +1,26 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'components/utils/input_form_body.dart';
 
 class StudentEditPage extends StatefulWidget {
-  const StudentEditPage({super.key});
+  final Child? child;
+
+  const StudentEditPage({super.key, this.child});
 
   @override
   State<StudentEditPage> createState() => _StudentEditPageState();
 }
 
 class _StudentEditPageState extends State<StudentEditPage> {
-  final List<String> busName = <String>["バス1", "バス2", "バス3"];
-  final List<String> busStop = <String>["停留所1", "停留所2", "停留所3"];
+  List<GuardianResponse> guardiansList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGuardians();
+  }
+
+  Future<void> _loadGuardians() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +29,7 @@ class _StudentEditPageState extends State<StudentEditPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(),
-        body: InputFormBody(
-          busName: busName,
-          busStop: busStop,
-        ),
+        body: InputFormBody(child: widget.child),
       ),
     );
   }

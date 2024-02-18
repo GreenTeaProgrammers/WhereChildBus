@@ -5,7 +5,8 @@ import torch
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.trainer import Trainer
-from face_detect_model.util import logger, init_client
+from face_detect_model.util import logger
+from face_detect_model.gcp_util import init_client
 from dotenv import load_dotenv
 
 load_dotenv("secrets/.env")

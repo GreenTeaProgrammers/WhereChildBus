@@ -5,17 +5,17 @@ package where_child_bus.v1;
 import "where_child_bus/v1/resources.proto";
 
 service StationService {
-        rpc UpdateStation(UpdateStationRequest) returns (UpdateStationResponse);
+        rpc UpdateStationLocationByGuardianId(UpdateStationLocationByGuardianIdRequest) returns (UpdateStationLocationByGuardianIdResponse);
         rpc GetStationListByBusId(GetStationListByBusIdRequest) returns (GetStationListByBusIdResponse);
 }
 
-message UpdateStationRequest {
+message UpdateStationLocationByGuardianIdRequest {
         string guardian_id = 1;
         double longitude = 2;
         double latitude = 3;
 }
 
-message UpdateStationResponse {
+message UpdateStationLocationByGuardianIdResponse {
         Station station = 1;
 }
 

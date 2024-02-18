@@ -12,9 +12,11 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 
+from where_child_bus.v1 import bus_pb2 as where__child__bus_dot_v1_dot_bus__pb2
+from where_child_bus.v1 import resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*machine_learning/v1/machine_learning.proto\x12\x13machine_learning.v1\"\x9a\x01\n\x0cTrainRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x15\n\x06\x62us_id\x18\x02 \x01(\tR\x05\x62usId\x12\x1b\n\tchild_ids\x18\x03 \x03(\tR\x08\x63hildIds\x12\x37\n\x08\x62us_type\x18\x04 \x01(\x0e\x32\x1c.machine_learning.v1.BusTypeR\x07\x62usType\".\n\rTrainResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted\"\xdb\x01\n\x0bPredRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x37\n\x08\x62us_type\x18\x02 \x01(\x0e\x32\x1c.machine_learning.v1.BusTypeR\x07\x62usType\x12=\n\nvideo_type\x18\x03 \x01(\x0e\x32\x1e.machine_learning.v1.VideoTypeR\tvideoType\x12\x1f\n\x0bvideo_chunk\x18\x04 \x01(\x0cR\nvideoChunk\x12\x1c\n\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"+\n\x0cPredResponse\x12\x1b\n\tchild_ids\x18\x01 \x03(\tR\x08\x63hildIds\"T\n\x18\x46\x61\x63\x65\x44\x65tectAndClipRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x01(\tR\x07\x63hildId\":\n\x19\x46\x61\x63\x65\x44\x65tectAndClipResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted*O\n\x07\x42usType\x12\x18\n\x14\x42US_TYPE_UNSPECIFIED\x10\x00\x12\x14\n\x10\x42US_TYPE_MORNING\x10\x01\x12\x14\n\x10\x42US_TYPE_EVENING\x10\x02*V\n\tVideoType\x12\x1a\n\x16VIDEO_TYPE_UNSPECIFIED\x10\x00\x12\x15\n\x11VIDEO_TYPE_GET_ON\x10\x01\x12\x16\n\x12VIDEO_TYPE_GET_OFF\x10\x02\x32\xad\x02\n\x16MachineLearningService\x12N\n\x05Train\x12!.machine_learning.v1.TrainRequest\x1a\".machine_learning.v1.TrainResponse\x12O\n\x04Pred\x12 .machine_learning.v1.PredRequest\x1a!.machine_learning.v1.PredResponse(\x01\x30\x01\x12r\n\x11\x46\x61\x63\x65\x44\x65tectAndClip\x12-.machine_learning.v1.FaceDetectAndClipRequest\x1a..machine_learning.v1.FaceDetectAndClipResponseB\x82\x02\n\x17\x63om.machine_learning.v1B\x14MachineLearningProtoP\x01Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\xa2\x02\x03MXX\xaa\x02\x12MachineLearning.V1\xca\x02\x12MachineLearning\\V1\xe2\x02\x1eMachineLearning\\V1\\GPBMetadata\xea\x02\x13MachineLearning::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*machine_learning/v1/machine_learning.proto\x12\x13machine_learning.v1\x1a\x1cwhere_child_bus/v1/bus.proto\x1a\"where_child_bus/v1/resources.proto\"\x99\x01\n\x0cTrainRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x15\n\x06\x62us_id\x18\x02 \x01(\tR\x05\x62usId\x12\x1b\n\tchild_ids\x18\x03 \x03(\tR\x08\x63hildIds\x12\x36\n\x08\x62us_type\x18\x04 \x01(\x0e\x32\x1b.where_child_bus.v1.BusTypeR\x07\x62usType\".\n\rTrainResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted\"L\n\x0cPredResponse\x12\x1f\n\x0bis_detected\x18\x01 \x01(\x08R\nisDetected\x12\x1b\n\tchild_ids\x18\x02 \x03(\tR\x08\x63hildIds\"T\n\x18\x46\x61\x63\x65\x44\x65tectAndClipRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x01(\tR\x07\x63hildId\":\n\x19\x46\x61\x63\x65\x44\x65tectAndClipResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted2\xb6\x02\n\x16MachineLearningService\x12N\n\x05Train\x12!.machine_learning.v1.TrainRequest\x1a\".machine_learning.v1.TrainResponse\x12X\n\x04Pred\x12).where_child_bus.v1.StreamBusVideoRequest\x1a!.machine_learning.v1.PredResponse(\x01\x30\x01\x12r\n\x11\x46\x61\x63\x65\x44\x65tectAndClip\x12-.machine_learning.v1.FaceDetectAndClipRequest\x1a..machine_learning.v1.FaceDetectAndClipResponseB\x82\x02\n\x17\x63om.machine_learning.v1B\x14MachineLearningProtoP\x01Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\xa2\x02\x03MXX\xaa\x02\x12MachineLearning.V1\xca\x02\x12MachineLearning\\V1\xe2\x02\x1eMachineLearning\\V1\\GPBMetadata\xea\x02\x13MachineLearning::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,22 +24,16 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'machine_learning.v1.machine
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\027com.machine_learning.v1B\024MachineLearningProtoP\001Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\242\002\003MXX\252\002\022MachineLearning.V1\312\002\022MachineLearning\\V1\342\002\036MachineLearning\\V1\\GPBMetadata\352\002\023MachineLearning::V1'
-  _globals['_BUSTYPE']._serialized_start=685
-  _globals['_BUSTYPE']._serialized_end=764
-  _globals['_VIDEOTYPE']._serialized_start=766
-  _globals['_VIDEOTYPE']._serialized_end=852
-  _globals['_TRAINREQUEST']._serialized_start=68
-  _globals['_TRAINREQUEST']._serialized_end=222
-  _globals['_TRAINRESPONSE']._serialized_start=224
-  _globals['_TRAINRESPONSE']._serialized_end=270
-  _globals['_PREDREQUEST']._serialized_start=273
-  _globals['_PREDREQUEST']._serialized_end=492
-  _globals['_PREDRESPONSE']._serialized_start=494
-  _globals['_PREDRESPONSE']._serialized_end=537
-  _globals['_FACEDETECTANDCLIPREQUEST']._serialized_start=539
-  _globals['_FACEDETECTANDCLIPREQUEST']._serialized_end=623
-  _globals['_FACEDETECTANDCLIPRESPONSE']._serialized_start=625
-  _globals['_FACEDETECTANDCLIPRESPONSE']._serialized_end=683
-  _globals['_MACHINELEARNINGSERVICE']._serialized_start=855
-  _globals['_MACHINELEARNINGSERVICE']._serialized_end=1156
+  _globals['_TRAINREQUEST']._serialized_start=134
+  _globals['_TRAINREQUEST']._serialized_end=287
+  _globals['_TRAINRESPONSE']._serialized_start=289
+  _globals['_TRAINRESPONSE']._serialized_end=335
+  _globals['_PREDRESPONSE']._serialized_start=337
+  _globals['_PREDRESPONSE']._serialized_end=413
+  _globals['_FACEDETECTANDCLIPREQUEST']._serialized_start=415
+  _globals['_FACEDETECTANDCLIPREQUEST']._serialized_end=499
+  _globals['_FACEDETECTANDCLIPRESPONSE']._serialized_start=501
+  _globals['_FACEDETECTANDCLIPRESPONSE']._serialized_end=559
+  _globals['_MACHINELEARNINGSERVICE']._serialized_start=562
+  _globals['_MACHINELEARNINGSERVICE']._serialized_end=872
 # @@protoc_insertion_point(module_scope)

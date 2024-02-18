@@ -5,11 +5,10 @@ from PIL import Image
 from torchvision import transforms
 
 from face_detect_model.util import (
-    init_client,
-    get_bucket,
-    get_blobs,
     load_image_from_remote,
 )
+
+from face_detect_model.gcp_util import get_bucket, get_blobs
 
 # TODO: GCSに関する処理を別ファイルに切り出す
 

@@ -3,7 +3,6 @@
 import grpc
 import grpc.experimental
 
-
 from where_child_bus.v1 import station_pb2 as where__child__bus_dot_v1_dot_station__pb2
 
 
@@ -16,10 +15,10 @@ class StationServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.UpdateStation = channel.unary_unary(
-                '/where_child_bus.v1.StationService/UpdateStation',
-                request_serializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationRequest.SerializeToString,
-                response_deserializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationResponse.FromString,
+        self.UpdateStationLocationByGuardianId = channel.unary_unary(
+                '/where_child_bus.v1.StationService/UpdateStationLocationByGuardianId',
+                request_serializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationLocationByGuardianIdRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationLocationByGuardianIdResponse.FromString,
                 )
         self.GetStationListByBusId = channel.unary_unary(
                 '/where_child_bus.v1.StationService/GetStationListByBusId',
@@ -31,7 +30,7 @@ class StationServiceStub(object):
 class StationServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def UpdateStation(self, request, context):
+    def UpdateStationLocationByGuardianId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -46,10 +45,10 @@ class StationServiceServicer(object):
 
 def add_StationServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'UpdateStation': grpc.unary_unary_rpc_method_handler(
-                    servicer.UpdateStation,
-                    request_deserializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationRequest.FromString,
-                    response_serializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationResponse.SerializeToString,
+            'UpdateStationLocationByGuardianId': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateStationLocationByGuardianId,
+                    request_deserializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationLocationByGuardianIdRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationLocationByGuardianIdResponse.SerializeToString,
             ),
             'GetStationListByBusId': grpc.unary_unary_rpc_method_handler(
                     servicer.GetStationListByBusId,
@@ -67,7 +66,7 @@ class StationService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def UpdateStation(request,
+    def UpdateStationLocationByGuardianId(request,
             target,
             options=(),
             channel_credentials=None,
@@ -77,9 +76,9 @@ class StationService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/UpdateStation',
-            where__child__bus_dot_v1_dot_station__pb2.UpdateStationRequest.SerializeToString,
-            where__child__bus_dot_v1_dot_station__pb2.UpdateStationResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/UpdateStationLocationByGuardianId',
+            where__child__bus_dot_v1_dot_station__pb2.UpdateStationLocationByGuardianIdRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_station__pb2.UpdateStationLocationByGuardianIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -11,23 +11,23 @@ type busServiceServer struct {
 	interactor *bus.Interactor
 }
 
-// SendLocationContinuous implements where_child_busv1.BusServiceServer.
-func (*busServiceServer) SendLocationContinuous(pb.BusService_SendLocationContinuousServer) error {
-	panic("unimplemented")
+func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
+	return &busServiceServer{interactor}
 }
 
-// StreamBusVideo implements where_child_busv1.BusServiceServer.
-func (*busServiceServer) StreamBusVideo(pb.BusService_StreamBusVideoServer) error {
-	panic("unimplemented")
+// SendLocationContinuous implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
+	return s.interactor.SendLocationContinuous(stream)
 }
 
 // TrackBusContinuous implements where_child_busv1.BusServiceServer.
-func (*busServiceServer) TrackBusContinuous(*pb.TrackBusContinuousRequest, pb.BusService_TrackBusContinuousServer) error {
-	panic("unimplemented")
+func (s *busServiceServer) TrackBusContinuous(req *pb.TrackBusContinuousRequest, stream pb.BusService_TrackBusContinuousServer) error {
+	return s.interactor.TrackBusContinuous(req, stream)
 }
 
-func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
-	return &busServiceServer{interactor}
+// StreamBusVideo implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) error {
+	return s.interactor.StreamBusVideo(stream)
 }
 
 // CreateBus implements where_child_busv1.BusServiceServer.
