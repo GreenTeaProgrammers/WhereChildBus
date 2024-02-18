@@ -2,6 +2,7 @@ package child
 
 import (
 	"fmt"
+	"io"
 
 	"cloud.google.com/go/storage"
 	"github.com/google/uuid"
@@ -13,6 +14,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	childPhotoRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
@@ -123,16 +125,16 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		}
 	}
 
-	// TODO: 顔検出と切り抜きのリクエストを送信
-	// res, err := i.MLServiceClient.FaceDetectAndClip(ctx, &mlv1.FaceDetectAndClipRequest{
-	// 	NurseryId: nurseryID.String(),
-	// 	ChildId:   child.ID.String(),
-	// })
+	// NOTE: ここでPythonRPCを呼び出して、顔検出と切り抜きを行う
+	res, err := i.MLServiceClient.FaceDetectAndClip(ctx, &mlv1.FaceDetectAndClipRequest{
+		NurseryId: nurseryID.String(),
+		ChildId:   child.ID.String(),
+	})
 
-	// if !res.IsStarted && err != nil {
-	// 	i.logger.Error("failed to start face detection and clipping", "error", err)
-	// 	return nil, err
-	// }
+	if !res.IsStarted && err != nil {
+		i.logger.Error("failed to start face detection and clipping", "error", err)
+		return nil, err
+	}
 
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
@@ -163,8 +165,21 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 		return nil, err
 	}
 
+	nursery, err := i.entClient.Guardian.Query().
+		Where(guardianRepo.HasNurseryWith(nurseryRepo.HasGuardiansWith(guardianRepo.IDEQ(guardianID)))).
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get nursery by guardian ID", "error", err)
+		return nil, err
+	}
+
+	nurseryID := nursery.ID.String()
 	var childPhotoList []*pb.ChildPhoto
+
+	// 子供ごとに処理
 	for _, child := range children {
+		// データベースから子供の写真のメタデータを取得
 		childPhotoRecordList, err := i.entClient.ChildPhoto.Query().
 			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).
 			All(ctx)
@@ -174,17 +189,28 @@ func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetCh
 			return nil, err
 		}
 
-		for _, photo := range childPhotoRecordList {
+		// 写真メタデータリストをループ
+		for _, photoMetadata := range childPhotoRecordList {
+			// GCSから写真を取得するためのIDを使用
+			photo_data, err := i.getPhotoFromGCS(ctx, nurseryID, child.Id, photoMetadata.ID.String())
+			if err != nil {
+				i.logger.Error("failed to get photo from GCS", "error", err)
+				return nil, err
+			}
+
+			// 結果リストに追加
 			childPhotoList = append(childPhotoList, &pb.ChildPhoto{
-				ChildId: child.Id,
-				Id:      photo.ID.String(),
+				ChildId:   child.Id,
+				Id:        photoMetadata.ID.String(), // 修正: GCSから取得した写真のIDではなく、メタデータのIDを使用
+				PhotoData: photo_data,
 			})
 		}
 	}
 
 	return &pb.GetChildListByGuardianIDResponse{
 		Children: children,
-		Photos:   childPhotoList}, nil
+		Photos:   childPhotoList,
+	}, nil
 }
 
 func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
@@ -210,7 +236,8 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 	// 子供の写真を取得
 	var photos []*pb.ChildPhoto
 	for _, child := range children {
-		photoRecordList, err := i.entClient.ChildPhoto.Query().
+		// 子供の写真のメタデータを取得
+		childPhotoRecordList, err := i.entClient.ChildPhoto.Query().
 			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).All(ctx)
 
 		if err != nil {
@@ -218,10 +245,20 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 			return nil, err
 		}
 
-		for _, photo := range photoRecordList {
+		// 写真メタデータリストをループ
+		for _, photoMetadata := range childPhotoRecordList {
+			// GCSから写真を取得するためのIDを使用
+			photo_data, err := i.getPhotoFromGCS(ctx, nurseryID.String(), child.Id, photoMetadata.ID.String())
+			if err != nil {
+				i.logger.Error("failed to get photo from GCS", "error", err)
+				return nil, err
+			}
+
+			// 結果リストに追加
 			photos = append(photos, &pb.ChildPhoto{
-				ChildId: child.Id,
-				Id:      photo.ID.String(),
+				ChildId:   child.Id,
+				Id:        photoMetadata.ID.String(), // 修正: GCSから取得した写真のIDではなく、メタデータのIDを使用
+				PhotoData: photo_data,
 			})
 		}
 	}
@@ -240,6 +277,7 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 	}
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
+		// Guardianの先のNurseryまで取得
 		return tx.Child.Query().
 			Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
 			WithGuardian(), nil
@@ -249,6 +287,10 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 		i.logger.Error("failed to get children by bus ID", "error", err)
 		return nil, err
 	}
+
+	nursery := i.entClient.Nursery.Query().
+		Where(nurseryRepo.HasBusesWith(busRepo.ID(busID))).
+		OnlyX(ctx)
 
 	// 子供の写真を取得
 	var photos []*pb.ChildPhoto
@@ -262,9 +304,16 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 		}
 
 		for _, photo := range photoRecordList {
+			photo_data, err := i.getPhotoFromGCS(ctx, nursery.ID.String(), child.Id, photo.ID.String())
+			if err != nil {
+				i.logger.Error("failed to get photo from GCS", "error", err)
+				return nil, err
+			}
+
 			photos = append(photos, &pb.ChildPhoto{
-				ChildId: child.Id,
-				Id:      photo.ID.String(),
+				ChildId:   child.Id,
+				Id:        photo.ID.String(),
+				PhotoData: photo_data,
 			})
 		}
 	}
@@ -307,6 +356,21 @@ func (i *Interactor) getChildList(ctx context.Context, queryFunc func(*ent.Tx) (
 	}
 
 	return pbChildren, nil
+}
+
+func (i *Interactor) getPhotoFromGCS(ctx context.Context, nurseryID, childID, photoID string) ([]byte, error) {
+	// Cloud Storage上の写真のパスを生成
+	objectName := fmt.Sprintf("%s/%s/raw/%s.png", nurseryID, childID, photoID)
+
+	// 指定したバケット内のオブジェクトを取得
+	rc, err := i.StorageClient.Bucket(i.BucketName).Object(objectName).NewReader(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rc.Close()
+
+	// バイトデータを読み込む
+	return io.ReadAll(rc)
 }
 
 // uploadPhotoToGCS は写真をGCPのCloud Storageにアップロードします。
