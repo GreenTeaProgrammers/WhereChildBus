@@ -36,28 +36,29 @@ class _BusChildManagePageState extends State<BusChildManagePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("子供の管理"),
-        backgroundColor: Colors.white, 
+        backgroundColor: Colors.white,
       ),
       body: pageBody(),
     );
   }
 
   Widget pageBody() {
-  // ChildListWithButton ウィジェットを使用してリストを表示
-  return ChildListWithButton(
-    childNames: name,
-    groupNames: group,
-    images: image,
-    callback: () {
-      // ここでリストアイテムがタップされたときの動作を定義
-      print("リストアイテムがタップされました");
-    },
-    buttonIconTypes: List<ButtonIconType>.generate(name.length, (index) {
-    // ここで条件に基づいてアイコンタイプを決定するロジックを追加できる
-    // 例として、すべてのアイテムに対して 'add' アイコンを設定
-      return ButtonIconType.add;
-  }),
-  );
-}
+    // ChildListWithButton ウィジェットを使用してリストを表示
+    // return ChildListWithButton(
+    //   childNames: name,
+    //   groupNames: group,
+    //   images: image,
+    //   callback: () {
+    //     // ここでリストアイテムがタップされたときの動作を定義
+    //     print("リストアイテムがタップされました");
+    //   },
+    //   buttonIconTypes: List<ButtonIconType>.generate(name.length, (index) {
+    //   // ここで条件に基づいてアイコンタイプを決定するロジックを追加できる
+    //   // 例として、すべてのアイテムに対して 'add' アイコンを設定
+    //     return ButtonIconType.add;
+    // }),
+    // );
 
+    return Container();
+  }
 }
