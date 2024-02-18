@@ -75,7 +75,7 @@ RUN echo "gcp-credentials.json is: $(cat /app/secrets/gcp-credentials.json)"
 
 # /appディレクトリ以下の全てのサブファイルディレクトリも含めた構造を出力
 RUN ls -laR /app
-
+ENV GOOGLE_APPLICATION_CREDENTIALS=/app/secrets/gcp-credentials.json
 
 # アプリケーションの起動
 ENTRYPOINT ["/app/server"]
