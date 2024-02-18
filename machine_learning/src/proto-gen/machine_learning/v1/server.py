@@ -40,7 +40,6 @@ class MachineLearningServiceServicer(
     def Predict(self, request: machine_learning_pb2.PredRequest, context):
         pass
 
-    # TODO: implement Train
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
         parser = argparse.ArgumentParser()
         args = parser.parse_args()
