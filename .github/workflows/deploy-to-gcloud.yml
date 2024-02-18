@@ -26,8 +26,8 @@ jobs:
         uses: "google-github-actions/setup-gcloud@v2"
         with:
           version: ">= 363.0.0"
-      - name: Configure Docker to use the gcloud command-line tool as a credential helper
-        run: gcloud auth configure-docker
+      - name: Configure Docker to use the gcloud command-line tool as a credential helper for us-west1
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
       - name: Build Docker Image
         run: |
