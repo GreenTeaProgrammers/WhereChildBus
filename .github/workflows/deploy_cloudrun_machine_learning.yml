@@ -29,7 +29,7 @@ jobs:
             --platform linux/amd64 ./machine_learning
 
       - name: Authenticate Docker to GCP
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker --quiet
 
       - name: Push Docker image to Artifact Registry
         run: |
