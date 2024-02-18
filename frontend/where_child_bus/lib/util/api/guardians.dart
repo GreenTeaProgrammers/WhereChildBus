@@ -34,9 +34,17 @@ Future<GetGuardianListByBusIdResponse> getGuardiansListByBusId(
   });
 }
 
-// Future<void> getGuardianByChildId(String childId) async {
-//   return performGrpcCall((client) async {
-//     var req = GetGuardianByChildIdRequest(childId: childId);
-//     return client.getGuardianBuChild
+Future<GetGuardianByChildIdResponse> getGuardiansListByChildId(
+    String childId) async {
+  return performGrpcCall((client) async {
+    var req = GetGuardianByChildIdRequest(childId: childId);
+    return client.getGuardianByChildId(req);
+  });
+}
+
+// Future<> getGuardiansListByNurseryId(String nurseryId) async {
+//   return performGrpcCall((client) async{
+//     var req = getGuardiansListByNurseryId(nurseryId);
+//     return client.
 //   });
 // }

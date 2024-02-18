@@ -1,5 +1,7 @@
+import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
+import 'package:where_child_bus/service/get_guardians_list_by_child_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class StudentDetailSheet extends StatefulWidget {
@@ -12,6 +14,41 @@ class StudentDetailSheet extends StatefulWidget {
 }
 
 class _StudentDetailSheetState extends State<StudentDetailSheet> {
+  late GuardianResponse guardian;
+  bool _isLoading = false;
+  bool _isFailLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGuardian();
+  }
+
+  Future<void> _loadGuardian() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      var res = await getGuardianListByChildIdService(widget.child.id);
+
+      if (mounted) {
+        setState(() {
+          guardian = res;
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      developer.log("Caught ErrorAAAAAA", error: error);
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isFailLoading = true;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +70,10 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
       children: <Widget>[
         modalHeader(context),
         Container(
-            margin: const EdgeInsets.only(top: 20), child: childDetailList())
+            margin: const EdgeInsets.only(top: 20),
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : childDetailList())
       ],
     );
   }
@@ -78,19 +118,26 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
   }
 
   Widget childDetailList() {
-    // 詳細リストのデータを受け取る処理を将来的に実装
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        childDetailItem("年齢", "${widget.child.age}歳"),
-        // childDetailItem("クラス", "1組"),
-        childDetailItem("保護者氏名", "保護者1"),
-        childDetailItem("保護者連絡先", "xxx-xxxx-xxxx"),
-        childDetailItem("利用バス", "○○コース"),
-        // childDetailItem("乗降場所", "○○駐車場前"),
-      ],
-    );
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (_isLoading == false && _isFailLoading) {
+      return const Text("ロードに失敗しました");
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          childDetailItem("年齢", "${widget.child.age}歳"),
+          // childDetailItem("クラス", "1組"),
+          childDetailItem("保護者氏名", "${guardian.name}"),
+          childDetailItem("保護者連絡先", guardian.phoneNumber),
+          childDetailItem("利用バス", "○○コース"),
+          // childDetailItem("乗降場所", "○○駐車場前"),
+        ],
+      );
+    }
   }
 
   Widget childDetailItem(String title, String element) {
