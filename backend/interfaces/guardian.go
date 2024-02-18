@@ -34,3 +34,8 @@ func (s *guardianServiceServer) GetGuardianListByBusId(ctx context.Context, req 
 func (s *guardianServiceServer) GetGuardianByChildId(ctx context.Context, req *pb.GetGuardianByChildIdRequest) (*pb.GetGuardianByChildIdResponse, error) {
 	return s.interactor.GetGuardianByChildID(ctx, req)
 }
+
+// GetGuardianListByNurseryId implements where_child_busv1.GuardianServiceServer.
+func (s *guardianServiceServer) GetGuardianListByNurseryId(ctx context.Context, req *pb.GetGuardianListByNurseryIdRequest) (*pb.GetGuardianListByNurseryIdResponse, error) {
+	return s.interactor.GetGuardianListByNurseryID(ctx, req)
+}

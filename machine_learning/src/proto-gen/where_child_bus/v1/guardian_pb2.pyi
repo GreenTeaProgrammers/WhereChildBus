@@ -67,3 +67,15 @@ class GetGuardianByChildIdResponse(_message.Message):
     GUARDIAN_FIELD_NUMBER: _ClassVar[int]
     guardian: _resources_pb2.GuardianResponse
     def __init__(self, guardian: _Optional[_Union[_resources_pb2.GuardianResponse, _Mapping]] = ...) -> None: ...
+
+class GetGuardianListByNurseryIdRequest(_message.Message):
+    __slots__ = ("nursery_id",)
+    NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
+    nursery_id: str
+    def __init__(self, nursery_id: _Optional[str] = ...) -> None: ...
+
+class GetGuardianListByNurseryIdResponse(_message.Message):
+    __slots__ = ("guardians",)
+    GUARDIANS_FIELD_NUMBER: _ClassVar[int]
+    guardians: _containers.RepeatedCompositeFieldContainer[_resources_pb2.GuardianResponse]
+    def __init__(self, guardians: _Optional[_Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]] = ...) -> None: ...

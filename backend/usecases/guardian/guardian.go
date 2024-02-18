@@ -207,3 +207,44 @@ func (i *Interactor) GetGuardianByChildID(ctx context.Context, req *pb.GetGuardi
 	pbGuardian := utils.ToPbGuardianResponse(guardians)
 	return &pb.GetGuardianByChildIdResponse{Guardian: pbGuardian}, nil
 }
+
+func (i *Interactor) GetGuardianListByNurseryID(ctx context.Context, req *pb.GetGuardianListByNurseryIdRequest) (*pb.GetGuardianListByNurseryIdResponse, error) {
+	nurseryID, err := uuid.Parse(req.NurseryId)
+	if err != nil {
+		i.logger.Error("failed to parse nursery ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションを開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+
+	defer utils.RollbackTx(tx, i.logger)
+
+	// Guardianを取得
+	guardians, err := tx.Guardian.Query().
+		Where(guardianRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))).
+		WithNursery().
+		All(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get guardians by nursery ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	var pbGuardians []*pb.GuardianResponse
+	for _, guardian := range guardians {
+		pbGuardians = append(pbGuardians, utils.ToPbGuardianResponse(guardian))
+	}
+
+	return &pb.GetGuardianListByNurseryIdResponse{Guardians: pbGuardians}, nil
+}
