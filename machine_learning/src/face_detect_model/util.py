@@ -36,6 +36,7 @@ def get_child_id(blob_name: str):
     return child_id
 
 
+# TODO: gRPC用に生成されたファイルを用いることができないか検証し，置換
 def switch_to_bus_type(bus_type_num: int):
     bus_type_str = "BUS_TYPE_"
     if bus_type_num == 0:
