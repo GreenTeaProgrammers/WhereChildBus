@@ -18,9 +18,9 @@ dataset:
   augmentation:
     num_variations: 10
   ratio:
-    train: 0.7
+    train: 0.8
     valid: 0.1
-    test: 0.2
+    test: 0.1
 train:
   epoch: 3
   learning_rate: 0.001
