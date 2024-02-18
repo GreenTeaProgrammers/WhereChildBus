@@ -5,16 +5,12 @@ from PIL import Image
 from torchvision import transforms
 
 from face_detect_model.util import (
-    init_client,
-    get_bucket,
-    get_blobs,
     load_image_from_remote,
 )
 
-# TODO: GCSに関する処理を別ファイルに切り出す
+from face_detect_model.gcp_util import get_bucket, get_blobs
 
 
-# 画像の読み込みを切り出す
 # (child_id, image)のタプルを返す
 class FaceDetectDataset(torch.utils.data.Dataset):
 
@@ -113,7 +109,7 @@ class FaceDetectDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         return self.face_data[idx]
 
-    def get_label_name_dict(self):
+    def get_idx_label_dict(self):
         return self.label_name_dict
 
     def get_label_num(self):

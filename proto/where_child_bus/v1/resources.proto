@@ -139,7 +139,7 @@ message BusStationAssociation {
 message ChildPhoto {
         string id = 1;
         string child_id = 2;
-        bytes photo  = 3;
+        bytes photo_data = 3;
         google.protobuf.Timestamp  created_at = 4;
         google.protobuf.Timestamp  updated_at = 5;
 }

@@ -1,11 +1,13 @@
 import yaml
 import argparse
 import torch
+import os
 
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.trainer import Trainer
-from face_detect_model.util import logger, init_client
+from face_detect_model.util import logger, save_pickle_to_gcs, switch_to_bus_type
+from face_detect_model.gcp_util import init_client, get_bucket
 from dotenv import load_dotenv
 
 load_dotenv("secrets/.env")
@@ -39,6 +41,20 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
     logger.info("model Initializing")
     num_classes = dataset.get_label_num()
     image_shape = dataset.get_image_shape()
+
+    idx_to_label = dataset.get_idx_label_dict()
+    if args.mode == "train":
+        bucket = get_bucket(
+            client,
+            os.environ.get("BUCKET_NAME_FOR_MODEL"),
+        )
+        save_pickle_to_gcs(
+            bucket=bucket,
+            upload_model_path=f"{args.nursery_id}/{args.bus_id}/idx_to_label_{switch_to_bus_type(args.bus_type)}.pth",
+            obj=idx_to_label,
+        )
+        logger.info("idx_to_label is saved")
+
     face_detect_model = FaceDetectModel(
         config, num_classes=num_classes, input_dim=image_shape
     )
@@ -57,6 +73,7 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
     if args.mode == "train":
         # 学習
         trainer.train()
+        logger.info("Done training!")
     elif args.mode == "test":
         # テスト
         face_detect_model.load_state_dict(
@@ -70,7 +87,6 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
 def main(args: argparse.Namespace):
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
-
     TrainAndTest(args, config)
 
 

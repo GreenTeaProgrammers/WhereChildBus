@@ -3,7 +3,6 @@ import re
 
 import random
 import torch
-import google.cloud.storage as gcs
 from google.cloud.storage import Bucket
 import os
 import numpy as np
@@ -25,39 +24,6 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
 
 
-def init_client():
-    # NOTE: gcloud auth application-default loginにて事前に認証
-    PROJECT_ID = os.environ.get("PROJECT_ID")
-
-    client = gcs.Client(PROJECT_ID)
-    if client is None:
-        logger.error("Failed to initialize client.")
-        exit(1)
-    else:
-        return client
-
-
-def get_bucket(client: gcs.Client, bucket_name: str):
-    bucket = client.bucket(bucket_name)
-
-    if bucket.exists():
-        return bucket
-    else:
-        raise ValueError(f"Failed to {bucket_name} does not exist.")
-
-
-def get_blobs(bucket: Bucket, blob_name: str):
-    # blobsの中身に対するエラーハンドリング
-    try:
-        blobs = list(bucket.list_blobs(prefix=blob_name))
-        if len(blobs) == 0:  # 最初の要素がない場合、イテレータは空
-            raise ValueError(f"No blobs found with prefix '{blob_name}' in the bucket.")
-        else:
-            return blobs
-    except Exception as e:
-        raise ValueError(f"Failed to get blobs from '{blob_name}' due to an error: {e}")
-
-
 def get_child_id(blob_name: str):
     # UUIDの正規表現パターン
     uuid_pattern = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
@@ -68,6 +34,19 @@ def get_child_id(blob_name: str):
     # 目的のUUIDを取得（2番目に現れるUUID）
     child_id = uuids[1] if len(uuids) > 1 else None
     return child_id
+
+
+# TODO: gRPC用に生成されたファイルを用いることができないか検証し，置換
+def switch_to_bus_type(bus_type_num: int):
+    bus_type_str = "BUS_TYPE_"
+    if bus_type_num == 0:
+        return bus_type_str + "UNSPECIFIED"
+    elif bus_type_num == 1:
+        return bus_type_str + "MORNING"
+    elif bus_type_num == 2:
+        return bus_type_str + "EVENING"
+    else:
+        raise ValueError(f"Invalid bus_type: {bus_type_num}")
 
 
 def load_image_from_remote(blobs: list):
@@ -98,11 +77,9 @@ def _is_valid_file(file_name):
     return os.path.splitext(file_name)[1].lower() in VALID_EXTENSIONS
 
 
-def save_model_to_gcs(
-    bucket: Bucket, upload_model_path: str, model_instance: torch.nn.Module
-):
+def save_pickle_to_gcs(bucket: Bucket, upload_model_path: str, obj: object):
     logger.info(f"Saving model to {upload_model_path}")
     blob = bucket.blob(upload_model_path)
     with blob.open("wb", ignore_flush=True) as f:
-        torch.save(model_instance.state_dict(), f)
+        torch.save(obj, f)
     logger.info(f"Model saved to {upload_model_path}")
