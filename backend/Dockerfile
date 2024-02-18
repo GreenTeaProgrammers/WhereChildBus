@@ -57,10 +57,15 @@ FROM alpine:latest
 # 必要なパッケージをインストール
 RUN apk --no-cache add ca-certificates
 
-# ビルドステージからバイナリと.envファイルをコピー
+# ビルドステージからバイナリファイルをコピー
 COPY --from=builder /go/bin/server /server
-COPY --from=builder /srv/grpc/.env ./.env
+
+# .envファイルをカレントディレクトリにコピー
+COPY --from=builder /srv/grpc/.env ./
+
+# secretsディレクトリをコピー
 COPY --from=builder /srv/grpc/secrets /secrets
 
-# アプリケーションの起動
+
+WORKDIR /app
 ENTRYPOINT ["/server"]
