@@ -64,11 +64,9 @@ def _is_valid_file(file_name):
     return os.path.splitext(file_name)[1].lower() in VALID_EXTENSIONS
 
 
-def save_model_to_gcs(
-    bucket: Bucket, upload_model_path: str, model_instance: torch.nn.Module
-):
+def save_pickle_to_gcs(bucket: Bucket, upload_model_path: str, obj: object):
     logger.info(f"Saving model to {upload_model_path}")
     blob = bucket.blob(upload_model_path)
     with blob.open("wb", ignore_flush=True) as f:
-        torch.save(model_instance.state_dict(), f)
+        torch.save(obj, f)
     logger.info(f"Model saved to {upload_model_path}")

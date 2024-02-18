@@ -6,7 +6,7 @@ import google.cloud.storage as gcs
 
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
 from face_detect_model.model.faceDetectModel import FaceDetectModel
-from face_detect_model.util import logger, save_model_to_gcs
+from face_detect_model.util import logger, save_pickle_to_gcs
 from face_detect_model.gcp_util import get_bucket
 
 
@@ -80,10 +80,10 @@ class Trainer:
                 self.validate()
 
         self.test()
-        save_model_to_gcs(
+        save_pickle_to_gcs(
             bucket=self.bucket,
             upload_model_path=f"{self.args.nursery_id}/{self.args.bus_id}/{self.args.bus_type}.pth",
-            model_instance=self.model,
+            obj=self.model.state_dict(),
         )
 
     def step(self, label: torch.Tensor, image: torch.Tensor):
