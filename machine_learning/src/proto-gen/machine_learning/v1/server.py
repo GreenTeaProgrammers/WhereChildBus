@@ -40,7 +40,12 @@ class HealthCheckServiceServer(
 class MachineLearningServiceServicer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
-    def Predict(self, request_iterator: machine_learning_pb2.PredRequest, context):
+    def __init__(self):
+        self.pred_fn = pred_fn
+        self.train_fn = train_fn
+        self.detect_face_and_clip_fn = detect_face_and_clip_fn
+
+    def Predict(self, request_iterator: bus_pb2.StreamBusVideoRequest, context):
         for req in request_iterator:
             parser = argparse.ArgumentParser()
             args = parser.parse_args()
@@ -52,7 +57,7 @@ class MachineLearningServiceServicer(
             args.timestamp = req.timestamp
 
             try:
-                child_ids = pred_fn(args)
+                child_ids = self.pred_fn(args)
             except Exception as e:
                 logging.error(e)
                 child_ids = []
@@ -70,7 +75,7 @@ class MachineLearningServiceServicer(
         args.mode = "train"
         # mainメソッドを別スレッドで実行
         try:
-            thread = threading.Thread(target=train_fn, args=(args,))
+            thread = threading.Thread(target=self.train_fn, args=(args,))
             thread.start()
             is_started = True
         except Exception as e:
@@ -92,7 +97,7 @@ class MachineLearningServiceServicer(
         args.env = "remote"
         # mainメソッドを別スレッドで実行
         try:
-            thread = threading.Thread(target=detect_face_and_clip_fn, args=(args,))
+            thread = threading.Thread(target=self.detect_face_and_clip_fn, args=(args,))
             thread.start()
             is_started = True
         except Exception as e:
