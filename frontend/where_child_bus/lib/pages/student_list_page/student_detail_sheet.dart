@@ -83,12 +83,12 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        childDetailItem("年齢", "3歳"),
-        childDetailItem("クラス", "1組"),
+        childDetailItem("年齢", "${widget.child.age}歳"),
+        // childDetailItem("クラス", "1組"),
         childDetailItem("保護者氏名", "保護者1"),
         childDetailItem("保護者連絡先", "xxx-xxxx-xxxx"),
-        childDetailItem("利用コース", "○○コース"),
-        childDetailItem("乗降場所", "○○駐車場前"),
+        childDetailItem("利用バス", "○○コース"),
+        // childDetailItem("乗降場所", "○○駐車場前"),
       ],
     );
   }

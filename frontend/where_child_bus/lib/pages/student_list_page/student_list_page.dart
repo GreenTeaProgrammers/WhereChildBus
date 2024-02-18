@@ -21,20 +21,6 @@ class _ChildListPageState extends State<ChildListPage> {
   bool _isFailLoading = false;
 
   //TODO: 将来的には動的にデータを受け取る。
-  final List<String> name = <String>[
-    "園児1",
-    "園児2",
-    "園児3",
-    "園児4",
-    "園児5",
-  ];
-  final List<String> group = <String>[
-    "1組",
-    "2組",
-    "3組",
-    "4組",
-    "5組",
-  ];
   final List<String> image = <String>[
     "1",
     "2",
@@ -91,10 +77,16 @@ class _ChildListPageState extends State<ChildListPage> {
   }
 
   Widget pageBody() {
-    return _isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : ChildList(children: children, images: image);
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (_isFailLoading) {
+      return const Center(
+        child: Text('Failed to load children.'),
+      );
+    } else {
+      return ChildList(children: children, images: image);
+    }
   }
 }
