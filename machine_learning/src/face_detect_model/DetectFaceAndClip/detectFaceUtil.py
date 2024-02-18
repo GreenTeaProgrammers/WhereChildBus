@@ -1,5 +1,4 @@
 import cv2
-import os
 
 
 def load_cascade(cascade_path):

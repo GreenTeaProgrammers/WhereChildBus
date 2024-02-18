@@ -6,7 +6,8 @@ import google.cloud.storage as gcs
 
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
 from face_detect_model.model.faceDetectModel import FaceDetectModel
-from face_detect_model.util import logger, get_bucket, save_model_to_gcs
+from face_detect_model.util import logger, save_model_to_gcs
+from face_detect_model.gcp_util import get_bucket
 
 
 class Trainer:
