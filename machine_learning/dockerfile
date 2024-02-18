@@ -1,20 +1,33 @@
+# ベースイメージ
 FROM python:3.11.6-slim
 
-WORKDIR /machine-learning
-COPY ./requirements.lock /machine-learning/
+# ビルド引数を定義
+ARG PROJECT_ID
+ARG BUCKET_NAME
 
-RUN sed '/-e/d' requirements.lock > requirements.txt
-RUN pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+# 作業ディレクトリの設定
+WORKDIR /machine-learning
+
+# 必要なパッケージのインストール
+COPY ./requirements.lock /machine-learning/
+RUN sed '/-e/d' requirements.lock > requirements.txt && \
+    pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 # 必要なライブラリをインストール
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0
 
+# アプリケーションコードをコピー
 COPY ./src /machine-learning/src
-COPY ./secrets /machine-learning/secrets
 
+# .envファイルを作成し、ビルド引数の値を書き込む
+RUN mkdir -p /machine-learning/secrets && \
+    echo "PROJECT_ID=$PROJECT_ID" > /machine-learning/secrets/.env && \
+    echo "BUCKET_NAME=$BUCKET_NAME" >> /machine-learning/secrets/.env
+
+# 環境変数PATHの設定
 ENV PYTHONPATH "${PYTHONPATH}:/machine-learning/src/"
 
-# TODO: server.pyをproto-genから切り出し
+# サーバー起動
 ENTRYPOINT ["python", "src/proto-gen/machine_learning/v1/server.py"]
