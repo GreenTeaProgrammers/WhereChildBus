@@ -90,7 +90,7 @@ class _ChildListPageState extends State<ChildListPage> {
         child: Text('Failed to load children.'),
       );
     } else {
-      return ChildList(children: children, images: image);
+      return ChildList(children: children, images: photos);
     }
   }
 }

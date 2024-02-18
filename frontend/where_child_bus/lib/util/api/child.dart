@@ -12,11 +12,14 @@ Future<T> performGrpcCall<T>(
     port: appConfig.grpcPort,
   );
   final grpcClient = ChildServiceClient(channel);
+  final Stopwatch stopwatch = new Stopwatch()..start();
 
   try {
     final result = await grpcCall(grpcClient);
+    stopwatch.stop();
+
     if (kDebugMode) {
-      developer.log("レスポンス: $result");
+      developer.log("レスポンスが返ってきました: ${stopwatch.elapsedMilliseconds}ms");
     }
     return result;
   } catch (error) {

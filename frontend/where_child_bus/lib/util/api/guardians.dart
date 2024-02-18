@@ -42,9 +42,10 @@ Future<GetGuardianByChildIdResponse> getGuardiansListByChildId(
   });
 }
 
-// Future<> getGuardiansListByNurseryId(String nurseryId) async {
-//   return performGrpcCall((client) async{
-//     var req = getGuardiansListByNurseryId(nurseryId);
-//     return client.
-//   });
-// }
+Future<GetGuardianListByNurseryIdResponse> getGuardiansListByNurseryId(
+    String nurseryId) async {
+  return performGrpcCall((client) async {
+    var req = GetGuardianListByNurseryIdRequest(nurseryId: nurseryId);
+    return client.getGuardianListByNurseryId(req);
+  });
+}

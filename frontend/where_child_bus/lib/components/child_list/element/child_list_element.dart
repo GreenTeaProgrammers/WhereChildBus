@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/components/util/image_from_byte.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class ChildListElement extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String imagePath;
+  final ChildPhoto image;
   final VoidCallback? onTap;
-  final Widget? actionButton; 
+  final Widget? actionButton;
 
   const ChildListElement({
     Key? key,
     required this.title,
     required this.subtitle,
-    required this.imagePath,
+    required this.image,
     this.onTap,
-    this.actionButton, 
+    this.actionButton,
   }) : super(key: key);
 
   @override
@@ -30,7 +32,8 @@ class ChildListElement extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Image.asset(imagePath, width: 100, height: 100),
+                  ImageFromBytes(
+                      imageData: image.photoData, height: 100, width: 100),
                   const SizedBox(width: 16),
                   Expanded(
                     child: titleAndSubTitle(title, subtitle),
@@ -57,10 +60,8 @@ class ChildListElement extends StatelessWidget {
   }
 
   Text titleText(String title) {
-    return Text(
-      title,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
-    );
+    return Text(title,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
   }
 
   Text subTitleText(String subtitle) {

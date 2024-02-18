@@ -5,7 +5,7 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 
 class ChildList extends StatefulWidget {
   final List<Child> children;
-  final List<String> images;
+  final List<ChildPhoto> images;
   final VoidCallback? callback;
 
   const ChildList({
@@ -35,7 +35,7 @@ class _ChildListState extends State<ChildList> {
     return ChildListElement(
         title: widget.children[index].name,
         subtitle: widget.children[index].id,
-        imagePath: "assets/images/face_${widget.images[index]}.png",
+        image: widget.images[index],
         onTap: () {
           if (widget.callback == null) {
             childDetailModal(index);
