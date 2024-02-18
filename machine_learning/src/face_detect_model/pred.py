@@ -11,6 +11,7 @@ from face_detect_model.util import (
     switch_to_bus_type,
     load_pickle_to_gcs,
     get_default_transforms,
+    logger,
 )
 from face_detect_model.gcp_util import init_client, get_bucket
 from face_detect_model.model.faceDetectModel import FaceDetectModel
@@ -87,7 +88,6 @@ def get_model_input_shape(tensor):
 
 def pred_child_from_tensor(model, input_image_tensor):
     output = model(input_image_tensor.unsqueeze(0))
-    print(torch.nn.functional.softmax(output, dim=1))
     pred = output.argmax(dim=1)
     return pred
 
@@ -98,9 +98,8 @@ def get_pred_child(model, input_image_tensors, idx_to_label_dict):
     # TODO: 複数枚をバッチで処理する
     for input_image_tensor in input_image_tensors:
         pred = pred_child_from_tensor(model, input_image_tensor)
-        print(pred)
         child_id = idx_to_label_dict[pred.item()]
-        print(child_id)
+        logger.info(f"Predicted child id: {child_id}")
         pred_child_ids.add(child_id)
 
     return pred_child_ids
@@ -117,8 +116,6 @@ def pred_child_from_images(args, config):
 
     clipped_faces = get_cliped_faces_from_images(args.video_chunks, config)
     input_image_tensors = convert_to_tensor_from_images(clipped_faces)
-    for input_image_tensor in input_image_tensors:
-        print(input_image_tensor.shape)
 
     model_bucket_path = (
         f"{args.nursery_id}/{args.bus_id}/model_{switch_to_bus_type(args.bus_type)}.pth"
@@ -131,18 +128,21 @@ def pred_child_from_images(args, config):
         num_classes=model_class_num,
         input_shape=input_shape,
     )
-    # model.eval()
+    model.eval()
 
+    logger.info("Start predicting child id")
     pred_child_ids = get_pred_child(model, input_image_tensors, idx_to_label_dict)
-    print(pred_child_ids)
+    logger.info(f"Predicted child ids: {pred_child_ids}")
+    logger.info("Done")
 
-    return pred_child_ids
+    return list(pred_child_ids)
 
 
 def main(args):
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
-    pred_child_from_images(args, config)
+    pred_child_ids_list = pred_child_from_images(args, config)
+    return pred_child_ids_list
 
 
 if __name__ == "__main__":
@@ -152,11 +152,10 @@ if __name__ == "__main__":
     parser.add_argument("--bus_type", type=int, required=True)
 
     args = parser.parse_args()
-
-    # DEBUG
     args.video_chunks = [
         open("/Users/mizuki/Desktop/test.jpg", "rb").read(),
         open("/Users/mizuki/Desktop/test1.jpg", "rb").read(),
     ]
 
+    # TODO: main関数に対してmodelを渡すように実装を変換
     main(args)
