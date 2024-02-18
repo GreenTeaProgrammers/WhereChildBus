@@ -19,7 +19,7 @@ class ChildServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildResponse.FromString,
                 )
-        self.GetChildListByNurseryID = channel.unary_stream(
+        self.GetChildListByNurseryID = channel.unary_unary(
                 '/where_child_bus.v1.ChildService/GetChildListByNurseryID',
                 request_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDResponse.FromString,
@@ -71,7 +71,7 @@ def add_ChildServiceServicer_to_server(servicer, server):
                     request_deserializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_child__pb2.CreateChildResponse.SerializeToString,
             ),
-            'GetChildListByNurseryID': grpc.unary_stream_rpc_method_handler(
+            'GetChildListByNurseryID': grpc.unary_unary_rpc_method_handler(
                     servicer.GetChildListByNurseryID,
                     request_deserializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDResponse.SerializeToString,
@@ -124,7 +124,7 @@ class ChildService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/where_child_bus.v1.ChildService/GetChildListByNurseryID',
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.ChildService/GetChildListByNurseryID',
             where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDRequest.SerializeToString,
             where__child__bus_dot_v1_dot_child__pb2.GetChildListByNurseryIDResponse.FromString,
             options, channel_credentials,

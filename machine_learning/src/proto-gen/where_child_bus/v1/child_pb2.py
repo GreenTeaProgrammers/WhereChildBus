@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from where_child_bus.v1 import resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1ewhere_child_bus/v1/child.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"\xbd\x01\n\x12\x43reateChildRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x1f\n\x0bguardian_id\x18\x02 \x01(\tR\nguardianId\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12\x10\n\x03\x61ge\x18\x04 \x01(\x05R\x03\x61ge\x12)\n\x03sex\x18\x05 \x01(\x0e\x32\x17.where_child_bus.v1.SexR\x03sex\x12\x16\n\x06photos\x18\x06 \x03(\x0cR\x06photos\"F\n\x13\x43reateChildResponse\x12/\n\x05\x63hild\x18\x01 \x01(\x0b\x32\x19.where_child_bus.v1.ChildR\x05\x63hild\"?\n\x1eGetChildListByNurseryIDRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\"\x88\x01\n\x1fGetChildListByNurseryIDResponse\x12/\n\x05\x63hild\x18\x01 \x01(\x0b\x32\x19.where_child_bus.v1.ChildR\x05\x63hild\x12\x34\n\x05photo\x18\x02 \x01(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x05photo\"B\n\x1fGetChildListByGuardianIDRequest\x12\x1f\n\x0bguardian_id\x18\x01 \x01(\tR\nguardianId\"\x91\x01\n GetChildListByGuardianIDResponse\x12\x35\n\x08\x63hildren\x18\x01 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\x12\x36\n\x06photos\x18\x02 \x03(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x06photos\"3\n\x1aGetChildListByBusIDRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\"\x8c\x01\n\x1bGetChildListByBusIDResponse\x12\x35\n\x08\x63hildren\x18\x01 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\x12\x36\n\x06photos\x18\x02 \x03(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x06photos2\xf5\x03\n\x0c\x43hildService\x12^\n\x0b\x43reateChild\x12&.where_child_bus.v1.CreateChildRequest\x1a\'.where_child_bus.v1.CreateChildResponse\x12\x84\x01\n\x17GetChildListByNurseryID\x12\x32.where_child_bus.v1.GetChildListByNurseryIDRequest\x1a\x33.where_child_bus.v1.GetChildListByNurseryIDResponse0\x01\x12\x85\x01\n\x18GetChildListByGuardianID\x12\x33.where_child_bus.v1.GetChildListByGuardianIDRequest\x1a\x34.where_child_bus.v1.GetChildListByGuardianIDResponse\x12v\n\x13GetChildListByBusID\x12..where_child_bus.v1.GetChildListByBusIDRequest\x1a/.where_child_bus.v1.GetChildListByBusIDResponseB\xed\x01\n\x16\x63om.where_child_bus.v1B\nChildProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1ewhere_child_bus/v1/child.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"\xbd\x01\n\x12\x43reateChildRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x1f\n\x0bguardian_id\x18\x02 \x01(\tR\nguardianId\x12\x12\n\x04name\x18\x03 \x01(\tR\x04name\x12\x10\n\x03\x61ge\x18\x04 \x01(\x05R\x03\x61ge\x12)\n\x03sex\x18\x05 \x01(\x0e\x32\x17.where_child_bus.v1.SexR\x03sex\x12\x16\n\x06photos\x18\x06 \x03(\x0cR\x06photos\"F\n\x13\x43reateChildResponse\x12/\n\x05\x63hild\x18\x01 \x01(\x0b\x32\x19.where_child_bus.v1.ChildR\x05\x63hild\"?\n\x1eGetChildListByNurseryIDRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\"\x90\x01\n\x1fGetChildListByNurseryIDResponse\x12\x35\n\x08\x63hildren\x18\x01 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\x12\x36\n\x06photos\x18\x02 \x03(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x06photos\"B\n\x1fGetChildListByGuardianIDRequest\x12\x1f\n\x0bguardian_id\x18\x01 \x01(\tR\nguardianId\"\x91\x01\n GetChildListByGuardianIDResponse\x12\x35\n\x08\x63hildren\x18\x01 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\x12\x36\n\x06photos\x18\x02 \x03(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x06photos\"3\n\x1aGetChildListByBusIDRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\"\x8c\x01\n\x1bGetChildListByBusIDResponse\x12\x35\n\x08\x63hildren\x18\x01 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\x12\x36\n\x06photos\x18\x02 \x03(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x06photos2\xf3\x03\n\x0c\x43hildService\x12^\n\x0b\x43reateChild\x12&.where_child_bus.v1.CreateChildRequest\x1a\'.where_child_bus.v1.CreateChildResponse\x12\x82\x01\n\x17GetChildListByNurseryID\x12\x32.where_child_bus.v1.GetChildListByNurseryIDRequest\x1a\x33.where_child_bus.v1.GetChildListByNurseryIDResponse\x12\x85\x01\n\x18GetChildListByGuardianID\x12\x33.where_child_bus.v1.GetChildListByGuardianIDRequest\x1a\x34.where_child_bus.v1.GetChildListByGuardianIDResponse\x12v\n\x13GetChildListByBusID\x12..where_child_bus.v1.GetChildListByBusIDRequest\x1a/.where_child_bus.v1.GetChildListByBusIDResponseB\xed\x01\n\x16\x63om.where_child_bus.v1B\nChildProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -30,15 +30,15 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETCHILDLISTBYNURSERYIDREQUEST']._serialized_start=354
   _globals['_GETCHILDLISTBYNURSERYIDREQUEST']._serialized_end=417
   _globals['_GETCHILDLISTBYNURSERYIDRESPONSE']._serialized_start=420
-  _globals['_GETCHILDLISTBYNURSERYIDRESPONSE']._serialized_end=556
-  _globals['_GETCHILDLISTBYGUARDIANIDREQUEST']._serialized_start=558
-  _globals['_GETCHILDLISTBYGUARDIANIDREQUEST']._serialized_end=624
-  _globals['_GETCHILDLISTBYGUARDIANIDRESPONSE']._serialized_start=627
-  _globals['_GETCHILDLISTBYGUARDIANIDRESPONSE']._serialized_end=772
-  _globals['_GETCHILDLISTBYBUSIDREQUEST']._serialized_start=774
-  _globals['_GETCHILDLISTBYBUSIDREQUEST']._serialized_end=825
-  _globals['_GETCHILDLISTBYBUSIDRESPONSE']._serialized_start=828
-  _globals['_GETCHILDLISTBYBUSIDRESPONSE']._serialized_end=968
-  _globals['_CHILDSERVICE']._serialized_start=971
-  _globals['_CHILDSERVICE']._serialized_end=1472
+  _globals['_GETCHILDLISTBYNURSERYIDRESPONSE']._serialized_end=564
+  _globals['_GETCHILDLISTBYGUARDIANIDREQUEST']._serialized_start=566
+  _globals['_GETCHILDLISTBYGUARDIANIDREQUEST']._serialized_end=632
+  _globals['_GETCHILDLISTBYGUARDIANIDRESPONSE']._serialized_start=635
+  _globals['_GETCHILDLISTBYGUARDIANIDRESPONSE']._serialized_end=780
+  _globals['_GETCHILDLISTBYBUSIDREQUEST']._serialized_start=782
+  _globals['_GETCHILDLISTBYBUSIDREQUEST']._serialized_end=833
+  _globals['_GETCHILDLISTBYBUSIDRESPONSE']._serialized_start=836
+  _globals['_GETCHILDLISTBYBUSIDRESPONSE']._serialized_end=976
+  _globals['_CHILDSERVICE']._serialized_start=979
+  _globals['_CHILDSERVICE']._serialized_end=1478
 # @@protoc_insertion_point(module_scope)

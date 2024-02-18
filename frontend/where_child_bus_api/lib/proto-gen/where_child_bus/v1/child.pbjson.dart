@@ -63,16 +63,16 @@ final $typed_data.Uint8List getChildListByNurseryIDRequestDescriptor = $convert.
 const GetChildListByNurseryIDResponse$json = {
   '1': 'GetChildListByNurseryIDResponse',
   '2': [
-    {'1': 'child', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'child'},
-    {'1': 'photo', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photo'},
+    {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
   ],
 };
 
 /// Descriptor for `GetChildListByNurseryIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByNurseryIDResponseDescriptor = $convert.base64Decode(
-    'Ch9HZXRDaGlsZExpc3RCeU51cnNlcnlJRFJlc3BvbnNlEi8KBWNoaWxkGAEgASgLMhkud2hlcm'
-    'VfY2hpbGRfYnVzLnYxLkNoaWxkUgVjaGlsZBI0CgVwaG90bxgCIAEoCzIeLndoZXJlX2NoaWxk'
-    'X2J1cy52MS5DaGlsZFBob3RvUgVwaG90bw==');
+    'Ch9HZXRDaGlsZExpc3RCeU51cnNlcnlJRFJlc3BvbnNlEjUKCGNoaWxkcmVuGAEgAygLMhkud2'
+    'hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MYAiADKAsyHi53aGVy'
+    'ZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
 
 @$core.Deprecated('Use getChildListByGuardianIDRequestDescriptor instead')
 const GetChildListByGuardianIDRequest$json = {
