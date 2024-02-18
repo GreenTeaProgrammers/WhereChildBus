@@ -336,3 +336,16 @@ final $typed_data.Uint8List boardingRecordDescriptor = $convert.base64Decode(
     'ZGluZxI4Cgl0aW1lc3RhbXAYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgl0aW'
     '1lc3RhbXA=');
 
+@$core.Deprecated('Use childrenDescriptor instead')
+const Children$json = {
+  '1': 'Children',
+  '2': [
+    {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+  ],
+};
+
+/// Descriptor for `Children`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List childrenDescriptor = $convert.base64Decode(
+    'CghDaGlsZHJlbhI1CghjaGlsZHJlbhgBIAMoCzIZLndoZXJlX2NoaWxkX2J1cy52MS5DaGlsZF'
+    'IIY2hpbGRyZW4=');
+

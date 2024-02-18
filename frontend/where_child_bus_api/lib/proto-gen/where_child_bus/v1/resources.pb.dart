@@ -1655,6 +1655,50 @@ class BoardingRecord extends $pb.GeneratedMessage {
   $7.Timestamp ensureTimestamp() => $_ensure(4);
 }
 
+class Children extends $pb.GeneratedMessage {
+  factory Children({
+    $core.Iterable<Child>? children,
+  }) {
+    final $result = create();
+    if (children != null) {
+      $result.children.addAll(children);
+    }
+    return $result;
+  }
+  Children._() : super();
+  factory Children.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Children.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Children', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..pc<Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: Child.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Children clone() => Children()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Children copyWith(void Function(Children) updates) => super.copyWith((message) => updates(message as Children)) as Children;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Children create() => Children._();
+  Children createEmptyInstance() => create();
+  static $pb.PbList<Children> createRepeated() => $pb.PbList<Children>();
+  @$core.pragma('dart2js:noInline')
+  static Children getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Children>(create);
+  static Children? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<Child> get children => $_getList(0);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

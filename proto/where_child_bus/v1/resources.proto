@@ -151,3 +151,7 @@ message BoardingRecord {
         bool is_boarding = 4;
         google.protobuf.Timestamp  timestamp = 5;
 }
+
+message Children {
+        repeated Child children = 1;
+}

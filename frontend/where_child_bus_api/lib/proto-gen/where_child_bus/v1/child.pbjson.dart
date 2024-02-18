@@ -63,16 +63,20 @@ final $typed_data.Uint8List getChildListByNurseryIDRequestDescriptor = $convert.
 const GetChildListByNurseryIDResponse$json = {
   '1': 'GetChildListByNurseryIDResponse',
   '2': [
-    {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
-    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
+    {'1': 'children', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Children', '9': 0, '10': 'children'},
+    {'1': 'photo', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '9': 0, '10': 'photo'},
+  ],
+  '8': [
+    {'1': 'response_type'},
   ],
 };
 
 /// Descriptor for `GetChildListByNurseryIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByNurseryIDResponseDescriptor = $convert.base64Decode(
-    'Ch9HZXRDaGlsZExpc3RCeU51cnNlcnlJRFJlc3BvbnNlEjUKCGNoaWxkcmVuGAEgAygLMhkud2'
-    'hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MYAiADKAsyHi53aGVy'
-    'ZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
+    'Ch9HZXRDaGlsZExpc3RCeU51cnNlcnlJRFJlc3BvbnNlEjoKCGNoaWxkcmVuGAEgASgLMhwud2'
+    'hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkcmVuSABSCGNoaWxkcmVuEjYKBXBob3RvGAIgASgLMh4u'
+    'd2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUGhvdG9IAFIFcGhvdG9CDwoNcmVzcG9uc2VfdHlwZQ'
+    '==');
 
 @$core.Deprecated('Use getChildListByGuardianIDRequestDescriptor instead')
 const GetChildListByGuardianIDRequest$json = {
@@ -91,16 +95,20 @@ final $typed_data.Uint8List getChildListByGuardianIDRequestDescriptor = $convert
 const GetChildListByGuardianIDResponse$json = {
   '1': 'GetChildListByGuardianIDResponse',
   '2': [
-    {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
-    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
+    {'1': 'children', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Children', '9': 0, '10': 'children'},
+    {'1': 'photo', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '9': 0, '10': 'photo'},
+  ],
+  '8': [
+    {'1': 'response_type'},
   ],
 };
 
 /// Descriptor for `GetChildListByGuardianIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByGuardianIDResponseDescriptor = $convert.base64Decode(
-    'CiBHZXRDaGlsZExpc3RCeUd1YXJkaWFuSURSZXNwb25zZRI1CghjaGlsZHJlbhgBIAMoCzIZLn'
-    'doZXJlX2NoaWxkX2J1cy52MS5DaGlsZFIIY2hpbGRyZW4SNgoGcGhvdG9zGAIgAygLMh4ud2hl'
-    'cmVfY2hpbGRfYnVzLnYxLkNoaWxkUGhvdG9SBnBob3Rvcw==');
+    'CiBHZXRDaGlsZExpc3RCeUd1YXJkaWFuSURSZXNwb25zZRI6CghjaGlsZHJlbhgBIAEoCzIcLn'
+    'doZXJlX2NoaWxkX2J1cy52MS5DaGlsZHJlbkgAUghjaGlsZHJlbhI2CgVwaG90bxgCIAEoCzIe'
+    'LndoZXJlX2NoaWxkX2J1cy52MS5DaGlsZFBob3RvSABSBXBob3RvQg8KDXJlc3BvbnNlX3R5cG'
+    'U=');
 
 @$core.Deprecated('Use getChildListByBusIDRequestDescriptor instead')
 const GetChildListByBusIDRequest$json = {
@@ -118,14 +126,17 @@ final $typed_data.Uint8List getChildListByBusIDRequestDescriptor = $convert.base
 const GetChildListByBusIDResponse$json = {
   '1': 'GetChildListByBusIDResponse',
   '2': [
-    {'1': 'children', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
-    {'1': 'photos', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '10': 'photos'},
+    {'1': 'children', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Children', '9': 0, '10': 'children'},
+    {'1': 'photo', '3': 2, '4': 1, '5': 11, '6': '.where_child_bus.v1.ChildPhoto', '9': 0, '10': 'photo'},
+  ],
+  '8': [
+    {'1': 'response_type'},
   ],
 };
 
 /// Descriptor for `GetChildListByBusIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getChildListByBusIDResponseDescriptor = $convert.base64Decode(
-    'ChtHZXRDaGlsZExpc3RCeUJ1c0lEUmVzcG9uc2USNQoIY2hpbGRyZW4YASADKAsyGS53aGVyZV'
-    '9jaGlsZF9idXMudjEuQ2hpbGRSCGNoaWxkcmVuEjYKBnBob3RvcxgCIAMoCzIeLndoZXJlX2No'
-    'aWxkX2J1cy52MS5DaGlsZFBob3RvUgZwaG90b3M=');
+    'ChtHZXRDaGlsZExpc3RCeUJ1c0lEUmVzcG9uc2USOgoIY2hpbGRyZW4YASABKAsyHC53aGVyZV'
+    '9jaGlsZF9idXMudjEuQ2hpbGRyZW5IAFIIY2hpbGRyZW4SNgoFcGhvdG8YAiABKAsyHi53aGVy'
+    'ZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b0gAUgVwaG90b0IPCg1yZXNwb25zZV90eXBl');
 

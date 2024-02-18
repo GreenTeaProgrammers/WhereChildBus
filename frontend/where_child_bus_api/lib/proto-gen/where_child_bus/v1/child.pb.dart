@@ -232,17 +232,23 @@ class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
   void clearNurseryId() => clearField(1);
 }
 
+enum GetChildListByNurseryIDResponse_ResponseType {
+  children, 
+  photo, 
+  notSet
+}
+
 class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse({
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $8.Children? children,
+    $8.ChildPhoto? photo,
   }) {
     final $result = create();
     if (children != null) {
-      $result.children.addAll(children);
+      $result.children = children;
     }
-    if (photos != null) {
-      $result.photos.addAll(photos);
+    if (photo != null) {
+      $result.photo = photo;
     }
     return $result;
   }
@@ -250,9 +256,15 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetChildListByNurseryIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, GetChildListByNurseryIDResponse_ResponseType> _GetChildListByNurseryIDResponse_ResponseTypeByTag = {
+    1 : GetChildListByNurseryIDResponse_ResponseType.children,
+    2 : GetChildListByNurseryIDResponse_ResponseType.photo,
+    0 : GetChildListByNurseryIDResponse_ResponseType.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByNurseryIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..oo(0, [1, 2])
+    ..aOM<$8.Children>(1, _omitFieldNames ? '' : 'children', subBuilder: $8.Children.create)
+    ..aOM<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photo', subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -277,11 +289,30 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   static GetChildListByNurseryIDResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChildListByNurseryIDResponse>(create);
   static GetChildListByNurseryIDResponse? _defaultInstance;
 
+  GetChildListByNurseryIDResponse_ResponseType whichResponseType() => _GetChildListByNurseryIDResponse_ResponseTypeByTag[$_whichOneof(0)]!;
+  void clearResponseType() => clearField($_whichOneof(0));
+
   @$pb.TagNumber(1)
-  $core.List<$8.Child> get children => $_getList(0);
+  $8.Children get children => $_getN(0);
+  @$pb.TagNumber(1)
+  set children($8.Children v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildren() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildren() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Children ensureChildren() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.ChildPhoto> get photos => $_getList(1);
+  $8.ChildPhoto get photo => $_getN(1);
+  @$pb.TagNumber(2)
+  set photo($8.ChildPhoto v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPhoto() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPhoto() => clearField(2);
+  @$pb.TagNumber(2)
+  $8.ChildPhoto ensurePhoto() => $_ensure(1);
 }
 
 class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
@@ -334,17 +365,23 @@ class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
   void clearGuardianId() => clearField(1);
 }
 
+enum GetChildListByGuardianIDResponse_ResponseType {
+  children, 
+  photo, 
+  notSet
+}
+
 class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse({
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $8.Children? children,
+    $8.ChildPhoto? photo,
   }) {
     final $result = create();
     if (children != null) {
-      $result.children.addAll(children);
+      $result.children = children;
     }
-    if (photos != null) {
-      $result.photos.addAll(photos);
+    if (photo != null) {
+      $result.photo = photo;
     }
     return $result;
   }
@@ -352,9 +389,15 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetChildListByGuardianIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, GetChildListByGuardianIDResponse_ResponseType> _GetChildListByGuardianIDResponse_ResponseTypeByTag = {
+    1 : GetChildListByGuardianIDResponse_ResponseType.children,
+    2 : GetChildListByGuardianIDResponse_ResponseType.photo,
+    0 : GetChildListByGuardianIDResponse_ResponseType.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByGuardianIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..oo(0, [1, 2])
+    ..aOM<$8.Children>(1, _omitFieldNames ? '' : 'children', subBuilder: $8.Children.create)
+    ..aOM<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photo', subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -379,11 +422,30 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   static GetChildListByGuardianIDResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChildListByGuardianIDResponse>(create);
   static GetChildListByGuardianIDResponse? _defaultInstance;
 
+  GetChildListByGuardianIDResponse_ResponseType whichResponseType() => _GetChildListByGuardianIDResponse_ResponseTypeByTag[$_whichOneof(0)]!;
+  void clearResponseType() => clearField($_whichOneof(0));
+
   @$pb.TagNumber(1)
-  $core.List<$8.Child> get children => $_getList(0);
+  $8.Children get children => $_getN(0);
+  @$pb.TagNumber(1)
+  set children($8.Children v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildren() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildren() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Children ensureChildren() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.ChildPhoto> get photos => $_getList(1);
+  $8.ChildPhoto get photo => $_getN(1);
+  @$pb.TagNumber(2)
+  set photo($8.ChildPhoto v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPhoto() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPhoto() => clearField(2);
+  @$pb.TagNumber(2)
+  $8.ChildPhoto ensurePhoto() => $_ensure(1);
 }
 
 class GetChildListByBusIDRequest extends $pb.GeneratedMessage {
@@ -436,17 +498,23 @@ class GetChildListByBusIDRequest extends $pb.GeneratedMessage {
   void clearBusId() => clearField(1);
 }
 
+enum GetChildListByBusIDResponse_ResponseType {
+  children, 
+  photo, 
+  notSet
+}
+
 class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByBusIDResponse({
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $8.Children? children,
+    $8.ChildPhoto? photo,
   }) {
     final $result = create();
     if (children != null) {
-      $result.children.addAll(children);
+      $result.children = children;
     }
-    if (photos != null) {
-      $result.photos.addAll(photos);
+    if (photo != null) {
+      $result.photo = photo;
     }
     return $result;
   }
@@ -454,9 +522,15 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByBusIDResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GetChildListByBusIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
+  static const $core.Map<$core.int, GetChildListByBusIDResponse_ResponseType> _GetChildListByBusIDResponse_ResponseTypeByTag = {
+    1 : GetChildListByBusIDResponse_ResponseType.children,
+    2 : GetChildListByBusIDResponse_ResponseType.photo,
+    0 : GetChildListByBusIDResponse_ResponseType.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByBusIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..oo(0, [1, 2])
+    ..aOM<$8.Children>(1, _omitFieldNames ? '' : 'children', subBuilder: $8.Children.create)
+    ..aOM<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photo', subBuilder: $8.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -481,11 +555,30 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   static GetChildListByBusIDResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChildListByBusIDResponse>(create);
   static GetChildListByBusIDResponse? _defaultInstance;
 
+  GetChildListByBusIDResponse_ResponseType whichResponseType() => _GetChildListByBusIDResponse_ResponseTypeByTag[$_whichOneof(0)]!;
+  void clearResponseType() => clearField($_whichOneof(0));
+
   @$pb.TagNumber(1)
-  $core.List<$8.Child> get children => $_getList(0);
+  $8.Children get children => $_getN(0);
+  @$pb.TagNumber(1)
+  set children($8.Children v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildren() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildren() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Children ensureChildren() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.ChildPhoto> get photos => $_getList(1);
+  $8.ChildPhoto get photo => $_getN(1);
+  @$pb.TagNumber(2)
+  set photo($8.ChildPhoto v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPhoto() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPhoto() => clearField(2);
+  @$pb.TagNumber(2)
+  $8.ChildPhoto ensurePhoto() => $_ensure(1);
 }
 
 

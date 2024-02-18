@@ -6,9 +6,9 @@ import "where_child_bus/v1/resources.proto";
 
 service ChildService {
         rpc CreateChild(CreateChildRequest) returns (CreateChildResponse);
-        rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (GetChildListByNurseryIDResponse);
-        rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
-        rpc GetChildListByBusID(GetChildListByBusIDRequest) returns (GetChildListByBusIDResponse);
+        rpc GetChildListByNurseryID(GetChildListByNurseryIDRequest) returns (stream GetChildListByNurseryIDResponse);
+        rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (stream GetChildListByGuardianIDResponse);
+        rpc GetChildListByBusID(GetChildListByBusIDRequest) returns (stream GetChildListByBusIDResponse);
 }
 
 message CreateChildRequest {
@@ -29,8 +29,10 @@ message GetChildListByNurseryIDRequest {
 }
 
 message GetChildListByNurseryIDResponse {
-        repeated Child children = 1;
-        repeated ChildPhoto photos = 2;
+        oneof response_type {
+                Children children = 1;
+                ChildPhoto photo = 2;
+        }
 }
 
 message GetChildListByGuardianIDRequest {
@@ -38,8 +40,10 @@ message GetChildListByGuardianIDRequest {
 }
 
 message GetChildListByGuardianIDResponse {
-        repeated Child children = 1;
-        repeated ChildPhoto photos = 2;
+        oneof response_type {
+                Children children = 1;
+                ChildPhoto photo = 2;
+        }
 }
 
 message GetChildListByBusIDRequest {
@@ -47,6 +51,8 @@ message GetChildListByBusIDRequest {
 }
 
 message GetChildListByBusIDResponse {
-        repeated Child children = 1;
-        repeated ChildPhoto photos = 2;
+        oneof response_type {
+                Children children = 1;
+                ChildPhoto photo = 2;
+        }
 }

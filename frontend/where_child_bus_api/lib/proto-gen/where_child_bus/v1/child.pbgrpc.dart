@@ -48,16 +48,16 @@ class ChildServiceClient extends $grpc.Client {
     return $createUnaryCall(_$createChild, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($1.GetChildListByNurseryIDRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getChildListByNurseryID, request, options: options);
+  $grpc.ResponseStream<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($1.GetChildListByNurseryIDRequest request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$getChildListByNurseryID, $async.Stream.fromIterable([request]), options: options);
   }
 
-  $grpc.ResponseFuture<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($1.GetChildListByGuardianIDRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getChildListByGuardianID, request, options: options);
+  $grpc.ResponseStream<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($1.GetChildListByGuardianIDRequest request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$getChildListByGuardianID, $async.Stream.fromIterable([request]), options: options);
   }
 
-  $grpc.ResponseFuture<$1.GetChildListByBusIDResponse> getChildListByBusID($1.GetChildListByBusIDRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getChildListByBusID, request, options: options);
+  $grpc.ResponseStream<$1.GetChildListByBusIDResponse> getChildListByBusID($1.GetChildListByBusIDRequest request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$getChildListByBusID, $async.Stream.fromIterable([request]), options: options);
   }
 }
 
@@ -77,21 +77,21 @@ abstract class ChildServiceBase extends $grpc.Service {
         'GetChildListByNurseryID',
         getChildListByNurseryID_Pre,
         false,
-        false,
+        true,
         ($core.List<$core.int> value) => $1.GetChildListByNurseryIDRequest.fromBuffer(value),
         ($1.GetChildListByNurseryIDResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.GetChildListByGuardianIDRequest, $1.GetChildListByGuardianIDResponse>(
         'GetChildListByGuardianID',
         getChildListByGuardianID_Pre,
         false,
-        false,
+        true,
         ($core.List<$core.int> value) => $1.GetChildListByGuardianIDRequest.fromBuffer(value),
         ($1.GetChildListByGuardianIDResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.GetChildListByBusIDRequest, $1.GetChildListByBusIDResponse>(
         'GetChildListByBusID',
         getChildListByBusID_Pre,
         false,
-        false,
+        true,
         ($core.List<$core.int> value) => $1.GetChildListByBusIDRequest.fromBuffer(value),
         ($1.GetChildListByBusIDResponse value) => value.writeToBuffer()));
   }
@@ -100,20 +100,20 @@ abstract class ChildServiceBase extends $grpc.Service {
     return createChild(call, await request);
   }
 
-  $async.Future<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByNurseryIDRequest> request) async {
-    return getChildListByNurseryID(call, await request);
+  $async.Stream<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByNurseryIDRequest> request) async* {
+    yield* getChildListByNurseryID(call, await request);
   }
 
-  $async.Future<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByGuardianIDRequest> request) async {
-    return getChildListByGuardianID(call, await request);
+  $async.Stream<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByGuardianIDRequest> request) async* {
+    yield* getChildListByGuardianID(call, await request);
   }
 
-  $async.Future<$1.GetChildListByBusIDResponse> getChildListByBusID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByBusIDRequest> request) async {
-    return getChildListByBusID(call, await request);
+  $async.Stream<$1.GetChildListByBusIDResponse> getChildListByBusID_Pre($grpc.ServiceCall call, $async.Future<$1.GetChildListByBusIDRequest> request) async* {
+    yield* getChildListByBusID(call, await request);
   }
 
   $async.Future<$1.CreateChildResponse> createChild($grpc.ServiceCall call, $1.CreateChildRequest request);
-  $async.Future<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($grpc.ServiceCall call, $1.GetChildListByNurseryIDRequest request);
-  $async.Future<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($grpc.ServiceCall call, $1.GetChildListByGuardianIDRequest request);
-  $async.Future<$1.GetChildListByBusIDResponse> getChildListByBusID($grpc.ServiceCall call, $1.GetChildListByBusIDRequest request);
+  $async.Stream<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($grpc.ServiceCall call, $1.GetChildListByNurseryIDRequest request);
+  $async.Stream<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($grpc.ServiceCall call, $1.GetChildListByGuardianIDRequest request);
+  $async.Stream<$1.GetChildListByBusIDResponse> getChildListByBusID($grpc.ServiceCall call, $1.GetChildListByBusIDRequest request);
 }
