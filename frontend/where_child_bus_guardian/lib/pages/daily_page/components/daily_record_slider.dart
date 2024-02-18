@@ -22,10 +22,10 @@ class _DailyRecordSlider extends State<DailyRecordSlider> {
   @override
   Widget build(BuildContext context) {
     List<Widget> recordList = widget.children.map((child) {
-      int imageIndex = widget.children.indexOf(child);
+      int index = widget.children.indexOf(child);
       return DailyRecordBody(
         child: child,
-        image: widget.images[imageIndex],
+        image: widget.images[index],
       );
     }).toList();
 

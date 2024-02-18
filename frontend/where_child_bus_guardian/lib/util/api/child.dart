@@ -31,3 +31,10 @@ Future<GetChildListByGuardianIDResponse> getChildListByGuardianId(
     return client.getChildListByGuardianID(req);
   });
 }
+
+Future<CheckIsChildInBusResponse> checkIsChildInBus(String childId) async {
+  return performGrpcCall((client) async {
+    var req = CheckIsChildInBusRequest(childId: childId);
+    return client.checkIsChildInBus(req);
+  });
+}

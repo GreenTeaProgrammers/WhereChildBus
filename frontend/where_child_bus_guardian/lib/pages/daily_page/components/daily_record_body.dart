@@ -1,4 +1,8 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pb.dart';
+import 'package:where_child_bus_guardian/service/check_is_child_in_bus.dart';
 import '../styles/styles.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_guardian/components/utils/image_from_byte.dart';
@@ -7,16 +11,40 @@ class DailyRecordBody extends StatefulWidget {
   final Child child;
   final ChildPhoto image;
 
-  const DailyRecordBody({Key? key, required this.child, required this.image})
-      : super(key: key);
+  const DailyRecordBody({
+    Key? key,
+    required this.child,
+    required this.image,
+  }) : super(key: key);
 
   @override
   State<DailyRecordBody> createState() => _DailyRecordBody();
 }
 
 class _DailyRecordBody extends State<DailyRecordBody> {
-  //TODO: 将来的にAPIからデータを受け取る
-  var isBoarding = false;
+  bool isBoarding = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBoardingStatus();
+  }
+
+  Future<void> _loadBoardingStatus() async {
+    try {
+      CheckIsChildInBusResponse res =
+          await checkIsChildInBusService(widget.child.id);
+      if (mounted) {
+        setState(() {
+          isBoarding = res.isInBus;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("乗降状態のロード中にエラーが発生しました: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
