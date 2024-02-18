@@ -45,38 +45,35 @@ class MachineLearningServiceServicer(
         self.train_fn = train_fn
         self.detect_face_and_clip_fn = detect_face_and_clip_fn
 
-    def Predict(self, request_iterator: bus_pb2.StreamBusVideoRequest, context):
-        for req in request_iterator:
-            parser = argparse.ArgumentParser()
-            args = parser.parse_args()
-
-            args.bus_id = req.bus_id
-            args.bus_type = req.bus_type
-            args.video_type = req.video_type
-            args.video_chunk = req.video_chunk
-            args.timestamp = req.timestamp
+    def Pred(self, request_iterator: bus_pb2.StreamBusVideoRequest, context):
+        for request in request_iterator:
+            params = {
+                "bus_id": request.bus_id,
+                "bus_type": request.bus_type,
+                "video_type": request.video_type,
+                "video_chunk": request.video_chunk,
+                "timestamp": request.timestamp,
+            }
 
             try:
-                child_ids = self.pred_fn(args)
+                child_ids = self.pred_fn(params)
             except Exception as e:
                 logging.error(e)
                 child_ids = []
             yield machine_learning_pb2.PredResponse(child_ids=child_ids)
 
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
-        parser = argparse.ArgumentParser()
-        args = parser.parse_args()
-
-        args.nursery_id = request.nursery_id
-        args.child_ids = request.child_ids
-        args.bus_id = request.bus_id
-        args.bus_type = request.bus_type
-        args.seed = 42
-        args.mode = "train"
+        params = {
+            "nursery_id": request.nursery_id,
+            "child_ids": request.child_ids,
+            "bus_id": request.bus_id,
+            "bus_type": request.bus_type,
+            "seed": 42,
+            "mode": "train",
+        }
         # mainメソッドを別スレッドで実行
         try:
-            thread = threading.Thread(target=self.train_fn, args=(args,))
-            thread.start()
+            self.train_fn(params)
             is_started = True
         except Exception as e:
             logging.error(e)
@@ -89,16 +86,14 @@ class MachineLearningServiceServicer(
         request: machine_learning_pb2.FaceDetectAndClipRequest,
         context,
     ):
-        parser = argparse.ArgumentParser()
-        args = parser.parse_args()
-
-        args.nursery_id = request.nursery_id
-        args.child_id = request.child_id
-        args.env = "remote"
+        params = {
+            "nursery_id": request.nursery_id,
+            "child_id": request.child_id,
+            "env": "remote",
+        }
         # mainメソッドを別スレッドで実行
         try:
-            thread = threading.Thread(target=self.detect_face_and_clip_fn, args=(args,))
-            thread.start()
+            self.detect_face_and_clip_fn(params)
             is_started = True
         except Exception as e:
             logging.error(e)
