@@ -52,20 +52,23 @@ RUN CGO_ENABLED=0 GOOS=linux \
 
 # Final stage: runtime environment
 # CA証明書が必要なので、alpineをベースにする
+# Final stage: runtime environment
 FROM alpine:latest
 
 # 必要なパッケージをインストール
 RUN apk --no-cache add ca-certificates
 
-# ビルドステージからバイナリファイルをコピー
-COPY --from=builder /go/bin/server /server
-
-# .envファイルをカレントディレクトリにコピー
-COPY --from=builder /srv/grpc/.env ./
-
-# secretsディレクトリをコピー
-COPY --from=builder /srv/grpc/secrets /secrets
-
-
+# アプリケーション実行用のディレクトリを設定
 WORKDIR /app
-ENTRYPOINT ["/server"]
+
+# ビルドステージからバイナリファイルをコピー
+COPY --from=builder /go/bin/server /app/server
+
+# .envファイルを/appディレクトリにコピー
+COPY --from=builder /srv/grpc/.env /app/.env
+
+# secretsディレクトリを/appディレクトリにコピー
+COPY --from=builder /srv/grpc/secrets /app/secrets
+
+# アプリケーションの起動
+ENTRYPOINT ["/app/server"]
