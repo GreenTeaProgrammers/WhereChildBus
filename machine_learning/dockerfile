@@ -2,8 +2,8 @@
 FROM python:3.11.6-slim
 
 # ビルド引数を定義
-ARG PROJECT_ID
-ARG BUCKET_NAME
+ARG GCP_PROJECT_ID
+ARG BUCKET_NAME_FOR_ML
 
 # 作業ディレクトリの設定
 WORKDIR /machine-learning
@@ -23,8 +23,8 @@ COPY ./src /machine-learning/src
 
 # .envファイルを作成し、ビルド引数の値を書き込む
 RUN mkdir -p /machine-learning/secrets && \
-    echo "PROJECT_ID=$PROJECT_ID" > /machine-learning/secrets/.env && \
-    echo "BUCKET_NAME=$BUCKET_NAME" >> /machine-learning/secrets/.env
+    echo "PROJECT_ID=$GCP_PROJECT_ID" > /machine-learning/secrets/.env && \
+    echo "BUCKET_NAME=$BUCKET_NAME_FOR_ML" >> /machine-learning/secrets/.env
 
 # 環境変数PATHの設定
 ENV PYTHONPATH "${PYTHONPATH}:/machine-learning/src/"
