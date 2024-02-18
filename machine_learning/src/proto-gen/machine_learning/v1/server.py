@@ -1,7 +1,6 @@
-import argparse
 import logging
-import threading
 from concurrent import futures
+from typing import Iterable
 
 import grpc
 from grpc_reflection.v1alpha import reflection
@@ -11,6 +10,11 @@ from generated.machine_learning.v1 import health_check_pb2_grpc
 from generated.machine_learning.v1 import machine_learning_pb2
 from generated.machine_learning.v1 import machine_learning_pb2_grpc
 from generated.where_child_bus.v1 import bus_pb2
+from generated.machine_learning.v1.func_args import (
+    FaceDetectAndClip_Args,
+    Pred_Args,
+    Train_Args,
+)
 
 import logging
 from concurrent import futures
@@ -37,6 +41,8 @@ class HealthCheckServiceServer(
         return health_check_pb2.PingResponse(message=message)
 
 
+# TODO: error handling
+# TODO: 非同期処理
 class MachineLearningServiceServicer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
@@ -45,33 +51,34 @@ class MachineLearningServiceServicer(
         self.train_fn = train_fn
         self.detect_face_and_clip_fn = detect_face_and_clip_fn
 
-    def Pred(self, request_iterator: bus_pb2.StreamBusVideoRequest, context):
+    def Pred(self, request_iterator: Iterable[bus_pb2.StreamBusVideoRequest], context):
         for request in request_iterator:
-            params = {
-                "bus_id": request.bus_id,
-                "bus_type": request.bus_type,
-                "video_type": request.video_type,
-                "video_chunk": request.video_chunk,
-                "timestamp": request.timestamp,
-            }
-
+            params = Pred_Args(
+                nursery_id=request.nursery_id,
+                bus_id=request.bus_id,
+                bus_type=request.bus_type,
+                video_chunk=request.video_chunk,
+                vehicle_event=request.vehicle_event,
+            )
             try:
                 child_ids = self.pred_fn(params)
             except Exception as e:
                 logging.error(e)
                 child_ids = []
-            yield machine_learning_pb2.PredResponse(child_ids=child_ids)
+            is_detected = len(child_ids) > 0
+            yield machine_learning_pb2.PredResponse(
+                is_detected=is_detected, child_ids=child_ids
+            )
 
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
-        params = {
-            "nursery_id": request.nursery_id,
-            "child_ids": request.child_ids,
-            "bus_id": request.bus_id,
-            "bus_type": request.bus_type,
-            "seed": 42,
-            "mode": "train",
-        }
-        # mainメソッドを別スレッドで実行
+        params = Train_Args(
+            nursery_id=request.nursery_id,
+            child_ids=request.child_ids,
+            bus_id=request.bus_id,
+            bus_type=request.bus_type,
+            seed=42,
+            mode="train",
+        )
         try:
             self.train_fn(params)
             is_started = True
@@ -86,12 +93,11 @@ class MachineLearningServiceServicer(
         request: machine_learning_pb2.FaceDetectAndClipRequest,
         context,
     ):
-        params = {
-            "nursery_id": request.nursery_id,
-            "child_id": request.child_id,
-            "env": "remote",
-        }
-        # mainメソッドを別スレッドで実行
+        params = FaceDetectAndClip_Args(
+            nursery_id=request.nursery_id,
+            child_id=request.child_id,
+            env="remote",
+        )
         try:
             self.detect_face_and_clip_fn(params)
             is_started = True
