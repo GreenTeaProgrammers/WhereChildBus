@@ -4,18 +4,23 @@ import threading
 from concurrent import futures
 
 import grpc
+from grpc_reflection.v1alpha import reflection
 import health_check_pb2
 import health_check_pb2_grpc
 import machine_learning_pb2
 import machine_learning_pb2_grpc
 
+
 import logging
-import os
 from concurrent import futures
 
-import grpc
 
-from face_detect_model.DetectFaceAndClip.detectFaceAndClip import main
+from face_detect_model.DetectFaceAndClip.detectFaceAndClip import (
+    main as detect_face_and_clip_fn,
+)
+from face_detect_model.main import (
+    main as train_fn,
+)
 
 
 class HealthCheckServiceServer(
@@ -35,9 +40,26 @@ class MachineLearningServiceServicer(
     def Predict(self, request: machine_learning_pb2.PredRequest, context):
         pass
 
-    # TODO: implement Train
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
-        pass
+        parser = argparse.ArgumentParser()
+        args = parser.parse_args()
+
+        args.nursery_id = request.nursery_id
+        args.child_ids = request.child_ids
+        args.bus_id = request.bus_id
+        args.bus_type = request.bus_type
+        args.seed = 42
+        args.mode = "train"
+        # mainメソッドを別スレッドで実行
+        try:
+            thread = threading.Thread(target=train_fn, args=(args,))
+            thread.start()
+            is_started = True
+        except Exception as e:
+            logging.error(e)
+            is_started = False
+
+        return machine_learning_pb2.TrainResponse(is_started=is_started)
 
     def FaceDetectAndClip(
         self,
@@ -52,7 +74,7 @@ class MachineLearningServiceServicer(
         args.env = "remote"
         # mainメソッドを別スレッドで実行
         try:
-            thread = threading.Thread(target=main, args=(args,))
+            thread = threading.Thread(target=detect_face_and_clip_fn, args=(args,))
             thread.start()
             is_started = True
         except Exception as e:
@@ -63,7 +85,7 @@ class MachineLearningServiceServicer(
 
 
 def serve():
-    bind_address = f"[::]:8080"
+    bind_address = "[::]:8080"
     server = grpc.server(futures.ThreadPoolExecutor())
     health_check_pb2_grpc.add_HealthcheckServiceServicer_to_server(
         HealthCheckServiceServer(), server
@@ -71,6 +93,15 @@ def serve():
     machine_learning_pb2_grpc.add_MachineLearningServiceServicer_to_server(
         MachineLearningServiceServicer(), server
     )
+    service_names = (
+        health_check_pb2.DESCRIPTOR.services_by_name["HealthcheckService"].full_name,
+        machine_learning_pb2.DESCRIPTOR.services_by_name[
+            "MachineLearningService"
+        ].full_name,
+        reflection.SERVICE_NAME,
+    )
+    reflection.enable_server_reflection(service_names, server)
+
     server.add_insecure_port(bind_address)
     server.start()
     logging.info("Listening on %s.", bind_address)

@@ -2,10 +2,11 @@ import os
 import torch
 import torch.nn as nn
 import argparse
+import google.cloud.storage as gcs
 
-from data.faceDetectDataset import FaceDetectDataset
-from model.faceDetectModel import FaceDetectModel
-from util import logger
+from face_detect_model.data.faceDetectDataset import FaceDetectDataset
+from face_detect_model.model.faceDetectModel import FaceDetectModel
+from face_detect_model.util import logger, get_bucket, save_model_to_gcs
 
 
 class Trainer:
@@ -13,6 +14,7 @@ class Trainer:
         self,
         args: argparse.Namespace,
         config: dict,
+        client: gcs.Client,
         model: FaceDetectModel,
         train_dataset: FaceDetectDataset,
         valid_dataset: FaceDetectDataset,
@@ -54,9 +56,16 @@ class Trainer:
             shuffle=False,
         )
 
-        self.save_model_dir = config["train"]["save_model_dir"]
-        if not os.path.exists(self.save_model_dir):
-            os.makedirs(self.save_model_dir)
+        self.bucket = get_bucket(
+            client,
+            os.environ.get("BUCKET_NAME_FOR_MODEL"),
+        )
+        logger.info("Bucket is ready")
+
+        # XXX: local用の保存先
+        # self.save_model_dir = config["train"]["save_model_dir"]
+        # if not os.path.exists(self.save_model_dir):
+        #     os.makedirs(self.save_model_dir)
 
     def train(self):
         logger.info("Start Training")
@@ -67,12 +76,14 @@ class Trainer:
             self.end_epoch()
 
             if self.epoch % self.config["train"]["validate_interval"] == 0:
-                self.save_model(
-                    self.save_model_dir + f"model_epoch_{self.epoch}.pth",
-                )
                 self.validate()
 
         self.test()
+        save_model_to_gcs(
+            bucket=self.bucket,
+            upload_model_path=f"{self.args.nursery_id}/{self.args.bus_id}/{self.args.bus_type}.pth",
+            model_instance=self.model,
+        )
 
     def step(self, label: torch.Tensor, image: torch.Tensor):
         self.optimizer.zero_grad()
@@ -91,7 +102,8 @@ class Trainer:
 
         if self.last_loss < self.best_loss:
             self.best_loss = self.last_loss
-            self.save_model(self.save_model_dir + "best_model.pth")
+            # XXX: local用の保存先
+            # self.save_model(self.save_model_dir + "best_model.pth")
 
         self.epoch += 1
         self.step_num = 1
@@ -113,10 +125,6 @@ class Trainer:
         logger.info(f"########## Epoch {self.epoch} ##########")
         logger.info(f"Validation Accuracy: {accuracy}")
 
-        if self.args.debug:
-            print(f"Collect: {collect_list}")
-            print(f"Predict: {pred_list}")
-
     def test(self):
         self.model.eval()
         collect_list = []
@@ -134,9 +142,6 @@ class Trainer:
         accuracy = self.calc_accuracy(pred_list, collect_list)
         logger.info("########## Test ##########")
         logger.info(f"Test Accuracy: {accuracy}")
-        if self.args.debug:
-            print(f"Collect: {collect_list}")
-            print(f"Predict: {pred_list}")
 
     def calc_accuracy(self, pred_list, collect_list):
         pred = torch.cat(pred_list)

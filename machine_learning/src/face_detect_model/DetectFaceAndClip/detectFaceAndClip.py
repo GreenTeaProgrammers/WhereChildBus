@@ -24,6 +24,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# TODO: GCSに関する処理を別ファイルに切り出す
+
 
 def load_image(args: argparse.Namespace, blobs=None):
     """画像の読み込みを行うラッパー関数"""
