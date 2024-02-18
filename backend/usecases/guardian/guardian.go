@@ -39,8 +39,7 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
-
+	defer utils.RollbackTx(tx, i.logger)
 	// req.nurseryCodeからnurseryを取得
 	nursery, err := tx.Nursery.Query().
 		Where(nurseryRepo.NurseryCode(req.NurseryCode)).
@@ -103,8 +102,7 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
-
+	defer utils.RollbackTx(tx, i.logger)
 	// Guardianを取得
 	guardian, err := tx.Guardian.Query().
 		Where(guardianRepo.Email(req.Email)).
@@ -148,7 +146,7 @@ func (i *Interactor) GetGuardianListByBusID(ctx context.Context, req *pb.GetGuar
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// Guardianを取得
 	guardians, err := tx.Guardian.Query().
@@ -187,7 +185,7 @@ func (i *Interactor) GetGuardianByChildID(ctx context.Context, req *pb.GetGuardi
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// Guardianを取得
 	guardians, err := tx.Guardian.Query().

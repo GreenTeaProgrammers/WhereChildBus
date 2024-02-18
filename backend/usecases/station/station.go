@@ -28,7 +28,7 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	guardianID, err := uuid.Parse(req.GuardianId)
 	if err != nil {
