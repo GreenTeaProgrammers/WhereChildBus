@@ -219,6 +219,164 @@ class DeleteChildPhotoResponse extends $pb.GeneratedMessage {
   $core.List<$core.String> get ids => $_getList(1);
 }
 
+class GetChildPhotoRequest extends $pb.GeneratedMessage {
+  factory GetChildPhotoRequest({
+    $core.String? childId,
+  }) {
+    final $result = create();
+    if (childId != null) {
+      $result.childId = childId;
+    }
+    return $result;
+  }
+  GetChildPhotoRequest._() : super();
+  factory GetChildPhotoRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetChildPhotoRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildPhotoRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'childId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetChildPhotoRequest clone() => GetChildPhotoRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetChildPhotoRequest copyWith(void Function(GetChildPhotoRequest) updates) => super.copyWith((message) => updates(message as GetChildPhotoRequest)) as GetChildPhotoRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetChildPhotoRequest create() => GetChildPhotoRequest._();
+  GetChildPhotoRequest createEmptyInstance() => create();
+  static $pb.PbList<GetChildPhotoRequest> createRepeated() => $pb.PbList<GetChildPhotoRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetChildPhotoRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChildPhotoRequest>(create);
+  static GetChildPhotoRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get childId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set childId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildId() => clearField(1);
+}
+
+class ChildPhotoResponse extends $pb.GeneratedMessage {
+  factory ChildPhotoResponse({
+    $core.String? childPhotoId,
+    $core.List<$core.int>? photo,
+  }) {
+    final $result = create();
+    if (childPhotoId != null) {
+      $result.childPhotoId = childPhotoId;
+    }
+    if (photo != null) {
+      $result.photo = photo;
+    }
+    return $result;
+  }
+  ChildPhotoResponse._() : super();
+  factory ChildPhotoResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChildPhotoResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChildPhotoResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'childPhotoId')
+    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'photo', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ChildPhotoResponse clone() => ChildPhotoResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ChildPhotoResponse copyWith(void Function(ChildPhotoResponse) updates) => super.copyWith((message) => updates(message as ChildPhotoResponse)) as ChildPhotoResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ChildPhotoResponse create() => ChildPhotoResponse._();
+  ChildPhotoResponse createEmptyInstance() => create();
+  static $pb.PbList<ChildPhotoResponse> createRepeated() => $pb.PbList<ChildPhotoResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ChildPhotoResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChildPhotoResponse>(create);
+  static ChildPhotoResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get childPhotoId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set childPhotoId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildPhotoId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildPhotoId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get photo => $_getN(1);
+  @$pb.TagNumber(2)
+  set photo($core.List<$core.int> v) { $_setBytes(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPhoto() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPhoto() => clearField(2);
+}
+
+class GetChildPhotoResponse extends $pb.GeneratedMessage {
+  factory GetChildPhotoResponse({
+    $core.Iterable<ChildPhotoResponse>? childPhotos,
+  }) {
+    final $result = create();
+    if (childPhotos != null) {
+      $result.childPhotos.addAll(childPhotos);
+    }
+    return $result;
+  }
+  GetChildPhotoResponse._() : super();
+  factory GetChildPhotoResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetChildPhotoResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildPhotoResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..pc<ChildPhotoResponse>(1, _omitFieldNames ? '' : 'childPhotos', $pb.PbFieldType.PM, subBuilder: ChildPhotoResponse.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetChildPhotoResponse clone() => GetChildPhotoResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetChildPhotoResponse copyWith(void Function(GetChildPhotoResponse) updates) => super.copyWith((message) => updates(message as GetChildPhotoResponse)) as GetChildPhotoResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetChildPhotoResponse create() => GetChildPhotoResponse._();
+  GetChildPhotoResponse createEmptyInstance() => create();
+  static $pb.PbList<GetChildPhotoResponse> createRepeated() => $pb.PbList<GetChildPhotoResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetChildPhotoResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetChildPhotoResponse>(create);
+  static GetChildPhotoResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<ChildPhotoResponse> get childPhotos => $_getList(0);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

@@ -139,8 +139,8 @@ message BusStationAssociation {
 message ChildPhoto {
         string id = 1;
         string child_id = 2;
-        google.protobuf.Timestamp  created_at = 5;
-        google.protobuf.Timestamp  updated_at = 6;
+        google.protobuf.Timestamp  created_at = 3;
+        google.protobuf.Timestamp  updated_at = 4;
 }
 
 message BoardingRecord {

@@ -9,10 +9,14 @@ import (
 	"os/signal"
 	"syscall"
 
+	"golang.org/x/exp/slog"
+
 	"cloud.google.com/go/storage"
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
-	"golang.org/x/exp/slog"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
@@ -76,6 +80,32 @@ func main() {
 	defer storageClient.Close()
 
 	log.Println("Connected to Cloud Storage!")
+
+	// 機械学習gRPCサーバーへの接続を開始
+	log.Println("Connecting to Machine Learning gRPC server...")
+	// デフォルトのシステム証明書を使用してTLS接続を設定
+	creds := credentials.NewClientTLSFromCert(nil, "")
+
+	// セキュアなチャネルを通じてサーバーに接続
+	conn, err := grpc.Dial(config.MLAddress, grpc.WithTransportCredentials(creds))
+	if err != nil {
+		log.Fatalf("Failed to connect: %v", err)
+	}
+	defer conn.Close()
+
+	// スタブの作成
+	stub := mlv1.NewHealthcheckServiceClient(conn)
+
+	// 最初のPingリクエスト（nameが設定されていない）
+	request := &mlv1.PingRequest{
+		Name: "ping",
+	}
+	_, err = stub.Ping(context.Background(), request)
+	if err != nil {
+		log.Fatalf("Failed to ping: %v", err)
+	}
+
+	log.Println("Connected to Machine Learning gRPC server!")
 
 	// loggerを作成
 	logger := slog.Default()

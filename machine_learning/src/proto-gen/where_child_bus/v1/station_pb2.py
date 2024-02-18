@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from where_child_bus.v1 import resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n where_child_bus/v1/station.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"q\n\x14UpdateStationRequest\x12\x1f\n\x0bguardian_id\x18\x01 \x01(\tR\nguardianId\x12\x1c\n\tlongitude\x18\x02 \x01(\x01R\tlongitude\x12\x1a\n\x08latitude\x18\x03 \x01(\x01R\x08latitude\"N\n\x15UpdateStationResponse\x12\x35\n\x07station\x18\x01 \x01(\x0b\x32\x1b.where_child_bus.v1.StationR\x07station\"5\n\x1cGetStationListByBusIdRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\"\xd3\x01\n\x1dGetStationListByBusIdResponse\x12\x37\n\x08stations\x18\x01 \x03(\x0b\x32\x1b.where_child_bus.v1.StationR\x08stations\x12\x42\n\tguardians\x18\x02 \x03(\x0b\x32$.where_child_bus.v1.GuardianResponseR\tguardians\x12\x35\n\x08\x63hildren\x18\x03 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren2\xf4\x01\n\x0eStationService\x12\x64\n\rUpdateStation\x12(.where_child_bus.v1.UpdateStationRequest\x1a).where_child_bus.v1.UpdateStationResponse\x12|\n\x15GetStationListByBusId\x12\x30.where_child_bus.v1.GetStationListByBusIdRequest\x1a\x31.where_child_bus.v1.GetStationListByBusIdResponseB\xef\x01\n\x16\x63om.where_child_bus.v1B\x0cStationProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n where_child_bus/v1/station.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\"q\n\x14UpdateStationRequest\x12\x1f\n\x0bguardian_id\x18\x01 \x01(\tR\nguardianId\x12\x1c\n\tlongitude\x18\x02 \x01(\x01R\tlongitude\x12\x1a\n\x08latitude\x18\x03 \x01(\x01R\x08latitude\"N\n\x15UpdateStationResponse\x12\x35\n\x07station\x18\x01 \x01(\x0b\x32\x1b.where_child_bus.v1.StationR\x07station\"5\n\x1cGetStationListByBusIdRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\"\x8b\x02\n\x1dGetStationListByBusIdResponse\x12\x37\n\x08stations\x18\x01 \x03(\x0b\x32\x1b.where_child_bus.v1.StationR\x08stations\x12\x42\n\tguardians\x18\x02 \x03(\x0b\x32$.where_child_bus.v1.GuardianResponseR\tguardians\x12\x35\n\x08\x63hildren\x18\x03 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\x12\x36\n\x06photos\x18\x04 \x03(\x0b\x32\x1e.where_child_bus.v1.ChildPhotoR\x06photos2\xf4\x01\n\x0eStationService\x12\x64\n\rUpdateStation\x12(.where_child_bus.v1.UpdateStationRequest\x1a).where_child_bus.v1.UpdateStationResponse\x12|\n\x15GetStationListByBusId\x12\x30.where_child_bus.v1.GetStationListByBusIdRequest\x1a\x31.where_child_bus.v1.GetStationListByBusIdResponseB\xef\x01\n\x16\x63om.where_child_bus.v1B\x0cStationProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -30,7 +30,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETSTATIONLISTBYBUSIDREQUEST']._serialized_start=287
   _globals['_GETSTATIONLISTBYBUSIDREQUEST']._serialized_end=340
   _globals['_GETSTATIONLISTBYBUSIDRESPONSE']._serialized_start=343
-  _globals['_GETSTATIONLISTBYBUSIDRESPONSE']._serialized_end=554
-  _globals['_STATIONSERVICE']._serialized_start=557
-  _globals['_STATIONSERVICE']._serialized_end=801
+  _globals['_GETSTATIONLISTBYBUSIDRESPONSE']._serialized_end=610
+  _globals['_STATIONSERVICE']._serialized_start=613
+  _globals['_STATIONSERVICE']._serialized_end=857
 # @@protoc_insertion_point(module_scope)

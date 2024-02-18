@@ -13,21 +13,27 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../where_child_bus/v1/resources.pbenum.dart' as $3;
+
 class TrainRequest extends $pb.GeneratedMessage {
   factory TrainRequest({
     $core.String? nurseryId,
-    $core.Iterable<$core.String>? childId,
     $core.String? busId,
+    $core.Iterable<$core.String>? childIds,
+    $3.BusType? busType,
   }) {
     final $result = create();
     if (nurseryId != null) {
       $result.nurseryId = nurseryId;
     }
-    if (childId != null) {
-      $result.childId.addAll(childId);
-    }
     if (busId != null) {
       $result.busId = busId;
+    }
+    if (childIds != null) {
+      $result.childIds.addAll(childIds);
+    }
+    if (busType != null) {
+      $result.busType = busType;
     }
     return $result;
   }
@@ -37,8 +43,9 @@ class TrainRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
-    ..pPS(2, _omitFieldNames ? '' : 'childId')
-    ..aOS(3, _omitFieldNames ? '' : 'busId')
+    ..aOS(2, _omitFieldNames ? '' : 'busId')
+    ..pPS(3, _omitFieldNames ? '' : 'childIds')
+    ..e<$3.BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $3.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $3.BusType.valueOf, enumValues: $3.BusType.values)
     ..hasRequiredFields = false
   ;
 
@@ -73,16 +80,25 @@ class TrainRequest extends $pb.GeneratedMessage {
   void clearNurseryId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<$core.String> get childId => $_getList(1);
+  $core.String get busId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set busId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasBusId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBusId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get busId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set busId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasBusId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearBusId() => clearField(3);
+  $core.List<$core.String> get childIds => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $3.BusType get busType => $_getN(3);
+  @$pb.TagNumber(4)
+  set busType($3.BusType v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBusType() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBusType() => clearField(4);
 }
 
 class TrainResponse extends $pb.GeneratedMessage {
@@ -135,63 +151,17 @@ class TrainResponse extends $pb.GeneratedMessage {
   void clearIsStarted() => clearField(1);
 }
 
-class PredRequest extends $pb.GeneratedMessage {
-  factory PredRequest({
-    $core.String? busId,
-  }) {
-    final $result = create();
-    if (busId != null) {
-      $result.busId = busId;
-    }
-    return $result;
-  }
-  PredRequest._() : super();
-  factory PredRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PredRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PredRequest clone() => PredRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PredRequest copyWith(void Function(PredRequest) updates) => super.copyWith((message) => updates(message as PredRequest)) as PredRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static PredRequest create() => PredRequest._();
-  PredRequest createEmptyInstance() => create();
-  static $pb.PbList<PredRequest> createRepeated() => $pb.PbList<PredRequest>();
-  @$core.pragma('dart2js:noInline')
-  static PredRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PredRequest>(create);
-  static PredRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get busId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set busId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasBusId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearBusId() => clearField(1);
-}
-
 class PredResponse extends $pb.GeneratedMessage {
   factory PredResponse({
-    $core.Iterable<$core.String>? childId,
+    $core.bool? isDetected,
+    $core.Iterable<$core.String>? childIds,
   }) {
     final $result = create();
-    if (childId != null) {
-      $result.childId.addAll(childId);
+    if (isDetected != null) {
+      $result.isDetected = isDetected;
+    }
+    if (childIds != null) {
+      $result.childIds.addAll(childIds);
     }
     return $result;
   }
@@ -200,7 +170,8 @@ class PredResponse extends $pb.GeneratedMessage {
   factory PredResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PredResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'childId')
+    ..aOB(1, _omitFieldNames ? '' : 'isDetected')
+    ..pPS(2, _omitFieldNames ? '' : 'childIds')
     ..hasRequiredFields = false
   ;
 
@@ -226,7 +197,16 @@ class PredResponse extends $pb.GeneratedMessage {
   static PredResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.String> get childId => $_getList(0);
+  $core.bool get isDetected => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isDetected($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsDetected() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsDetected() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get childIds => $_getList(1);
 }
 
 class FaceDetectAndClipRequest extends $pb.GeneratedMessage {

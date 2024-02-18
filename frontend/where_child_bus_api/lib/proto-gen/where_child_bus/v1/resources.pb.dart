@@ -1466,8 +1466,8 @@ class ChildPhoto extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChildPhoto', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'childId')
-    ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(6, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(3, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(4, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1510,26 +1510,26 @@ class ChildPhoto extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearChildId() => clearField(2);
 
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(3)
   $7.Timestamp get createdAt => $_getN(2);
-  @$pb.TagNumber(5)
-  set createdAt($7.Timestamp v) { setField(5, v); }
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(3)
+  set createdAt($7.Timestamp v) { setField(3, v); }
+  @$pb.TagNumber(3)
   $core.bool hasCreatedAt() => $_has(2);
-  @$pb.TagNumber(5)
-  void clearCreatedAt() => clearField(5);
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(3)
+  void clearCreatedAt() => clearField(3);
+  @$pb.TagNumber(3)
   $7.Timestamp ensureCreatedAt() => $_ensure(2);
 
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(4)
   $7.Timestamp get updatedAt => $_getN(3);
-  @$pb.TagNumber(6)
-  set updatedAt($7.Timestamp v) { setField(6, v); }
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(4)
+  set updatedAt($7.Timestamp v) { setField(4, v); }
+  @$pb.TagNumber(4)
   $core.bool hasUpdatedAt() => $_has(3);
-  @$pb.TagNumber(6)
-  void clearUpdatedAt() => clearField(6);
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(4)
+  void clearUpdatedAt() => clearField(4);
+  @$pb.TagNumber(4)
   $7.Timestamp ensureUpdatedAt() => $_ensure(3);
 }
 

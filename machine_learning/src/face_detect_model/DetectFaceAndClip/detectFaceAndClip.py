@@ -1,19 +1,18 @@
-import cv2
-import os
-import yaml
-import numpy as np
 import argparse
 import logging
-from dotenv import load_dotenv
-from google.oauth2 import service_account
+import os
+
+import cv2
 import google.cloud.storage as gcs
+import numpy as np
+import yaml
+from dotenv import load_dotenv
 from google.cloud.storage import Blob, Bucket
 
-
-from detectFaceUtil import (
-    load_cascade,
-    detect_face,
+from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
     clip_and_resize_face,
+    detect_face,
+    load_cascade,
 )
 
 load_dotenv("secrets/.env")
@@ -31,7 +30,7 @@ def load_image(args: argparse.Namespace, blobs=None):
     if args.env == "local":
         return load_image_from_local(args.image_dir_path)
     elif args.env == "remote":
-        return load_image_from_remote(args.nursery_id, args.child_id, blobs)
+        return load_image_from_remote(blobs)
 
 
 def load_image_from_local(image_dir_path: str):
@@ -46,7 +45,7 @@ def load_image_from_local(image_dir_path: str):
     return images
 
 
-def load_image_from_remote(nursery_id: str, child_id: str, blobs: list):
+def load_image_from_remote(blobs: list):
     images = []
     for blob in blobs:
         logger.info(f"loading: {blob.name}")
@@ -96,7 +95,7 @@ def get_bucket(client: gcs.Client):
     if bucket.exists():
         return bucket
     else:
-        logger.error("Failed to " + BUCKET_NAME + " does not exist.")
+        logger.error(f"Failed to {BUCKET_NAME} does not exist.")
         exit(1)
 
 
@@ -166,6 +165,9 @@ def detect_face_and_clip(args: argparse.Namespace, config: dict):
         SOURCE_BLOB_NAME = f"{args.nursery_id}/{args.child_id}/raw/"
         blobs = get_blobs(bucket, SOURCE_BLOB_NAME)
         images = load_image(args, blobs=blobs)
+    else:
+        logger.error(f"Invalid env: {args.env}")
+        exit(1)
 
     logger.info("Detecting faces...")
     detect_face_num = 0

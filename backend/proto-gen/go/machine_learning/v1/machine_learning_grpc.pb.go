@@ -8,6 +8,7 @@ package machine_learningv1
 
 import (
 	context "context"
+	v1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -60,7 +61,7 @@ func (c *machineLearningServiceClient) Pred(ctx context.Context, opts ...grpc.Ca
 }
 
 type MachineLearningService_PredClient interface {
-	Send(*PredRequest) error
+	Send(*v1.StreamBusVideoRequest) error
 	Recv() (*PredResponse, error)
 	grpc.ClientStream
 }
@@ -69,7 +70,7 @@ type machineLearningServicePredClient struct {
 	grpc.ClientStream
 }
 
-func (x *machineLearningServicePredClient) Send(m *PredRequest) error {
+func (x *machineLearningServicePredClient) Send(m *v1.StreamBusVideoRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
@@ -148,7 +149,7 @@ func _MachineLearningService_Pred_Handler(srv interface{}, stream grpc.ServerStr
 
 type MachineLearningService_PredServer interface {
 	Send(*PredResponse) error
-	Recv() (*PredRequest, error)
+	Recv() (*v1.StreamBusVideoRequest, error)
 	grpc.ServerStream
 }
 
@@ -160,8 +161,8 @@ func (x *machineLearningServicePredServer) Send(m *PredResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *machineLearningServicePredServer) Recv() (*PredRequest, error) {
-	m := new(PredRequest)
+func (x *machineLearningServicePredServer) Recv() (*v1.StreamBusVideoRequest, error) {
+	m := new(v1.StreamBusVideoRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
