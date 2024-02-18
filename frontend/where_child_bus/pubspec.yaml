@@ -15,6 +15,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   image_picker: ^1.0.7
   flutter_cache_manager: ^3.3.1
+  camera: ^0.10.5+9
   where_child_bus_api:
     path: ../where_child_bus_api
 
