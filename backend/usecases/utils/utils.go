@@ -47,12 +47,12 @@ func convertSexToPbSex(sex child.Sex) pb.Sex {
 	}
 }
 
-func ConvertPbStatusToEntStatus(pbStatus pb.Status) (*bus.Status, error) {
+func ConvertPbStatusToEntStatus(pbStatus pb.BusStatus) (*bus.Status, error) {
 	switch pbStatus {
-	case pb.Status_STATUS_RUNNING:
+	case pb.BusStatus_BUS_STATUS_RUNNING:
 		status := bus.StatusRunning
 		return &status, nil
-	case pb.Status_STATUS_STOPPED:
+	case pb.BusStatus_BUS_STATUS_STOPPED:
 		status := bus.StatusStopped
 		return &status, nil
 	default:
@@ -62,13 +62,13 @@ func ConvertPbStatusToEntStatus(pbStatus pb.Status) (*bus.Status, error) {
 }
 
 func ToPbBus(t *ent.Bus) *pb.Bus {
-	status := convertStatusToPbStatus(t.Status)
+	busStatus := convertStatusToPbStatus(t.Status)
 	return &pb.Bus{
 		Id:                    t.ID.String(),
 		NurseryId:             t.Edges.Nursery.ID.String(),
 		Name:                  t.Name,
 		PlateNumber:           t.PlateNumber,
-		Status:                status,
+		BusStatus:             busStatus,
 		Latitude:              t.Latitude,
 		Longitude:             t.Longitude,
 		EnableFaceRecognition: t.EnableFaceRecognition,
@@ -94,14 +94,14 @@ func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
 	}
 }
 
-func convertStatusToPbStatus(status bus.Status) pb.Status {
+func convertStatusToPbStatus(status bus.Status) pb.BusStatus {
 	switch status {
 	case bus.StatusRunning:
-		return pb.Status_STATUS_RUNNING
+		return pb.BusStatus_BUS_STATUS_STOPPED
 	case bus.StatusStopped:
-		return pb.Status_STATUS_STOPPED
+		return pb.BusStatus_BUS_STATUS_STOPPED
 	default:
-		return pb.Status_STATUS_UNSPECIFIED
+		return pb.BusStatus_BUS_STATUS_STOPPED
 	}
 }
 

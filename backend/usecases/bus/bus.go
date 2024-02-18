@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/exp/slog"
-	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"context"
 
@@ -215,7 +214,7 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		return nil, err
 	}
 
-	status, err := utils.ConvertPbStatusToEntStatus(req.Status)
+	status, err := utils.ConvertPbStatusToEntStatus(req.BusStatus)
 	if err != nil {
 		i.logger.Error("failed to convert status", "error", err)
 		return nil, err
@@ -314,7 +313,6 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 			BusId:     req.BusId,
 			Latitude:  bus.Latitude,
 			Longitude: bus.Longitude,
-			Timestamp: &timestamppb.Timestamp{Seconds: time.Now().Unix()},
 		}); err != nil {
 			return fmt.Errorf("failed to send bus: %w", err)
 		}
@@ -328,7 +326,7 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 	}
 
 	var busID string
-	var videoType pb.VideoType
+	var vehicleEvent pb.VehicleEvent
 
 	// Go サーバーから受け取ったメッセージをPythonサーバーに転送
 	for {
@@ -343,16 +341,10 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 
 		// バスID、バスタイプ、ビデオタイプを保持
 		busID = in.BusId
-		videoType = in.VideoType
+		vehicleEvent = in.VehicleEvent
 
-		// Python サーバーへ送信
-		err = MLStream.Send(&pb.StreamBusVideoRequest{
-			BusId:      in.BusId,
-			BusType:    in.BusType,
-			VideoType:  in.VideoType,
-			VideoChunk: in.VideoChunk,
-			Timestamp:  in.Timestamp,
-		})
+		// Python サーバーへそのまま転送
+		err = MLStream.Send(in)
 		if err != nil {
 			return err
 		}
@@ -405,8 +397,8 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 				// レコード作成成功
 			}
 
-			switch videoType {
-			case pb.VideoType_VIDEO_TYPE_GET_ON:
+			switch vehicleEvent {
+			case pb.VehicleEvent_VEHICLE_EVENT_GET_ON:
 				// 乗車時の検出の場合
 				_, err = i.entClient.BoardingRecord.Update().
 					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 乗車レコードを更新
@@ -414,7 +406,7 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 					SetIsBoarding(true).                                               // 乗車フラグを立てる
 					SetTimestamp(time.Now()).                                          // 乗車時刻を記録
 					Save(context.Background())
-			case pb.VideoType_VIDEO_TYPE_GET_OFF:
+			case pb.VehicleEvent_VEHICLE_EVENT_GET_OFF:
 				// 降車時の検出の場合
 				_, err = i.entClient.BoardingRecord.Update().
 					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 降車レコードを更新
@@ -423,7 +415,7 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 					SetTimestamp(time.Now()).                                          // 降車時刻を記録
 					Save(context.Background())
 			default:
-				return fmt.Errorf("invalid video type: %v", videoType)
+				return fmt.Errorf("invalid video type: %v", vehicleEvent)
 			}
 
 			if err != nil {
