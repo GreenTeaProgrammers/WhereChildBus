@@ -3,6 +3,8 @@ package utils
 import (
 	"fmt"
 
+	"golang.org/x/exp/slog"
+
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"golang.org/x/crypto/bcrypt"
@@ -46,17 +48,17 @@ func convertSexToPbSex(sex child.Sex) pb.Sex {
 }
 
 func ConvertPbStatusToEntStatus(pbStatus pb.Status) (*bus.Status, error) {
-        switch pbStatus {
-        case pb.Status_STATUS_RUNNING:
-                status := bus.StatusRunning
-                return &status, nil
-        case pb.Status_STATUS_STOPPED:
-                status := bus.StatusStopped
-                return &status, nil
-        default:
-                // 不正な値の場合はエラーを返す
-                return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
-        }
+	switch pbStatus {
+	case pb.Status_STATUS_RUNNING:
+		status := bus.StatusRunning
+		return &status, nil
+	case pb.Status_STATUS_STOPPED:
+		status := bus.StatusStopped
+		return &status, nil
+	default:
+		// 不正な値の場合はエラーを返す
+		return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
+	}
 }
 
 func ToPbBus(t *ent.Bus) *pb.Bus {
@@ -175,4 +177,11 @@ func CheckPassword(hashedPassword string, plainPassword string) bool {
 
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(passwordWithPepper))
 	return err == nil
+}
+
+// RollbackTx はトランザクションのロールバックを試み、エラーがあればロギングします。
+func RollbackTx(tx *ent.Tx, logger *slog.Logger) {
+	if err := tx.Rollback(); err != nil {
+		logger.Error("failed to rollback transaction", "error", err)
+	}
 }

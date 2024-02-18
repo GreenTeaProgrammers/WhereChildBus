@@ -3,6 +3,7 @@
 import grpc
 
 from machine_learning.v1 import machine_learning_pb2 as machine__learning_dot_v1_dot_machine__learning__pb2
+from where_child_bus.v1 import bus_pb2 as where__child__bus_dot_v1_dot_bus__pb2
 
 
 class MachineLearningServiceStub(object):
@@ -21,7 +22,7 @@ class MachineLearningServiceStub(object):
                 )
         self.Pred = channel.stream_stream(
                 '/machine_learning.v1.MachineLearningService/Pred',
-                request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredRequest.SerializeToString,
+                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
                 response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.FromString,
                 )
         self.FaceDetectAndClip = channel.unary_unary(
@@ -62,7 +63,7 @@ def add_MachineLearningServiceServicer_to_server(servicer, server):
             ),
             'Pred': grpc.stream_stream_rpc_method_handler(
                     servicer.Pred,
-                    request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredRequest.FromString,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.FromString,
                     response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.SerializeToString,
             ),
             'FaceDetectAndClip': grpc.unary_unary_rpc_method_handler(
@@ -109,7 +110,7 @@ class MachineLearningService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.stream_stream(request_iterator, target, '/machine_learning.v1.MachineLearningService/Pred',
-            machine__learning_dot_v1_dot_machine__learning__pb2.PredRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
             machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

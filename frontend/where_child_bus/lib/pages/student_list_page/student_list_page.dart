@@ -1,45 +1,64 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/child_list.dart';
-import 'package:where_child_bus/pages/student_list_page/student_detail_sheet.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
+import 'package:where_child_bus/service/get_child_list_by_nursery_id.dart';
+import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
-class StudentListPage extends StatefulWidget {
-  const StudentListPage({super.key});
+class ChildListPage extends StatefulWidget {
+  const ChildListPage({
+    super.key,
+  });
 
   @override
-  State<StudentListPage> createState() => _StudentListPageState();
+  State<ChildListPage> createState() => _ChildListPageState();
 }
 
-class _StudentListPageState extends State<StudentListPage> {
-  //TODO: 将来的には動的にデータを受け取る。
-  final List<String> name = <String>[
-    "園児1",
-    "園児2",
-    "園児3",
-    "園児4",
-    "園児5",
-  ];
-  final List<String> group = <String>[
-    "1組",
-    "2組",
-    "3組",
-    "4組",
-    "5組",
-  ];
-  final List<String> image = <String>[
-    "1",
-    "2",
-    "1",
-    "1",
-    "2",
-  ];
+class _ChildListPageState extends State<ChildListPage> {
+  List<Child> children = [];
+  List<ChildPhoto> photos = [];
+  bool _isLoading = false;
+  bool _isFailLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChildren();
+  }
+
+  Future<void> _loadChildren() async {
+    try {
+      _isLoading = true;
+      GetChildListByNurseryIDResponse res =
+          await getChildListByNurseryIdService(NurseryData().getNursery().id);
+      if (mounted) {
+        setState(() {
+          children = res.children;
+          photos = res.photos;
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (kDebugMode) {
+        developer.log("子供のロード中にエラーが発生しました");
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isFailLoading = true;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      body: ChildList(childNames: name, groupNames: group, images: image,),
+      body: pageBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -48,5 +67,19 @@ class _StudentListPageState extends State<StudentListPage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Widget pageBody() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (_isFailLoading) {
+      return const Center(
+        child: Text('Failed to load children.'),
+      );
+    } else {
+      return ChildList(children: children, images: photos);
+    }
   }
 }

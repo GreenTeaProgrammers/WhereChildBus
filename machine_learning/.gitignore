@@ -8,6 +8,8 @@ src/face_detect_model/pickle/*
 src/face_detect_model/DetectFaceAndClip/img
 src/face_detect_model/DetectFaceAndClip/detce_img
 
+debug_sh_files/
+
 ### macOS ###
 # General
 .DS_Store

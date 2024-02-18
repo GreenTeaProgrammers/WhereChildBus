@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
 import "dart:developer" as developer;
 import 'package:where_child_bus/util/api/nursery_create.dart';
+import 'package:where_child_bus/util/nursery_data.dart';
 import 'package:where_child_bus/util/validation/create_nursery_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
 import '../../models/create_nursery_error.dart';
@@ -69,12 +70,11 @@ class _RegisterPageState extends State<RegisterPage> {
         _addressController.text,
       );
 
+      NurseryData().setNursery(res.nursery);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => App(
-            nursery: res.nursery,
-          ),
+          builder: (BuildContext context) => App(),
         ),
       );
     } catch (err) {

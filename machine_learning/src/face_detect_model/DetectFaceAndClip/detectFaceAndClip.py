@@ -15,6 +15,8 @@ from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
     load_cascade,
 )
 
+from face_detect_model.gcp_util import get_bucket, get_blobs, init_client
+
 load_dotenv("secrets/.env")
 
 logging.basicConfig(
@@ -24,13 +26,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# TODO: GCSに関する処理を別ファイルに切り出す
+
 
 def load_image(args: argparse.Namespace, blobs=None):
     """画像の読み込みを行うラッパー関数"""
     if args.env == "local":
         return load_image_from_local(args.image_dir_path)
     elif args.env == "remote":
-        return load_image_from_remote(args.nursery_id, args.child_id, blobs)
+        return load_image_from_remote(blobs)
 
 
 def load_image_from_local(image_dir_path: str):
@@ -74,46 +78,6 @@ def init_save_dir(save_dir_path: str):
             os.remove(file_path)
 
 
-def init_client():
-    # NOTE: gcloud auth application-default loginにて事前に認証
-    credential = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-    PROJECT_ID = os.environ.get("PROJECT_ID")
-
-    client = gcs.Client(PROJECT_ID, credentials=credential)
-    if client is None:
-        logger.error("Failed to initialize client.")
-        exit(1)
-    else:
-        return client
-
-
-def get_bucket(client: gcs.Client):
-    # NOTE: 環境変数からバケット名を取得
-    BUCKET_NAME = os.environ.get("BUCKET_NAME")
-    bucket = client.bucket(BUCKET_NAME)
-
-    if bucket.exists():
-        return bucket
-    else:
-        logger.error(f"Failed to {BUCKET_NAME} does not exist.")
-        exit(1)
-
-
-def get_blobs(bucket: Bucket, blob_name: str):
-    blobs = list(bucket.list_blobs(prefix=blob_name))
-
-    # blobsの中身に対するエラーハンドリング
-    try:
-        if len(blobs) == 0:  # 最初の要素がない場合、イテレータは空
-            logger.error(f"No blobs found with prefix '{blob_name}' in the bucket.")
-            exit(1)
-        else:
-            return blobs
-    except Exception as e:
-        logger.error(f"Failed to get blobs from '{blob_name}' due to an error: {e}")
-        exit(1)
-
-
 def save_face_image_to_local(face: np.ndarray, save_dir: str, save_file_name: str):
     """クリップされた顔画像を保存する"""
     os.makedirs(save_dir, exist_ok=True)
@@ -154,7 +118,8 @@ def detect_face_and_clip(args: argparse.Namespace, config: dict):
     # GCSとの接続
     if args.env == "remote":
         client = init_client()
-        bucket = get_bucket(client)
+        BUCKET_NAME = os.environ.get("BUCKET_NAME")
+        bucket = get_bucket(client, BUCKET_NAME)
 
     # Haar Cascadeの読み込み
     face_cascade = load_cascade(face_cascade_path)
