@@ -6,7 +6,7 @@ import os
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.trainer import Trainer
-from face_detect_model.util import logger, save_pickle_to_gcs
+from face_detect_model.util import logger, save_pickle_to_gcs, switch_to_bus_type
 from face_detect_model.gcp_util import init_client, get_bucket
 from dotenv import load_dotenv
 
@@ -50,7 +50,7 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
         )
         save_pickle_to_gcs(
             bucket=bucket,
-            upload_model_path=f"{args.nursery_id}/{args.bus_id}/{args.bus_type}_idx_to_label.pth",
+            upload_model_path=f"{args.nursery_id}/{args.bus_id}/idx_to_label_{switch_to_bus_type(args.bus_type)}.pth",
             obj=idx_to_label,
         )
         logger.info("idx_to_label is saved")
@@ -73,6 +73,7 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
     if args.mode == "train":
         # 学習
         trainer.train()
+        logger.info("Done training!")
     elif args.mode == "test":
         # テスト
         face_detect_model.load_state_dict(
@@ -86,7 +87,6 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
 def main(args: argparse.Namespace):
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
-
     TrainAndTest(args, config)
 
 

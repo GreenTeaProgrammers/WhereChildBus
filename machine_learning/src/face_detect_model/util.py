@@ -36,6 +36,18 @@ def get_child_id(blob_name: str):
     return child_id
 
 
+def switch_to_bus_type(bus_type_num: int):
+    bus_type_str = "BUS_TYPE_"
+    if bus_type_num == 0:
+        return bus_type_str + "UNSPECIFIED"
+    elif bus_type_num == 1:
+        return bus_type_str + "MORNING"
+    elif bus_type_num == 2:
+        return bus_type_str + "EVENING"
+    else:
+        raise ValueError(f"Invalid bus_type: {bus_type_num}")
+
+
 def load_image_from_remote(blobs: list):
     images = []
     for blob in blobs:
