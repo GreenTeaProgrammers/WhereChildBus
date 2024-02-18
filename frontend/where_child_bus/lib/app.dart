@@ -5,9 +5,9 @@ import 'package:where_child_bus/pages/student_list_page/student_list_page.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class App extends StatefulWidget {
-  NurseryResponse nursery;
-
-  App({super.key, required this.nursery});
+  App({
+    super.key,
+  });
 
   @override
   State<App> createState() => _AppState();
@@ -23,12 +23,8 @@ class _AppState extends State<App> {
         title: Text(['園児一覧', '送迎バスコース一覧', '連絡情報設定'][_selectedIndex]),
       ),
       body: [
-        ChildListPage(
-          nursery: widget.nursery,
-        ),
-        BusListPage(
-          nursery: widget.nursery,
-        ),
+        ChildListPage(),
+        BusListPage(),
         const NotificationPage()
       ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

@@ -5,12 +5,13 @@ import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
+import 'package:where_child_bus/util/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusListPage extends StatefulWidget {
-  final NurseryResponse nursery;
-
-  const BusListPage({super.key, required this.nursery});
+  const BusListPage({
+    super.key,
+  });
 
   @override
   State<BusListPage> createState() => _BusListPageState();
@@ -28,7 +29,7 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Future<void> _loadBusList() async {
-    String nurseryId = widget.nursery.id;
+    String nurseryId = NurseryData().getNursery().id;
     List<Bus> busList = await getBusList(nurseryId);
     try {
       if (mounted) {

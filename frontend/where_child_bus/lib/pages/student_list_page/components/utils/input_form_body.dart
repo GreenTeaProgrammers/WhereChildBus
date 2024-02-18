@@ -76,10 +76,7 @@ class _InputFormBody extends State<InputFormBody> {
             context, "園児氏名", "園児氏名を入力してください", TextInputType.name),
         inputLabelAndTextField(
             context, "年齢", "年齢を入力してください", TextInputType.number),
-        inputLabelAndTextField(
-            context, "保護者氏名", "保護者氏名を入力してください", TextInputType.name),
-        inputLabelAndTextField(
-            context, "保護者連絡先", "保護者連絡先を入力してください", TextInputType.phone),
+        inputLabelAndSelectBox(context, "保護者", widget.busName),
         inputLabelAndSelectBox(context, "利用バス", widget.busName),
         inputLabelAndSelectBox(context, "乗降場所", widget.busStop),
         Container(

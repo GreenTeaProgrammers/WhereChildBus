@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/child_list.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
 import 'package:where_child_bus/service/get_child_list_by_nursery_id.dart';
+import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class ChildListPage extends StatefulWidget {
-  final NurseryResponse nursery;
-
-  const ChildListPage({super.key, required this.nursery});
+  const ChildListPage({
+    super.key,
+  });
 
   @override
   State<ChildListPage> createState() => _ChildListPageState();
@@ -17,6 +19,7 @@ class ChildListPage extends StatefulWidget {
 
 class _ChildListPageState extends State<ChildListPage> {
   List<Child> children = [];
+  List<ChildPhoto> photos = [];
   bool _isLoading = false;
   bool _isFailLoading = false;
 
@@ -38,11 +41,12 @@ class _ChildListPageState extends State<ChildListPage> {
   Future<void> _loadChildren() async {
     try {
       _isLoading = true;
-      List<Child> childList =
-          await getChildListByNurseryIdService(widget.nursery.id);
+      GetChildListByNurseryIDResponse res =
+          await getChildListByNurseryIdService(NurseryData().getNursery().id);
       if (mounted) {
         setState(() {
-          children = childList;
+          children = res.children;
+          photos = res.photos;
           _isLoading = false;
         });
       }
