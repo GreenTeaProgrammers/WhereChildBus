@@ -37,11 +37,6 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
         ],
     )
 
-    # modelの読み込み
-    logger.info("model Initializing")
-    num_classes = dataset.get_label_num()
-    image_shape = dataset.get_image_shape()
-
     idx_to_label = dataset.get_idx_label_dict()
     if args.mode == "train":
         bucket = get_bucket(
@@ -54,6 +49,11 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
             obj=idx_to_label,
         )
         logger.info("idx_to_label is saved")
+
+    # modelの読み込み
+    logger.info("model Initializing")
+    num_classes = dataset.get_label_num()
+    image_shape = dataset.get_image_shape()
 
     face_detect_model = FaceDetectModel(
         config, num_classes=num_classes, input_dim=image_shape
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         nargs="*",
     )
     parser.add_argument("--bus_id", type=str)
-    parser.add_argument("--bus_type", type=str)
+    parser.add_argument("--bus_type", type=int)
 
     args = parser.parse_args()
 
