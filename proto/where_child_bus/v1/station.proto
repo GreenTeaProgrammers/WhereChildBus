@@ -34,8 +34,6 @@ message GetStationListByBusIdResponse {
 
 message UpdateStationRequest {
         string id  = 1;
-        string morning_next_station_id = 2;
-        string evening_next_station_id = 3;
         double latitude = 5;
         double longitude = 6;
         int32 morning_order = 7;

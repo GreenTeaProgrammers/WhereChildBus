@@ -42,24 +42,20 @@ class GetStationListByBusIdResponse(_message.Message):
     def __init__(self, stations: _Optional[_Iterable[_Union[_resources_pb2.Station, _Mapping]]] = ..., guardians: _Optional[_Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]] = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ..., photos: _Optional[_Iterable[_Union[_resources_pb2.ChildPhoto, _Mapping]]] = ...) -> None: ...
 
 class UpdateStationRequest(_message.Message):
-    __slots__ = ("id", "morning_next_station_id", "evening_next_station_id", "latitude", "longitude", "morning_order", "evening_order", "update_mask")
+    __slots__ = ("id", "latitude", "longitude", "morning_order", "evening_order", "update_mask")
     ID_FIELD_NUMBER: _ClassVar[int]
-    MORNING_NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
-    EVENING_NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     MORNING_ORDER_FIELD_NUMBER: _ClassVar[int]
     EVENING_ORDER_FIELD_NUMBER: _ClassVar[int]
     UPDATE_MASK_FIELD_NUMBER: _ClassVar[int]
     id: str
-    morning_next_station_id: str
-    evening_next_station_id: str
     latitude: float
     longitude: float
     morning_order: int
     evening_order: int
     update_mask: _field_mask_pb2.FieldMask
-    def __init__(self, id: _Optional[str] = ..., morning_next_station_id: _Optional[str] = ..., evening_next_station_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., morning_order: _Optional[int] = ..., evening_order: _Optional[int] = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., morning_order: _Optional[int] = ..., evening_order: _Optional[int] = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
 
 class UpdateStationResponse(_message.Message):
     __slots__ = ("station",)
