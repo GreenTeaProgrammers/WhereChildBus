@@ -36,7 +36,7 @@ message NurseryLoginResponse {
 message UpdateNurseryRequest {
         string id = 1;
         string name = 2;
-        string adress = 3;
+        string address = 3;
         string phone_number = 4;
         string email = 5;
         string password = 6;

@@ -308,7 +308,7 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
   factory UpdateNurseryRequest({
     $core.String? id,
     $core.String? name,
-    $core.String? adress,
+    $core.String? address,
     $core.String? phoneNumber,
     $core.String? email,
     $core.String? password,
@@ -321,8 +321,8 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
     if (name != null) {
       $result.name = name;
     }
-    if (adress != null) {
-      $result.adress = adress;
+    if (address != null) {
+      $result.address = address;
     }
     if (phoneNumber != null) {
       $result.phoneNumber = phoneNumber;
@@ -345,7 +345,7 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateNurseryRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'adress')
+    ..aOS(3, _omitFieldNames ? '' : 'address')
     ..aOS(4, _omitFieldNames ? '' : 'phoneNumber')
     ..aOS(5, _omitFieldNames ? '' : 'email')
     ..aOS(6, _omitFieldNames ? '' : 'password')
@@ -393,13 +393,13 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get adress => $_getSZ(2);
+  $core.String get address => $_getSZ(2);
   @$pb.TagNumber(3)
-  set adress($core.String v) { $_setString(2, v); }
+  set address($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasAdress() => $_has(2);
+  $core.bool hasAddress() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAdress() => clearField(3);
+  void clearAddress() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get phoneNumber => $_getSZ(3);
