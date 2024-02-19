@@ -5,6 +5,8 @@ on:
     branches:
       - develop
       - feature/machine-learning/cicd
+    paths:
+      - "machine-learning/**"
 
 permissions:
   contents: read
