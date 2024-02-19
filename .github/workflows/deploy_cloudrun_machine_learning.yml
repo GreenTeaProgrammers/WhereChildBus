@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - develop
-      - feature/machine-learning/cicd
     paths:
-      - "machine-learning/**"
+      - "machine_learning/**"
 
 permissions:
   contents: read
