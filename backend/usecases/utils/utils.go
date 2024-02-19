@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"database/sql"
 	"fmt"
 
 	"golang.org/x/exp/slog"
@@ -181,7 +182,14 @@ func CheckPassword(hashedPassword string, plainPassword string) bool {
 
 // RollbackTx はトランザクションのロールバックを試み、エラーがあればロギングします。
 func RollbackTx(tx *ent.Tx, logger *slog.Logger) {
+	// txがコミット済みの場合はロールバックしない
+	if tx == nil {
+		logger.Error("failed to rollback transaction", "error", "tx is nil")
+		return
+	}
 	if err := tx.Rollback(); err != nil {
-		logger.Error("failed to rollback transaction", "error", err)
+		if err != sql.ErrTxDone {
+			logger.Error("failed to rollback transaction", "error", err)
+		}
 	}
 }

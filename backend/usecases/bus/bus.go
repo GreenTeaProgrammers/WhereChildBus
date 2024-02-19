@@ -259,6 +259,11 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
 }
 
+func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
+	panic("unimplemented")
+	// TODO: 実装
+}
+
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
 	for {
 		req, err := stream.Recv()
@@ -329,30 +334,36 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 	var vehicleEvent pb.VehicleEvent
 
 	// Go サーバーから受け取ったメッセージをPythonサーバーに転送
-	for {
-		in, err := stream.Recv()
-		if err == io.EOF {
-			// ストリームの終了
-			break
-		}
-		if err != nil {
-			return err
-		}
+	go func() {
+		for {
+			in, err := stream.Recv()
+			i.logger.Info("received from client")
+			i.logger.Info("img", in.VideoChunk[0])
 
-		// バスID、バスタイプ、ビデオタイプを保持
-		busID = in.BusId
-		vehicleEvent = in.VehicleEvent
+			if err == io.EOF {
+				// ストリームの終了
+				break
+			}
+			if err != nil {
+				return
+			}
 
-		// Python サーバーへそのまま転送
-		err = MLStream.Send(in)
-		if err != nil {
-			return err
+			// バスID、バスタイプ、ビデオタイプを保持
+			busID = in.BusId
+			vehicleEvent = in.VehicleEvent
+
+			// Python サーバーへそのまま転送
+			err = MLStream.Send(in)
+			if err != nil {
+				return
+			}
 		}
-	}
+	}()
 
 	// Python サーバーからのレスポンスを待つ
 	for {
 		resp, err := MLStream.Recv()
+		i.logger.Info("received from ML server")
 		if err == io.EOF {
 			// ストリームの終了
 			break
@@ -444,7 +455,6 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 			return err
 		}
 	}
-
 	return nil
 }
 

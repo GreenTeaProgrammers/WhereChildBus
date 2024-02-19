@@ -29,6 +29,10 @@ class NurseryServiceClient extends $grpc.Client {
       '/where_child_bus.v1.NurseryService/NurseryLogin',
       ($5.NurseryLoginRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $5.NurseryLoginResponse.fromBuffer(value));
+  static final _$updateNursery = $grpc.ClientMethod<$5.UpdateNurseryRequest, $5.UpdateNurseryResponse>(
+      '/where_child_bus.v1.NurseryService/UpdateNursery',
+      ($5.UpdateNurseryRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $5.UpdateNurseryResponse.fromBuffer(value));
 
   NurseryServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +46,10 @@ class NurseryServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$5.NurseryLoginResponse> nurseryLogin($5.NurseryLoginRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$nurseryLogin, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$5.UpdateNurseryResponse> updateNursery($5.UpdateNurseryRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$updateNursery, request, options: options);
   }
 }
 
@@ -64,6 +72,13 @@ abstract class NurseryServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $5.NurseryLoginRequest.fromBuffer(value),
         ($5.NurseryLoginResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$5.UpdateNurseryRequest, $5.UpdateNurseryResponse>(
+        'UpdateNursery',
+        updateNursery_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $5.UpdateNurseryRequest.fromBuffer(value),
+        ($5.UpdateNurseryResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$5.CreateNurseryResponse> createNursery_Pre($grpc.ServiceCall call, $async.Future<$5.CreateNurseryRequest> request) async {
@@ -74,6 +89,11 @@ abstract class NurseryServiceBase extends $grpc.Service {
     return nurseryLogin(call, await request);
   }
 
+  $async.Future<$5.UpdateNurseryResponse> updateNursery_Pre($grpc.ServiceCall call, $async.Future<$5.UpdateNurseryRequest> request) async {
+    return updateNursery(call, await request);
+  }
+
   $async.Future<$5.CreateNurseryResponse> createNursery($grpc.ServiceCall call, $5.CreateNurseryRequest request);
   $async.Future<$5.NurseryLoginResponse> nurseryLogin($grpc.ServiceCall call, $5.NurseryLoginRequest request);
+  $async.Future<$5.UpdateNurseryResponse> updateNursery($grpc.ServiceCall call, $5.UpdateNurseryRequest request);
 }

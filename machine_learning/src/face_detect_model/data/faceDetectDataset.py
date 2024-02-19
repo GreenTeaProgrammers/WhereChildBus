@@ -2,13 +2,13 @@ import os
 
 import torch
 from PIL import Image
-from torchvision import transforms
 
 from face_detect_model.util import (
     load_image_from_remote,
 )
 
 from face_detect_model.gcp_util import get_bucket, get_blobs
+from face_detect_model.util import get_augment_transform, get_default_transforms
 
 
 # (child_id, image)のタプルを返す
@@ -18,7 +18,7 @@ class FaceDetectDataset(torch.utils.data.Dataset):
         self.args = args
         self.config = config
 
-        default_transform = self.get_default_transforms()
+        default_transform = get_default_transforms()
 
         bucket_name = os.environ.get("BUCKET_NAME")
         bucket = get_bucket(client, bucket_name)
@@ -62,41 +62,9 @@ class FaceDetectDataset(torch.utils.data.Dataset):
         self.name_label_dict[label] = self.label_num
         self.label_num += 1
 
-    def get_default_transforms(self):
-        return transforms.Compose(
-            [
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-                ),
-            ]
-        )
-
-    def get_augment_transform(self):
-        return transforms.Compose(
-            [
-                transforms.RandomCrop((100, 100)),
-                transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomVerticalFlip(p=0.5),
-                transforms.RandomApply([transforms.RandomRotation(degrees=180)], p=0.5),
-                transforms.RandomApply(
-                    [
-                        transforms.RandomAffine(
-                            degrees=0, translate=(0.1, 0.1), scale=(0.8, 1.2)
-                        )
-                    ],
-                    p=0.5,
-                ),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-                ),
-            ]
-        )
-
     def augment_image(self, image, num_variations=100):
         # ランダムな変換を適用するための拡張設定を強化
-        transformations = self.get_augment_transform()
+        transformations = get_augment_transform()
         augmented_images = []
         for _ in range(num_variations):
             augmented_image = transformations(image)
