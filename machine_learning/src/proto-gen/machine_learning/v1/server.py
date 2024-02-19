@@ -1,15 +1,20 @@
-import argparse
 import logging
-import threading
 from concurrent import futures
+from typing import Iterable
 
 import grpc
 from grpc_reflection.v1alpha import reflection
-import health_check_pb2
-import health_check_pb2_grpc
-import machine_learning_pb2
-import machine_learning_pb2_grpc
 
+from generated.machine_learning.v1 import health_check_pb2
+from generated.machine_learning.v1 import health_check_pb2_grpc
+from generated.machine_learning.v1 import machine_learning_pb2
+from generated.machine_learning.v1 import machine_learning_pb2_grpc
+from generated.where_child_bus.v1 import bus_pb2
+from generated.machine_learning.v1.func_args import (
+    FaceDetectAndClip_Args,
+    Pred_Args,
+    Train_Args,
+)
 
 import logging
 from concurrent import futures
@@ -36,42 +41,46 @@ class HealthCheckServiceServer(
         return health_check_pb2.PingResponse(message=message)
 
 
+# TODO: error handling
+# TODO: 非同期処理
 class MachineLearningServiceServicer(
     machine_learning_pb2_grpc.MachineLearningServiceServicer
 ):
-    # TODO: implement Predict
-    def Predict(self, request_iterator: machine_learning_pb2.PredRequest, context):
-        for req in request_iterator:
-            parser = argparse.ArgumentParser()
-            args = parser.parse_args()
+    def __init__(self):
+        self.pred_fn = pred_fn
+        self.train_fn = train_fn
+        self.detect_face_and_clip_fn = detect_face_and_clip_fn
 
-            args.bus_id = req.bus_id
-            args.bus_type = req.bus_type
-            args.video_type = req.video_type
-            args.video_chunk = req.video_chunk
-            args.timestamp = req.timestamp
-
+    def Pred(self, request_iterator: Iterable[bus_pb2.StreamBusVideoRequest], context):
+        for request in request_iterator:
+            params = Pred_Args(
+                nursery_id=request.nursery_id,
+                bus_id=request.bus_id,
+                bus_type=request.bus_type,
+                video_chunk=request.video_chunk,
+                vehicle_event=request.vehicle_event,
+            )
             try:
-                child_ids = pred_fn(args)
+                child_ids = self.pred_fn(params)
             except Exception as e:
                 logging.error(e)
                 child_ids = []
-            yield machine_learning_pb2.PredResponse(child_ids=child_ids)
+            is_detected = len(child_ids) > 0
+            yield machine_learning_pb2.PredResponse(
+                is_detected=is_detected, child_ids=child_ids
+            )
 
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
-        parser = argparse.ArgumentParser()
-        args = parser.parse_args()
-
-        args.nursery_id = request.nursery_id
-        args.child_ids = request.child_ids
-        args.bus_id = request.bus_id
-        args.bus_type = request.bus_type
-        args.seed = 42
-        args.mode = "train"
-        # mainメソッドを別スレッドで実行
+        params = Train_Args(
+            nursery_id=request.nursery_id,
+            child_ids=request.child_ids,
+            bus_id=request.bus_id,
+            bus_type=request.bus_type,
+            seed=42,
+            mode="train",
+        )
         try:
-            thread = threading.Thread(target=train_fn, args=(args,))
-            thread.start()
+            self.train_fn(params)
             is_started = True
         except Exception as e:
             logging.error(e)
@@ -84,16 +93,13 @@ class MachineLearningServiceServicer(
         request: machine_learning_pb2.FaceDetectAndClipRequest,
         context,
     ):
-        parser = argparse.ArgumentParser()
-        args = parser.parse_args()
-
-        args.nursery_id = request.nursery_id
-        args.child_id = request.child_id
-        args.env = "remote"
-        # mainメソッドを別スレッドで実行
+        params = FaceDetectAndClip_Args(
+            nursery_id=request.nursery_id,
+            child_id=request.child_id,
+            env="remote",
+        )
         try:
-            thread = threading.Thread(target=detect_face_and_clip_fn, args=(args,))
-            thread.start()
+            self.detect_face_and_clip_fn(params)
             is_started = True
         except Exception as e:
             logging.error(e)
