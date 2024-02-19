@@ -17,6 +17,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	boardingrecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childbusassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
@@ -260,8 +261,65 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 }
 
 func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
-	panic("unimplemented")
 	// TODO: 実装
+	// bus_idのパース
+	busID, err := uuid.Parse(req.BusId)
+	if err != nil {
+		i.logger.Error("failed to parse bus ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションの開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transction", "error", "err")
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// 更新処理のビルダー
+	update := tx.Bus.Update().Where(bus.IDEQ(busID))
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "name":
+			update.SetName(req.Name)
+		case "plate_number":
+			update.SetPlateNumber(req.PlateNumber)
+		case "bus_status":
+			status := bus.Status(req.BusStatus)
+			update.SetStatus(status)
+		case "latitude":
+			update.SetLatitude(req.Latitude)
+		case "longitude":
+			update.SetLongitude(req.Longitude)
+		case "enable_face_recognition":
+			update.SetEnableFaceRecognition(req.EnableFaceRecognition)
+		}
+	}
+
+	// 更新の実行
+	_, err = update.Save(ctx)
+	if err != nil {
+		i.logger.Error("failed to update bus", "error", err)
+		return nil, err
+	}
+
+	// 更新されたバスを取得
+	updatedBus, err := tx.Bus.Query().Where(bus.IDEQ(busID)).Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to retrieve updated bus", "error", err)
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transction", "error", err)
+		return nil, err
+	}
+
+	// レスポンスの生成と返却
+	return &pb.UpdateBusResponse{
+		Bus: utils.ToPbBus(updatedBus),
+	}, nil
 }
 
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {

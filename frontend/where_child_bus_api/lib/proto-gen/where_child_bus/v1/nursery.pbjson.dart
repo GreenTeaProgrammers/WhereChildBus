@@ -78,7 +78,7 @@ const UpdateNurseryRequest$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'adress', '3': 3, '4': 1, '5': 9, '10': 'adress'},
+    {'1': 'address', '3': 3, '4': 1, '5': 9, '10': 'address'},
     {'1': 'phone_number', '3': 4, '4': 1, '5': 9, '10': 'phoneNumber'},
     {'1': 'email', '3': 5, '4': 1, '5': 9, '10': 'email'},
     {'1': 'password', '3': 6, '4': 1, '5': 9, '10': 'password'},
@@ -89,10 +89,10 @@ const UpdateNurseryRequest$json = {
 /// Descriptor for `UpdateNurseryRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateNurseryRequestDescriptor = $convert.base64Decode(
     'ChRVcGRhdGVOdXJzZXJ5UmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbm'
-    'FtZRIWCgZhZHJlc3MYAyABKAlSBmFkcmVzcxIhCgxwaG9uZV9udW1iZXIYBCABKAlSC3Bob25l'
-    'TnVtYmVyEhQKBWVtYWlsGAUgASgJUgVlbWFpbBIaCghwYXNzd29yZBgGIAEoCVIIcGFzc3dvcm'
-    'QSOwoLdXBkYXRlX21hc2sYByABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYXNrUgp1cGRh'
-    'dGVNYXNr');
+    'FtZRIYCgdhZGRyZXNzGAMgASgJUgdhZGRyZXNzEiEKDHBob25lX251bWJlchgEIAEoCVILcGhv'
+    'bmVOdW1iZXISFAoFZW1haWwYBSABKAlSBWVtYWlsEhoKCHBhc3N3b3JkGAYgASgJUghwYXNzd2'
+    '9yZBI7Cgt1cGRhdGVfbWFzaxgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5GaWVsZE1hc2tSCnVw'
+    'ZGF0ZU1hc2s=');
 
 @$core.Deprecated('Use updateNurseryResponseDescriptor instead')
 const UpdateNurseryResponse$json = {
