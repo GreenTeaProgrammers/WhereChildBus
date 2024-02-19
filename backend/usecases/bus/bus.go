@@ -348,11 +348,6 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 				return
 			}
 
-			// ! 治す
-			in.BusId = "83bd2da8-8d15-4c05-bb26-ed992334d9c6"
-			in.VehicleEvent = pb.VehicleEvent_VEHICLE_EVENT_GET_ON
-			in.BusType = pb.BusType_BUS_TYPE_MORNING
-
 			// バスID、バスタイプ、ビデオタイプを保持
 			busID = in.BusId
 			vehicleEvent = in.VehicleEvent
