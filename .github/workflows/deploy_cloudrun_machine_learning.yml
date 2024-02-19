@@ -32,12 +32,6 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
-      # - name: Set up Cloud SDK
-      #   uses: "google-github-actions/setup-gcloud@v2"
-      #   with:
-      #     workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-      #     service_account: ${{ secrets.SERVICE_ACCOUNT }}
-
       - name: Build Docker image
         run: |
           docker build \
