@@ -1,9 +1,12 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/config/config.dart';
 import 'package:where_child_bus/pages/auth_page/auth_page.dart';
 import 'package:where_child_bus/util/api/health_check.dart';
 
-void main() async {
+List<CameraDescription> cameras = [];
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
@@ -12,6 +15,10 @@ void main() async {
   } catch (e) {
     print("Failed to initialize the app");
   }
+
+  //カメラを取得
+  cameras = await availableCameras();
+
   runApp(const MyApp());
 }
 
@@ -30,9 +37,6 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white, // AppBarの背景色を白に設定
-        ),
       ),
       home: const AuthPage(),
     );
