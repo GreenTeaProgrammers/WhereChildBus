@@ -6,6 +6,11 @@ on:
       - develop
       - feature/machine-learning/cicd
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
