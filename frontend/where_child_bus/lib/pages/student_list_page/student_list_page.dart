@@ -30,31 +30,23 @@ class _ChildListPageState extends State<ChildListPage> {
     _loadChildren();
   }
 
-  Future<void> _loadChildren() async {
-    try {
-      _isLoading = true;
+  Future<void> _fetchChildren() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
-      // If the child list is already loaded, use it
-      if (NurseryChildListData().getChildList().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            children = NurseryChildListData().getChildList();
-            photos = NurseryChildListData().getPhotos();
-            _isLoading = false;
-          });
-        }
-        return;
-      } else {
-        GetChildListByNurseryIDResponse res =
-            await getChildListByNurseryIdService(NurseryData().getNursery().id);
-        NurseryChildListData().setChildListResponse(res);
-        if (mounted) {
-          setState(() {
-            children = res.children;
-            photos = res.photos;
-            _isLoading = false;
-          });
-        }
+    try {
+      GetChildListByNurseryIDResponse res =
+          await getChildListByNurseryIdService(NurseryData().getNursery().id);
+      NurseryChildListData().setChildListResponse(res);
+      if (mounted) {
+        setState(() {
+          children = res.children;
+          photos = res.photos;
+          _isLoading = false;
+        });
       }
     } catch (error) {
       if (kDebugMode) {
@@ -67,6 +59,24 @@ class _ChildListPageState extends State<ChildListPage> {
           _isFailLoading = true;
         });
       }
+    }
+  }
+
+  Future<void> _loadChildren() async {
+    _isLoading = true;
+
+    // If the child list is already loaded, use it
+    if (NurseryChildListData().getChildList().isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          children = NurseryChildListData().getChildList();
+          photos = NurseryChildListData().getPhotos();
+          _isLoading = false;
+        });
+      }
+      return;
+    } else {
+      await _fetchChildren();
     }
   }
 
@@ -94,7 +104,9 @@ class _ChildListPageState extends State<ChildListPage> {
         child: Text('Failed to load children.'),
       );
     } else {
-      return ChildList(children: children, images: photos);
+      return RefreshIndicator(
+          onRefresh: _fetchChildren,
+          child: ChildList(children: children, images: photos));
     }
   }
 }

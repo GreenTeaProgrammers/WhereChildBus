@@ -85,8 +85,8 @@ class _CameraPageState extends State<CameraPage> {
             //TODO VheicleEventを動的にする
             vehicleEvent: VehicleEvent.VEHICLE_EVENT_GET_ON,
             videoChunk: videoChunks,
-            photoHeight: image.width,
-            photoWidth: image.height,
+            photoHeight: image.height,
+            photoWidth: image.width,
           ));
           developer.log("Received image frame ${videoChunks}",
               name: "CameraPage");
