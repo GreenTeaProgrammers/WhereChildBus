@@ -2,10 +2,12 @@ import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
+import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusListPage extends StatefulWidget {
@@ -30,19 +32,31 @@ class _BusListPageState extends State<BusListPage> {
 
   Future<void> _loadBusList() async {
     String nurseryId = NurseryData().getNursery().id;
-    List<Bus> busList = await getBusList(nurseryId);
-    try {
+
+    if (NurseryBusData().getBusList().isNotEmpty) {
       if (mounted) {
         setState(() {
-          buses = busList;
+          buses = NurseryBusData().getBusList();
           _isLoading = false;
         });
       }
-    } catch (e) {
-      if (kDebugMode) {
-        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      return;
+    } else {
+      GetBusListByNurseryIdResponse busList = await getBusList(nurseryId);
+      NurseryBusData().setBusListResponse(busList);
+      try {
+        if (mounted) {
+          setState(() {
+            buses = NurseryBusData().getBusList();
+            _isLoading = false;
+          });
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          developer.log("バスリストのロード中にエラーが発生しました: $e");
+        }
+        setState(() => {_isLoading = false, _isFailLoading = true});
       }
-      setState(() => {_isLoading = false, _isFailLoading = true});
     }
   }
 

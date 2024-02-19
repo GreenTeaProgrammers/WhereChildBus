@@ -2,7 +2,7 @@ import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/child_list.dart';
-import 'package:where_child_bus/models/child_data.dart';
+import 'package:where_child_bus/models/nursery_child_data.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
 import 'package:where_child_bus/service/get_child_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';

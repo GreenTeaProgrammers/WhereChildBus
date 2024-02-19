@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/service/get_guardian_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
@@ -64,16 +65,24 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Future<void> _loadBuses() async {
-    try {
-      var res = await getBusList(NurseryData().getNursery().id);
+    if (NurseryBusData().getBusList().isNotEmpty) {
       setState(() {
-        buses = res;
+        buses = NurseryBusData().getBusList();
       });
-    } catch (error) {
-      developer.log("Caught Error", error: error.toString());
-      setState(() {
-        buses = [];
-      });
+      return;
+    } else {
+      try {
+        var res = await getBusList(NurseryData().getNursery().id);
+        NurseryBusData().setBusListResponse(res);
+        setState(() {
+          buses = NurseryBusData().getBusList();
+        });
+      } catch (error) {
+        developer.log("Caught Error", error: error.toString());
+        setState(() {
+          buses = [];
+        });
+      }
     }
   }
 
