@@ -21,44 +21,24 @@ class BusSelectPage extends StatefulWidget {
 class _BusSelectPageState extends State<BusSelectPage> {
   Bus? _selectedBus;
   BusType _selectedType = BusType.BUS_TYPE_MORNING;
-  bool _isLoading = false;
-  bool _isFailLoading = false;
   List<Bus> _buses = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _loadBuses();
-  }
-
-  Future<void> _loadBuses() async {
+  Future<List<Bus>> _loadBuses() async {
     if (NurseryBusData().getBusList().isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          _buses = NurseryBusData().getBusList();
-        });
-      }
-      return;
+      _selectedBus = NurseryBusData().getBusList().first;
+      return NurseryBusData().getBusList();
     } else {
       try {
         GetBusListByNurseryIdResponse busList =
             await getBusList(NurseryData().getNursery().id);
         NurseryBusData().setBusListResponse(busList);
-        if (mounted) {
-          setState(() {
-            _buses = NurseryBusData().getBusList();
-          });
-        }
+        _selectedBus = busList.buses[0];
+        return NurseryBusData().getBusList();
       } catch (error) {
         if (kDebugMode) {
-          developer.log("バスのロード中にエラーが発生しました", error: error);
+          developer.log("バスのロード中にエラーが発生しました", error: error.toString());
         }
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-            _isFailLoading = true;
-          });
-        }
+        throw Exception('バスのロードに失敗しました');
       }
     }
   }
@@ -71,27 +51,32 @@ class _BusSelectPageState extends State<BusSelectPage> {
   }
 
   Widget _createPageBody() {
-    if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (_isFailLoading) {
-      return const Center(
-        child: Text('データの取得に失敗しました'),
-      );
-    } else {
-      return Center(
-          child: Column(
-        children: [
-          _createBusInputLabelAndSelectBox(context, "バスを選択して下さい",
-              _buses.map((Bus bus) => bus.name).toList()),
-          const SizedBox(height: 20),
-          _createTimeInputLabelAndSelectBox(context, "時間を選択して下さい"),
-          const SizedBox(height: 20),
-          _proceedButton(),
-        ],
-      ));
-    }
+    return FutureBuilder<List<Bus>>(
+      future: _loadBuses(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('データの取得に失敗しました: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          _buses = snapshot.data!;
+          return Center(
+            child: Column(
+              children: [
+                _createBusInputLabelAndSelectBox(context, "バスを選択して下さい",
+                    _buses.map((Bus bus) => bus.name).toList()),
+                const SizedBox(height: 20),
+                _createTimeInputLabelAndSelectBox(context, "時間を選択して下さい"),
+                const SizedBox(height: 20),
+                _proceedButton(),
+              ],
+            ),
+          );
+        } else {
+          return const Center(child: Text('利用可能なバスがありません'));
+        }
+      },
+    );
   }
 
   Widget _createBusInputLabelAndSelectBox(

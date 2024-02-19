@@ -85,10 +85,11 @@ class _CameraPageState extends State<CameraPage> {
             //TODO VheicleEventを動的にする
             vehicleEvent: VehicleEvent.VEHICLE_EVENT_GET_ON,
             videoChunk: videoChunks,
-            photoHeight: image.height,
-            photoWidth: image.width,
+            photoHeight: image.width,
+            photoWidth: image.height,
           ));
-          developer.log("Received image frame", name: "CameraPage");
+          developer.log("Received image frame ${videoChunks}",
+              name: "CameraPage");
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 
@@ -111,6 +112,9 @@ class _CameraPageState extends State<CameraPage> {
       return const SizedBox.shrink(); // カメラが初期化されていない場合は何も表示しない
     }
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("カメラ"),
+      ),
       body: CameraPreview(_controller),
     );
   }
