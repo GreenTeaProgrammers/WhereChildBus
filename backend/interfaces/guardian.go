@@ -39,3 +39,8 @@ func (s *guardianServiceServer) GetGuardianByChildId(ctx context.Context, req *p
 func (s *guardianServiceServer) GetGuardianListByNurseryId(ctx context.Context, req *pb.GetGuardianListByNurseryIdRequest) (*pb.GetGuardianListByNurseryIdResponse, error) {
 	return s.interactor.GetGuardianListByNurseryID(ctx, req)
 }
+
+// UpdateGuardian implements where_child_busv1.GuardianServiceServer.
+func (s *guardianServiceServer) UpdateGuardian(ctx context.Context, req *pb.UpdateGuardianRequest) (*pb.UpdateGuardianResponse, error) {
+	return s.interactor.UpdateGuardian(ctx, req)
+}

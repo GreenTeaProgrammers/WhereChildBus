@@ -15,6 +15,7 @@ import (
 	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
+	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
@@ -73,7 +74,8 @@ func main() {
 	// Cloud Storageへの接続を開始
 	log.Println("Connecting to Cloud Storage...")
 	ctx := context.Background()
-	storageClient, err := storage.NewClient(ctx)
+	credPath := "./secrets/gcp-credentials.json"
+	storageClient, err := storage.NewClient(ctx, option.WithCredentialsFile(credPath))
 	if err != nil {
 		log.Fatalf("Failed to create Cloud Storage client: %v", err)
 	}
@@ -117,6 +119,7 @@ func main() {
 		grpc_server.WithReflection(config.ModeDev),
 		grpc_server.WithStorageClient(storageClient),
 		grpc_server.WithBucketName(config.StorageBucketName),
+		grpc_server.WithMLClient(mlv1.NewMachineLearningServiceClient(conn)),
 	)
 	lsnr, err := net.Listen("tcp", ":"+config.GrpcPort)
 	if err != nil {
