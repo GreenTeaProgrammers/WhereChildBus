@@ -3,6 +3,7 @@ syntax = "proto3";
 package where_child_bus.v1;
 
 import "where_child_bus/v1/resources.proto";
+import "google/protobuf/field_mask.proto";
 
 service ChildService {
         rpc CreateChild(CreateChildRequest) returns (CreateChildResponse);
@@ -10,7 +11,9 @@ service ChildService {
         rpc GetChildListByGuardianID(GetChildListByGuardianIDRequest) returns (GetChildListByGuardianIDResponse);
         rpc GetChildListByBusID(GetChildListByBusIDRequest) returns (GetChildListByBusIDResponse);
         rpc CheckIsChildInBus(CheckIsChildInBusRequest) returns (CheckIsChildInBusResponse);
+        rpc UpdateChild(UpdateChildRequest) returns (UpdateChildResponse);
 }
+
 
 message CreateChildRequest {
         string nursery_id = 1;
@@ -59,3 +62,23 @@ message CheckIsChildInBusRequest {
 message CheckIsChildInBusResponse {
         bool is_in_bus = 1;
 }
+
+message UpdateChildRequest {
+        string child_id = 1;
+        string name = 2;
+        int32 age = 3;
+        Sex sex = 4;
+        bool check_for_missing_items = 5;
+        bool has_bag = 6;
+        bool has_lunch_box = 7;
+        bool has_water_bottle = 8;
+        bool has_umbrella = 9;
+        bool has_other = 10;
+        google.protobuf.FieldMask update_mask = 11;
+}
+
+
+message UpdateChildResponse {
+        Child child = 1;
+}
+

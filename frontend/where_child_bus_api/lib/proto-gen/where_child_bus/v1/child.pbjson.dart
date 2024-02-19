@@ -154,3 +154,45 @@ final $typed_data.Uint8List checkIsChildInBusResponseDescriptor = $convert.base6
     'ChlDaGVja0lzQ2hpbGRJbkJ1c1Jlc3BvbnNlEhoKCWlzX2luX2J1cxgBIAEoCFIHaXNJbkJ1cw'
     '==');
 
+@$core.Deprecated('Use updateChildRequestDescriptor instead')
+const UpdateChildRequest$json = {
+  '1': 'UpdateChildRequest',
+  '2': [
+    {'1': 'child_id', '3': 1, '4': 1, '5': 9, '10': 'childId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'age', '3': 3, '4': 1, '5': 5, '10': 'age'},
+    {'1': 'sex', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.Sex', '10': 'sex'},
+    {'1': 'check_for_missing_items', '3': 5, '4': 1, '5': 8, '10': 'checkForMissingItems'},
+    {'1': 'has_bag', '3': 6, '4': 1, '5': 8, '10': 'hasBag'},
+    {'1': 'has_lunch_box', '3': 7, '4': 1, '5': 8, '10': 'hasLunchBox'},
+    {'1': 'has_water_bottle', '3': 8, '4': 1, '5': 8, '10': 'hasWaterBottle'},
+    {'1': 'has_umbrella', '3': 9, '4': 1, '5': 8, '10': 'hasUmbrella'},
+    {'1': 'has_other', '3': 10, '4': 1, '5': 8, '10': 'hasOther'},
+    {'1': 'update_mask', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+  ],
+};
+
+/// Descriptor for `UpdateChildRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateChildRequestDescriptor = $convert.base64Decode(
+    'ChJVcGRhdGVDaGlsZFJlcXVlc3QSGQoIY2hpbGRfaWQYASABKAlSB2NoaWxkSWQSEgoEbmFtZR'
+    'gCIAEoCVIEbmFtZRIQCgNhZ2UYAyABKAVSA2FnZRIpCgNzZXgYBCABKA4yFy53aGVyZV9jaGls'
+    'ZF9idXMudjEuU2V4UgNzZXgSNQoXY2hlY2tfZm9yX21pc3NpbmdfaXRlbXMYBSABKAhSFGNoZW'
+    'NrRm9yTWlzc2luZ0l0ZW1zEhcKB2hhc19iYWcYBiABKAhSBmhhc0JhZxIiCg1oYXNfbHVuY2hf'
+    'Ym94GAcgASgIUgtoYXNMdW5jaEJveBIoChBoYXNfd2F0ZXJfYm90dGxlGAggASgIUg5oYXNXYX'
+    'RlckJvdHRsZRIhCgxoYXNfdW1icmVsbGEYCSABKAhSC2hhc1VtYnJlbGxhEhsKCWhhc19vdGhl'
+    'chgKIAEoCFIIaGFzT3RoZXISOwoLdXBkYXRlX21hc2sYCyABKAsyGi5nb29nbGUucHJvdG9idW'
+    'YuRmllbGRNYXNrUgp1cGRhdGVNYXNr');
+
+@$core.Deprecated('Use updateChildResponseDescriptor instead')
+const UpdateChildResponse$json = {
+  '1': 'UpdateChildResponse',
+  '2': [
+    {'1': 'child', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'child'},
+  ],
+};
+
+/// Descriptor for `UpdateChildResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateChildResponseDescriptor = $convert.base64Decode(
+    'ChNVcGRhdGVDaGlsZFJlc3BvbnNlEi8KBWNoaWxkGAEgASgLMhkud2hlcmVfY2hpbGRfYnVzLn'
+    'YxLkNoaWxkUgVjaGlsZA==');
+

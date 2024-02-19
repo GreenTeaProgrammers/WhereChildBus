@@ -3,10 +3,12 @@ syntax = "proto3";
 package where_child_bus.v1;
 
 import "where_child_bus/v1/resources.proto";
+import "google/protobuf/field_mask.proto";
 
 service StationService {
         rpc UpdateStationLocationByGuardianId(UpdateStationLocationByGuardianIdRequest) returns (UpdateStationLocationByGuardianIdResponse);
         rpc GetStationListByBusId(GetStationListByBusIdRequest) returns (GetStationListByBusIdResponse);
+        rpc UpdateStation(UpdateStationRequest) returns (UpdateStationResponse);
 }
 
 message UpdateStationLocationByGuardianIdRequest {
@@ -28,4 +30,19 @@ message GetStationListByBusIdResponse {
         repeated GuardianResponse guardians = 2;
         repeated Child children = 3;
         repeated ChildPhoto photos = 4;
+}
+
+message UpdateStationRequest {
+        string id  = 1;
+        string morning_next_station_id = 2;
+        string morning_evening_station_id = 3;
+        double latitude = 5;
+        double longitude = 6;
+        int32 morning_order = 7;
+        int32 morning_evening_order = 8;
+        google.protobuf.FieldMask update_mask = 9;
+}
+
+message UpdateStationResponse {
+        Station station = 1;
 }

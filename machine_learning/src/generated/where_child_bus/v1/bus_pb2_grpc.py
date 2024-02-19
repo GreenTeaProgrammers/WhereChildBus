@@ -24,10 +24,10 @@ class BusServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdResponse.FromString,
                 )
-        self.ChangeBusStatus = channel.unary_unary(
-                '/where_child_bus.v1.BusService/ChangeBusStatus',
-                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.SerializeToString,
-                response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.FromString,
+        self.UpdateBus = channel.unary_unary(
+                '/where_child_bus.v1.BusService/UpdateBus',
+                request_serializer=where__child__bus_dot_v1_dot_bus__pb2.UpdateBusRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.UpdateBusResponse.FromString,
                 )
         self.SendLocationContinuous = channel.stream_unary(
                 '/where_child_bus.v1.BusService/SendLocationContinuous',
@@ -61,7 +61,7 @@ class BusServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ChangeBusStatus(self, request, context):
+    def UpdateBus(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -98,10 +98,10 @@ def add_BusServiceServicer_to_server(servicer, server):
                     request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_bus__pb2.GetBusListByNurseryIdResponse.SerializeToString,
             ),
-            'ChangeBusStatus': grpc.unary_unary_rpc_method_handler(
-                    servicer.ChangeBusStatus,
-                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.FromString,
-                    response_serializer=where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.SerializeToString,
+            'UpdateBus': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateBus,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.UpdateBusRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_bus__pb2.UpdateBusResponse.SerializeToString,
             ),
             'SendLocationContinuous': grpc.stream_unary_rpc_method_handler(
                     servicer.SendLocationContinuous,
@@ -163,7 +163,7 @@ class BusService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ChangeBusStatus(request,
+    def UpdateBus(request,
             target,
             options=(),
             channel_credentials=None,
@@ -173,9 +173,9 @@ class BusService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusService/ChangeBusStatus',
-            where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusRequest.SerializeToString,
-            where__child__bus_dot_v1_dot_bus__pb2.ChangeBusStatusResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusService/UpdateBus',
+            where__child__bus_dot_v1_dot_bus__pb2.UpdateBusRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__pb2.UpdateBusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

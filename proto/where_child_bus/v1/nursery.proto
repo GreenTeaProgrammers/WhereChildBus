@@ -3,10 +3,12 @@ syntax = "proto3";
 package where_child_bus.v1;
 
 import "where_child_bus/v1/resources.proto";
+import "google/protobuf/field_mask.proto";
 
 service NurseryService {
         rpc CreateNursery(CreateNurseryRequest) returns (CreateNurseryResponse);
         rpc NurseryLogin(NurseryLoginRequest) returns (NurseryLoginResponse);
+        rpc UpdateNursery(UpdateNurseryRequest) returns (UpdateNurseryResponse);
 }
 
 message CreateNurseryRequest {
@@ -30,3 +32,18 @@ message NurseryLoginResponse {
         bool success = 1;
         NurseryResponse nursery = 2;
 }
+
+message UpdateNurseryRequest {
+        string id = 1;
+        string name = 2;
+        string adress = 3;
+        string phone_number = 4;
+        string email = 5;
+        string password = 6;
+        google.protobuf.FieldMask update_mask = 7;
+}
+
+message UpdateNurseryResponse {
+        NurseryResponse nursery = 1;
+}
+

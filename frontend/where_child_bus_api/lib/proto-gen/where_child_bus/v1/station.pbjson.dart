@@ -73,3 +73,41 @@ final $typed_data.Uint8List getStationListByBusIdResponseDescriptor = $convert.b
     'VuGAMgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MY'
     'BCADKAsyHi53aGVyZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
 
+@$core.Deprecated('Use updateStationRequestDescriptor instead')
+const UpdateStationRequest$json = {
+  '1': 'UpdateStationRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'morning_next_station_id', '3': 2, '4': 1, '5': 9, '10': 'morningNextStationId'},
+    {'1': 'morning_evening_station_id', '3': 3, '4': 1, '5': 9, '10': 'morningEveningStationId'},
+    {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'morning_order', '3': 7, '4': 1, '5': 5, '10': 'morningOrder'},
+    {'1': 'morning_evening_order', '3': 8, '4': 1, '5': 5, '10': 'morningEveningOrder'},
+    {'1': 'update_mask', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+  ],
+};
+
+/// Descriptor for `UpdateStationRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateStationRequestDescriptor = $convert.base64Decode(
+    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSNQoXbW9ybmluZ19uZXh0X3'
+    'N0YXRpb25faWQYAiABKAlSFG1vcm5pbmdOZXh0U3RhdGlvbklkEjsKGm1vcm5pbmdfZXZlbmlu'
+    'Z19zdGF0aW9uX2lkGAMgASgJUhdtb3JuaW5nRXZlbmluZ1N0YXRpb25JZBIaCghsYXRpdHVkZR'
+    'gFIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAYgASgBUglsb25naXR1ZGUSIwoNbW9ybmlu'
+    'Z19vcmRlchgHIAEoBVIMbW9ybmluZ09yZGVyEjIKFW1vcm5pbmdfZXZlbmluZ19vcmRlchgIIA'
+    'EoBVITbW9ybmluZ0V2ZW5pbmdPcmRlchI7Cgt1cGRhdGVfbWFzaxgJIAEoCzIaLmdvb2dsZS5w'
+    'cm90b2J1Zi5GaWVsZE1hc2tSCnVwZGF0ZU1hc2s=');
+
+@$core.Deprecated('Use updateStationResponseDescriptor instead')
+const UpdateStationResponse$json = {
+  '1': 'UpdateStationResponse',
+  '2': [
+    {'1': 'station', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Station', '10': 'station'},
+  ],
+};
+
+/// Descriptor for `UpdateStationResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateStationResponseDescriptor = $convert.base64Decode(
+    'ChVVcGRhdGVTdGF0aW9uUmVzcG9uc2USNQoHc3RhdGlvbhgBIAEoCzIbLndoZXJlX2NoaWxkX2'
+    'J1cy52MS5TdGF0aW9uUgdzdGF0aW9u');
+

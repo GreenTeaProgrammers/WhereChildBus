@@ -29,10 +29,10 @@ class BusServiceClient extends $grpc.Client {
       '/where_child_bus.v1.BusService/GetBusListByNurseryId',
       ($0.GetBusListByNurseryIdRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetBusListByNurseryIdResponse.fromBuffer(value));
-  static final _$changeBusStatus = $grpc.ClientMethod<$0.ChangeBusStatusRequest, $0.ChangeBusStatusResponse>(
-      '/where_child_bus.v1.BusService/ChangeBusStatus',
-      ($0.ChangeBusStatusRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ChangeBusStatusResponse.fromBuffer(value));
+  static final _$updateBus = $grpc.ClientMethod<$0.UpdateBusRequest, $0.UpdateBusResponse>(
+      '/where_child_bus.v1.BusService/UpdateBus',
+      ($0.UpdateBusRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.UpdateBusResponse.fromBuffer(value));
   static final _$sendLocationContinuous = $grpc.ClientMethod<$0.SendLocationContinuousRequest, $0.SendLocationContinuousResponse>(
       '/where_child_bus.v1.BusService/SendLocationContinuous',
       ($0.SendLocationContinuousRequest value) => value.writeToBuffer(),
@@ -60,8 +60,8 @@ class BusServiceClient extends $grpc.Client {
     return $createUnaryCall(_$getBusListByNurseryId, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.ChangeBusStatusResponse> changeBusStatus($0.ChangeBusStatusRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$changeBusStatus, request, options: options);
+  $grpc.ResponseFuture<$0.UpdateBusResponse> updateBus($0.UpdateBusRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$updateBus, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.SendLocationContinuousResponse> sendLocationContinuous($async.Stream<$0.SendLocationContinuousRequest> request, {$grpc.CallOptions? options}) {
@@ -96,13 +96,13 @@ abstract class BusServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetBusListByNurseryIdRequest.fromBuffer(value),
         ($0.GetBusListByNurseryIdResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ChangeBusStatusRequest, $0.ChangeBusStatusResponse>(
-        'ChangeBusStatus',
-        changeBusStatus_Pre,
+    $addMethod($grpc.ServiceMethod<$0.UpdateBusRequest, $0.UpdateBusResponse>(
+        'UpdateBus',
+        updateBus_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.ChangeBusStatusRequest.fromBuffer(value),
-        ($0.ChangeBusStatusResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $0.UpdateBusRequest.fromBuffer(value),
+        ($0.UpdateBusResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.SendLocationContinuousRequest, $0.SendLocationContinuousResponse>(
         'SendLocationContinuous',
         sendLocationContinuous,
@@ -134,8 +134,8 @@ abstract class BusServiceBase extends $grpc.Service {
     return getBusListByNurseryId(call, await request);
   }
 
-  $async.Future<$0.ChangeBusStatusResponse> changeBusStatus_Pre($grpc.ServiceCall call, $async.Future<$0.ChangeBusStatusRequest> request) async {
-    return changeBusStatus(call, await request);
+  $async.Future<$0.UpdateBusResponse> updateBus_Pre($grpc.ServiceCall call, $async.Future<$0.UpdateBusRequest> request) async {
+    return updateBus(call, await request);
   }
 
   $async.Stream<$0.TrackBusContinuousResponse> trackBusContinuous_Pre($grpc.ServiceCall call, $async.Future<$0.TrackBusContinuousRequest> request) async* {
@@ -144,7 +144,7 @@ abstract class BusServiceBase extends $grpc.Service {
 
   $async.Future<$0.CreateBusResponse> createBus($grpc.ServiceCall call, $0.CreateBusRequest request);
   $async.Future<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($grpc.ServiceCall call, $0.GetBusListByNurseryIdRequest request);
-  $async.Future<$0.ChangeBusStatusResponse> changeBusStatus($grpc.ServiceCall call, $0.ChangeBusStatusRequest request);
+  $async.Future<$0.UpdateBusResponse> updateBus($grpc.ServiceCall call, $0.UpdateBusRequest request);
   $async.Future<$0.SendLocationContinuousResponse> sendLocationContinuous($grpc.ServiceCall call, $async.Stream<$0.SendLocationContinuousRequest> request);
   $async.Stream<$0.TrackBusContinuousResponse> trackBusContinuous($grpc.ServiceCall call, $0.TrackBusContinuousRequest request);
   $async.Future<$0.StreamBusVideoResponse> streamBusVideo($grpc.ServiceCall call, $async.Stream<$0.StreamBusVideoRequest> request);
