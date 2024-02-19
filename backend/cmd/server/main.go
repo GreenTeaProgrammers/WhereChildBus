@@ -75,14 +75,6 @@ func main() {
 	log.Println("Connecting to Cloud Storage...")
 	ctx := context.Background()
 	credPath := "./secrets/gcp-credentials.json"
-	// パスのファイルの中身を出力
-	data, err := os.ReadFile(credPath)
-	if err != nil {
-		log.Fatalf("Failed to read credentials file: %v", err)
-	}
-
-	log.Printf("Credentials file: %s", data)
-
 	storageClient, err := storage.NewClient(ctx, option.WithCredentialsFile(credPath))
 	if err != nil {
 		log.Fatalf("Failed to create Cloud Storage client: %v", err)

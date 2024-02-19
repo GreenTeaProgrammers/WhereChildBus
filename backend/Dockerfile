@@ -19,9 +19,6 @@ ARG ML_ADDR
 
 ARG INSIDE_OF_CREDENTIALS
 
-RUN echo "Port is: $PORT" && echo "Mode is: $MODE_DEV"
-
-
 # .env ファイルを生成
 RUN echo "DSN=$DSN" > .env \
     && echo "DB_USER_NAME=$DB_USER_NAME" >> .env \
@@ -69,12 +66,6 @@ COPY --from=builder /srv/grpc/.env /app/.env
 
 # secretsディレクトリを/appディレクトリにコピー
 COPY --from=builder /srv/grpc/secrets /app/secrets
-
-RUN ls -la /app/secrets
-RUN echo "gcp-credentials.json is: $(cat /app/secrets/gcp-credentials.json)"
-
-# /appディレクトリ以下の全てのサブファイルディレクトリも含めた構造を出力
-RUN ls -laR /app
 
 # アプリケーションの起動
 ENTRYPOINT ["/app/server"]
