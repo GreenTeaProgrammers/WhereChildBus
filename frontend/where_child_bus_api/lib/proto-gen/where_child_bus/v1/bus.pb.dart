@@ -13,6 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../google/protobuf/field_mask.pb.dart' as $9;
 import 'resources.pb.dart' as $8;
 import 'resources.pbenum.dart' as $8;
 
@@ -767,6 +768,208 @@ class StreamBusVideoResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.List<$8.Child> get children => $_getList(1);
+}
+
+class UpdateBusRequest extends $pb.GeneratedMessage {
+  factory UpdateBusRequest({
+    $core.String? busId,
+    $core.String? name,
+    $core.String? plateNumber,
+    $8.BusStatus? busStatus,
+    $core.double? latitude,
+    $core.double? longitude,
+    $core.bool? enableFaceRecognition,
+    $9.FieldMask? updateMask,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (plateNumber != null) {
+      $result.plateNumber = plateNumber;
+    }
+    if (busStatus != null) {
+      $result.busStatus = busStatus;
+    }
+    if (latitude != null) {
+      $result.latitude = latitude;
+    }
+    if (longitude != null) {
+      $result.longitude = longitude;
+    }
+    if (enableFaceRecognition != null) {
+      $result.enableFaceRecognition = enableFaceRecognition;
+    }
+    if (updateMask != null) {
+      $result.updateMask = updateMask;
+    }
+    return $result;
+  }
+  UpdateBusRequest._() : super();
+  factory UpdateBusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateBusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBusRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'plateNumber')
+    ..e<$8.BusStatus>(4, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: $8.BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: $8.BusStatus.valueOf, enumValues: $8.BusStatus.values)
+    ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOB(7, _omitFieldNames ? '' : 'enableFaceRecognition')
+    ..aOM<$9.FieldMask>(8, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateBusRequest clone() => UpdateBusRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateBusRequest copyWith(void Function(UpdateBusRequest) updates) => super.copyWith((message) => updates(message as UpdateBusRequest)) as UpdateBusRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateBusRequest create() => UpdateBusRequest._();
+  UpdateBusRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateBusRequest> createRepeated() => $pb.PbList<UpdateBusRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateBusRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateBusRequest>(create);
+  static UpdateBusRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get plateNumber => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set plateNumber($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasPlateNumber() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPlateNumber() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $8.BusStatus get busStatus => $_getN(3);
+  @$pb.TagNumber(4)
+  set busStatus($8.BusStatus v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBusStatus() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBusStatus() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.double get latitude => $_getN(4);
+  @$pb.TagNumber(5)
+  set latitude($core.double v) { $_setDouble(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasLatitude() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearLatitude() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.double get longitude => $_getN(5);
+  @$pb.TagNumber(6)
+  set longitude($core.double v) { $_setDouble(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasLongitude() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLongitude() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get enableFaceRecognition => $_getBF(6);
+  @$pb.TagNumber(7)
+  set enableFaceRecognition($core.bool v) { $_setBool(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasEnableFaceRecognition() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearEnableFaceRecognition() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $9.FieldMask get updateMask => $_getN(7);
+  @$pb.TagNumber(8)
+  set updateMask($9.FieldMask v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasUpdateMask() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearUpdateMask() => clearField(8);
+  @$pb.TagNumber(8)
+  $9.FieldMask ensureUpdateMask() => $_ensure(7);
+}
+
+class UpdateBusResponse extends $pb.GeneratedMessage {
+  factory UpdateBusResponse({
+    $8.Bus? bus,
+  }) {
+    final $result = create();
+    if (bus != null) {
+      $result.bus = bus;
+    }
+    return $result;
+  }
+  UpdateBusResponse._() : super();
+  factory UpdateBusResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateBusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateBusResponse clone() => UpdateBusResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateBusResponse copyWith(void Function(UpdateBusResponse) updates) => super.copyWith((message) => updates(message as UpdateBusResponse)) as UpdateBusResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateBusResponse create() => UpdateBusResponse._();
+  UpdateBusResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateBusResponse> createRepeated() => $pb.PbList<UpdateBusResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateBusResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateBusResponse>(create);
+  static UpdateBusResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.Bus get bus => $_getN(0);
+  @$pb.TagNumber(1)
+  set bus($8.Bus v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBus() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Bus ensureBus() => $_ensure(0);
 }
 
 
