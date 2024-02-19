@@ -39,3 +39,8 @@ func (s *childServiceServer) GetChildListByGuardianID(ctx context.Context, req *
 func (s *childServiceServer) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
 	return s.interactor.GetChildListByNurseryID(ctx, req)
 }
+
+// UpdateChild implements where_child_busv1.ChildServiceServer.
+func (s *childServiceServer) UpdateChild(ctx context.Context, req *pb.UpdateChildRequest) (*pb.UpdateChildResponse, error) {
+	return s.interactor.UpdateChild(ctx, req)
+}

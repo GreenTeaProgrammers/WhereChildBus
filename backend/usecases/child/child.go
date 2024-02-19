@@ -16,6 +16,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	boardingRecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	childPhotoRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
@@ -350,6 +351,81 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 	return &pb.GetChildListByBusIDResponse{
 		Children: children,
 		Photos:   photos,
+	}, nil
+}
+
+func (i *Interactor) UpdateChild(ctx context.Context, req *pb.UpdateChildRequest) (*pb.UpdateChildResponse, error) {
+	// child_idのパース
+	childID, err := uuid.Parse(req.ChildId)
+	if err != nil {
+		i.logger.Error("failed to parse child ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションの開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// 更新処理のビルダー
+	update := tx.Child.Update().Where(child.IDEQ(childID))
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "name":
+			update.SetName(req.Name)
+		case "age":
+			update.SetAge(int(req.Age))
+		case "sex":
+			sex, err := utils.ConvertPbSexToEntSex(req.Sex) // 仮に性別変換用の関数を想定
+			if err != nil {
+				i.logger.Error("failed to convert sex", "error", err)
+				return nil, err
+			}
+			update.SetSex(*sex)
+		case "check_for_missing_items":
+			update.SetCheckForMissingItems(req.CheckForMissingItems)
+		case "has_bag":
+			update.SetHasBag(req.HasBag)
+		case "has_lunch_box":
+			update.SetHasLunchBox(req.HasLunchBox)
+		case "has_water_bottle":
+			update.SetHasWaterBottle(req.HasWaterBottle)
+		case "has_umbrella":
+			update.SetHasUmbrella(req.HasUmbrella)
+		case "has_other":
+			update.SetHasOther(req.HasOther)
+		}
+	}
+
+	// 更新の実行
+	_, err = update.Save(ctx)
+	if err != nil {
+		i.logger.Error("failed to update child", "error", err)
+		return nil, err
+	}
+
+	// 更新されたエンティティの取得
+	updatedChild, err := tx.Child.Query().
+		Where(child.IDEQ(childID)).
+		WithGuardian().
+		Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to retrieve updated child", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	// レスポンスの生成と返却
+	return &pb.UpdateChildResponse{
+		Child: utils.ToPbChild(updatedChild), // 仮にエンティティをProtobufメッセージに変換する関数を想定
 	}, nil
 }
 

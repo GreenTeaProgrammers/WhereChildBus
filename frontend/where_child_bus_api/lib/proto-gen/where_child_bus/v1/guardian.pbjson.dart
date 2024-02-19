@@ -152,3 +152,39 @@ final $typed_data.Uint8List getGuardianListByNurseryIdResponseDescriptor = $conv
     'CiJHZXRHdWFyZGlhbkxpc3RCeU51cnNlcnlJZFJlc3BvbnNlEkIKCWd1YXJkaWFucxgBIAMoCz'
     'IkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUglndWFyZGlhbnM=');
 
+@$core.Deprecated('Use updateGuardianRequestDescriptor instead')
+const UpdateGuardianRequest$json = {
+  '1': 'UpdateGuardianRequest',
+  '2': [
+    {'1': 'guardian_id', '3': 1, '4': 1, '5': 9, '10': 'guardianId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'email', '3': 3, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'phone_number', '3': 4, '4': 1, '5': 9, '10': 'phoneNumber'},
+    {'1': 'is_use_morning_bus', '3': 5, '4': 1, '5': 8, '10': 'isUseMorningBus'},
+    {'1': 'is_use_evening_bus', '3': 6, '4': 1, '5': 8, '10': 'isUseEveningBus'},
+    {'1': 'update_mask', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+  ],
+};
+
+/// Descriptor for `UpdateGuardianRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateGuardianRequestDescriptor = $convert.base64Decode(
+    'ChVVcGRhdGVHdWFyZGlhblJlcXVlc3QSHwoLZ3VhcmRpYW5faWQYASABKAlSCmd1YXJkaWFuSW'
+    'QSEgoEbmFtZRgCIAEoCVIEbmFtZRIUCgVlbWFpbBgDIAEoCVIFZW1haWwSIQoMcGhvbmVfbnVt'
+    'YmVyGAQgASgJUgtwaG9uZU51bWJlchIrChJpc191c2VfbW9ybmluZ19idXMYBSABKAhSD2lzVX'
+    'NlTW9ybmluZ0J1cxIrChJpc191c2VfZXZlbmluZ19idXMYBiABKAhSD2lzVXNlRXZlbmluZ0J1'
+    'cxI7Cgt1cGRhdGVfbWFzaxgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5GaWVsZE1hc2tSCnVwZG'
+    'F0ZU1hc2s=');
+
+@$core.Deprecated('Use updateGuardianResponseDescriptor instead')
+const UpdateGuardianResponse$json = {
+  '1': 'UpdateGuardianResponse',
+  '2': [
+    {'1': 'guardian', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardian'},
+  ],
+};
+
+/// Descriptor for `UpdateGuardianResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateGuardianResponseDescriptor = $convert.base64Decode(
+    'ChZVcGRhdGVHdWFyZGlhblJlc3BvbnNlEkAKCGd1YXJkaWFuGAEgASgLMiQud2hlcmVfY2hpbG'
+    'RfYnVzLnYxLkd1YXJkaWFuUmVzcG9uc2VSCGd1YXJkaWFu');
+

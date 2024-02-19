@@ -41,6 +41,10 @@ class ChildServiceClient extends $grpc.Client {
       '/where_child_bus.v1.ChildService/CheckIsChildInBus',
       ($1.CheckIsChildInBusRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.CheckIsChildInBusResponse.fromBuffer(value));
+  static final _$updateChild = $grpc.ClientMethod<$1.UpdateChildRequest, $1.UpdateChildResponse>(
+      '/where_child_bus.v1.ChildService/UpdateChild',
+      ($1.UpdateChildRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.UpdateChildResponse.fromBuffer(value));
 
   ChildServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -66,6 +70,10 @@ class ChildServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$1.CheckIsChildInBusResponse> checkIsChildInBus($1.CheckIsChildInBusRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$checkIsChildInBus, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.UpdateChildResponse> updateChild($1.UpdateChildRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$updateChild, request, options: options);
   }
 }
 
@@ -109,6 +117,13 @@ abstract class ChildServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $1.CheckIsChildInBusRequest.fromBuffer(value),
         ($1.CheckIsChildInBusResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.UpdateChildRequest, $1.UpdateChildResponse>(
+        'UpdateChild',
+        updateChild_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.UpdateChildRequest.fromBuffer(value),
+        ($1.UpdateChildResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.CreateChildResponse> createChild_Pre($grpc.ServiceCall call, $async.Future<$1.CreateChildRequest> request) async {
@@ -131,9 +146,14 @@ abstract class ChildServiceBase extends $grpc.Service {
     return checkIsChildInBus(call, await request);
   }
 
+  $async.Future<$1.UpdateChildResponse> updateChild_Pre($grpc.ServiceCall call, $async.Future<$1.UpdateChildRequest> request) async {
+    return updateChild(call, await request);
+  }
+
   $async.Future<$1.CreateChildResponse> createChild($grpc.ServiceCall call, $1.CreateChildRequest request);
   $async.Future<$1.GetChildListByNurseryIDResponse> getChildListByNurseryID($grpc.ServiceCall call, $1.GetChildListByNurseryIDRequest request);
   $async.Future<$1.GetChildListByGuardianIDResponse> getChildListByGuardianID($grpc.ServiceCall call, $1.GetChildListByGuardianIDRequest request);
   $async.Future<$1.GetChildListByBusIDResponse> getChildListByBusID($grpc.ServiceCall call, $1.GetChildListByBusIDRequest request);
   $async.Future<$1.CheckIsChildInBusResponse> checkIsChildInBus($grpc.ServiceCall call, $1.CheckIsChildInBusRequest request);
+  $async.Future<$1.UpdateChildResponse> updateChild($grpc.ServiceCall call, $1.UpdateChildRequest request);
 }
