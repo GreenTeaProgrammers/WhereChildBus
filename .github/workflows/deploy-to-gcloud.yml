@@ -6,7 +6,9 @@ permissions:
 on:
   push:
     branches:
-      - ci/backend # デプロイをトリガーするブランチを指定
+      - develop
+    paths:
+      - "backend/**"
 
 jobs:
   setup-build-deploy:
