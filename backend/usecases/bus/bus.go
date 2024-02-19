@@ -284,16 +284,16 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 		case "name":
 			update.SetName(req.Name)
 		case "plate_number":
-			update.SetNillablePlateNumber(&req.PlateNumber)
+			update.SetPlateNumber(req.PlateNumber)
 		case "bus_status":
 			status := bus.Status(req.BusStatus)
-			update.SetNillableStatus(&status)
+			update.SetStatus(status)
 		case "latitude":
-			update.SetNillableLatitude(&req.Latitude)
+			update.SetLatitude(req.Latitude)
 		case "longitude":
-			update.SetNillableLongitude(&req.Longitude)
+			update.SetLongitude(req.Longitude)
 		case "enable_face_recognition":
-			update.SetNillableEnableFaceRecognition(&req.EnableFaceRecognition)
+			update.SetEnableFaceRecognition(req.EnableFaceRecognition)
 		}
 	}
 
