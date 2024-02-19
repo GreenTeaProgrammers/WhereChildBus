@@ -8,6 +8,9 @@ ARG BUCKET_NAME_FOR_ML
 # 作業ディレクトリの設定
 WORKDIR /machine-learning
 
+# pipのアップグレード
+RUN pip install --upgrade pip
+
 # 必要なパッケージのインストール
 COPY ./requirements.lock /machine-learning/
 
