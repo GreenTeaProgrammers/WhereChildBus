@@ -1,4 +1,5 @@
 import 'dart:io';
+import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
@@ -14,10 +15,10 @@ class BusEditPage extends StatefulWidget {
   BusEditPage({super.key, this.bus, required this.busEditPageType});
 
   @override
-  _BusEditPage createState() => _BusEditPage();
+  _BusEditPageState createState() => _BusEditPageState();
 }
 
-class _BusEditPage extends State<BusEditPage> {
+class _BusEditPageState extends State<BusEditPage> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _busNameController = TextEditingController();
   final TextEditingController _busNumberController = TextEditingController();
@@ -160,10 +161,10 @@ class _BusEditPage extends State<BusEditPage> {
           _selectedImagePath = image.path;
         });
       } else {
-        print('No image selected.');
+        developer.log('No image selected.');
       }
     } catch (e) {
-      print('Error picking image: $e');
+      developer.log('Error picking image: $e');
     } finally {
       setState(() {
         _isPickingImage = false;
