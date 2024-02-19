@@ -8,6 +8,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
@@ -90,8 +91,66 @@ func (i *Interactor) UpdateStationLocationByGuardianID(ctx context.Context, req 
 }
 
 func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
-	panic("unimplemented")
 	// TODO: 実装
+	// station_idのパース
+	stationID, err := uuid.Parse(req.StationId)
+	if err != nil {
+		i.logger.Error("failed to parse station ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションの開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// 更新処理のビルダー
+	update := tx.Station.Update().Where(station.IDEQ(stationID))
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "latitude":
+			update = update.SetLatitude(req.Latitude)
+		case "longitude":
+			update = update.SetLongitude(req.Longitude)
+		}
+	}
+
+	// 更新の実行
+	_, err = update.Save(ctx)
+	if err != nil {
+		i.logger.Error("failed to update station", "error", err)
+		return nil, err
+	}
+
+	// 更新されたエンティティの取得
+	updateStation, err := tx.Station.Query().
+		Where(station.IDEQ(stationID)).
+		Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to get updated station", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	// 次のバス停を取得
+	morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, updateStation)
+	if err != nil {
+		i.logger.Error("failed to get next station IDs", "error", err)
+		return nil, err
+	}
+
+	// レスポンスの作成と返却
+	return &pb.UpdateStationResponse{
+		Station: utils.ToPbStation(updateStation, morningNextStationID, eveningNextStationID),
+	}, nil
 }
 
 func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStationListByBusIdRequest) (*pb.GetStationListByBusIdResponse, error) {
