@@ -93,7 +93,7 @@ func (i *Interactor) UpdateStationLocationByGuardianID(ctx context.Context, req 
 func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
 	// TODO: 実装
 	// station_idのパース
-	stationID, err := uuid.Parse(req.StationId)
+	stationID, err := uuid.Parse(req.Id)
 	if err != nil {
 		i.logger.Error("failed to parse station ID", "error", err)
 		return nil, err

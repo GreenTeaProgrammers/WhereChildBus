@@ -118,7 +118,7 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 func (i *Interactor) UpdateNursery(ctx context.Context, req *pb.UpdateNurseryRequest) (*pb.UpdateNurseryResponse, error) {
 	// TODO: 実装
 	// requestからnurseryIDを取得
-	nurseryID, err := uuid.Parse(req.NurseryId)
+	nurseryID, err := uuid.Parse(req.Id)
 	if err != nil {
 		i.logger.Error("failed to parse uuid", "error", err)
 		return nil, err
