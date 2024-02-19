@@ -48,6 +48,9 @@ jobs:
             --build-arg ML_ADDR="${{ secrets.ML_ADDR }}" \
             --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
 
+      - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
+        run: gcloud auth configure-docker --quiet
+
       - name: Push Docker Image to Google Container Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest
