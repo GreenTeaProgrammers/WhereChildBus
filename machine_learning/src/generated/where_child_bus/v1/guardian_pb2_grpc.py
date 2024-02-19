@@ -39,6 +39,11 @@ class GuardianServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_guardian__pb2.GetGuardianListByNurseryIdRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_guardian__pb2.GetGuardianListByNurseryIdResponse.FromString,
                 )
+        self.UpdateGuardian = channel.unary_unary(
+                '/where_child_bus.v1.GuardianService/UpdateGuardian',
+                request_serializer=where__child__bus_dot_v1_dot_guardian__pb2.UpdateGuardianRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_guardian__pb2.UpdateGuardianResponse.FromString,
+                )
 
 
 class GuardianServiceServicer(object):
@@ -74,6 +79,12 @@ class GuardianServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def UpdateGuardian(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GuardianServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -101,6 +112,11 @@ def add_GuardianServiceServicer_to_server(servicer, server):
                     servicer.GetGuardianListByNurseryId,
                     request_deserializer=where__child__bus_dot_v1_dot_guardian__pb2.GetGuardianListByNurseryIdRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_guardian__pb2.GetGuardianListByNurseryIdResponse.SerializeToString,
+            ),
+            'UpdateGuardian': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateGuardian,
+                    request_deserializer=where__child__bus_dot_v1_dot_guardian__pb2.UpdateGuardianRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_guardian__pb2.UpdateGuardianResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -194,5 +210,22 @@ class GuardianService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.GuardianService/GetGuardianListByNurseryId',
             where__child__bus_dot_v1_dot_guardian__pb2.GetGuardianListByNurseryIdRequest.SerializeToString,
             where__child__bus_dot_v1_dot_guardian__pb2.GetGuardianListByNurseryIdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdateGuardian(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.GuardianService/UpdateGuardian',
+            where__child__bus_dot_v1_dot_guardian__pb2.UpdateGuardianRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_guardian__pb2.UpdateGuardianResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
