@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/service/get_guardian_list_by_nursery_id.dart';
-import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'input_value_label.dart';
 import 'text_input_field.dart';

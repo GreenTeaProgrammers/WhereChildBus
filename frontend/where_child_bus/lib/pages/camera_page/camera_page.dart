@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:grpc/grpc.dart';
 import 'package:where_child_bus/config/config.dart';
-import 'package:where_child_bus/util/api/bus.dart';
-import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 import "package:where_child_bus/main.dart" as where_child_bus;
 
@@ -37,9 +36,7 @@ class _CameraPageState extends State<CameraPage> {
       setState(() {});
       _startImageStream();
       developer.log("Start streaming video to server", name: "CameraPage");
-      // _streamVideoToServer();
       streamBusVideo(_streamController.stream);
-      developer.log("Finish streaming video to server", name: "CameraPage");
     } catch (e) {
       developer.log('Failed to initialize camera: $e');
     }
@@ -62,7 +59,7 @@ class _CameraPageState extends State<CameraPage> {
         developer.log("Received response: $response");
       }
     } catch (error) {
-      developer.log("Caught Error:", error: error.toString());
+      developer.log("Caught Error:", error: error);
     } finally {
       await channel.shutdown();
     }
@@ -75,20 +72,19 @@ class _CameraPageState extends State<CameraPage> {
       _controller.startImageStream((CameraImage image) {
         frameCounter++;
         if (frameCounter % 60 == 0) {
-          videoChunks.add(image.planes[0].bytes);
+          videoChunks.add(image.planes[0].bytes.toList());
           _streamController.add(StreamBusVideoRequest(
               nurseryId: NurseryData().getNursery().id,
               videoChunk: videoChunks));
-          developer.log("Received image frame", name: "CameraPage");
+          developer.log("Received image frame ${videoChunks}}",
+              name: "CameraPage");
+          developer.log("widge ${image.width}", name: "CameraPage");
+          developer.log("height ${image.height}", name: "CameraPage");
+
           videoChunks = [];
         }
       });
     }
-  }
-
-  void _streamVideoToServer() async {
-    final stream = _streamController.stream;
-    await streamBusVideo(stream);
   }
 
   @override

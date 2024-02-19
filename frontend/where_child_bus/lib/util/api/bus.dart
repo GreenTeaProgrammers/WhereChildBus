@@ -3,7 +3,7 @@ import "package:camera/camera.dart";
 import "package:flutter/foundation.dart";
 import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
-import "package:where_child_bus/util/nursery_data.dart";
+import 'package:where_child_bus/models/nursery_data.dart';
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
