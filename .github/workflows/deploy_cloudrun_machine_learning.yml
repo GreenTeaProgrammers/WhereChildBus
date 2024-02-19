@@ -31,6 +31,12 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          access_token_lifetime: 1200s
+          create_credentials_file: "true"
+
+      - name: gcloud auth login by workload identity
+        run: |-
+          gcloud auth login --brief --cred-file="${{ steps.Auth.outputs.credentials_file_path }}"
 
       - name: Build Docker image
         run: |
