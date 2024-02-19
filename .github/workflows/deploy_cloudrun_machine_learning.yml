@@ -5,6 +5,8 @@ on:
     branches:
       - develop
       - feature/machine-learning/cicd
+    paths:
+      - "machine-learning/**"
 
 permissions:
   contents: read
@@ -31,6 +33,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          access_token_lifetime: 1200s
 
       - name: Build Docker image
         run: |
