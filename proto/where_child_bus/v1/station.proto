@@ -34,11 +34,9 @@ message GetStationListByBusIdResponse {
 
 message UpdateStationRequest {
         string id  = 1;
-        double latitude = 5;
-        double longitude = 6;
-        int32 morning_order = 7;
-        int32 evening_order = 8;
-        google.protobuf.FieldMask update_mask = 9;
+        double latitude = 2;
+        double longitude = 3;
+        google.protobuf.FieldMask update_mask = 4;
 }
 
 message UpdateStationResponse {

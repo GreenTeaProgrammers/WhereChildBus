@@ -78,21 +78,17 @@ const UpdateStationRequest$json = {
   '1': 'UpdateStationRequest',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
-    {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
-    {'1': 'morning_order', '3': 7, '4': 1, '5': 5, '10': 'morningOrder'},
-    {'1': 'evening_order', '3': 8, '4': 1, '5': 5, '10': 'eveningOrder'},
-    {'1': 'update_mask', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+    {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'update_mask', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
   ],
 };
 
 /// Descriptor for `UpdateStationRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateStationRequestDescriptor = $convert.base64Decode(
-    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSGgoIbGF0aXR1ZGUYBSABKA'
-    'FSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgGIAEoAVIJbG9uZ2l0dWRlEiMKDW1vcm5pbmdfb3Jk'
-    'ZXIYByABKAVSDG1vcm5pbmdPcmRlchIjCg1ldmVuaW5nX29yZGVyGAggASgFUgxldmVuaW5nT3'
-    'JkZXISOwoLdXBkYXRlX21hc2sYCSABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYXNrUgp1'
-    'cGRhdGVNYXNr');
+    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSGgoIbGF0aXR1ZGUYAiABKA'
+    'FSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgDIAEoAVIJbG9uZ2l0dWRlEjsKC3VwZGF0ZV9tYXNr'
+    'GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLkZpZWxkTWFza1IKdXBkYXRlTWFzaw==');
 
 @$core.Deprecated('Use updateStationResponseDescriptor instead')
 const UpdateStationResponse$json = {

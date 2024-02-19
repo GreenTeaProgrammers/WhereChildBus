@@ -269,8 +269,6 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
     $core.String? id,
     $core.double? latitude,
     $core.double? longitude,
-    $core.int? morningOrder,
-    $core.int? eveningOrder,
     $9.FieldMask? updateMask,
   }) {
     final $result = create();
@@ -283,12 +281,6 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
     if (longitude != null) {
       $result.longitude = longitude;
     }
-    if (morningOrder != null) {
-      $result.morningOrder = morningOrder;
-    }
-    if (eveningOrder != null) {
-      $result.eveningOrder = eveningOrder;
-    }
     if (updateMask != null) {
       $result.updateMask = updateMask;
     }
@@ -300,11 +292,9 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'morningOrder', $pb.PbFieldType.O3)
-    ..a<$core.int>(8, _omitFieldNames ? '' : 'eveningOrder', $pb.PbFieldType.O3)
-    ..aOM<$9.FieldMask>(9, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOM<$9.FieldMask>(4, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -338,52 +328,34 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(2)
   $core.double get latitude => $_getN(1);
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(2)
   set latitude($core.double v) { $_setDouble(1, v); }
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(2)
   $core.bool hasLatitude() => $_has(1);
-  @$pb.TagNumber(5)
-  void clearLatitude() => clearField(5);
+  @$pb.TagNumber(2)
+  void clearLatitude() => clearField(2);
 
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(3)
   $core.double get longitude => $_getN(2);
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(3)
   set longitude($core.double v) { $_setDouble(2, v); }
-  @$pb.TagNumber(6)
+  @$pb.TagNumber(3)
   $core.bool hasLongitude() => $_has(2);
-  @$pb.TagNumber(6)
-  void clearLongitude() => clearField(6);
+  @$pb.TagNumber(3)
+  void clearLongitude() => clearField(3);
 
-  @$pb.TagNumber(7)
-  $core.int get morningOrder => $_getIZ(3);
-  @$pb.TagNumber(7)
-  set morningOrder($core.int v) { $_setSignedInt32(3, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasMorningOrder() => $_has(3);
-  @$pb.TagNumber(7)
-  void clearMorningOrder() => clearField(7);
-
-  @$pb.TagNumber(8)
-  $core.int get eveningOrder => $_getIZ(4);
-  @$pb.TagNumber(8)
-  set eveningOrder($core.int v) { $_setSignedInt32(4, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasEveningOrder() => $_has(4);
-  @$pb.TagNumber(8)
-  void clearEveningOrder() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $9.FieldMask get updateMask => $_getN(5);
-  @$pb.TagNumber(9)
-  set updateMask($9.FieldMask v) { setField(9, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasUpdateMask() => $_has(5);
-  @$pb.TagNumber(9)
-  void clearUpdateMask() => clearField(9);
-  @$pb.TagNumber(9)
-  $9.FieldMask ensureUpdateMask() => $_ensure(5);
+  @$pb.TagNumber(4)
+  $9.FieldMask get updateMask => $_getN(3);
+  @$pb.TagNumber(4)
+  set updateMask($9.FieldMask v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasUpdateMask() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearUpdateMask() => clearField(4);
+  @$pb.TagNumber(4)
+  $9.FieldMask ensureUpdateMask() => $_ensure(3);
 }
 
 class UpdateStationResponse extends $pb.GeneratedMessage {
