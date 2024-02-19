@@ -28,15 +28,16 @@ func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryReq
 	//パスワードをハッシュ化
 	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
-		//エラーハンドリング
-		return nil, fmt.Errorf("failed to hash password: %w", err)
+		i.logger.Error("failed to hash password", "error", err)
+		return nil, err
 	}
 
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// nurseryコード(レコードに存在しない)
 	// 生成したコードが既存のコードと重複していないか確認
@@ -47,6 +48,7 @@ func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryReq
 		if err != nil {
 			break
 		}
+		i.logger.Warn("code is already exists", "code", code)
 	}
 
 	//Nurseryを作成
@@ -60,12 +62,13 @@ func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryReq
 		Save(ctx)
 
 	if err != nil {
-		//エラーハンドリング
-		return nil, fmt.Errorf("failed to create nursery: %w", err)
+		i.logger.Error("failed to create nursery", "error", err)
+		return nil, err
 	}
 
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	return &pb.CreateNurseryResponse{
@@ -77,9 +80,10 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 	// トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// Nurseryを取得
 	nursery, err := tx.Nursery.Query().
@@ -87,17 +91,20 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get nursery")
+		i.logger.Error("failed to get nursery", "error", err)
+		return nil, err
 	}
 
 	// フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
 	if !utils.CheckPassword(nursery.HashedPassword, req.Password) {
-		return nil, fmt.Errorf("failed to get nursery")
+		i.logger.Info("password is incorrect")
+		return nil, err
 	}
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	return &pb.NurseryLoginResponse{
@@ -106,13 +113,19 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 	}, nil
 }
 
+func (i *Interactor) UpdateNursery(ctx context.Context, req *pb.UpdateNurseryRequest) (*pb.UpdateNurseryResponse, error) {
+	panic("unimplemented")
+	// TODO: 実装
+}
+
 // コード生成
 func generateCode() string {
-	rand.Seed(time.Now().UnixNano()) // 現在時刻をシード値として乱数生成器を初期化
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	code := ""               // 空の文字列でコードを初期化
 	for i := 0; i < 7; i++ { // 7桁のコードを生成
-		digit := rand.Intn(10)           // 0から9までの乱数を生成
+		// `rand.Intn` の代わりに `rnd.Intn` を使用する
+		digit := rnd.Intn(10)
 		code += fmt.Sprintf("%d", digit) // 数字を文字列に変換してコードに追加
 	}
 

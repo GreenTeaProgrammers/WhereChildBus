@@ -1,14 +1,14 @@
 package guardian
 
 import (
-	"fmt"
-
 	"golang.org/x/exp/slog"
 
 	"context"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
@@ -30,22 +30,24 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
 		// エラーハンドリング
-		return nil, fmt.Errorf("failed to hash password: %w", err)
+		i.logger.Error("failed to hash password", "error", err)
+		return nil, err
 	}
 
 	// トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
-	defer tx.Rollback()
-
+	defer utils.RollbackTx(tx, i.logger)
 	// req.nurseryCodeからnurseryを取得
 	nursery, err := tx.Nursery.Query().
 		Where(nurseryRepo.NurseryCode(req.NurseryCode)).
 		Only(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get nursery: %w", err)
+		i.logger.Error("failed to get nursery", "error", err)
+		return nil, err
 	}
 
 	// Guardianを作成
@@ -58,7 +60,8 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 		Save(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to create guardian: %w", err)
+		i.logger.Error("failed to create guardian", "error", err)
+		return nil, err
 	}
 
 	guardian, err = tx.Guardian.Query().
@@ -67,7 +70,8 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get guardian: %w", err)
+		i.logger.Error("failed to get guardian", "error", err)
+		return nil, err
 	}
 
 	// Stationを作成
@@ -76,12 +80,14 @@ func (i *Interactor) CreateGuardian(ctx context.Context, req *pb.CreateGuardianR
 		Save(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to create guardian: %w", err)
+		i.logger.Error("failed to create station", "error", err)
+		return nil, err
 	}
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	// レスポンスを返す
@@ -94,10 +100,10 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 	// トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
-	defer tx.Rollback()
-
+	defer utils.RollbackTx(tx, i.logger)
 	// Guardianを取得
 	guardian, err := tx.Guardian.Query().
 		Where(guardianRepo.Email(req.Email)).
@@ -105,17 +111,20 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 		Only(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get guardian")
+		i.logger.Error("failed to get guardian", "error", err)
+		return nil, err
 	}
 
 	// フロントエンドから送られてきたパスワードとデータベースのハッシュ値を比較
 	if !utils.CheckPassword(guardian.HashedPassword, req.Password) {
-		return nil, fmt.Errorf("failed to get guardian")
+		i.logger.Error("password is incorrect")
+		return nil, err
 	}
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %v", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	// レスポンスを返す
@@ -129,14 +138,16 @@ func (i *Interactor) GuardianLogin(ctx context.Context, req *pb.GuardianLoginReq
 func (i *Interactor) GetGuardianListByBusID(ctx context.Context, req *pb.GetGuardianListByBusIdRequest) (*pb.GetGuardianListByBusIdResponse, error) {
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+		i.logger.Error("failed to parse bus ID", "error", err)
+		return nil, err
 	}
 	// トランザクションを開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
-	defer tx.Rollback()
+	defer utils.RollbackTx(tx, i.logger)
 
 	// Guardianを取得
 	guardians, err := tx.Guardian.Query().
@@ -145,12 +156,14 @@ func (i *Interactor) GetGuardianListByBusID(ctx context.Context, req *pb.GetGuar
 		All(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get guardians by bus ID: %w", err)
+		i.logger.Error("failed to get guardians by bus ID", "error", err)
+		return nil, err
 	}
 
 	// トランザクションをコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	var pbGuardians []*pb.GuardianResponse
@@ -159,4 +172,139 @@ func (i *Interactor) GetGuardianListByBusID(ctx context.Context, req *pb.GetGuar
 	}
 
 	return &pb.GetGuardianListByBusIdResponse{Guardians: pbGuardians}, nil
+}
+
+func (i *Interactor) GetGuardianByChildID(ctx context.Context, req *pb.GetGuardianByChildIdRequest) (*pb.GetGuardianByChildIdResponse, error) {
+	childID, err := uuid.Parse(req.ChildId)
+	if err != nil {
+		i.logger.Error("failed to parse child ID", "error", err)
+		return nil, err
+	}
+	// トランザクションを開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// Guardianを取得
+	guardians, err := tx.Guardian.Query().
+		Where(guardianRepo.HasChildrenWith(childRepo.ID(childID))).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get guardians by child ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	pbGuardian := utils.ToPbGuardianResponse(guardians)
+	return &pb.GetGuardianByChildIdResponse{Guardian: pbGuardian}, nil
+}
+
+func (i *Interactor) GetGuardianListByNurseryID(ctx context.Context, req *pb.GetGuardianListByNurseryIdRequest) (*pb.GetGuardianListByNurseryIdResponse, error) {
+	nurseryID, err := uuid.Parse(req.NurseryId)
+	if err != nil {
+		i.logger.Error("failed to parse nursery ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションを開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+
+	defer utils.RollbackTx(tx, i.logger)
+
+	// Guardianを取得
+	guardians, err := tx.Guardian.Query().
+		Where(guardianRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))).
+		WithNursery().
+		All(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get guardians by nursery ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	var pbGuardians []*pb.GuardianResponse
+	for _, guardian := range guardians {
+		pbGuardians = append(pbGuardians, utils.ToPbGuardianResponse(guardian))
+	}
+
+	return &pb.GetGuardianListByNurseryIdResponse{Guardians: pbGuardians}, nil
+}
+
+func (i *Interactor) UpdateGuardian(ctx context.Context, req *pb.UpdateGuardianRequest) (*pb.UpdateGuardianResponse, error) {
+	guardianID, err := uuid.Parse(req.GuardianId)
+	if err != nil {
+		i.logger.Error("failed to parse guardian ID", "error", err)
+		return nil, err
+	}
+
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// 更新処理のビルダー
+	update := tx.Guardian.UpdateOneID(guardianID)
+
+	// FieldMaskの解析とフィールドの更新
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "name":
+			update.SetName(req.Name)
+		case "email":
+			update.SetEmail(req.Email)
+		case "phone_number":
+			update.SetPhoneNumber(req.PhoneNumber)
+		case "is_use_morning_bus":
+			update.SetIsUseMorningBus(req.IsUseMorningBus)
+		case "is_use_evening_bus":
+			update.SetIsUseEveningBus(req.IsUseEveningBus)
+		}
+	}
+
+	// 更新の実行
+	_, err = update.Save(ctx)
+	if err != nil {
+		i.logger.Error("failed to update guardian", "error", err)
+		return nil, err
+	}
+
+	// 更新されたエンティティの取得
+	guardian, err := tx.Guardian.Query().Where(guardian.IDEQ(guardianID)).WithNursery().Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to get guardian", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	// レスポンスの生成と返却
+	return &pb.UpdateGuardianResponse{
+		Guardian: utils.ToPbGuardianResponse(guardian), // 仮にエンティティをProtobufメッセージに変換する関数を想定
+	}, nil
 }

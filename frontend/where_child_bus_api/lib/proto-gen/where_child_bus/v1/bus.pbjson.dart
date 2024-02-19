@@ -76,14 +76,14 @@ const ChangeBusStatusRequest$json = {
   '1': 'ChangeBusStatusRequest',
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'status', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.Status', '10': 'status'},
+    {'1': 'bus_status', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusStatus', '10': 'busStatus'},
   ],
 };
 
 /// Descriptor for `ChangeBusStatusRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List changeBusStatusRequestDescriptor = $convert.base64Decode(
-    'ChZDaGFuZ2VCdXNTdGF0dXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSMgoGc3RhdH'
-    'VzGAIgASgOMhoud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXR1c1IGc3RhdHVz');
+    'ChZDaGFuZ2VCdXNTdGF0dXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSPAoKYnVzX3'
+    'N0YXR1cxgCIAEoDjIdLndoZXJlX2NoaWxkX2J1cy52MS5CdXNTdGF0dXNSCWJ1c1N0YXR1cw==');
 
 @$core.Deprecated('Use changeBusStatusResponseDescriptor instead')
 const ChangeBusStatusResponse$json = {
@@ -105,7 +105,6 @@ const SendLocationContinuousRequest$json = {
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
     {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
-    {'1': 'timestamp', '3': 4, '4': 1, '5': 3, '10': 'timestamp'},
   ],
 };
 
@@ -113,7 +112,7 @@ const SendLocationContinuousRequest$json = {
 final $typed_data.Uint8List sendLocationContinuousRequestDescriptor = $convert.base64Decode(
     'Ch1TZW5kTG9jYXRpb25Db250aW51b3VzUmVxdWVzdBIVCgZidXNfaWQYASABKAlSBWJ1c0lkEh'
     'oKCGxhdGl0dWRlGAIgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYAyABKAFSCWxvbmdpdHVk'
-    'ZRIcCgl0aW1lc3RhbXAYBCABKANSCXRpbWVzdGFtcA==');
+    'ZQ==');
 
 @$core.Deprecated('Use sendLocationContinuousResponseDescriptor instead')
 const SendLocationContinuousResponse$json = {
@@ -143,42 +142,86 @@ const TrackBusContinuousResponse$json = {
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
     {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
-    {'1': 'timestamp', '3': 4, '4': 1, '5': 3, '10': 'timestamp'},
   ],
 };
 
 /// Descriptor for `TrackBusContinuousResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List trackBusContinuousResponseDescriptor = $convert.base64Decode(
     'ChpUcmFja0J1c0NvbnRpbnVvdXNSZXNwb25zZRIVCgZidXNfaWQYASABKAlSBWJ1c0lkEhoKCG'
-    'xhdGl0dWRlGAIgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYAyABKAFSCWxvbmdpdHVkZRIc'
-    'Cgl0aW1lc3RhbXAYBCABKANSCXRpbWVzdGFtcA==');
+    'xhdGl0dWRlGAIgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYAyABKAFSCWxvbmdpdHVkZQ==');
 
 @$core.Deprecated('Use streamBusVideoRequestDescriptor instead')
 const StreamBusVideoRequest$json = {
   '1': 'StreamBusVideoRequest',
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'bus_type', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
-    {'1': 'video_type', '3': 3, '4': 1, '5': 14, '6': '.where_child_bus.v1.VideoType', '10': 'videoType'},
-    {'1': 'video_chunk', '3': 4, '4': 1, '5': 12, '10': 'videoChunk'},
-    {'1': 'timestamp', '3': 5, '4': 1, '5': 3, '10': 'timestamp'},
+    {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'bus_type', '3': 3, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
+    {'1': 'vehicle_event', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.VehicleEvent', '10': 'vehicleEvent'},
+    {'1': 'video_chunk', '3': 5, '4': 3, '5': 12, '10': 'videoChunk'},
+    {'1': 'photo_height', '3': 6, '4': 1, '5': 5, '10': 'photoHeight'},
+    {'1': 'photo_width', '3': 7, '4': 1, '5': 5, '10': 'photoWidth'},
   ],
 };
 
 /// Descriptor for `StreamBusVideoRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamBusVideoRequestDescriptor = $convert.base64Decode(
-    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBI2CghidXNfdH'
-    'lwZRgCIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBlEjwKCnZpZGVv'
-    'X3R5cGUYAyABKA4yHS53aGVyZV9jaGlsZF9idXMudjEuVmlkZW9UeXBlUgl2aWRlb1R5cGUSHw'
-    'oLdmlkZW9fY2h1bmsYBCABKAxSCnZpZGVvQ2h1bmsSHAoJdGltZXN0YW1wGAUgASgDUgl0aW1l'
-    'c3RhbXA=');
+    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBIdCgpudXJzZX'
+    'J5X2lkGAIgASgJUgludXJzZXJ5SWQSNgoIYnVzX3R5cGUYAyABKA4yGy53aGVyZV9jaGlsZF9i'
+    'dXMudjEuQnVzVHlwZVIHYnVzVHlwZRJFCg12ZWhpY2xlX2V2ZW50GAQgASgOMiAud2hlcmVfY2'
+    'hpbGRfYnVzLnYxLlZlaGljbGVFdmVudFIMdmVoaWNsZUV2ZW50Eh8KC3ZpZGVvX2NodW5rGAUg'
+    'AygMUgp2aWRlb0NodW5rEiEKDHBob3RvX2hlaWdodBgGIAEoBVILcGhvdG9IZWlnaHQSHwoLcG'
+    'hvdG9fd2lkdGgYByABKAVSCnBob3RvV2lkdGg=');
 
 @$core.Deprecated('Use streamBusVideoResponseDescriptor instead')
 const StreamBusVideoResponse$json = {
   '1': 'StreamBusVideoResponse',
+  '2': [
+    {'1': 'is_detected', '3': 1, '4': 1, '5': 8, '10': 'isDetected'},
+    {'1': 'children', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.Child', '10': 'children'},
+  ],
 };
 
 /// Descriptor for `StreamBusVideoResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamBusVideoResponseDescriptor = $convert.base64Decode(
-    'ChZTdHJlYW1CdXNWaWRlb1Jlc3BvbnNl');
+    'ChZTdHJlYW1CdXNWaWRlb1Jlc3BvbnNlEh8KC2lzX2RldGVjdGVkGAEgASgIUgppc0RldGVjdG'
+    'VkEjUKCGNoaWxkcmVuGAIgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJl'
+    'bg==');
+
+@$core.Deprecated('Use updateBusRequestDescriptor instead')
+const UpdateBusRequest$json = {
+  '1': 'UpdateBusRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'plate_number', '3': 3, '4': 1, '5': 9, '10': 'plateNumber'},
+    {'1': 'bus_status', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusStatus', '10': 'busStatus'},
+    {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'enable_face_recognition', '3': 7, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
+    {'1': 'update_mask', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+  ],
+};
+
+/// Descriptor for `UpdateBusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateBusRequestDescriptor = $convert.base64Decode(
+    'ChBVcGRhdGVCdXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSEgoEbmFtZRgCIAEoCV'
+    'IEbmFtZRIhCgxwbGF0ZV9udW1iZXIYAyABKAlSC3BsYXRlTnVtYmVyEjwKCmJ1c19zdGF0dXMY'
+    'BCABKA4yHS53aGVyZV9jaGlsZF9idXMudjEuQnVzU3RhdHVzUglidXNTdGF0dXMSGgoIbGF0aX'
+    'R1ZGUYBSABKAFSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgGIAEoAVIJbG9uZ2l0dWRlEjYKF2Vu'
+    'YWJsZV9mYWNlX3JlY29nbml0aW9uGAcgASgIUhVlbmFibGVGYWNlUmVjb2duaXRpb24SOwoLdX'
+    'BkYXRlX21hc2sYCCABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYXNrUgp1cGRhdGVNYXNr');
+
+@$core.Deprecated('Use updateBusResponseDescriptor instead')
+const UpdateBusResponse$json = {
+  '1': 'UpdateBusResponse',
+  '2': [
+    {'1': 'bus', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Bus', '10': 'bus'},
+  ],
+};
+
+/// Descriptor for `UpdateBusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateBusResponseDescriptor = $convert.base64Decode(
+    'ChFVcGRhdGVCdXNSZXNwb25zZRIpCgNidXMYASABKAsyFy53aGVyZV9jaGlsZF9idXMudjEuQn'
+    'VzUgNidXM=');
 

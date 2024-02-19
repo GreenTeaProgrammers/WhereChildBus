@@ -54,17 +54,17 @@ message GuardianResponse {
         google.protobuf.Timestamp updated_at = 9;
 }
 
-enum Status {
-        STATUS_UNSPECIFIED = 0;
-        STATUS_STOPPED = 1;
-        STATUS_RUNNING = 2;
-        STATUS_MAINTEINANCE = 3;
+enum BusStatus {
+        BUS_STATUS_UNSPECIFIED = 0;
+        BUS_STATUS_STOPPED = 1;
+        BUS_STATUS_RUNNING = 2;
+        BUS_STATUS_MAINTENANCE = 3;
 }
 
-enum VideoType {
-        VIDEO_TYPE_UNSPECIFIED = 0;
-        VIDEO_TYPE_GET_ON = 1;
-        VIDEO_TYPE_GET_OFF = 2;
+enum VehicleEvent {
+        VEHICLE_EVENT_UNSPECIFIED = 0;
+        VEHICLE_EVENT_GET_ON = 1;
+        VEHICLE_EVENT_GET_OFF = 2;
 }
 
 message Bus {
@@ -72,7 +72,7 @@ message Bus {
         string nursery_id = 2;
         string name = 3;
         string plate_number = 4;
-        Status status = 5;
+        BusStatus bus_status = 5;
         //緯度経度
         double latitude = 6;
         double longitude = 7;
@@ -139,7 +139,7 @@ message BusStationAssociation {
 message ChildPhoto {
         string id = 1;
         string child_id = 2;
-        bytes photo  = 3;
+        bytes photo_data = 3;
         google.protobuf.Timestamp  created_at = 4;
         google.protobuf.Timestamp  updated_at = 5;
 }

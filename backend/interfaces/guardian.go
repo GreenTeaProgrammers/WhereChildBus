@@ -29,3 +29,18 @@ func (s *guardianServiceServer) GuardianLogin(ctx context.Context, req *pb.Guard
 func (s *guardianServiceServer) GetGuardianListByBusId(ctx context.Context, req *pb.GetGuardianListByBusIdRequest) (*pb.GetGuardianListByBusIdResponse, error) {
 	return s.interactor.GetGuardianListByBusID(ctx, req)
 }
+
+// GetGuardianByChildId implements where_child_busv1.GuardianServiceServer.
+func (s *guardianServiceServer) GetGuardianByChildId(ctx context.Context, req *pb.GetGuardianByChildIdRequest) (*pb.GetGuardianByChildIdResponse, error) {
+	return s.interactor.GetGuardianByChildID(ctx, req)
+}
+
+// GetGuardianListByNurseryId implements where_child_busv1.GuardianServiceServer.
+func (s *guardianServiceServer) GetGuardianListByNurseryId(ctx context.Context, req *pb.GetGuardianListByNurseryIdRequest) (*pb.GetGuardianListByNurseryIdResponse, error) {
+	return s.interactor.GetGuardianListByNurseryID(ctx, req)
+}
+
+// UpdateGuardian implements where_child_busv1.GuardianServiceServer.
+func (s *guardianServiceServer) UpdateGuardian(ctx context.Context, req *pb.UpdateGuardianRequest) (*pb.UpdateGuardianResponse, error) {
+	return s.interactor.UpdateGuardian(ctx, req)
+}

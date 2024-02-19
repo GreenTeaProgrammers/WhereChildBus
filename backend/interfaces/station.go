@@ -15,9 +15,14 @@ func NewStationServiceServer(interactor *station.Interactor) pb.StationServiceSe
 	return &stationServiceServer{interactor}
 }
 
-// CreateStation implements where_child_busv1.StationServiceServer.
+// UpdateStation implements where_child_busv1.StationServiceServer.
 func (s *stationServiceServer) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
 	return s.interactor.UpdateStation(ctx, req)
+}
+
+// UpdateStationLocationByGuardianId implements where_child_busv1.StationServiceServer.
+func (s *stationServiceServer) UpdateStationLocationByGuardianId(ctx context.Context, req *pb.UpdateStationLocationByGuardianIdRequest) (*pb.UpdateStationLocationByGuardianIdResponse, error) {
+	return s.interactor.UpdateStationLocationByGuardianID(ctx, req)
 }
 
 // GetStationListByBusId implements where_child_busv1.StationServiceServer.

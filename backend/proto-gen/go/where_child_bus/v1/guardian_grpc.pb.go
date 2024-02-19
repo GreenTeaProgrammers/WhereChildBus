@@ -19,9 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	GuardianService_CreateGuardian_FullMethodName         = "/where_child_bus.v1.GuardianService/CreateGuardian"
-	GuardianService_GuardianLogin_FullMethodName          = "/where_child_bus.v1.GuardianService/GuardianLogin"
-	GuardianService_GetGuardianListByBusId_FullMethodName = "/where_child_bus.v1.GuardianService/GetGuardianListByBusId"
+	GuardianService_CreateGuardian_FullMethodName             = "/where_child_bus.v1.GuardianService/CreateGuardian"
+	GuardianService_GuardianLogin_FullMethodName              = "/where_child_bus.v1.GuardianService/GuardianLogin"
+	GuardianService_GetGuardianListByBusId_FullMethodName     = "/where_child_bus.v1.GuardianService/GetGuardianListByBusId"
+	GuardianService_GetGuardianByChildId_FullMethodName       = "/where_child_bus.v1.GuardianService/GetGuardianByChildId"
+	GuardianService_GetGuardianListByNurseryId_FullMethodName = "/where_child_bus.v1.GuardianService/GetGuardianListByNurseryId"
+	GuardianService_UpdateGuardian_FullMethodName             = "/where_child_bus.v1.GuardianService/UpdateGuardian"
 )
 
 // GuardianServiceClient is the client API for GuardianService service.
@@ -31,6 +34,9 @@ type GuardianServiceClient interface {
 	CreateGuardian(ctx context.Context, in *CreateGuardianRequest, opts ...grpc.CallOption) (*CreateGuardianResponse, error)
 	GuardianLogin(ctx context.Context, in *GuardianLoginRequest, opts ...grpc.CallOption) (*GuardianLoginResponse, error)
 	GetGuardianListByBusId(ctx context.Context, in *GetGuardianListByBusIdRequest, opts ...grpc.CallOption) (*GetGuardianListByBusIdResponse, error)
+	GetGuardianByChildId(ctx context.Context, in *GetGuardianByChildIdRequest, opts ...grpc.CallOption) (*GetGuardianByChildIdResponse, error)
+	GetGuardianListByNurseryId(ctx context.Context, in *GetGuardianListByNurseryIdRequest, opts ...grpc.CallOption) (*GetGuardianListByNurseryIdResponse, error)
+	UpdateGuardian(ctx context.Context, in *UpdateGuardianRequest, opts ...grpc.CallOption) (*UpdateGuardianResponse, error)
 }
 
 type guardianServiceClient struct {
@@ -68,6 +74,33 @@ func (c *guardianServiceClient) GetGuardianListByBusId(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *guardianServiceClient) GetGuardianByChildId(ctx context.Context, in *GetGuardianByChildIdRequest, opts ...grpc.CallOption) (*GetGuardianByChildIdResponse, error) {
+	out := new(GetGuardianByChildIdResponse)
+	err := c.cc.Invoke(ctx, GuardianService_GetGuardianByChildId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *guardianServiceClient) GetGuardianListByNurseryId(ctx context.Context, in *GetGuardianListByNurseryIdRequest, opts ...grpc.CallOption) (*GetGuardianListByNurseryIdResponse, error) {
+	out := new(GetGuardianListByNurseryIdResponse)
+	err := c.cc.Invoke(ctx, GuardianService_GetGuardianListByNurseryId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *guardianServiceClient) UpdateGuardian(ctx context.Context, in *UpdateGuardianRequest, opts ...grpc.CallOption) (*UpdateGuardianResponse, error) {
+	out := new(UpdateGuardianResponse)
+	err := c.cc.Invoke(ctx, GuardianService_UpdateGuardian_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GuardianServiceServer is the server API for GuardianService service.
 // All implementations should embed UnimplementedGuardianServiceServer
 // for forward compatibility
@@ -75,6 +108,9 @@ type GuardianServiceServer interface {
 	CreateGuardian(context.Context, *CreateGuardianRequest) (*CreateGuardianResponse, error)
 	GuardianLogin(context.Context, *GuardianLoginRequest) (*GuardianLoginResponse, error)
 	GetGuardianListByBusId(context.Context, *GetGuardianListByBusIdRequest) (*GetGuardianListByBusIdResponse, error)
+	GetGuardianByChildId(context.Context, *GetGuardianByChildIdRequest) (*GetGuardianByChildIdResponse, error)
+	GetGuardianListByNurseryId(context.Context, *GetGuardianListByNurseryIdRequest) (*GetGuardianListByNurseryIdResponse, error)
+	UpdateGuardian(context.Context, *UpdateGuardianRequest) (*UpdateGuardianResponse, error)
 }
 
 // UnimplementedGuardianServiceServer should be embedded to have forward compatible implementations.
@@ -89,6 +125,15 @@ func (UnimplementedGuardianServiceServer) GuardianLogin(context.Context, *Guardi
 }
 func (UnimplementedGuardianServiceServer) GetGuardianListByBusId(context.Context, *GetGuardianListByBusIdRequest) (*GetGuardianListByBusIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGuardianListByBusId not implemented")
+}
+func (UnimplementedGuardianServiceServer) GetGuardianByChildId(context.Context, *GetGuardianByChildIdRequest) (*GetGuardianByChildIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGuardianByChildId not implemented")
+}
+func (UnimplementedGuardianServiceServer) GetGuardianListByNurseryId(context.Context, *GetGuardianListByNurseryIdRequest) (*GetGuardianListByNurseryIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGuardianListByNurseryId not implemented")
+}
+func (UnimplementedGuardianServiceServer) UpdateGuardian(context.Context, *UpdateGuardianRequest) (*UpdateGuardianResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateGuardian not implemented")
 }
 
 // UnsafeGuardianServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -156,6 +201,60 @@ func _GuardianService_GetGuardianListByBusId_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GuardianService_GetGuardianByChildId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGuardianByChildIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GuardianServiceServer).GetGuardianByChildId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GuardianService_GetGuardianByChildId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GuardianServiceServer).GetGuardianByChildId(ctx, req.(*GetGuardianByChildIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GuardianService_GetGuardianListByNurseryId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGuardianListByNurseryIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GuardianServiceServer).GetGuardianListByNurseryId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GuardianService_GetGuardianListByNurseryId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GuardianServiceServer).GetGuardianListByNurseryId(ctx, req.(*GetGuardianListByNurseryIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GuardianService_UpdateGuardian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateGuardianRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GuardianServiceServer).UpdateGuardian(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GuardianService_UpdateGuardian_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GuardianServiceServer).UpdateGuardian(ctx, req.(*UpdateGuardianRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GuardianService_ServiceDesc is the grpc.ServiceDesc for GuardianService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -174,6 +273,18 @@ var GuardianService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGuardianListByBusId",
 			Handler:    _GuardianService_GetGuardianListByBusId_Handler,
+		},
+		{
+			MethodName: "GetGuardianByChildId",
+			Handler:    _GuardianService_GetGuardianByChildId_Handler,
+		},
+		{
+			MethodName: "GetGuardianListByNurseryId",
+			Handler:    _GuardianService_GetGuardianListByNurseryId_Handler,
+		},
+		{
+			MethodName: "UpdateGuardian",
+			Handler:    _GuardianService_UpdateGuardian_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
