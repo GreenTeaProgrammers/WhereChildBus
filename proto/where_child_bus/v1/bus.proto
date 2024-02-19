@@ -71,6 +71,8 @@ message StreamBusVideoRequest {
         BusType bus_type = 3;
         VehicleEvent vehicle_event = 4;
         repeated bytes video_chunk = 5; // Chunk of video data
+        int32 photo_height = 6;
+        int32 photo_width = 7;
 }
 
 message StreamBusVideoResponse {
