@@ -49,7 +49,7 @@ jobs:
             --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
 
       - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
-        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker --quiet
 
       - name: Push Docker Image to Google Container Registry
         run: |
