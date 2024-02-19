@@ -16,21 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-    - name: Setup gcloud CLI
+      - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           skip_install: false
           version: ">= 363.0.0"
 
-
-    - name: Auth
-      uses: google-github-actions/auth@v2
+      - name: Auth
+        uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
           access_token_lifetime: 1200s
-
 
       - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
         run: gcloud auth configure-docker us-docker.pkg.dev --quiet
