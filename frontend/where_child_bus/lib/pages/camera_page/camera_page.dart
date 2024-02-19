@@ -7,9 +7,14 @@ import 'package:where_child_bus/config/config.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 import "package:where_child_bus/main.dart" as where_child_bus;
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+  Bus bus;
+  BusType busType;
+
+  CameraPage({Key? key, required this.bus, required this.busType})
+      : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -75,10 +80,13 @@ class _CameraPageState extends State<CameraPage> {
           videoChunks.add(image.planes[0].bytes.toList());
           _streamController.add(StreamBusVideoRequest(
               nurseryId: NurseryData().getNursery().id,
+              busId: widget.bus.id,
+              busType: widget.busType,
+              //TODO VheicleEventを動的にする
+              vehicleEvent: VehicleEvent.VEHICLE_EVENT_GET_ON,
               videoChunk: videoChunks));
-          developer.log("Received image frame ${videoChunks}}",
-              name: "CameraPage");
-          developer.log("widge ${image.width}", name: "CameraPage");
+          developer.log("Received image frame", name: "CameraPage");
+          developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 
           videoChunks = [];

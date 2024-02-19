@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_list_page.dart';
+import 'package:where_child_bus/pages/camera_page/camera_bus_select_page.dart';
 import 'package:where_child_bus/pages/camera_page/camera_page.dart';
 import 'package:where_child_bus/pages/notification_page/notification_page.dart';
 import 'package:where_child_bus/pages/student_list_page/student_list_page.dart';
@@ -24,10 +25,10 @@ class _AppState extends State<App> {
         title: Text(['園児一覧', '送迎バスコース一覧', '連絡情報設定', 'カメラ'][_selectedIndex]),
       ),
       body: [
-        ChildListPage(),
-        BusListPage(),
+        const ChildListPage(),
+        const BusListPage(),
         const NotificationPage(),
-        CameraPage()
+        const BusSelectPage(),
       ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
