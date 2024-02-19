@@ -117,6 +117,7 @@ func main() {
 		grpc_server.WithReflection(config.ModeDev),
 		grpc_server.WithStorageClient(storageClient),
 		grpc_server.WithBucketName(config.StorageBucketName),
+		grpc_server.WithMLClient(mlv1.NewMachineLearningServiceClient(conn)),
 	)
 	lsnr, err := net.Listen("tcp", ":"+config.GrpcPort)
 	if err != nil {
