@@ -75,8 +75,8 @@ def load_image_from_remote(blobs: list):
 
 def load_image_from_binary(binary: bytes):
     image_array = np.frombuffer(binary, dtype=np.uint8)
-    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # BGRからRGBに変換
+    # TODO: 画像サイズをgRPCのリクエストから受け取る
+    image = image_array.reshape((240, 320))
     if image is None:
         raise ValueError("Can not load image from binary.")
     return image

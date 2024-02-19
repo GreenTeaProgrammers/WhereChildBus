@@ -116,6 +116,11 @@ def pred_child_from_images(args, config):
     model_class_num = len(idx_to_label_dict)
 
     clipped_faces = get_cliped_faces_from_images(args.video_chunk, config)
+
+    if len(clipped_faces) == 0:
+        logger.info("No face detected.")
+        return []
+
     input_image_tensors = convert_to_tensor_from_images(clipped_faces)
 
     model_bucket_path = (
@@ -153,9 +158,6 @@ if __name__ == "__main__":
     parser.add_argument("--bus_type", type=int, required=True)
 
     args = parser.parse_args()
-    args.video_chunk = [
-        open("/Users/mizuki/Desktop/test.jpg", "rb").read(),
-        open("/Users/mizuki/Desktop/test1.jpg", "rb").read(),
-    ]
+    args.video_chunk = []
 
     main(args)
