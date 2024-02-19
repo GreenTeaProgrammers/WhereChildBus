@@ -13,6 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../google/protobuf/field_mask.pb.dart' as $9;
 import 'resources.pb.dart' as $8;
 
 class CreateGuardianRequest extends $pb.GeneratedMessage {
@@ -607,6 +608,194 @@ class GetGuardianListByNurseryIdResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$8.GuardianResponse> get guardians => $_getList(0);
+}
+
+class UpdateGuardianRequest extends $pb.GeneratedMessage {
+  factory UpdateGuardianRequest({
+    $core.String? guardianId,
+    $core.String? name,
+    $core.String? email,
+    $core.String? phoneNumber,
+    $core.bool? isUseMorningBus,
+    $core.bool? isUseEveningBus,
+    $9.FieldMask? updateMask,
+  }) {
+    final $result = create();
+    if (guardianId != null) {
+      $result.guardianId = guardianId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (phoneNumber != null) {
+      $result.phoneNumber = phoneNumber;
+    }
+    if (isUseMorningBus != null) {
+      $result.isUseMorningBus = isUseMorningBus;
+    }
+    if (isUseEveningBus != null) {
+      $result.isUseEveningBus = isUseEveningBus;
+    }
+    if (updateMask != null) {
+      $result.updateMask = updateMask;
+    }
+    return $result;
+  }
+  UpdateGuardianRequest._() : super();
+  factory UpdateGuardianRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateGuardianRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateGuardianRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'guardianId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'email')
+    ..aOS(4, _omitFieldNames ? '' : 'phoneNumber')
+    ..aOB(5, _omitFieldNames ? '' : 'isUseMorningBus')
+    ..aOB(6, _omitFieldNames ? '' : 'isUseEveningBus')
+    ..aOM<$9.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateGuardianRequest clone() => UpdateGuardianRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateGuardianRequest copyWith(void Function(UpdateGuardianRequest) updates) => super.copyWith((message) => updates(message as UpdateGuardianRequest)) as UpdateGuardianRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateGuardianRequest create() => UpdateGuardianRequest._();
+  UpdateGuardianRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateGuardianRequest> createRepeated() => $pb.PbList<UpdateGuardianRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateGuardianRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateGuardianRequest>(create);
+  static UpdateGuardianRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get guardianId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set guardianId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGuardianId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGuardianId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get email => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set email($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasEmail() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearEmail() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get phoneNumber => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set phoneNumber($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasPhoneNumber() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPhoneNumber() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get isUseMorningBus => $_getBF(4);
+  @$pb.TagNumber(5)
+  set isUseMorningBus($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasIsUseMorningBus() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearIsUseMorningBus() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get isUseEveningBus => $_getBF(5);
+  @$pb.TagNumber(6)
+  set isUseEveningBus($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasIsUseEveningBus() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearIsUseEveningBus() => clearField(6);
+
+  @$pb.TagNumber(11)
+  $9.FieldMask get updateMask => $_getN(6);
+  @$pb.TagNumber(11)
+  set updateMask($9.FieldMask v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasUpdateMask() => $_has(6);
+  @$pb.TagNumber(11)
+  void clearUpdateMask() => clearField(11);
+  @$pb.TagNumber(11)
+  $9.FieldMask ensureUpdateMask() => $_ensure(6);
+}
+
+class UpdateGuardianResponse extends $pb.GeneratedMessage {
+  factory UpdateGuardianResponse({
+    $8.GuardianResponse? guardian,
+  }) {
+    final $result = create();
+    if (guardian != null) {
+      $result.guardian = guardian;
+    }
+    return $result;
+  }
+  UpdateGuardianResponse._() : super();
+  factory UpdateGuardianResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateGuardianResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateGuardianResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $8.GuardianResponse.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateGuardianResponse clone() => UpdateGuardianResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateGuardianResponse copyWith(void Function(UpdateGuardianResponse) updates) => super.copyWith((message) => updates(message as UpdateGuardianResponse)) as UpdateGuardianResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateGuardianResponse create() => UpdateGuardianResponse._();
+  UpdateGuardianResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateGuardianResponse> createRepeated() => $pb.PbList<UpdateGuardianResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateGuardianResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateGuardianResponse>(create);
+  static UpdateGuardianResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.GuardianResponse get guardian => $_getN(0);
+  @$pb.TagNumber(1)
+  set guardian($8.GuardianResponse v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGuardian() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGuardian() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.GuardianResponse ensureGuardian() => $_ensure(0);
 }
 
 
