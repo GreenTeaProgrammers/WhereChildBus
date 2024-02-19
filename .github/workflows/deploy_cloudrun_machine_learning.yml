@@ -31,10 +31,6 @@ jobs:
       - name: Authenticate Docker to GCP
         run: gcloud auth configure-docker --quiet
 
-      - name: Authenticate Docker with GCP
-        run: |
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
-
       - name: Push Docker image to Artifact Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest
