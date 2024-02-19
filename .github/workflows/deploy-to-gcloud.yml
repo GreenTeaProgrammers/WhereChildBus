@@ -30,9 +30,6 @@ jobs:
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
           access_token_lifetime: 1200s
 
-      - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
-        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
-
       - name: Build Docker Image
         run: |
           docker build --tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest \
@@ -50,6 +47,9 @@ jobs:
             --build-arg PASSWORD_PEPPER="${{ secrets.PASSWORD_PEPPER }}" \
             --build-arg ML_ADDR="${{ secrets.ML_ADDR }}" \
             --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
+
+      - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
+        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
 
       - name: Push Docker Image to Google Container Registry
         run: |
