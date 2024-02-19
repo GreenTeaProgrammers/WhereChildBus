@@ -36,7 +36,7 @@ jobs:
 
       - name: gcloud auth login by workload identity
         run: |-
-          gcloud auth login --brief --cred-file="${{ steps.Auth.outputs.credentials_file_path }}"
+          gcloud auth login --brief --no-launch-browser --cred-file="${{ steps.Auth.outputs.credentials_file_path }}"
 
       - name: Build Docker image
         run: |
