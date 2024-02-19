@@ -20,6 +20,11 @@ func (s *nurseryServiceServer) CreateNursery(ctx context.Context, req *pb.Create
 	return s.interactor.CreateNursery(ctx, req)
 }
 
+// UpdateNursery implements where_child_busv1.NurseryServiceServer.
+func (s *nurseryServiceServer) UpdateNursery(ctx context.Context, req *pb.UpdateNurseryRequest) (*pb.UpdateNurseryResponse, error) {
+	return s.interactor.UpdateNursery(ctx, req)
+}
+
 func (s *nurseryServiceServer) NurseryLogin(ctx context.Context, req *pb.NurseryLoginRequest) (*pb.NurseryLoginResponse, error) {
 	return s.interactor.NurseryLogin(ctx, req)
 }

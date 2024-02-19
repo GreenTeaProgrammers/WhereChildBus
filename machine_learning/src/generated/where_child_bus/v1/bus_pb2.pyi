@@ -1,4 +1,5 @@
 from where_child_bus.v1 import resources_pb2 as _resources_pb2
+from google.protobuf import field_mask_pb2 as _field_mask_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
@@ -103,3 +104,29 @@ class StreamBusVideoResponse(_message.Message):
     is_detected: bool
     children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
     def __init__(self, is_detected: bool = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...) -> None: ...
+
+class UpdateBusRequest(_message.Message):
+    __slots__ = ("bus_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "update_mask")
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
+    LATITUDE_FIELD_NUMBER: _ClassVar[int]
+    LONGITUDE_FIELD_NUMBER: _ClassVar[int]
+    ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
+    UPDATE_MASK_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    name: str
+    plate_number: str
+    bus_status: _resources_pb2.BusStatus
+    latitude: float
+    longitude: float
+    enable_face_recognition: bool
+    update_mask: _field_mask_pb2.FieldMask
+    def __init__(self, bus_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
+
+class UpdateBusResponse(_message.Message):
+    __slots__ = ("bus",)
+    BUS_FIELD_NUMBER: _ClassVar[int]
+    bus: _resources_pb2.Bus
+    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...

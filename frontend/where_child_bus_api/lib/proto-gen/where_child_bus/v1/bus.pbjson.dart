@@ -185,3 +185,40 @@ final $typed_data.Uint8List streamBusVideoResponseDescriptor = $convert.base64De
     'VkEjUKCGNoaWxkcmVuGAIgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJl'
     'bg==');
 
+@$core.Deprecated('Use updateBusRequestDescriptor instead')
+const UpdateBusRequest$json = {
+  '1': 'UpdateBusRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'plate_number', '3': 3, '4': 1, '5': 9, '10': 'plateNumber'},
+    {'1': 'bus_status', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusStatus', '10': 'busStatus'},
+    {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'enable_face_recognition', '3': 7, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
+    {'1': 'update_mask', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+  ],
+};
+
+/// Descriptor for `UpdateBusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateBusRequestDescriptor = $convert.base64Decode(
+    'ChBVcGRhdGVCdXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSEgoEbmFtZRgCIAEoCV'
+    'IEbmFtZRIhCgxwbGF0ZV9udW1iZXIYAyABKAlSC3BsYXRlTnVtYmVyEjwKCmJ1c19zdGF0dXMY'
+    'BCABKA4yHS53aGVyZV9jaGlsZF9idXMudjEuQnVzU3RhdHVzUglidXNTdGF0dXMSGgoIbGF0aX'
+    'R1ZGUYBSABKAFSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgGIAEoAVIJbG9uZ2l0dWRlEjYKF2Vu'
+    'YWJsZV9mYWNlX3JlY29nbml0aW9uGAcgASgIUhVlbmFibGVGYWNlUmVjb2duaXRpb24SOwoLdX'
+    'BkYXRlX21hc2sYCCABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYXNrUgp1cGRhdGVNYXNr');
+
+@$core.Deprecated('Use updateBusResponseDescriptor instead')
+const UpdateBusResponse$json = {
+  '1': 'UpdateBusResponse',
+  '2': [
+    {'1': 'bus', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Bus', '10': 'bus'},
+  ],
+};
+
+/// Descriptor for `UpdateBusResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateBusResponseDescriptor = $convert.base64Decode(
+    'ChFVcGRhdGVCdXNSZXNwb25zZRIpCgNidXMYASABKAsyFy53aGVyZV9jaGlsZF9idXMudjEuQn'
+    'VzUgNidXM=');
+

@@ -5,7 +5,7 @@ on:
     branches:
       - develop
     paths:
-      - "machine-learning/**"
+      - "machine_learning/**"
 
 permissions:
   contents: read

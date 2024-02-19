@@ -3,11 +3,12 @@ syntax = "proto3";
 package where_child_bus.v1;
 
 import "where_child_bus/v1/resources.proto";
+import "google/protobuf/field_mask.proto";
 
 service BusService {
         rpc CreateBus(CreateBusRequest) returns (CreateBusResponse);
         rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
-        rpc ChangeBusStatus(ChangeBusStatusRequest) returns (ChangeBusStatusResponse);
+        rpc UpdateBus(UpdateBusRequest) returns (UpdateBusResponse);
 
         rpc SendLocationContinuous(stream SendLocationContinuousRequest) returns (SendLocationContinuousResponse);
         rpc TrackBusContinuous(TrackBusContinuousRequest) returns (stream TrackBusContinuousResponse);
@@ -75,4 +76,19 @@ message StreamBusVideoRequest {
 message StreamBusVideoResponse {
         bool is_detected = 1;
         repeated Child children = 2;
+}
+
+message UpdateBusRequest {
+        string bus_id = 1;
+        string name = 2;
+        string plate_number = 3;
+        BusStatus bus_status = 4;
+        double latitude = 5;
+        double longitude = 6;
+        bool enable_face_recognition = 7;
+        google.protobuf.FieldMask update_mask = 8;
+}
+
+message UpdateBusResponse {
+        Bus bus = 1;
 }
