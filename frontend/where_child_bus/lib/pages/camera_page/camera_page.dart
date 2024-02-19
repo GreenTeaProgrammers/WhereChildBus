@@ -79,12 +79,15 @@ class _CameraPageState extends State<CameraPage> {
         if (frameCounter % 60 == 0) {
           videoChunks.add(image.planes[0].bytes.toList());
           _streamController.add(StreamBusVideoRequest(
-              nurseryId: NurseryData().getNursery().id,
-              busId: widget.bus.id,
-              busType: widget.busType,
-              //TODO VheicleEventを動的にする
-              vehicleEvent: VehicleEvent.VEHICLE_EVENT_GET_ON,
-              videoChunk: videoChunks));
+            nurseryId: NurseryData().getNursery().id,
+            busId: widget.bus.id,
+            busType: widget.busType,
+            //TODO VheicleEventを動的にする
+            vehicleEvent: VehicleEvent.VEHICLE_EVENT_GET_ON,
+            videoChunk: videoChunks,
+            photoHeight: image.height,
+            photoWidth: image.width,
+          ));
           developer.log("Received image frame", name: "CameraPage");
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");

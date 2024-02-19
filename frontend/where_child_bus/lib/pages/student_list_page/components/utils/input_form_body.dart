@@ -22,8 +22,8 @@ class InputFormBody extends StatefulWidget {
 }
 
 class _InputFormBodyState extends State<InputFormBody> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   late Future<void> _loadDataFuture; // 非同期処理の結果を保持する変数
   List<GuardianResponse> guardians = [];
   List<Bus> buses = [];
