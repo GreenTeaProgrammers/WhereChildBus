@@ -30,9 +30,28 @@ class _BusListPageState extends State<BusListPage> {
     _loadBusList();
   }
 
-  Future<void> _loadBusList() async {
-    String nurseryId = NurseryData().getNursery().id;
+  Future<void> _fetchBusList() async {
+    _isLoading = true;
 
+    try {
+      GetBusListByNurseryIdResponse busList =
+          await getBusList(NurseryData().getNursery().id);
+      NurseryBusData().setBusListResponse(busList);
+      if (mounted) {
+        setState(() {
+          buses = NurseryBusData().getBusList();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      }
+      setState(() => {_isLoading = false, _isFailLoading = true});
+    }
+  }
+
+  Future<void> _loadBusList() async {
     if (NurseryBusData().getBusList().isNotEmpty) {
       if (mounted) {
         setState(() {
@@ -42,21 +61,7 @@ class _BusListPageState extends State<BusListPage> {
       }
       return;
     } else {
-      GetBusListByNurseryIdResponse busList = await getBusList(nurseryId);
-      NurseryBusData().setBusListResponse(busList);
-      try {
-        if (mounted) {
-          setState(() {
-            buses = NurseryBusData().getBusList();
-            _isLoading = false;
-          });
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          developer.log("バスリストのロード中にエラーが発生しました: $e");
-        }
-        setState(() => {_isLoading = false, _isFailLoading = true});
-      }
+      await _fetchBusList();
     }
   }
 
@@ -80,7 +85,8 @@ class _BusListPageState extends State<BusListPage> {
                 if (_isFailLoading) loadFailText(),
                 if (buses.isEmpty) busNotRegisteredText(),
                 Expanded(
-                  child: listViewBuilder(),
+                  child: RefreshIndicator(
+                      onRefresh: _fetchBusList, child: listViewBuilder()),
                 )
               ],
             ),
