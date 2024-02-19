@@ -259,6 +259,11 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
 }
 
+func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
+	panic("unimplemented")
+	// TODO: 実装
+}
+
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
 	for {
 		req, err := stream.Recv()

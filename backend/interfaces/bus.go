@@ -15,6 +15,11 @@ func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
 	return &busServiceServer{interactor}
 }
 
+// UpdateBus implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
+	return s.interactor.UpdateBus(ctx, req)
+}
+
 // SendLocationContinuous implements where_child_busv1.BusServiceServer.
 func (s *busServiceServer) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
 	return s.interactor.SendLocationContinuous(stream)
