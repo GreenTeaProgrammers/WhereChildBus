@@ -3,6 +3,7 @@ syntax = "proto3";
 package where_child_bus.v1;
 
 import "where_child_bus/v1/resources.proto";
+import "google/protobuf/field_mask.proto";
 
 service GuardianService {
         rpc CreateGuardian(CreateGuardianRequest) returns (CreateGuardianResponse);
@@ -10,6 +11,7 @@ service GuardianService {
         rpc GetGuardianListByBusId(GetGuardianListByBusIdRequest) returns (GetGuardianListByBusIdResponse);
         rpc GetGuardianByChildId(GetGuardianByChildIdRequest) returns (GetGuardianByChildIdResponse);
         rpc GetGuardianListByNurseryId(GetGuardianListByNurseryIdRequest) returns (GetGuardianListByNurseryIdResponse);
+        rpc UpdateGuardian(UpdateGuardianRequest) returns (UpdateGuardianResponse);
 }
 
 message CreateGuardianRequest {
@@ -57,4 +59,18 @@ message GetGuardianListByNurseryIdRequest {
 
 message GetGuardianListByNurseryIdResponse {
         repeated GuardianResponse guardians = 1;
+}
+
+message UpdateGuardianRequest {
+        string guardian_id = 1;
+        string name = 2;
+        string email = 3;
+        string phone_number = 4;
+        bool is_use_morning_bus = 5;
+        bool is_use_evening_bus = 6;
+        google.protobuf.FieldMask update_mask = 11;
+}
+
+message UpdateGuardianResponse {
+        GuardianResponse guardian = 1;
 }
