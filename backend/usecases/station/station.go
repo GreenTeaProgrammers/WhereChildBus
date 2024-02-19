@@ -89,6 +89,11 @@ func (i *Interactor) UpdateStationLocationByGuardianID(ctx context.Context, req 
 	}, nil
 }
 
+func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
+	panic("unimplemented")
+	// TODO: 実装
+}
+
 func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStationListByBusIdRequest) (*pb.GetStationListByBusIdResponse, error) {
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
@@ -99,7 +104,7 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 	stations, err := i.entClient.Station.Query().
 		Where(stationRepo.HasBusWith(busRepo.ID(busID))).
 		WithGuardian(func(q *ent.GuardianQuery) {
-			// Guardian に紐づく Children と Nursery も取得
+			q.WithNursery()
 			q.WithChildren()
 		}).
 		All(ctx)

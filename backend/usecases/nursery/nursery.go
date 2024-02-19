@@ -113,6 +113,11 @@ func (i *Interactor) NurseryLogin(ctx context.Context, req *pb.NurseryLoginReque
 	}, nil
 }
 
+func (i *Interactor) UpdateNursery(ctx context.Context, req *pb.UpdateNurseryRequest) (*pb.UpdateNurseryResponse, error) {
+	panic("unimplemented")
+	// TODO: 実装
+}
+
 // コード生成
 func generateCode() string {
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
