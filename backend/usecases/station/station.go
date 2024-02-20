@@ -235,7 +235,9 @@ func (i Interactor) GetUnregisteredStationList(ctx context.Context, req *pb.GetU
 		Where(stationRepo.HasBusWith(busRepo.IDEQ(busID))).
 		Where(stationRepo.Latitude(0)).
 		Where(stationRepo.Longitude(0)).
-		WithGuardian().
+		WithGuardian(func(q *ent.GuardianQuery) {
+			q.WithNursery()
+		}).
 		All(ctx)
 
 	if err != nil {
