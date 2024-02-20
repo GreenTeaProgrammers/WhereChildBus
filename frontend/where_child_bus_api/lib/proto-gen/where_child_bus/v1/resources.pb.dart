@@ -1109,8 +1109,6 @@ class Station extends $pb.GeneratedMessage {
     $core.String? eveningNextStationId,
     $core.double? latitude,
     $core.double? longitude,
-    $core.int? morningOrder,
-    $core.int? eveningOrder,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -1133,12 +1131,6 @@ class Station extends $pb.GeneratedMessage {
     if (longitude != null) {
       $result.longitude = longitude;
     }
-    if (morningOrder != null) {
-      $result.morningOrder = morningOrder;
-    }
-    if (eveningOrder != null) {
-      $result.eveningOrder = eveningOrder;
-    }
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
@@ -1158,10 +1150,8 @@ class Station extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'eveningNextStationId')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'morningOrder', $pb.PbFieldType.O3)
-    ..a<$core.int>(8, _omitFieldNames ? '' : 'eveningOrder', $pb.PbFieldType.O3)
-    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1241,44 +1231,26 @@ class Station extends $pb.GeneratedMessage {
   void clearLongitude() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.int get morningOrder => $_getIZ(6);
+  $7.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set morningOrder($core.int v) { $_setSignedInt32(6, v); }
+  set createdAt($7.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasMorningOrder() => $_has(6);
+  $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
-  void clearMorningOrder() => clearField(7);
+  void clearCreatedAt() => clearField(7);
+  @$pb.TagNumber(7)
+  $7.Timestamp ensureCreatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $core.int get eveningOrder => $_getIZ(7);
+  $7.Timestamp get updatedAt => $_getN(7);
   @$pb.TagNumber(8)
-  set eveningOrder($core.int v) { $_setSignedInt32(7, v); }
+  set updatedAt($7.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
-  $core.bool hasEveningOrder() => $_has(7);
+  $core.bool hasUpdatedAt() => $_has(7);
   @$pb.TagNumber(8)
-  void clearEveningOrder() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $7.Timestamp get createdAt => $_getN(8);
-  @$pb.TagNumber(9)
-  set createdAt($7.Timestamp v) { setField(9, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasCreatedAt() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearCreatedAt() => clearField(9);
-  @$pb.TagNumber(9)
-  $7.Timestamp ensureCreatedAt() => $_ensure(8);
-
-  @$pb.TagNumber(10)
-  $7.Timestamp get updatedAt => $_getN(9);
-  @$pb.TagNumber(10)
-  set updatedAt($7.Timestamp v) { setField(10, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasUpdatedAt() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearUpdatedAt() => clearField(10);
-  @$pb.TagNumber(10)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(9);
+  void clearUpdatedAt() => clearField(8);
+  @$pb.TagNumber(8)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(7);
 }
 
 class ChildBusAssociation extends $pb.GeneratedMessage {

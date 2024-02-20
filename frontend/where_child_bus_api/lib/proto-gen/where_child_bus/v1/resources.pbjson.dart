@@ -250,10 +250,8 @@ const Station$json = {
     {'1': 'evening_next_station_id', '3': 4, '4': 1, '5': 9, '10': 'eveningNextStationId'},
     {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
-    {'1': 'morning_order', '3': 7, '4': 1, '5': 5, '10': 'morningOrder'},
-    {'1': 'evening_order', '3': 8, '4': 1, '5': 5, '10': 'eveningOrder'},
-    {'1': 'created_at', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
-    {'1': 'updated_at', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
+    {'1': 'created_at', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'updated_at', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
   ],
 };
 
@@ -263,10 +261,9 @@ final $typed_data.Uint8List stationDescriptor = $convert.base64Decode(
     '5JZBI1Chdtb3JuaW5nX25leHRfc3RhdGlvbl9pZBgDIAEoCVIUbW9ybmluZ05leHRTdGF0aW9u'
     'SWQSNQoXZXZlbmluZ19uZXh0X3N0YXRpb25faWQYBCABKAlSFGV2ZW5pbmdOZXh0U3RhdGlvbk'
     'lkEhoKCGxhdGl0dWRlGAUgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYBiABKAFSCWxvbmdp'
-    'dHVkZRIjCg1tb3JuaW5nX29yZGVyGAcgASgFUgxtb3JuaW5nT3JkZXISIwoNZXZlbmluZ19vcm'
-    'RlchgIIAEoBVIMZXZlbmluZ09yZGVyEjkKCmNyZWF0ZWRfYXQYCSABKAsyGi5nb29nbGUucHJv'
-    'dG9idWYuVGltZXN0YW1wUgljcmVhdGVkQXQSOQoKdXBkYXRlZF9hdBgKIAEoCzIaLmdvb2dsZS'
-    '5wcm90b2J1Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdA==');
+    'dHVkZRI5CgpjcmVhdGVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3'
+    'JlYXRlZEF0EjkKCnVwZGF0ZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w'
+    'Ugl1cGRhdGVkQXQ=');
 
 @$core.Deprecated('Use childBusAssociationDescriptor instead')
 const ChildBusAssociation$json = {

@@ -112,10 +112,8 @@ message Station {
         string evening_next_station_id = 4;
         double latitude = 5;
         double longitude = 6;
-        int32 morning_order = 7;
-        int32 evening_order = 8;
-        google.protobuf.Timestamp  created_at = 9;
-        google.protobuf.Timestamp  updated_at = 10;
+        google.protobuf.Timestamp  created_at = 7;
+        google.protobuf.Timestamp  updated_at = 8;
 }
 
 enum BusType {
