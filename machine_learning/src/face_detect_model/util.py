@@ -1,18 +1,14 @@
 import logging
+import os
+import random
 import re
 
-import random
+import cv2
+import numpy as np
 import torch
+from generated.machine_learning.v1.func_args import FaceDetectAndClip_Args
 from google.cloud.storage import Bucket
 from torchvision import transforms
-import os
-import numpy as np
-
-from generated.machine_learning.v1.func_args import (
-    FaceDetectAndClip_Args,
-)
-
-import cv2
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - PID: %(process)d -  %(message)s",
@@ -54,7 +50,7 @@ def switch_to_bus_type(bus_type_num: int):
         raise ValueError(f"Invalid bus_type: {bus_type_num}")
 
 
-def load_image_from_remote(blobs: list):
+def load_image_from_remote(blobs: list, color_channel: int):
     images = []
     for blob in blobs:
         logger.info(f"loading: {blob.name}")
@@ -68,7 +64,14 @@ def load_image_from_remote(blobs: list):
 
         # cv2.imdecode でバイト配列を画像に変換
         image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # BGRからRGBに変換
+
+        if color_channel == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # BGRからRGBに変換
+        elif color_channel == 1:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            raise ValueError(f"Invalid color_channel: {color_channel}")
+
         if image is None:
             logger.error(f"Can not load: {blob.name}")
             continue
@@ -124,6 +127,27 @@ def get_augment_transform():
             ),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
+
+def get_augment_transform_for_gray():
+    return transforms.Compose(
+        [
+            transforms.RandomCrop((100, 100)),
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomVerticalFlip(p=0.5),
+            transforms.RandomApply([transforms.RandomRotation(degrees=180)], p=0.5),
+            transforms.RandomApply(
+                [
+                    transforms.RandomAffine(
+                        degrees=0, translate=(0.1, 0.1), scale=(0.8, 1.2)
+                    )
+                ],
+                p=0.5,
+            ),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5]),
         ]
     )
 

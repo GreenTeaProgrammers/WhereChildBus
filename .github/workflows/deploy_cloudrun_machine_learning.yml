@@ -1,4 +1,4 @@
-name: Deployment of machine learning system to CloudRun
+name: Deployment of machine learning gRPC server to CloudRun
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
           version: latest
 
       # gcloud CLIを認証するステップを追加
-      - name: Auth
+      - name: Google Cloud Platform Service Account Authentication
         uses: google-github-actions/auth@v0.4.0
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ secrets.GCP_IMAGE_NAME_FOR_ML }} \
+          gcloud run deploy ${{ secrets.GCP_SERVICE_NAME_FOR_ML }} \
             --image gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
             --region ${{ secrets.REGION }} \
             --platform managed

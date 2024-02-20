@@ -1,14 +1,25 @@
-from where_child_bus.v1 import resources_pb2 as _resources_pb2
-from google.protobuf import field_mask_pb2 as _field_mask_pb2
-from google.protobuf.internal import containers as _containers
+from typing import ClassVar as _ClassVar
+from typing import Iterable as _Iterable
+from typing import Mapping as _Mapping
+from typing import Optional as _Optional
+from typing import Union as _Union
+
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import field_mask_pb2 as _field_mask_pb2
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
+from google.protobuf.internal import containers as _containers
+from where_child_bus.v1 import resources_pb2 as _resources_pb2
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class CreateBusRequest(_message.Message):
-    __slots__ = ("nursery_id", "name", "plate_number", "morning_guardian_ids", "evening_guardian_ids")
+    __slots__ = (
+        "nursery_id",
+        "name",
+        "plate_number",
+        "morning_guardian_ids",
+        "evening_guardian_ids",
+    )
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
@@ -19,13 +30,22 @@ class CreateBusRequest(_message.Message):
     plate_number: str
     morning_guardian_ids: _containers.RepeatedScalarFieldContainer[str]
     evening_guardian_ids: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., morning_guardian_ids: _Optional[_Iterable[str]] = ..., evening_guardian_ids: _Optional[_Iterable[str]] = ...) -> None: ...
+    def __init__(
+        self,
+        nursery_id: _Optional[str] = ...,
+        name: _Optional[str] = ...,
+        plate_number: _Optional[str] = ...,
+        morning_guardian_ids: _Optional[_Iterable[str]] = ...,
+        evening_guardian_ids: _Optional[_Iterable[str]] = ...,
+    ) -> None: ...
 
 class CreateBusResponse(_message.Message):
     __slots__ = ("bus",)
     BUS_FIELD_NUMBER: _ClassVar[int]
     bus: _resources_pb2.Bus
-    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...
+    ) -> None: ...
 
 class GetBusListByNurseryIdRequest(_message.Message):
     __slots__ = ("nursery_id",)
@@ -37,7 +57,9 @@ class GetBusListByNurseryIdResponse(_message.Message):
     __slots__ = ("buses",)
     BUSES_FIELD_NUMBER: _ClassVar[int]
     buses: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Bus]
-    def __init__(self, buses: _Optional[_Iterable[_Union[_resources_pb2.Bus, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self, buses: _Optional[_Iterable[_Union[_resources_pb2.Bus, _Mapping]]] = ...
+    ) -> None: ...
 
 class GetRunningBusByGuardianIdRequest(_message.Message):
     __slots__ = ("guardian_id",)
@@ -49,7 +71,9 @@ class GetRunningBusByGuardianIdResponse(_message.Message):
     __slots__ = ("bus",)
     BUS_FIELD_NUMBER: _ClassVar[int]
     bus: _resources_pb2.Bus
-    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...
+    ) -> None: ...
 
 class ChangeBusStatusRequest(_message.Message):
     __slots__ = ("bus_id", "bus_status")
@@ -57,13 +81,19 @@ class ChangeBusStatusRequest(_message.Message):
     BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     bus_status: _resources_pb2.BusStatus
-    def __init__(self, bus_id: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...) -> None: ...
+    def __init__(
+        self,
+        bus_id: _Optional[str] = ...,
+        bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...,
+    ) -> None: ...
 
 class ChangeBusStatusResponse(_message.Message):
     __slots__ = ("bus",)
     BUS_FIELD_NUMBER: _ClassVar[int]
     bus: _resources_pb2.Bus
-    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...
+    ) -> None: ...
 
 class SendLocationContinuousRequest(_message.Message):
     __slots__ = ("bus_id", "latitude", "longitude")
@@ -73,7 +103,12 @@ class SendLocationContinuousRequest(_message.Message):
     bus_id: str
     latitude: float
     longitude: float
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ...) -> None: ...
+    def __init__(
+        self,
+        bus_id: _Optional[str] = ...,
+        latitude: _Optional[float] = ...,
+        longitude: _Optional[float] = ...,
+    ) -> None: ...
 
 class SendLocationContinuousResponse(_message.Message):
     __slots__ = ()
@@ -93,10 +128,23 @@ class TrackBusContinuousResponse(_message.Message):
     bus_id: str
     latitude: float
     longitude: float
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ...) -> None: ...
+    def __init__(
+        self,
+        bus_id: _Optional[str] = ...,
+        latitude: _Optional[float] = ...,
+        longitude: _Optional[float] = ...,
+    ) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
-    __slots__ = ("bus_id", "nursery_id", "bus_type", "vehicle_event", "video_chunk", "photo_height", "photo_width")
+    __slots__ = (
+        "bus_id",
+        "nursery_id",
+        "bus_type",
+        "vehicle_event",
+        "video_chunk",
+        "photo_height",
+        "photo_width",
+    )
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
@@ -111,7 +159,16 @@ class StreamBusVideoRequest(_message.Message):
     video_chunk: _containers.RepeatedScalarFieldContainer[bytes]
     photo_height: int
     photo_width: int
-    def __init__(self, bus_id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ..., video_chunk: _Optional[_Iterable[bytes]] = ..., photo_height: _Optional[int] = ..., photo_width: _Optional[int] = ...) -> None: ...
+    def __init__(
+        self,
+        bus_id: _Optional[str] = ...,
+        nursery_id: _Optional[str] = ...,
+        bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ...,
+        vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ...,
+        video_chunk: _Optional[_Iterable[bytes]] = ...,
+        photo_height: _Optional[int] = ...,
+        photo_width: _Optional[int] = ...,
+    ) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
     __slots__ = ("is_detected", "children")
@@ -119,10 +176,23 @@ class StreamBusVideoResponse(_message.Message):
     CHILDREN_FIELD_NUMBER: _ClassVar[int]
     is_detected: bool
     children: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Child]
-    def __init__(self, is_detected: bool = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self,
+        is_detected: bool = ...,
+        children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...,
+    ) -> None: ...
 
 class UpdateBusRequest(_message.Message):
-    __slots__ = ("bus_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "update_mask")
+    __slots__ = (
+        "bus_id",
+        "name",
+        "plate_number",
+        "bus_status",
+        "latitude",
+        "longitude",
+        "enable_face_recognition",
+        "update_mask",
+    )
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
@@ -139,10 +209,22 @@ class UpdateBusRequest(_message.Message):
     longitude: float
     enable_face_recognition: bool
     update_mask: _field_mask_pb2.FieldMask
-    def __init__(self, bus_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self,
+        bus_id: _Optional[str] = ...,
+        name: _Optional[str] = ...,
+        plate_number: _Optional[str] = ...,
+        bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...,
+        latitude: _Optional[float] = ...,
+        longitude: _Optional[float] = ...,
+        enable_face_recognition: bool = ...,
+        update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...,
+    ) -> None: ...
 
 class UpdateBusResponse(_message.Message):
     __slots__ = ("bus",)
     BUS_FIELD_NUMBER: _ClassVar[int]
     bus: _resources_pb2.Bus
-    def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...
+    ) -> None: ...

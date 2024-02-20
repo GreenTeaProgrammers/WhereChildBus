@@ -1,14 +1,14 @@
-import yaml
 import argparse
-import torch
 import os
 
+import torch
+import yaml
+from dotenv import load_dotenv
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
+from face_detect_model.gcp_util import get_bucket, init_client
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.trainer import Trainer
 from face_detect_model.util import logger, save_pickle_to_gcs, switch_to_bus_type
-from face_detect_model.gcp_util import init_client, get_bucket
-from dotenv import load_dotenv
 
 load_dotenv("secrets/.env")
 
@@ -85,6 +85,7 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
 
 
 def main(args: argparse.Namespace):
+    # TODO: configに関するsanity_checkを実装する
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
     TrainAndTest(args, config)

@@ -7,15 +7,18 @@ import google.cloud.storage as gcs
 import numpy as np
 import yaml
 from dotenv import load_dotenv
-from google.cloud.storage import Blob, Bucket
-
 from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
     clip_and_resize_face,
     detect_face,
     load_cascade,
 )
-
-from face_detect_model.gcp_util import get_bucket, get_blobs, init_client
+from face_detect_model.gcp_util import (
+    get_blobs,
+    get_bucket,
+    init_client,
+    save_face_image_to_remote,
+)
+from google.cloud.storage import Blob, Bucket
 
 load_dotenv("secrets/.env")
 

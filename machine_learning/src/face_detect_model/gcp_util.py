@@ -1,10 +1,10 @@
-import google.cloud.storage as gcs
-from google.cloud.storage import Bucket, Blob
 import os
 
-from face_detect_model.util import logger
-import numpy as np
 import cv2
+import google.cloud.storage as gcs
+import numpy as np
+from face_detect_model.util import logger
+from google.cloud.storage import Blob, Bucket
 
 
 def init_client():
