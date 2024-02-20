@@ -201,6 +201,26 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	return &pb.GetBusListByNurseryIdResponse{Buses: buses}, nil
 }
 
+func (i *Interactor) GetRunningBusByGuardianID(ctx context.Context, req *pb.GetRunningBusByGuardianIdRequest) (*pb.GetRunningBusByGuardianIdResponse, error) {
+	guardianID, err := uuid.Parse(req.GuardianId)
+	if err != nil {
+		i.logger.Error("failed to parse guardian ID", "error", err)
+		return nil, err
+	}
+
+	bus, err := i.entClient.Bus.Query().
+		Where(busRepo.HasNurseryWith(nurseryRepo.HasGuardiansWith(guardianRepo.ID(guardianID)))).
+		Where(busRepo.StatusEQ(bus.StatusRunning)).
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get bus list", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetRunningBusByGuardianIdResponse{Bus: utils.ToPbBus(bus)}, nil
+}
+
 func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatusRequest) (*pb.ChangeBusStatusResponse, error) {
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
@@ -399,8 +419,6 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 	go func() {
 		for {
 			in, err := stream.Recv()
-			i.logger.Info("received from client")
-			i.logger.Info("img", in.VideoChunk[0])
 
 			if err == io.EOF {
 				// ストリームの終了
@@ -409,11 +427,6 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 			if err != nil {
 				return
 			}
-
-			// ! 治す
-			in.BusId = "83bd2da8-8d15-4c05-bb26-ed992334d9c6"
-			in.VehicleEvent = pb.VehicleEvent_VEHICLE_EVENT_GET_ON
-			in.BusType = pb.BusType_BUS_TYPE_MORNING
 
 			// バスID、バスタイプ、ビデオタイプを保持
 			busID = in.BusId

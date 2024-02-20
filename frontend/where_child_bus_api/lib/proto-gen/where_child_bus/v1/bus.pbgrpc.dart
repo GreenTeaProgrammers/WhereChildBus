@@ -29,6 +29,10 @@ class BusServiceClient extends $grpc.Client {
       '/where_child_bus.v1.BusService/GetBusListByNurseryId',
       ($0.GetBusListByNurseryIdRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetBusListByNurseryIdResponse.fromBuffer(value));
+  static final _$getRunningBusByGuardianId = $grpc.ClientMethod<$0.GetRunningBusByGuardianIdRequest, $0.GetRunningBusByGuardianIdResponse>(
+      '/where_child_bus.v1.BusService/GetRunningBusByGuardianId',
+      ($0.GetRunningBusByGuardianIdRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetRunningBusByGuardianIdResponse.fromBuffer(value));
   static final _$updateBus = $grpc.ClientMethod<$0.UpdateBusRequest, $0.UpdateBusResponse>(
       '/where_child_bus.v1.BusService/UpdateBus',
       ($0.UpdateBusRequest value) => value.writeToBuffer(),
@@ -58,6 +62,10 @@ class BusServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($0.GetBusListByNurseryIdRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getBusListByNurseryId, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetRunningBusByGuardianIdResponse> getRunningBusByGuardianId($0.GetRunningBusByGuardianIdRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getRunningBusByGuardianId, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.UpdateBusResponse> updateBus($0.UpdateBusRequest request, {$grpc.CallOptions? options}) {
@@ -96,6 +104,13 @@ abstract class BusServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetBusListByNurseryIdRequest.fromBuffer(value),
         ($0.GetBusListByNurseryIdResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetRunningBusByGuardianIdRequest, $0.GetRunningBusByGuardianIdResponse>(
+        'GetRunningBusByGuardianId',
+        getRunningBusByGuardianId_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetRunningBusByGuardianIdRequest.fromBuffer(value),
+        ($0.GetRunningBusByGuardianIdResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.UpdateBusRequest, $0.UpdateBusResponse>(
         'UpdateBus',
         updateBus_Pre,
@@ -134,6 +149,10 @@ abstract class BusServiceBase extends $grpc.Service {
     return getBusListByNurseryId(call, await request);
   }
 
+  $async.Future<$0.GetRunningBusByGuardianIdResponse> getRunningBusByGuardianId_Pre($grpc.ServiceCall call, $async.Future<$0.GetRunningBusByGuardianIdRequest> request) async {
+    return getRunningBusByGuardianId(call, await request);
+  }
+
   $async.Future<$0.UpdateBusResponse> updateBus_Pre($grpc.ServiceCall call, $async.Future<$0.UpdateBusRequest> request) async {
     return updateBus(call, await request);
   }
@@ -144,6 +163,7 @@ abstract class BusServiceBase extends $grpc.Service {
 
   $async.Future<$0.CreateBusResponse> createBus($grpc.ServiceCall call, $0.CreateBusRequest request);
   $async.Future<$0.GetBusListByNurseryIdResponse> getBusListByNurseryId($grpc.ServiceCall call, $0.GetBusListByNurseryIdRequest request);
+  $async.Future<$0.GetRunningBusByGuardianIdResponse> getRunningBusByGuardianId($grpc.ServiceCall call, $0.GetRunningBusByGuardianIdRequest request);
   $async.Future<$0.UpdateBusResponse> updateBus($grpc.ServiceCall call, $0.UpdateBusRequest request);
   $async.Future<$0.SendLocationContinuousResponse> sendLocationContinuous($grpc.ServiceCall call, $async.Stream<$0.SendLocationContinuousRequest> request);
   $async.Stream<$0.TrackBusContinuousResponse> trackBusContinuous($grpc.ServiceCall call, $0.TrackBusContinuousRequest request);
