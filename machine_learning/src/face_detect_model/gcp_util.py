@@ -19,6 +19,7 @@ def init_client():
 
 
 def get_bucket(client: gcs.Client, bucket_name: str):
+    logger.info(f"Getting bucket '{bucket_name}'...")
     bucket = client.bucket(bucket_name)
 
     if bucket.exists():
@@ -28,6 +29,7 @@ def get_bucket(client: gcs.Client, bucket_name: str):
 
 
 def get_blobs(bucket: Bucket, blob_name: str):
+    logger.info(f"Getting blobs with prefix '{blob_name}'...")
     # blobsの中身に対するエラーハンドリング
     try:
         blobs = list(bucket.list_blobs(prefix=blob_name))
