@@ -8,7 +8,12 @@ from face_detect_model.util import (
 )
 
 from face_detect_model.gcp_util import get_bucket, get_blobs
-from face_detect_model.util import get_augment_transform, get_default_transforms
+from face_detect_model.util import (
+    get_augment_transform,
+    get_default_transforms,
+    get_augment_transform_for_gray,
+    get_default_transforms_for_gray,
+)
 
 
 # (child_id, image)のタプルを返す
@@ -18,7 +23,12 @@ class FaceDetectDataset(torch.utils.data.Dataset):
         self.args = args
         self.config = config
 
-        default_transform = get_default_transforms()
+        if config["model"]["in_channels"] == 1:
+            default_transform = get_default_transforms_for_gray()
+            argument_transform = get_augment_transform_for_gray()
+        elif config["model"]["in_channels"] == 3:
+            default_transform = get_default_transforms()
+            argument_transform = get_augment_transform()
 
         bucket_name = os.environ.get("BUCKET_NAME")
         bucket = get_bucket(client, bucket_name)
@@ -33,7 +43,11 @@ class FaceDetectDataset(torch.utils.data.Dataset):
             SOURCE_BLOB_NAME = f"{args.nursery_id}/{child_id}/clipped/"
 
             blobs = get_blobs(bucket, SOURCE_BLOB_NAME)
-            label_image_list.extend(load_image_from_remote(blobs))
+            label_image_list.extend(
+                load_image_from_remote(
+                    blobs=blobs, color_channel=config["model"]["in_channels"]
+                )
+            )
 
         for label, image in label_image_list:
             if label not in self.name_label_dict:
@@ -46,6 +60,7 @@ class FaceDetectDataset(torch.utils.data.Dataset):
 
             augmented_images = self.augment_image(
                 image_pil,
+                transforms=argument_transform,
                 num_variations=self.config["dataset"]["augmentation"]["num_variations"],
             )
             for aug_img in augmented_images:
@@ -62,12 +77,11 @@ class FaceDetectDataset(torch.utils.data.Dataset):
         self.name_label_dict[label] = self.label_num
         self.label_num += 1
 
-    def augment_image(self, image, num_variations=100):
+    def augment_image(self, image, transforms, num_variations=100):
         # ランダムな変換を適用するための拡張設定を強化
-        transformations = get_augment_transform()
         augmented_images = []
         for _ in range(num_variations):
-            augmented_image = transformations(image)
+            augmented_image = transforms(image)
             augmented_images.append(augmented_image)
         return augmented_images
 
