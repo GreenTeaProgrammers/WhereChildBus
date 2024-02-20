@@ -60,8 +60,9 @@ Future<UpdateBusResponse> updateBusStatus(
     var req = UpdateBusRequest(
       busId: busId,
       busStatus: busStatus,
-      updateMask: FieldMask(paths: ["busStatus"]),
+      updateMask: FieldMask(paths: ["bus_status"]),
     );
+    developer.log("Request: $req");
     return client.updateBus(req);
   });
 }

@@ -18,107 +18,12 @@ class BusGuardianManagePage extends StatefulWidget {
 }
 
 class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
-  // サンプルデータのリスト
-  final List<String> morningGuardianNames = [
-    '保護者1',
-    '保護者2',
-    '保護者3',
-    '保護者4',
-    '保護者5',
-    '保護者6',
-    '保護者7',
-    '保護者8',
-    '保護者9',
-    '保護者10',
-    '保護者11',
-    '保護者12',
-    '保護者13',
-    '保護者14',
-    '保護者15',
-    '保護者16',
-    '保護者17',
-    '保護者18',
-    '保護者19',
-    '保護者20',
-  ];
-
-  final List<String> eveningGuardianNames = [
-    '保護者1',
-    '保護者2',
-    '保護者3',
-    '保護者4',
-    '保護者5',
-    '保護者6',
-    '保護者7',
-    '保護者8',
-    '保護者9',
-    '保護者10',
-    '保護者11',
-    '保護者12',
-    '保護者13',
-    '保護者14',
-    '保護者15',
-    '保護者16',
-    '保護者17',
-    '保護者18',
-    '保護者19',
-    '保護者20',
-  ];
-
-  final List<String> morningGroupNames = [
-    'グループA',
-    'グループB',
-    'グループC',
-    'グループD',
-    'グループE',
-    'グループF',
-    'グループG',
-    'グループH',
-    'グループI',
-    'グループJ',
-    'グループK',
-    'グループL',
-    'グループM',
-    'グループN',
-    'グループO',
-    'グループP',
-    'グループQ',
-    'グループR',
-    'グループS',
-    'グループT',
-  ];
-
-  final List<String> eveningGroupNames = [
-    'グループA',
-    'グループB',
-    'グループC',
-    'グループD',
-    'グループE',
-    'グループF',
-    'グループG',
-    'グループH',
-    'グループI',
-    'グループJ',
-    'グループK',
-    'グループL',
-    'グループM',
-    'グループN',
-    'グループO',
-    'グループP',
-    'グループQ',
-    'グループR',
-    'グループS',
-    'グループT',
-  ];
-
   bool _isLoading = false;
   bool _isFailLoading = false;
   List<GuardianResponse> morningGuardians = [];
   List<GuardianResponse> eveningGuardians = [];
   List<GuardianResponse> morningSelectedGuardians = [];
   List<GuardianResponse> eveningSelectedGuardians = [];
-  List<String> morningAddedGuardians = [];
-  List<String> eveningAddedGuardians = [];
 
   @override
   void initState() {
@@ -202,7 +107,17 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
               ],
             ),
           ),
-          SizedBox(height: 100, child: ConfirmButton(buttonText: "保存")),
+          SizedBox(
+              height: 100,
+              child: ConfirmButton(
+                buttonText: "保存",
+                onTap: () => {
+                  Navigator.pop(context, {
+                    "morning": morningSelectedGuardians,
+                    "evening": eveningSelectedGuardians
+                  }),
+                },
+              )),
         ],
       );
     }

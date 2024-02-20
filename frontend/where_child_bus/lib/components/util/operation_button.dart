@@ -6,11 +6,13 @@ import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class OperationButton extends StatefulWidget {
-  final Bus bus;
+  Bus bus;
+  Function(Bus) onBusUpdated;
 
-  const OperationButton({
+  OperationButton({
     super.key,
     required this.bus,
+    required this.onBusUpdated,
   });
 
   @override
@@ -43,7 +45,9 @@ class _OperationButtonState extends State<OperationButton> {
     try {
       var res = await updateBusStatus(widget.bus.id, busStatus);
       if (mounted) {
-        setState(() {});
+        setState(() {
+          widget.onBusUpdated(res.bus);
+        });
       }
     } catch (e) {
       if (kDebugMode) {

@@ -22,6 +22,8 @@ class _BusEditPageState extends State<BusEditPage> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _busNameController = TextEditingController();
   final TextEditingController _busNumberController = TextEditingController();
+  List<GuardianResponse> morningSelectedGuardians = [];
+  List<GuardianResponse> eveningSelectedGuardians = [];
 
   String? _selectedImagePath;
   bool _isPickingImage = false;
@@ -131,11 +133,16 @@ class _BusEditPageState extends State<BusEditPage> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            var res = await Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => BusGuardianManagePage()));
+            if (res != null && res is Map<String, dynamic>) {
+              developer.log("${res["morning"]}");
+              morningSelectedGuardians = res["morning"];
+              eveningSelectedGuardians = res["evening"];
+            }
           },
           child: const Text("バスを利用する保護者を変更"),
         ),

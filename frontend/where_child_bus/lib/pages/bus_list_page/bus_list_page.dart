@@ -8,7 +8,6 @@ import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
-import 'package:where_child_bus/service/update_bus_status.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -156,6 +155,14 @@ class _BusListPageState extends State<BusListPage> {
                 const Spacer(),
                 OperationButton(
                   bus: bus,
+                  onBusUpdated: (Bus updatedBus) {
+                    int index = buses.indexOf(bus);
+                    if (index != -1) {
+                      setState(() {
+                        buses[index] = updatedBus;
+                      });
+                    }
+                  },
                 ),
               ],
             ),
