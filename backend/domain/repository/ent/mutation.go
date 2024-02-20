@@ -582,8 +582,8 @@ type BusMutation struct {
 	childBusAssociations         map[int]struct{}
 	removedchildBusAssociations  map[int]struct{}
 	clearedchildBusAssociations  bool
-	destination_station          *uuid.UUID
-	cleareddestination_station   bool
+	next_station                 *uuid.UUID
+	clearednext_station          bool
 	morning_first_station        *uuid.UUID
 	clearedmorning_first_station bool
 	evening_first_station        *uuid.UUID
@@ -1267,43 +1267,43 @@ func (m *BusMutation) ResetChildBusAssociations() {
 	m.removedchildBusAssociations = nil
 }
 
-// SetDestinationStationID sets the "destination_station" edge to the Station entity by id.
-func (m *BusMutation) SetDestinationStationID(id uuid.UUID) {
-	m.destination_station = &id
+// SetNextStationID sets the "next_station" edge to the Station entity by id.
+func (m *BusMutation) SetNextStationID(id uuid.UUID) {
+	m.next_station = &id
 }
 
-// ClearDestinationStation clears the "destination_station" edge to the Station entity.
-func (m *BusMutation) ClearDestinationStation() {
-	m.cleareddestination_station = true
+// ClearNextStation clears the "next_station" edge to the Station entity.
+func (m *BusMutation) ClearNextStation() {
+	m.clearednext_station = true
 }
 
-// DestinationStationCleared reports if the "destination_station" edge to the Station entity was cleared.
-func (m *BusMutation) DestinationStationCleared() bool {
-	return m.cleareddestination_station
+// NextStationCleared reports if the "next_station" edge to the Station entity was cleared.
+func (m *BusMutation) NextStationCleared() bool {
+	return m.clearednext_station
 }
 
-// DestinationStationID returns the "destination_station" edge ID in the mutation.
-func (m *BusMutation) DestinationStationID() (id uuid.UUID, exists bool) {
-	if m.destination_station != nil {
-		return *m.destination_station, true
+// NextStationID returns the "next_station" edge ID in the mutation.
+func (m *BusMutation) NextStationID() (id uuid.UUID, exists bool) {
+	if m.next_station != nil {
+		return *m.next_station, true
 	}
 	return
 }
 
-// DestinationStationIDs returns the "destination_station" edge IDs in the mutation.
+// NextStationIDs returns the "next_station" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// DestinationStationID instead. It exists only for internal usage by the builders.
-func (m *BusMutation) DestinationStationIDs() (ids []uuid.UUID) {
-	if id := m.destination_station; id != nil {
+// NextStationID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) NextStationIDs() (ids []uuid.UUID) {
+	if id := m.next_station; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetDestinationStation resets all changes to the "destination_station" edge.
-func (m *BusMutation) ResetDestinationStation() {
-	m.destination_station = nil
-	m.cleareddestination_station = false
+// ResetNextStation resets all changes to the "next_station" edge.
+func (m *BusMutation) ResetNextStation() {
+	m.next_station = nil
+	m.clearednext_station = false
 }
 
 // SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by id.
@@ -1697,8 +1697,8 @@ func (m *BusMutation) AddedEdges() []string {
 	if m.childBusAssociations != nil {
 		edges = append(edges, bus.EdgeChildBusAssociations)
 	}
-	if m.destination_station != nil {
-		edges = append(edges, bus.EdgeDestinationStation)
+	if m.next_station != nil {
+		edges = append(edges, bus.EdgeNextStation)
 	}
 	if m.morning_first_station != nil {
 		edges = append(edges, bus.EdgeMorningFirstStation)
@@ -1735,8 +1735,8 @@ func (m *BusMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case bus.EdgeDestinationStation:
-		if id := m.destination_station; id != nil {
+	case bus.EdgeNextStation:
+		if id := m.next_station; id != nil {
 			return []ent.Value{*id}
 		}
 	case bus.EdgeMorningFirstStation:
@@ -1807,8 +1807,8 @@ func (m *BusMutation) ClearedEdges() []string {
 	if m.clearedchildBusAssociations {
 		edges = append(edges, bus.EdgeChildBusAssociations)
 	}
-	if m.cleareddestination_station {
-		edges = append(edges, bus.EdgeDestinationStation)
+	if m.clearednext_station {
+		edges = append(edges, bus.EdgeNextStation)
 	}
 	if m.clearedmorning_first_station {
 		edges = append(edges, bus.EdgeMorningFirstStation)
@@ -1831,8 +1831,8 @@ func (m *BusMutation) EdgeCleared(name string) bool {
 		return m.clearedboarding_records
 	case bus.EdgeChildBusAssociations:
 		return m.clearedchildBusAssociations
-	case bus.EdgeDestinationStation:
-		return m.cleareddestination_station
+	case bus.EdgeNextStation:
+		return m.clearednext_station
 	case bus.EdgeMorningFirstStation:
 		return m.clearedmorning_first_station
 	case bus.EdgeEveningFirstStation:
@@ -1848,8 +1848,8 @@ func (m *BusMutation) ClearEdge(name string) error {
 	case bus.EdgeNursery:
 		m.ClearNursery()
 		return nil
-	case bus.EdgeDestinationStation:
-		m.ClearDestinationStation()
+	case bus.EdgeNextStation:
+		m.ClearNextStation()
 		return nil
 	case bus.EdgeMorningFirstStation:
 		m.ClearMorningFirstStation()
@@ -1877,8 +1877,8 @@ func (m *BusMutation) ResetEdge(name string) error {
 	case bus.EdgeChildBusAssociations:
 		m.ResetChildBusAssociations()
 		return nil
-	case bus.EdgeDestinationStation:
-		m.ResetDestinationStation()
+	case bus.EdgeNextStation:
+		m.ResetNextStation()
 		return nil
 	case bus.EdgeMorningFirstStation:
 		m.ResetMorningFirstStation()
@@ -6001,9 +6001,9 @@ type StationMutation struct {
 	evening_next_station            map[uuid.UUID]struct{}
 	removedevening_next_station     map[uuid.UUID]struct{}
 	clearedevening_next_station     bool
-	destination_for_buses           map[uuid.UUID]struct{}
-	removeddestination_for_buses    map[uuid.UUID]struct{}
-	cleareddestination_for_buses    bool
+	next_for_buses                  map[uuid.UUID]struct{}
+	removednext_for_buses           map[uuid.UUID]struct{}
+	clearednext_for_buses           bool
 	morning_first_for_buses         map[uuid.UUID]struct{}
 	removedmorning_first_for_buses  map[uuid.UUID]struct{}
 	clearedmorning_first_for_buses  bool
@@ -6610,58 +6610,58 @@ func (m *StationMutation) ResetEveningNextStation() {
 	m.removedevening_next_station = nil
 }
 
-// AddDestinationForBusIDs adds the "destination_for_buses" edge to the Bus entity by ids.
-func (m *StationMutation) AddDestinationForBusIDs(ids ...uuid.UUID) {
-	if m.destination_for_buses == nil {
-		m.destination_for_buses = make(map[uuid.UUID]struct{})
+// AddNextForBusIDs adds the "next_for_buses" edge to the Bus entity by ids.
+func (m *StationMutation) AddNextForBusIDs(ids ...uuid.UUID) {
+	if m.next_for_buses == nil {
+		m.next_for_buses = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
-		m.destination_for_buses[ids[i]] = struct{}{}
+		m.next_for_buses[ids[i]] = struct{}{}
 	}
 }
 
-// ClearDestinationForBuses clears the "destination_for_buses" edge to the Bus entity.
-func (m *StationMutation) ClearDestinationForBuses() {
-	m.cleareddestination_for_buses = true
+// ClearNextForBuses clears the "next_for_buses" edge to the Bus entity.
+func (m *StationMutation) ClearNextForBuses() {
+	m.clearednext_for_buses = true
 }
 
-// DestinationForBusesCleared reports if the "destination_for_buses" edge to the Bus entity was cleared.
-func (m *StationMutation) DestinationForBusesCleared() bool {
-	return m.cleareddestination_for_buses
+// NextForBusesCleared reports if the "next_for_buses" edge to the Bus entity was cleared.
+func (m *StationMutation) NextForBusesCleared() bool {
+	return m.clearednext_for_buses
 }
 
-// RemoveDestinationForBusIDs removes the "destination_for_buses" edge to the Bus entity by IDs.
-func (m *StationMutation) RemoveDestinationForBusIDs(ids ...uuid.UUID) {
-	if m.removeddestination_for_buses == nil {
-		m.removeddestination_for_buses = make(map[uuid.UUID]struct{})
+// RemoveNextForBusIDs removes the "next_for_buses" edge to the Bus entity by IDs.
+func (m *StationMutation) RemoveNextForBusIDs(ids ...uuid.UUID) {
+	if m.removednext_for_buses == nil {
+		m.removednext_for_buses = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
-		delete(m.destination_for_buses, ids[i])
-		m.removeddestination_for_buses[ids[i]] = struct{}{}
+		delete(m.next_for_buses, ids[i])
+		m.removednext_for_buses[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedDestinationForBuses returns the removed IDs of the "destination_for_buses" edge to the Bus entity.
-func (m *StationMutation) RemovedDestinationForBusesIDs() (ids []uuid.UUID) {
-	for id := range m.removeddestination_for_buses {
+// RemovedNextForBuses returns the removed IDs of the "next_for_buses" edge to the Bus entity.
+func (m *StationMutation) RemovedNextForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removednext_for_buses {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// DestinationForBusesIDs returns the "destination_for_buses" edge IDs in the mutation.
-func (m *StationMutation) DestinationForBusesIDs() (ids []uuid.UUID) {
-	for id := range m.destination_for_buses {
+// NextForBusesIDs returns the "next_for_buses" edge IDs in the mutation.
+func (m *StationMutation) NextForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.next_for_buses {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetDestinationForBuses resets all changes to the "destination_for_buses" edge.
-func (m *StationMutation) ResetDestinationForBuses() {
-	m.destination_for_buses = nil
-	m.cleareddestination_for_buses = false
-	m.removeddestination_for_buses = nil
+// ResetNextForBuses resets all changes to the "next_for_buses" edge.
+func (m *StationMutation) ResetNextForBuses() {
+	m.next_for_buses = nil
+	m.clearednext_for_buses = false
+	m.removednext_for_buses = nil
 }
 
 // AddMorningFirstForBusIDs adds the "morning_first_for_buses" edge to the Bus entity by ids.
@@ -7017,8 +7017,8 @@ func (m *StationMutation) AddedEdges() []string {
 	if m.evening_next_station != nil {
 		edges = append(edges, station.EdgeEveningNextStation)
 	}
-	if m.destination_for_buses != nil {
-		edges = append(edges, station.EdgeDestinationForBuses)
+	if m.next_for_buses != nil {
+		edges = append(edges, station.EdgeNextForBuses)
 	}
 	if m.morning_first_for_buses != nil {
 		edges = append(edges, station.EdgeMorningFirstForBuses)
@@ -7063,9 +7063,9 @@ func (m *StationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case station.EdgeDestinationForBuses:
-		ids := make([]ent.Value, 0, len(m.destination_for_buses))
-		for id := range m.destination_for_buses {
+	case station.EdgeNextForBuses:
+		ids := make([]ent.Value, 0, len(m.next_for_buses))
+		for id := range m.next_for_buses {
 			ids = append(ids, id)
 		}
 		return ids
@@ -7097,8 +7097,8 @@ func (m *StationMutation) RemovedEdges() []string {
 	if m.removedevening_next_station != nil {
 		edges = append(edges, station.EdgeEveningNextStation)
 	}
-	if m.removeddestination_for_buses != nil {
-		edges = append(edges, station.EdgeDestinationForBuses)
+	if m.removednext_for_buses != nil {
+		edges = append(edges, station.EdgeNextForBuses)
 	}
 	if m.removedmorning_first_for_buses != nil {
 		edges = append(edges, station.EdgeMorningFirstForBuses)
@@ -7131,9 +7131,9 @@ func (m *StationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case station.EdgeDestinationForBuses:
-		ids := make([]ent.Value, 0, len(m.removeddestination_for_buses))
-		for id := range m.removeddestination_for_buses {
+	case station.EdgeNextForBuses:
+		ids := make([]ent.Value, 0, len(m.removednext_for_buses))
+		for id := range m.removednext_for_buses {
 			ids = append(ids, id)
 		}
 		return ids
@@ -7174,8 +7174,8 @@ func (m *StationMutation) ClearedEdges() []string {
 	if m.clearedevening_next_station {
 		edges = append(edges, station.EdgeEveningNextStation)
 	}
-	if m.cleareddestination_for_buses {
-		edges = append(edges, station.EdgeDestinationForBuses)
+	if m.clearednext_for_buses {
+		edges = append(edges, station.EdgeNextForBuses)
 	}
 	if m.clearedmorning_first_for_buses {
 		edges = append(edges, station.EdgeMorningFirstForBuses)
@@ -7202,8 +7202,8 @@ func (m *StationMutation) EdgeCleared(name string) bool {
 		return m.clearedevening_previous_station
 	case station.EdgeEveningNextStation:
 		return m.clearedevening_next_station
-	case station.EdgeDestinationForBuses:
-		return m.cleareddestination_for_buses
+	case station.EdgeNextForBuses:
+		return m.clearednext_for_buses
 	case station.EdgeMorningFirstForBuses:
 		return m.clearedmorning_first_for_buses
 	case station.EdgeEveningFirstForBuses:
@@ -7251,8 +7251,8 @@ func (m *StationMutation) ResetEdge(name string) error {
 	case station.EdgeEveningNextStation:
 		m.ResetEveningNextStation()
 		return nil
-	case station.EdgeDestinationForBuses:
-		m.ResetDestinationForBuses()
+	case station.EdgeNextForBuses:
+		m.ResetNextForBuses()
 		return nil
 	case station.EdgeMorningFirstForBuses:
 		m.ResetMorningFirstForBuses()

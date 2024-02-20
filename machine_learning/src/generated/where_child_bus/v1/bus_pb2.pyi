@@ -52,12 +52,14 @@ class GetRunningBusByGuardianIdResponse(_message.Message):
     def __init__(self, bus: _Optional[_Union[_resources_pb2.Bus, _Mapping]] = ...) -> None: ...
 
 class ChangeBusStatusRequest(_message.Message):
-    __slots__ = ("bus_id", "bus_status")
+    __slots__ = ("bus_id", "bus_status", "bus_type")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
+    BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     bus_status: _resources_pb2.BusStatus
-    def __init__(self, bus_id: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...) -> None: ...
+    bus_type: _resources_pb2.BusType
+    def __init__(self, bus_id: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ...) -> None: ...
 
 class ChangeBusStatusResponse(_message.Message):
     __slots__ = ("bus",)
@@ -86,14 +88,16 @@ class TrackBusContinuousRequest(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
 
 class TrackBusContinuousResponse(_message.Message):
-    __slots__ = ("bus_id", "latitude", "longitude")
+    __slots__ = ("bus_id", "latitude", "longitude", "next_station_id")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
+    NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     latitude: float
     longitude: float
-    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ...) -> None: ...
+    next_station_id: str
+    def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., next_station_id: _Optional[str] = ...) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
     __slots__ = ("bus_id", "nursery_id", "bus_type", "vehicle_event", "video_chunk", "photo_height", "photo_width")
@@ -122,11 +126,10 @@ class StreamBusVideoResponse(_message.Message):
     def __init__(self, is_detected: bool = ..., children: _Optional[_Iterable[_Union[_resources_pb2.Child, _Mapping]]] = ...) -> None: ...
 
 class UpdateBusRequest(_message.Message):
-    __slots__ = ("bus_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "morning_first_station_id", "evening_first_station_id", "next_station_id", "update_mask")
+    __slots__ = ("bus_id", "name", "plate_number", "latitude", "longitude", "enable_face_recognition", "morning_first_station_id", "evening_first_station_id", "next_station_id", "update_mask")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
@@ -137,7 +140,6 @@ class UpdateBusRequest(_message.Message):
     bus_id: str
     name: str
     plate_number: str
-    bus_status: _resources_pb2.BusStatus
     latitude: float
     longitude: float
     enable_face_recognition: bool
@@ -145,7 +147,7 @@ class UpdateBusRequest(_message.Message):
     evening_first_station_id: str
     next_station_id: str
     update_mask: _field_mask_pb2.FieldMask
-    def __init__(self, bus_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., morning_first_station_id: _Optional[str] = ..., evening_first_station_id: _Optional[str] = ..., next_station_id: _Optional[str] = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
+    def __init__(self, bus_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., morning_first_station_id: _Optional[str] = ..., evening_first_station_id: _Optional[str] = ..., next_station_id: _Optional[str] = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
 
 class UpdateBusResponse(_message.Message):
     __slots__ = ("bus",)

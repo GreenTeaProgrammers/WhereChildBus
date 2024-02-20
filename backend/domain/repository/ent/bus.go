@@ -40,7 +40,7 @@ type Bus struct {
 	// The values are being populated by the BusQuery when eager-loading is set.
 	Edges                     BusEdges `json:"edges"`
 	bus_nursery               *uuid.UUID
-	bus_destination_station   *uuid.UUID
+	bus_next_station          *uuid.UUID
 	bus_morning_first_station *uuid.UUID
 	bus_evening_first_station *uuid.UUID
 	selectValues              sql.SelectValues
@@ -56,8 +56,8 @@ type BusEdges struct {
 	BoardingRecords []*BoardingRecord `json:"boarding_records,omitempty"`
 	// ChildBusAssociations holds the value of the childBusAssociations edge.
 	ChildBusAssociations []*ChildBusAssociation `json:"childBusAssociations,omitempty"`
-	// DestinationStation holds the value of the destination_station edge.
-	DestinationStation *Station `json:"destination_station,omitempty"`
+	// NextStation holds the value of the next_station edge.
+	NextStation *Station `json:"next_station,omitempty"`
 	// MorningFirstStation holds the value of the morning_first_station edge.
 	MorningFirstStation *Station `json:"morning_first_station,omitempty"`
 	// EveningFirstStation holds the value of the evening_first_station edge.
@@ -107,17 +107,17 @@ func (e BusEdges) ChildBusAssociationsOrErr() ([]*ChildBusAssociation, error) {
 	return nil, &NotLoadedError{edge: "childBusAssociations"}
 }
 
-// DestinationStationOrErr returns the DestinationStation value or an error if the edge
+// NextStationOrErr returns the NextStation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e BusEdges) DestinationStationOrErr() (*Station, error) {
+func (e BusEdges) NextStationOrErr() (*Station, error) {
 	if e.loadedTypes[4] {
-		if e.DestinationStation == nil {
+		if e.NextStation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: station.Label}
 		}
-		return e.DestinationStation, nil
+		return e.NextStation, nil
 	}
-	return nil, &NotLoadedError{edge: "destination_station"}
+	return nil, &NotLoadedError{edge: "next_station"}
 }
 
 // MorningFirstStationOrErr returns the MorningFirstStation value or an error if the edge
@@ -163,7 +163,7 @@ func (*Bus) scanValues(columns []string) ([]any, error) {
 			values[i] = new(uuid.UUID)
 		case bus.ForeignKeys[0]: // bus_nursery
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
-		case bus.ForeignKeys[1]: // bus_destination_station
+		case bus.ForeignKeys[1]: // bus_next_station
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case bus.ForeignKeys[2]: // bus_morning_first_station
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
@@ -247,10 +247,10 @@ func (b *Bus) assignValues(columns []string, values []any) error {
 			}
 		case bus.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field bus_destination_station", values[i])
+				return fmt.Errorf("unexpected type %T for field bus_next_station", values[i])
 			} else if value.Valid {
-				b.bus_destination_station = new(uuid.UUID)
-				*b.bus_destination_station = *value.S.(*uuid.UUID)
+				b.bus_next_station = new(uuid.UUID)
+				*b.bus_next_station = *value.S.(*uuid.UUID)
 			}
 		case bus.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -299,9 +299,9 @@ func (b *Bus) QueryChildBusAssociations() *ChildBusAssociationQuery {
 	return NewBusClient(b.config).QueryChildBusAssociations(b)
 }
 
-// QueryDestinationStation queries the "destination_station" edge of the Bus entity.
-func (b *Bus) QueryDestinationStation() *StationQuery {
-	return NewBusClient(b.config).QueryDestinationStation(b)
+// QueryNextStation queries the "next_station" edge of the Bus entity.
+func (b *Bus) QueryNextStation() *StationQuery {
+	return NewBusClient(b.config).QueryNextStation(b)
 }
 
 // QueryMorningFirstStation queries the "morning_first_station" edge of the Bus entity.
