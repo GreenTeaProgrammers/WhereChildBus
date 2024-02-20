@@ -53,11 +53,11 @@ android {
         applicationId "com.example.where_child_bus"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         minSdkVersion 21 //cameraパッケージの使用に必要
+        manifestPlaceholders = [googleMapApiKey: secretProperties.getProperty('googleMapApiKey'),]
     }
 
     buildTypes {

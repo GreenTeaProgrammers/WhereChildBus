@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/bus_list_page/create_station_page/create_station_page.dart';
 import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -75,7 +76,11 @@ class _OperationButtonState extends State<OperationButton> {
       case BusStatus.BUS_STATUS_MAINTENANCE:
         buttonColor = Colors.lime;
         buttonText = "設定";
-        onPressed = () {};
+        onPressed = () => {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CreateStationPage(bus: widget.bus);
+              }))
+            };
         break;
       default:
         buttonColor = Colors.red;

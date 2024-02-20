@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/bus_list_page/create_station_page/widget/google_map.dart';
 import 'package:where_child_bus/util/api/guardians.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
@@ -43,9 +44,9 @@ class _CreateStationPageState extends State<CreateStationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('新規バス停作成'),
+        title: const Text('新規バス停作成'),
       ),
-      body: Container(),
+      body: const GoogleMapWidget(),
     );
   }
 }
