@@ -1,6 +1,12 @@
+import 'dart:developer' as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
-import '../../components/utils/current_time_body.dart';
+import 'package:where_child_bus_guardian/components/utils/current_time_body.dart';
+import 'package:where_child_bus_guardian/pages/check_page/components/bus_toggle_button.dart';
+import 'package:where_child_bus_guardian/service/update_guardian_status.dart';
+import 'package:where_child_bus_guardian/util/guardian_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pb.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({super.key});
@@ -10,8 +16,7 @@ class CheckPage extends StatefulWidget {
 }
 
 class _CheckPageState extends State<CheckPage> {
-  var isRideMorningBus = true;
-  var isRideEveningBus = true;
+  final GuardianResponse guardian = GuardianData().getGuardian();
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +49,9 @@ class _CheckPageState extends State<CheckPage> {
               child: Column(
                 children: <Widget>[
                   busTitleAndToggleButton(
-                      context, "朝のバス", isRideMorningBus, true),
+                      "朝のバス", guardian.isUseMorningBus, true),
                   busTitleAndToggleButton(
-                      context, "夕方のバス", isRideEveningBus, false),
+                      "夕方のバス", guardian.isUseEveningBus, false),
                 ],
               ),
             ),
@@ -55,48 +60,22 @@ class _CheckPageState extends State<CheckPage> {
   }
 
   Widget busTitleAndToggleButton(
-      BuildContext context, String title, bool isRide, bool isMorning) {
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Text(title, style: const TextStyle(fontSize: 16)),
-      ),
-      toggleSwitch(context, isRide, isMorning),
-    ]);
-  }
-
-  Widget toggleSwitch(BuildContext context, bool isRide, bool isMorning) {
-    int selectedIndex = isRide ? 0 : 1;
-    return FlutterToggleTab(
-      width: 70,
-      height: 50,
-      borderRadius: 15,
-      selectedBackgroundColors: const [Colors.blue],
-      selectedTextStyle: const TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
-      unSelectedTextStyle: const TextStyle(
-        color: Colors.black,
-        fontSize: 14,
-      ),
-      labels: const ["乗る", "乗らない"],
-      selectedIndex: selectedIndex,
-      selectedLabelIndex: (index) {
-        setState(() {
-          setRideState(isMorning, index);
-        });
-      },
-      marginSelected: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+      String title, bool isRideBus, bool isMorningBus) {
+    return Column(
+      children: <Widget>[
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        BusToggleButton(
+          guardian: guardian,
+          isMorningBus: isMorningBus,
+          isUseBus: isRideBus,
+        ),
+      ],
     );
-  }
-
-  //TODO: 将来的にバックエンドとの通信を行う
-  void setRideState(bool isMorning, int index) {
-    if (isMorning) {
-      isRideMorningBus = index == 0;
-    } else {
-      isRideEveningBus = index == 0;
-    }
   }
 }

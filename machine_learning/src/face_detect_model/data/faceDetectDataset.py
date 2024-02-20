@@ -1,48 +1,75 @@
-import torch
-import torchvision.transforms.functional as TF
-from torch.utils.data import Dataset
 import os
-import cv2
+
+import torch
+from PIL import Image
+
+from face_detect_model.util import (
+    load_image_from_remote,
+)
+
+from face_detect_model.gcp_util import get_bucket, get_blobs
+from face_detect_model.util import get_augment_transform, get_default_transforms
 
 
-class FaceDetectDataset(Dataset):
-    VALID_EXTENSIONS = {".png"}  # 適宜調整
+# (child_id, image)のタプルを返す
+class FaceDetectDataset(torch.utils.data.Dataset):
 
-    def __init__(self, config):
-        self.data_dir = config["dataset"]["root_path"]
+    def __init__(self, args, config, client):
+        self.args = args
+        self.config = config
+
+        default_transform = get_default_transforms()
+
+        bucket_name = os.environ.get("BUCKET_NAME")
+        bucket = get_bucket(client, bucket_name)
+
         self.face_data = []
         self.label_name_dict = {}
-        name_label_dict = {}
+        self.name_label_dict = {}
         self.label_num = 0
 
-        for file_name in os.listdir(self.data_dir):
-            # macOS環境におけるDS_Storeなどのファイルをスキップ
-            if not self._is_valid_file(file_name):
-                continue
+        label_image_list = []
+        for child_id in args.child_ids:
+            SOURCE_BLOB_NAME = f"{args.nursery_id}/{child_id}/clipped/"
 
-            file_path = os.path.join(self.data_dir, file_name)
-            people_name = file_name.split("-")[0]
+            blobs = get_blobs(bucket, SOURCE_BLOB_NAME)
+            label_image_list.extend(load_image_from_remote(blobs))
 
-            # TODO: データ拡張によってはBGR -> RGB変換処理を検討
-            image = cv2.imread(file_path)
-            if image is None:
-                continue
-            image_tensor = TF.to_tensor(image)
+        for label, image in label_image_list:
+            if label not in self.name_label_dict:
+                self._add_label(label)
 
-            # 人物名とラベルの対応を辞書に保存
-            if name_label_dict.get(people_name) is None:
-                self.label_name_dict[self.label_num] = people_name
-                name_label_dict[people_name] = self.label_num
-                self.label_num += 1
+            label_tensor = self._convert_label_to_tensor(label)
+            image_pil = self._convert_image_to_pil(image)
 
-            label_img_data = (
-                torch.tensor(name_label_dict[people_name], dtype=torch.int64),
-                image_tensor,
+            self.face_data.append((label_tensor, default_transform(image_pil)))
+
+            augmented_images = self.augment_image(
+                image_pil,
+                num_variations=self.config["dataset"]["augmentation"]["num_variations"],
             )
-            self.face_data.append(label_img_data)
+            for aug_img in augmented_images:
+                self.face_data.append((label_tensor, aug_img))
 
-    def _is_valid_file(self, file_name):
-        return os.path.splitext(file_name)[1].lower() in self.VALID_EXTENSIONS
+    def _convert_label_to_tensor(self, label: str):
+        return torch.tensor(self.name_label_dict[label], dtype=torch.int64)
+
+    def _convert_image_to_pil(self, image):
+        return Image.fromarray(image)
+
+    def _add_label(self, label: str):
+        self.label_name_dict[self.label_num] = label
+        self.name_label_dict[label] = self.label_num
+        self.label_num += 1
+
+    def augment_image(self, image, num_variations=100):
+        # ランダムな変換を適用するための拡張設定を強化
+        transformations = get_augment_transform()
+        augmented_images = []
+        for _ in range(num_variations):
+            augmented_image = transformations(image)
+            augmented_images.append(augmented_image)
+        return augmented_images
 
     def __len__(self):
         return len(self.face_data)
@@ -50,7 +77,7 @@ class FaceDetectDataset(Dataset):
     def __getitem__(self, idx):
         return self.face_data[idx]
 
-    def get_label_name_dict(self):
+    def get_idx_label_dict(self):
         return self.label_name_dict
 
     def get_label_num(self):

@@ -15,9 +15,14 @@ func NewChildServiceServer(interactor *child.Interactor) pb.ChildServiceServer {
 	return &childServiceServer{interactor}
 }
 
+// CheckIsChildInBus implements where_child_busv1.ChildServiceServer.
+func (s *childServiceServer) CheckIsChildInBus(ctx context.Context, req *pb.CheckIsChildInBusRequest) (*pb.CheckIsChildInBusResponse, error) {
+	return s.interactor.CheckIsChildInBus(ctx, req)
+}
+
 // GetChildListByBusID implements where_child_busv1.ChildServiceServer.
-func (*childServiceServer) GetChildListByBusID(context.Context, *pb.GetChildListByBusIDRequest) (*pb.GetChildListByBusIDResponse, error) {
-	panic("unimplemented")
+func (s *childServiceServer) GetChildListByBusID(ctx context.Context, req *pb.GetChildListByBusIDRequest) (*pb.GetChildListByBusIDResponse, error) {
+	return s.interactor.GetChildListByBusID(ctx, req)
 }
 
 // CreateChild implements where_child_busv1.ChildServiceServer.
@@ -33,4 +38,9 @@ func (s *childServiceServer) GetChildListByGuardianID(ctx context.Context, req *
 // GetChildListByNurseryID implements where_child_busv1.ChildServiceServer.
 func (s *childServiceServer) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
 	return s.interactor.GetChildListByNurseryID(ctx, req)
+}
+
+// UpdateChild implements where_child_busv1.ChildServiceServer.
+func (s *childServiceServer) UpdateChild(ctx context.Context, req *pb.UpdateChildRequest) (*pb.UpdateChildResponse, error) {
+	return s.interactor.UpdateChild(ctx, req)
 }

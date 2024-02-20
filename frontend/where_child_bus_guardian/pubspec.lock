@@ -493,6 +493,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  where_child_bus_api:
+    dependency: "direct main"
+    description:
+      path: "../where_child_bus_api"
+      relative: true
+    source: path
+    version: "0.0.1"
 sdks:
   dart: ">=3.2.6 <4.0.0"
   flutter: ">=3.16.6"

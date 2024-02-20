@@ -16,7 +16,6 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
 	"github.com/google/uuid"
 )
@@ -30,7 +29,6 @@ type ChildQuery struct {
 	predicates               []predicate.Child
 	withGuardian             *GuardianQuery
 	withChildBusAssociations *ChildBusAssociationQuery
-	withNursery              *NurseryQuery
 	withBoardingRecord       *BoardingRecordQuery
 	withPhotos               *ChildPhotoQuery
 	withFKs                  bool
@@ -107,28 +105,6 @@ func (cq *ChildQuery) QueryChildBusAssociations() *ChildBusAssociationQuery {
 			sqlgraph.From(child.Table, child.FieldID, selector),
 			sqlgraph.To(childbusassociation.Table, childbusassociation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, child.ChildBusAssociationsTable, child.ChildBusAssociationsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryNursery chains the current query on the "nursery" edge.
-func (cq *ChildQuery) QueryNursery() *NurseryQuery {
-	query := (&NurseryClient{config: cq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := cq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(child.Table, child.FieldID, selector),
-			sqlgraph.To(nursery.Table, nursery.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, child.NurseryTable, child.NurseryColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -374,7 +350,6 @@ func (cq *ChildQuery) Clone() *ChildQuery {
 		predicates:               append([]predicate.Child{}, cq.predicates...),
 		withGuardian:             cq.withGuardian.Clone(),
 		withChildBusAssociations: cq.withChildBusAssociations.Clone(),
-		withNursery:              cq.withNursery.Clone(),
 		withBoardingRecord:       cq.withBoardingRecord.Clone(),
 		withPhotos:               cq.withPhotos.Clone(),
 		// clone intermediate query.
@@ -402,17 +377,6 @@ func (cq *ChildQuery) WithChildBusAssociations(opts ...func(*ChildBusAssociation
 		opt(query)
 	}
 	cq.withChildBusAssociations = query
-	return cq
-}
-
-// WithNursery tells the query-builder to eager-load the nodes that are connected to
-// the "nursery" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ChildQuery) WithNursery(opts ...func(*NurseryQuery)) *ChildQuery {
-	query := (&NurseryClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	cq.withNursery = query
 	return cq
 }
 
@@ -517,15 +481,14 @@ func (cq *ChildQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Child,
 		nodes       = []*Child{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [4]bool{
 			cq.withGuardian != nil,
 			cq.withChildBusAssociations != nil,
-			cq.withNursery != nil,
 			cq.withBoardingRecord != nil,
 			cq.withPhotos != nil,
 		}
 	)
-	if cq.withGuardian != nil || cq.withNursery != nil {
+	if cq.withGuardian != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -561,12 +524,6 @@ func (cq *ChildQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Child,
 			func(n *Child, e *ChildBusAssociation) {
 				n.Edges.ChildBusAssociations = append(n.Edges.ChildBusAssociations, e)
 			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := cq.withNursery; query != nil {
-		if err := cq.loadNursery(ctx, query, nodes, nil,
-			func(n *Child, e *Nursery) { n.Edges.Nursery = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -646,38 +603,6 @@ func (cq *ChildQuery) loadChildBusAssociations(ctx context.Context, query *Child
 			return fmt.Errorf(`unexpected referenced foreign-key "child_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
-	}
-	return nil
-}
-func (cq *ChildQuery) loadNursery(ctx context.Context, query *NurseryQuery, nodes []*Child, init func(*Child), assign func(*Child, *Nursery)) error {
-	ids := make([]uuid.UUID, 0, len(nodes))
-	nodeids := make(map[uuid.UUID][]*Child)
-	for i := range nodes {
-		if nodes[i].child_nursery == nil {
-			continue
-		}
-		fk := *nodes[i].child_nursery
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(nursery.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "child_nursery" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
 	}
 	return nil
 }

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package machine_learning.v1;
+import "where_child_bus/v1/bus.proto";
+import "where_child_bus/v1/resources.proto";
+
+service MachineLearningService {
+        rpc Train(TrainRequest) returns (TrainResponse);
+        rpc Pred(stream where_child_bus.v1.StreamBusVideoRequest) returns (stream PredResponse);
+        rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
+}
+
+
+message TrainRequest {
+        string nursery_id = 1;
+        string bus_id = 2;
+        repeated string child_ids = 3;
+        where_child_bus.v1.BusType bus_type = 4;
+}
+
+message TrainResponse {
+        bool is_started = 1;
+}
+
+message PredResponse {
+        bool is_detected = 1;
+        repeated string child_ids = 2;
+}
+
+message FaceDetectAndClipRequest {
+        string nursery_id = 1;
+        string child_id = 2;
+}
+
+message FaceDetectAndClipResponse {
+        bool is_started = 1;
+}

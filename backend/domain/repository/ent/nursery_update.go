@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
@@ -148,21 +147,6 @@ func (nu *NurseryUpdate) SetUpdatedAt(t time.Time) *NurseryUpdate {
 	return nu
 }
 
-// AddChildIDs adds the "children" edge to the Child entity by IDs.
-func (nu *NurseryUpdate) AddChildIDs(ids ...uuid.UUID) *NurseryUpdate {
-	nu.mutation.AddChildIDs(ids...)
-	return nu
-}
-
-// AddChildren adds the "children" edges to the Child entity.
-func (nu *NurseryUpdate) AddChildren(c ...*Child) *NurseryUpdate {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return nu.AddChildIDs(ids...)
-}
-
 // AddGuardianIDs adds the "guardians" edge to the Guardian entity by IDs.
 func (nu *NurseryUpdate) AddGuardianIDs(ids ...uuid.UUID) *NurseryUpdate {
 	nu.mutation.AddGuardianIDs(ids...)
@@ -196,27 +180,6 @@ func (nu *NurseryUpdate) AddBuses(b ...*Bus) *NurseryUpdate {
 // Mutation returns the NurseryMutation object of the builder.
 func (nu *NurseryUpdate) Mutation() *NurseryMutation {
 	return nu.mutation
-}
-
-// ClearChildren clears all "children" edges to the Child entity.
-func (nu *NurseryUpdate) ClearChildren() *NurseryUpdate {
-	nu.mutation.ClearChildren()
-	return nu
-}
-
-// RemoveChildIDs removes the "children" edge to Child entities by IDs.
-func (nu *NurseryUpdate) RemoveChildIDs(ids ...uuid.UUID) *NurseryUpdate {
-	nu.mutation.RemoveChildIDs(ids...)
-	return nu
-}
-
-// RemoveChildren removes "children" edges to Child entities.
-func (nu *NurseryUpdate) RemoveChildren(c ...*Child) *NurseryUpdate {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return nu.RemoveChildIDs(ids...)
 }
 
 // ClearGuardians clears all "guardians" edges to the Guardian entity.
@@ -335,51 +298,6 @@ func (nu *NurseryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := nu.mutation.UpdatedAt(); ok {
 		_spec.SetField(nursery.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if nu.mutation.ChildrenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !nu.mutation.ChildrenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nu.mutation.ChildrenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nu.mutation.GuardiansCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -607,21 +525,6 @@ func (nuo *NurseryUpdateOne) SetUpdatedAt(t time.Time) *NurseryUpdateOne {
 	return nuo
 }
 
-// AddChildIDs adds the "children" edge to the Child entity by IDs.
-func (nuo *NurseryUpdateOne) AddChildIDs(ids ...uuid.UUID) *NurseryUpdateOne {
-	nuo.mutation.AddChildIDs(ids...)
-	return nuo
-}
-
-// AddChildren adds the "children" edges to the Child entity.
-func (nuo *NurseryUpdateOne) AddChildren(c ...*Child) *NurseryUpdateOne {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return nuo.AddChildIDs(ids...)
-}
-
 // AddGuardianIDs adds the "guardians" edge to the Guardian entity by IDs.
 func (nuo *NurseryUpdateOne) AddGuardianIDs(ids ...uuid.UUID) *NurseryUpdateOne {
 	nuo.mutation.AddGuardianIDs(ids...)
@@ -655,27 +558,6 @@ func (nuo *NurseryUpdateOne) AddBuses(b ...*Bus) *NurseryUpdateOne {
 // Mutation returns the NurseryMutation object of the builder.
 func (nuo *NurseryUpdateOne) Mutation() *NurseryMutation {
 	return nuo.mutation
-}
-
-// ClearChildren clears all "children" edges to the Child entity.
-func (nuo *NurseryUpdateOne) ClearChildren() *NurseryUpdateOne {
-	nuo.mutation.ClearChildren()
-	return nuo
-}
-
-// RemoveChildIDs removes the "children" edge to Child entities by IDs.
-func (nuo *NurseryUpdateOne) RemoveChildIDs(ids ...uuid.UUID) *NurseryUpdateOne {
-	nuo.mutation.RemoveChildIDs(ids...)
-	return nuo
-}
-
-// RemoveChildren removes "children" edges to Child entities.
-func (nuo *NurseryUpdateOne) RemoveChildren(c ...*Child) *NurseryUpdateOne {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return nuo.RemoveChildIDs(ids...)
 }
 
 // ClearGuardians clears all "guardians" edges to the Guardian entity.
@@ -824,51 +706,6 @@ func (nuo *NurseryUpdateOne) sqlSave(ctx context.Context) (_node *Nursery, err e
 	}
 	if value, ok := nuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(nursery.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if nuo.mutation.ChildrenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !nuo.mutation.ChildrenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := nuo.mutation.ChildrenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   nursery.ChildrenTable,
-			Columns: []string{nursery.ChildrenColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(child.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nuo.mutation.GuardiansCleared() {
 		edge := &sqlgraph.EdgeSpec{

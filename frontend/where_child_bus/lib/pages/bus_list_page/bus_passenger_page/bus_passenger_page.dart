@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:where_child_bus/components/child_list/child_list_with_mark.dart";
 
 class BusPassengerPage extends StatefulWidget {
   final List<String> name = <String>[
@@ -33,7 +32,7 @@ class _BusPassengerPage extends State<BusPassengerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: pageAppBar(),
-      body:pageBody(),
+      body: pageBody(),
     );
   }
 
@@ -45,6 +44,8 @@ class _BusPassengerPage extends State<BusPassengerPage> {
 
   Widget pageBody() {
     //TODO:将来的にはChildのリストを渡す
-    return ChildListWithMark(childNames: widget.name, groupNames: widget.group, images: widget.image);
+    // return ChildListWithMark(childNames: widget.name, groupNames: widget.group, images: widget.image);
+
+    return Container();
   }
 }

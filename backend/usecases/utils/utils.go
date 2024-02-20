@@ -1,7 +1,10 @@
 package utils
 
 import (
+	"database/sql"
 	"fmt"
+
+	"golang.org/x/exp/slog"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
@@ -17,13 +20,10 @@ func ToPbChild(t *ent.Child) *pb.Child {
 	sex := convertSexToPbSex(t.Sex)
 	return &pb.Child{
 		Id:                   t.ID.String(),
-		NurseryId:            t.Edges.Nursery.ID.String(),
 		GuardianId:           t.Edges.Guardian.ID.String(),
 		Name:                 t.Name,
 		Age:                  int32(t.Age),
 		Sex:                  sex,
-		IsRideMorningBus:     t.IsRideMorningBus,
-		IsRideEveningBus:     t.IsRideEveningBus,
 		CheckForMissingItems: t.CheckForMissingItems,
 		HasBag:               t.HasBag,
 		HasLunchBox:          t.HasLunchBox,
@@ -48,18 +48,33 @@ func convertSexToPbSex(sex child.Sex) pb.Sex {
 	}
 }
 
+func ConvertPbStatusToEntStatus(pbStatus pb.BusStatus) (*bus.Status, error) {
+	switch pbStatus {
+	case pb.BusStatus_BUS_STATUS_RUNNING:
+		status := bus.StatusRunning
+		return &status, nil
+	case pb.BusStatus_BUS_STATUS_STOPPED:
+		status := bus.StatusStopped
+		return &status, nil
+	default:
+		// 不正な値の場合はエラーを返す
+		return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
+	}
+}
+
 func ToPbBus(t *ent.Bus) *pb.Bus {
-	status := convertStatusToPbStatus(t.Status)
+	busStatus := convertStatusToPbStatus(t.Status)
 	return &pb.Bus{
-		Id:          t.ID.String(),
-		NurseryId:   t.Edges.Nursery.ID.String(),
-		Name:        t.Name,
-		PlateNumber: t.PlateNumber,
-		Latitude:    t.Latitude,
-		Longitude:   t.Longitude,
-		Status:      status,
-		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
-		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+		Id:                    t.ID.String(),
+		NurseryId:             t.Edges.Nursery.ID.String(),
+		Name:                  t.Name,
+		PlateNumber:           t.PlateNumber,
+		BusStatus:             busStatus,
+		Latitude:              t.Latitude,
+		Longitude:             t.Longitude,
+		EnableFaceRecognition: t.EnableFaceRecognition,
+		CreatedAt:             &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:             &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 
@@ -68,7 +83,7 @@ func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
 	case pb.Sex_SEX_MAN:
 		sex := child.SexMan
 		return &sex, nil
-	case pb.Sex_SEX_WOMAN: // 修正: WOMEN -> WOMAN
+	case pb.Sex_SEX_WOMAN:
 		sex := child.SexWoman
 		return &sex, nil
 	case pb.Sex_SEX_OTHER:
@@ -80,26 +95,28 @@ func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
 	}
 }
 
-func convertStatusToPbStatus(status bus.Status) pb.Status {
+func convertStatusToPbStatus(status bus.Status) pb.BusStatus {
 	switch status {
 	case bus.StatusRunning:
-		return pb.Status_STATUS_RUNNING
+		return pb.BusStatus_BUS_STATUS_STOPPED
 	case bus.StatusStopped:
-		return pb.Status_STATUS_STOPPED
+		return pb.BusStatus_BUS_STATUS_STOPPED
 	default:
-		return pb.Status_STATUS_UNSPECIFIED
+		return pb.BusStatus_BUS_STATUS_STOPPED
 	}
 }
 
 func ToPbGuardianResponse(t *ent.Guardian) *pb.GuardianResponse {
 	return &pb.GuardianResponse{
-		Id:          t.ID.String(),
-		NurseryId:   t.Edges.Nursery.ID.String(),
-		Email:       t.Email,
-		PhoneNumber: t.PhoneNumber,
-		Name:        t.Name,
-		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
-		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+		Id:              t.ID.String(),
+		NurseryId:       t.Edges.Nursery.ID.String(),
+		Email:           t.Email,
+		PhoneNumber:     t.PhoneNumber,
+		Name:            t.Name,
+		IsUseMorningBus: t.IsUseMorningBus,
+		IsUseEveningBus: t.IsUseEveningBus,
+		CreatedAt:       &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:       &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 
@@ -113,6 +130,19 @@ func ToPbNurseryResponse(t *ent.Nursery) *pb.NurseryResponse {
 		PhoneNumber: t.PhoneNumber,
 		CreatedAt:   &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
 		UpdatedAt:   &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
+	}
+}
+
+func ToPbStation(t *ent.Station, morningNextStationID, eveningNextStationID string) *pb.Station {
+	return &pb.Station{
+		Id:                   t.ID.String(),
+		GuardianId:           t.Edges.Guardian.ID.String(),
+		MorningNextStationId: morningNextStationID,
+		EveningNextStationId: eveningNextStationID,
+		Latitude:             t.Latitude,
+		Longitude:            t.Longitude,
+		CreatedAt:            &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
+		UpdatedAt:            &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}
 }
 
@@ -148,4 +178,18 @@ func CheckPassword(hashedPassword string, plainPassword string) bool {
 
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(passwordWithPepper))
 	return err == nil
+}
+
+// RollbackTx はトランザクションのロールバックを試み、エラーがあればロギングします。
+func RollbackTx(tx *ent.Tx, logger *slog.Logger) {
+	// txがコミット済みの場合はロールバックしない
+	if tx == nil {
+		logger.Error("failed to rollback transaction", "error", "tx is nil")
+		return
+	}
+	if err := tx.Rollback(); err != nil {
+		if err != sql.ErrTxDone {
+			logger.Error("failed to rollback transaction", "error", err)
+		}
+	}
 }

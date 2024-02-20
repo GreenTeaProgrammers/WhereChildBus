@@ -16,8 +16,13 @@ func NewNurseryServiceServer(interactor *nursery.Interactor) pb.NurseryServiceSe
 }
 
 // CreateNursery implements where_child_busv1.NurseryServiceServer.
-func (*nurseryServiceServer) CreateNursery(context.Context, *pb.CreateNurseryRequest) (*pb.CreateNurseryResponse, error) {
-	panic("unimplemented")
+func (s *nurseryServiceServer) CreateNursery(ctx context.Context, req *pb.CreateNurseryRequest) (*pb.CreateNurseryResponse, error) {
+	return s.interactor.CreateNursery(ctx, req)
+}
+
+// UpdateNursery implements where_child_busv1.NurseryServiceServer.
+func (s *nurseryServiceServer) UpdateNursery(ctx context.Context, req *pb.UpdateNurseryRequest) (*pb.UpdateNurseryResponse, error) {
+	return s.interactor.UpdateNursery(ctx, req)
 }
 
 func (s *nurseryServiceServer) NurseryLogin(ctx context.Context, req *pb.NurseryLoginRequest) (*pb.NurseryLoginResponse, error) {

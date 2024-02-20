@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_guardian/pages/check_page/check_page.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/daily_page.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
 
 class App extends StatefulWidget {
-  const App({super.key});
+  App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -21,7 +22,7 @@ class _AppState extends State<App> {
       ),
       body: IndexedStack(
           index: _selectedIndex,
-          children: const [DailyPage(), MapPage(), CheckPage()]),
+          children: [const DailyPage(), const MapPage(), CheckPage()]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (int index) => setState(() => _selectedIndex = index),

@@ -16,7 +16,6 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
 	"github.com/google/uuid"
 )
@@ -221,25 +220,6 @@ func (cu *ChildUpdate) AddChildBusAssociations(c ...*ChildBusAssociation) *Child
 	return cu.AddChildBusAssociationIDs(ids...)
 }
 
-// SetNurseryID sets the "nursery" edge to the Nursery entity by ID.
-func (cu *ChildUpdate) SetNurseryID(id uuid.UUID) *ChildUpdate {
-	cu.mutation.SetNurseryID(id)
-	return cu
-}
-
-// SetNillableNurseryID sets the "nursery" edge to the Nursery entity by ID if the given value is not nil.
-func (cu *ChildUpdate) SetNillableNurseryID(id *uuid.UUID) *ChildUpdate {
-	if id != nil {
-		cu = cu.SetNurseryID(*id)
-	}
-	return cu
-}
-
-// SetNursery sets the "nursery" edge to the Nursery entity.
-func (cu *ChildUpdate) SetNursery(n *Nursery) *ChildUpdate {
-	return cu.SetNurseryID(n.ID)
-}
-
 // AddBoardingRecordIDs adds the "boarding_record" edge to the BoardingRecord entity by IDs.
 func (cu *ChildUpdate) AddBoardingRecordIDs(ids ...uuid.UUID) *ChildUpdate {
 	cu.mutation.AddBoardingRecordIDs(ids...)
@@ -300,12 +280,6 @@ func (cu *ChildUpdate) RemoveChildBusAssociations(c ...*ChildBusAssociation) *Ch
 		ids[i] = c[i].ID
 	}
 	return cu.RemoveChildBusAssociationIDs(ids...)
-}
-
-// ClearNursery clears the "nursery" edge to the Nursery entity.
-func (cu *ChildUpdate) ClearNursery() *ChildUpdate {
-	cu.mutation.ClearNursery()
-	return cu
 }
 
 // ClearBoardingRecord clears all "boarding_record" edges to the BoardingRecord entity.
@@ -511,35 +485,6 @@ func (cu *ChildUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cu.mutation.NurseryCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   child.NurseryTable,
-			Columns: []string{child.NurseryColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(nursery.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.NurseryIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   child.NurseryTable,
-			Columns: []string{child.NurseryColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(nursery.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -844,25 +789,6 @@ func (cuo *ChildUpdateOne) AddChildBusAssociations(c ...*ChildBusAssociation) *C
 	return cuo.AddChildBusAssociationIDs(ids...)
 }
 
-// SetNurseryID sets the "nursery" edge to the Nursery entity by ID.
-func (cuo *ChildUpdateOne) SetNurseryID(id uuid.UUID) *ChildUpdateOne {
-	cuo.mutation.SetNurseryID(id)
-	return cuo
-}
-
-// SetNillableNurseryID sets the "nursery" edge to the Nursery entity by ID if the given value is not nil.
-func (cuo *ChildUpdateOne) SetNillableNurseryID(id *uuid.UUID) *ChildUpdateOne {
-	if id != nil {
-		cuo = cuo.SetNurseryID(*id)
-	}
-	return cuo
-}
-
-// SetNursery sets the "nursery" edge to the Nursery entity.
-func (cuo *ChildUpdateOne) SetNursery(n *Nursery) *ChildUpdateOne {
-	return cuo.SetNurseryID(n.ID)
-}
-
 // AddBoardingRecordIDs adds the "boarding_record" edge to the BoardingRecord entity by IDs.
 func (cuo *ChildUpdateOne) AddBoardingRecordIDs(ids ...uuid.UUID) *ChildUpdateOne {
 	cuo.mutation.AddBoardingRecordIDs(ids...)
@@ -923,12 +849,6 @@ func (cuo *ChildUpdateOne) RemoveChildBusAssociations(c ...*ChildBusAssociation)
 		ids[i] = c[i].ID
 	}
 	return cuo.RemoveChildBusAssociationIDs(ids...)
-}
-
-// ClearNursery clears the "nursery" edge to the Nursery entity.
-func (cuo *ChildUpdateOne) ClearNursery() *ChildUpdateOne {
-	cuo.mutation.ClearNursery()
-	return cuo
 }
 
 // ClearBoardingRecord clears all "boarding_record" edges to the BoardingRecord entity.
@@ -1164,35 +1084,6 @@ func (cuo *ChildUpdateOne) sqlSave(ctx context.Context) (_node *Child, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cuo.mutation.NurseryCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   child.NurseryTable,
-			Columns: []string{child.NurseryColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(nursery.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.NurseryIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   child.NurseryTable,
-			Columns: []string{child.NurseryColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(nursery.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

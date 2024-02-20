@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+service HealthcheckService {
+        rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message PingRequest {
+        string name = 1;
+}
+
+message PingResponse {
+        string message = 1;
+}

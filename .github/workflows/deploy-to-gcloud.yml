@@ -1,9 +1,14 @@
 name: Deploy to Google Cloud Run
+permissions:
+  id-token: write
+  contents: read
 
 on:
   push:
     branches:
       - develop
+    paths:
+      - "backend/**"
 
 jobs:
   setup-build-deploy:
@@ -11,33 +16,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          skip_install: false
+          version: ">= 363.0.0"
+
+      - name: Auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          access_token_lifetime: 1200s
 
       - name: Build Docker Image
         run: |
-          docker build --tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest \
+          docker build --tag=gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest \
             --file=./backend/Dockerfile \
             --platform linux/amd64 ./backend \
-            --build-arg DSN=${{ secrets.DSN }} \
-            --build-arg DB_USER_NAME=${{ secrets.DB_USER_NAME }} \
-            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --build-arg DB_ADDR=${{ secrets.DB_ADDR }} \
-            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
-            --build-arg PORT=${{ secrets.PORT }} \
-            --build-arg MODE_DEV=${{ secrets.MODE_DEV }}
+            --build-arg DSN="${{ secrets.DSN }}" \
+            --build-arg DB_USER_NAME="${{ secrets.DB_USER_NAME }}" \
+            --build-arg DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            --build-arg DB_ADDR="${{ secrets.DB_ADDR }}" \
+            --build-arg DB_NAME="${{ secrets.DB_NAME }}" \
+            --build-arg PORT="${{ secrets.PORT }}" \
+            --build-arg MODE_DEV="${{ secrets.MODE_DEV }}" \
+            --build-arg GOOGLE_APPLICATION_CREDENTIALS="${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" \
+            --build-arg STORAGE_BUCKET_NAME="${{ secrets.STORAGE_BUCKET_NAME }}" \
+            --build-arg PASSWORD_PEPPER="${{ secrets.PASSWORD_PEPPER }}" \
+            --build-arg ML_ADDR="${{ secrets.ML_ADDR }}" \
+            --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
+
+      - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
+        run: gcloud auth configure-docker --quiet
 
       - name: Push Docker Image to Google Container Registry
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy where-child-bus-grpc --image=gcr.io/${{ secrets.GCP_PROJECT_ID }}/where_child_bus-grpc:latest --platform=managed --allow-unauthenticated --project=${{ secrets.GCP_PROJECT_ID }} --region=${{ secrets.GCP_REGION }}
+          gcloud run deploy ${{ secrets.GCP_CLOUD_RUN_NAME }} --image=gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest --platform=managed --project=${{ secrets.GCP_PROJECT_ID }} --region=${{ secrets.REGION }}

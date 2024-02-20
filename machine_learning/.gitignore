@@ -1,6 +1,15 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,visualstudiocode
 
+## local
+secrets/
+
+src/face_detect_model/pickle/*
+src/face_detect_model/DetectFaceAndClip/img
+src/face_detect_model/DetectFaceAndClip/detce_img
+
+debug_sh_files/
+
 ### macOS ###
 # General
 .DS_Store
@@ -35,9 +44,7 @@ Temporary Items
 *.icloud
 
 ### Python ###
-src/face_detect_model/pickle/*
-src/face_detect_model/data/img
-src/face_detect_model/data/detect_img
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
