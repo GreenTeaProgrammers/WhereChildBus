@@ -225,7 +225,10 @@ const UpdateBusRequest$json = {
     {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'enable_face_recognition', '3': 7, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
-    {'1': 'update_mask', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+    {'1': 'morning_first_station_id', '3': 8, '4': 1, '5': 9, '10': 'morningFirstStationId'},
+    {'1': 'evening_first_station_id', '3': 9, '4': 1, '5': 9, '10': 'eveningFirstStationId'},
+    {'1': 'next_station_id', '3': 10, '4': 1, '5': 9, '10': 'nextStationId'},
+    {'1': 'update_mask', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
   ],
 };
 
@@ -235,8 +238,11 @@ final $typed_data.Uint8List updateBusRequestDescriptor = $convert.base64Decode(
     'IEbmFtZRIhCgxwbGF0ZV9udW1iZXIYAyABKAlSC3BsYXRlTnVtYmVyEjwKCmJ1c19zdGF0dXMY'
     'BCABKA4yHS53aGVyZV9jaGlsZF9idXMudjEuQnVzU3RhdHVzUglidXNTdGF0dXMSGgoIbGF0aX'
     'R1ZGUYBSABKAFSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgGIAEoAVIJbG9uZ2l0dWRlEjYKF2Vu'
-    'YWJsZV9mYWNlX3JlY29nbml0aW9uGAcgASgIUhVlbmFibGVGYWNlUmVjb2duaXRpb24SOwoLdX'
-    'BkYXRlX21hc2sYCCABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYXNrUgp1cGRhdGVNYXNr');
+    'YWJsZV9mYWNlX3JlY29nbml0aW9uGAcgASgIUhVlbmFibGVGYWNlUmVjb2duaXRpb24SNwoYbW'
+    '9ybmluZ19maXJzdF9zdGF0aW9uX2lkGAggASgJUhVtb3JuaW5nRmlyc3RTdGF0aW9uSWQSNwoY'
+    'ZXZlbmluZ19maXJzdF9zdGF0aW9uX2lkGAkgASgJUhVldmVuaW5nRmlyc3RTdGF0aW9uSWQSJg'
+    'oPbmV4dF9zdGF0aW9uX2lkGAogASgJUg1uZXh0U3RhdGlvbklkEjsKC3VwZGF0ZV9tYXNrGAsg'
+    'ASgLMhouZ29vZ2xlLnByb3RvYnVmLkZpZWxkTWFza1IKdXBkYXRlTWFzaw==');
 
 @$core.Deprecated('Use updateBusResponseDescriptor instead')
 const UpdateBusResponse$json = {

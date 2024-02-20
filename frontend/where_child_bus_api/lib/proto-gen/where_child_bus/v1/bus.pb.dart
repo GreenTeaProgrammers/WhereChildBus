@@ -909,6 +909,9 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     $core.double? latitude,
     $core.double? longitude,
     $core.bool? enableFaceRecognition,
+    $core.String? morningFirstStationId,
+    $core.String? eveningFirstStationId,
+    $core.String? nextStationId,
     $9.FieldMask? updateMask,
   }) {
     final $result = create();
@@ -933,6 +936,15 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     if (enableFaceRecognition != null) {
       $result.enableFaceRecognition = enableFaceRecognition;
     }
+    if (morningFirstStationId != null) {
+      $result.morningFirstStationId = morningFirstStationId;
+    }
+    if (eveningFirstStationId != null) {
+      $result.eveningFirstStationId = eveningFirstStationId;
+    }
+    if (nextStationId != null) {
+      $result.nextStationId = nextStationId;
+    }
     if (updateMask != null) {
       $result.updateMask = updateMask;
     }
@@ -950,7 +962,10 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..aOB(7, _omitFieldNames ? '' : 'enableFaceRecognition')
-    ..aOM<$9.FieldMask>(8, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..aOS(8, _omitFieldNames ? '' : 'morningFirstStationId')
+    ..aOS(9, _omitFieldNames ? '' : 'eveningFirstStationId')
+    ..aOS(10, _omitFieldNames ? '' : 'nextStationId')
+    ..aOM<$9.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -1039,15 +1054,42 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
   void clearEnableFaceRecognition() => clearField(7);
 
   @$pb.TagNumber(8)
-  $9.FieldMask get updateMask => $_getN(7);
+  $core.String get morningFirstStationId => $_getSZ(7);
   @$pb.TagNumber(8)
-  set updateMask($9.FieldMask v) { setField(8, v); }
+  set morningFirstStationId($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasUpdateMask() => $_has(7);
+  $core.bool hasMorningFirstStationId() => $_has(7);
   @$pb.TagNumber(8)
-  void clearUpdateMask() => clearField(8);
-  @$pb.TagNumber(8)
-  $9.FieldMask ensureUpdateMask() => $_ensure(7);
+  void clearMorningFirstStationId() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get eveningFirstStationId => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set eveningFirstStationId($core.String v) { $_setString(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasEveningFirstStationId() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearEveningFirstStationId() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get nextStationId => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set nextStationId($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasNextStationId() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNextStationId() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $9.FieldMask get updateMask => $_getN(10);
+  @$pb.TagNumber(11)
+  set updateMask($9.FieldMask v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasUpdateMask() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearUpdateMask() => clearField(11);
+  @$pb.TagNumber(11)
+  $9.FieldMask ensureUpdateMask() => $_ensure(10);
 }
 
 class UpdateBusResponse extends $pb.GeneratedMessage {

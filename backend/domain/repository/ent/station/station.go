@@ -35,6 +35,12 @@ const (
 	EdgeEveningPreviousStation = "evening_previous_station"
 	// EdgeEveningNextStation holds the string denoting the evening_next_station edge name in mutations.
 	EdgeEveningNextStation = "evening_next_station"
+	// EdgeDestinationForBuses holds the string denoting the destination_for_buses edge name in mutations.
+	EdgeDestinationForBuses = "destination_for_buses"
+	// EdgeMorningFirstForBuses holds the string denoting the morning_first_for_buses edge name in mutations.
+	EdgeMorningFirstForBuses = "morning_first_for_buses"
+	// EdgeEveningFirstForBuses holds the string denoting the evening_first_for_buses edge name in mutations.
+	EdgeEveningFirstForBuses = "evening_first_for_buses"
 	// Table holds the table name of the station in the database.
 	Table = "stations"
 	// GuardianTable is the table that holds the guardian relation/edge.
@@ -65,6 +71,27 @@ const (
 	EveningNextStationTable = "stations"
 	// EveningNextStationColumn is the table column denoting the evening_next_station relation/edge.
 	EveningNextStationColumn = "station_evening_next_station"
+	// DestinationForBusesTable is the table that holds the destination_for_buses relation/edge.
+	DestinationForBusesTable = "bus"
+	// DestinationForBusesInverseTable is the table name for the Bus entity.
+	// It exists in this package in order to avoid circular dependency with the "bus" package.
+	DestinationForBusesInverseTable = "bus"
+	// DestinationForBusesColumn is the table column denoting the destination_for_buses relation/edge.
+	DestinationForBusesColumn = "bus_destination_station"
+	// MorningFirstForBusesTable is the table that holds the morning_first_for_buses relation/edge.
+	MorningFirstForBusesTable = "bus"
+	// MorningFirstForBusesInverseTable is the table name for the Bus entity.
+	// It exists in this package in order to avoid circular dependency with the "bus" package.
+	MorningFirstForBusesInverseTable = "bus"
+	// MorningFirstForBusesColumn is the table column denoting the morning_first_for_buses relation/edge.
+	MorningFirstForBusesColumn = "bus_morning_first_station"
+	// EveningFirstForBusesTable is the table that holds the evening_first_for_buses relation/edge.
+	EveningFirstForBusesTable = "bus"
+	// EveningFirstForBusesInverseTable is the table name for the Bus entity.
+	// It exists in this package in order to avoid circular dependency with the "bus" package.
+	EveningFirstForBusesInverseTable = "bus"
+	// EveningFirstForBusesColumn is the table column denoting the evening_first_for_buses relation/edge.
+	EveningFirstForBusesColumn = "bus_evening_first_station"
 )
 
 // Columns holds all SQL columns for station fields.
@@ -210,6 +237,48 @@ func ByEveningNextStation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newEveningNextStationStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByDestinationForBusesCount orders the results by destination_for_buses count.
+func ByDestinationForBusesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDestinationForBusesStep(), opts...)
+	}
+}
+
+// ByDestinationForBuses orders the results by destination_for_buses terms.
+func ByDestinationForBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDestinationForBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMorningFirstForBusesCount orders the results by morning_first_for_buses count.
+func ByMorningFirstForBusesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMorningFirstForBusesStep(), opts...)
+	}
+}
+
+// ByMorningFirstForBuses orders the results by morning_first_for_buses terms.
+func ByMorningFirstForBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMorningFirstForBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEveningFirstForBusesCount orders the results by evening_first_for_buses count.
+func ByEveningFirstForBusesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEveningFirstForBusesStep(), opts...)
+	}
+}
+
+// ByEveningFirstForBuses orders the results by evening_first_for_buses terms.
+func ByEveningFirstForBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEveningFirstForBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newGuardianStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -250,5 +319,26 @@ func newEveningNextStationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(Table, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EveningNextStationTable, EveningNextStationColumn),
+	)
+}
+func newDestinationForBusesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DestinationForBusesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, DestinationForBusesTable, DestinationForBusesColumn),
+	)
+}
+func newMorningFirstForBusesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MorningFirstForBusesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, MorningFirstForBusesTable, MorningFirstForBusesColumn),
+	)
+}
+func newEveningFirstForBusesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EveningFirstForBusesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, EveningFirstForBusesTable, EveningFirstForBusesColumn),
 	)
 }
