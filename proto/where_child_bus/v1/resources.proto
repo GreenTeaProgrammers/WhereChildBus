@@ -77,8 +77,11 @@ message Bus {
         double latitude = 6;
         double longitude = 7;
         bool enable_face_recognition = 8;
-        google.protobuf.Timestamp  created_at = 9;
-        google.protobuf.Timestamp  updated_at = 10;
+        string morning_first_station_id = 9;
+        string evening_first_station_id = 10;
+        string next_station_id = 11;
+        google.protobuf.Timestamp  created_at = 12;
+        google.protobuf.Timestamp  updated_at = 13;
 }
 
 enum Sex {

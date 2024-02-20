@@ -694,6 +694,9 @@ class Bus extends $pb.GeneratedMessage {
     $core.double? latitude,
     $core.double? longitude,
     $core.bool? enableFaceRecognition,
+    $core.String? morningFirstStationId,
+    $core.String? eveningFirstStationId,
+    $core.String? nextStationId,
     $7.Timestamp? createdAt,
     $7.Timestamp? updatedAt,
   }) {
@@ -722,6 +725,15 @@ class Bus extends $pb.GeneratedMessage {
     if (enableFaceRecognition != null) {
       $result.enableFaceRecognition = enableFaceRecognition;
     }
+    if (morningFirstStationId != null) {
+      $result.morningFirstStationId = morningFirstStationId;
+    }
+    if (eveningFirstStationId != null) {
+      $result.eveningFirstStationId = eveningFirstStationId;
+    }
+    if (nextStationId != null) {
+      $result.nextStationId = nextStationId;
+    }
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
@@ -743,8 +755,11 @@ class Bus extends $pb.GeneratedMessage {
     ..a<$core.double>(6, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..aOB(8, _omitFieldNames ? '' : 'enableFaceRecognition')
-    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOS(9, _omitFieldNames ? '' : 'morningFirstStationId')
+    ..aOS(10, _omitFieldNames ? '' : 'eveningFirstStationId')
+    ..aOS(11, _omitFieldNames ? '' : 'nextStationId')
+    ..aOM<$7.Timestamp>(12, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$7.Timestamp>(13, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -843,26 +858,53 @@ class Bus extends $pb.GeneratedMessage {
   void clearEnableFaceRecognition() => clearField(8);
 
   @$pb.TagNumber(9)
-  $7.Timestamp get createdAt => $_getN(8);
+  $core.String get morningFirstStationId => $_getSZ(8);
   @$pb.TagNumber(9)
-  set createdAt($7.Timestamp v) { setField(9, v); }
+  set morningFirstStationId($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasCreatedAt() => $_has(8);
+  $core.bool hasMorningFirstStationId() => $_has(8);
   @$pb.TagNumber(9)
-  void clearCreatedAt() => clearField(9);
-  @$pb.TagNumber(9)
-  $7.Timestamp ensureCreatedAt() => $_ensure(8);
+  void clearMorningFirstStationId() => clearField(9);
 
   @$pb.TagNumber(10)
-  $7.Timestamp get updatedAt => $_getN(9);
+  $core.String get eveningFirstStationId => $_getSZ(9);
   @$pb.TagNumber(10)
-  set updatedAt($7.Timestamp v) { setField(10, v); }
+  set eveningFirstStationId($core.String v) { $_setString(9, v); }
   @$pb.TagNumber(10)
-  $core.bool hasUpdatedAt() => $_has(9);
+  $core.bool hasEveningFirstStationId() => $_has(9);
   @$pb.TagNumber(10)
-  void clearUpdatedAt() => clearField(10);
-  @$pb.TagNumber(10)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(9);
+  void clearEveningFirstStationId() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get nextStationId => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set nextStationId($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasNextStationId() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearNextStationId() => clearField(11);
+
+  @$pb.TagNumber(12)
+  $7.Timestamp get createdAt => $_getN(11);
+  @$pb.TagNumber(12)
+  set createdAt($7.Timestamp v) { setField(12, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasCreatedAt() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearCreatedAt() => clearField(12);
+  @$pb.TagNumber(12)
+  $7.Timestamp ensureCreatedAt() => $_ensure(11);
+
+  @$pb.TagNumber(13)
+  $7.Timestamp get updatedAt => $_getN(12);
+  @$pb.TagNumber(13)
+  set updatedAt($7.Timestamp v) { setField(13, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasUpdatedAt() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearUpdatedAt() => clearField(13);
+  @$pb.TagNumber(13)
+  $7.Timestamp ensureUpdatedAt() => $_ensure(12);
 }
 
 class Child extends $pb.GeneratedMessage {

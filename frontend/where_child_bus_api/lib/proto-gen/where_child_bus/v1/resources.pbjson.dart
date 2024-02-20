@@ -190,8 +190,11 @@ const Bus$json = {
     {'1': 'latitude', '3': 6, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 7, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'enable_face_recognition', '3': 8, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
-    {'1': 'created_at', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
-    {'1': 'updated_at', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
+    {'1': 'morning_first_station_id', '3': 9, '4': 1, '5': 9, '10': 'morningFirstStationId'},
+    {'1': 'evening_first_station_id', '3': 10, '4': 1, '5': 9, '10': 'eveningFirstStationId'},
+    {'1': 'next_station_id', '3': 11, '4': 1, '5': 9, '10': 'nextStationId'},
+    {'1': 'created_at', '3': 12, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'updated_at', '3': 13, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
   ],
 };
 
@@ -202,9 +205,11 @@ final $typed_data.Uint8List busDescriptor = $convert.base64Decode(
     'YnVzX3N0YXR1cxgFIAEoDjIdLndoZXJlX2NoaWxkX2J1cy52MS5CdXNTdGF0dXNSCWJ1c1N0YX'
     'R1cxIaCghsYXRpdHVkZRgGIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAcgASgBUglsb25n'
     'aXR1ZGUSNgoXZW5hYmxlX2ZhY2VfcmVjb2duaXRpb24YCCABKAhSFWVuYWJsZUZhY2VSZWNvZ2'
-    '5pdGlvbhI5CgpjcmVhdGVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJ'
-    'Y3JlYXRlZEF0EjkKCnVwZGF0ZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW'
-    '1wUgl1cGRhdGVkQXQ=');
+    '5pdGlvbhI3Chhtb3JuaW5nX2ZpcnN0X3N0YXRpb25faWQYCSABKAlSFW1vcm5pbmdGaXJzdFN0'
+    'YXRpb25JZBI3ChhldmVuaW5nX2ZpcnN0X3N0YXRpb25faWQYCiABKAlSFWV2ZW5pbmdGaXJzdF'
+    'N0YXRpb25JZBImCg9uZXh0X3N0YXRpb25faWQYCyABKAlSDW5leHRTdGF0aW9uSWQSOQoKY3Jl'
+    'YXRlZF9hdBgMIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cg'
+    'p1cGRhdGVkX2F0GA0gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
 
 @$core.Deprecated('Use childDescriptor instead')
 const Child$json = {
