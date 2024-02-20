@@ -13,6 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../google/protobuf/field_mask.pb.dart' as $9;
 import 'resources.pb.dart' as $8;
 
 class UpdateStationLocationByGuardianIdRequest extends $pb.GeneratedMessage {
@@ -261,6 +262,152 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.List<$8.ChildPhoto> get photos => $_getList(3);
+}
+
+class UpdateStationRequest extends $pb.GeneratedMessage {
+  factory UpdateStationRequest({
+    $core.String? id,
+    $core.double? latitude,
+    $core.double? longitude,
+    $9.FieldMask? updateMask,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (latitude != null) {
+      $result.latitude = latitude;
+    }
+    if (longitude != null) {
+      $result.longitude = longitude;
+    }
+    if (updateMask != null) {
+      $result.updateMask = updateMask;
+    }
+    return $result;
+  }
+  UpdateStationRequest._() : super();
+  factory UpdateStationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateStationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOM<$9.FieldMask>(4, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateStationRequest clone() => UpdateStationRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateStationRequest copyWith(void Function(UpdateStationRequest) updates) => super.copyWith((message) => updates(message as UpdateStationRequest)) as UpdateStationRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateStationRequest create() => UpdateStationRequest._();
+  UpdateStationRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateStationRequest> createRepeated() => $pb.PbList<UpdateStationRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateStationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateStationRequest>(create);
+  static UpdateStationRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.double get latitude => $_getN(1);
+  @$pb.TagNumber(2)
+  set latitude($core.double v) { $_setDouble(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasLatitude() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLatitude() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.double get longitude => $_getN(2);
+  @$pb.TagNumber(3)
+  set longitude($core.double v) { $_setDouble(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasLongitude() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearLongitude() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $9.FieldMask get updateMask => $_getN(3);
+  @$pb.TagNumber(4)
+  set updateMask($9.FieldMask v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasUpdateMask() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearUpdateMask() => clearField(4);
+  @$pb.TagNumber(4)
+  $9.FieldMask ensureUpdateMask() => $_ensure(3);
+}
+
+class UpdateStationResponse extends $pb.GeneratedMessage {
+  factory UpdateStationResponse({
+    $8.Station? station,
+  }) {
+    final $result = create();
+    if (station != null) {
+      $result.station = station;
+    }
+    return $result;
+  }
+  UpdateStationResponse._() : super();
+  factory UpdateStationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateStationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.Station>(1, _omitFieldNames ? '' : 'station', subBuilder: $8.Station.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateStationResponse clone() => UpdateStationResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateStationResponse copyWith(void Function(UpdateStationResponse) updates) => super.copyWith((message) => updates(message as UpdateStationResponse)) as UpdateStationResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateStationResponse create() => UpdateStationResponse._();
+  UpdateStationResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateStationResponse> createRepeated() => $pb.PbList<UpdateStationResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateStationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateStationResponse>(create);
+  static UpdateStationResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.Station get station => $_getN(0);
+  @$pb.TagNumber(1)
+  set station($8.Station v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStation() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStation() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Station ensureStation() => $_ensure(0);
 }
 
 

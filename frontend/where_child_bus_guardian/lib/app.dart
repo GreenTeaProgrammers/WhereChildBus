@@ -5,9 +5,7 @@ import 'package:where_child_bus_guardian/pages/daily_page/daily_page.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
 
 class App extends StatefulWidget {
-  GuardianResponse guardian;
-
-  App({super.key, required this.guardian});
+  App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -22,11 +20,9 @@ class _AppState extends State<App> {
       appBar: AppBar(
         title: Text(['日々の記録', '地図', '乗車確認'][_selectedIndex]),
       ),
-      body: [
-        const DailyPage(),
-        const MapPage(),
-        const CheckPage()
-      ][_selectedIndex],
+      body: IndexedStack(
+          index: _selectedIndex,
+          children: [const DailyPage(), const MapPage(), CheckPage()]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (int index) => setState(() => _selectedIndex = index),
