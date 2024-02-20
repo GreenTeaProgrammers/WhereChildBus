@@ -48,10 +48,30 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		return nil, err
 	}
 	defer utils.RollbackTx(tx, i.logger)
+
+	morningFirstStation, err := tx.Station.Query().
+		Where(stationRepo.HasGuardianWith(guardianRepo.ID(uuid.MustParse(req.MorningGuardianIds[0])))).
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get morning first station", "error", err)
+		return nil, err
+	}
+
+	eveningFirstStation, err := tx.Station.Query().
+		Where(stationRepo.HasGuardianWith(guardianRepo.ID(uuid.MustParse(req.EveningGuardianIds[0])))).
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get evening first station", "error", err)
+		return nil, err
+	}
 	bus, err := tx.Bus.Create().
 		SetNurseryID(nurseryID).
 		SetName(req.Name).
 		SetPlateNumber(req.PlateNumber).
+		SetMorningFirstStation(morningFirstStation).
+		SetEveningFirstStation(eveningFirstStation).
 		Save(ctx)
 
 	if err != nil {
@@ -70,6 +90,9 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	bus, err = tx.Bus.Query().
 		Where(busRepo.IDEQ(bus.ID)).
 		WithNursery().
+		WithNextStation().
+		WithMorningFirstStation().
+		WithEveningFirstStation().
 		Only(ctx)
 
 	if err != nil {
@@ -188,6 +211,9 @@ func (i *Interactor) GetBusListByNurseryID(ctx context.Context, req *pb.GetBusLi
 	buses, err := i.getBusList(ctx, func(tx *ent.Tx) (*ent.BusQuery, error) {
 		return tx.Bus.Query().
 			Where(busRepo.HasNurseryWith(nurseryRepo.IDEQ(nurseryID))).
+			WithNextStation().
+			WithMorningFirstStation().
+			WithEveningFirstStation().
 			WithNursery(), nil
 	})
 
@@ -210,6 +236,9 @@ func (i *Interactor) GetRunningBusByGuardianID(ctx context.Context, req *pb.GetR
 		Where(busRepo.HasNurseryWith(nurseryRepo.HasGuardiansWith(guardianRepo.ID(guardianID)))).
 		Where(busRepo.StatusEQ(busRepo.StatusRunning)).
 		WithNursery().
+		WithNextStation().
+		WithMorningFirstStation().
+		WithEveningFirstStation().
 		Only(ctx)
 
 	if err != nil {
@@ -239,9 +268,36 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		return nil, err
 	}
 
-	bus, err := tx.Bus.UpdateOneID(busID).
-		SetStatus(*status).
-		Save(ctx)
+	bus, err := tx.Bus.Query().Where(busRepo.IDEQ(busID)).
+		WithNursery().
+		WithNextStation().
+		WithMorningFirstStation().
+		WithEveningFirstStation().
+		Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to get bus", "error", err)
+		return nil, err
+
+	}
+
+	update := tx.Bus.UpdateOneID(busID)
+	// バスを停止に変更する場合、次のステーションをクリア
+	switch req.BusStatus {
+	case pb.BusStatus_BUS_STATUS_RUNNING:
+		update.ClearNextStation()
+		break
+	case pb.BusStatus_BUS_STATUS_STOPPED:
+		switch req.BusType {
+		case pb.BusType_BUS_TYPE_MORNING:
+			update.ClearNextStation().SetNextStation(bus.Edges.MorningFirstStation)
+			break
+		case pb.BusType_BUS_TYPE_EVENING:
+			update.ClearNextStation().SetNextStation(bus.Edges.EveningFirstStation)
+			break
+		}
+	}
+
+	bus, err = update.SetStatus(*status).Save(ctx)
 
 	if err != nil {
 		i.logger.Error("failed to update bus", "error", err)
@@ -264,6 +320,9 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	bus, err = tx.Bus.Query().
 		Where(busRepo.IDEQ(bus.ID)).
 		WithNursery().
+		WithNextStation().
+		WithMorningFirstStation().
+		WithEveningFirstStation().
 		Only(ctx)
 
 	if err != nil {
@@ -302,19 +361,20 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 			update.SetName(req.Name)
 		case "plate_number":
 			update.SetPlateNumber(req.PlateNumber)
-		case "bus_status":
-			status, err := utils.ConvertPbStatusToEntStatus(req.BusStatus)
-			if err != nil {
-				i.logger.Error("failed to convert status", "error", err)
-				return nil, err
-			}
-			update.SetStatus(*status)
 		case "latitude":
 			update.SetLatitude(req.Latitude)
 		case "longitude":
 			update.SetLongitude(req.Longitude)
 		case "enable_face_recognition":
 			update.SetEnableFaceRecognition(req.EnableFaceRecognition)
+		case "next_station":
+			nextStationID, err := uuid.Parse(req.NextStationId)
+			if err != nil {
+				i.logger.Error("failed to parse next station ID", "error", err)
+				return nil, err
+			}
+			update.ClearNextStation()
+			update.SetNextStationID(nextStationID)
 		}
 	}
 
@@ -328,6 +388,9 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 
 	updatedBus, err := tx.Bus.Query().Where(busRepo.IDEQ(busID)).
 		WithNursery().
+		WithNextStation().
+		WithMorningFirstStation().
+		WithEveningFirstStation().
 		Only(ctx)
 
 	if err != nil {
@@ -345,7 +408,11 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 	// 更新されたバスを取得
 	updatedBus, err = tx.Bus.Query().Where(busRepo.ID(busID)).
 		WithNursery().
+		WithNextStation().
+		WithMorningFirstStation().
+		WithEveningFirstStation().
 		Only(ctx)
+
 	if err != nil {
 		i.logger.Error("failed to retrieve updated bus", "error", err)
 	}
@@ -406,6 +473,9 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 		bus, err := i.entClient.Bus.Query().
 			Where(busRepo.IDEQ(busID)).
 			WithNursery().
+			WithNextStation().
+			WithMorningFirstStation().
+			WithEveningFirstStation().
 			Only(context.Background())
 
 		if err != nil {
@@ -413,9 +483,10 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 		}
 
 		if err := stream.Send(&pb.TrackBusContinuousResponse{
-			BusId:     req.BusId,
-			Latitude:  bus.Latitude,
-			Longitude: bus.Longitude,
+			BusId:         req.BusId,
+			Latitude:      bus.Latitude,
+			Longitude:     bus.Longitude,
+			NextStationId: bus.Edges.NextStation.ID.String(),
 		}); err != nil {
 			return fmt.Errorf("failed to send bus: %w", err)
 		}
