@@ -291,7 +291,10 @@ func (i *Interactor) UpdateGuardian(ctx context.Context, req *pb.UpdateGuardianR
 	}
 
 	// 更新されたエンティティの取得
-	guardian, err := tx.Guardian.Query().Where(guardian.IDEQ(guardianID)).WithNursery().Only(ctx)
+	guardian, err := tx.Guardian.Query().
+		Where(guardian.IDEQ(guardianID)).
+		WithNursery().
+		Only(ctx)
 	if err != nil {
 		i.logger.Error("failed to get guardian", "error", err)
 		return nil, err
