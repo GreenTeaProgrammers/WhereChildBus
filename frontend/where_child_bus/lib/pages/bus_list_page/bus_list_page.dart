@@ -169,8 +169,10 @@ class _BusListPageState extends State<BusListPage> {
     late String imagePath;
     if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       imagePath = "assets/images/bus_operating.png";
-    } else {
+    } else if (busStatus == BusStatus.BUS_STATUS_STOPPED) {
       imagePath = "assets/images/bus_not_operating.png";
+    } else {
+      imagePath = "assets/images/bus_maintenance.png";
     }
 
     return SizedBox(
@@ -201,7 +203,7 @@ class _BusListPageState extends State<BusListPage> {
     if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       description = "運行中";
     } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
-      description = "未設定";
+      description = "経路未設定";
     } else {
       description = "停止中";
     }
