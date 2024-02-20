@@ -15,7 +15,12 @@ from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
     load_cascade,
 )
 
-from face_detect_model.gcp_util import get_bucket, get_blobs, init_client
+from face_detect_model.gcp_util import (
+    get_bucket,
+    get_blobs,
+    init_client,
+    save_face_image_to_remote,
+)
 
 load_dotenv("secrets/.env")
 
