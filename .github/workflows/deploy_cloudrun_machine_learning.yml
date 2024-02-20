@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/machine-learning/cicd
     paths:
       - "machine_learning/**"
 
@@ -52,7 +53,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ secrets.GCP_IMAGE_NAME_FOR_ML }} \
+          gcloud run deploy ${{ secrets.GCP_SERVICE_NAME_FOR_ML }} \
             --image gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
             --region ${{ secrets.REGION }} \
             --platform managed
