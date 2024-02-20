@@ -721,6 +721,8 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     $8.BusType? busType,
     $8.VehicleEvent? vehicleEvent,
     $core.Iterable<$core.List<$core.int>>? videoChunk,
+    $core.int? photoHeight,
+    $core.int? photoWidth,
   }) {
     final $result = create();
     if (busId != null) {
@@ -738,6 +740,12 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     if (videoChunk != null) {
       $result.videoChunk.addAll(videoChunk);
     }
+    if (photoHeight != null) {
+      $result.photoHeight = photoHeight;
+    }
+    if (photoWidth != null) {
+      $result.photoWidth = photoWidth;
+    }
     return $result;
   }
   StreamBusVideoRequest._() : super();
@@ -750,6 +758,8 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     ..e<$8.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
     ..e<$8.VehicleEvent>(4, _omitFieldNames ? '' : 'vehicleEvent', $pb.PbFieldType.OE, defaultOrMaker: $8.VehicleEvent.VEHICLE_EVENT_UNSPECIFIED, valueOf: $8.VehicleEvent.valueOf, enumValues: $8.VehicleEvent.values)
     ..p<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.PY)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'photoHeight', $pb.PbFieldType.O3)
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'photoWidth', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
@@ -812,6 +822,24 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.List<$core.List<$core.int>> get videoChunk => $_getList(4);
+
+  @$pb.TagNumber(6)
+  $core.int get photoHeight => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set photoHeight($core.int v) { $_setSignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasPhotoHeight() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearPhotoHeight() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get photoWidth => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set photoWidth($core.int v) { $_setSignedInt32(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasPhotoWidth() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearPhotoWidth() => clearField(7);
 }
 
 class StreamBusVideoResponse extends $pb.GeneratedMessage {

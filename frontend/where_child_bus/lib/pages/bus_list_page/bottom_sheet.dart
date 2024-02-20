@@ -132,7 +132,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          busThumbnail(widget.bus.status),
+          busThumbnail(widget.bus.busStatus),
           courseAndOperator(busCourseName, busOperatorName),
         ],
       ),
@@ -185,9 +185,9 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
         ));
   }
 
-  Widget busThumbnail(Status busStatus) {
+  Widget busThumbnail(BusStatus busStatus) {
     late String imagePath;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       imagePath = "assets/images/bus_operating.png";
     } else {
       imagePath = "assets/images/bus_not_operating.png";

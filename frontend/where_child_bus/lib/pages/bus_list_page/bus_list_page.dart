@@ -2,10 +2,12 @@ import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
+import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
-import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusListPage extends StatefulWidget {
@@ -30,19 +32,31 @@ class _BusListPageState extends State<BusListPage> {
 
   Future<void> _loadBusList() async {
     String nurseryId = NurseryData().getNursery().id;
-    List<Bus> busList = await getBusList(nurseryId);
-    try {
+
+    if (NurseryBusData().getBusList().isNotEmpty) {
       if (mounted) {
         setState(() {
-          buses = busList;
+          buses = NurseryBusData().getBusList();
           _isLoading = false;
         });
       }
-    } catch (e) {
-      if (kDebugMode) {
-        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      return;
+    } else {
+      GetBusListByNurseryIdResponse busList = await getBusList(nurseryId);
+      NurseryBusData().setBusListResponse(busList);
+      try {
+        if (mounted) {
+          setState(() {
+            buses = NurseryBusData().getBusList();
+            _isLoading = false;
+          });
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          developer.log("バスリストのロード中にエラーが発生しました: $e");
+        }
+        setState(() => {_isLoading = false, _isFailLoading = true});
       }
-      setState(() => {_isLoading = false, _isFailLoading = true});
     }
   }
 
@@ -129,8 +143,8 @@ class _BusListPageState extends State<BusListPage> {
             },
             child: Row(
               children: [
-                busPhoto(bus.status),
-                busNameAndDescription(bus.name, bus.status),
+                busPhoto(bus.busStatus),
+                busNameAndDescription(bus.name, bus.busStatus),
               ],
             ),
           ),
@@ -139,9 +153,9 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busPhoto(Status busStatus) {
+  Widget busPhoto(BusStatus busStatus) {
     late String imagePath;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       imagePath = "assets/images/bus_operating.png";
     } else {
       imagePath = "assets/images/bus_not_operating.png";
@@ -170,11 +184,11 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busDescription(Status busStatus) {
+  Widget busDescription(BusStatus busStatus) {
     late String description;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       description = "運行中";
-    } else if (busStatus == Status.STATUS_MAINTEINANCE) {
+    } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
       description = "メンテナンス中";
     } else {
       description = "停止中";
@@ -190,7 +204,7 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busNameAndDescription(String name, Status busStatus) {
+  Widget busNameAndDescription(String name, BusStatus busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

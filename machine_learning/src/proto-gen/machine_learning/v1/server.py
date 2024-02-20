@@ -58,6 +58,8 @@ class MachineLearningServiceServicer(
                 bus_id=request.bus_id,
                 bus_type=request.bus_type,
                 video_chunk=request.video_chunk,
+                photo_height=request.photo_height,
+                photo_width=request.photo_width,
                 vehicle_event=request.vehicle_event,
             )
             try:
