@@ -1,3 +1,4 @@
+import 'package:protobuf/protobuf.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -15,8 +16,16 @@ class NurseryGuardianData {
     _guardianList = res;
   }
 
+  // List<GuardianResponse> getGuardianList() {
+  //   return _guardianList?.guardians ?? [];
+  // }
+
   List<GuardianResponse> getGuardianList() {
-    return _guardianList?.guardians ?? [];
+    // _guardianListのguardiansリストの各要素をクローンして新しいリストを作成
+    return _guardianList?.guardians
+            .map((guardian) => guardian.deepCopy())
+            .toList() ??
+        [];
   }
 
   void clearGuardianList() {

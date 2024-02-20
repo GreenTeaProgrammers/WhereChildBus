@@ -143,6 +143,11 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
         var res = await getGuardianListByNurseryIdService(
             NurseryData().getNursery().id);
         NurseryGuardianData().setGuardianListResponse(res);
+        setState(() {
+          morningGuardians = NurseryGuardianData().getGuardianList();
+          eveningGuardians = NurseryGuardianData().getGuardianList();
+          _isLoading = false;
+        });
       } catch (e) {
         if (kDebugMode) {
           developer.log("保護者リストのロード中にエラーが発生しました: $e");
