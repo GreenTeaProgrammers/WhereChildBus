@@ -20,7 +20,9 @@ class _AppState extends State<App> {
       appBar: AppBar(
         title: Text(['日々の記録', '地図', '乗車確認'][_selectedIndex]),
       ),
-      body: [const DailyPage(), const MapPage(), CheckPage()][_selectedIndex],
+      body: IndexedStack(
+          index: _selectedIndex,
+          children: [const DailyPage(), const MapPage(), CheckPage()]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (int index) => setState(() => _selectedIndex = index),
