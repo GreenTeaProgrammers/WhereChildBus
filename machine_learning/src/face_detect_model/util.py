@@ -8,6 +8,10 @@ from torchvision import transforms
 import os
 import numpy as np
 
+from generated.machine_learning.v1.func_args import (
+    FaceDetectAndClip_Args,
+)
+
 import cv2
 
 logging.basicConfig(
@@ -73,10 +77,13 @@ def load_image_from_remote(blobs: list):
     return images
 
 
-def load_image_from_binary(binary: bytes):
+def load_image_from_binary(args: FaceDetectAndClip_Args, binary: bytes):
     image_array = np.frombuffer(binary, dtype=np.uint8)
-    # TODO: 画像サイズをgRPCのリクエストから受け取る
-    image = image_array.reshape((240, 320))
+    image = image_array.reshape((args.photo_height, args.photo_width))
+    # 画像を回転
+    image = np.rot90(image, k=3)
+
+    # TODO: GSCへの画像保存
     if image is None:
         raise ValueError("Can not load image from binary.")
     return image
@@ -87,6 +94,15 @@ def get_default_transforms():
         [
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
+
+def get_default_transforms_for_gray():
+    return transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5]),
         ]
     )
 
