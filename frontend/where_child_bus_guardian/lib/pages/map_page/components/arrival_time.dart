@@ -71,8 +71,8 @@ class _ArrivalTime extends State<ArrivalTime> {
           '?destination=$endLat,$endLng&origin=$startLat,$startLng&key=$apiKey';
     } else {
       int guardianIndex = waypoints.indexWhere((point) =>
-          point.latitude == guardianLatitude &&
-          point.longitude == guardianLongitude);
+          point.latitude == widget.guardianLatitude &&
+          point.longitude == widget.guardianLongitude);
       if (guardianIndex != -1) {
         waypoints = waypoints.sublist(0, guardianIndex + 1);
       }
