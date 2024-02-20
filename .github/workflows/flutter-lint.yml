@@ -1,0 +1,31 @@
+name: Flutter Lint
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.9"
+
+      - name: Install dependencies
+        run: |
+          cd frontend/where_child_bus && flutter pub get
+          cd ../where_child_bus_api && flutter pub get
+          cd ../where_child_bus_guardian && flutter pub get
+
+      - name: Run Flutter Lint
+        run: |
+          cd frontend/where_child_bus && flutter analyze
+          cd ../where_child_bus_api && flutter analyze
+          cd ../where_child_bus_guardian && flutter analyze
