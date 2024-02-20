@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/machine_learning/cicd
     paths:
       - "machine_learning/**"
 
