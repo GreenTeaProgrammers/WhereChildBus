@@ -150,16 +150,16 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		}
 	}
 
-	// トランザクションのコミット
-	if err := tx.Commit(); err != nil {
-		i.logger.Error("failed to commit transaction", "error", err)
-		return nil, err
-	}
-
 	// 次のバス停を取得
 	morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, updateStation)
 	if err != nil {
 		i.logger.Error("failed to get next station IDs", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
 
