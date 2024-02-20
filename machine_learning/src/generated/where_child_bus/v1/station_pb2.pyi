@@ -55,6 +55,20 @@ class GetUnregisteredStationListResponse(_message.Message):
     guardians: _containers.RepeatedCompositeFieldContainer[_resources_pb2.GuardianResponse]
     def __init__(self, stations: _Optional[_Iterable[_Union[_resources_pb2.Station, _Mapping]]] = ..., guardians: _Optional[_Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]] = ...) -> None: ...
 
+class GetUnregisteredStationListRequest(_message.Message):
+    __slots__ = ("bus_id",)
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    bus_id: str
+    def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
+
+class GetUnregisteredStationListResponse(_message.Message):
+    __slots__ = ("stations", "guardians")
+    STATIONS_FIELD_NUMBER: _ClassVar[int]
+    GUARDIANS_FIELD_NUMBER: _ClassVar[int]
+    stations: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Station]
+    guardians: _containers.RepeatedCompositeFieldContainer[_resources_pb2.GuardianResponse]
+    def __init__(self, stations: _Optional[_Iterable[_Union[_resources_pb2.Station, _Mapping]]] = ..., guardians: _Optional[_Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]] = ...) -> None: ...
+
 class UpdateStationRequest(_message.Message):
     __slots__ = ("id", "bus_id", "latitude", "longitude", "update_mask")
     ID_FIELD_NUMBER: _ClassVar[int]
