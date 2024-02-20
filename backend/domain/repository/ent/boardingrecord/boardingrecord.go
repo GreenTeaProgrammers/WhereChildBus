@@ -73,6 +73,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultTimestamp holds the default value on creation for the "timestamp" field.
 	DefaultTimestamp func() time.Time
+	// DefaultIsBoarding holds the default value on creation for the "is_boarding" field.
+	DefaultIsBoarding bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

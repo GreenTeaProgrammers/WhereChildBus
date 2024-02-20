@@ -18,8 +18,8 @@ type Station struct {
 func (Station) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
-		field.Float("latitude").Optional(),
-		field.Float("longitude").Optional(),
+		field.Float("latitude").Optional().Default(0),
+		field.Float("longitude").Optional().Default(0),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}
