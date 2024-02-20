@@ -24,8 +24,6 @@ jobs:
         run: |
           echo "Secrets are decrypted and ready to use"
 
-      - uses: actions/checkout@v4
-
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
