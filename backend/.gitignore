@@ -30,4 +30,4 @@ go.work
 .env
 
 # secrets
-secrets/*
+secrets-raw/*
