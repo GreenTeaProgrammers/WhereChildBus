@@ -79,12 +79,12 @@ class _BusListPageState extends State<BusListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pageBody(),
-      floatingActionButton: addBusButton(),
+      body: _createPageBody(),
+      floatingActionButton: _createAddBusButton(),
     );
   }
 
-  Widget pageBody() {
+  Widget _createPageBody() {
     return _isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -97,14 +97,14 @@ class _BusListPageState extends State<BusListPage> {
                 if (buses.isEmpty) const NoBusRegisteredText(),
                 Expanded(
                   child: RefreshIndicator(
-                      onRefresh: _fetchBusList, child: listViewBuilder()),
+                      onRefresh: _fetchBusList, child: _listViewBuilder()),
                 )
               ],
             ),
           );
   }
 
-  Widget addBusButton() {
+  Widget _createAddBusButton() {
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(
@@ -118,16 +118,16 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget listViewBuilder() {
+  Widget _listViewBuilder() {
     return ListView.builder(
       itemCount: buses.length,
       itemBuilder: (BuildContext context, int index) {
-        return busListCard(buses[index]);
+        return _createBusListCard(buses[index]);
       },
     );
   }
 
-  Widget busListCard(Bus bus) {
+  Widget _createBusListCard(Bus bus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
