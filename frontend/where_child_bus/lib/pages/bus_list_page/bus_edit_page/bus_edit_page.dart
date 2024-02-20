@@ -1,11 +1,16 @@
 import 'dart:io';
 import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
+import 'package:where_child_bus/models/create_bus_error.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_guardian_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
+import 'package:where_child_bus/util/api/bus.dart';
+import 'package:where_child_bus/util/validation/create_bus_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusEditPage extends StatefulWidget {
@@ -22,11 +27,12 @@ class _BusEditPageState extends State<BusEditPage> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _busNameController = TextEditingController();
   final TextEditingController _busNumberController = TextEditingController();
-  List<GuardianResponse> morningSelectedGuardians = [];
-  List<GuardianResponse> eveningSelectedGuardians = [];
+  List<String> morningSelectedGuardiansId = [];
+  List<String> eveningSelectedGuardiansId = [];
 
   String? _selectedImagePath;
   bool _isPickingImage = false;
+  CreateBusError? _createBusError;
 
   @override
   void initState() {
@@ -47,6 +53,55 @@ class _BusEditPageState extends State<BusEditPage> {
     );
   }
 
+  bool validation() {
+    if (CreateBusValidator.validateFields(
+        _busNameController.text, _busNumberController.text)) {
+      developer.log("バス名とナンバーを入力してください");
+      setState(() {
+        _createBusError = CreateBusError.fieldsNotFilled;
+      });
+      return true;
+    } else if (CreateBusValidator.validateGuardians(
+        morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
+      setState(() {
+        _createBusError = CreateBusError.noGuardiansSelected;
+      });
+      return true;
+    } else if (CreateBusValidator.validateNameLength(_busNameController.text)) {
+      setState(() {
+        _createBusError = CreateBusError.nameTooLong;
+      });
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<void> _updateBus() async {
+    throw UnimplementedError();
+  }
+
+  Future<void> _createBus() async {
+    if (validation()) {
+      return;
+    }
+
+    try {
+      var res = await createBus(
+        NurseryData().getNursery().id,
+        _busNameController.text,
+        _busNumberController.text,
+        morningSelectedGuardiansId,
+        eveningSelectedGuardiansId,
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスの作成中にエラーが発生しました: $e");
+      }
+    }
+  }
+
   Widget pageBody(BuildContext context) {
     return Center(
       child: Column(
@@ -55,10 +110,39 @@ class _BusEditPageState extends State<BusEditPage> {
           // inputFieldsAndThumbnail(context),
           inputFields(),
           manageChildrenButton(),
+          _createErrorMessage(),
           ConfirmButton(
             buttonText: "保存",
+            onTap: widget.busEditPageType == BusEditPageType.update
+                ? _updateBus
+                : _createBus,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _createErrorMessage() {
+    String errorMessage;
+    if (_createBusError == CreateBusError.fieldsNotFilled) {
+      errorMessage = "バス名とナンバーを入力してください";
+    } else if (_createBusError == CreateBusError.noGuardiansSelected) {
+      errorMessage = "保護者を選択してください";
+    } else if (_createBusError == CreateBusError.nameTooLong) {
+      errorMessage = "バス名は20文字以内で入力してください";
+    } else {
+      errorMessage = "";
+    }
+
+    if (_createBusError == null) {
+      return const SizedBox();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Text(
+        errorMessage,
+        style: const TextStyle(color: Colors.red),
       ),
     );
   }
@@ -138,10 +222,12 @@ class _BusEditPageState extends State<BusEditPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => BusGuardianManagePage()));
-            if (res != null && res is Map<String, dynamic>) {
+            if (res != null && res is Map<String, List<GuardianResponse>>) {
               developer.log("${res["morning"]}");
-              morningSelectedGuardians = res["morning"];
-              eveningSelectedGuardians = res["evening"];
+              morningSelectedGuardiansId =
+                  res["morning"]?.map((e) => e.id).toList() ?? [];
+              eveningSelectedGuardiansId =
+                  res["evening"]?.map((e) => e.id).toList() ?? [];
             }
           },
           child: const Text("バスを利用する保護者を変更"),
