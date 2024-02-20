@@ -22,7 +22,7 @@ class _AppState extends State<App> {
       ),
       body: IndexedStack(
           index: _selectedIndex,
-          children: [const DailyPage(), const MapPage(), CheckPage()]),
+          children: [DailyPage(), const MapPage(), CheckPage()]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (int index) => setState(() => _selectedIndex = index),

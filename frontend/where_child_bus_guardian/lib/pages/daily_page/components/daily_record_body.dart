@@ -1,22 +1,55 @@
+import "dart:developer" as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pb.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
+import 'package:where_child_bus_guardian/service/check_is_child_in_bus.dart';
+import 'package:where_child_bus_guardian/components/utils/image_from_byte.dart';
+import 'package:where_child_bus_guardian/pages/daily_page/components/has_item_state.dart';
 import '../../styles/styles.dart';
 
 class DailyRecordBody extends StatefulWidget {
-  final String childName;
+  final Child child;
+  final ChildPhoto image;
 
-  const DailyRecordBody({super.key, required this.childName});
+  const DailyRecordBody({
+    Key? key,
+    required this.child,
+    required this.image,
+  }) : super(key: key);
 
   @override
   State<DailyRecordBody> createState() => _DailyRecordBody();
 }
 
 class _DailyRecordBody extends State<DailyRecordBody> {
-  //TODO: 将来的にChild型を受け取る
-  var isBoarding = true;
-  var hasBag = false;
-  var hasLunchBox = true;
-  var hasWaterBottle = true;
-  var hasUmbrella = true;
+  bool isBoarding = false;
+  bool hasBagState = false;
+  bool hasLunchBoxState = false;
+  bool hasWaterBottleState = false;
+  bool hasUmbrellaState = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBoardingStatus();
+  }
+
+  Future<void> _loadBoardingStatus() async {
+    try {
+      CheckIsChildInBusResponse res =
+          await checkIsChildInBusService(widget.child.id);
+      if (mounted) {
+        setState(() {
+          isBoarding = res.isInBus;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("乗降状態のロード中にエラーが発生しました: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +59,14 @@ class _DailyRecordBody extends State<DailyRecordBody> {
         Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 10),
             child: Text(
-              widget.childName,
-              style: TextStyle(fontSize: 24),
+              widget.child.name,
+              style: const TextStyle(fontSize: 24),
               textAlign: TextAlign.center,
             )),
         statusIconAndStatusField(
-            Icons.directions_bus, isBoardingStatusField(context)),
-        statusIconAndStatusField(Icons.business_center, childItemList(context)),
+            context, Icons.directions_bus, isBoardingStatusField(context)),
+        statusIconAndStatusField(
+            context, Icons.business_center, childItemList(context)),
       ],
     );
   }
@@ -40,19 +74,14 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget childFaceAndExpression() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[childFaceImage(), childExpressionIcon()],
-    );
-  }
-
-  //TODO: 将来的に画像を受け取る
-  Widget childFaceImage() {
-    return const SizedBox(
-      width: 150,
-      height: 150,
-      child: Card(
-        color: Colors.grey,
-        child: Text("ここに子供の写真が入る"),
-      ),
+      children: <Widget>[
+        ImageFromBytes(
+          imageData: widget.image.photoData,
+          height: 150,
+          width: 150,
+        ),
+        childExpressionIcon()
+      ],
     );
   }
 
@@ -68,7 +97,8 @@ class _DailyRecordBody extends State<DailyRecordBody> {
     );
   }
 
-  Widget statusIconAndStatusField(IconData icon, Widget statusField) {
+  Widget statusIconAndStatusField(
+      BuildContext context, IconData icon, Widget statusField) {
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Row(
@@ -100,41 +130,31 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget childItemList(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.height * 0.14,
       child: Wrap(
         direction: Axis.horizontal,
         alignment: WrapAlignment.spaceBetween,
         runAlignment: WrapAlignment.spaceBetween,
         runSpacing: 4.0,
         children: [
-          itemText("かばん", hasBag),
-          itemText("お弁当", hasLunchBox),
-          itemText("水筒", hasWaterBottle),
-          itemText("傘", hasUmbrella),
+          HasItemState(
+              child: widget.child,
+              itemName: "かばん",
+              hasItem: widget.child.hasBag),
+          HasItemState(
+              child: widget.child,
+              itemName: "お弁当",
+              hasItem: widget.child.hasLunchBox),
+          HasItemState(
+              child: widget.child,
+              itemName: "水筒",
+              hasItem: widget.child.hasWaterBottle),
+          HasItemState(
+              child: widget.child,
+              itemName: "傘",
+              hasItem: widget.child.hasUmbrella),
         ],
       ),
     );
-  }
-
-  Widget itemText(String itemName, bool hasItem) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.24,
-        child: Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                  child: hasItem
-                      ? const Icon(Icons.check, color: Colors.green)
-                      : const Icon(Icons.error_outline, color: Colors.red),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  itemName,
-                  style: statusFieldTextStyle(hasItem),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            )));
   }
 }
