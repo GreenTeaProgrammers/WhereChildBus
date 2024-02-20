@@ -7,7 +7,8 @@ on:
   push:
     branches:
       - develop
-      - ci/backend
+    paths:
+      - "backend/**"
 
 jobs:
   setup-build-deploy:
@@ -15,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Decrypt secrets
         run: openssl aes-256-cbc -d -in backend/secrets/gcp-credentials.json.enc -out backend/secrets/gcp-credentials.json -k ${{ secrets.DECRYPTION_KEY }}
