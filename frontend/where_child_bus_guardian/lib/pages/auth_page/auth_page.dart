@@ -1,8 +1,11 @@
 import 'dart:developer' as developer;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus_guardian/app.dart';
 import 'package:where_child_bus_guardian/models/guardian_login_error.dart';
 import 'package:where_child_bus_guardian/util/api/guardian.dart';
+import 'package:where_child_bus_guardian/util/guardian_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pb.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -27,22 +30,31 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  void login(String email, String password) async {
-    if (email.isEmpty || password.isEmpty) {
-      setState(() => _loginError = GuardianLoginError.fieldsDoNotFilled);
-      return;
-    }
+  login() async {
+    BuildContext currentContext = context;
+    GuardianLoginResponse res;
 
     try {
-      final res = await guardianLogin(email, password);
+      if (kDebugMode) {
+        res = await guardianLogin("guardian1@example.com", "password");
+      } else {
+        res = await guardianLogin(
+            _emailController.text, _passwordController.text);
+        if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+          setState(() => _loginError = GuardianLoginError.fieldsDoNotFilled);
+          return;
+        }
+      }
+
       if (res.success) {
-        developer.log("$res");
+        print(res.success);
+        print(res.guardian.name);
+        GuardianData().setGuardian(res.guardian);
         Navigator.pushReplacement(
-            context,
+            currentContext,
             MaterialPageRoute(
-                builder: (context) => App(
-                      guardian: res.guardian,
-                    )));
+              builder: (BuildContext context) => App(),
+            ));
       } else {
         setState(() => _loginError = GuardianLoginError.invalidCredentials);
       }
@@ -124,9 +136,7 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget loginButton() => SizedBox(
         width: MediaQuery.of(context).size.width * 0.6,
-        child: ElevatedButton(
-            onPressed: () =>
-                login(_emailController.text, _passwordController.text),
-            child: const Text('ログイン')),
+        child:
+            ElevatedButton(onPressed: () => login(), child: const Text('ログイン')),
       );
 }

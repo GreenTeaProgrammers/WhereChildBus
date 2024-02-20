@@ -1,0 +1,58 @@
+name: Deployment of machine learning system to CloudRun
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - "machine_learning/**"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          skip_install: false
+          version: latest
+
+      # gcloud CLIを認証するステップを追加
+      - name: Auth
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          access_token_lifetime: 1200s
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }} \
+            --build-arg BUCKET_NAME_FOR_ML=${{ secrets.BUCKET_NAME_FOR_ML }} \
+            --tag=gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
+            --file=./machine_learning/Dockerfile \
+            --platform linux/amd64 ./machine_learning
+
+      - name: Authenticate Docker to GCP
+        run: gcloud auth configure-docker --quiet
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ secrets.GCP_IMAGE_NAME_FOR_ML }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_NAME_FOR_ML }}/${{ secrets.GCP_IMAGE_NAME_FOR_ML }}:latest \
+            --region ${{ secrets.REGION }} \
+            --platform managed

@@ -8,7 +8,7 @@ class InputValueLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(top: 10, bottom: 4),
         child: Text(
           label,
           style: const TextStyle(color: Colors.black, fontSize: 16),

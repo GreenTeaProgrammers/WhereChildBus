@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../styles/styles.dart';
+import '../../styles/styles.dart';
 
 class DailyRecordBody extends StatefulWidget {
   final String childName;

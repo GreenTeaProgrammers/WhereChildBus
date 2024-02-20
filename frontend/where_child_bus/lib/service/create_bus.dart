@@ -1,5 +1,4 @@
 import 'package:where_child_bus/util/api/bus.dart';
-import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 
 Future<void> createBusService(
     String nurseryId,
