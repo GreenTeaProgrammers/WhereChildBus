@@ -1,5 +1,6 @@
 import "dart:developer" as developer;
 import "package:flutter/foundation.dart";
+import 'package:collection/collection.dart';
 import "package:flutter/material.dart";
 import "package:where_child_bus/components/guardian_list/guardian_list.dart";
 import "package:where_child_bus/models/nursery_data.dart";
@@ -40,25 +41,25 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
 
   void _setSelectedGuardians() {
     if (widget.morningSelectedGuardiansId != null) {
-      developer.log(
-          "morningSelectedGuardiansId: ${widget.morningSelectedGuardiansId}");
-      //mornignGuardiansの中からmorningSelectedGuardiansIdに一致するguardianをmorningSelectedGuardiansに追加
-      morningSelectedGuardians = morningGuardians
-          .where((guardian) =>
-              widget.morningSelectedGuardiansId!.contains(guardian.id))
+      morningSelectedGuardians = widget.morningSelectedGuardiansId!
+          .map((id) => morningGuardians
+              .firstWhereOrNull((guardian) => guardian.id == id))
+          .where((element) => element != null)
+          .cast<GuardianResponse>()
           .toList();
-      //morningGuardiansからmorningSelectedGuardiansに追加したguardianを削除
+
       morningGuardians.removeWhere((guardian) =>
           widget.morningSelectedGuardiansId!.contains(guardian.id));
     }
 
     if (widget.eveningSelectedGuardiansId != null) {
-      //eveningGuardiansの中からeveningSelectedGuardiansIdに一致するguardianをeveningSelectedGuardiansに追加
-      eveningSelectedGuardians = eveningGuardians
-          .where((guardian) =>
-              widget.eveningSelectedGuardiansId!.contains(guardian.id))
+      eveningSelectedGuardians = widget.eveningSelectedGuardiansId!
+          .map((id) => eveningGuardians
+              .firstWhereOrNull((guardian) => guardian.id == id))
+          .where((element) => element != null)
+          .cast<GuardianResponse>()
           .toList();
-      //eveningGuardiansからeveningSelectedGuardiansに追加したguardianを削除
+
       eveningGuardians.removeWhere((guardian) =>
           widget.eveningSelectedGuardiansId!.contains(guardian.id));
     }
