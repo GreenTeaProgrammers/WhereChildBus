@@ -133,6 +133,23 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		return nil, err
 	}
 
+	if req.BusId != "" {
+		bus, err := tx.Bus.Query().
+			Where(busRepo.IDEQ(uuid.MustParse(req.BusId))).
+			Only(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get bus", "error", err)
+			return nil, err
+		}
+
+		_, err = utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, bus)
+		if err != nil {
+			i.logger.Error("failed to check and fix bus station coordinates", "error", err)
+			return nil, err
+		}
+	}
+
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)

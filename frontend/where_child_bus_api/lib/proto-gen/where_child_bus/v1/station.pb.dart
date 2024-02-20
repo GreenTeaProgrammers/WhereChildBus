@@ -369,6 +369,7 @@ class GetUnregisteredStationListResponse extends $pb.GeneratedMessage {
 class UpdateStationRequest extends $pb.GeneratedMessage {
   factory UpdateStationRequest({
     $core.String? id,
+    $core.String? busId,
     $core.double? latitude,
     $core.double? longitude,
     $9.FieldMask? updateMask,
@@ -376,6 +377,9 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
     final $result = create();
     if (id != null) {
       $result.id = id;
+    }
+    if (busId != null) {
+      $result.busId = busId;
     }
     if (latitude != null) {
       $result.latitude = latitude;
@@ -394,9 +398,10 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOM<$9.FieldMask>(4, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..aOS(2, _omitFieldNames ? '' : 'busId')
+    ..a<$core.double>(3, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(4, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOM<$9.FieldMask>(5, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -431,33 +436,42 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.double get latitude => $_getN(1);
+  $core.String get busId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set latitude($core.double v) { $_setDouble(1, v); }
+  set busId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasLatitude() => $_has(1);
+  $core.bool hasBusId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearLatitude() => clearField(2);
+  void clearBusId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.double get longitude => $_getN(2);
+  $core.double get latitude => $_getN(2);
   @$pb.TagNumber(3)
-  set longitude($core.double v) { $_setDouble(2, v); }
+  set latitude($core.double v) { $_setDouble(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasLongitude() => $_has(2);
+  $core.bool hasLatitude() => $_has(2);
   @$pb.TagNumber(3)
-  void clearLongitude() => clearField(3);
+  void clearLatitude() => clearField(3);
 
   @$pb.TagNumber(4)
-  $9.FieldMask get updateMask => $_getN(3);
+  $core.double get longitude => $_getN(3);
   @$pb.TagNumber(4)
-  set updateMask($9.FieldMask v) { setField(4, v); }
+  set longitude($core.double v) { $_setDouble(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasUpdateMask() => $_has(3);
+  $core.bool hasLongitude() => $_has(3);
   @$pb.TagNumber(4)
-  void clearUpdateMask() => clearField(4);
-  @$pb.TagNumber(4)
-  $9.FieldMask ensureUpdateMask() => $_ensure(3);
+  void clearLongitude() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $9.FieldMask get updateMask => $_getN(4);
+  @$pb.TagNumber(5)
+  set updateMask($9.FieldMask v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUpdateMask() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUpdateMask() => clearField(5);
+  @$pb.TagNumber(5)
+  $9.FieldMask ensureUpdateMask() => $_ensure(4);
 }
 
 class UpdateStationResponse extends $pb.GeneratedMessage {
