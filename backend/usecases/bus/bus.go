@@ -62,7 +62,7 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	}
 
 	// TODO: もう少し簡潔に
-	_, err = checkAndFixBusStationCoordinates(*i.logger, ctx, bus)
+	_, err = utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, bus)
 	if err != nil {
 		i.logger.Error("failed to check and fix bus station coordinates", "error", err)
 		return nil, err
@@ -250,7 +250,7 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	}
 
 	// TODO: もう少し簡潔に
-	is_ready, err := checkAndFixBusStationCoordinates(*i.logger, ctx, bus)
+	is_ready, err := utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, bus)
 	if err != nil {
 		i.logger.Error("failed to check and fix bus station coordinates", "error", err)
 		return nil, err
@@ -337,7 +337,7 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 	}
 
 	// TODO: もう少し簡潔に
-	_, err = checkAndFixBusStationCoordinates(*i.logger, ctx, updatedBus)
+	_, err = utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, updatedBus)
 	if err != nil {
 		i.logger.Error("failed to check and fix bus station coordinates", "error", err)
 		return nil, err
@@ -601,7 +601,7 @@ func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*e
 
 	// TODO: もう少し簡潔に書ける
 	for _, bus := range entBuses {
-		_, err = checkAndFixBusStationCoordinates(*i.logger, ctx, bus)
+		_, err = utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, bus)
 		if err != nil {
 			i.logger.Error("failed to check and fix bus station coordinates", "error", err)
 			return nil, err
@@ -699,36 +699,3 @@ func setNextStation(logger slog.Logger, ctx context.Context, tx *ent.Tx, guardia
 	return nil
 }
 
-func checkAndFixBusStationCoordinates(logger slog.Logger, ctx context.Context, bus *ent.Bus) (is_ready bool, err error) {
-	// バスのステーションを取得
-	stations, err := bus.QueryStations().All(ctx)
-	if err != nil {
-		logger.Error("failed to get stations", "error", err)
-		return false, err
-	}
-
-	// ステーションの座標を修正
-	for _, station := range stations {
-		// ステーションの座標が登録されていない場合は、バスのステータスをメンテナンスに設定
-		if station.Latitude == 0 || station.Longitude == 0 {
-			_, err := bus.Update().
-				SetStatus(busRepo.StatusMaintenance).
-				Save(ctx)
-			if err != nil {
-				logger.Error("failed to update bus status to maintenance due to missing station coordinates", "error", err)
-				return false, err
-			}
-			return false, nil
-		}
-
-	}
-	// Stationは正しく設定されているので、バスのステータスを訂正
-	if bus.Status == busRepo.StatusMaintenance {
-		_, err := bus.Update().SetStatus(busRepo.StatusStopped).Save(ctx)
-		if err != nil {
-			logger.Error("failed to update bus", "error", err)
-			return false, err
-		}
-	}
-	return true, nil
-}
