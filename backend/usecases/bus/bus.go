@@ -261,7 +261,6 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 }
 
 func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
-	// TODO: 実装
 	// bus_idのパース
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
@@ -272,7 +271,7 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 	// トランザクションの開始
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		i.logger.Error("failed to start transction", "error", "err")
+		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
 	defer utils.RollbackTx(tx, i.logger)
@@ -286,8 +285,12 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 		case "plate_number":
 			update.SetPlateNumber(req.PlateNumber)
 		case "bus_status":
-			status := bus.Status(req.BusStatus)
-			update.SetStatus(status)
+			status, err := utils.ConvertPbStatusToEntStatus(req.BusStatus)
+			if err != nil {
+				i.logger.Error("failed to convert status", "error", err)
+				return nil, err
+			}
+			update.SetStatus(*status)
 		case "latitude":
 			update.SetLatitude(req.Latitude)
 		case "longitude":
@@ -305,14 +308,16 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 	}
 
 	// 更新されたバスを取得
-	updatedBus, err := tx.Bus.Query().Where(bus.IDEQ(busID)).Only(ctx)
+	updatedBus, err := tx.Bus.Query().Where(bus.IDEQ(busID)).
+		WithNursery().
+		Only(ctx)
 	if err != nil {
 		i.logger.Error("failed to retrieve updated bus", "error", err)
 	}
 
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
-		i.logger.Error("failed to commit transction", "error", err)
+		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
 
