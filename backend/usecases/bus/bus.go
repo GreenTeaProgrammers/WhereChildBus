@@ -209,6 +209,7 @@ func (i *Interactor) GetRunningBusByGuardianID(ctx context.Context, req *pb.GetR
 	bus, err := i.entClient.Bus.Query().
 		Where(busRepo.HasNurseryWith(nurseryRepo.HasGuardiansWith(guardianRepo.ID(guardianID)))).
 		Where(busRepo.StatusEQ(busRepo.StatusRunning)).
+		WithNursery().
 		Only(ctx)
 
 	if err != nil {
