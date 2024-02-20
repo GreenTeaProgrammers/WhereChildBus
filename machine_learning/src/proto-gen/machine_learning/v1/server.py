@@ -5,6 +5,7 @@ import traceback
 
 
 import grpc
+
 from grpc_status import rpc_status
 from grpc_reflection.v1alpha import reflection
 
@@ -26,12 +27,21 @@ from error_util import create_service_error_status
 from face_detect_model.DetectFaceAndClip.detectFaceAndClip import (
     main as detect_face_and_clip_fn,
 )
-from face_detect_model.main import (
-    main as train_fn,
+from face_detect_model.main import main as train_fn
+from face_detect_model.pred import main as pred_fn
+from generated.machine_learning.v1 import (
+    health_check_pb2,
+    health_check_pb2_grpc,
+    machine_learning_pb2,
+    machine_learning_pb2_grpc,
 )
-from face_detect_model.pred import (
-    main as pred_fn,
+from generated.machine_learning.v1.func_args import (
+    FaceDetectAndClip_Args,
+    Pred_Args,
+    Train_Args,
 )
+from generated.where_child_bus.v1 import bus_pb2
+from grpc_reflection.v1alpha import reflection
 
 
 class HealthCheckServiceServer(
