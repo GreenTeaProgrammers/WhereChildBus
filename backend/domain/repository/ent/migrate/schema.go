@@ -12,7 +12,7 @@ var (
 	BoardingRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "timestamp", Type: field.TypeTime},
-		{Name: "is_boarding", Type: field.TypeBool},
+		{Name: "is_boarding", Type: field.TypeBool, Default: false},
 		{Name: "bus_boarding_records", Type: field.TypeUUID, Nullable: true},
 		{Name: "child_boarding_record", Type: field.TypeUUID, Nullable: true},
 	}
@@ -189,8 +189,8 @@ var (
 	// StationsColumns holds the columns for the "stations" table.
 	StationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "latitude", Type: field.TypeFloat64, Nullable: true},
-		{Name: "longitude", Type: field.TypeFloat64, Nullable: true},
+		{Name: "latitude", Type: field.TypeFloat64, Nullable: true, Default: 0},
+		{Name: "longitude", Type: field.TypeFloat64, Nullable: true, Default: 0},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_station", Type: field.TypeUUID, Unique: true, Nullable: true},

@@ -106,6 +106,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultLatitude holds the default value on creation for the "latitude" field.
+	DefaultLatitude float64
+	// DefaultLongitude holds the default value on creation for the "longitude" field.
+	DefaultLongitude float64
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
