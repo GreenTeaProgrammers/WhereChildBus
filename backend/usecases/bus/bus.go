@@ -285,15 +285,12 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	switch req.BusStatus {
 	case pb.BusStatus_BUS_STATUS_RUNNING:
 		update.ClearNextStation()
-		break
 	case pb.BusStatus_BUS_STATUS_STOPPED:
 		switch req.BusType {
 		case pb.BusType_BUS_TYPE_MORNING:
 			update.ClearNextStation().SetNextStation(bus.Edges.MorningFirstStation)
-			break
 		case pb.BusType_BUS_TYPE_EVENING:
 			update.ClearNextStation().SetNextStation(bus.Edges.EveningFirstStation)
-			break
 		}
 	}
 
