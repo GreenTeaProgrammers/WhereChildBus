@@ -19,15 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	NurseryService_CreateNursery_FullMethodName = "/where_child_bus.v1.NurseryService/CreateNursery"
-	NurseryService_NurseryLogin_FullMethodName  = "/where_child_bus.v1.NurseryService/NurseryLogin"
-	NurseryService_UpdateNursery_FullMethodName = "/where_child_bus.v1.NurseryService/UpdateNursery"
+	NurseryService_GetNurseryByGuardianId_FullMethodName = "/where_child_bus.v1.NurseryService/GetNurseryByGuardianId"
+	NurseryService_CreateNursery_FullMethodName          = "/where_child_bus.v1.NurseryService/CreateNursery"
+	NurseryService_NurseryLogin_FullMethodName           = "/where_child_bus.v1.NurseryService/NurseryLogin"
+	NurseryService_UpdateNursery_FullMethodName          = "/where_child_bus.v1.NurseryService/UpdateNursery"
 )
 
 // NurseryServiceClient is the client API for NurseryService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NurseryServiceClient interface {
+	GetNurseryByGuardianId(ctx context.Context, in *GetNurseryByGuardianIdRequest, opts ...grpc.CallOption) (*GetNurseryByGuardianIdResponse, error)
 	CreateNursery(ctx context.Context, in *CreateNurseryRequest, opts ...grpc.CallOption) (*CreateNurseryResponse, error)
 	NurseryLogin(ctx context.Context, in *NurseryLoginRequest, opts ...grpc.CallOption) (*NurseryLoginResponse, error)
 	UpdateNursery(ctx context.Context, in *UpdateNurseryRequest, opts ...grpc.CallOption) (*UpdateNurseryResponse, error)
@@ -39,6 +41,15 @@ type nurseryServiceClient struct {
 
 func NewNurseryServiceClient(cc grpc.ClientConnInterface) NurseryServiceClient {
 	return &nurseryServiceClient{cc}
+}
+
+func (c *nurseryServiceClient) GetNurseryByGuardianId(ctx context.Context, in *GetNurseryByGuardianIdRequest, opts ...grpc.CallOption) (*GetNurseryByGuardianIdResponse, error) {
+	out := new(GetNurseryByGuardianIdResponse)
+	err := c.cc.Invoke(ctx, NurseryService_GetNurseryByGuardianId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *nurseryServiceClient) CreateNursery(ctx context.Context, in *CreateNurseryRequest, opts ...grpc.CallOption) (*CreateNurseryResponse, error) {
@@ -72,6 +83,7 @@ func (c *nurseryServiceClient) UpdateNursery(ctx context.Context, in *UpdateNurs
 // All implementations should embed UnimplementedNurseryServiceServer
 // for forward compatibility
 type NurseryServiceServer interface {
+	GetNurseryByGuardianId(context.Context, *GetNurseryByGuardianIdRequest) (*GetNurseryByGuardianIdResponse, error)
 	CreateNursery(context.Context, *CreateNurseryRequest) (*CreateNurseryResponse, error)
 	NurseryLogin(context.Context, *NurseryLoginRequest) (*NurseryLoginResponse, error)
 	UpdateNursery(context.Context, *UpdateNurseryRequest) (*UpdateNurseryResponse, error)
@@ -81,6 +93,9 @@ type NurseryServiceServer interface {
 type UnimplementedNurseryServiceServer struct {
 }
 
+func (UnimplementedNurseryServiceServer) GetNurseryByGuardianId(context.Context, *GetNurseryByGuardianIdRequest) (*GetNurseryByGuardianIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNurseryByGuardianId not implemented")
+}
 func (UnimplementedNurseryServiceServer) CreateNursery(context.Context, *CreateNurseryRequest) (*CreateNurseryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateNursery not implemented")
 }
@@ -100,6 +115,24 @@ type UnsafeNurseryServiceServer interface {
 
 func RegisterNurseryServiceServer(s grpc.ServiceRegistrar, srv NurseryServiceServer) {
 	s.RegisterService(&NurseryService_ServiceDesc, srv)
+}
+
+func _NurseryService_GetNurseryByGuardianId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNurseryByGuardianIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NurseryServiceServer).GetNurseryByGuardianId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NurseryService_GetNurseryByGuardianId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NurseryServiceServer).GetNurseryByGuardianId(ctx, req.(*GetNurseryByGuardianIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _NurseryService_CreateNursery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -163,6 +196,10 @@ var NurseryService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "where_child_bus.v1.NurseryService",
 	HandlerType: (*NurseryServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetNurseryByGuardianId",
+			Handler:    _NurseryService_GetNurseryByGuardianId_Handler,
+		},
 		{
 			MethodName: "CreateNursery",
 			Handler:    _NurseryService_CreateNursery_Handler,
