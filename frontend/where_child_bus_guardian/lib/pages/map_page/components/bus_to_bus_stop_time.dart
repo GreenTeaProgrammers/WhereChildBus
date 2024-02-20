@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:math' as math;
 import '../map_page.dart';
+import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 
 class BusToBusStopTime extends StatefulWidget {
   final List<Waypoint> waypoints;
@@ -61,6 +62,7 @@ class _BusToBusStopTime extends State<BusToBusStopTime> {
       List<Waypoint> waypoints) async {
     String apiKey = dotenv.get("GOOGLE_MAP_API_KEY");
     String url = '';
+    dynamic response;
 
     int nearestWaypointIndex =
         findNearestWaypointIndex(startLat, startLng, waypoints);
@@ -100,7 +102,9 @@ class _BusToBusStopTime extends State<BusToBusStopTime> {
           '?destination=$endLat,$endLng&origin=$startLat,$startLng&waypoints=$waypointsString&key=$apiKey';
     }
 
-    final response = await http.get(Uri.parse(url));
+    if (GoogleMapApiManager.canSendRequest()) {
+      response = await http.get(Uri.parse(url));
+    }
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

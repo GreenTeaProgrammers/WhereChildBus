@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 import 'dart:convert';
 import '../map_page.dart';
 
@@ -65,6 +67,7 @@ class _ArrivalTime extends State<ArrivalTime> {
       List<Waypoint> waypoints) async {
     String apiKey = dotenv.get("GOOGLE_MAP_API_KEY");
     String url = '';
+    dynamic response;
 
     if (waypoints[0].latitude == endLat && waypoints[0].longitude == endLng) {
       url = 'https://maps.googleapis.com/maps/api/directions/json'
@@ -84,8 +87,9 @@ class _ArrivalTime extends State<ArrivalTime> {
       url = 'https://maps.googleapis.com/maps/api/directions/json'
           '?destination=$endLat,$endLng&origin=$startLat,$startLng&waypoints=$waypointsString&key=$apiKey';
     }
-
-    final response = await http.get(Uri.parse(url));
+    if (GoogleMapApiManager.canSendRequest()) {
+      response = await http.get(Uri.parse(url));
+    }
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

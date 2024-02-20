@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../../pages/map_page/map_page.dart';
+import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 
 class GoogleMapView extends StatefulWidget {
   final List<Waypoint> waypoints;
@@ -93,16 +94,19 @@ class _GoogleMapView extends State<GoogleMapView> {
             location: "${waypoint.latitude},${waypoint.longitude}"))
         .toList();
     try {
-      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey,
-        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-        travelMode: TravelMode.driving,
-        avoidTolls: true,
-        avoidHighways: false,
-        avoidFerries: false,
-        wayPoints: polylineWayPoints,
-      );
+      late PolylineResult result;
+      if (GoogleMapApiManager.canSendRequest()) {
+        result = await polylinePoints.getRouteBetweenCoordinates(
+          googleApiKey,
+          PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+          PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+          travelMode: TravelMode.driving,
+          avoidTolls: true,
+          avoidHighways: false,
+          avoidFerries: false,
+          wayPoints: polylineWayPoints,
+        );
+      }
 
       if (result.points.isNotEmpty) {
         result.points.forEach((PointLatLng point) {

@@ -6,12 +6,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/map_page_bottom.dart';
+import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 import 'package:where_child_bus_guardian/service/get_running_bus_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/service/get_station_list_by_bus_id.dart';
 import 'package:where_child_bus_guardian/service/get_nursery_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/util/guardian_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
+import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 
 class Waypoint {
   final double latitude;
@@ -55,7 +57,12 @@ class _MapPageState extends State<MapPage> {
     _isLoading = true;
     super.initState();
     guardian = GuardianData().getGuardian();
-    _loadData();
+    _loadBusLocation();
+    _loadBusData();
+    _loadStationsData();
+    _loadWaypointData();
+    _loadNurseryData();
+    _getCoordinates();
     _isLoading = false;
   }
 
@@ -68,33 +75,66 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadBusData() async {
     try {
       var busRes = await getRunningBusByGuardianIdService(guardian.id);
+      setState(() {
+        bus = busRes.bus;
+      });
+    } catch (error) {
+      developer.log('バスの読み込みに失敗しました: $error');
+    }
+  }
+
+  Future<void> _loadStationsData() async {
+    try {
       var stationsRes = await getStationListByBusIdService(bus.id);
-      var nurseryRes = await getNurseryByGuardianIdService(guardian.id);
+      setState(() {
+        stations = stationsRes.stations;
+      });
+    } catch (error) {
+      developer.log('停留所リストの読み込みに失敗しました: $error');
+    }
+  }
+
+  Future<void> _loadWaypointData() async {
+    try {
       stations.forEach((station) {
         waypoints.add(Waypoint(
             latitude: station.latitude,
             longitude: station.longitude,
             name: station.id.toString()));
       });
-      final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/geocode/json?address=$nurseryAddress&key=$googleApiKey'));
-      final data = json.decode(response.body);
-      final location = data['results'][0]['geometry']['location'];
+    } catch (error) {
+      developer.log('通過点の読み込みに失敗しました: $error');
+    }
+  }
 
+  Future<void> _loadNurseryData() async {
+    try {
+      var nurseryRes = await getNurseryByGuardianIdService(guardian.id);
       setState(() {
-        bus = busRes.bus;
-        stations = stationsRes.stations;
         nursery = nurseryRes.nurseries;
-        nurseryAddress = nursery.address;
-        nurseryLatitude = location['lat'];
-        nurseryLongitude = location['lng'];
+        developer.log(nursery.address);
+        if (nursery != null) {
+          nurseryAddress = nursery.address;
+        }
       });
     } catch (error) {
-      developer.log('データの読み込みに失敗しました: $error');
+      developer.log('保育園の読み込みに失敗しました: $error');
     }
+  }
+
+  Future<void> _getCoordinates() async {
+    dynamic response;
+    if (GoogleMapApiManager.canSendRequest()) {
+      response = await http.get(Uri.parse(
+          'https://maps.googleapis.com/maps/api/geocode/json?address=$nurseryAddress&key=$googleApiKey'));
+    }
+    final data = json.decode(response.body);
+    final location = data['results'][0]['geometry']['location'];
+    nurseryLatitude = location['lat'];
+    nurseryLongitude = location['lng'];
   }
 
   @override
