@@ -62,6 +62,7 @@ Future<GetUnregisteredStationListResponse> getUnregisteredStations(
 
 Future<void> updateStation(
   String stationId,
+  String busId,
   double latitude,
   double longitude,
 ) async {
@@ -74,7 +75,7 @@ Future<void> updateStation(
 
   try {
     var req = UpdateStationRequest(
-        id: stationId, latitude: latitude, longitude: longitude);
+        id: stationId, busId: bussId, latitude: latitude, longitude: longitude);
     var res = grpcClient.updateStation(req);
     if (kDebugMode) {
       developer.log("リクエスト: $req");

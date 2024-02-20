@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:where_child_bus/pages/bus_list_page/create_station_page/widget/decide_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/create_station_page/widget/google_map.dart';
-import 'package:where_child_bus/util/api/guardians.dart';
 import 'package:where_child_bus/util/api/station.dart';
-import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class CreateStationPage extends StatefulWidget {
@@ -64,7 +62,7 @@ class _CreateStationPageState extends State<CreateStationPage> {
     }
 
     try {
-      var res = await updateStation(stations[_index].id,
+      var res = await updateStation(stations[_index].id, widget.bus.id,
           _markers.first.position.latitude, _markers.first.position.longitude);
       developer.log("バス停の更新が完了しました");
       setState(() {
