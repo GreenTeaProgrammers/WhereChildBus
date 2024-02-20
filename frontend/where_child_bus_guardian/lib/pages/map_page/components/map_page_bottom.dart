@@ -31,7 +31,7 @@ class MapPageBottom extends StatefulWidget {
 }
 
 class _MapPageBottomState extends State<MapPageBottom> {
-  late Station guardianStation;
+  Station guardianStation = Station();
 
   @override
   void initState() {

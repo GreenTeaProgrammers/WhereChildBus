@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 import 'dart:convert';
-import '../map_page.dart';
+import 'package:intl/intl.dart';
+import 'package:where_child_bus_guardian/pages/map_page/map_page.dart'; // 日付フォーマットのために追加
 
 class ArrivalTime extends StatefulWidget {
   final List<Waypoint> waypoints;
-  double nurseryLatitude, nurseryLongitude;
-  double guardianLatitude, guardianLongitude;
-  DateTime departureTime;
+  final double nurseryLatitude, nurseryLongitude;
+  final double guardianLatitude, guardianLongitude;
+  final DateTime departureTime;
 
-  ArrivalTime({
-    super.key,
+  const ArrivalTime({
+    Key? key,
     required this.waypoints,
     required this.nurseryLatitude,
     required this.nurseryLongitude,
     required this.guardianLatitude,
     required this.guardianLongitude,
     required this.departureTime,
-  });
+  }) : super(key: key);
 
   @override
-  State<ArrivalTime> createState() => _ArrivalTime();
+  State<ArrivalTime> createState() => _ArrivalTimeState();
 }
 
-class _ArrivalTime extends State<ArrivalTime> {
+class _ArrivalTimeState extends State<ArrivalTime> {
   String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
-  String arrivalTime = '';
+  String arrivalTime = "Loading...";
 
   @override
   void initState() {
@@ -45,63 +45,69 @@ class _ArrivalTime extends State<ArrivalTime> {
   }
 
   void setArrivalTime() async {
-    int durationInSeconds = await getArrivalTime(
+    try {
+      final durationInSeconds = await getArrivalTime(
         widget.nurseryLatitude,
         widget.nurseryLongitude,
         widget.guardianLatitude,
         widget.guardianLongitude,
-        widget.waypoints);
+        widget.waypoints,
+      );
 
-    DateTime nurseryToBusStopTime =
-        widget.departureTime.add(Duration(seconds: durationInSeconds));
+      if (durationInSeconds != null) {
+        DateTime arrivalDateTime =
+            widget.departureTime.add(Duration(seconds: durationInSeconds));
 
-    String formattedArrivalTime =
-        '${nurseryToBusStopTime.hour.toString().padLeft(2, '0')}:${nurseryToBusStopTime.minute.toString().padLeft(2, '0')}';
-
-    setState(() {
-      arrivalTime = formattedArrivalTime;
-    });
+        setState(() {
+          arrivalTime = DateFormat('HH:mm').format(arrivalDateTime);
+        });
+      } else {
+        setState(() => arrivalTime = "N/A");
+      }
+    } catch (e) {
+      setState(() => arrivalTime = "Error");
+      developer.log('Error setting arrival time: $e');
+    }
   }
 
-  getArrivalTime(double startLat, double startLng, double endLat, double endLng,
-      List<Waypoint> waypoints) async {
-    String apiKey = dotenv.get("GOOGLE_MAP_API_KEY");
-    String url = '';
-    dynamic response;
-
-    if (waypoints[0].latitude == endLat && waypoints[0].longitude == endLng) {
-      url = 'https://maps.googleapis.com/maps/api/directions/json'
-          '?destination=$endLat,$endLng&origin=$startLat,$startLng&key=$apiKey';
-    } else {
-      int guardianIndex = waypoints.indexWhere((point) =>
-          point.latitude == widget.guardianLatitude &&
-          point.longitude == widget.guardianLongitude);
-      if (guardianIndex != -1) {
-        waypoints = waypoints.sublist(0, guardianIndex + 1);
+  Future<int?> getArrivalTime(
+    double startLat,
+    double startLng,
+    double endLat,
+    double endLng,
+    List<Waypoint> waypoints,
+  ) async {
+    String url = buildDirectionUrl(
+        startLat, startLng, endLat, endLng, waypoints, googleApiKey);
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['routes'].isNotEmpty) {
+          final int duration =
+              data['routes'][0]['legs'][0]['duration']['value'];
+          return duration;
+        }
       }
-
-      String waypointsString = waypoints
-          .map((point) => 'via:${point.latitude},${point.longitude}|')
-          .join('');
-
-      url = 'https://maps.googleapis.com/maps/api/directions/json'
-          '?destination=$endLat,$endLng&origin=$startLat,$startLng&waypoints=$waypointsString&key=$apiKey';
+      developer.log('Failed to fetch directions or no routes found.');
+      return null;
+    } catch (e) {
+      developer.log('Exception caught fetching directions: $e');
+      return null;
     }
-    if (GoogleMapApiManager.canSendRequest()) {
-      response = await http.get(Uri.parse(url));
-    }
+  }
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['routes'] != null && data['routes'].isNotEmpty) {
-        final route = data['routes'][0];
-        final duration = route['legs'][0]['duration']['value'];
-        return duration;
-      } else {
-        print('No routes found.');
-      }
-    } else {
-      print('Failed to fetch directions.');
-    }
+  String buildDirectionUrl(
+    double startLat,
+    double startLng,
+    double endLat,
+    double endLng,
+    List<Waypoint> waypoints,
+    String apiKey,
+  ) {
+    String waypointsString = waypoints
+        .map((point) => 'via:${point.latitude},${point.longitude}')
+        .join('|');
+    return 'https://maps.googleapis.com/maps/api/directions/json?origin=$startLat,$startLng&destination=$endLat,$endLng&waypoints=$waypointsString&key=$apiKey';
   }
 }

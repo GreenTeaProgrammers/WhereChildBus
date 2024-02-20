@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "dart:developer" as developer;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -20,10 +21,10 @@ class BusToBusStopTime extends StatefulWidget {
       required this.guardianLongitude});
 
   @override
-  State<BusToBusStopTime> createState() => _BusToBusStopTime();
+  State<BusToBusStopTime> createState() => _BusToBusStopTimeState();
 }
 
-class _BusToBusStopTime extends State<BusToBusStopTime> {
+class _BusToBusStopTimeState extends State<BusToBusStopTime> {
   String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
   String busToBusStopTime = '';
 
@@ -42,82 +43,103 @@ class _BusToBusStopTime extends State<BusToBusStopTime> {
   }
 
   void setArrivalTime() async {
-    int durationInMinutes = (await getArrivalTime(
-                widget.busLatitude,
-                widget.busLongitude,
-                widget.guardianLatitude,
-                widget.guardianLongitude,
-                widget.waypoints) /
-            60)
-        .toInt();
+    try {
+      final double? durationInSeconds = await getArrivalTime(
+        widget.busLatitude,
+        widget.busLongitude,
+        widget.guardianLatitude,
+        widget.guardianLongitude,
+        widget.waypoints,
+      );
 
-    String formattedBusToBusStopTime = durationInMinutes.toString();
+      // durationInSecondsがnullでないことを確認し、分単位に変換
+      if (durationInSeconds != null) {
+        final int durationInMinutes = (durationInSeconds / 60).toInt();
+        final String formattedBusToBusStopTime = durationInMinutes.toString();
 
-    setState(() {
-      busToBusStopTime = formattedBusToBusStopTime;
-    });
+        setState(() {
+          busToBusStopTime = formattedBusToBusStopTime;
+        });
+      } else {
+        // getArrivalTimeがnullを返した場合、エラー処理やデフォルト値の設定をここで行う
+        setState(() {
+          busToBusStopTime = "N/A"; // 例: 到着時間を計算できない場合のデフォルト値
+        });
+      }
+    } catch (e) {
+      // 例外が発生した場合のエラーハンドリング
+      developer.log('到着時間の取得中にエラーが発生しました', error: e, name: "BusStopTimeError");
+      setState(() {
+        busToBusStopTime = "Error"; // エラーが発生したことを示す値
+      });
+    }
   }
 
-  getArrivalTime(double startLat, double startLng, double endLat, double endLng,
-      List<Waypoint> waypoints) async {
+  Future<double?> getArrivalTime(double startLat, double startLng,
+      double endLat, double endLng, List<Waypoint> waypoints) async {
     String apiKey = dotenv.get("GOOGLE_MAP_API_KEY");
-    String url = '';
-    dynamic response;
 
+    // 最寄りの経由地を見つける
     int nearestWaypointIndex =
         findNearestWaypointIndex(startLat, startLng, waypoints);
 
-    double busToNextWaypointDistance = calculateDistance(
-        startLat,
-        startLng,
-        waypoints[nearestWaypointIndex + 1].latitude,
-        waypoints[nearestWaypointIndex + 1].longitude);
+    // URLの基本部分を設定
+    String baseUrl = 'https://maps.googleapis.com/maps/api/directions/json';
 
-    double nearestWaypointToNextWaypointDistance = calculateDistance(
-        waypoints[nearestWaypointIndex].latitude,
-        waypoints[nearestWaypointIndex].longitude,
-        waypoints[nearestWaypointIndex + 1].latitude,
-        waypoints[nearestWaypointIndex + 1].longitude);
+    // 経由地をURLパラメータ形式で生成
+    String waypointsString = _generateWaypointsString(
+        nearestWaypointIndex, waypoints, endLat, endLng);
 
-    if (busToNextWaypointDistance > nearestWaypointToNextWaypointDistance) {
-      nearestWaypointIndex++;
+    // リクエストURLを組み立て
+    String url =
+        '$baseUrl?destination=$endLat,$endLng&origin=$startLat,$startLng&waypoints=$waypointsString&key=$apiKey';
+
+    // Google Maps APIからのレスポンスを取得
+    http.Response? response = await _fetchDirections(url);
+
+    // レスポンスデータから所要時間を抽出
+    return _parseDurationFromResponse(response);
+  }
+
+  String _generateWaypointsString(
+      int startIndex, List<Waypoint> waypoints, double endLat, double endLng) {
+    int endIndex = waypoints.indexWhere(
+        (point) => point.latitude == endLat && point.longitude == endLng);
+    if (endIndex == -1) {
+      endIndex = waypoints.length;
+    }
+    return waypoints
+        .sublist(startIndex, endIndex)
+        .map((point) => 'via:${point.latitude},${point.longitude}')
+        .join('|');
+  }
+
+  Future<http.Response?> _fetchDirections(String url) async {
+    if (!GoogleMapApiManager.canSendRequest()) {
+      developer.log('Request limit reached.');
+      return null;
+    }
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode != 200) {
+      developer.log(
+          'Failed to fetch directions. Status code: ${response.statusCode}');
+      return null;
+    }
+    return response;
+  }
+
+  double? _parseDurationFromResponse(http.Response? response) {
+    if (response == null) return null;
+
+    final data = json.decode(response.body);
+    if (data['routes'] == null || data['routes'].isEmpty) {
+      developer.log('No routes found.');
+      return null;
     }
 
-    if (waypoints[0].latitude == endLat && waypoints[0].longitude == endLng) {
-      url = 'https://maps.googleapis.com/maps/api/directions/json'
-          '?destination=$endLat,$endLng&origin=$startLat,$startLng&key=$apiKey';
-    } else {
-      int guardianIndex = waypoints.indexWhere((point) =>
-          point.latitude == widget.guardianLatitude &&
-          point.longitude == widget.guardianLongitude);
-      if (guardianIndex != -1) {
-        waypoints = waypoints.sublist(nearestWaypointIndex, guardianIndex + 1);
-      }
-
-      String waypointsString = waypoints
-          .map((point) => 'via:${point.latitude},${point.longitude}|')
-          .join('');
-
-      url = 'https://maps.googleapis.com/maps/api/directions/json'
-          '?destination=$endLat,$endLng&origin=$startLat,$startLng&waypoints=$waypointsString&key=$apiKey';
-    }
-
-    if (GoogleMapApiManager.canSendRequest()) {
-      response = await http.get(Uri.parse(url));
-    }
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['routes'] != null && data['routes'].isNotEmpty) {
-        final route = data['routes'][0];
-        final duration = route['legs'][0]['duration']['value'];
-        return duration;
-      } else {
-        print('No routes found.');
-      }
-    } else {
-      print('Failed to fetch directions.');
-    }
+    final route = data['routes'][0];
+    final duration = route['legs'][0]['duration']['value'] as double?;
+    return duration;
   }
 
   int findNearestWaypointIndex(

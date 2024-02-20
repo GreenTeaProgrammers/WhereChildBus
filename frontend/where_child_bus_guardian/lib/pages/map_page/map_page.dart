@@ -41,46 +41,73 @@ class _MapPageState extends State<MapPage> {
   List<Station> stations = [];
   List<Waypoint> waypoints = [];
 
-  late GuardianResponse guardian;
-  late Bus bus;
-  late NurseryResponse nursery;
-  late String nurseryAddress;
-  late double busLatitude;
-  late double busLongitude;
-  late double nurseryLatitude;
-  late double nurseryLongitude;
+  final GuardianResponse guardian = GuardianData().getGuardian();
+  Bus bus = Bus();
+  NurseryResponse nursery = NurseryResponse();
+  String? nurseryAddress;
+  double busLatitude = 0.0;
+  double busLongitude = 0.0;
+  double nurseryLatitude = 0.0;
+  double nurseryLongitude = 0.0;
 
   bool _isLoading = false;
 
   @override
   void initState() {
-    _isLoading = true;
     super.initState();
-    guardian = GuardianData().getGuardian();
-    _loadBusLocation();
-    _loadBusData();
-    _loadStationsData();
-    _loadWaypointData();
-    _loadNurseryData();
-    _getCoordinates();
-    _isLoading = false;
+    _initializePage();
+  }
+
+  Future<void> _initializePage() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _loadBusData();
+      developer.log('バスデータの読み込み');
+      await _loadStationsData();
+      developer.log('停留所リストデータの読み込み');
+      await _loadWaypointData();
+      developer.log('経由地データの読み込み');
+      await _loadNurseryData();
+      developer.log('保育園データの読み込み');
+      await _getCoordinates();
+      developer.log('座標の取得');
+      _loadBusLocation();
+      developer.log('バスの位置情報の読み込み');
+    } catch (e) {
+      developer.log('初期化中にエラーが発生しました: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   void _loadBusLocation() {
     _controller.stream.listen((val) {
-      setState(() {
-        busLatitude = val.latitude;
-        busLongitude = val.longitude;
-      });
+      if (mounted) {
+        setState(() {
+          busLatitude = val.latitude;
+          busLongitude = val.longitude;
+        });
+      }
     });
   }
 
   Future<void> _loadBusData() async {
     try {
       var busRes = await getRunningBusByGuardianIdService(guardian.id);
-      setState(() {
-        bus = busRes.bus;
-      });
+      developer.log("$mounted");
+      if (mounted) {
+        setState(() {
+          bus = busRes.bus;
+          developer.log("bus: $bus");
+        });
+      }
     } catch (error) {
       developer.log('バスの読み込みに失敗しました: $error');
     }
@@ -88,10 +115,14 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _loadStationsData() async {
     try {
+      developer.log('停留所リストの読み込み開始');
+      developer.log(bus.id);
       var stationsRes = await getStationListByBusIdService(bus.id);
-      setState(() {
-        stations = stationsRes.stations;
-      });
+      if (mounted) {
+        setState(() {
+          stations = stationsRes.stations;
+        });
+      }
     } catch (error) {
       developer.log('停留所リストの読み込みに失敗しました: $error');
     }
@@ -99,42 +130,54 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _loadWaypointData() async {
     try {
-      stations.forEach((station) {
-        waypoints.add(Waypoint(
-            latitude: station.latitude,
-            longitude: station.longitude,
-            name: station.id.toString()));
-      });
+      if (mounted) {
+        stations.forEach((station) {
+          waypoints.add(Waypoint(
+              latitude: station.latitude,
+              longitude: station.longitude,
+              name: station.id.toString()));
+        });
+      }
     } catch (error) {
-      developer.log('通過点の読み込みに失敗しました: $error');
+      developer.log('経由地の読み込みに失敗しました: $error');
     }
   }
 
   Future<void> _loadNurseryData() async {
     try {
       var nurseryRes = await getNurseryByGuardianIdService(guardian.id);
-      setState(() {
-        nursery = nurseryRes.nurseries;
-        developer.log(nursery.address);
-        if (nursery != null) {
+      developer.log(nurseryRes.nurseries.address);
+      if (mounted) {
+        setState(() {
+          nursery = nurseryRes.nurseries;
           nurseryAddress = nursery.address;
-        }
-      });
+          developer.log("nurseryAddressを初期化");
+        });
+      }
     } catch (error) {
       developer.log('保育園の読み込みに失敗しました: $error');
     }
   }
 
   Future<void> _getCoordinates() async {
-    dynamic response;
-    if (GoogleMapApiManager.canSendRequest()) {
+    try {
+      dynamic response;
+      developer.log("住所から緯度経度への変換${nurseryAddress}");
       response = await http.get(Uri.parse(
           'https://maps.googleapis.com/maps/api/geocode/json?address=$nurseryAddress&key=$googleApiKey'));
+      if (mounted) {
+        setState(() {
+          developer.log("$response");
+          final data = json.decode(response.body);
+          developer.log(response.body);
+          final location = data['results'][0]['geometry']['location'];
+          nurseryLatitude = location['lat'];
+          nurseryLongitude = location['lng'];
+        });
+      }
+    } catch (e) {
+      developer.log('座標の取得に失敗しました:', error: e);
     }
-    final data = json.decode(response.body);
-    final location = data['results'][0]['geometry']['location'];
-    nurseryLatitude = location['lat'];
-    nurseryLongitude = location['lng'];
   }
 
   @override
