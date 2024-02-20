@@ -8,6 +8,7 @@ import "google/protobuf/field_mask.proto";
 service StationService {
         rpc UpdateStationLocationByGuardianId(UpdateStationLocationByGuardianIdRequest) returns (UpdateStationLocationByGuardianIdResponse);
         rpc GetStationListByBusId(GetStationListByBusIdRequest) returns (GetStationListByBusIdResponse);
+        rpc GetUnregisteredStationList(GetUnregisteredStationListRequest) returns (GetUnregisteredStationListResponse);
         rpc UpdateStation(UpdateStationRequest) returns (UpdateStationResponse);
 }
 
@@ -32,11 +33,21 @@ message GetStationListByBusIdResponse {
         repeated ChildPhoto photos = 4;
 }
 
+message GetUnregisteredStationListRequest {
+        string bus_id = 1;
+}
+
+message GetUnregisteredStationListResponse {
+        repeated Station stations = 1;
+        repeated GuardianResponse guardians = 2;
+}
+
 message UpdateStationRequest {
         string id  = 1;
-        double latitude = 2;
-        double longitude = 3;
-        google.protobuf.FieldMask update_mask = 4;
+        string bus_id = 2;
+        double latitude = 3;
+        double longitude = 4;
+        google.protobuf.FieldMask update_mask = 5;
 }
 
 message UpdateStationResponse {

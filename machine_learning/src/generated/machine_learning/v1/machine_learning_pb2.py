@@ -20,7 +20,6 @@ from generated.where_child_bus.v1 import (
     resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2,
 )
 
-
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
     b'\n*machine_learning/v1/machine_learning.proto\x12\x13machine_learning.v1\x1a\x1cwhere_child_bus/v1/bus.proto\x1a"where_child_bus/v1/resources.proto"\x99\x01\n\x0cTrainRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x15\n\x06\x62us_id\x18\x02 \x01(\tR\x05\x62usId\x12\x1b\n\tchild_ids\x18\x03 \x03(\tR\x08\x63hildIds\x12\x36\n\x08\x62us_type\x18\x04 \x01(\x0e\x32\x1b.where_child_bus.v1.BusTypeR\x07\x62usType".\n\rTrainResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted"L\n\x0cPredResponse\x12\x1f\n\x0bis_detected\x18\x01 \x01(\x08R\nisDetected\x12\x1b\n\tchild_ids\x18\x02 \x03(\tR\x08\x63hildIds"T\n\x18\x46\x61\x63\x65\x44\x65tectAndClipRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x19\n\x08\x63hild_id\x18\x02 \x01(\tR\x07\x63hildId":\n\x19\x46\x61\x63\x65\x44\x65tectAndClipResponse\x12\x1d\n\nis_started\x18\x01 \x01(\x08R\tisStarted2\xb6\x02\n\x16MachineLearningService\x12N\n\x05Train\x12!.machine_learning.v1.TrainRequest\x1a".machine_learning.v1.TrainResponse\x12X\n\x04Pred\x12).where_child_bus.v1.StreamBusVideoRequest\x1a!.machine_learning.v1.PredResponse(\x01\x30\x01\x12r\n\x11\x46\x61\x63\x65\x44\x65tectAndClip\x12-.machine_learning.v1.FaceDetectAndClipRequest\x1a..machine_learning.v1.FaceDetectAndClipResponseB\x82\x02\n\x17\x63om.machine_learning.v1B\x14MachineLearningProtoP\x01Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\xa2\x02\x03MXX\xaa\x02\x12MachineLearning.V1\xca\x02\x12MachineLearning\\V1\xe2\x02\x1eMachineLearning\\V1\\GPBMetadata\xea\x02\x13MachineLearning::V1b\x06proto3'
 )
@@ -32,9 +31,9 @@ _builder.BuildTopDescriptorsAndMessages(
 )
 if _descriptor._USE_C_DESCRIPTORS == False:
     _globals["DESCRIPTOR"]._options = None
-    _globals["DESCRIPTOR"]._serialized_options = (
-        b"\n\027com.machine_learning.v1B\024MachineLearningProtoP\001Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\242\002\003MXX\252\002\022MachineLearning.V1\312\002\022MachineLearning\\V1\342\002\036MachineLearning\\V1\\GPBMetadata\352\002\023MachineLearning::V1"
-    )
+    _globals[
+        "DESCRIPTOR"
+    ]._serialized_options = b"\n\027com.machine_learning.v1B\024MachineLearningProtoP\001Zhgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1;machine_learningv1\242\002\003MXX\252\002\022MachineLearning.V1\312\002\022MachineLearning\\V1\342\002\036MachineLearning\\V1\\GPBMetadata\352\002\023MachineLearning::V1"
     _globals["_TRAINREQUEST"]._serialized_start = 134
     _globals["_TRAINREQUEST"]._serialized_end = 287
     _globals["_TRAINRESPONSE"]._serialized_start = 289

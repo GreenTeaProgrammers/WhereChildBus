@@ -24,6 +24,11 @@ class StationServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdResponse.FromString,
                 )
+        self.GetUnregisteredStationList = channel.unary_unary(
+                '/where_child_bus.v1.StationService/GetUnregisteredStationList',
+                request_serializer=where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListResponse.FromString,
+                )
         self.UpdateStation = channel.unary_unary(
                 '/where_child_bus.v1.StationService/UpdateStation',
                 request_serializer=where__child__bus_dot_v1_dot_station__pb2.UpdateStationRequest.SerializeToString,
@@ -41,6 +46,18 @@ class StationServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetStationListByBusId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetUnregisteredStationList(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetUnregisteredStationList(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,6 +81,11 @@ def add_StationServiceServicer_to_server(servicer, server):
                     servicer.GetStationListByBusId,
                     request_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdResponse.SerializeToString,
+            ),
+            'GetUnregisteredStationList': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUnregisteredStationList,
+                    request_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListResponse.SerializeToString,
             ),
             'UpdateStation': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateStation,
@@ -111,6 +133,40 @@ class StationService(object):
         return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/GetStationListByBusId',
             where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdRequest.SerializeToString,
             where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetUnregisteredStationList(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/GetUnregisteredStationList',
+            where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetUnregisteredStationList(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/GetUnregisteredStationList',
+            where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

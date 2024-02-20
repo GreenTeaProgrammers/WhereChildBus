@@ -230,6 +230,14 @@ func (sc *StationCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *StationCreate) defaults() {
+	if _, ok := sc.mutation.Latitude(); !ok {
+		v := station.DefaultLatitude
+		sc.mutation.SetLatitude(v)
+	}
+	if _, ok := sc.mutation.Longitude(); !ok {
+		v := station.DefaultLongitude
+		sc.mutation.SetLongitude(v)
+	}
 	if _, ok := sc.mutation.CreatedAt(); !ok {
 		v := station.DefaultCreatedAt()
 		sc.mutation.SetCreatedAt(v)

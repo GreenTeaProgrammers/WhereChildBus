@@ -19,7 +19,7 @@ func (BoardingRecord) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
 		field.Time("timestamp").Default(time.Now).Comment("乗降時刻"),
-		field.Bool("is_boarding").Comment("乗車時はtrue、降車時はfalse")}
+		field.Bool("is_boarding").Default(false).Comment("乗車時はtrue、降車時はfalse")}
 }
 
 // Edges of the BoardingRecord.

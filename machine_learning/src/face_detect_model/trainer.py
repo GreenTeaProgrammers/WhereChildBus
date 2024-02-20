@@ -1,13 +1,13 @@
+import argparse
 import os
+
+import google.cloud.storage as gcs
 import torch
 import torch.nn as nn
-import argparse
-import google.cloud.storage as gcs
-
 from face_detect_model.data.faceDetectDataset import FaceDetectDataset
+from face_detect_model.gcp_util import get_bucket
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.util import logger, save_pickle_to_gcs, switch_to_bus_type
-from face_detect_model.gcp_util import get_bucket
 
 
 class Trainer:
