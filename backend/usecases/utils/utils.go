@@ -101,8 +101,10 @@ func convertStatusToPbStatus(status bus.Status) pb.BusStatus {
 		return pb.BusStatus_BUS_STATUS_STOPPED
 	case bus.StatusStopped:
 		return pb.BusStatus_BUS_STATUS_STOPPED
+	case bus.StatusMaintenance:
+		return pb.BusStatus_BUS_STATUS_MAINTENANCE
 	default:
-		return pb.BusStatus_BUS_STATUS_STOPPED
+		return pb.BusStatus_BUS_STATUS_UNSPECIFIED
 	}
 }
 
