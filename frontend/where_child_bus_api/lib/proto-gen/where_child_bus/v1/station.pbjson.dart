@@ -13,9 +13,9 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use updateStationRequestDescriptor instead')
-const UpdateStationRequest$json = {
-  '1': 'UpdateStationRequest',
+@$core.Deprecated('Use updateStationLocationByGuardianIdRequestDescriptor instead')
+const UpdateStationLocationByGuardianIdRequest$json = {
+  '1': 'UpdateStationLocationByGuardianIdRequest',
   '2': [
     {'1': 'guardian_id', '3': 1, '4': 1, '5': 9, '10': 'guardianId'},
     {'1': 'longitude', '3': 2, '4': 1, '5': 1, '10': 'longitude'},
@@ -23,24 +23,24 @@ const UpdateStationRequest$json = {
   ],
 };
 
-/// Descriptor for `UpdateStationRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateStationRequestDescriptor = $convert.base64Decode(
-    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIfCgtndWFyZGlhbl9pZBgBIAEoCVIKZ3VhcmRpYW5JZB'
-    'IcCglsb25naXR1ZGUYAiABKAFSCWxvbmdpdHVkZRIaCghsYXRpdHVkZRgDIAEoAVIIbGF0aXR1'
-    'ZGU=');
+/// Descriptor for `UpdateStationLocationByGuardianIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateStationLocationByGuardianIdRequestDescriptor = $convert.base64Decode(
+    'CihVcGRhdGVTdGF0aW9uTG9jYXRpb25CeUd1YXJkaWFuSWRSZXF1ZXN0Eh8KC2d1YXJkaWFuX2'
+    'lkGAEgASgJUgpndWFyZGlhbklkEhwKCWxvbmdpdHVkZRgCIAEoAVIJbG9uZ2l0dWRlEhoKCGxh'
+    'dGl0dWRlGAMgASgBUghsYXRpdHVkZQ==');
 
-@$core.Deprecated('Use updateStationResponseDescriptor instead')
-const UpdateStationResponse$json = {
-  '1': 'UpdateStationResponse',
+@$core.Deprecated('Use updateStationLocationByGuardianIdResponseDescriptor instead')
+const UpdateStationLocationByGuardianIdResponse$json = {
+  '1': 'UpdateStationLocationByGuardianIdResponse',
   '2': [
     {'1': 'station', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Station', '10': 'station'},
   ],
 };
 
-/// Descriptor for `UpdateStationResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateStationResponseDescriptor = $convert.base64Decode(
-    'ChVVcGRhdGVTdGF0aW9uUmVzcG9uc2USNQoHc3RhdGlvbhgBIAEoCzIbLndoZXJlX2NoaWxkX2'
-    'J1cy52MS5TdGF0aW9uUgdzdGF0aW9u');
+/// Descriptor for `UpdateStationLocationByGuardianIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateStationLocationByGuardianIdResponseDescriptor = $convert.base64Decode(
+    'CilVcGRhdGVTdGF0aW9uTG9jYXRpb25CeUd1YXJkaWFuSWRSZXNwb25zZRI1CgdzdGF0aW9uGA'
+    'EgASgLMhsud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXRpb25SB3N0YXRpb24=');
 
 @$core.Deprecated('Use getStationListByBusIdRequestDescriptor instead')
 const GetStationListByBusIdRequest$json = {
@@ -72,4 +72,34 @@ final $typed_data.Uint8List getStationListByBusIdResponseDescriptor = $convert.b
     'aGVyZV9jaGlsZF9idXMudjEuR3VhcmRpYW5SZXNwb25zZVIJZ3VhcmRpYW5zEjUKCGNoaWxkcm'
     'VuGAMgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MY'
     'BCADKAsyHi53aGVyZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
+
+@$core.Deprecated('Use updateStationRequestDescriptor instead')
+const UpdateStationRequest$json = {
+  '1': 'UpdateStationRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'update_mask', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+  ],
+};
+
+/// Descriptor for `UpdateStationRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateStationRequestDescriptor = $convert.base64Decode(
+    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSGgoIbGF0aXR1ZGUYAiABKA'
+    'FSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgDIAEoAVIJbG9uZ2l0dWRlEjsKC3VwZGF0ZV9tYXNr'
+    'GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLkZpZWxkTWFza1IKdXBkYXRlTWFzaw==');
+
+@$core.Deprecated('Use updateStationResponseDescriptor instead')
+const UpdateStationResponse$json = {
+  '1': 'UpdateStationResponse',
+  '2': [
+    {'1': 'station', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Station', '10': 'station'},
+  ],
+};
+
+/// Descriptor for `UpdateStationResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateStationResponseDescriptor = $convert.base64Decode(
+    'ChVVcGRhdGVTdGF0aW9uUmVzcG9uc2USNQoHc3RhdGlvbhgBIAEoCzIbLndoZXJlX2NoaWxkX2'
+    'J1cy52MS5TdGF0aW9uUgdzdGF0aW9u');
 

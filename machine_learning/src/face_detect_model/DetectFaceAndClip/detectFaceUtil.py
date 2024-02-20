@@ -10,9 +10,8 @@ def detect_face(
     image, face_cascade, scaleFactor=1.1, minNeighbors=15, minSize=(50, 50)
 ):
     """画像から顔を検出する"""
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(
-        gray, scaleFactor=scaleFactor, minNeighbors=minNeighbors, minSize=minSize
+        image, scaleFactor=scaleFactor, minNeighbors=minNeighbors, minSize=minSize
     )
     return faces
 

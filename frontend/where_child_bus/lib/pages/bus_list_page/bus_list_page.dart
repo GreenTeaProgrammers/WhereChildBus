@@ -1,16 +1,20 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/components/util/operation_button.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
+import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusListPage extends StatefulWidget {
-  final NurseryResponse nursery;
-
-  const BusListPage({super.key, required this.nursery});
+  const BusListPage({
+    super.key,
+  });
 
   @override
   State<BusListPage> createState() => _BusListPageState();
@@ -27,13 +31,16 @@ class _BusListPageState extends State<BusListPage> {
     _loadBusList();
   }
 
-  Future<void> _loadBusList() async {
-    String nurseryId = widget.nursery.id;
-    List<Bus> busList = await getBusList(nurseryId);
+  Future<void> _fetchBusList() async {
+    _isLoading = true;
+
     try {
+      GetBusListByNurseryIdResponse busList =
+          await getBusList(NurseryData().getNursery().id);
+      NurseryBusData().setBusListResponse(busList);
       if (mounted) {
         setState(() {
-          buses = busList;
+          buses = NurseryBusData().getBusList();
           _isLoading = false;
         });
       }
@@ -42,6 +49,20 @@ class _BusListPageState extends State<BusListPage> {
         developer.log("バスリストのロード中にエラーが発生しました: $e");
       }
       setState(() => {_isLoading = false, _isFailLoading = true});
+    }
+  }
+
+  Future<void> _loadBusList() async {
+    if (NurseryBusData().getBusList().isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          buses = NurseryBusData().getBusList();
+          _isLoading = false;
+        });
+      }
+      return;
+    } else {
+      await _fetchBusList();
     }
   }
 
@@ -65,7 +86,8 @@ class _BusListPageState extends State<BusListPage> {
                 if (_isFailLoading) loadFailText(),
                 if (buses.isEmpty) busNotRegisteredText(),
                 Expanded(
-                  child: listViewBuilder(),
+                  child: RefreshIndicator(
+                      onRefresh: _fetchBusList, child: listViewBuilder()),
                 )
               ],
             ),
@@ -128,8 +150,20 @@ class _BusListPageState extends State<BusListPage> {
             },
             child: Row(
               children: [
-                busPhoto(bus.status),
-                busNameAndDescription(bus.name, bus.status),
+                busPhoto(bus.busStatus),
+                busNameAndDescription(bus.name, bus.busStatus),
+                const Spacer(),
+                OperationButton(
+                  bus: bus,
+                  onBusUpdated: (Bus updatedBus) {
+                    int index = buses.indexOf(bus);
+                    if (index != -1) {
+                      setState(() {
+                        buses[index] = updatedBus;
+                      });
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -138,12 +172,14 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busPhoto(Status busStatus) {
+  Widget busPhoto(BusStatus busStatus) {
     late String imagePath;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       imagePath = "assets/images/bus_operating.png";
-    } else {
+    } else if (busStatus == BusStatus.BUS_STATUS_STOPPED) {
       imagePath = "assets/images/bus_not_operating.png";
+    } else {
+      imagePath = "assets/images/bus_maintenance.png";
     }
 
     return SizedBox(
@@ -169,12 +205,12 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busDescription(Status busStatus) {
+  Widget busDescription(BusStatus busStatus) {
     late String description;
-    if (busStatus == Status.STATUS_RUNNING) {
+    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       description = "運行中";
-    } else if (busStatus == Status.STATUS_MAINTEINANCE) {
-      description = "メンテナンス中";
+    } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
+      description = "経路未設定";
     } else {
       description = "停止中";
     }
@@ -189,7 +225,7 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busNameAndDescription(String name, Status busStatus) {
+  Widget busNameAndDescription(String name, BusStatus busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

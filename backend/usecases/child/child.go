@@ -2,6 +2,7 @@ package child
 
 import (
 	"fmt"
+	"io"
 
 	"cloud.google.com/go/storage"
 	"github.com/google/uuid"
@@ -9,37 +10,45 @@ import (
 
 	"context"
 
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/config"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
+	boardingRecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
+	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
+	childPhotoRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
+
+	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 )
 
 type Interactor struct {
-	entClient     *ent.Client
-	logger        *slog.Logger
-	StorageClient *storage.Client
-	BucketName    string
+	entClient       *ent.Client
+	logger          *slog.Logger
+	StorageClient   *storage.Client
+	MLServiceClient mlv1.MachineLearningServiceClient
+	BucketName      string
 }
 
-func NewInteractor(entClient *ent.Client, logger *slog.Logger, storageClient *storage.Client, bucketName string) *Interactor {
-	return &Interactor{entClient, logger, storageClient, bucketName}
+func NewInteractor(entClient *ent.Client, logger *slog.Logger, storageClient *storage.Client, mlClient mlv1.MachineLearningServiceClient, bucketName string) *Interactor {
+	return &Interactor{entClient, logger, storageClient, mlClient, bucketName}
 }
 
 func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest) (*pb.CreateChildResponse, error) {
 	nurseryID, err := uuid.Parse(req.NurseryId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse nursery ID '%s': %w", req.NurseryId, err)
+		i.logger.Error("failed to parse nursery ID", "error", err)
+		return nil, err
 	}
 
 	guardianID, err := uuid.Parse(req.GuardianId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse guardian ID '%s': %w", req.GuardianId, err)
+		i.logger.Error("failed to parse guardian ID", "error", err)
+		return nil, err
 	}
 
 	// トランザクションの開始
@@ -48,18 +57,13 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
 	}
-
 	// 成功した場合にロールバックを防ぐためのフラグ
-	var commit bool
-	defer func() {
-		if !commit {
-			tx.Rollback()
-		}
-	}()
+	defer utils.RollbackTx(tx, i.logger)
 
 	sex, err := utils.ConvertPbSexToEntSex(req.Sex)
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert sex: %w", err)
+		i.logger.Error("failed to convert sex", "error", err)
+		return nil, err
 	}
 	age := int(req.Age)
 
@@ -73,7 +77,8 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		Save(ctx)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to create child: %w", err)
+		i.logger.Error("failed to create child", "error", err)
+		return nil, err
 	}
 
 	child, err = tx.Child.Query().
@@ -105,7 +110,8 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 
 		// 写真をGCSにアップロード
 		if err := i.uploadPhotoToGCS(ctx, nurseryID.String(), child.ID.String(), photoID.String(), photoData); err != nil {
-			return nil, fmt.Errorf("failed to upload photo to GCS: %w", err)
+			i.logger.Error("failed to upload photo to GCS", "error", err)
+			return nil, err
 		}
 
 		// childPhotoレコードをデータベースに作成
@@ -116,49 +122,132 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 			Save(ctx)
 
 		if err != nil {
-			return nil, fmt.Errorf("failed to create child photo record: %w", err)
+			i.logger.Error("failed to create child photo record", "error", err)
+			return nil, err
 		}
+	}
+
+	// NOTE: ここでPythonRPCを呼び出して、顔検出と切り抜きを行う
+	res, err := i.MLServiceClient.FaceDetectAndClip(ctx, &mlv1.FaceDetectAndClipRequest{
+		NurseryId: nurseryID.String(),
+		ChildId:   child.ID.String(),
+	})
+
+	if !res.IsStarted && err != nil {
+		i.logger.Error("failed to start face detection and clipping", "error", err)
+		return nil, err
 	}
 
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
-	commit = true // トランザクションが成功した
-
-	// 最後にCloudFunctionに通知を送信
-	// TODO: 将来的に子供作成の通知にする
-	cfg, err := config.New()
-	utils.MakeCloudFunctionRequest(cfg.EndPointPingRequest, "POST")
 
 	return &pb.CreateChildResponse{
 		Child: utils.ToPbChild(child),
 	}, nil
 }
 
+func (i *Interactor) CheckIsChildInBus(ctx context.Context, req *pb.CheckIsChildInBusRequest) (*pb.CheckIsChildInBusResponse, error) {
+	childID, err := uuid.Parse(req.ChildId)
+	if err != nil {
+		i.logger.Error("failed to parse child ID", "error", err)
+		return nil, err
+
+	}
+
+	boardingRecord, err := i.entClient.BoardingRecord.Query().
+		Where(boardingRecordRepo.HasChildWith(childRepo.IDEQ(childID))).
+		Only(ctx)
+
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return &pb.CheckIsChildInBusResponse{
+				IsInBus: false,
+			}, nil
+		} else {
+			i.logger.Error("failed to check if child is in bus", "error", err)
+			return nil, err
+		}
+	}
+
+	return &pb.CheckIsChildInBusResponse{
+		IsInBus: boardingRecord.IsBoarding,
+	}, nil
+}
+
 func (i *Interactor) GetChildListByGuardianID(ctx context.Context, req *pb.GetChildListByGuardianIDRequest) (*pb.GetChildListByGuardianIDResponse, error) {
 	guardianID, err := uuid.Parse(req.GuardianId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse guardian ID '%s': %w", req.GuardianId, err)
+		i.logger.Error("failed to parse guardian ID", "error", err)
+		return nil, err
 	}
 
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
 		return tx.Child.Query().
-		Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
-		WithGuardian(), nil
+			Where(childRepo.HasGuardianWith(guardianRepo.IDEQ(guardianID))).
+			WithGuardian(), nil
 	})
 
 	if err != nil {
+		i.logger.Error("failed to get children by guardian ID", "error", err)
 		return nil, err
 	}
 
-	return &pb.GetChildListByGuardianIDResponse{Children: children}, nil
+	nursery, err := i.entClient.Nursery.Query().
+		Where(nurseryRepo.HasGuardiansWith(guardianRepo.ID(guardianID))).
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get nursery by guardian ID", "error", err)
+		return nil, err
+	}
+
+	nurseryID := nursery.ID.String()
+	var childPhotoList []*pb.ChildPhoto
+
+	// 子供ごとに処理
+	for _, child := range children {
+		// データベースから子供の写真のメタデータを取得
+		childPhotoRecordList, err := i.entClient.ChildPhoto.Query().
+			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).
+			All(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get child photo list", "error", err)
+			return nil, err
+		}
+
+		// 写真メタデータリストをループ
+		for _, photoMetadata := range childPhotoRecordList {
+			// GCSから写真を取得するためのIDを使用
+			photo_data, err := i.getPhotoFromGCS(ctx, nurseryID, child.Id, photoMetadata.ID.String())
+			if err != nil {
+				i.logger.Error("failed to get photo from GCS", "error", err)
+				return nil, err
+			}
+
+			// 結果リストに追加
+			childPhotoList = append(childPhotoList, &pb.ChildPhoto{
+				ChildId:   child.Id,
+				Id:        photoMetadata.ID.String(), // 修正: GCSから取得した写真のIDではなく、メタデータのIDを使用
+				PhotoData: photo_data,
+			})
+		}
+	}
+
+	return &pb.GetChildListByGuardianIDResponse{
+		Children: children,
+		Photos:   childPhotoList,
+	}, nil
 }
 
 func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChildListByNurseryIDRequest) (*pb.GetChildListByNurseryIDResponse, error) {
 	nurseryID, err := uuid.Parse(req.NurseryId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse nursery ID '%s': %w", req.NurseryId, err)
+		i.logger.Error("failed to parse nursery ID", "error", err)
+		return nil, err
 	}
 
 	// 子供と保育園の間に親を介在させるためのクエリを修正
@@ -170,52 +259,195 @@ func (i *Interactor) GetChildListByNurseryID(ctx context.Context, req *pb.GetChi
 	})
 
 	if err != nil {
+		i.logger.Error("failed to get children by nursery ID", "error", err)
 		return nil, err
 	}
 
-	return &pb.GetChildListByNurseryIDResponse{Children: children}, nil
+	// 子供の写真を取得
+	var photos []*pb.ChildPhoto
+	for _, child := range children {
+		// 子供の写真のメタデータを取得
+		childPhotoRecordList, err := i.entClient.ChildPhoto.Query().
+			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).All(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get child photo list", "error", err)
+			return nil, err
+		}
+
+		// 写真メタデータリストをループ
+		for _, photoMetadata := range childPhotoRecordList {
+			// GCSから写真を取得するためのIDを使用
+			photo_data, err := i.getPhotoFromGCS(ctx, nurseryID.String(), child.Id, photoMetadata.ID.String())
+			if err != nil {
+				i.logger.Error("failed to get photo from GCS", "error", err)
+				return nil, err
+			}
+
+			// 結果リストに追加
+			photos = append(photos, &pb.ChildPhoto{
+				ChildId:   child.Id,
+				Id:        photoMetadata.ID.String(), // 修正: GCSから取得した写真のIDではなく、メタデータのIDを使用
+				PhotoData: photo_data,
+			})
+		}
+	}
+
+	return &pb.GetChildListByNurseryIDResponse{
+		Children: children,
+		Photos:   photos,
+	}, nil
 }
 
 func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildListByBusIDRequest) (*pb.GetChildListByBusIDResponse, error) {
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
+		i.logger.Error("failed to parse bus ID", "error", err)
+		return nil, err
 	}
 
-	// バスIDに紐づく子供のIDを中間テーブルを通じて取得
-	children, err := i.entClient.Child.Query().
-		Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
-		WithGuardian().
-		All(ctx)
+	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
+		// Guardianの先のNurseryまで取得
+		return tx.Child.Query().
+			Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
+			WithGuardian(), nil
+	})
+
 	if err != nil {
-		return nil, fmt.Errorf("failed to get children by bus ID: %w", err)
+		i.logger.Error("failed to get children by bus ID", "error", err)
+		return nil, err
 	}
 
-	// 子供の情報をプロトコルバッファ形式に変換
-	pbChildren := make([]*pb.Child, 0, len(children))
+	nursery := i.entClient.Nursery.Query().
+		Where(nurseryRepo.HasBusesWith(busRepo.ID(busID))).
+		OnlyX(ctx)
+
+	// 子供の写真を取得
+	var photos []*pb.ChildPhoto
 	for _, child := range children {
-		pbChildren = append(pbChildren, utils.ToPbChild(child))
+		photoRecordList, err := i.entClient.ChildPhoto.Query().
+			Where(childPhotoRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(child.Id)))).All(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get child photo list", "error", err)
+			return nil, err
+		}
+
+		for _, photo := range photoRecordList {
+			photo_data, err := i.getPhotoFromGCS(ctx, nursery.ID.String(), child.Id, photo.ID.String())
+			if err != nil {
+				i.logger.Error("failed to get photo from GCS", "error", err)
+				return nil, err
+			}
+
+			photos = append(photos, &pb.ChildPhoto{
+				ChildId:   child.Id,
+				Id:        photo.ID.String(),
+				PhotoData: photo_data,
+			})
+		}
 	}
 
-	return &pb.GetChildListByBusIDResponse{Children: pbChildren}, nil
+	return &pb.GetChildListByBusIDResponse{
+		Children: children,
+		Photos:   photos,
+	}, nil
+}
+
+func (i *Interactor) UpdateChild(ctx context.Context, req *pb.UpdateChildRequest) (*pb.UpdateChildResponse, error) {
+	// child_idのパース
+	childID, err := uuid.Parse(req.ChildId)
+	if err != nil {
+		i.logger.Error("failed to parse child ID", "error", err)
+		return nil, err
+	}
+
+	// トランザクションの開始
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// 更新処理のビルダー
+	update := tx.Child.Update().Where(child.IDEQ(childID))
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "name":
+			update.SetName(req.Name)
+		case "age":
+			update.SetAge(int(req.Age))
+		case "sex":
+			sex, err := utils.ConvertPbSexToEntSex(req.Sex) // 仮に性別変換用の関数を想定
+			if err != nil {
+				i.logger.Error("failed to convert sex", "error", err)
+				return nil, err
+			}
+			update.SetSex(*sex)
+		case "check_for_missing_items":
+			update.SetCheckForMissingItems(req.CheckForMissingItems)
+		case "has_bag":
+			update.SetHasBag(req.HasBag)
+		case "has_lunch_box":
+			update.SetHasLunchBox(req.HasLunchBox)
+		case "has_water_bottle":
+			update.SetHasWaterBottle(req.HasWaterBottle)
+		case "has_umbrella":
+			update.SetHasUmbrella(req.HasUmbrella)
+		case "has_other":
+			update.SetHasOther(req.HasOther)
+		}
+	}
+
+	// 更新の実行
+	_, err = update.Save(ctx)
+	if err != nil {
+		i.logger.Error("failed to update child", "error", err)
+		return nil, err
+	}
+
+	// 更新されたエンティティの取得
+	updatedChild, err := tx.Child.Query().
+		Where(child.IDEQ(childID)).
+		WithGuardian().
+		Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to retrieve updated child", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	// レスポンスの生成と返却
+	return &pb.UpdateChildResponse{
+		Child: utils.ToPbChild(updatedChild), // 仮にエンティティをProtobufメッセージに変換する関数を想定
+	}, nil
 }
 
 // getChildList abstracts the common logic for fetching child lists.
 func (i *Interactor) getChildList(ctx context.Context, queryFunc func(*ent.Tx) (*ent.ChildQuery, error)) ([]*pb.Child, error) {
 	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to start transaction: %w", err)
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
 	}
-	defer tx.Rollback() // Rollback is safe to call even if the tx is already committed.
+	defer utils.RollbackTx(tx, i.logger)
 
 	query, err := queryFunc(tx)
 	if err != nil {
+		i.logger.Error("failed to create query", "error", err)
 		return nil, err
 	}
 
 	entChildren, err := query.All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("query failed: %w", err)
+		i.logger.Error("failed to get children", "error", err)
+		return nil, err
 	}
 
 	pbChildren := make([]*pb.Child, len(entChildren))
@@ -224,10 +456,26 @@ func (i *Interactor) getChildList(ctx context.Context, queryFunc func(*ent.Tx) (
 	}
 
 	if err := tx.Commit(); err != nil {
-		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
 	}
 
 	return pbChildren, nil
+}
+
+func (i *Interactor) getPhotoFromGCS(ctx context.Context, nurseryID, childID, photoID string) ([]byte, error) {
+	// Cloud Storage上の写真のパスを生成
+	objectName := fmt.Sprintf("%s/%s/raw/%s.png", nurseryID, childID, photoID)
+
+	// 指定したバケット内のオブジェクトを取得
+	rc, err := i.StorageClient.Bucket(i.BucketName).Object(objectName).NewReader(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rc.Close()
+
+	// バイトデータを読み込む
+	return io.ReadAll(rc)
 }
 
 // uploadPhotoToGCS は写真をGCPのCloud Storageにアップロードします。
@@ -240,11 +488,13 @@ func (i *Interactor) uploadPhotoToGCS(ctx context.Context, nurseryID, childID, p
 
 	// 写真のバイトデータを書き込む
 	if _, err := wc.Write(photo); err != nil {
+		i.logger.Error("failed to write photo to GCS", "error", err)
 		return err
 	}
 
 	// ライターを閉じて、アップロードを完了させる
 	if err := wc.Close(); err != nil {
+		i.logger.Error("failed to close writer", "error", err)
 		return err
 	}
 
@@ -259,7 +509,8 @@ func (i *Interactor) deletePhotoFromGCS(ctx context.Context, nurseryID, childID,
 	// 指定したバケット内のオブジェクトを削除
 	o := i.StorageClient.Bucket(i.BucketName).Object(objectName)
 	if err := o.Delete(ctx); err != nil {
-		return fmt.Errorf("failed to delete photo '%s' from GCS: %w", objectName, err)
+		i.logger.Error("failed to delete photo from GCS", "error", err)
+		return err
 	}
 
 	return nil

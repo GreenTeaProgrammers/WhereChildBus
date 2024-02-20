@@ -3,7 +3,6 @@ FROM golang:1.21.5 AS builder
 
 WORKDIR /srv/grpc
 COPY . .
-
 RUN go mod download
 
 ARG VERS="3.11.4"

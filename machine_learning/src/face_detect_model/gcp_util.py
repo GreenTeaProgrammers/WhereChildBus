@@ -1,6 +1,10 @@
 import google.cloud.storage as gcs
-from google.cloud.storage import Bucket
+from google.cloud.storage import Bucket, Blob
 import os
+
+from face_detect_model.util import logger
+import numpy as np
+import cv2
 
 
 def init_client():
@@ -33,3 +37,22 @@ def get_blobs(bucket: Bucket, blob_name: str):
             return blobs
     except Exception as e:
         raise ValueError(f"Failed to get blobs from '{blob_name}' due to an error: {e}")
+
+
+def decode_face_image_from_ndaarray(face_image: np.ndarray):
+    _, encoded_image = cv2.imencode(".png", face_image)
+    png_clipped_face_data = encoded_image.tobytes()
+    return png_clipped_face_data
+
+
+def save_face_image_to_remote(
+    face_image: np.ndarray,
+    save_blob_name: str,
+    bucket: Bucket,
+):
+    """クリップされた顔画像をGCSに保存する"""
+    png_cliped_face_data = decode_face_image_from_ndaarray(face_image)
+
+    save_blob = Blob(save_blob_name, bucket)
+    save_blob.upload_from_string(data=png_cliped_face_data, content_type="image/png")
+    logger.info(f"Saved face image to {save_blob_name} in GCS.")
