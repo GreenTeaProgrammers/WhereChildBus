@@ -257,6 +257,108 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   $core.List<$8.Bus> get buses => $_getList(0);
 }
 
+class GetRunningBusByGuardianIdRequest extends $pb.GeneratedMessage {
+  factory GetRunningBusByGuardianIdRequest({
+    $core.String? guardianId,
+  }) {
+    final $result = create();
+    if (guardianId != null) {
+      $result.guardianId = guardianId;
+    }
+    return $result;
+  }
+  GetRunningBusByGuardianIdRequest._() : super();
+  factory GetRunningBusByGuardianIdRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRunningBusByGuardianIdRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRunningBusByGuardianIdRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'guardianId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRunningBusByGuardianIdRequest clone() => GetRunningBusByGuardianIdRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRunningBusByGuardianIdRequest copyWith(void Function(GetRunningBusByGuardianIdRequest) updates) => super.copyWith((message) => updates(message as GetRunningBusByGuardianIdRequest)) as GetRunningBusByGuardianIdRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRunningBusByGuardianIdRequest create() => GetRunningBusByGuardianIdRequest._();
+  GetRunningBusByGuardianIdRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRunningBusByGuardianIdRequest> createRepeated() => $pb.PbList<GetRunningBusByGuardianIdRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRunningBusByGuardianIdRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRunningBusByGuardianIdRequest>(create);
+  static GetRunningBusByGuardianIdRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get guardianId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set guardianId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGuardianId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGuardianId() => clearField(1);
+}
+
+class GetRunningBusByGuardianIdResponse extends $pb.GeneratedMessage {
+  factory GetRunningBusByGuardianIdResponse({
+    $8.Bus? bus,
+  }) {
+    final $result = create();
+    if (bus != null) {
+      $result.bus = bus;
+    }
+    return $result;
+  }
+  GetRunningBusByGuardianIdResponse._() : super();
+  factory GetRunningBusByGuardianIdResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRunningBusByGuardianIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRunningBusByGuardianIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRunningBusByGuardianIdResponse clone() => GetRunningBusByGuardianIdResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRunningBusByGuardianIdResponse copyWith(void Function(GetRunningBusByGuardianIdResponse) updates) => super.copyWith((message) => updates(message as GetRunningBusByGuardianIdResponse)) as GetRunningBusByGuardianIdResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetRunningBusByGuardianIdResponse create() => GetRunningBusByGuardianIdResponse._();
+  GetRunningBusByGuardianIdResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRunningBusByGuardianIdResponse> createRepeated() => $pb.PbList<GetRunningBusByGuardianIdResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRunningBusByGuardianIdResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRunningBusByGuardianIdResponse>(create);
+  static GetRunningBusByGuardianIdResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.Bus get bus => $_getN(0);
+  @$pb.TagNumber(1)
+  set bus($8.Bus v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBus() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Bus ensureBus() => $_ensure(0);
+}
+
 class ChangeBusStatusRequest extends $pb.GeneratedMessage {
   factory ChangeBusStatusRequest({
     $core.String? busId,

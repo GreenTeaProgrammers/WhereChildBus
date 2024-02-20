@@ -86,24 +86,6 @@ def save_face_image_to_local(face: np.ndarray, save_dir: str, save_file_name: st
     cv2.imwrite(save_path, face)
 
 
-def decode_face_image_from_ndaarray(face_image: np.ndarray):
-    _, encoded_image = cv2.imencode(".png", face_image)
-    png_cliped_face_data = encoded_image.tobytes()
-    return png_cliped_face_data
-
-
-def save_face_image_to_remote(
-    face_image: np.ndarray,
-    save_blob_name: str,
-    bucket: Bucket,
-):
-    """クリップされた顔画像をGCSに保存する"""
-    png_cliped_face_data = decode_face_image_from_ndaarray(face_image)
-
-    save_blob = Blob(save_blob_name, bucket)
-    save_blob.upload_from_string(data=png_cliped_face_data, content_type="image/png")
-
-
 def detect_face_and_clip(args: argparse.Namespace, config: dict):
     face_cascade_path = config["face_detect"]["cascade_path"]
     image_size = (

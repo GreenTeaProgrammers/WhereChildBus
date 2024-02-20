@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	BusService_CreateBus_FullMethodName              = "/where_child_bus.v1.BusService/CreateBus"
-	BusService_GetBusListByNurseryId_FullMethodName  = "/where_child_bus.v1.BusService/GetBusListByNurseryId"
-	BusService_UpdateBus_FullMethodName              = "/where_child_bus.v1.BusService/UpdateBus"
-	BusService_SendLocationContinuous_FullMethodName = "/where_child_bus.v1.BusService/SendLocationContinuous"
-	BusService_TrackBusContinuous_FullMethodName     = "/where_child_bus.v1.BusService/TrackBusContinuous"
-	BusService_StreamBusVideo_FullMethodName         = "/where_child_bus.v1.BusService/StreamBusVideo"
+	BusService_CreateBus_FullMethodName                 = "/where_child_bus.v1.BusService/CreateBus"
+	BusService_GetBusListByNurseryId_FullMethodName     = "/where_child_bus.v1.BusService/GetBusListByNurseryId"
+	BusService_GetRunningBusByGuardianId_FullMethodName = "/where_child_bus.v1.BusService/GetRunningBusByGuardianId"
+	BusService_UpdateBus_FullMethodName                 = "/where_child_bus.v1.BusService/UpdateBus"
+	BusService_SendLocationContinuous_FullMethodName    = "/where_child_bus.v1.BusService/SendLocationContinuous"
+	BusService_TrackBusContinuous_FullMethodName        = "/where_child_bus.v1.BusService/TrackBusContinuous"
+	BusService_StreamBusVideo_FullMethodName            = "/where_child_bus.v1.BusService/StreamBusVideo"
 )
 
 // BusServiceClient is the client API for BusService service.
@@ -33,6 +34,7 @@ const (
 type BusServiceClient interface {
 	CreateBus(ctx context.Context, in *CreateBusRequest, opts ...grpc.CallOption) (*CreateBusResponse, error)
 	GetBusListByNurseryId(ctx context.Context, in *GetBusListByNurseryIdRequest, opts ...grpc.CallOption) (*GetBusListByNurseryIdResponse, error)
+	GetRunningBusByGuardianId(ctx context.Context, in *GetRunningBusByGuardianIdRequest, opts ...grpc.CallOption) (*GetRunningBusByGuardianIdResponse, error)
 	UpdateBus(ctx context.Context, in *UpdateBusRequest, opts ...grpc.CallOption) (*UpdateBusResponse, error)
 	SendLocationContinuous(ctx context.Context, opts ...grpc.CallOption) (BusService_SendLocationContinuousClient, error)
 	TrackBusContinuous(ctx context.Context, in *TrackBusContinuousRequest, opts ...grpc.CallOption) (BusService_TrackBusContinuousClient, error)
@@ -59,6 +61,15 @@ func (c *busServiceClient) CreateBus(ctx context.Context, in *CreateBusRequest, 
 func (c *busServiceClient) GetBusListByNurseryId(ctx context.Context, in *GetBusListByNurseryIdRequest, opts ...grpc.CallOption) (*GetBusListByNurseryIdResponse, error) {
 	out := new(GetBusListByNurseryIdResponse)
 	err := c.cc.Invoke(ctx, BusService_GetBusListByNurseryId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *busServiceClient) GetRunningBusByGuardianId(ctx context.Context, in *GetRunningBusByGuardianIdRequest, opts ...grpc.CallOption) (*GetRunningBusByGuardianIdResponse, error) {
+	out := new(GetRunningBusByGuardianIdResponse)
+	err := c.cc.Invoke(ctx, BusService_GetRunningBusByGuardianId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -180,6 +191,7 @@ func (x *busServiceStreamBusVideoClient) CloseAndRecv() (*StreamBusVideoResponse
 type BusServiceServer interface {
 	CreateBus(context.Context, *CreateBusRequest) (*CreateBusResponse, error)
 	GetBusListByNurseryId(context.Context, *GetBusListByNurseryIdRequest) (*GetBusListByNurseryIdResponse, error)
+	GetRunningBusByGuardianId(context.Context, *GetRunningBusByGuardianIdRequest) (*GetRunningBusByGuardianIdResponse, error)
 	UpdateBus(context.Context, *UpdateBusRequest) (*UpdateBusResponse, error)
 	SendLocationContinuous(BusService_SendLocationContinuousServer) error
 	TrackBusContinuous(*TrackBusContinuousRequest, BusService_TrackBusContinuousServer) error
@@ -195,6 +207,9 @@ func (UnimplementedBusServiceServer) CreateBus(context.Context, *CreateBusReques
 }
 func (UnimplementedBusServiceServer) GetBusListByNurseryId(context.Context, *GetBusListByNurseryIdRequest) (*GetBusListByNurseryIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBusListByNurseryId not implemented")
+}
+func (UnimplementedBusServiceServer) GetRunningBusByGuardianId(context.Context, *GetRunningBusByGuardianIdRequest) (*GetRunningBusByGuardianIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRunningBusByGuardianId not implemented")
 }
 func (UnimplementedBusServiceServer) UpdateBus(context.Context, *UpdateBusRequest) (*UpdateBusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBus not implemented")
@@ -252,6 +267,24 @@ func _BusService_GetBusListByNurseryId_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BusServiceServer).GetBusListByNurseryId(ctx, req.(*GetBusListByNurseryIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusService_GetRunningBusByGuardianId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRunningBusByGuardianIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusServiceServer).GetRunningBusByGuardianId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BusService_GetRunningBusByGuardianId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusServiceServer).GetRunningBusByGuardianId(ctx, req.(*GetRunningBusByGuardianIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -361,6 +394,10 @@ var BusService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBusListByNurseryId",
 			Handler:    _BusService_GetBusListByNurseryId_Handler,
+		},
+		{
+			MethodName: "GetRunningBusByGuardianId",
+			Handler:    _BusService_GetRunningBusByGuardianId_Handler,
 		},
 		{
 			MethodName: "UpdateBus",

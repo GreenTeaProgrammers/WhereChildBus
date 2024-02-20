@@ -83,7 +83,7 @@ func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
 	case pb.Sex_SEX_MAN:
 		sex := child.SexMan
 		return &sex, nil
-	case pb.Sex_SEX_WOMAN: // 修正: WOMEN -> WOMAN
+	case pb.Sex_SEX_WOMAN:
 		sex := child.SexWoman
 		return &sex, nil
 	case pb.Sex_SEX_OTHER:
