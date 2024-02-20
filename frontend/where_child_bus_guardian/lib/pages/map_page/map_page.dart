@@ -6,14 +6,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/map_page_bottom.dart';
-import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 import 'package:where_child_bus_guardian/service/get_running_bus_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/service/get_station_list_by_bus_id.dart';
 import 'package:where_child_bus_guardian/service/get_nursery_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/util/guardian_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
-import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
 
 class Waypoint {
   final double latitude;
@@ -65,17 +63,11 @@ class _MapPageState extends State<MapPage> {
 
     try {
       await _loadBusData();
-      developer.log('バスデータの読み込み');
       await _loadStationsData();
-      developer.log('停留所リストデータの読み込み');
-      await _loadWaypointData();
-      developer.log('経由地データの読み込み');
+      await _createWayPointsFromStations();
       await _loadNurseryData();
-      developer.log('保育園データの読み込み');
-      await _getCoordinates();
-      developer.log('座標の取得');
+      await _getNurseryCoordinates();
       _loadBusLocation();
-      developer.log('バスの位置情報の読み込み');
     } catch (e) {
       developer.log('初期化中にエラーが発生しました: $e');
     } finally {
@@ -101,11 +93,9 @@ class _MapPageState extends State<MapPage> {
   Future<void> _loadBusData() async {
     try {
       var busRes = await getRunningBusByGuardianIdService(guardian.id);
-      developer.log("$mounted");
       if (mounted) {
         setState(() {
           bus = busRes.bus;
-          developer.log("bus: $bus");
         });
       }
     } catch (error) {
@@ -116,7 +106,6 @@ class _MapPageState extends State<MapPage> {
   Future<void> _loadStationsData() async {
     try {
       developer.log('停留所リストの読み込み開始');
-      developer.log(bus.id);
       var stationsRes = await getStationListByBusIdService(bus.id);
       if (mounted) {
         setState(() {
@@ -128,15 +117,16 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> _loadWaypointData() async {
+  Future<void> _createWayPointsFromStations() async {
     try {
+      developer.log("Waypointsの作成開始", name: "CreateWaypointsFromStations");
       if (mounted) {
-        stations.forEach((station) {
+        for (var station in stations) {
           waypoints.add(Waypoint(
               latitude: station.latitude,
               longitude: station.longitude,
               name: station.id.toString()));
-        });
+        }
       }
     } catch (error) {
       developer.log('経由地の読み込みに失敗しました: $error');
@@ -145,13 +135,12 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _loadNurseryData() async {
     try {
+      developer.log("保育園の読み込み開始", name: "LoadNurseryData");
       var nurseryRes = await getNurseryByGuardianIdService(guardian.id);
-      developer.log(nurseryRes.nurseries.address);
       if (mounted) {
         setState(() {
           nursery = nurseryRes.nurseries;
           nurseryAddress = nursery.address;
-          developer.log("nurseryAddressを初期化");
         });
       }
     } catch (error) {
@@ -159,7 +148,7 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> _getCoordinates() async {
+  Future<void> _getNurseryCoordinates() async {
     try {
       dynamic response;
       developer.log("住所から緯度経度への変換${nurseryAddress}");
@@ -167,7 +156,6 @@ class _MapPageState extends State<MapPage> {
           'https://maps.googleapis.com/maps/api/geocode/json?address=$nurseryAddress&key=$googleApiKey'));
       if (mounted) {
         setState(() {
-          developer.log("$response");
           final data = json.decode(response.body);
           developer.log(response.body);
           final location = data['results'][0]['geometry']['location'];
