@@ -15,10 +15,8 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	boardingrecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childbusassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
@@ -210,7 +208,7 @@ func (i *Interactor) GetRunningBusByGuardianID(ctx context.Context, req *pb.GetR
 
 	bus, err := i.entClient.Bus.Query().
 		Where(busRepo.HasNurseryWith(nurseryRepo.HasGuardiansWith(guardianRepo.ID(guardianID)))).
-		Where(busRepo.StatusEQ(bus.StatusRunning)).
+		Where(busRepo.StatusEQ(busRepo.StatusRunning)).
 		Only(ctx)
 
 	if err != nil {
@@ -296,7 +294,7 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 	defer utils.RollbackTx(tx, i.logger)
 
 	// 更新処理のビルダー
-	update := tx.Bus.Update().Where(bus.IDEQ(busID))
+	update := tx.Bus.Update().Where(busRepo.IDEQ(busID))
 	for _, path := range req.UpdateMask.Paths {
 		switch path {
 		case "name":
@@ -504,8 +502,8 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 
 		// 既存のレコードを検索
 		exists, err := tx.BoardingRecord.Query().
-			Where(boardingrecord.HasChildWith(child.IDEQ(childUUID))).
-			Where(boardingrecord.HasBusWith(bus.IDEQ(busUUID))).
+			Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))).
+			Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).
 			Exist(context.Background())
 		if err != nil {
 			return err
@@ -524,8 +522,8 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 		}
 
 		boardingrecord, err := tx.BoardingRecord.Query().
-			Where(boardingrecord.HasChildWith(child.IDEQ(childUUID))).
-			Where(boardingrecord.HasBusWith(bus.IDEQ(busUUID))).
+			Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))).
+			Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).
 			Only(context.Background())
 		if err != nil {
 			return err
@@ -558,7 +556,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 
 		// 子供の情報を取得してレスポンスに追加
 		child, err := tx.Child.Query().
-			Where(child.IDEQ(childUUID)).
+			Where(childRepo.IDEQ(childUUID)).
 			WithGuardian().
 			Only(context.Background())
 		if err != nil {
@@ -698,4 +696,3 @@ func setNextStation(logger slog.Logger, ctx context.Context, tx *ent.Tx, guardia
 	}
 	return nil
 }
-
