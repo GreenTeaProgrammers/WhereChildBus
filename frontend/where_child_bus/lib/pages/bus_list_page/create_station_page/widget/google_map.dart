@@ -1,6 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:where_child_bus/pages/bus_list_page/create_station_page/locate_user.dart';
 
 class GoogleMapWidget extends StatefulWidget {
   const GoogleMapWidget({super.key});
@@ -12,16 +13,20 @@ class GoogleMapWidget extends StatefulWidget {
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(35.68145403034362, 139.76707116150914);
 
   bool _isLoading = false;
+
+  void _onLoad() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     developer.log("GoogleMapControllerが作成されました");
     mapController = controller;
-    setState(() {
-      _isLoading = false;
-    });
+    locateUser(mapController, _onLoad);
   }
 
   @override
@@ -40,6 +45,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             target: _center,
             zoom: 11.0,
           ),
+          myLocationEnabled: true,
         ),
         if (_isLoading) // マップが読み込まれていない間はローディングインジケーターを表示
           const Center(

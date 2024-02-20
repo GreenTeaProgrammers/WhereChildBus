@@ -46,7 +46,9 @@ class _CreateStationPageState extends State<CreateStationPage> {
       appBar: AppBar(
         title: const Text('新規バス停作成'),
       ),
-      body: const GoogleMapWidget(),
+      body: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: const GoogleMapWidget()),
     );
   }
 }
