@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 
 import torch
 import yaml
@@ -80,18 +81,17 @@ def convert_to_tensor_from_images(clipped_face_images):
 
 def get_clipped_faces_from_images(args, config, save_bucket):
     all_faces = []
-    save_blob_name = f"{args.bus_id}.png"
     for video in args.video_chunk:
         image = load_image_from_binary(args, video)
-        save_face_image_to_remote(image, save_blob_name, save_bucket)
-
-        # TODO: 保存処理を推論後にして保存先をchild_id/timestampにする
         clipped_faces = detect_face_and_clip_from_image(image, config)
-        if len(clipped_faces) != 0:
-            for i in range(len(clipped_faces)):
-                save_face_image_to_remote(
-                    clipped_faces[i], f"{args.bus_id}_clipped{i}.png", save_bucket
-                )
+        if len(clipped_faces) > 0:
+            # timestampをファイル名に含めて保存
+            now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+            save_face_image_to_remote(
+                image,
+                f"{args.nursery_id}/{args.bus_id}/{now}_{switch_to_bus_type(args.bus_type)}.png",
+                save_bucket,
+            )
         all_faces.extend(clipped_faces)
     return all_faces
 
