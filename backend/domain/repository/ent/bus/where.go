@@ -76,24 +76,9 @@ func Longitude(v float64) predicate.Bus {
 	return predicate.Bus(sql.FieldEQ(FieldLongitude, v))
 }
 
-// MorningFirstStationID applies equality check predicate on the "morning_first_station_id" field. It's identical to MorningFirstStationIDEQ.
-func MorningFirstStationID(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldEQ(FieldMorningFirstStationID, v))
-}
-
-// EveningFirstStationID applies equality check predicate on the "evening_first_station_id" field. It's identical to EveningFirstStationIDEQ.
-func EveningFirstStationID(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldEQ(FieldEveningFirstStationID, v))
-}
-
 // EnableFaceRecognition applies equality check predicate on the "enable_face_recognition" field. It's identical to EnableFaceRecognitionEQ.
 func EnableFaceRecognition(v bool) predicate.Bus {
 	return predicate.Bus(sql.FieldEQ(FieldEnableFaceRecognition, v))
-}
-
-// NextStationID applies equality check predicate on the "next_station_id" field. It's identical to NextStationIDEQ.
-func NextStationID(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldEQ(FieldNextStationID, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -366,136 +351,6 @@ func StatusNotIn(vs ...Status) predicate.Bus {
 	return predicate.Bus(sql.FieldNotIn(FieldStatus, vs...))
 }
 
-// MorningFirstStationIDEQ applies the EQ predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDEQ(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldEQ(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDNEQ applies the NEQ predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDNEQ(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldNEQ(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDIn applies the In predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDIn(vs ...string) predicate.Bus {
-	return predicate.Bus(sql.FieldIn(FieldMorningFirstStationID, vs...))
-}
-
-// MorningFirstStationIDNotIn applies the NotIn predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDNotIn(vs ...string) predicate.Bus {
-	return predicate.Bus(sql.FieldNotIn(FieldMorningFirstStationID, vs...))
-}
-
-// MorningFirstStationIDGT applies the GT predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDGT(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldGT(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDGTE applies the GTE predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDGTE(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldGTE(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDLT applies the LT predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDLT(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldLT(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDLTE applies the LTE predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDLTE(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldLTE(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDContains applies the Contains predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDContains(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldContains(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDHasPrefix applies the HasPrefix predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDHasPrefix(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldHasPrefix(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDHasSuffix applies the HasSuffix predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDHasSuffix(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldHasSuffix(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDEqualFold applies the EqualFold predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDEqualFold(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldEqualFold(FieldMorningFirstStationID, v))
-}
-
-// MorningFirstStationIDContainsFold applies the ContainsFold predicate on the "morning_first_station_id" field.
-func MorningFirstStationIDContainsFold(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldContainsFold(FieldMorningFirstStationID, v))
-}
-
-// EveningFirstStationIDEQ applies the EQ predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDEQ(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldEQ(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDNEQ applies the NEQ predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDNEQ(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldNEQ(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDIn applies the In predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDIn(vs ...string) predicate.Bus {
-	return predicate.Bus(sql.FieldIn(FieldEveningFirstStationID, vs...))
-}
-
-// EveningFirstStationIDNotIn applies the NotIn predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDNotIn(vs ...string) predicate.Bus {
-	return predicate.Bus(sql.FieldNotIn(FieldEveningFirstStationID, vs...))
-}
-
-// EveningFirstStationIDGT applies the GT predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDGT(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldGT(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDGTE applies the GTE predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDGTE(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldGTE(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDLT applies the LT predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDLT(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldLT(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDLTE applies the LTE predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDLTE(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldLTE(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDContains applies the Contains predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDContains(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldContains(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDHasPrefix applies the HasPrefix predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDHasPrefix(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldHasPrefix(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDHasSuffix applies the HasSuffix predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDHasSuffix(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldHasSuffix(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDEqualFold applies the EqualFold predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDEqualFold(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldEqualFold(FieldEveningFirstStationID, v))
-}
-
-// EveningFirstStationIDContainsFold applies the ContainsFold predicate on the "evening_first_station_id" field.
-func EveningFirstStationIDContainsFold(v string) predicate.Bus {
-	return predicate.Bus(sql.FieldContainsFold(FieldEveningFirstStationID, v))
-}
-
 // EnableFaceRecognitionEQ applies the EQ predicate on the "enable_face_recognition" field.
 func EnableFaceRecognitionEQ(v bool) predicate.Bus {
 	return predicate.Bus(sql.FieldEQ(FieldEnableFaceRecognition, v))
@@ -504,56 +359,6 @@ func EnableFaceRecognitionEQ(v bool) predicate.Bus {
 // EnableFaceRecognitionNEQ applies the NEQ predicate on the "enable_face_recognition" field.
 func EnableFaceRecognitionNEQ(v bool) predicate.Bus {
 	return predicate.Bus(sql.FieldNEQ(FieldEnableFaceRecognition, v))
-}
-
-// NextStationIDEQ applies the EQ predicate on the "next_station_id" field.
-func NextStationIDEQ(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldEQ(FieldNextStationID, v))
-}
-
-// NextStationIDNEQ applies the NEQ predicate on the "next_station_id" field.
-func NextStationIDNEQ(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldNEQ(FieldNextStationID, v))
-}
-
-// NextStationIDIn applies the In predicate on the "next_station_id" field.
-func NextStationIDIn(vs ...uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldIn(FieldNextStationID, vs...))
-}
-
-// NextStationIDNotIn applies the NotIn predicate on the "next_station_id" field.
-func NextStationIDNotIn(vs ...uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldNotIn(FieldNextStationID, vs...))
-}
-
-// NextStationIDGT applies the GT predicate on the "next_station_id" field.
-func NextStationIDGT(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldGT(FieldNextStationID, v))
-}
-
-// NextStationIDGTE applies the GTE predicate on the "next_station_id" field.
-func NextStationIDGTE(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldGTE(FieldNextStationID, v))
-}
-
-// NextStationIDLT applies the LT predicate on the "next_station_id" field.
-func NextStationIDLT(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldLT(FieldNextStationID, v))
-}
-
-// NextStationIDLTE applies the LTE predicate on the "next_station_id" field.
-func NextStationIDLTE(v uuid.UUID) predicate.Bus {
-	return predicate.Bus(sql.FieldLTE(FieldNextStationID, v))
-}
-
-// NextStationIDIsNil applies the IsNil predicate on the "next_station_id" field.
-func NextStationIDIsNil() predicate.Bus {
-	return predicate.Bus(sql.FieldIsNull(FieldNextStationID))
-}
-
-// NextStationIDNotNil applies the NotNil predicate on the "next_station_id" field.
-func NextStationIDNotNil() predicate.Bus {
-	return predicate.Bus(sql.FieldNotNull(FieldNextStationID))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -720,6 +525,75 @@ func HasChildBusAssociations() predicate.Bus {
 func HasChildBusAssociationsWith(preds ...predicate.ChildBusAssociation) predicate.Bus {
 	return predicate.Bus(func(s *sql.Selector) {
 		step := newChildBusAssociationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDestinationStation applies the HasEdge predicate on the "destination_station" edge.
+func HasDestinationStation() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DestinationStationTable, DestinationStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDestinationStationWith applies the HasEdge predicate on the "destination_station" edge with a given conditions (other predicates).
+func HasDestinationStationWith(preds ...predicate.Station) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newDestinationStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMorningFirstStation applies the HasEdge predicate on the "morning_first_station" edge.
+func HasMorningFirstStation() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, MorningFirstStationTable, MorningFirstStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMorningFirstStationWith applies the HasEdge predicate on the "morning_first_station" edge with a given conditions (other predicates).
+func HasMorningFirstStationWith(preds ...predicate.Station) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newMorningFirstStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEveningFirstStation applies the HasEdge predicate on the "evening_first_station" edge.
+func HasEveningFirstStation() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, EveningFirstStationTable, EveningFirstStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEveningFirstStationWith applies the HasEdge predicate on the "evening_first_station" edge with a given conditions (other predicates).
+func HasEveningFirstStationWith(preds ...predicate.Station) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newEveningFirstStationStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
