@@ -6,8 +6,10 @@ class Pred_Args:
     nursery_id: str
     bus_id: str
     bus_type: int
-    video_chunk: str
+    video_chunk: list[str]
     vehicle_event: str
+    photo_height: int
+    photo_width: int
 
 
 @dataclass
