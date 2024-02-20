@@ -75,7 +75,7 @@ Future<void> updateStation(
 
   try {
     var req = UpdateStationRequest(
-        id: stationId, busId: bussId, latitude: latitude, longitude: longitude);
+        id: stationId, busId: busId, latitude: latitude, longitude: longitude);
     var res = grpcClient.updateStation(req);
     if (kDebugMode) {
       developer.log("リクエスト: $req");
