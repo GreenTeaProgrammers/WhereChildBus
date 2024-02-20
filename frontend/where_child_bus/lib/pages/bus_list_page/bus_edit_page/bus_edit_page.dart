@@ -221,7 +221,12 @@ class _BusEditPageState extends State<BusEditPage> {
             var res = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => BusGuardianManagePage()));
+                    builder: (context) => BusGuardianManagePage(
+                          morningSelectedGuardiansId:
+                              morningSelectedGuardiansId,
+                          eveningSelectedGuardiansId:
+                              eveningSelectedGuardiansId,
+                        )));
             if (res != null && res is Map<String, List<GuardianResponse>>) {
               developer.log("${res["morning"]}");
               morningSelectedGuardiansId =

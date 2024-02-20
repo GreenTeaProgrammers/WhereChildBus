@@ -10,8 +10,15 @@ import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 
 class BusGuardianManagePage extends StatefulWidget {
   final Bus? bus;
+  final List<String>? morningSelectedGuardiansId;
+  final List<String>? eveningSelectedGuardiansId;
 
-  const BusGuardianManagePage({Key? key, this.bus}) : super(key: key);
+  const BusGuardianManagePage(
+      {Key? key,
+      this.bus,
+      this.morningSelectedGuardiansId,
+      this.eveningSelectedGuardiansId})
+      : super(key: key);
 
   @override
   _BusGuardianManagePageState createState() => _BusGuardianManagePageState();
@@ -31,6 +38,32 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
     _loadGuardians();
   }
 
+  void _setSelectedGuardians() {
+    if (widget.morningSelectedGuardiansId != null) {
+      developer.log(
+          "morningSelectedGuardiansId: ${widget.morningSelectedGuardiansId}");
+      //mornignGuardiansの中からmorningSelectedGuardiansIdに一致するguardianをmorningSelectedGuardiansに追加
+      morningSelectedGuardians = morningGuardians
+          .where((guardian) =>
+              widget.morningSelectedGuardiansId!.contains(guardian.id))
+          .toList();
+      //morningGuardiansからmorningSelectedGuardiansに追加したguardianを削除
+      morningGuardians.removeWhere((guardian) =>
+          widget.morningSelectedGuardiansId!.contains(guardian.id));
+    }
+
+    if (widget.eveningSelectedGuardiansId != null) {
+      //eveningGuardiansの中からeveningSelectedGuardiansIdに一致するguardianをeveningSelectedGuardiansに追加
+      eveningSelectedGuardians = eveningGuardians
+          .where((guardian) =>
+              widget.eveningSelectedGuardiansId!.contains(guardian.id))
+          .toList();
+      //eveningGuardiansからeveningSelectedGuardiansに追加したguardianを削除
+      eveningGuardians.removeWhere((guardian) =>
+          widget.eveningSelectedGuardiansId!.contains(guardian.id));
+    }
+  }
+
   Future<void> _loadGuardians() async {
     _isLoading = true;
 
@@ -39,6 +72,7 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
         setState(() {
           morningGuardians = NurseryGuardianData().getGuardianList();
           eveningGuardians = NurseryGuardianData().getGuardianList();
+          _setSelectedGuardians();
           _isLoading = false;
         });
       }
@@ -57,7 +91,11 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
         if (kDebugMode) {
           developer.log("保護者リストのロード中にエラーが発生しました: $e");
         }
-        setState(() => {_isLoading = false, _isFailLoading = true});
+        setState(() => {
+              _setSelectedGuardians(),
+              _isLoading = false,
+              _isFailLoading = true
+            });
       }
     }
   }
