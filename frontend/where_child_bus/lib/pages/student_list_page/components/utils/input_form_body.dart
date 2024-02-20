@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:where_child_bus/models/nursery_bus_data.dart';
+import 'package:where_child_bus/models/nursery_guardian_data.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/service/get_guardian_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
@@ -50,17 +51,27 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Future<void> _loadGuardians() async {
-    try {
-      var res = await getGuardianListByNurseryIdService(
-          NurseryData().getNursery().id);
-      setState(() {
-        guardians = res;
-      });
-    } catch (error) {
-      developer.log("Caught Error", error: error.toString());
-      setState(() {
-        guardians = [];
-      });
+    if (NurseryGuardianData().getGuardianList().isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          guardians = NurseryGuardianData().getGuardianList();
+        });
+      }
+      return;
+    } else {
+      try {
+        var res = await getGuardianListByNurseryIdService(
+            NurseryData().getNursery().id);
+        NurseryGuardianData().setGuardianListResponse(res);
+        setState(() {
+          guardians = NurseryGuardianData().getGuardianList();
+        });
+      } catch (error) {
+        developer.log("Caught Error", error: error.toString());
+        setState(() {
+          guardians = [];
+        });
+      }
     }
   }
 

@@ -11,6 +11,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
+	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
@@ -24,6 +25,28 @@ type Interactor struct {
 
 func NewInteractor(entClient *ent.Client, logger *slog.Logger) *Interactor {
 	return &Interactor{entClient, logger}
+}
+
+func (i *Interactor) GetNurseryByGuardianID(ctx context.Context, req *pb.GetNurseryByGuardianIdRequest) (*pb.GetNurseryByGuardianIdResponse, error) {
+	// guardianIDをuuidに変換
+	guardianID, err := uuid.Parse(req.GuardianId)
+	if err != nil {
+		i.logger.Error("failed to parse uuid", "error", err)
+		return nil, err
+	}
+
+	// guardianIDに紐づくnurseryを取得
+	nurseries, err := i.entClient.Nursery.Query().
+		Where(nursery.HasGuardiansWith(guardianRepo.IDEQ(guardianID))).
+		Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to get nurseries", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetNurseryByGuardianIdResponse{
+		Nurseries: utils.ToPbNurseryResponse(nurseries),
+	}, nil
 }
 
 func (i *Interactor) CreateNursery(ctx context.Context, req *pb.CreateNurseryRequest) (*pb.CreateNurseryResponse, error) {

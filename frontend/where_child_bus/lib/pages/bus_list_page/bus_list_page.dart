@@ -1,6 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/components/util/operation_button.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
@@ -30,9 +31,28 @@ class _BusListPageState extends State<BusListPage> {
     _loadBusList();
   }
 
-  Future<void> _loadBusList() async {
-    String nurseryId = NurseryData().getNursery().id;
+  Future<void> _fetchBusList() async {
+    _isLoading = true;
 
+    try {
+      GetBusListByNurseryIdResponse busList =
+          await getBusList(NurseryData().getNursery().id);
+      NurseryBusData().setBusListResponse(busList);
+      if (mounted) {
+        setState(() {
+          buses = NurseryBusData().getBusList();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスリストのロード中にエラーが発生しました: $e");
+      }
+      setState(() => {_isLoading = false, _isFailLoading = true});
+    }
+  }
+
+  Future<void> _loadBusList() async {
     if (NurseryBusData().getBusList().isNotEmpty) {
       if (mounted) {
         setState(() {
@@ -42,21 +62,7 @@ class _BusListPageState extends State<BusListPage> {
       }
       return;
     } else {
-      GetBusListByNurseryIdResponse busList = await getBusList(nurseryId);
-      NurseryBusData().setBusListResponse(busList);
-      try {
-        if (mounted) {
-          setState(() {
-            buses = NurseryBusData().getBusList();
-            _isLoading = false;
-          });
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          developer.log("バスリストのロード中にエラーが発生しました: $e");
-        }
-        setState(() => {_isLoading = false, _isFailLoading = true});
-      }
+      await _fetchBusList();
     }
   }
 
@@ -80,7 +86,8 @@ class _BusListPageState extends State<BusListPage> {
                 if (_isFailLoading) loadFailText(),
                 if (buses.isEmpty) busNotRegisteredText(),
                 Expanded(
-                  child: listViewBuilder(),
+                  child: RefreshIndicator(
+                      onRefresh: _fetchBusList, child: listViewBuilder()),
                 )
               ],
             ),
@@ -145,6 +152,18 @@ class _BusListPageState extends State<BusListPage> {
               children: [
                 busPhoto(bus.busStatus),
                 busNameAndDescription(bus.name, bus.busStatus),
+                const Spacer(),
+                OperationButton(
+                  bus: bus,
+                  onBusUpdated: (Bus updatedBus) {
+                    int index = buses.indexOf(bus);
+                    if (index != -1) {
+                      setState(() {
+                        buses[index] = updatedBus;
+                      });
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -157,8 +176,10 @@ class _BusListPageState extends State<BusListPage> {
     late String imagePath;
     if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       imagePath = "assets/images/bus_operating.png";
-    } else {
+    } else if (busStatus == BusStatus.BUS_STATUS_STOPPED) {
       imagePath = "assets/images/bus_not_operating.png";
+    } else {
+      imagePath = "assets/images/bus_maintenance.png";
     }
 
     return SizedBox(
@@ -189,7 +210,7 @@ class _BusListPageState extends State<BusListPage> {
     if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       description = "運行中";
     } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
-      description = "メンテナンス中";
+      description = "経路未設定";
     } else {
       description = "停止中";
     }
