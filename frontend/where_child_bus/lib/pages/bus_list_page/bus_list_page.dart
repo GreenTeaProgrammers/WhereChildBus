@@ -1,12 +1,14 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/components/util/operation_button.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_edit_page.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
+import 'package:where_child_bus/service/update_bus_status.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -152,7 +154,9 @@ class _BusListPageState extends State<BusListPage> {
                 busPhoto(bus.busStatus),
                 busNameAndDescription(bus.name, bus.busStatus),
                 const Spacer(),
-                _createOperationButton(bus.busStatus),
+                OperationButton(
+                  bus: bus,
+                ),
               ],
             ),
           ),
@@ -192,57 +196,12 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget _createOperationButton(
-    BusStatus busStatus,
-  ) {
-    Color buttonColor;
-    String buttonText;
-
-    switch (busStatus) {
-      case BusStatus.BUS_STATUS_STOPPED:
-        buttonColor = Colors.green;
-        buttonText = "運航開始";
-        break;
-      case BusStatus.BUS_STATUS_MAINTENANCE:
-        buttonColor = Colors.red;
-        buttonText = "設定";
-        break;
-      default:
-        buttonColor = Colors.red;
-        buttonText = "運航停止";
-    }
-
-    return _buildButton(buttonColor, buttonText, () {});
-  }
-
-  Widget _buildButton(Color color, String text, VoidCallback onPressed) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          primary: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget busDescription(BusStatus busStatus) {
     late String description;
     if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
       description = "運行中";
     } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
-      description = "メンテナンス中";
+      description = "未設定";
     } else {
       description = "停止中";
     }
