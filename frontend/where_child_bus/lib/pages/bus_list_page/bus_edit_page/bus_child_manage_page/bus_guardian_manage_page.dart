@@ -105,13 +105,13 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: pageAppBar(),
-        body: pageBody(),
+        appBar: _createPageAppBar(),
+        body: _createPageBody(),
       ),
     );
   }
 
-  AppBar pageAppBar() {
+  AppBar _createPageAppBar() {
     return AppBar(
         bottom: const TabBar(
       tabs: [
@@ -125,7 +125,7 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
     ));
   }
 
-  Widget pageBody() {
+  Widget _createPageBody() {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -140,8 +140,8 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
           Expanded(
             child: TabBarView(
               children: [
-                morningGuardianList(),
-                eveningGuardianList(),
+                _createMorningGuardianList(),
+                _createEveningGuardianList(),
               ],
             ),
           ),
@@ -161,13 +161,13 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
     }
   }
 
-  Widget morningGuardianList() {
+  Widget _createMorningGuardianList() {
     return GuardianList(
         guardians: morningGuardians,
         selectedGuardians: morningSelectedGuardians);
   }
 
-  Widget eveningGuardianList() {
+  Widget _createEveningGuardianList() {
     return GuardianList(
         guardians: eveningGuardians,
         selectedGuardians: eveningSelectedGuardians);
