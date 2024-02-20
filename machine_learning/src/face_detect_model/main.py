@@ -85,6 +85,7 @@ def TrainAndTest(args: argparse.Namespace, config: dict):
 
 
 def main(args: argparse.Namespace):
+    # TODO: configに関するsanity_checkを実装する
     with open("src/face_detect_model/config.yaml", "r") as f:
         config = yaml.safe_load(f)
     TrainAndTest(args, config)
