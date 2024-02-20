@@ -51,3 +51,25 @@ Future<CreateBusResponse> createBus(
     return client.createBus(req);
   });
 }
+
+Future<void> streamBusVideo(Stream<StreamBusVideoRequest> requestStream) async {
+  final channel = ClientChannel(
+    appConfig.grpcEndpoint,
+    port: appConfig.grpcPort,
+    options: const ChannelOptions(),
+  );
+  final grpcClient = BusServiceClient(channel);
+  developer.log("ServiceClient created");
+  final res = grpcClient.streamBusVideo(requestStream);
+
+  try {
+    developer.log("Streamed video to server");
+    await for (var response in res.asStream()) {
+      developer.log("Received response: $response");
+    }
+  } catch (error) {
+    developer.log("Caught Error:", error: error.toString());
+  } finally {
+    await channel.shutdown();
+  }
+}

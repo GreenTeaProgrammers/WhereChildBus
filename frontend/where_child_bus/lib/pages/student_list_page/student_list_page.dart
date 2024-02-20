@@ -2,9 +2,10 @@ import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/child_list.dart';
+import 'package:where_child_bus/models/nursery_child_data.dart';
 import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
 import 'package:where_child_bus/service/get_child_list_by_nursery_id.dart';
-import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -29,11 +30,17 @@ class _ChildListPageState extends State<ChildListPage> {
     _loadChildren();
   }
 
-  Future<void> _loadChildren() async {
+  Future<void> _fetchChildren() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
     try {
-      _isLoading = true;
       GetChildListByNurseryIDResponse res =
           await getChildListByNurseryIdService(NurseryData().getNursery().id);
+      NurseryChildListData().setChildListResponse(res);
       if (mounted) {
         setState(() {
           children = res.children;
@@ -43,7 +50,7 @@ class _ChildListPageState extends State<ChildListPage> {
       }
     } catch (error) {
       if (kDebugMode) {
-        developer.log("子供のロード中にエラーが発生しました");
+        developer.log("子供のロード中にエラーが発生しました", error: error);
       }
 
       if (mounted) {
@@ -52,6 +59,24 @@ class _ChildListPageState extends State<ChildListPage> {
           _isFailLoading = true;
         });
       }
+    }
+  }
+
+  Future<void> _loadChildren() async {
+    _isLoading = true;
+
+    // If the child list is already loaded, use it
+    if (NurseryChildListData().getChildList().isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          children = NurseryChildListData().getChildList();
+          photos = NurseryChildListData().getPhotos();
+          _isLoading = false;
+        });
+      }
+      return;
+    } else {
+      await _fetchChildren();
     }
   }
 
@@ -79,7 +104,9 @@ class _ChildListPageState extends State<ChildListPage> {
         child: Text('Failed to load children.'),
       );
     } else {
-      return ChildList(children: children, images: photos);
+      return RefreshIndicator(
+          onRefresh: _fetchChildren,
+          child: ChildList(children: children, images: photos));
     }
   }
 }

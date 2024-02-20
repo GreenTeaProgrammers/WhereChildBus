@@ -10,10 +10,14 @@ from face_detect_model.util import (
     load_image_from_binary,
     switch_to_bus_type,
     load_pickle_to_gcs,
-    get_default_transforms,
+    get_default_transforms_for_gray,
     logger,
 )
-from face_detect_model.gcp_util import init_client, get_bucket
+from face_detect_model.gcp_util import (
+    init_client,
+    get_bucket,
+    save_face_image_to_remote,
+)
 from face_detect_model.model.faceDetectModel import FaceDetectModel
 from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
     detect_face,
@@ -64,20 +68,29 @@ def detect_face_and_clip_from_image(image, config):
     return clipped_faces
 
 
-def convert_to_tensor_from_images(cliped_face_images):
-    transforms = get_default_transforms()
+def convert_to_tensor_from_images(clipped_face_images):
+    transforms = get_default_transforms_for_gray()
     image_tensors = []
-    for cliped_face_image in cliped_face_images:
-        image_tensor = transforms(cliped_face_image)
+    for clipped_face_image in clipped_face_images:
+        image_tensor = transforms(clipped_face_image)
         image_tensors.append(image_tensor)
     return image_tensors
 
 
-def get_cliped_faces_from_images(video_chunk_list, config):
+def get_clipped_faces_from_images(args, config, save_bucket):
     all_faces = []
-    for video_chunk in video_chunk_list:
-        image = load_image_from_binary(video_chunk)
+    save_blob_name = f"{args.bus_id}.png"
+    for video in args.video_chunk:
+        image = load_image_from_binary(args, video)
+        save_face_image_to_remote(image, save_blob_name, save_bucket)
+
+        # TODO: 保存処理を推論後にして保存先をchild_id/timestampにする
         clipped_faces = detect_face_and_clip_from_image(image, config)
+        if len(clipped_faces) != 0:
+            for i in range(len(clipped_faces)):
+                save_face_image_to_remote(
+                    clipped_faces[i], f"{args.bus_id}_clipped{i}.png", save_bucket
+                )
         all_faces.extend(clipped_faces)
     return all_faces
 
@@ -109,19 +122,27 @@ def get_pred_child(model, input_image_tensors, idx_to_label_dict):
 def pred_child_from_images(args, config):
     client = init_client()
     bucket_name = os.environ.get("BUCKET_NAME_FOR_MODEL")
+    bucket_name_for_image = os.environ.get("BUCKET_NAME_FOR_FACE")
     bucket = get_bucket(client, bucket_name)
+    bucket_for_face = get_bucket(client, bucket_name_for_image)
     idx_to_label_dict_bucket_path = f"{args.nursery_id}/{args.bus_id}/idx_to_label_{switch_to_bus_type(args.bus_type)}.pth"
 
     idx_to_label_dict = load_pickle_to_gcs(bucket, idx_to_label_dict_bucket_path)
     model_class_num = len(idx_to_label_dict)
 
-    clipped_faces = get_cliped_faces_from_images(args.video_chunk, config)
+    clipped_faces = get_clipped_faces_from_images(args, config, bucket_for_face)
+
+    if len(clipped_faces) == 0:
+        logger.info("No face detected.")
+        return []
+
     input_image_tensors = convert_to_tensor_from_images(clipped_faces)
 
     model_bucket_path = (
         f"{args.nursery_id}/{args.bus_id}/model_{switch_to_bus_type(args.bus_type)}.pth"
     )
     input_shape = get_model_input_shape(input_image_tensors[0])
+    logger.info(f"Input shape: {input_shape}")
     model_pickle = load_pickle_to_gcs(bucket, model_bucket_path)
     model = load_model(
         model_pickle=model_pickle,
@@ -153,9 +174,8 @@ if __name__ == "__main__":
     parser.add_argument("--bus_type", type=int, required=True)
 
     args = parser.parse_args()
-    args.video_chunk = [
-        open("/Users/mizuki/Desktop/test.jpg", "rb").read(),
-        open("/Users/mizuki/Desktop/test1.jpg", "rb").read(),
-    ]
+    args.video_chunk = [[]]
+    args.photo_height = 240
+    args.photo_width = 320
 
     main(args)

@@ -43,22 +43,22 @@ class NurseryLoginResponse(_message.Message):
     def __init__(self, success: bool = ..., nursery: _Optional[_Union[_resources_pb2.NurseryResponse, _Mapping]] = ...) -> None: ...
 
 class UpdateNurseryRequest(_message.Message):
-    __slots__ = ("id", "name", "adress", "phone_number", "email", "password", "update_mask")
+    __slots__ = ("id", "name", "address", "phone_number", "email", "password", "update_mask")
     ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
-    ADRESS_FIELD_NUMBER: _ClassVar[int]
+    ADDRESS_FIELD_NUMBER: _ClassVar[int]
     PHONE_NUMBER_FIELD_NUMBER: _ClassVar[int]
     EMAIL_FIELD_NUMBER: _ClassVar[int]
     PASSWORD_FIELD_NUMBER: _ClassVar[int]
     UPDATE_MASK_FIELD_NUMBER: _ClassVar[int]
     id: str
     name: str
-    adress: str
+    address: str
     phone_number: str
     email: str
     password: str
     update_mask: _field_mask_pb2.FieldMask
-    def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., adress: _Optional[str] = ..., phone_number: _Optional[str] = ..., email: _Optional[str] = ..., password: _Optional[str] = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., address: _Optional[str] = ..., phone_number: _Optional[str] = ..., email: _Optional[str] = ..., password: _Optional[str] = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
 
 class UpdateNurseryResponse(_message.Message):
     __slots__ = ("nursery",)

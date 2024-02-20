@@ -71,6 +71,32 @@ final $typed_data.Uint8List getBusListByNurseryIdResponseDescriptor = $convert.b
     'Ch1HZXRCdXNMaXN0QnlOdXJzZXJ5SWRSZXNwb25zZRItCgVidXNlcxgBIAMoCzIXLndoZXJlX2'
     'NoaWxkX2J1cy52MS5CdXNSBWJ1c2Vz');
 
+@$core.Deprecated('Use getRunningBusByGuardianIdRequestDescriptor instead')
+const GetRunningBusByGuardianIdRequest$json = {
+  '1': 'GetRunningBusByGuardianIdRequest',
+  '2': [
+    {'1': 'guardian_id', '3': 1, '4': 1, '5': 9, '10': 'guardianId'},
+  ],
+};
+
+/// Descriptor for `GetRunningBusByGuardianIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRunningBusByGuardianIdRequestDescriptor = $convert.base64Decode(
+    'CiBHZXRSdW5uaW5nQnVzQnlHdWFyZGlhbklkUmVxdWVzdBIfCgtndWFyZGlhbl9pZBgBIAEoCV'
+    'IKZ3VhcmRpYW5JZA==');
+
+@$core.Deprecated('Use getRunningBusByGuardianIdResponseDescriptor instead')
+const GetRunningBusByGuardianIdResponse$json = {
+  '1': 'GetRunningBusByGuardianIdResponse',
+  '2': [
+    {'1': 'bus', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.Bus', '10': 'bus'},
+  ],
+};
+
+/// Descriptor for `GetRunningBusByGuardianIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRunningBusByGuardianIdResponseDescriptor = $convert.base64Decode(
+    'CiFHZXRSdW5uaW5nQnVzQnlHdWFyZGlhbklkUmVzcG9uc2USKQoDYnVzGAEgASgLMhcud2hlcm'
+    'VfY2hpbGRfYnVzLnYxLkJ1c1IDYnVz');
+
 @$core.Deprecated('Use changeBusStatusRequestDescriptor instead')
 const ChangeBusStatusRequest$json = {
   '1': 'ChangeBusStatusRequest',

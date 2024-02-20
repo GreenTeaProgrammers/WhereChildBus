@@ -6,7 +6,7 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 import 'package:where_child_bus_guardian/service/check_is_child_in_bus.dart';
 import 'package:where_child_bus_guardian/components/utils/image_from_byte.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/components/has_item_state.dart';
-import '../styles/styles.dart';
+import '../../styles/styles.dart';
 
 class DailyRecordBody extends StatefulWidget {
   final Child child;

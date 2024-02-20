@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
-import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
 
 enum NurseryLoginError {
