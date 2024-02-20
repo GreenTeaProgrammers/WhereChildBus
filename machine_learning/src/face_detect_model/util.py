@@ -172,3 +172,80 @@ def load_pickle_to_gcs(bucket: Bucket, obj_path: str) -> object:
         model = torch.load(f)
     logger.info(f"pickle loaded from {obj_path}")
     return model
+
+
+class smile_detecter:
+    def __init__(
+        self, scaleFactor=1.1, minNeighbors=10, cascade_path="haarcascade_smile.xml"
+    ):
+        self.scaleFactor = scaleFactor
+        self.minNeighbors = minNeighbors
+        self.smile_cascade = self.get_casecade(cascade_path)
+
+    def get_casecade(self, cascade_path):
+        cascade = cv2.CascadeClassifier(cv2.data.haarcascades + cascade_path)
+        if cascade is None:
+            raise ValueError(f"Can not load cascade: {cascade_path}")
+        return cascade
+
+    def detect_smile_degree(self, gray_image):
+        smile = self.smile_cascade.detectMultiScale(
+            gray_image, scaleFactor=self.scaleFactor, minNeighbors=self.minNeighbors
+        )
+        if len(smile) > 0:
+            (_, _, sw, sh) = smile[0]
+            smile_area = sw * sh
+            smile_degree = (
+                smile_area / (gray_image.shape[0] * gray_image.shape[1]) * 100
+            )
+            return smile_degree
+
+        return 0
+
+    def add_smile_degree_to_image(
+        self, image, smile_degree, font_scale=0.7, thickness=2
+    ):
+        # 画像の高さと幅を取得
+        height, width = image.shape[:2]
+
+        # テキストを追加する位置（画像の下部中央付近）
+        position = (10, height - 10)  # 下部に少し余白を残す
+
+        # テキストのフォント
+        font = cv2.FONT_HERSHEY_SIMPLEX
+
+        # テキストの色（BGR形式）
+        color = (255, 255, 255)  # 白色
+
+        # テキストの背景色
+        background_color = (0, 0, 0)  # 黒色
+
+        # 小数点以下1桁まで表示
+        smile_degree = round(smile_degree, 1)
+
+        # テキストの背景を描画（背景に少し余白を持たせるためにテキストサイズを計算）
+        (text_width, text_height), _ = cv2.getTextSize(
+            f"Smile degree: {smile_degree}", font, font_scale, thickness
+        )
+        image_copy = image.copy()
+        cv2.rectangle(
+            image_copy,
+            position,
+            (position[0] + text_width, position[1] + text_height + 10),
+            background_color,
+            -1,
+        )
+
+        # テキストを画像に追加
+        cv2.putText(
+            image_copy,
+            f"Smile degree: {smile_degree}",
+            position,
+            font,
+            font_scale,
+            color,
+            thickness,
+            cv2.LINE_AA,
+        )
+
+        return image_copy
