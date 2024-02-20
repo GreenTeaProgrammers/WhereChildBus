@@ -13,6 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../google/protobuf/field_mask.pb.dart' as $9;
 import 'resources.pb.dart' as $8;
 import 'resources.pbenum.dart' as $8;
 
@@ -586,6 +587,250 @@ class CheckIsChildInBusResponse extends $pb.GeneratedMessage {
   $core.bool hasIsInBus() => $_has(0);
   @$pb.TagNumber(1)
   void clearIsInBus() => clearField(1);
+}
+
+class UpdateChildRequest extends $pb.GeneratedMessage {
+  factory UpdateChildRequest({
+    $core.String? childId,
+    $core.String? name,
+    $core.int? age,
+    $8.Sex? sex,
+    $core.bool? checkForMissingItems,
+    $core.bool? hasBag,
+    $core.bool? hasLunchBox,
+    $core.bool? hasWaterBottle,
+    $core.bool? hasUmbrella,
+    $core.bool? hasOther,
+    $9.FieldMask? updateMask,
+  }) {
+    final $result = create();
+    if (childId != null) {
+      $result.childId = childId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    if (age != null) {
+      $result.age = age;
+    }
+    if (sex != null) {
+      $result.sex = sex;
+    }
+    if (checkForMissingItems != null) {
+      $result.checkForMissingItems = checkForMissingItems;
+    }
+    if (hasBag != null) {
+      $result.hasBag = hasBag;
+    }
+    if (hasLunchBox != null) {
+      $result.hasLunchBox = hasLunchBox;
+    }
+    if (hasWaterBottle != null) {
+      $result.hasWaterBottle = hasWaterBottle;
+    }
+    if (hasUmbrella != null) {
+      $result.hasUmbrella = hasUmbrella;
+    }
+    if (hasOther != null) {
+      $result.hasOther = hasOther;
+    }
+    if (updateMask != null) {
+      $result.updateMask = updateMask;
+    }
+    return $result;
+  }
+  UpdateChildRequest._() : super();
+  factory UpdateChildRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateChildRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChildRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'childId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'age', $pb.PbFieldType.O3)
+    ..e<$8.Sex>(4, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: $8.Sex.SEX_UNSPECIFIED, valueOf: $8.Sex.valueOf, enumValues: $8.Sex.values)
+    ..aOB(5, _omitFieldNames ? '' : 'checkForMissingItems')
+    ..aOB(6, _omitFieldNames ? '' : 'hasBag')
+    ..aOB(7, _omitFieldNames ? '' : 'hasLunchBox')
+    ..aOB(8, _omitFieldNames ? '' : 'hasWaterBottle')
+    ..aOB(9, _omitFieldNames ? '' : 'hasUmbrella')
+    ..aOB(10, _omitFieldNames ? '' : 'hasOther')
+    ..aOM<$9.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateChildRequest clone() => UpdateChildRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateChildRequest copyWith(void Function(UpdateChildRequest) updates) => super.copyWith((message) => updates(message as UpdateChildRequest)) as UpdateChildRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateChildRequest create() => UpdateChildRequest._();
+  UpdateChildRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateChildRequest> createRepeated() => $pb.PbList<UpdateChildRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateChildRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateChildRequest>(create);
+  static UpdateChildRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get childId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set childId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChildId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChildId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get age => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set age($core.int v) { $_setSignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasAge() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAge() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $8.Sex get sex => $_getN(3);
+  @$pb.TagNumber(4)
+  set sex($8.Sex v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasSex() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSex() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get checkForMissingItems => $_getBF(4);
+  @$pb.TagNumber(5)
+  set checkForMissingItems($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasCheckForMissingItems() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCheckForMissingItems() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get hasBag => $_getBF(5);
+  @$pb.TagNumber(6)
+  set hasBag($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasHasBag() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearHasBag() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get hasLunchBox => $_getBF(6);
+  @$pb.TagNumber(7)
+  set hasLunchBox($core.bool v) { $_setBool(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasHasLunchBox() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearHasLunchBox() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.bool get hasWaterBottle => $_getBF(7);
+  @$pb.TagNumber(8)
+  set hasWaterBottle($core.bool v) { $_setBool(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasHasWaterBottle() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearHasWaterBottle() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get hasUmbrella => $_getBF(8);
+  @$pb.TagNumber(9)
+  set hasUmbrella($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasHasUmbrella() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearHasUmbrella() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get hasOther => $_getBF(9);
+  @$pb.TagNumber(10)
+  set hasOther($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasHasOther() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearHasOther() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $9.FieldMask get updateMask => $_getN(10);
+  @$pb.TagNumber(11)
+  set updateMask($9.FieldMask v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasUpdateMask() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearUpdateMask() => clearField(11);
+  @$pb.TagNumber(11)
+  $9.FieldMask ensureUpdateMask() => $_ensure(10);
+}
+
+class UpdateChildResponse extends $pb.GeneratedMessage {
+  factory UpdateChildResponse({
+    $8.Child? child,
+  }) {
+    final $result = create();
+    if (child != null) {
+      $result.child = child;
+    }
+    return $result;
+  }
+  UpdateChildResponse._() : super();
+  factory UpdateChildResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateChildResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChildResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.Child>(1, _omitFieldNames ? '' : 'child', subBuilder: $8.Child.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateChildResponse clone() => UpdateChildResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateChildResponse copyWith(void Function(UpdateChildResponse) updates) => super.copyWith((message) => updates(message as UpdateChildResponse)) as UpdateChildResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateChildResponse create() => UpdateChildResponse._();
+  UpdateChildResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateChildResponse> createRepeated() => $pb.PbList<UpdateChildResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateChildResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateChildResponse>(create);
+  static UpdateChildResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.Child get child => $_getN(0);
+  @$pb.TagNumber(1)
+  set child($8.Child v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChild() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChild() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.Child ensureChild() => $_ensure(0);
 }
 
 

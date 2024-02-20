@@ -2,13 +2,15 @@ import 'dart:developer' as developer;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:where_child_bus/models/nursery_bus_data.dart';
+import 'package:where_child_bus/models/nursery_guardian_data.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/service/get_guardian_list_by_nursery_id.dart';
-import 'package:where_child_bus/util/nursery_data.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
-import 'input_value_label.dart';
+import '../../../../components/util/input_value_label.dart';
 import 'text_input_field.dart';
-import 'select_value_box.dart';
+import '../../../../components/util/select_value_box.dart';
 import 'submit_button.dart';
 
 class InputFormBody extends StatefulWidget {
@@ -21,8 +23,8 @@ class InputFormBody extends StatefulWidget {
 }
 
 class _InputFormBodyState extends State<InputFormBody> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   late Future<void> _loadDataFuture; // 非同期処理の結果を保持する変数
   List<GuardianResponse> guardians = [];
   List<Bus> buses = [];
@@ -49,31 +51,49 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Future<void> _loadGuardians() async {
-    try {
-      var res = await getGuardianListByNurseryIdService(
-          NurseryData().getNursery().id);
-      setState(() {
-        guardians = res;
-      });
-    } catch (error) {
-      developer.log("Caught Error", error: error.toString());
-      setState(() {
-        guardians = [];
-      });
+    if (NurseryGuardianData().getGuardianList().isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          guardians = NurseryGuardianData().getGuardianList();
+        });
+      }
+      return;
+    } else {
+      try {
+        var res = await getGuardianListByNurseryIdService(
+            NurseryData().getNursery().id);
+        NurseryGuardianData().setGuardianListResponse(res);
+        setState(() {
+          guardians = NurseryGuardianData().getGuardianList();
+        });
+      } catch (error) {
+        developer.log("Caught Error", error: error.toString());
+        setState(() {
+          guardians = [];
+        });
+      }
     }
   }
 
   Future<void> _loadBuses() async {
-    try {
-      var res = await getBusList(NurseryData().getNursery().id);
+    if (NurseryBusData().getBusList().isNotEmpty) {
       setState(() {
-        buses = res;
+        buses = NurseryBusData().getBusList();
       });
-    } catch (error) {
-      developer.log("Caught Error", error: error.toString());
-      setState(() {
-        buses = [];
-      });
+      return;
+    } else {
+      try {
+        var res = await getBusList(NurseryData().getNursery().id);
+        NurseryBusData().setBusListResponse(res);
+        setState(() {
+          buses = NurseryBusData().getBusList();
+        });
+      } catch (error) {
+        developer.log("Caught Error", error: error.toString());
+        setState(() {
+          buses = [];
+        });
+      }
     }
   }
 

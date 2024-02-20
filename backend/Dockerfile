@@ -19,9 +19,6 @@ ARG ML_ADDR
 
 ARG INSIDE_OF_CREDENTIALS
 
-RUN echo "Port is: $PORT" && echo "Mode is: $MODE_DEV"
-
-
 # .env ファイルを生成
 RUN echo "DSN=$DSN" > .env \
     && echo "DB_USER_NAME=$DB_USER_NAME" >> .env \
@@ -34,11 +31,6 @@ RUN echo "DSN=$DSN" > .env \
     && echo "STORAGE_BUCKET_NAME=$STORAGE_BUCKET_NAME" >> .env \
     && echo "PASSWORD_PEPPER=$PASSWORD_PEPPER" >> .env \
     && echo "ML_ADDR=$ML_ADDR" >> .env
-
-# secretsディレクトリのgcp-credentials.jsonを作成
-RUN mkdir secrets
-RUN touch secrets/gcp-credentials.json
-RUN echo "$INSIDE_OF_CREDENTIALS" >> secrets/gcp-credentials.json
 
 RUN go mod download
 
@@ -69,13 +61,6 @@ COPY --from=builder /srv/grpc/.env /app/.env
 
 # secretsディレクトリを/appディレクトリにコピー
 COPY --from=builder /srv/grpc/secrets /app/secrets
-
-RUN ls -la /app/secrets
-RUN echo "gcp-credentials.json is: $(cat /app/secrets/gcp-credentials.json)"
-
-# /appディレクトリ以下の全てのサブファイルディレクトリも含めた構造を出力
-RUN ls -laR /app
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/secrets/gcp-credentials.json
 
 # アプリケーションの起動
 ENTRYPOINT ["/app/server"]

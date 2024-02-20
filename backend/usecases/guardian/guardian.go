@@ -8,6 +8,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
@@ -247,4 +248,66 @@ func (i *Interactor) GetGuardianListByNurseryID(ctx context.Context, req *pb.Get
 	}
 
 	return &pb.GetGuardianListByNurseryIdResponse{Guardians: pbGuardians}, nil
+}
+
+func (i *Interactor) UpdateGuardian(ctx context.Context, req *pb.UpdateGuardianRequest) (*pb.UpdateGuardianResponse, error) {
+	guardianID, err := uuid.Parse(req.GuardianId)
+	if err != nil {
+		i.logger.Error("failed to parse guardian ID", "error", err)
+		return nil, err
+	}
+
+	tx, err := i.entClient.Tx(ctx)
+	if err != nil {
+		i.logger.Error("failed to start transaction", "error", err)
+		return nil, err
+	}
+	defer utils.RollbackTx(tx, i.logger)
+
+	// 更新処理のビルダー
+	update := tx.Guardian.UpdateOneID(guardianID)
+
+	// FieldMaskの解析とフィールドの更新
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "name":
+			update.SetName(req.Name)
+		case "email":
+			update.SetEmail(req.Email)
+		case "phone_number":
+			update.SetPhoneNumber(req.PhoneNumber)
+		case "is_use_morning_bus":
+			update.SetIsUseMorningBus(req.IsUseMorningBus)
+		case "is_use_evening_bus":
+			update.SetIsUseEveningBus(req.IsUseEveningBus)
+		}
+	}
+
+	// 更新の実行
+	_, err = update.Save(ctx)
+	if err != nil {
+		i.logger.Error("failed to update guardian", "error", err)
+		return nil, err
+	}
+
+	// 更新されたエンティティの取得
+	guardian, err := tx.Guardian.Query().
+		Where(guardian.IDEQ(guardianID)).
+		WithNursery().
+		Only(ctx)
+	if err != nil {
+		i.logger.Error("failed to get guardian", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	// レスポンスの生成と返却
+	return &pb.UpdateGuardianResponse{
+		Guardian: utils.ToPbGuardianResponse(guardian), // 仮にエンティティをProtobufメッセージに変換する関数を想定
+	}, nil
 }

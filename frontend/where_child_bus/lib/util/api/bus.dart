@@ -2,7 +2,9 @@ import "dart:developer" as developer;
 import "package:flutter/foundation.dart";
 import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
+import "package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart";
+import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 Future<T> performGrpcCall<T>(
     Future<T> Function(BusServiceClient) grpcCall) async {
@@ -50,4 +52,39 @@ Future<CreateBusResponse> createBus(
     );
     return client.createBus(req);
   });
+}
+
+Future<UpdateBusResponse> updateBusStatus(
+    String busId, BusStatus busStatus) async {
+  return performGrpcCall((client) async {
+    var req = UpdateBusRequest(
+      busId: busId,
+      busStatus: busStatus,
+      updateMask: FieldMask(paths: ["bus_status"]),
+    );
+    developer.log("Request: $req");
+    return client.updateBus(req);
+  });
+}
+
+Future<void> streamBusVideo(Stream<StreamBusVideoRequest> requestStream) async {
+  final channel = ClientChannel(
+    appConfig.grpcEndpoint,
+    port: appConfig.grpcPort,
+    options: const ChannelOptions(),
+  );
+  final grpcClient = BusServiceClient(channel);
+  developer.log("ServiceClient created");
+  final res = grpcClient.streamBusVideo(requestStream);
+
+  try {
+    developer.log("Streamed video to server");
+    await for (var response in res.asStream()) {
+      developer.log("Received response: $response");
+    }
+  } catch (error) {
+    developer.log("Caught Error:", error: error.toString());
+  } finally {
+    await channel.shutdown();
+  }
 }

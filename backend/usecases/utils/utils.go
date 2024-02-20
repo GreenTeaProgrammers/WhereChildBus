@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"database/sql"
 	"fmt"
 
 	"golang.org/x/exp/slog"
@@ -82,7 +83,7 @@ func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
 	case pb.Sex_SEX_MAN:
 		sex := child.SexMan
 		return &sex, nil
-	case pb.Sex_SEX_WOMAN: // 修正: WOMEN -> WOMAN
+	case pb.Sex_SEX_WOMAN:
 		sex := child.SexWoman
 		return &sex, nil
 	case pb.Sex_SEX_OTHER:
@@ -100,8 +101,10 @@ func convertStatusToPbStatus(status bus.Status) pb.BusStatus {
 		return pb.BusStatus_BUS_STATUS_STOPPED
 	case bus.StatusStopped:
 		return pb.BusStatus_BUS_STATUS_STOPPED
+	case bus.StatusMaintenance:
+		return pb.BusStatus_BUS_STATUS_MAINTENANCE
 	default:
-		return pb.BusStatus_BUS_STATUS_STOPPED
+		return pb.BusStatus_BUS_STATUS_UNSPECIFIED
 	}
 }
 
@@ -181,7 +184,14 @@ func CheckPassword(hashedPassword string, plainPassword string) bool {
 
 // RollbackTx はトランザクションのロールバックを試み、エラーがあればロギングします。
 func RollbackTx(tx *ent.Tx, logger *slog.Logger) {
+	// txがコミット済みの場合はロールバックしない
+	if tx == nil {
+		logger.Error("failed to rollback transaction", "error", "tx is nil")
+		return
+	}
 	if err := tx.Rollback(); err != nil {
-		logger.Error("failed to rollback transaction", "error", err)
+		if err != sql.ErrTxDone {
+			logger.Error("failed to rollback transaction", "error", err)
+		}
 	}
 }

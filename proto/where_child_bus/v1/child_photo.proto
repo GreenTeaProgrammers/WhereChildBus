@@ -18,7 +18,6 @@ message DuplicationCheckResponse {
         repeated bytes duplicated_photos  = 3;
 }
 
-
 message DeleteChildPhotoRequest {
         repeated string ids = 1;
 }
