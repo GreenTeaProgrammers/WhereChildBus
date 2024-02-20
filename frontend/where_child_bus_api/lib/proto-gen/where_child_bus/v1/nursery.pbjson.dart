@@ -13,6 +13,32 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use getNurseryByGuardianIdRequestDescriptor instead')
+const GetNurseryByGuardianIdRequest$json = {
+  '1': 'GetNurseryByGuardianIdRequest',
+  '2': [
+    {'1': 'guardian_id', '3': 1, '4': 1, '5': 9, '10': 'guardianId'},
+  ],
+};
+
+/// Descriptor for `GetNurseryByGuardianIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getNurseryByGuardianIdRequestDescriptor = $convert.base64Decode(
+    'Ch1HZXROdXJzZXJ5QnlHdWFyZGlhbklkUmVxdWVzdBIfCgtndWFyZGlhbl9pZBgBIAEoCVIKZ3'
+    'VhcmRpYW5JZA==');
+
+@$core.Deprecated('Use getNurseryByGuardianIdResponseDescriptor instead')
+const GetNurseryByGuardianIdResponse$json = {
+  '1': 'GetNurseryByGuardianIdResponse',
+  '2': [
+    {'1': 'nurseries', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.NurseryResponse', '10': 'nurseries'},
+  ],
+};
+
+/// Descriptor for `GetNurseryByGuardianIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getNurseryByGuardianIdResponseDescriptor = $convert.base64Decode(
+    'Ch5HZXROdXJzZXJ5QnlHdWFyZGlhbklkUmVzcG9uc2USQQoJbnVyc2VyaWVzGAEgASgLMiMud2'
+    'hlcmVfY2hpbGRfYnVzLnYxLk51cnNlcnlSZXNwb25zZVIJbnVyc2VyaWVz');
+
 @$core.Deprecated('Use createNurseryRequestDescriptor instead')
 const CreateNurseryRequest$json = {
   '1': 'CreateNurseryRequest',

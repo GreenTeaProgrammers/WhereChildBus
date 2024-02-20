@@ -18,6 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decrypt secrets
+        run: openssl aes-256-cbc -d -in backend/secrets/gcp-credentials.json.enc -out backend/secrets/gcp-credentials.json -k ${{ secrets.DECRYPTION_KEY }}
+
+      - name: Use decrypted secrets
+        run: |
+          echo "Secrets are decrypted and ready to use"
+
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
@@ -47,8 +54,7 @@ jobs:
             --build-arg GOOGLE_APPLICATION_CREDENTIALS="${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" \
             --build-arg STORAGE_BUCKET_NAME="${{ secrets.STORAGE_BUCKET_NAME }}" \
             --build-arg PASSWORD_PEPPER="${{ secrets.PASSWORD_PEPPER }}" \
-            --build-arg ML_ADDR="${{ secrets.ML_ADDR }}" \
-            --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
+            --build-arg ML_ADDR="${{ secrets.ML_ADDR }}"
 
       - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
         run: gcloud auth configure-docker --quiet

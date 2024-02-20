@@ -1,24 +1,19 @@
 import os
 
 import torch
-from PIL import Image
-
-from face_detect_model.util import (
-    load_image_from_remote,
-)
-
-from face_detect_model.gcp_util import get_bucket, get_blobs
+from face_detect_model.gcp_util import get_blobs, get_bucket
 from face_detect_model.util import (
     get_augment_transform,
-    get_default_transforms,
     get_augment_transform_for_gray,
+    get_default_transforms,
     get_default_transforms_for_gray,
+    load_image_from_remote,
 )
+from PIL import Image
 
 
 # (child_id, image)のタプルを返す
 class FaceDetectDataset(torch.utils.data.Dataset):
-
     def __init__(self, args, config, client):
         self.args = args
         self.config = config
