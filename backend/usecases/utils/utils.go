@@ -57,6 +57,9 @@ func ConvertPbStatusToEntStatus(pbStatus pb.BusStatus) (*busRepo.Status, error) 
 	case pb.BusStatus_BUS_STATUS_STOPPED:
 		status := busRepo.StatusStopped
 		return &status, nil
+	case pb.BusStatus_BUS_STATUS_MAINTENANCE:
+		status := busRepo.StatusMaintenance
+		return &status, nil
 	default:
 		// 不正な値の場合はエラーを返す
 		return nil, fmt.Errorf("invalid Status value: %v", pbStatus)
@@ -99,7 +102,7 @@ func ConvertPbSexToEntSex(pbSex pb.Sex) (*child.Sex, error) {
 func convertStatusToPbStatus(status busRepo.Status) pb.BusStatus {
 	switch status {
 	case busRepo.StatusRunning:
-		return pb.BusStatus_BUS_STATUS_STOPPED
+		return pb.BusStatus_BUS_STATUS_RUNNING
 	case busRepo.StatusStopped:
 		return pb.BusStatus_BUS_STATUS_STOPPED
 	case busRepo.StatusMaintenance:
@@ -222,6 +225,7 @@ func CheckAndFixBusStationCoordinates(logger slog.Logger, ctx context.Context, b
 	}
 	// Stationは正しく設定されているので、バスのステータスを訂正
 	if bus.Status == busRepo.StatusMaintenance {
+		print("バスのステータスを訂正します")
 		_, err := bus.Update().SetStatus(busRepo.StatusStopped).Save(ctx)
 		if err != nil {
 			logger.Error("failed to update bus", "error", err)
