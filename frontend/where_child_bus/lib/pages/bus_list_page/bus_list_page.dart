@@ -151,6 +151,8 @@ class _BusListPageState extends State<BusListPage> {
               children: [
                 busPhoto(bus.busStatus),
                 busNameAndDescription(bus.name, bus.busStatus),
+                const Spacer(),
+                _createOperationButton(bus.busStatus),
               ],
             ),
           ),
@@ -186,6 +188,51 @@ class _BusListPageState extends State<BusListPage> {
       style: const TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 22,
+      ),
+    );
+  }
+
+  Widget _createOperationButton(
+    BusStatus busStatus,
+  ) {
+    Color buttonColor;
+    String buttonText;
+
+    switch (busStatus) {
+      case BusStatus.BUS_STATUS_STOPPED:
+        buttonColor = Colors.green;
+        buttonText = "運航開始";
+        break;
+      case BusStatus.BUS_STATUS_MAINTENANCE:
+        buttonColor = Colors.red;
+        buttonText = "設定";
+        break;
+      default:
+        buttonColor = Colors.red;
+        buttonText = "運航停止";
+    }
+
+    return _buildButton(buttonColor, buttonText, () {});
+  }
+
+  Widget _buildButton(Color color, String text, VoidCallback onPressed) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          primary: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
