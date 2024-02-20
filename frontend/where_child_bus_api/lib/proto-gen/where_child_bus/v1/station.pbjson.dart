@@ -73,6 +73,34 @@ final $typed_data.Uint8List getStationListByBusIdResponseDescriptor = $convert.b
     'VuGAMgAygLMhkud2hlcmVfY2hpbGRfYnVzLnYxLkNoaWxkUghjaGlsZHJlbhI2CgZwaG90b3MY'
     'BCADKAsyHi53aGVyZV9jaGlsZF9idXMudjEuQ2hpbGRQaG90b1IGcGhvdG9z');
 
+@$core.Deprecated('Use getUnregisteredStationListRequestDescriptor instead')
+const GetUnregisteredStationListRequest$json = {
+  '1': 'GetUnregisteredStationListRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+  ],
+};
+
+/// Descriptor for `GetUnregisteredStationListRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getUnregisteredStationListRequestDescriptor = $convert.base64Decode(
+    'CiFHZXRVbnJlZ2lzdGVyZWRTdGF0aW9uTGlzdFJlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidX'
+    'NJZA==');
+
+@$core.Deprecated('Use getUnregisteredStationListResponseDescriptor instead')
+const GetUnregisteredStationListResponse$json = {
+  '1': 'GetUnregisteredStationListResponse',
+  '2': [
+    {'1': 'stations', '3': 1, '4': 3, '5': 11, '6': '.where_child_bus.v1.Station', '10': 'stations'},
+    {'1': 'guardians', '3': 2, '4': 3, '5': 11, '6': '.where_child_bus.v1.GuardianResponse', '10': 'guardians'},
+  ],
+};
+
+/// Descriptor for `GetUnregisteredStationListResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getUnregisteredStationListResponseDescriptor = $convert.base64Decode(
+    'CiJHZXRVbnJlZ2lzdGVyZWRTdGF0aW9uTGlzdFJlc3BvbnNlEjcKCHN0YXRpb25zGAEgAygLMh'
+    'sud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXRpb25SCHN0YXRpb25zEkIKCWd1YXJkaWFucxgCIAMo'
+    'CzIkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUglndWFyZGlhbnM=');
+
 @$core.Deprecated('Use updateStationRequestDescriptor instead')
 const UpdateStationRequest$json = {
   '1': 'UpdateStationRequest',

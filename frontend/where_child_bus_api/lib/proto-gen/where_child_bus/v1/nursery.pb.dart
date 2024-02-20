@@ -16,6 +16,108 @@ import 'package:protobuf/protobuf.dart' as $pb;
 import '../../google/protobuf/field_mask.pb.dart' as $9;
 import 'resources.pb.dart' as $8;
 
+class GetNurseryByGuardianIdRequest extends $pb.GeneratedMessage {
+  factory GetNurseryByGuardianIdRequest({
+    $core.String? guardianId,
+  }) {
+    final $result = create();
+    if (guardianId != null) {
+      $result.guardianId = guardianId;
+    }
+    return $result;
+  }
+  GetNurseryByGuardianIdRequest._() : super();
+  factory GetNurseryByGuardianIdRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetNurseryByGuardianIdRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetNurseryByGuardianIdRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'guardianId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetNurseryByGuardianIdRequest clone() => GetNurseryByGuardianIdRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetNurseryByGuardianIdRequest copyWith(void Function(GetNurseryByGuardianIdRequest) updates) => super.copyWith((message) => updates(message as GetNurseryByGuardianIdRequest)) as GetNurseryByGuardianIdRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetNurseryByGuardianIdRequest create() => GetNurseryByGuardianIdRequest._();
+  GetNurseryByGuardianIdRequest createEmptyInstance() => create();
+  static $pb.PbList<GetNurseryByGuardianIdRequest> createRepeated() => $pb.PbList<GetNurseryByGuardianIdRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetNurseryByGuardianIdRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetNurseryByGuardianIdRequest>(create);
+  static GetNurseryByGuardianIdRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get guardianId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set guardianId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGuardianId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGuardianId() => clearField(1);
+}
+
+class GetNurseryByGuardianIdResponse extends $pb.GeneratedMessage {
+  factory GetNurseryByGuardianIdResponse({
+    $8.NurseryResponse? nurseries,
+  }) {
+    final $result = create();
+    if (nurseries != null) {
+      $result.nurseries = nurseries;
+    }
+    return $result;
+  }
+  GetNurseryByGuardianIdResponse._() : super();
+  factory GetNurseryByGuardianIdResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetNurseryByGuardianIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetNurseryByGuardianIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.NurseryResponse>(1, _omitFieldNames ? '' : 'nurseries', subBuilder: $8.NurseryResponse.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetNurseryByGuardianIdResponse clone() => GetNurseryByGuardianIdResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetNurseryByGuardianIdResponse copyWith(void Function(GetNurseryByGuardianIdResponse) updates) => super.copyWith((message) => updates(message as GetNurseryByGuardianIdResponse)) as GetNurseryByGuardianIdResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetNurseryByGuardianIdResponse create() => GetNurseryByGuardianIdResponse._();
+  GetNurseryByGuardianIdResponse createEmptyInstance() => create();
+  static $pb.PbList<GetNurseryByGuardianIdResponse> createRepeated() => $pb.PbList<GetNurseryByGuardianIdResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetNurseryByGuardianIdResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetNurseryByGuardianIdResponse>(create);
+  static GetNurseryByGuardianIdResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.NurseryResponse get nurseries => $_getN(0);
+  @$pb.TagNumber(1)
+  set nurseries($8.NurseryResponse v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNurseries() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNurseries() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.NurseryResponse ensureNurseries() => $_ensure(0);
+}
+
 class CreateNurseryRequest extends $pb.GeneratedMessage {
   factory CreateNurseryRequest({
     $core.String? email,

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,9 +15,10 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
-	boardingrecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childbusassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
@@ -321,13 +321,30 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 
 	// 更新の実行
 	_, err = update.Save(ctx)
+
 	if err != nil {
 		i.logger.Error("failed to update bus", "error", err)
 		return nil, err
 	}
 
+	updatedBus, err := tx.Bus.Query().Where(busRepo.IDEQ(busID)).
+		WithNursery().
+		Only(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to update bus", "error", err)
+		return nil, err
+	}
+
+	// TODO: もう少し簡潔に
+	_, err = checkAndFixBusStationCoordinates(*i.logger, ctx, updatedBus)
+	if err != nil {
+		i.logger.Error("failed to check and fix bus station coordinates", "error", err)
+		return nil, err
+	}
+
 	// 更新されたバスを取得
-	updatedBus, err := tx.Bus.Query().Where(bus.IDEQ(busID)).
+	updatedBus, err = tx.Bus.Query().Where(busRepo.ID(busID)).
 		WithNursery().
 		Only(ctx)
 	if err != nil {
@@ -419,7 +436,6 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 	go func() {
 		for {
 			in, err := stream.Recv()
-
 			if err == io.EOF {
 				// ストリームの終了
 				break
@@ -457,103 +473,109 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 			continue
 		}
 
-		var pbChildren []*pb.Child
-		busUUID := uuid.MustParse(busID)
-		for _, childId := range resp.ChildIds {
-			childUUID := uuid.MustParse(childId)
-			// まず既存のレコードを検索
-			exists, err := i.entClient.BoardingRecord.Query().
-				Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(uuid.MustParse(childId)))).
-				Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(uuid.MustParse(busID)))).
-				Exist(context.Background())
-
-			if err != nil {
-				// エラーハンドリング
-				log.Printf("Failed to query existing boarding record: %v", err)
-				return err
-			}
-
-			// 既存のレコードがない場合にのみ新しいレコードを作成
-			if !exists {
-				_, err = i.entClient.BoardingRecord.Create().
-					SetChildID(childUUID).
-					SetBusID(busUUID).
-					SetTimestamp(time.Now()).
-					Save(context.Background())
-				if err != nil {
-					// レコード作成時のエラーハンドリング
-					i.logger.Error("Failed to create new boarding record: %v", err)
-					return err
-				}
-				// レコード作成成功
-			}
-
-			boardingrecord, err := i.entClient.BoardingRecord.Query().
-				Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))).
-				Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).
-				Only(context.Background())
-
-			if err != nil {
-				i.logger.Error("Failed to get boarding record: %v", err)
-				return err
-			}
-
-			switch vehicleEvent {
-			case pb.VehicleEvent_VEHICLE_EVENT_GET_ON:
-				if boardingrecord.Unwrap().IsBoarding {
-					// 乗車済みの場合は次のループに進む
-					continue
-				}
-				// 乗車時の検出の場合
-				_, err = i.entClient.BoardingRecord.Update().
-					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 乗車レコードを更新
-					Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).       // 乗車レコードを更新
-					SetIsBoarding(true).                                               // 乗車フラグを立てる
-					SetTimestamp(time.Now()).                                          // 乗車時刻を記録
-					Save(context.Background())
-			case pb.VehicleEvent_VEHICLE_EVENT_GET_OFF:
-				if !boardingrecord.Unwrap().IsBoarding {
-					// 未乗車の場合は次のループに進む
-					continue
-				}
-				// 降車時の検出の場合
-				_, err = i.entClient.BoardingRecord.Update().
-					Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))). // 降車レコードを更新
-					Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).       // 降車レコードを更新
-					SetIsBoarding(false).                                              // 降車フラグを立てる
-					SetTimestamp(time.Now()).                                          // 降車時刻を記録
-					Save(context.Background())
-			default:
-				return fmt.Errorf("invalid video type: %v", vehicleEvent)
-			}
-
-			if err != nil {
-				// レコード更新時のエラーハンドリング
-				i.logger.Error("Failed to update boarding record: %v", err)
-				return err
-			}
-			// レコード更新成功
-
-			// 更新された子供を取得
-			child, err := i.entClient.Child.Query().
-				Where(childRepo.IDEQ(childUUID)).
-				WithGuardian().
-				All(context.Background())
-			if err != nil {
-				i.logger.Error("Failed to get child: %v", err)
-				return err
-			}
-			pbChildren = append(pbChildren, utils.ToPbChild(child[0]))
-		}
-		// 元のクライアントにレスポンスを返す
-		err = stream.SendMsg(&pb.StreamBusVideoResponse{
-			IsDetected: resp.IsDetected,
-			Children:   pbChildren, // ChildIDsをChildrenオブジェクトに変換する必要がある
-		})
+		// トランザクションの開始
+		tx, err := i.entClient.Tx(context.Background())
 		if err != nil {
 			return err
 		}
+
+		// トランザクション内での操作
+		err = i.processDetectedChildren(tx, stream, resp, busID, vehicleEvent) // stream 引数を追加
+		if err != nil {
+			utils.RollbackTx(tx, i.logger)
+			return err
+		}
+
+		// トランザクションのコミット
+		if err := tx.Commit(); err != nil {
+			return err
+		}
 	}
+
+	return nil
+}
+
+// processDetectedChildren は検出された子供たちを処理するためのヘルパー関数です。
+func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_StreamBusVideoServer, resp *mlv1.PredResponse, busID string, vehicleEvent pb.VehicleEvent) error {
+	var pbChildren []*pb.Child
+	busUUID := uuid.MustParse(busID)
+	for _, childId := range resp.ChildIds {
+		childUUID := uuid.MustParse(childId)
+
+		// 既存のレコードを検索
+		exists, err := tx.BoardingRecord.Query().
+			Where(boardingrecord.HasChildWith(child.IDEQ(childUUID))).
+			Where(boardingrecord.HasBusWith(bus.IDEQ(busUUID))).
+			Exist(context.Background())
+		if err != nil {
+			return err
+		}
+
+		if !exists {
+			_, err = tx.BoardingRecord.Create().
+				SetChildID(childUUID).
+				SetBusID(busUUID).
+				SetIsBoarding(false).
+				SetTimestamp(time.Now()).
+				Save(context.Background())
+			if err != nil {
+				return err
+			}
+		}
+
+		boardingrecord, err := tx.BoardingRecord.Query().
+			Where(boardingrecord.HasChildWith(child.IDEQ(childUUID))).
+			Where(boardingrecord.HasBusWith(bus.IDEQ(busUUID))).
+			Only(context.Background())
+		if err != nil {
+			return err
+		}
+
+		// 乗車または降車の処理
+		switch vehicleEvent {
+		case pb.VehicleEvent_VEHICLE_EVENT_GET_ON:
+			if boardingrecord.IsBoarding {
+				continue
+			}
+			_, err = tx.BoardingRecord.UpdateOneID(boardingrecord.ID).
+				SetIsBoarding(true).
+				SetTimestamp(time.Now()).
+				Save(context.Background())
+		case pb.VehicleEvent_VEHICLE_EVENT_GET_OFF:
+			if !boardingrecord.IsBoarding {
+				continue
+			}
+			_, err = tx.BoardingRecord.UpdateOneID(boardingrecord.ID).
+				SetIsBoarding(false).
+				SetTimestamp(time.Now()).
+				Save(context.Background())
+		default:
+			return fmt.Errorf("invalid vehicle event: %v", vehicleEvent)
+		}
+		if err != nil {
+			return err
+		}
+
+		// 子供の情報を取得してレスポンスに追加
+		child, err := tx.Child.Query().
+			Where(child.IDEQ(childUUID)).
+			WithGuardian().
+			Only(context.Background())
+		if err != nil {
+			return err
+		}
+		pbChildren = append(pbChildren, utils.ToPbChild(child))
+	}
+
+	// 元のクライアントにレスポンスを返す
+	err := stream.SendMsg(&pb.StreamBusVideoResponse{
+		IsDetected: resp.IsDetected,
+		Children:   pbChildren,
+	})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -264,6 +264,108 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
   $core.List<$8.ChildPhoto> get photos => $_getList(3);
 }
 
+class GetUnregisteredStationListRequest extends $pb.GeneratedMessage {
+  factory GetUnregisteredStationListRequest({
+    $core.String? busId,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    return $result;
+  }
+  GetUnregisteredStationListRequest._() : super();
+  factory GetUnregisteredStationListRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetUnregisteredStationListRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetUnregisteredStationListRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetUnregisteredStationListRequest clone() => GetUnregisteredStationListRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetUnregisteredStationListRequest copyWith(void Function(GetUnregisteredStationListRequest) updates) => super.copyWith((message) => updates(message as GetUnregisteredStationListRequest)) as GetUnregisteredStationListRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetUnregisteredStationListRequest create() => GetUnregisteredStationListRequest._();
+  GetUnregisteredStationListRequest createEmptyInstance() => create();
+  static $pb.PbList<GetUnregisteredStationListRequest> createRepeated() => $pb.PbList<GetUnregisteredStationListRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetUnregisteredStationListRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetUnregisteredStationListRequest>(create);
+  static GetUnregisteredStationListRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+}
+
+class GetUnregisteredStationListResponse extends $pb.GeneratedMessage {
+  factory GetUnregisteredStationListResponse({
+    $core.Iterable<$8.Station>? stations,
+    $core.Iterable<$8.GuardianResponse>? guardians,
+  }) {
+    final $result = create();
+    if (stations != null) {
+      $result.stations.addAll(stations);
+    }
+    if (guardians != null) {
+      $result.guardians.addAll(guardians);
+    }
+    return $result;
+  }
+  GetUnregisteredStationListResponse._() : super();
+  factory GetUnregisteredStationListResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetUnregisteredStationListResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetUnregisteredStationListResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..pc<$8.Station>(1, _omitFieldNames ? '' : 'stations', $pb.PbFieldType.PM, subBuilder: $8.Station.create)
+    ..pc<$8.GuardianResponse>(2, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetUnregisteredStationListResponse clone() => GetUnregisteredStationListResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetUnregisteredStationListResponse copyWith(void Function(GetUnregisteredStationListResponse) updates) => super.copyWith((message) => updates(message as GetUnregisteredStationListResponse)) as GetUnregisteredStationListResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetUnregisteredStationListResponse create() => GetUnregisteredStationListResponse._();
+  GetUnregisteredStationListResponse createEmptyInstance() => create();
+  static $pb.PbList<GetUnregisteredStationListResponse> createRepeated() => $pb.PbList<GetUnregisteredStationListResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetUnregisteredStationListResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetUnregisteredStationListResponse>(create);
+  static GetUnregisteredStationListResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$8.Station> get stations => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.List<$8.GuardianResponse> get guardians => $_getList(1);
+}
+
 class UpdateStationRequest extends $pb.GeneratedMessage {
   factory UpdateStationRequest({
     $core.String? id,

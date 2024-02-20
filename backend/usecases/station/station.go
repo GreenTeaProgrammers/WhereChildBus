@@ -8,7 +8,6 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
@@ -107,7 +106,7 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 	defer utils.RollbackTx(tx, i.logger)
 
 	// 更新処理のビルダー
-	update := tx.Station.Update().Where(station.IDEQ(stationID))
+	update := tx.Station.Update().Where(stationRepo.IDEQ(stationID))
 	for _, path := range req.UpdateMask.Paths {
 		switch path {
 		case "latitude":
@@ -126,7 +125,7 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 
 	// 更新されたエンティティの取得
 	updateStation, err := tx.Station.Query().
-		Where(station.IDEQ(stationID)).
+		Where(stationRepo.IDEQ(stationID)).
 		WithGuardian().
 		Only(ctx)
 	if err != nil {
@@ -222,6 +221,44 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 		Stations:  pbStations,
 		Guardians: pbGuardians,
 		Children:  pbChildren,
+	}, nil
+}
+
+func (i Interactor) GetUnregisteredStationList(ctx context.Context, req *pb.GetUnregisteredStationListRequest) (*pb.GetUnregisteredStationListResponse, error) {
+	busID, err := uuid.Parse(req.BusId)
+	if err != nil {
+		i.logger.Error("failed to parse bus ID", "error", err)
+		return nil, err
+	}
+
+	stations, err := i.entClient.Station.Query().
+		Where(stationRepo.HasBusWith(busRepo.IDEQ(busID))).
+		Where(stationRepo.Latitude(0)).
+		Where(stationRepo.Longitude(0)).
+		WithGuardian().
+		All(ctx)
+
+	if err != nil {
+		i.logger.Error("failed to get unregistered stations", "error", err)
+		return nil, err
+	}
+
+	var pbStations []*pb.Station
+	var pbGuardians []*pb.GuardianResponse
+	for _, station := range stations {
+		morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, station)
+		if err != nil {
+			i.logger.Error("failed to get next station IDs", "error", err)
+			return nil, err
+		}
+
+		pbStations = append(pbStations, utils.ToPbStation(station, morningNextStationID, eveningNextStationID))
+		pbGuardians = append(pbGuardians, utils.ToPbGuardianResponse(station.Edges.Guardian))
+	}
+
+	return &pb.GetUnregisteredStationListResponse{
+		Stations:  pbStations,
+		Guardians: pbGuardians,
 	}, nil
 }
 

@@ -32,11 +32,6 @@ RUN echo "DSN=$DSN" > .env \
     && echo "PASSWORD_PEPPER=$PASSWORD_PEPPER" >> .env \
     && echo "ML_ADDR=$ML_ADDR" >> .env
 
-# secretsディレクトリのgcp-credentials.jsonを作成
-RUN mkdir secrets
-RUN touch secrets/gcp-credentials.json
-RUN echo "$INSIDE_OF_CREDENTIALS" >> secrets/gcp-credentials.json
-
 RUN go mod download
 
 ARG VERS="3.11.4"

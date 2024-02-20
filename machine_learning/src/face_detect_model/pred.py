@@ -1,28 +1,30 @@
-import os
 import argparse
-from dotenv import load_dotenv
-import yaml
+import os
+import time
+
 import torch
+import yaml
+from dotenv import load_dotenv
 
 load_dotenv("secrets/.env")
 
-from face_detect_model.util import (
-    load_image_from_binary,
-    switch_to_bus_type,
-    load_pickle_to_gcs,
-    get_default_transforms_for_gray,
-    logger,
+from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
+    clip_and_resize_face,
+    detect_face,
+    load_cascade,
 )
 from face_detect_model.gcp_util import (
-    init_client,
     get_bucket,
+    init_client,
     save_face_image_to_remote,
 )
 from face_detect_model.model.faceDetectModel import FaceDetectModel
-from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
-    detect_face,
-    load_cascade,
-    clip_and_resize_face,
+from face_detect_model.util import (
+    get_default_transforms_for_gray,
+    load_image_from_binary,
+    load_pickle_to_gcs,
+    logger,
+    switch_to_bus_type,
 )
 
 
@@ -79,18 +81,17 @@ def convert_to_tensor_from_images(clipped_face_images):
 
 def get_clipped_faces_from_images(args, config, save_bucket):
     all_faces = []
-    save_blob_name = f"{args.bus_id}.png"
     for video in args.video_chunk:
         image = load_image_from_binary(args, video)
-        save_face_image_to_remote(image, save_blob_name, save_bucket)
-
-        # TODO: 保存処理を推論後にして保存先をchild_id/timestampにする
         clipped_faces = detect_face_and_clip_from_image(image, config)
-        if len(clipped_faces) != 0:
-            for i in range(len(clipped_faces)):
-                save_face_image_to_remote(
-                    clipped_faces[i], f"{args.bus_id}_clipped{i}.png", save_bucket
-                )
+        if len(clipped_faces) > 0:
+            # timestampをファイル名に含めて保存
+            now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+            save_face_image_to_remote(
+                image,
+                f"{args.nursery_id}/{args.bus_id}/{now}_{switch_to_bus_type(args.bus_type)}.png",
+                save_bucket,
+            )
         all_faces.extend(clipped_faces)
     return all_faces
 
