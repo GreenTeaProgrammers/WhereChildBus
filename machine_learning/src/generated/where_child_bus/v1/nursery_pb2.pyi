@@ -6,6 +6,18 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class GetNurseryByGuardianIdRequest(_message.Message):
+    __slots__ = ("guardian_id",)
+    GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
+    guardian_id: str
+    def __init__(self, guardian_id: _Optional[str] = ...) -> None: ...
+
+class GetNurseryByGuardianIdResponse(_message.Message):
+    __slots__ = ("nurseries",)
+    NURSERIES_FIELD_NUMBER: _ClassVar[int]
+    nurseries: _resources_pb2.NurseryResponse
+    def __init__(self, nurseries: _Optional[_Union[_resources_pb2.NurseryResponse, _Mapping]] = ...) -> None: ...
+
 class CreateNurseryRequest(_message.Message):
     __slots__ = ("email", "password", "name", "phone_number", "address")
     EMAIL_FIELD_NUMBER: _ClassVar[int]

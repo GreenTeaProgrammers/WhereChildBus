@@ -21,6 +21,10 @@ export 'nursery.pb.dart';
 
 @$pb.GrpcServiceName('where_child_bus.v1.NurseryService')
 class NurseryServiceClient extends $grpc.Client {
+  static final _$getNurseryByGuardianId = $grpc.ClientMethod<$5.GetNurseryByGuardianIdRequest, $5.GetNurseryByGuardianIdResponse>(
+      '/where_child_bus.v1.NurseryService/GetNurseryByGuardianId',
+      ($5.GetNurseryByGuardianIdRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $5.GetNurseryByGuardianIdResponse.fromBuffer(value));
   static final _$createNursery = $grpc.ClientMethod<$5.CreateNurseryRequest, $5.CreateNurseryResponse>(
       '/where_child_bus.v1.NurseryService/CreateNursery',
       ($5.CreateNurseryRequest value) => value.writeToBuffer(),
@@ -40,6 +44,10 @@ class NurseryServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
+  $grpc.ResponseFuture<$5.GetNurseryByGuardianIdResponse> getNurseryByGuardianId($5.GetNurseryByGuardianIdRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getNurseryByGuardianId, request, options: options);
+  }
+
   $grpc.ResponseFuture<$5.CreateNurseryResponse> createNursery($5.CreateNurseryRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createNursery, request, options: options);
   }
@@ -58,6 +66,13 @@ abstract class NurseryServiceBase extends $grpc.Service {
   $core.String get $name => 'where_child_bus.v1.NurseryService';
 
   NurseryServiceBase() {
+    $addMethod($grpc.ServiceMethod<$5.GetNurseryByGuardianIdRequest, $5.GetNurseryByGuardianIdResponse>(
+        'GetNurseryByGuardianId',
+        getNurseryByGuardianId_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $5.GetNurseryByGuardianIdRequest.fromBuffer(value),
+        ($5.GetNurseryByGuardianIdResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$5.CreateNurseryRequest, $5.CreateNurseryResponse>(
         'CreateNursery',
         createNursery_Pre,
@@ -81,6 +96,10 @@ abstract class NurseryServiceBase extends $grpc.Service {
         ($5.UpdateNurseryResponse value) => value.writeToBuffer()));
   }
 
+  $async.Future<$5.GetNurseryByGuardianIdResponse> getNurseryByGuardianId_Pre($grpc.ServiceCall call, $async.Future<$5.GetNurseryByGuardianIdRequest> request) async {
+    return getNurseryByGuardianId(call, await request);
+  }
+
   $async.Future<$5.CreateNurseryResponse> createNursery_Pre($grpc.ServiceCall call, $async.Future<$5.CreateNurseryRequest> request) async {
     return createNursery(call, await request);
   }
@@ -93,6 +112,7 @@ abstract class NurseryServiceBase extends $grpc.Service {
     return updateNursery(call, await request);
   }
 
+  $async.Future<$5.GetNurseryByGuardianIdResponse> getNurseryByGuardianId($grpc.ServiceCall call, $5.GetNurseryByGuardianIdRequest request);
   $async.Future<$5.CreateNurseryResponse> createNursery($grpc.ServiceCall call, $5.CreateNurseryRequest request);
   $async.Future<$5.NurseryLoginResponse> nurseryLogin($grpc.ServiceCall call, $5.NurseryLoginRequest request);
   $async.Future<$5.UpdateNurseryResponse> updateNursery($grpc.ServiceCall call, $5.UpdateNurseryRequest request);

@@ -15,6 +15,11 @@ func NewNurseryServiceServer(interactor *nursery.Interactor) pb.NurseryServiceSe
 	return &nurseryServiceServer{interactor}
 }
 
+// GetNurseryByGuardianId implements where_child_busv1.NurseryServiceServer.
+func (s *nurseryServiceServer) GetNurseryByGuardianId(ctx context.Context, req *pb.GetNurseryByGuardianIdRequest) (*pb.GetNurseryByGuardianIdResponse, error) {
+	return s.interactor.GetNurseryByGuardianID(ctx, req)
+}
+
 // CreateNursery implements where_child_busv1.NurseryServiceServer.
 func (s *nurseryServiceServer) CreateNursery(ctx context.Context, req *pb.CreateNurseryRequest) (*pb.CreateNurseryResponse, error) {
 	return s.interactor.CreateNursery(ctx, req)
