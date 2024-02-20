@@ -233,23 +233,23 @@ func (bu *BusUpdate) AddChildBusAssociations(c ...*ChildBusAssociation) *BusUpda
 	return bu.AddChildBusAssociationIDs(ids...)
 }
 
-// SetDestinationStationID sets the "destination_station" edge to the Station entity by ID.
-func (bu *BusUpdate) SetDestinationStationID(id uuid.UUID) *BusUpdate {
-	bu.mutation.SetDestinationStationID(id)
+// SetNextStationID sets the "next_station" edge to the Station entity by ID.
+func (bu *BusUpdate) SetNextStationID(id uuid.UUID) *BusUpdate {
+	bu.mutation.SetNextStationID(id)
 	return bu
 }
 
-// SetNillableDestinationStationID sets the "destination_station" edge to the Station entity by ID if the given value is not nil.
-func (bu *BusUpdate) SetNillableDestinationStationID(id *uuid.UUID) *BusUpdate {
+// SetNillableNextStationID sets the "next_station" edge to the Station entity by ID if the given value is not nil.
+func (bu *BusUpdate) SetNillableNextStationID(id *uuid.UUID) *BusUpdate {
 	if id != nil {
-		bu = bu.SetDestinationStationID(*id)
+		bu = bu.SetNextStationID(*id)
 	}
 	return bu
 }
 
-// SetDestinationStation sets the "destination_station" edge to the Station entity.
-func (bu *BusUpdate) SetDestinationStation(s *Station) *BusUpdate {
-	return bu.SetDestinationStationID(s.ID)
+// SetNextStation sets the "next_station" edge to the Station entity.
+func (bu *BusUpdate) SetNextStation(s *Station) *BusUpdate {
+	return bu.SetNextStationID(s.ID)
 }
 
 // SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID.
@@ -364,9 +364,9 @@ func (bu *BusUpdate) RemoveChildBusAssociations(c ...*ChildBusAssociation) *BusU
 	return bu.RemoveChildBusAssociationIDs(ids...)
 }
 
-// ClearDestinationStation clears the "destination_station" edge to the Station entity.
-func (bu *BusUpdate) ClearDestinationStation() *BusUpdate {
-	bu.mutation.ClearDestinationStation()
+// ClearNextStation clears the "next_station" edge to the Station entity.
+func (bu *BusUpdate) ClearNextStation() *BusUpdate {
+	bu.mutation.ClearNextStation()
 	return bu
 }
 
@@ -643,12 +643,12 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if bu.mutation.DestinationStationCleared() {
+	if bu.mutation.NextStationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   bus.DestinationStationTable,
-			Columns: []string{bus.DestinationStationColumn},
+			Table:   bus.NextStationTable,
+			Columns: []string{bus.NextStationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
@@ -656,12 +656,12 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bu.mutation.DestinationStationIDs(); len(nodes) > 0 {
+	if nodes := bu.mutation.NextStationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   bus.DestinationStationTable,
-			Columns: []string{bus.DestinationStationColumn},
+			Table:   bus.NextStationTable,
+			Columns: []string{bus.NextStationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
@@ -950,23 +950,23 @@ func (buo *BusUpdateOne) AddChildBusAssociations(c ...*ChildBusAssociation) *Bus
 	return buo.AddChildBusAssociationIDs(ids...)
 }
 
-// SetDestinationStationID sets the "destination_station" edge to the Station entity by ID.
-func (buo *BusUpdateOne) SetDestinationStationID(id uuid.UUID) *BusUpdateOne {
-	buo.mutation.SetDestinationStationID(id)
+// SetNextStationID sets the "next_station" edge to the Station entity by ID.
+func (buo *BusUpdateOne) SetNextStationID(id uuid.UUID) *BusUpdateOne {
+	buo.mutation.SetNextStationID(id)
 	return buo
 }
 
-// SetNillableDestinationStationID sets the "destination_station" edge to the Station entity by ID if the given value is not nil.
-func (buo *BusUpdateOne) SetNillableDestinationStationID(id *uuid.UUID) *BusUpdateOne {
+// SetNillableNextStationID sets the "next_station" edge to the Station entity by ID if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableNextStationID(id *uuid.UUID) *BusUpdateOne {
 	if id != nil {
-		buo = buo.SetDestinationStationID(*id)
+		buo = buo.SetNextStationID(*id)
 	}
 	return buo
 }
 
-// SetDestinationStation sets the "destination_station" edge to the Station entity.
-func (buo *BusUpdateOne) SetDestinationStation(s *Station) *BusUpdateOne {
-	return buo.SetDestinationStationID(s.ID)
+// SetNextStation sets the "next_station" edge to the Station entity.
+func (buo *BusUpdateOne) SetNextStation(s *Station) *BusUpdateOne {
+	return buo.SetNextStationID(s.ID)
 }
 
 // SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID.
@@ -1081,9 +1081,9 @@ func (buo *BusUpdateOne) RemoveChildBusAssociations(c ...*ChildBusAssociation) *
 	return buo.RemoveChildBusAssociationIDs(ids...)
 }
 
-// ClearDestinationStation clears the "destination_station" edge to the Station entity.
-func (buo *BusUpdateOne) ClearDestinationStation() *BusUpdateOne {
-	buo.mutation.ClearDestinationStation()
+// ClearNextStation clears the "next_station" edge to the Station entity.
+func (buo *BusUpdateOne) ClearNextStation() *BusUpdateOne {
+	buo.mutation.ClearNextStation()
 	return buo
 }
 
@@ -1390,12 +1390,12 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if buo.mutation.DestinationStationCleared() {
+	if buo.mutation.NextStationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   bus.DestinationStationTable,
-			Columns: []string{bus.DestinationStationColumn},
+			Table:   bus.NextStationTable,
+			Columns: []string{bus.NextStationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
@@ -1403,12 +1403,12 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := buo.mutation.DestinationStationIDs(); len(nodes) > 0 {
+	if nodes := buo.mutation.NextStationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   bus.DestinationStationTable,
-			Columns: []string{bus.DestinationStationColumn},
+			Table:   bus.NextStationTable,
+			Columns: []string{bus.NextStationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),

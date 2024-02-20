@@ -40,8 +40,8 @@ const (
 	EdgeBoardingRecords = "boarding_records"
 	// EdgeChildBusAssociations holds the string denoting the childbusassociations edge name in mutations.
 	EdgeChildBusAssociations = "childBusAssociations"
-	// EdgeDestinationStation holds the string denoting the destination_station edge name in mutations.
-	EdgeDestinationStation = "destination_station"
+	// EdgeNextStation holds the string denoting the next_station edge name in mutations.
+	EdgeNextStation = "next_station"
 	// EdgeMorningFirstStation holds the string denoting the morning_first_station edge name in mutations.
 	EdgeMorningFirstStation = "morning_first_station"
 	// EdgeEveningFirstStation holds the string denoting the evening_first_station edge name in mutations.
@@ -74,13 +74,13 @@ const (
 	ChildBusAssociationsInverseTable = "child_bus_associations"
 	// ChildBusAssociationsColumn is the table column denoting the childBusAssociations relation/edge.
 	ChildBusAssociationsColumn = "bus_id"
-	// DestinationStationTable is the table that holds the destination_station relation/edge.
-	DestinationStationTable = "bus"
-	// DestinationStationInverseTable is the table name for the Station entity.
+	// NextStationTable is the table that holds the next_station relation/edge.
+	NextStationTable = "bus"
+	// NextStationInverseTable is the table name for the Station entity.
 	// It exists in this package in order to avoid circular dependency with the "station" package.
-	DestinationStationInverseTable = "stations"
-	// DestinationStationColumn is the table column denoting the destination_station relation/edge.
-	DestinationStationColumn = "bus_destination_station"
+	NextStationInverseTable = "stations"
+	// NextStationColumn is the table column denoting the next_station relation/edge.
+	NextStationColumn = "bus_next_station"
 	// MorningFirstStationTable is the table that holds the morning_first_station relation/edge.
 	MorningFirstStationTable = "bus"
 	// MorningFirstStationInverseTable is the table name for the Station entity.
@@ -114,7 +114,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"bus_nursery",
-	"bus_destination_station",
+	"bus_next_station",
 	"bus_morning_first_station",
 	"bus_evening_first_station",
 }
@@ -277,10 +277,10 @@ func ByChildBusAssociations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
-// ByDestinationStationField orders the results by destination_station field.
-func ByDestinationStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByNextStationField orders the results by next_station field.
+func ByNextStationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDestinationStationStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newNextStationStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -325,11 +325,11 @@ func newChildBusAssociationsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ChildBusAssociationsTable, ChildBusAssociationsColumn),
 	)
 }
-func newDestinationStationStep() *sqlgraph.Step {
+func newNextStationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DestinationStationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, DestinationStationTable, DestinationStationColumn),
+		sqlgraph.To(NextStationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, NextStationTable, NextStationColumn),
 	)
 }
 func newMorningFirstStationStep() *sqlgraph.Step {

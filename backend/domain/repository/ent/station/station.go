@@ -35,8 +35,8 @@ const (
 	EdgeEveningPreviousStation = "evening_previous_station"
 	// EdgeEveningNextStation holds the string denoting the evening_next_station edge name in mutations.
 	EdgeEveningNextStation = "evening_next_station"
-	// EdgeDestinationForBuses holds the string denoting the destination_for_buses edge name in mutations.
-	EdgeDestinationForBuses = "destination_for_buses"
+	// EdgeNextForBuses holds the string denoting the next_for_buses edge name in mutations.
+	EdgeNextForBuses = "next_for_buses"
 	// EdgeMorningFirstForBuses holds the string denoting the morning_first_for_buses edge name in mutations.
 	EdgeMorningFirstForBuses = "morning_first_for_buses"
 	// EdgeEveningFirstForBuses holds the string denoting the evening_first_for_buses edge name in mutations.
@@ -71,13 +71,13 @@ const (
 	EveningNextStationTable = "stations"
 	// EveningNextStationColumn is the table column denoting the evening_next_station relation/edge.
 	EveningNextStationColumn = "station_evening_next_station"
-	// DestinationForBusesTable is the table that holds the destination_for_buses relation/edge.
-	DestinationForBusesTable = "bus"
-	// DestinationForBusesInverseTable is the table name for the Bus entity.
+	// NextForBusesTable is the table that holds the next_for_buses relation/edge.
+	NextForBusesTable = "bus"
+	// NextForBusesInverseTable is the table name for the Bus entity.
 	// It exists in this package in order to avoid circular dependency with the "bus" package.
-	DestinationForBusesInverseTable = "bus"
-	// DestinationForBusesColumn is the table column denoting the destination_for_buses relation/edge.
-	DestinationForBusesColumn = "bus_destination_station"
+	NextForBusesInverseTable = "bus"
+	// NextForBusesColumn is the table column denoting the next_for_buses relation/edge.
+	NextForBusesColumn = "bus_next_station"
 	// MorningFirstForBusesTable is the table that holds the morning_first_for_buses relation/edge.
 	MorningFirstForBusesTable = "bus"
 	// MorningFirstForBusesInverseTable is the table name for the Bus entity.
@@ -238,17 +238,17 @@ func ByEveningNextStation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 	}
 }
 
-// ByDestinationForBusesCount orders the results by destination_for_buses count.
-func ByDestinationForBusesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByNextForBusesCount orders the results by next_for_buses count.
+func ByNextForBusesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDestinationForBusesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newNextForBusesStep(), opts...)
 	}
 }
 
-// ByDestinationForBuses orders the results by destination_for_buses terms.
-func ByDestinationForBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByNextForBuses orders the results by next_for_buses terms.
+func ByNextForBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDestinationForBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newNextForBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -321,11 +321,11 @@ func newEveningNextStationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, EveningNextStationTable, EveningNextStationColumn),
 	)
 }
-func newDestinationForBusesStep() *sqlgraph.Step {
+func newNextForBusesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DestinationForBusesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, DestinationForBusesTable, DestinationForBusesColumn),
+		sqlgraph.To(NextForBusesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, NextForBusesTable, NextForBusesColumn),
 	)
 }
 func newMorningFirstForBusesStep() *sqlgraph.Step {

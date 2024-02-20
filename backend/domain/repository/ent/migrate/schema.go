@@ -48,7 +48,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "bus_nursery", Type: field.TypeUUID, Nullable: true},
-		{Name: "bus_destination_station", Type: field.TypeUUID, Nullable: true},
+		{Name: "bus_next_station", Type: field.TypeUUID, Nullable: true},
 		{Name: "bus_morning_first_station", Type: field.TypeUUID, Nullable: true},
 		{Name: "bus_evening_first_station", Type: field.TypeUUID, Nullable: true},
 	}
@@ -65,7 +65,7 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "bus_stations_destination_station",
+				Symbol:     "bus_stations_next_station",
 				Columns:    []*schema.Column{BusColumns[10]},
 				RefColumns: []*schema.Column{StationsColumns[0]},
 				OnDelete:   schema.SetNull,

@@ -38,7 +38,7 @@ func (Bus) Edges() []ent.Edge {
 		edge.To("boarding_records", BoardingRecord.Type),
 		edge.To("childBusAssociations", ChildBusAssociation.Type),
 		// バスが向かっている先のステーション
-		edge.To("destination_station", Station.Type).Unique(),
+		edge.To("next_station", Station.Type).Unique(),
 		// 朝の最初のステーション
 		edge.To("morning_first_station", Station.Type).Unique(),
 		// 夕方の最初のステーション
