@@ -6,7 +6,7 @@ on:
       - develop
       - feature/machine-learning/cicd
     paths:
-      - "github/workflows/deploy_cloudrun_machine_learning.yml"
+      - ".github/workflows/deploy_cloudrun_machine_learning.yml"
       - "machine_learning/**"
 
 permissions:
