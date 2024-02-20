@@ -1,4 +1,5 @@
 from where_child_bus.v1 import resources_pb2 as _resources_pb2
+from google.protobuf import field_mask_pb2 as _field_mask_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
@@ -79,3 +80,27 @@ class GetGuardianListByNurseryIdResponse(_message.Message):
     GUARDIANS_FIELD_NUMBER: _ClassVar[int]
     guardians: _containers.RepeatedCompositeFieldContainer[_resources_pb2.GuardianResponse]
     def __init__(self, guardians: _Optional[_Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]] = ...) -> None: ...
+
+class UpdateGuardianRequest(_message.Message):
+    __slots__ = ("guardian_id", "name", "email", "phone_number", "is_use_morning_bus", "is_use_evening_bus", "update_mask")
+    GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    EMAIL_FIELD_NUMBER: _ClassVar[int]
+    PHONE_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    IS_USE_MORNING_BUS_FIELD_NUMBER: _ClassVar[int]
+    IS_USE_EVENING_BUS_FIELD_NUMBER: _ClassVar[int]
+    UPDATE_MASK_FIELD_NUMBER: _ClassVar[int]
+    guardian_id: str
+    name: str
+    email: str
+    phone_number: str
+    is_use_morning_bus: bool
+    is_use_evening_bus: bool
+    update_mask: _field_mask_pb2.FieldMask
+    def __init__(self, guardian_id: _Optional[str] = ..., name: _Optional[str] = ..., email: _Optional[str] = ..., phone_number: _Optional[str] = ..., is_use_morning_bus: bool = ..., is_use_evening_bus: bool = ..., update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...) -> None: ...
+
+class UpdateGuardianResponse(_message.Message):
+    __slots__ = ("guardian",)
+    GUARDIAN_FIELD_NUMBER: _ClassVar[int]
+    guardian: _resources_pb2.GuardianResponse
+    def __init__(self, guardian: _Optional[_Union[_resources_pb2.GuardianResponse, _Mapping]] = ...) -> None: ...

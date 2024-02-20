@@ -6,7 +6,9 @@ permissions:
 on:
   push:
     branches:
-      - ci/backend # デプロイをトリガーするブランチを指定
+      - develop
+    paths:
+      - "backend/**"
 
 jobs:
   setup-build-deploy:
@@ -16,19 +18,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: google-github-actions/auth@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          workload_identity_provider: "projects/484440918227/locations/global/workloadIdentityPools/github-action-pool/providers/github-action-provider"
-          service_account: "grpc-server-sa@wherechildbus.iam.gserviceaccount.com"
-
-      - name: Set up Cloud SDK
+      - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          skip_install: false
           version: ">= 363.0.0"
 
-      - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
-        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
+      - name: Auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          access_token_lifetime: 1200s
 
       - name: Build Docker Image
         run: |
@@ -48,10 +50,13 @@ jobs:
             --build-arg ML_ADDR="${{ secrets.ML_ADDR }}" \
             --build-arg INSIDE_OF_CREDENTIALS="${{ secrets.INSIDE_OF_CREDENTIALS }}"
 
+      - name: Configure Docker to use the gcloud command-line tool as a credential helper for the us region
+        run: gcloud auth configure-docker --quiet
+
       - name: Push Docker Image to Google Container Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ secrets.GCP_CLOUD_RUN_NAME }} --image=gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest --platform=managed --allow-unauthenticated --project=${{ secrets.GCP_PROJECT_ID }} --region=${{ secrets.GCP_REGION }}
+          gcloud run deploy ${{ secrets.GCP_CLOUD_RUN_NAME }} --image=gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_DOCKER_IMAGE_NAME }}:latest --platform=managed --project=${{ secrets.GCP_PROJECT_ID }} --region=${{ secrets.REGION }}

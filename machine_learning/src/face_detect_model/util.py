@@ -4,8 +4,13 @@ import re
 import random
 import torch
 from google.cloud.storage import Bucket
+from torchvision import transforms
 import os
 import numpy as np
+
+from generated.machine_learning.v1.func_args import (
+    FaceDetectAndClip_Args,
+)
 
 import cv2
 
@@ -72,14 +77,74 @@ def load_image_from_remote(blobs: list):
     return images
 
 
+def load_image_from_binary(args: FaceDetectAndClip_Args, binary: bytes):
+    image_array = np.frombuffer(binary, dtype=np.uint8)
+    image = image_array.reshape((args.photo_height, args.photo_width))
+    # 画像を回転
+    image = np.rot90(image, k=3)
+
+    # TODO: GSCへの画像保存
+    if image is None:
+        raise ValueError("Can not load image from binary.")
+    return image
+
+
+def get_default_transforms():
+    return transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
+
+def get_default_transforms_for_gray():
+    return transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5]),
+        ]
+    )
+
+
+def get_augment_transform():
+    return transforms.Compose(
+        [
+            transforms.RandomCrop((100, 100)),
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomVerticalFlip(p=0.5),
+            transforms.RandomApply([transforms.RandomRotation(degrees=180)], p=0.5),
+            transforms.RandomApply(
+                [
+                    transforms.RandomAffine(
+                        degrees=0, translate=(0.1, 0.1), scale=(0.8, 1.2)
+                    )
+                ],
+                p=0.5,
+            ),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
+
 def _is_valid_file(file_name):
     VALID_EXTENSIONS = {".png"}
     return os.path.splitext(file_name)[1].lower() in VALID_EXTENSIONS
 
 
 def save_pickle_to_gcs(bucket: Bucket, upload_model_path: str, obj: object):
-    logger.info(f"Saving model to {upload_model_path}")
+    logger.info(f"Saving pickle to {upload_model_path}")
     blob = bucket.blob(upload_model_path)
     with blob.open("wb", ignore_flush=True) as f:
         torch.save(obj, f)
-    logger.info(f"Model saved to {upload_model_path}")
+    logger.info(f"pickle saved to {upload_model_path}")
+
+
+def load_pickle_to_gcs(bucket: Bucket, obj_path: str) -> object:
+    logger.info(f"Loading pickle from {obj_path}")
+    blob = bucket.blob(obj_path)
+    with blob.open("rb") as f:
+        model = torch.load(f)
+    logger.info(f"pickle loaded from {obj_path}")
+    return model

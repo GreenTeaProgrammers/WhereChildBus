@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	NurseryService_CreateNursery_FullMethodName = "/where_child_bus.v1.NurseryService/CreateNursery"
 	NurseryService_NurseryLogin_FullMethodName  = "/where_child_bus.v1.NurseryService/NurseryLogin"
+	NurseryService_UpdateNursery_FullMethodName = "/where_child_bus.v1.NurseryService/UpdateNursery"
 )
 
 // NurseryServiceClient is the client API for NurseryService service.
@@ -29,6 +30,7 @@ const (
 type NurseryServiceClient interface {
 	CreateNursery(ctx context.Context, in *CreateNurseryRequest, opts ...grpc.CallOption) (*CreateNurseryResponse, error)
 	NurseryLogin(ctx context.Context, in *NurseryLoginRequest, opts ...grpc.CallOption) (*NurseryLoginResponse, error)
+	UpdateNursery(ctx context.Context, in *UpdateNurseryRequest, opts ...grpc.CallOption) (*UpdateNurseryResponse, error)
 }
 
 type nurseryServiceClient struct {
@@ -57,12 +59,22 @@ func (c *nurseryServiceClient) NurseryLogin(ctx context.Context, in *NurseryLogi
 	return out, nil
 }
 
+func (c *nurseryServiceClient) UpdateNursery(ctx context.Context, in *UpdateNurseryRequest, opts ...grpc.CallOption) (*UpdateNurseryResponse, error) {
+	out := new(UpdateNurseryResponse)
+	err := c.cc.Invoke(ctx, NurseryService_UpdateNursery_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NurseryServiceServer is the server API for NurseryService service.
 // All implementations should embed UnimplementedNurseryServiceServer
 // for forward compatibility
 type NurseryServiceServer interface {
 	CreateNursery(context.Context, *CreateNurseryRequest) (*CreateNurseryResponse, error)
 	NurseryLogin(context.Context, *NurseryLoginRequest) (*NurseryLoginResponse, error)
+	UpdateNursery(context.Context, *UpdateNurseryRequest) (*UpdateNurseryResponse, error)
 }
 
 // UnimplementedNurseryServiceServer should be embedded to have forward compatible implementations.
@@ -74,6 +86,9 @@ func (UnimplementedNurseryServiceServer) CreateNursery(context.Context, *CreateN
 }
 func (UnimplementedNurseryServiceServer) NurseryLogin(context.Context, *NurseryLoginRequest) (*NurseryLoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NurseryLogin not implemented")
+}
+func (UnimplementedNurseryServiceServer) UpdateNursery(context.Context, *UpdateNurseryRequest) (*UpdateNurseryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNursery not implemented")
 }
 
 // UnsafeNurseryServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -123,6 +138,24 @@ func _NurseryService_NurseryLogin_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NurseryService_UpdateNursery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNurseryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NurseryServiceServer).UpdateNursery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NurseryService_UpdateNursery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NurseryServiceServer).UpdateNursery(ctx, req.(*UpdateNurseryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NurseryService_ServiceDesc is the grpc.ServiceDesc for NurseryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -137,6 +170,10 @@ var NurseryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NurseryLogin",
 			Handler:    _NurseryService_NurseryLogin_Handler,
+		},
+		{
+			MethodName: "UpdateNursery",
+			Handler:    _NurseryService_UpdateNursery_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
