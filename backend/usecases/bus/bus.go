@@ -482,7 +482,7 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 		// トランザクション内での操作
 		err = i.processDetectedChildren(tx, stream, resp, busID, vehicleEvent) // stream 引数を追加
 		if err != nil {
-			tx.Rollback()
+			utils.RollbackTx(tx, i.logger)
 			return err
 		}
 

@@ -15,6 +15,11 @@ func NewStationServiceServer(interactor *station.Interactor) pb.StationServiceSe
 	return &stationServiceServer{interactor}
 }
 
+// GetUnregisteredStationList implements where_child_busv1.StationServiceServer.
+func (s *stationServiceServer) GetUnregisteredStationList(ctx context.Context, req *pb.GetUnregisteredStationListRequest) (*pb.GetUnregisteredStationListResponse, error) {
+	return s.interactor.GetUnregisteredStationList(ctx, req)
+}
+
 // UpdateStation implements where_child_busv1.StationServiceServer.
 func (s *stationServiceServer) UpdateStation(ctx context.Context, req *pb.UpdateStationRequest) (*pb.UpdateStationResponse, error) {
 	return s.interactor.UpdateStation(ctx, req)
