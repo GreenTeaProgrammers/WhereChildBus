@@ -567,7 +567,10 @@ type BusMutation struct {
 	longitude                   *float64
 	addlongitude                *float64
 	status                      *bus.Status
+	morning_first_station_id    *string
+	evening_first_station_id    *string
 	enable_face_recognition     *bool
+	next_station_id             *uuid.UUID
 	created_at                  *time.Time
 	updated_at                  *time.Time
 	clearedFields               map[string]struct{}
@@ -952,6 +955,78 @@ func (m *BusMutation) ResetStatus() {
 	m.status = nil
 }
 
+// SetMorningFirstStationID sets the "morning_first_station_id" field.
+func (m *BusMutation) SetMorningFirstStationID(s string) {
+	m.morning_first_station_id = &s
+}
+
+// MorningFirstStationID returns the value of the "morning_first_station_id" field in the mutation.
+func (m *BusMutation) MorningFirstStationID() (r string, exists bool) {
+	v := m.morning_first_station_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMorningFirstStationID returns the old "morning_first_station_id" field's value of the Bus entity.
+// If the Bus object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusMutation) OldMorningFirstStationID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMorningFirstStationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMorningFirstStationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMorningFirstStationID: %w", err)
+	}
+	return oldValue.MorningFirstStationID, nil
+}
+
+// ResetMorningFirstStationID resets all changes to the "morning_first_station_id" field.
+func (m *BusMutation) ResetMorningFirstStationID() {
+	m.morning_first_station_id = nil
+}
+
+// SetEveningFirstStationID sets the "evening_first_station_id" field.
+func (m *BusMutation) SetEveningFirstStationID(s string) {
+	m.evening_first_station_id = &s
+}
+
+// EveningFirstStationID returns the value of the "evening_first_station_id" field in the mutation.
+func (m *BusMutation) EveningFirstStationID() (r string, exists bool) {
+	v := m.evening_first_station_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEveningFirstStationID returns the old "evening_first_station_id" field's value of the Bus entity.
+// If the Bus object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusMutation) OldEveningFirstStationID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEveningFirstStationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEveningFirstStationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEveningFirstStationID: %w", err)
+	}
+	return oldValue.EveningFirstStationID, nil
+}
+
+// ResetEveningFirstStationID resets all changes to the "evening_first_station_id" field.
+func (m *BusMutation) ResetEveningFirstStationID() {
+	m.evening_first_station_id = nil
+}
+
 // SetEnableFaceRecognition sets the "enable_face_recognition" field.
 func (m *BusMutation) SetEnableFaceRecognition(b bool) {
 	m.enable_face_recognition = &b
@@ -986,6 +1061,55 @@ func (m *BusMutation) OldEnableFaceRecognition(ctx context.Context) (v bool, err
 // ResetEnableFaceRecognition resets all changes to the "enable_face_recognition" field.
 func (m *BusMutation) ResetEnableFaceRecognition() {
 	m.enable_face_recognition = nil
+}
+
+// SetNextStationID sets the "next_station_id" field.
+func (m *BusMutation) SetNextStationID(u uuid.UUID) {
+	m.next_station_id = &u
+}
+
+// NextStationID returns the value of the "next_station_id" field in the mutation.
+func (m *BusMutation) NextStationID() (r uuid.UUID, exists bool) {
+	v := m.next_station_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNextStationID returns the old "next_station_id" field's value of the Bus entity.
+// If the Bus object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusMutation) OldNextStationID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNextStationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNextStationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNextStationID: %w", err)
+	}
+	return oldValue.NextStationID, nil
+}
+
+// ClearNextStationID clears the value of the "next_station_id" field.
+func (m *BusMutation) ClearNextStationID() {
+	m.next_station_id = nil
+	m.clearedFields[bus.FieldNextStationID] = struct{}{}
+}
+
+// NextStationIDCleared returns if the "next_station_id" field was cleared in this mutation.
+func (m *BusMutation) NextStationIDCleared() bool {
+	_, ok := m.clearedFields[bus.FieldNextStationID]
+	return ok
+}
+
+// ResetNextStationID resets all changes to the "next_station_id" field.
+func (m *BusMutation) ResetNextStationID() {
+	m.next_station_id = nil
+	delete(m.clearedFields, bus.FieldNextStationID)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -1295,7 +1419,7 @@ func (m *BusMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BusMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, bus.FieldName)
 	}
@@ -1311,8 +1435,17 @@ func (m *BusMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, bus.FieldStatus)
 	}
+	if m.morning_first_station_id != nil {
+		fields = append(fields, bus.FieldMorningFirstStationID)
+	}
+	if m.evening_first_station_id != nil {
+		fields = append(fields, bus.FieldEveningFirstStationID)
+	}
 	if m.enable_face_recognition != nil {
 		fields = append(fields, bus.FieldEnableFaceRecognition)
+	}
+	if m.next_station_id != nil {
+		fields = append(fields, bus.FieldNextStationID)
 	}
 	if m.created_at != nil {
 		fields = append(fields, bus.FieldCreatedAt)
@@ -1338,8 +1471,14 @@ func (m *BusMutation) Field(name string) (ent.Value, bool) {
 		return m.Longitude()
 	case bus.FieldStatus:
 		return m.Status()
+	case bus.FieldMorningFirstStationID:
+		return m.MorningFirstStationID()
+	case bus.FieldEveningFirstStationID:
+		return m.EveningFirstStationID()
 	case bus.FieldEnableFaceRecognition:
 		return m.EnableFaceRecognition()
+	case bus.FieldNextStationID:
+		return m.NextStationID()
 	case bus.FieldCreatedAt:
 		return m.CreatedAt()
 	case bus.FieldUpdatedAt:
@@ -1363,8 +1502,14 @@ func (m *BusMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldLongitude(ctx)
 	case bus.FieldStatus:
 		return m.OldStatus(ctx)
+	case bus.FieldMorningFirstStationID:
+		return m.OldMorningFirstStationID(ctx)
+	case bus.FieldEveningFirstStationID:
+		return m.OldEveningFirstStationID(ctx)
 	case bus.FieldEnableFaceRecognition:
 		return m.OldEnableFaceRecognition(ctx)
+	case bus.FieldNextStationID:
+		return m.OldNextStationID(ctx)
 	case bus.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case bus.FieldUpdatedAt:
@@ -1413,12 +1558,33 @@ func (m *BusMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case bus.FieldMorningFirstStationID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMorningFirstStationID(v)
+		return nil
+	case bus.FieldEveningFirstStationID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEveningFirstStationID(v)
+		return nil
 	case bus.FieldEnableFaceRecognition:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetEnableFaceRecognition(v)
+		return nil
+	case bus.FieldNextStationID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNextStationID(v)
 		return nil
 	case bus.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -1500,6 +1666,9 @@ func (m *BusMutation) ClearedFields() []string {
 	if m.FieldCleared(bus.FieldLongitude) {
 		fields = append(fields, bus.FieldLongitude)
 	}
+	if m.FieldCleared(bus.FieldNextStationID) {
+		fields = append(fields, bus.FieldNextStationID)
+	}
 	return fields
 }
 
@@ -1522,6 +1691,9 @@ func (m *BusMutation) ClearField(name string) error {
 		return nil
 	case bus.FieldLongitude:
 		m.ClearLongitude()
+		return nil
+	case bus.FieldNextStationID:
+		m.ClearNextStationID()
 		return nil
 	}
 	return fmt.Errorf("unknown Bus nullable field %s", name)
@@ -1546,8 +1718,17 @@ func (m *BusMutation) ResetField(name string) error {
 	case bus.FieldStatus:
 		m.ResetStatus()
 		return nil
+	case bus.FieldMorningFirstStationID:
+		m.ResetMorningFirstStationID()
+		return nil
+	case bus.FieldEveningFirstStationID:
+		m.ResetEveningFirstStationID()
+		return nil
 	case bus.FieldEnableFaceRecognition:
 		m.ResetEnableFaceRecognition()
+		return nil
+	case bus.FieldNextStationID:
+		m.ResetNextStationID()
 		return nil
 	case bus.FieldCreatedAt:
 		m.ResetCreatedAt()

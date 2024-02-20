@@ -29,8 +29,14 @@ type Bus struct {
 	Longitude float64 `json:"longitude,omitempty"`
 	// バスのステータス（運行中、停止中など）
 	Status bus.Status `json:"status,omitempty"`
+	// MorningFirstStationID holds the value of the "morning_first_station_id" field.
+	MorningFirstStationID string `json:"morning_first_station_id,omitempty"`
+	// EveningFirstStationID holds the value of the "evening_first_station_id" field.
+	EveningFirstStationID string `json:"evening_first_station_id,omitempty"`
 	// 顔識別が有効かどうか
 	EnableFaceRecognition bool `json:"enable_face_recognition,omitempty"`
+	// 次のステーションのID
+	NextStationID uuid.UUID `json:"next_station_id,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -106,11 +112,11 @@ func (*Bus) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case bus.FieldLatitude, bus.FieldLongitude:
 			values[i] = new(sql.NullFloat64)
-		case bus.FieldName, bus.FieldPlateNumber, bus.FieldStatus:
+		case bus.FieldName, bus.FieldPlateNumber, bus.FieldStatus, bus.FieldMorningFirstStationID, bus.FieldEveningFirstStationID:
 			values[i] = new(sql.NullString)
 		case bus.FieldCreatedAt, bus.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case bus.FieldID:
+		case bus.FieldID, bus.FieldNextStationID:
 			values[i] = new(uuid.UUID)
 		case bus.ForeignKeys[0]: // bus_nursery
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
@@ -165,11 +171,29 @@ func (b *Bus) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				b.Status = bus.Status(value.String)
 			}
+		case bus.FieldMorningFirstStationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field morning_first_station_id", values[i])
+			} else if value.Valid {
+				b.MorningFirstStationID = value.String
+			}
+		case bus.FieldEveningFirstStationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evening_first_station_id", values[i])
+			} else if value.Valid {
+				b.EveningFirstStationID = value.String
+			}
 		case bus.FieldEnableFaceRecognition:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field enable_face_recognition", values[i])
 			} else if value.Valid {
 				b.EnableFaceRecognition = value.Bool
+			}
+		case bus.FieldNextStationID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field next_station_id", values[i])
+			} else if value != nil {
+				b.NextStationID = *value
 			}
 		case bus.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -261,8 +285,17 @@ func (b *Bus) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", b.Status))
 	builder.WriteString(", ")
+	builder.WriteString("morning_first_station_id=")
+	builder.WriteString(b.MorningFirstStationID)
+	builder.WriteString(", ")
+	builder.WriteString("evening_first_station_id=")
+	builder.WriteString(b.EveningFirstStationID)
+	builder.WriteString(", ")
 	builder.WriteString("enable_face_recognition=")
 	builder.WriteString(fmt.Sprintf("%v", b.EnableFaceRecognition))
+	builder.WriteString(", ")
+	builder.WriteString("next_station_id=")
+	builder.WriteString(fmt.Sprintf("%v", b.NextStationID))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(b.CreatedAt.Format(time.ANSIC))

@@ -26,8 +26,14 @@ const (
 	FieldLongitude = "longitude"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldMorningFirstStationID holds the string denoting the morning_first_station_id field in the database.
+	FieldMorningFirstStationID = "morning_first_station_id"
+	// FieldEveningFirstStationID holds the string denoting the evening_first_station_id field in the database.
+	FieldEveningFirstStationID = "evening_first_station_id"
 	// FieldEnableFaceRecognition holds the string denoting the enable_face_recognition field in the database.
 	FieldEnableFaceRecognition = "enable_face_recognition"
+	// FieldNextStationID holds the string denoting the next_station_id field in the database.
+	FieldNextStationID = "next_station_id"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -78,7 +84,10 @@ var Columns = []string{
 	FieldLatitude,
 	FieldLongitude,
 	FieldStatus,
+	FieldMorningFirstStationID,
+	FieldEveningFirstStationID,
 	FieldEnableFaceRecognition,
+	FieldNextStationID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -183,9 +192,24 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByMorningFirstStationID orders the results by the morning_first_station_id field.
+func ByMorningFirstStationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMorningFirstStationID, opts...).ToFunc()
+}
+
+// ByEveningFirstStationID orders the results by the evening_first_station_id field.
+func ByEveningFirstStationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEveningFirstStationID, opts...).ToFunc()
+}
+
 // ByEnableFaceRecognition orders the results by the enable_face_recognition field.
 func ByEnableFaceRecognition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnableFaceRecognition, opts...).ToFunc()
+}
+
+// ByNextStationID orders the results by the next_station_id field.
+func ByNextStationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextStationID, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

@@ -87,6 +87,18 @@ func (bc *BusCreate) SetNillableStatus(b *bus.Status) *BusCreate {
 	return bc
 }
 
+// SetMorningFirstStationID sets the "morning_first_station_id" field.
+func (bc *BusCreate) SetMorningFirstStationID(s string) *BusCreate {
+	bc.mutation.SetMorningFirstStationID(s)
+	return bc
+}
+
+// SetEveningFirstStationID sets the "evening_first_station_id" field.
+func (bc *BusCreate) SetEveningFirstStationID(s string) *BusCreate {
+	bc.mutation.SetEveningFirstStationID(s)
+	return bc
+}
+
 // SetEnableFaceRecognition sets the "enable_face_recognition" field.
 func (bc *BusCreate) SetEnableFaceRecognition(b bool) *BusCreate {
 	bc.mutation.SetEnableFaceRecognition(b)
@@ -97,6 +109,20 @@ func (bc *BusCreate) SetEnableFaceRecognition(b bool) *BusCreate {
 func (bc *BusCreate) SetNillableEnableFaceRecognition(b *bool) *BusCreate {
 	if b != nil {
 		bc.SetEnableFaceRecognition(*b)
+	}
+	return bc
+}
+
+// SetNextStationID sets the "next_station_id" field.
+func (bc *BusCreate) SetNextStationID(u uuid.UUID) *BusCreate {
+	bc.mutation.SetNextStationID(u)
+	return bc
+}
+
+// SetNillableNextStationID sets the "next_station_id" field if the given value is not nil.
+func (bc *BusCreate) SetNillableNextStationID(u *uuid.UUID) *BusCreate {
+	if u != nil {
+		bc.SetNextStationID(*u)
 	}
 	return bc
 }
@@ -277,6 +303,12 @@ func (bc *BusCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Bus.status": %w`, err)}
 		}
 	}
+	if _, ok := bc.mutation.MorningFirstStationID(); !ok {
+		return &ValidationError{Name: "morning_first_station_id", err: errors.New(`ent: missing required field "Bus.morning_first_station_id"`)}
+	}
+	if _, ok := bc.mutation.EveningFirstStationID(); !ok {
+		return &ValidationError{Name: "evening_first_station_id", err: errors.New(`ent: missing required field "Bus.evening_first_station_id"`)}
+	}
 	if _, ok := bc.mutation.EnableFaceRecognition(); !ok {
 		return &ValidationError{Name: "enable_face_recognition", err: errors.New(`ent: missing required field "Bus.enable_face_recognition"`)}
 	}
@@ -341,9 +373,21 @@ func (bc *BusCreate) createSpec() (*Bus, *sqlgraph.CreateSpec) {
 		_spec.SetField(bus.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := bc.mutation.MorningFirstStationID(); ok {
+		_spec.SetField(bus.FieldMorningFirstStationID, field.TypeString, value)
+		_node.MorningFirstStationID = value
+	}
+	if value, ok := bc.mutation.EveningFirstStationID(); ok {
+		_spec.SetField(bus.FieldEveningFirstStationID, field.TypeString, value)
+		_node.EveningFirstStationID = value
+	}
 	if value, ok := bc.mutation.EnableFaceRecognition(); ok {
 		_spec.SetField(bus.FieldEnableFaceRecognition, field.TypeBool, value)
 		_node.EnableFaceRecognition = value
+	}
+	if value, ok := bc.mutation.NextStationID(); ok {
+		_spec.SetField(bus.FieldNextStationID, field.TypeUUID, value)
+		_node.NextStationID = value
 	}
 	if value, ok := bc.mutation.CreatedAt(); ok {
 		_spec.SetField(bus.FieldCreatedAt, field.TypeTime, value)

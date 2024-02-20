@@ -37,15 +37,15 @@ func init() {
 	busFields := schema.Bus{}.Fields()
 	_ = busFields
 	// busDescEnableFaceRecognition is the schema descriptor for enable_face_recognition field.
-	busDescEnableFaceRecognition := busFields[6].Descriptor()
+	busDescEnableFaceRecognition := busFields[8].Descriptor()
 	// bus.DefaultEnableFaceRecognition holds the default value on creation for the enable_face_recognition field.
 	bus.DefaultEnableFaceRecognition = busDescEnableFaceRecognition.Default.(bool)
 	// busDescCreatedAt is the schema descriptor for created_at field.
-	busDescCreatedAt := busFields[7].Descriptor()
+	busDescCreatedAt := busFields[10].Descriptor()
 	// bus.DefaultCreatedAt holds the default value on creation for the created_at field.
 	bus.DefaultCreatedAt = busDescCreatedAt.Default.(func() time.Time)
 	// busDescUpdatedAt is the schema descriptor for updated_at field.
-	busDescUpdatedAt := busFields[8].Descriptor()
+	busDescUpdatedAt := busFields[11].Descriptor()
 	// bus.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	bus.DefaultUpdatedAt = busDescUpdatedAt.Default.(func() time.Time)
 	// bus.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

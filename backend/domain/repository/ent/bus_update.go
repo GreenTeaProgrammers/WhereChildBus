@@ -135,6 +135,34 @@ func (bu *BusUpdate) SetNillableStatus(b *bus.Status) *BusUpdate {
 	return bu
 }
 
+// SetMorningFirstStationID sets the "morning_first_station_id" field.
+func (bu *BusUpdate) SetMorningFirstStationID(s string) *BusUpdate {
+	bu.mutation.SetMorningFirstStationID(s)
+	return bu
+}
+
+// SetNillableMorningFirstStationID sets the "morning_first_station_id" field if the given value is not nil.
+func (bu *BusUpdate) SetNillableMorningFirstStationID(s *string) *BusUpdate {
+	if s != nil {
+		bu.SetMorningFirstStationID(*s)
+	}
+	return bu
+}
+
+// SetEveningFirstStationID sets the "evening_first_station_id" field.
+func (bu *BusUpdate) SetEveningFirstStationID(s string) *BusUpdate {
+	bu.mutation.SetEveningFirstStationID(s)
+	return bu
+}
+
+// SetNillableEveningFirstStationID sets the "evening_first_station_id" field if the given value is not nil.
+func (bu *BusUpdate) SetNillableEveningFirstStationID(s *string) *BusUpdate {
+	if s != nil {
+		bu.SetEveningFirstStationID(*s)
+	}
+	return bu
+}
+
 // SetEnableFaceRecognition sets the "enable_face_recognition" field.
 func (bu *BusUpdate) SetEnableFaceRecognition(b bool) *BusUpdate {
 	bu.mutation.SetEnableFaceRecognition(b)
@@ -146,6 +174,26 @@ func (bu *BusUpdate) SetNillableEnableFaceRecognition(b *bool) *BusUpdate {
 	if b != nil {
 		bu.SetEnableFaceRecognition(*b)
 	}
+	return bu
+}
+
+// SetNextStationID sets the "next_station_id" field.
+func (bu *BusUpdate) SetNextStationID(u uuid.UUID) *BusUpdate {
+	bu.mutation.SetNextStationID(u)
+	return bu
+}
+
+// SetNillableNextStationID sets the "next_station_id" field if the given value is not nil.
+func (bu *BusUpdate) SetNillableNextStationID(u *uuid.UUID) *BusUpdate {
+	if u != nil {
+		bu.SetNextStationID(*u)
+	}
+	return bu
+}
+
+// ClearNextStationID clears the value of the "next_station_id" field.
+func (bu *BusUpdate) ClearNextStationID() *BusUpdate {
+	bu.mutation.ClearNextStationID()
 	return bu
 }
 
@@ -395,8 +443,20 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := bu.mutation.Status(); ok {
 		_spec.SetField(bus.FieldStatus, field.TypeEnum, value)
 	}
+	if value, ok := bu.mutation.MorningFirstStationID(); ok {
+		_spec.SetField(bus.FieldMorningFirstStationID, field.TypeString, value)
+	}
+	if value, ok := bu.mutation.EveningFirstStationID(); ok {
+		_spec.SetField(bus.FieldEveningFirstStationID, field.TypeString, value)
+	}
 	if value, ok := bu.mutation.EnableFaceRecognition(); ok {
 		_spec.SetField(bus.FieldEnableFaceRecognition, field.TypeBool, value)
+	}
+	if value, ok := bu.mutation.NextStationID(); ok {
+		_spec.SetField(bus.FieldNextStationID, field.TypeUUID, value)
+	}
+	if bu.mutation.NextStationIDCleared() {
+		_spec.ClearField(bus.FieldNextStationID, field.TypeUUID)
 	}
 	if value, ok := bu.mutation.CreatedAt(); ok {
 		_spec.SetField(bus.FieldCreatedAt, field.TypeTime, value)
@@ -690,6 +750,34 @@ func (buo *BusUpdateOne) SetNillableStatus(b *bus.Status) *BusUpdateOne {
 	return buo
 }
 
+// SetMorningFirstStationID sets the "morning_first_station_id" field.
+func (buo *BusUpdateOne) SetMorningFirstStationID(s string) *BusUpdateOne {
+	buo.mutation.SetMorningFirstStationID(s)
+	return buo
+}
+
+// SetNillableMorningFirstStationID sets the "morning_first_station_id" field if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableMorningFirstStationID(s *string) *BusUpdateOne {
+	if s != nil {
+		buo.SetMorningFirstStationID(*s)
+	}
+	return buo
+}
+
+// SetEveningFirstStationID sets the "evening_first_station_id" field.
+func (buo *BusUpdateOne) SetEveningFirstStationID(s string) *BusUpdateOne {
+	buo.mutation.SetEveningFirstStationID(s)
+	return buo
+}
+
+// SetNillableEveningFirstStationID sets the "evening_first_station_id" field if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableEveningFirstStationID(s *string) *BusUpdateOne {
+	if s != nil {
+		buo.SetEveningFirstStationID(*s)
+	}
+	return buo
+}
+
 // SetEnableFaceRecognition sets the "enable_face_recognition" field.
 func (buo *BusUpdateOne) SetEnableFaceRecognition(b bool) *BusUpdateOne {
 	buo.mutation.SetEnableFaceRecognition(b)
@@ -701,6 +789,26 @@ func (buo *BusUpdateOne) SetNillableEnableFaceRecognition(b *bool) *BusUpdateOne
 	if b != nil {
 		buo.SetEnableFaceRecognition(*b)
 	}
+	return buo
+}
+
+// SetNextStationID sets the "next_station_id" field.
+func (buo *BusUpdateOne) SetNextStationID(u uuid.UUID) *BusUpdateOne {
+	buo.mutation.SetNextStationID(u)
+	return buo
+}
+
+// SetNillableNextStationID sets the "next_station_id" field if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableNextStationID(u *uuid.UUID) *BusUpdateOne {
+	if u != nil {
+		buo.SetNextStationID(*u)
+	}
+	return buo
+}
+
+// ClearNextStationID clears the value of the "next_station_id" field.
+func (buo *BusUpdateOne) ClearNextStationID() *BusUpdateOne {
+	buo.mutation.ClearNextStationID()
 	return buo
 }
 
@@ -980,8 +1088,20 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 	if value, ok := buo.mutation.Status(); ok {
 		_spec.SetField(bus.FieldStatus, field.TypeEnum, value)
 	}
+	if value, ok := buo.mutation.MorningFirstStationID(); ok {
+		_spec.SetField(bus.FieldMorningFirstStationID, field.TypeString, value)
+	}
+	if value, ok := buo.mutation.EveningFirstStationID(); ok {
+		_spec.SetField(bus.FieldEveningFirstStationID, field.TypeString, value)
+	}
 	if value, ok := buo.mutation.EnableFaceRecognition(); ok {
 		_spec.SetField(bus.FieldEnableFaceRecognition, field.TypeBool, value)
+	}
+	if value, ok := buo.mutation.NextStationID(); ok {
+		_spec.SetField(bus.FieldNextStationID, field.TypeUUID, value)
+	}
+	if buo.mutation.NextStationIDCleared() {
+		_spec.ClearField(bus.FieldNextStationID, field.TypeUUID)
 	}
 	if value, ok := buo.mutation.CreatedAt(); ok {
 		_spec.SetField(bus.FieldCreatedAt, field.TypeTime, value)
