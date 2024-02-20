@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class PositionDecideButton extends StatelessWidget {
   final Function() onPressed;
   final String text;
+  final bool isLoading;
 
   const PositionDecideButton({
     Key? key,
     required this.onPressed,
     required this.text,
+    required this.isLoading,
   }) : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class PositionDecideButton extends StatelessWidget {
         height: 50,
         child: ElevatedButton(
           onPressed: onPressed,
-          child: Text(text),
+          child: isLoading ? const CircularProgressIndicator() : Text(text),
         ),
       ),
     );

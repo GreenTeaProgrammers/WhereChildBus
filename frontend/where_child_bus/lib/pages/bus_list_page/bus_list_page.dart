@@ -1,7 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:where_child_bus/components/util/operation_button.dart';
+import 'package:where_child_bus/pages/bus_list_page/widgets/operation_button.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
@@ -38,7 +38,11 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Future<void> _fetchBusList() async {
-    _isLoading = true;
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
     try {
       GetBusListByNurseryIdResponse busList =
@@ -155,11 +159,15 @@ class _BusListPageState extends State<BusListPage> {
                 OperationButton(
                   bus: bus,
                   onBusUpdated: (Bus updatedBus) {
-                    int index = buses.indexOf(bus);
-                    if (index != -1) {
-                      setState(() {
-                        buses[index] = updatedBus;
-                      });
+                    if (bus.busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
+                      _fetchBusList();
+                    } else {
+                      int index = buses.indexOf(bus);
+                      if (index != -1) {
+                        setState(() {
+                          buses[index] = updatedBus;
+                        });
+                      }
                     }
                   },
                 ),

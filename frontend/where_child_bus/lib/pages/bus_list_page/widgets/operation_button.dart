@@ -79,7 +79,7 @@ class _OperationButtonState extends State<OperationButton> {
         onPressed = () => {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return CreateStationPage(bus: widget.bus);
-              }))
+              })).then((_) => widget.onBusUpdated(widget.bus))
             };
         break;
       default:

@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:where_child_bus/pages/bus_list_page/create_station_page/widget/decide_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/create_station_page/widget/google_map.dart';
 import 'package:where_child_bus/util/api/guardians.dart';
+import 'package:where_child_bus/util/api/station.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/guardian.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
@@ -20,17 +21,21 @@ class CreateStationPage extends StatefulWidget {
 class _CreateStationPageState extends State<CreateStationPage> {
   bool _isLoading = false;
   bool _isFailLoading = false;
+  bool _isLoadingUpdate = false;
   List<GuardianResponse> guardians = [];
+  List<Station> stations = [];
+  Set<Marker> _markers = {};
+  int _index = 0;
 
   Future<void> _fetchGuardians() async {
     _isLoading = true;
 
     try {
-      GetGuardianListByBusIdResponse guardianList =
-          await getGuardiansListByBusId(widget.bus.id);
+      var res = await getUnregisteredStations(widget.bus.id);
       if (mounted) {
         setState(() {
-          guardians = guardianList.guardians;
+          guardians = res.guardians;
+          stations = res.stations;
           _isLoading = false;
         });
       }
@@ -44,6 +49,43 @@ class _CreateStationPageState extends State<CreateStationPage> {
 
   void _onMapTapped(Set<Marker> markers) {
     developer.log("マップがタップされました ${markers.first.position}");
+    setState(() {
+      _markers = markers;
+    });
+  }
+
+  Future<void> _onButtonPressed() async {
+    setState(() {
+      _isLoadingUpdate = true;
+    });
+
+    if (_markers.isEmpty) {
+      return;
+    }
+
+    try {
+      var res = await updateStation(stations[_index].id,
+          _markers.first.position.latitude, _markers.first.position.longitude);
+      developer.log("バス停の更新が完了しました");
+      setState(() {
+        _markers.clear();
+        if (_index < guardians.length - 1) {
+          _index++;
+          developer.log("index: $_index");
+        } else {
+          Navigator.of(context).pop();
+        }
+        _isLoadingUpdate = false;
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バス停の更新中にエラーが発生しました: $e");
+      }
+    }
+
+    setState(() {
+      _isLoadingUpdate = false;
+    });
   }
 
   @override
@@ -63,38 +105,63 @@ class _CreateStationPageState extends State<CreateStationPage> {
   }
 
   Widget _createPageBody() {
-    return SingleChildScrollView(
-      // スクロールを可能にする
-      child: Column(
-        children: [
-          if (_isLoading)
-            const Center(child: CircularProgressIndicator())
-          else if (_isFailLoading)
-            const Text('保護者リストの取得に失敗しました')
-          else
-            Container(
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: GoogleMapWidget(
-                onTapped: _onMapTapped,
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              'マップの下に配置されるテキスト',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10.0),
-            child: PositionDecideButton(
-              onPressed: () {},
-              text: '決定',
+    return Column(
+      // SingleChildScrollViewを削除し、Columnを直接使用
+      children: [
+        if (_isLoading)
+          const Expanded(
+            // CircularProgressIndicatorを中央に表示
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else if (_isFailLoading)
+          const Expanded(
+            // エラーメッセージを中央に表示
+            child: Center(child: Text('保護者リストの取得に失敗しました')),
+          )
+        else
+          Expanded(
+            // GoogleMapを表示するためにExpandedを使用
+            flex: 7, // 画面の7割をGoogleMapに割り当てる
+            child: GoogleMapWidget(
+              onTapped: _onMapTapped,
             ),
           ),
-        ],
-      ),
+        _isLoading
+            ? Container()
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Card(
+                  color: Colors.white,
+                  child: Expanded(
+                    flex: 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            '${guardians[_index].name}さん',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 8.0),
+                          child: PositionDecideButton(
+                            onPressed:
+                                _markers.isNotEmpty ? _onButtonPressed : () {},
+                            text: _markers.isNotEmpty
+                                ? 'バス停を決定する'
+                                : '地図をタップしてバス停を決定してください',
+                            isLoading: _isLoadingUpdate,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+      ],
     );
   }
 }

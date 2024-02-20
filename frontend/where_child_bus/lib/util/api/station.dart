@@ -34,3 +34,56 @@ Future<GetStationListByBusIdResponse> getStationListByBusId(
     return Future.error(error);
   }
 }
+
+Future<GetUnregisteredStationListResponse> getUnregisteredStations(
+    String busId) async {
+  final channel = ClientChannel(
+    appConfig.grpcEndpoint,
+    port: appConfig.grpcPort,
+  );
+
+  final grpcClient = StationServiceClient(channel);
+
+  try {
+    var req = GetUnregisteredStationListRequest(busId: busId);
+    var res = await grpcClient.getUnregisteredStationList(req);
+    if (kDebugMode) {
+      developer.log("リクエスト: $req");
+      developer.log("レスポンス: ${res.stations}");
+    }
+    return res;
+  } catch (error) {
+    developer.log("Caught Error:", error: error);
+    return Future.error(error);
+  } finally {
+    await channel.shutdown();
+  }
+}
+
+Future<void> updateStation(
+  String stationId,
+  double latitude,
+  double longitude,
+) async {
+  final channel = ClientChannel(
+    appConfig.grpcEndpoint,
+    port: appConfig.grpcPort,
+  );
+
+  final grpcClient = StationServiceClient(channel);
+
+  try {
+    var req = UpdateStationRequest(
+        id: stationId, latitude: latitude, longitude: longitude);
+    var res = grpcClient.updateStation(req);
+    if (kDebugMode) {
+      developer.log("リクエスト: $req");
+      developer.log("レスポンス: $res");
+    }
+  } catch (error) {
+    developer.log("Caught Error:", error: error);
+    return Future.error(error);
+  } finally {
+    await channel.shutdown();
+  }
+}
