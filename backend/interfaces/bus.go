@@ -15,6 +15,11 @@ func NewBusServiceServer(interactor *bus.Interactor) pb.BusServiceServer {
 	return &busServiceServer{interactor}
 }
 
+// GetRunningBusByGuardianId implements where_child_busv1.BusServiceServer.
+func (s *busServiceServer) GetRunningBusByGuardianId(ctx context.Context, req *pb.GetRunningBusByGuardianIdRequest) (*pb.GetRunningBusByGuardianIdResponse, error) {
+	return s.interactor.GetRunningBusByGuardianID(ctx, req)
+}
+
 // UpdateBus implements where_child_busv1.BusServiceServer.
 func (s *busServiceServer) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
 	return s.interactor.UpdateBus(ctx, req)

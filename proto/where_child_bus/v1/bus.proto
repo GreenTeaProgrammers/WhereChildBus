@@ -8,6 +8,7 @@ import "google/protobuf/field_mask.proto";
 service BusService {
         rpc CreateBus(CreateBusRequest) returns (CreateBusResponse);
         rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
+        rpc GetRunningBusByGuardianId(GetRunningBusByGuardianIdRequest) returns (GetRunningBusByGuardianIdResponse);
         rpc UpdateBus(UpdateBusRequest) returns (UpdateBusResponse);
 
         rpc SendLocationContinuous(stream SendLocationContinuousRequest) returns (SendLocationContinuousResponse);
@@ -33,6 +34,14 @@ message GetBusListByNurseryIdRequest {
 
 message GetBusListByNurseryIdResponse {
         repeated Bus buses = 1;
+}
+
+message GetRunningBusByGuardianIdRequest {
+        string guardian_id = 1;
+}
+
+message GetRunningBusByGuardianIdResponse {
+        Bus bus = 1;
 }
 
 message ChangeBusStatusRequest {
