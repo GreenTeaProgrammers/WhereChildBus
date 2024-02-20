@@ -1,28 +1,29 @@
-import os
 import argparse
-from dotenv import load_dotenv
-import yaml
+import os
+
 import torch
+import yaml
+from dotenv import load_dotenv
 
 load_dotenv("secrets/.env")
 
-from face_detect_model.util import (
-    load_image_from_binary,
-    switch_to_bus_type,
-    load_pickle_to_gcs,
-    get_default_transforms_for_gray,
-    logger,
+from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
+    clip_and_resize_face,
+    detect_face,
+    load_cascade,
 )
 from face_detect_model.gcp_util import (
-    init_client,
     get_bucket,
+    init_client,
     save_face_image_to_remote,
 )
 from face_detect_model.model.faceDetectModel import FaceDetectModel
-from face_detect_model.DetectFaceAndClip.detectFaceUtil import (
-    detect_face,
-    load_cascade,
-    clip_and_resize_face,
+from face_detect_model.util import (
+    get_default_transforms_for_gray,
+    load_image_from_binary,
+    load_pickle_to_gcs,
+    logger,
+    switch_to_bus_type,
 )
 
 

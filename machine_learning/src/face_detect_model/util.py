@@ -1,18 +1,14 @@
 import logging
+import os
+import random
 import re
 
-import random
+import cv2
+import numpy as np
 import torch
+from generated.machine_learning.v1.func_args import FaceDetectAndClip_Args
 from google.cloud.storage import Bucket
 from torchvision import transforms
-import os
-import numpy as np
-
-from generated.machine_learning.v1.func_args import (
-    FaceDetectAndClip_Args,
-)
-
-import cv2
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - PID: %(process)d -  %(message)s",
