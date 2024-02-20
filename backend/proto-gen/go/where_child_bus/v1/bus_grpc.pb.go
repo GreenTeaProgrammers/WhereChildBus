@@ -23,6 +23,7 @@ const (
 	BusService_GetBusListByNurseryId_FullMethodName     = "/where_child_bus.v1.BusService/GetBusListByNurseryId"
 	BusService_GetRunningBusByGuardianId_FullMethodName = "/where_child_bus.v1.BusService/GetRunningBusByGuardianId"
 	BusService_UpdateBus_FullMethodName                 = "/where_child_bus.v1.BusService/UpdateBus"
+	BusService_ChangeBusStatus_FullMethodName           = "/where_child_bus.v1.BusService/ChangeBusStatus"
 	BusService_SendLocationContinuous_FullMethodName    = "/where_child_bus.v1.BusService/SendLocationContinuous"
 	BusService_TrackBusContinuous_FullMethodName        = "/where_child_bus.v1.BusService/TrackBusContinuous"
 	BusService_StreamBusVideo_FullMethodName            = "/where_child_bus.v1.BusService/StreamBusVideo"
@@ -36,6 +37,7 @@ type BusServiceClient interface {
 	GetBusListByNurseryId(ctx context.Context, in *GetBusListByNurseryIdRequest, opts ...grpc.CallOption) (*GetBusListByNurseryIdResponse, error)
 	GetRunningBusByGuardianId(ctx context.Context, in *GetRunningBusByGuardianIdRequest, opts ...grpc.CallOption) (*GetRunningBusByGuardianIdResponse, error)
 	UpdateBus(ctx context.Context, in *UpdateBusRequest, opts ...grpc.CallOption) (*UpdateBusResponse, error)
+	ChangeBusStatus(ctx context.Context, in *ChangeBusStatusRequest, opts ...grpc.CallOption) (*ChangeBusStatusResponse, error)
 	SendLocationContinuous(ctx context.Context, opts ...grpc.CallOption) (BusService_SendLocationContinuousClient, error)
 	TrackBusContinuous(ctx context.Context, in *TrackBusContinuousRequest, opts ...grpc.CallOption) (BusService_TrackBusContinuousClient, error)
 	StreamBusVideo(ctx context.Context, opts ...grpc.CallOption) (BusService_StreamBusVideoClient, error)
@@ -79,6 +81,15 @@ func (c *busServiceClient) GetRunningBusByGuardianId(ctx context.Context, in *Ge
 func (c *busServiceClient) UpdateBus(ctx context.Context, in *UpdateBusRequest, opts ...grpc.CallOption) (*UpdateBusResponse, error) {
 	out := new(UpdateBusResponse)
 	err := c.cc.Invoke(ctx, BusService_UpdateBus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *busServiceClient) ChangeBusStatus(ctx context.Context, in *ChangeBusStatusRequest, opts ...grpc.CallOption) (*ChangeBusStatusResponse, error) {
+	out := new(ChangeBusStatusResponse)
+	err := c.cc.Invoke(ctx, BusService_ChangeBusStatus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -193,6 +204,7 @@ type BusServiceServer interface {
 	GetBusListByNurseryId(context.Context, *GetBusListByNurseryIdRequest) (*GetBusListByNurseryIdResponse, error)
 	GetRunningBusByGuardianId(context.Context, *GetRunningBusByGuardianIdRequest) (*GetRunningBusByGuardianIdResponse, error)
 	UpdateBus(context.Context, *UpdateBusRequest) (*UpdateBusResponse, error)
+	ChangeBusStatus(context.Context, *ChangeBusStatusRequest) (*ChangeBusStatusResponse, error)
 	SendLocationContinuous(BusService_SendLocationContinuousServer) error
 	TrackBusContinuous(*TrackBusContinuousRequest, BusService_TrackBusContinuousServer) error
 	StreamBusVideo(BusService_StreamBusVideoServer) error
@@ -213,6 +225,9 @@ func (UnimplementedBusServiceServer) GetRunningBusByGuardianId(context.Context, 
 }
 func (UnimplementedBusServiceServer) UpdateBus(context.Context, *UpdateBusRequest) (*UpdateBusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBus not implemented")
+}
+func (UnimplementedBusServiceServer) ChangeBusStatus(context.Context, *ChangeBusStatusRequest) (*ChangeBusStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeBusStatus not implemented")
 }
 func (UnimplementedBusServiceServer) SendLocationContinuous(BusService_SendLocationContinuousServer) error {
 	return status.Errorf(codes.Unimplemented, "method SendLocationContinuous not implemented")
@@ -303,6 +318,24 @@ func _BusService_UpdateBus_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BusServiceServer).UpdateBus(ctx, req.(*UpdateBusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusService_ChangeBusStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeBusStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusServiceServer).ChangeBusStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BusService_ChangeBusStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusServiceServer).ChangeBusStatus(ctx, req.(*ChangeBusStatusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -402,6 +435,10 @@ var BusService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateBus",
 			Handler:    _BusService_UpdateBus_Handler,
+		},
+		{
+			MethodName: "ChangeBusStatus",
+			Handler:    _BusService_ChangeBusStatus_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

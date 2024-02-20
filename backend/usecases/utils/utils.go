@@ -77,6 +77,9 @@ func ToPbBus(t *ent.Bus) *pb.Bus {
 		Latitude:              t.Latitude,
 		Longitude:             t.Longitude,
 		EnableFaceRecognition: t.EnableFaceRecognition,
+		NextStationId:         t.Edges.NextStation.ID.String(),
+		MorningFirstStationId: t.Edges.MorningFirstStation.ID.String(),
+		EveningFirstStationId: t.Edges.EveningFirstStation.ID.String(),
 		CreatedAt:             &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
 		UpdatedAt:             &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}

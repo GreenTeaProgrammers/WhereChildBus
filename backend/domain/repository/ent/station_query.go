@@ -31,7 +31,7 @@ type StationQuery struct {
 	withMorningNextStation     *StationQuery
 	withEveningPreviousStation *StationQuery
 	withEveningNextStation     *StationQuery
-	withDestinationForBuses    *BusQuery
+	withNextForBuses           *BusQuery
 	withMorningFirstForBuses   *BusQuery
 	withEveningFirstForBuses   *BusQuery
 	withFKs                    bool
@@ -203,8 +203,8 @@ func (sq *StationQuery) QueryEveningNextStation() *StationQuery {
 	return query
 }
 
-// QueryDestinationForBuses chains the current query on the "destination_for_buses" edge.
-func (sq *StationQuery) QueryDestinationForBuses() *BusQuery {
+// QueryNextForBuses chains the current query on the "next_for_buses" edge.
+func (sq *StationQuery) QueryNextForBuses() *BusQuery {
 	query := (&BusClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
@@ -217,7 +217,7 @@ func (sq *StationQuery) QueryDestinationForBuses() *BusQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(station.Table, station.FieldID, selector),
 			sqlgraph.To(bus.Table, bus.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, station.DestinationForBusesTable, station.DestinationForBusesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, station.NextForBusesTable, station.NextForBusesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -467,7 +467,7 @@ func (sq *StationQuery) Clone() *StationQuery {
 		withMorningNextStation:     sq.withMorningNextStation.Clone(),
 		withEveningPreviousStation: sq.withEveningPreviousStation.Clone(),
 		withEveningNextStation:     sq.withEveningNextStation.Clone(),
-		withDestinationForBuses:    sq.withDestinationForBuses.Clone(),
+		withNextForBuses:           sq.withNextForBuses.Clone(),
 		withMorningFirstForBuses:   sq.withMorningFirstForBuses.Clone(),
 		withEveningFirstForBuses:   sq.withEveningFirstForBuses.Clone(),
 		// clone intermediate query.
@@ -542,14 +542,14 @@ func (sq *StationQuery) WithEveningNextStation(opts ...func(*StationQuery)) *Sta
 	return sq
 }
 
-// WithDestinationForBuses tells the query-builder to eager-load the nodes that are connected to
-// the "destination_for_buses" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StationQuery) WithDestinationForBuses(opts ...func(*BusQuery)) *StationQuery {
+// WithNextForBuses tells the query-builder to eager-load the nodes that are connected to
+// the "next_for_buses" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StationQuery) WithNextForBuses(opts ...func(*BusQuery)) *StationQuery {
 	query := (&BusClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withDestinationForBuses = query
+	sq.withNextForBuses = query
 	return sq
 }
 
@@ -661,7 +661,7 @@ func (sq *StationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Stat
 			sq.withMorningNextStation != nil,
 			sq.withEveningPreviousStation != nil,
 			sq.withEveningNextStation != nil,
-			sq.withDestinationForBuses != nil,
+			sq.withNextForBuses != nil,
 			sq.withMorningFirstForBuses != nil,
 			sq.withEveningFirstForBuses != nil,
 		}
@@ -729,10 +729,10 @@ func (sq *StationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Stat
 			return nil, err
 		}
 	}
-	if query := sq.withDestinationForBuses; query != nil {
-		if err := sq.loadDestinationForBuses(ctx, query, nodes,
-			func(n *Station) { n.Edges.DestinationForBuses = []*Bus{} },
-			func(n *Station, e *Bus) { n.Edges.DestinationForBuses = append(n.Edges.DestinationForBuses, e) }); err != nil {
+	if query := sq.withNextForBuses; query != nil {
+		if err := sq.loadNextForBuses(ctx, query, nodes,
+			func(n *Station) { n.Edges.NextForBuses = []*Bus{} },
+			func(n *Station, e *Bus) { n.Edges.NextForBuses = append(n.Edges.NextForBuses, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -972,7 +972,7 @@ func (sq *StationQuery) loadEveningNextStation(ctx context.Context, query *Stati
 	}
 	return nil
 }
-func (sq *StationQuery) loadDestinationForBuses(ctx context.Context, query *BusQuery, nodes []*Station, init func(*Station), assign func(*Station, *Bus)) error {
+func (sq *StationQuery) loadNextForBuses(ctx context.Context, query *BusQuery, nodes []*Station, init func(*Station), assign func(*Station, *Bus)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[uuid.UUID]*Station)
 	for i := range nodes {
@@ -984,20 +984,20 @@ func (sq *StationQuery) loadDestinationForBuses(ctx context.Context, query *BusQ
 	}
 	query.withFKs = true
 	query.Where(predicate.Bus(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(station.DestinationForBusesColumn), fks...))
+		s.Where(sql.InValues(s.C(station.NextForBusesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.bus_destination_station
+		fk := n.bus_next_station
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "bus_destination_station" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "bus_next_station" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "bus_destination_station" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "bus_next_station" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

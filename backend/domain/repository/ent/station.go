@@ -50,8 +50,8 @@ type StationEdges struct {
 	EveningPreviousStation *Station `json:"evening_previous_station,omitempty"`
 	// EveningNextStation holds the value of the evening_next_station edge.
 	EveningNextStation []*Station `json:"evening_next_station,omitempty"`
-	// DestinationForBuses holds the value of the destination_for_buses edge.
-	DestinationForBuses []*Bus `json:"destination_for_buses,omitempty"`
+	// NextForBuses holds the value of the next_for_buses edge.
+	NextForBuses []*Bus `json:"next_for_buses,omitempty"`
 	// MorningFirstForBuses holds the value of the morning_first_for_buses edge.
 	MorningFirstForBuses []*Bus `json:"morning_first_for_buses,omitempty"`
 	// EveningFirstForBuses holds the value of the evening_first_for_buses edge.
@@ -127,13 +127,13 @@ func (e StationEdges) EveningNextStationOrErr() ([]*Station, error) {
 	return nil, &NotLoadedError{edge: "evening_next_station"}
 }
 
-// DestinationForBusesOrErr returns the DestinationForBuses value or an error if the edge
+// NextForBusesOrErr returns the NextForBuses value or an error if the edge
 // was not loaded in eager-loading.
-func (e StationEdges) DestinationForBusesOrErr() ([]*Bus, error) {
+func (e StationEdges) NextForBusesOrErr() ([]*Bus, error) {
 	if e.loadedTypes[6] {
-		return e.DestinationForBuses, nil
+		return e.NextForBuses, nil
 	}
-	return nil, &NotLoadedError{edge: "destination_for_buses"}
+	return nil, &NotLoadedError{edge: "next_for_buses"}
 }
 
 // MorningFirstForBusesOrErr returns the MorningFirstForBuses value or an error if the edge
@@ -280,9 +280,9 @@ func (s *Station) QueryEveningNextStation() *StationQuery {
 	return NewStationClient(s.config).QueryEveningNextStation(s)
 }
 
-// QueryDestinationForBuses queries the "destination_for_buses" edge of the Station entity.
-func (s *Station) QueryDestinationForBuses() *BusQuery {
-	return NewStationClient(s.config).QueryDestinationForBuses(s)
+// QueryNextForBuses queries the "next_for_buses" edge of the Station entity.
+func (s *Station) QueryNextForBuses() *BusQuery {
+	return NewStationClient(s.config).QueryNextForBuses(s)
 }
 
 // QueryMorningFirstForBuses queries the "morning_first_for_buses" edge of the Station entity.

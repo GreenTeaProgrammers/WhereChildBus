@@ -533,21 +533,21 @@ func HasChildBusAssociationsWith(preds ...predicate.ChildBusAssociation) predica
 	})
 }
 
-// HasDestinationStation applies the HasEdge predicate on the "destination_station" edge.
-func HasDestinationStation() predicate.Bus {
+// HasNextStation applies the HasEdge predicate on the "next_station" edge.
+func HasNextStation() predicate.Bus {
 	return predicate.Bus(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, DestinationStationTable, DestinationStationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, NextStationTable, NextStationColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasDestinationStationWith applies the HasEdge predicate on the "destination_station" edge with a given conditions (other predicates).
-func HasDestinationStationWith(preds ...predicate.Station) predicate.Bus {
+// HasNextStationWith applies the HasEdge predicate on the "next_station" edge with a given conditions (other predicates).
+func HasNextStationWith(preds ...predicate.Station) predicate.Bus {
 	return predicate.Bus(func(s *sql.Selector) {
-		step := newDestinationStationStep()
+		step := newNextStationStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

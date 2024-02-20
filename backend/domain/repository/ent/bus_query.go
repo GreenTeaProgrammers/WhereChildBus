@@ -31,7 +31,7 @@ type BusQuery struct {
 	withStations             *StationQuery
 	withBoardingRecords      *BoardingRecordQuery
 	withChildBusAssociations *ChildBusAssociationQuery
-	withDestinationStation   *StationQuery
+	withNextStation          *StationQuery
 	withMorningFirstStation  *StationQuery
 	withEveningFirstStation  *StationQuery
 	withFKs                  bool
@@ -159,8 +159,8 @@ func (bq *BusQuery) QueryChildBusAssociations() *ChildBusAssociationQuery {
 	return query
 }
 
-// QueryDestinationStation chains the current query on the "destination_station" edge.
-func (bq *BusQuery) QueryDestinationStation() *StationQuery {
+// QueryNextStation chains the current query on the "next_station" edge.
+func (bq *BusQuery) QueryNextStation() *StationQuery {
 	query := (&StationClient{config: bq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := bq.prepareQuery(ctx); err != nil {
@@ -173,7 +173,7 @@ func (bq *BusQuery) QueryDestinationStation() *StationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bus.Table, bus.FieldID, selector),
 			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, bus.DestinationStationTable, bus.DestinationStationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.NextStationTable, bus.NextStationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -421,7 +421,7 @@ func (bq *BusQuery) Clone() *BusQuery {
 		withStations:             bq.withStations.Clone(),
 		withBoardingRecords:      bq.withBoardingRecords.Clone(),
 		withChildBusAssociations: bq.withChildBusAssociations.Clone(),
-		withDestinationStation:   bq.withDestinationStation.Clone(),
+		withNextStation:          bq.withNextStation.Clone(),
 		withMorningFirstStation:  bq.withMorningFirstStation.Clone(),
 		withEveningFirstStation:  bq.withEveningFirstStation.Clone(),
 		// clone intermediate query.
@@ -474,14 +474,14 @@ func (bq *BusQuery) WithChildBusAssociations(opts ...func(*ChildBusAssociationQu
 	return bq
 }
 
-// WithDestinationStation tells the query-builder to eager-load the nodes that are connected to
-// the "destination_station" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BusQuery) WithDestinationStation(opts ...func(*StationQuery)) *BusQuery {
+// WithNextStation tells the query-builder to eager-load the nodes that are connected to
+// the "next_station" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BusQuery) WithNextStation(opts ...func(*StationQuery)) *BusQuery {
 	query := (&StationClient{config: bq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	bq.withDestinationStation = query
+	bq.withNextStation = query
 	return bq
 }
 
@@ -591,12 +591,12 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 			bq.withStations != nil,
 			bq.withBoardingRecords != nil,
 			bq.withChildBusAssociations != nil,
-			bq.withDestinationStation != nil,
+			bq.withNextStation != nil,
 			bq.withMorningFirstStation != nil,
 			bq.withEveningFirstStation != nil,
 		}
 	)
-	if bq.withNursery != nil || bq.withDestinationStation != nil || bq.withMorningFirstStation != nil || bq.withEveningFirstStation != nil {
+	if bq.withNursery != nil || bq.withNextStation != nil || bq.withMorningFirstStation != nil || bq.withEveningFirstStation != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -649,9 +649,9 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 			return nil, err
 		}
 	}
-	if query := bq.withDestinationStation; query != nil {
-		if err := bq.loadDestinationStation(ctx, query, nodes, nil,
-			func(n *Bus, e *Station) { n.Edges.DestinationStation = e }); err != nil {
+	if query := bq.withNextStation; query != nil {
+		if err := bq.loadNextStation(ctx, query, nodes, nil,
+			func(n *Bus, e *Station) { n.Edges.NextStation = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -824,14 +824,14 @@ func (bq *BusQuery) loadChildBusAssociations(ctx context.Context, query *ChildBu
 	}
 	return nil
 }
-func (bq *BusQuery) loadDestinationStation(ctx context.Context, query *StationQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *Station)) error {
+func (bq *BusQuery) loadNextStation(ctx context.Context, query *StationQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *Station)) error {
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*Bus)
 	for i := range nodes {
-		if nodes[i].bus_destination_station == nil {
+		if nodes[i].bus_next_station == nil {
 			continue
 		}
-		fk := *nodes[i].bus_destination_station
+		fk := *nodes[i].bus_next_station
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -848,7 +848,7 @@ func (bq *BusQuery) loadDestinationStation(ctx context.Context, query *StationQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "bus_destination_station" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "bus_next_station" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

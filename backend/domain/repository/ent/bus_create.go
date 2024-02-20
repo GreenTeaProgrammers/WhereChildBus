@@ -207,23 +207,23 @@ func (bc *BusCreate) AddChildBusAssociations(c ...*ChildBusAssociation) *BusCrea
 	return bc.AddChildBusAssociationIDs(ids...)
 }
 
-// SetDestinationStationID sets the "destination_station" edge to the Station entity by ID.
-func (bc *BusCreate) SetDestinationStationID(id uuid.UUID) *BusCreate {
-	bc.mutation.SetDestinationStationID(id)
+// SetNextStationID sets the "next_station" edge to the Station entity by ID.
+func (bc *BusCreate) SetNextStationID(id uuid.UUID) *BusCreate {
+	bc.mutation.SetNextStationID(id)
 	return bc
 }
 
-// SetNillableDestinationStationID sets the "destination_station" edge to the Station entity by ID if the given value is not nil.
-func (bc *BusCreate) SetNillableDestinationStationID(id *uuid.UUID) *BusCreate {
+// SetNillableNextStationID sets the "next_station" edge to the Station entity by ID if the given value is not nil.
+func (bc *BusCreate) SetNillableNextStationID(id *uuid.UUID) *BusCreate {
 	if id != nil {
-		bc = bc.SetDestinationStationID(*id)
+		bc = bc.SetNextStationID(*id)
 	}
 	return bc
 }
 
-// SetDestinationStation sets the "destination_station" edge to the Station entity.
-func (bc *BusCreate) SetDestinationStation(s *Station) *BusCreate {
-	return bc.SetDestinationStationID(s.ID)
+// SetNextStation sets the "next_station" edge to the Station entity.
+func (bc *BusCreate) SetNextStation(s *Station) *BusCreate {
+	return bc.SetNextStationID(s.ID)
 }
 
 // SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID.
@@ -475,12 +475,12 @@ func (bc *BusCreate) createSpec() (*Bus, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := bc.mutation.DestinationStationIDs(); len(nodes) > 0 {
+	if nodes := bc.mutation.NextStationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   bus.DestinationStationTable,
-			Columns: []string{bus.DestinationStationColumn},
+			Table:   bus.NextStationTable,
+			Columns: []string{bus.NextStationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
@@ -489,7 +489,7 @@ func (bc *BusCreate) createSpec() (*Bus, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.bus_destination_station = &nodes[0]
+		_node.bus_next_station = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := bc.mutation.MorningFirstStationIDs(); len(nodes) > 0 {
