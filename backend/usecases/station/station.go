@@ -180,7 +180,11 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 		Where(stationRepo.HasBusWith(busRepo.ID(busID))).
 		WithGuardian(func(q *ent.GuardianQuery) {
 			q.WithNursery()
-			q.WithChildren()
+			q.WithChildren(
+				func(q *ent.ChildQuery) {
+					q.WithGuardian()
+				},
+			)
 		}).
 		All(ctx)
 

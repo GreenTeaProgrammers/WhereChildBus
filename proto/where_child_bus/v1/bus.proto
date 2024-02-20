@@ -97,7 +97,10 @@ message UpdateBusRequest {
         double latitude = 5;
         double longitude = 6;
         bool enable_face_recognition = 7;
-        google.protobuf.FieldMask update_mask = 8;
+        string morning_first_station_id = 8;
+        string evening_first_station_id = 9;
+        string next_station_id = 10;
+        google.protobuf.FieldMask update_mask = 11;
 }
 
 message UpdateBusResponse {

@@ -50,9 +50,15 @@ type StationEdges struct {
 	EveningPreviousStation *Station `json:"evening_previous_station,omitempty"`
 	// EveningNextStation holds the value of the evening_next_station edge.
 	EveningNextStation []*Station `json:"evening_next_station,omitempty"`
+	// DestinationForBuses holds the value of the destination_for_buses edge.
+	DestinationForBuses []*Bus `json:"destination_for_buses,omitempty"`
+	// MorningFirstForBuses holds the value of the morning_first_for_buses edge.
+	MorningFirstForBuses []*Bus `json:"morning_first_for_buses,omitempty"`
+	// EveningFirstForBuses holds the value of the evening_first_for_buses edge.
+	EveningFirstForBuses []*Bus `json:"evening_first_for_buses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [9]bool
 }
 
 // GuardianOrErr returns the Guardian value or an error if the edge
@@ -119,6 +125,33 @@ func (e StationEdges) EveningNextStationOrErr() ([]*Station, error) {
 		return e.EveningNextStation, nil
 	}
 	return nil, &NotLoadedError{edge: "evening_next_station"}
+}
+
+// DestinationForBusesOrErr returns the DestinationForBuses value or an error if the edge
+// was not loaded in eager-loading.
+func (e StationEdges) DestinationForBusesOrErr() ([]*Bus, error) {
+	if e.loadedTypes[6] {
+		return e.DestinationForBuses, nil
+	}
+	return nil, &NotLoadedError{edge: "destination_for_buses"}
+}
+
+// MorningFirstForBusesOrErr returns the MorningFirstForBuses value or an error if the edge
+// was not loaded in eager-loading.
+func (e StationEdges) MorningFirstForBusesOrErr() ([]*Bus, error) {
+	if e.loadedTypes[7] {
+		return e.MorningFirstForBuses, nil
+	}
+	return nil, &NotLoadedError{edge: "morning_first_for_buses"}
+}
+
+// EveningFirstForBusesOrErr returns the EveningFirstForBuses value or an error if the edge
+// was not loaded in eager-loading.
+func (e StationEdges) EveningFirstForBusesOrErr() ([]*Bus, error) {
+	if e.loadedTypes[8] {
+		return e.EveningFirstForBuses, nil
+	}
+	return nil, &NotLoadedError{edge: "evening_first_for_buses"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -245,6 +278,21 @@ func (s *Station) QueryEveningPreviousStation() *StationQuery {
 // QueryEveningNextStation queries the "evening_next_station" edge of the Station entity.
 func (s *Station) QueryEveningNextStation() *StationQuery {
 	return NewStationClient(s.config).QueryEveningNextStation(s)
+}
+
+// QueryDestinationForBuses queries the "destination_for_buses" edge of the Station entity.
+func (s *Station) QueryDestinationForBuses() *BusQuery {
+	return NewStationClient(s.config).QueryDestinationForBuses(s)
+}
+
+// QueryMorningFirstForBuses queries the "morning_first_for_buses" edge of the Station entity.
+func (s *Station) QueryMorningFirstForBuses() *BusQuery {
+	return NewStationClient(s.config).QueryMorningFirstForBuses(s)
+}
+
+// QueryEveningFirstForBuses queries the "evening_first_for_buses" edge of the Station entity.
+func (s *Station) QueryEveningFirstForBuses() *BusQuery {
+	return NewStationClient(s.config).QueryEveningFirstForBuses(s)
 }
 
 // Update returns a builder for updating this Station.

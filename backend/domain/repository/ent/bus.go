@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	"github.com/google/uuid"
 )
 
@@ -37,9 +38,12 @@ type Bus struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BusQuery when eager-loading is set.
-	Edges        BusEdges `json:"edges"`
-	bus_nursery  *uuid.UUID
-	selectValues sql.SelectValues
+	Edges                     BusEdges `json:"edges"`
+	bus_nursery               *uuid.UUID
+	bus_destination_station   *uuid.UUID
+	bus_morning_first_station *uuid.UUID
+	bus_evening_first_station *uuid.UUID
+	selectValues              sql.SelectValues
 }
 
 // BusEdges holds the relations/edges for other nodes in the graph.
@@ -52,9 +56,15 @@ type BusEdges struct {
 	BoardingRecords []*BoardingRecord `json:"boarding_records,omitempty"`
 	// ChildBusAssociations holds the value of the childBusAssociations edge.
 	ChildBusAssociations []*ChildBusAssociation `json:"childBusAssociations,omitempty"`
+	// DestinationStation holds the value of the destination_station edge.
+	DestinationStation *Station `json:"destination_station,omitempty"`
+	// MorningFirstStation holds the value of the morning_first_station edge.
+	MorningFirstStation *Station `json:"morning_first_station,omitempty"`
+	// EveningFirstStation holds the value of the evening_first_station edge.
+	EveningFirstStation *Station `json:"evening_first_station,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [7]bool
 }
 
 // NurseryOrErr returns the Nursery value or an error if the edge
@@ -97,6 +107,45 @@ func (e BusEdges) ChildBusAssociationsOrErr() ([]*ChildBusAssociation, error) {
 	return nil, &NotLoadedError{edge: "childBusAssociations"}
 }
 
+// DestinationStationOrErr returns the DestinationStation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BusEdges) DestinationStationOrErr() (*Station, error) {
+	if e.loadedTypes[4] {
+		if e.DestinationStation == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: station.Label}
+		}
+		return e.DestinationStation, nil
+	}
+	return nil, &NotLoadedError{edge: "destination_station"}
+}
+
+// MorningFirstStationOrErr returns the MorningFirstStation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BusEdges) MorningFirstStationOrErr() (*Station, error) {
+	if e.loadedTypes[5] {
+		if e.MorningFirstStation == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: station.Label}
+		}
+		return e.MorningFirstStation, nil
+	}
+	return nil, &NotLoadedError{edge: "morning_first_station"}
+}
+
+// EveningFirstStationOrErr returns the EveningFirstStation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BusEdges) EveningFirstStationOrErr() (*Station, error) {
+	if e.loadedTypes[6] {
+		if e.EveningFirstStation == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: station.Label}
+		}
+		return e.EveningFirstStation, nil
+	}
+	return nil, &NotLoadedError{edge: "evening_first_station"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Bus) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -113,6 +162,12 @@ func (*Bus) scanValues(columns []string) ([]any, error) {
 		case bus.FieldID:
 			values[i] = new(uuid.UUID)
 		case bus.ForeignKeys[0]: // bus_nursery
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case bus.ForeignKeys[1]: // bus_destination_station
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case bus.ForeignKeys[2]: // bus_morning_first_station
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case bus.ForeignKeys[3]: // bus_evening_first_station
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -190,6 +245,27 @@ func (b *Bus) assignValues(columns []string, values []any) error {
 				b.bus_nursery = new(uuid.UUID)
 				*b.bus_nursery = *value.S.(*uuid.UUID)
 			}
+		case bus.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field bus_destination_station", values[i])
+			} else if value.Valid {
+				b.bus_destination_station = new(uuid.UUID)
+				*b.bus_destination_station = *value.S.(*uuid.UUID)
+			}
+		case bus.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field bus_morning_first_station", values[i])
+			} else if value.Valid {
+				b.bus_morning_first_station = new(uuid.UUID)
+				*b.bus_morning_first_station = *value.S.(*uuid.UUID)
+			}
+		case bus.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field bus_evening_first_station", values[i])
+			} else if value.Valid {
+				b.bus_evening_first_station = new(uuid.UUID)
+				*b.bus_evening_first_station = *value.S.(*uuid.UUID)
+			}
 		default:
 			b.selectValues.Set(columns[i], values[i])
 		}
@@ -221,6 +297,21 @@ func (b *Bus) QueryBoardingRecords() *BoardingRecordQuery {
 // QueryChildBusAssociations queries the "childBusAssociations" edge of the Bus entity.
 func (b *Bus) QueryChildBusAssociations() *ChildBusAssociationQuery {
 	return NewBusClient(b.config).QueryChildBusAssociations(b)
+}
+
+// QueryDestinationStation queries the "destination_station" edge of the Bus entity.
+func (b *Bus) QueryDestinationStation() *StationQuery {
+	return NewBusClient(b.config).QueryDestinationStation(b)
+}
+
+// QueryMorningFirstStation queries the "morning_first_station" edge of the Bus entity.
+func (b *Bus) QueryMorningFirstStation() *StationQuery {
+	return NewBusClient(b.config).QueryMorningFirstStation(b)
+}
+
+// QueryEveningFirstStation queries the "evening_first_station" edge of the Bus entity.
+func (b *Bus) QueryEveningFirstStation() *StationQuery {
+	return NewBusClient(b.config).QueryEveningFirstStation(b)
 }
 
 // Update returns a builder for updating this Bus.

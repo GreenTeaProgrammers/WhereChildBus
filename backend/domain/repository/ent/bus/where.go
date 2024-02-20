@@ -533,6 +533,75 @@ func HasChildBusAssociationsWith(preds ...predicate.ChildBusAssociation) predica
 	})
 }
 
+// HasDestinationStation applies the HasEdge predicate on the "destination_station" edge.
+func HasDestinationStation() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DestinationStationTable, DestinationStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDestinationStationWith applies the HasEdge predicate on the "destination_station" edge with a given conditions (other predicates).
+func HasDestinationStationWith(preds ...predicate.Station) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newDestinationStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMorningFirstStation applies the HasEdge predicate on the "morning_first_station" edge.
+func HasMorningFirstStation() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, MorningFirstStationTable, MorningFirstStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMorningFirstStationWith applies the HasEdge predicate on the "morning_first_station" edge with a given conditions (other predicates).
+func HasMorningFirstStationWith(preds ...predicate.Station) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newMorningFirstStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEveningFirstStation applies the HasEdge predicate on the "evening_first_station" edge.
+func HasEveningFirstStation() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, EveningFirstStationTable, EveningFirstStationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEveningFirstStationWith applies the HasEdge predicate on the "evening_first_station" edge with a given conditions (other predicates).
+func HasEveningFirstStationWith(preds ...predicate.Station) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newEveningFirstStationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Bus) predicate.Bus {
 	return predicate.Bus(sql.AndPredicates(predicates...))

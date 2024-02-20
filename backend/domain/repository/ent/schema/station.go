@@ -41,5 +41,14 @@ func (Station) Edges() []ent.Edge {
 		edge.To("evening_next_station", Station.Type).
 			From("evening_previous_station").
 			Unique(),
+		// このステーションが「現在」の目的地であるバス
+		edge.From("destination_for_buses", Bus.Type).
+			Ref("destination_station"),
+		// このステーションが朝の最初のステーションであるバス
+		edge.From("morning_first_for_buses", Bus.Type).
+			Ref("morning_first_station"),
+		// このステーションが夕方の最初のステーションであるバス
+		edge.From("evening_first_for_buses", Bus.Type).
+			Ref("evening_first_station"),
 	}
 }
