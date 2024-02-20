@@ -2,10 +2,11 @@ import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pb.dart';
-import 'package:where_child_bus_guardian/service/check_is_child_in_bus.dart';
-import '../styles/styles.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
+import 'package:where_child_bus_guardian/service/check_is_child_in_bus.dart';
 import 'package:where_child_bus_guardian/components/utils/image_from_byte.dart';
+import 'package:where_child_bus_guardian/pages/daily_page/components/has_item_state.dart';
+import '../styles/styles.dart';
 
 class DailyRecordBody extends StatefulWidget {
   final Child child;
@@ -23,6 +24,10 @@ class DailyRecordBody extends StatefulWidget {
 
 class _DailyRecordBody extends State<DailyRecordBody> {
   bool isBoarding = false;
+  bool hasBagState = false;
+  bool hasLunchBoxState = false;
+  bool hasWaterBottleState = false;
+  bool hasUmbrellaState = false;
 
   @override
   void initState() {
@@ -55,12 +60,13 @@ class _DailyRecordBody extends State<DailyRecordBody> {
             padding: const EdgeInsets.only(top: 20, bottom: 10),
             child: Text(
               widget.child.name,
-              style: TextStyle(fontSize: 24),
+              style: const TextStyle(fontSize: 24),
               textAlign: TextAlign.center,
             )),
         statusIconAndStatusField(
-            Icons.directions_bus, isBoardingStatusField(context)),
-        statusIconAndStatusField(Icons.business_center, childItemList(context)),
+            context, Icons.directions_bus, isBoardingStatusField(context)),
+        statusIconAndStatusField(
+            context, Icons.business_center, childItemList(context)),
       ],
     );
   }
@@ -91,7 +97,8 @@ class _DailyRecordBody extends State<DailyRecordBody> {
     );
   }
 
-  Widget statusIconAndStatusField(IconData icon, Widget statusField) {
+  Widget statusIconAndStatusField(
+      BuildContext context, IconData icon, Widget statusField) {
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Row(
@@ -130,45 +137,24 @@ class _DailyRecordBody extends State<DailyRecordBody> {
         runAlignment: WrapAlignment.spaceBetween,
         runSpacing: 4.0,
         children: [
-          itemText("かばん", widget.child.hasBag),
-          itemText("お弁当", widget.child.hasLunchBox),
-          itemText("水筒", widget.child.hasWaterBottle),
-          itemText("傘", widget.child.hasUmbrella),
+          HasItemState(
+              child: widget.child,
+              itemName: "かばん",
+              hasItem: widget.child.hasBag),
+          HasItemState(
+              child: widget.child,
+              itemName: "お弁当",
+              hasItem: widget.child.hasLunchBox),
+          HasItemState(
+              child: widget.child,
+              itemName: "水筒",
+              hasItem: widget.child.hasWaterBottle),
+          HasItemState(
+              child: widget.child,
+              itemName: "傘",
+              hasItem: widget.child.hasUmbrella),
         ],
       ),
     );
-  }
-
-  Widget itemText(String itemName, bool hasItem) {
-    return Material(
-        color: hasItem ? Colors.green[100] : Colors.red[100],
-        borderRadius: BorderRadius.circular(5),
-        elevation: 5,
-        child: InkWell(
-            onTap: () {
-              //TODO: ここにアイテムの所持状況を変更する処理を追加
-            },
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.24,
-                child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, bottom: 10.0, left: 8.0),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 20,
-                          child: hasItem
-                              ? const Icon(Icons.check, color: Colors.green)
-                              : const Icon(Icons.error_outline,
-                                  color: Colors.red),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          itemName,
-                          style: statusFieldTextStyle(hasItem),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    )))));
   }
 }
