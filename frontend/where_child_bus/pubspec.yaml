@@ -17,6 +17,7 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   camera: ^0.10.5+9
   image: ^4.1.7
+  google_maps_flutter: ^2.5.3
   collection: ^1.18.0
   where_child_bus_api:
     path: ../where_child_bus_api
