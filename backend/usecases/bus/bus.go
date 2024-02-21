@@ -503,11 +503,16 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 			return fmt.Errorf("failed to get bus: %w", err)
 		}
 
+		nextStation, err := bus.QueryNextStation().Only(context.Background())
+		if err != nil {
+			return err
+		}
+
 		if err := stream.Send(&pb.TrackBusContinuousResponse{
 			BusId:         req.BusId,
 			Latitude:      bus.Latitude,
 			Longitude:     bus.Longitude,
-			NextStationId: bus.Edges.NextStation.ID.String(),
+			NextStationId: nextStation.ID.String(),
 		}); err != nil {
 			return fmt.Errorf("failed to send bus: %w", err)
 		}
