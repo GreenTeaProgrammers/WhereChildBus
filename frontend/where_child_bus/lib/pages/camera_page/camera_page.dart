@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:grpc/grpc.dart';
@@ -18,7 +19,7 @@ class CameraPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CameraPageState createState() => _CameraPageState();
+  State<CameraPage> createState() => _CameraPageState();
 }
 
 class _CameraPageState extends State<CameraPage> {
@@ -61,9 +62,8 @@ class _CameraPageState extends State<CameraPage> {
     final res = grpcClient.streamBusVideo(requestStream);
 
     try {
-      developer.log("Streamed video to server");
       await for (var response in res.asStream()) {
-        developer.log("Received response: $response");
+        developer.log("Received response: $response", name: "CameraPage");
       }
     } catch (error) {
       developer.log("Caught Error:", error: error);
@@ -79,7 +79,12 @@ class _CameraPageState extends State<CameraPage> {
       _controller.startImageStream((CameraImage image) {
         frameCounter++;
         if (frameCounter % 60 == 0) {
-          videoChunks.add(image.planes[0].bytes.toList());
+          //TODO プラットフォームで画像を変える
+          if (Platform.isAndroid) {
+            videoChunks.add(image.planes[0].bytes.toList());
+          } else if (Platform.isIOS) {
+            videoChunks.add(image.planes[0].bytes.toList());
+          }
           _streamController.add(StreamBusVideoRequest(
             nurseryId: NurseryData().getNursery().id,
             busId: widget.bus.id,
