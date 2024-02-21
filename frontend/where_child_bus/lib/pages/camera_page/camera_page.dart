@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:grpc/grpc.dart';
@@ -12,10 +11,10 @@ import "package:where_child_bus/main.dart" as where_child_bus;
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class CameraPage extends StatefulWidget {
-  Bus bus;
-  BusType busType;
+  final Bus bus;
+  final BusType busType;
 
-  CameraPage({Key? key, required this.bus, required this.busType})
+  const CameraPage({Key? key, required this.bus, required this.busType})
       : super(key: key);
 
   @override
@@ -81,16 +80,15 @@ class _CameraPageState extends State<CameraPage> {
         frameCounter++;
         if (frameCounter % 60 == 0) {
           videoChunks.add(image.planes[0].bytes.toList());
-          // _streamController.add(StreamBusVideoRequest(
-          //   nurseryId: NurseryData().getNursery().id,
-          //   busId: widget.bus.id,
-          //   busType: widget.busType,
-          //   //TODO VheicleEventを動的にする
-          //   vehicleEvent: _vehicleEvent,
-          //   videoChunk: videoChunks,
-          //   photoHeight: image.height,
-          //   photoWidth: image.width,
-          // ));
+          _streamController.add(StreamBusVideoRequest(
+            nurseryId: NurseryData().getNursery().id,
+            busId: widget.bus.id,
+            busType: widget.busType,
+            vehicleEvent: _vehicleEvent,
+            videoChunk: videoChunks,
+            photoHeight: image.height,
+            photoWidth: image.width,
+          ));
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 

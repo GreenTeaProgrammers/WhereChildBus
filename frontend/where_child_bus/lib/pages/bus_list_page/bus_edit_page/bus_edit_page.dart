@@ -14,10 +14,10 @@ import 'package:where_child_bus/util/validation/create_bus_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusEditPage extends StatefulWidget {
-  Bus? bus;
+  final Bus? bus;
   final BusEditPageType busEditPageType;
 
-  BusEditPage({super.key, this.bus, required this.busEditPageType});
+  const BusEditPage({super.key, this.bus, required this.busEditPageType});
 
   @override
   _BusEditPageState createState() => _BusEditPageState();
@@ -94,6 +94,7 @@ class _BusEditPageState extends State<BusEditPage> {
         morningSelectedGuardiansId,
         eveningSelectedGuardiansId,
       );
+      developer.log("バスの作成に成功しました: $res", name: "BusEditPage");
       Navigator.pop(context);
     } catch (e) {
       if (kDebugMode) {

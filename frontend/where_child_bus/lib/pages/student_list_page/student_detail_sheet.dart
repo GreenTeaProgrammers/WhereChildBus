@@ -130,7 +130,7 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
         children: <Widget>[
           childDetailItem("年齢", "${widget.child.age}歳"),
           // childDetailItem("クラス", "1組"),
-          childDetailItem("保護者氏名", "${guardian.name}"),
+          childDetailItem("保護者氏名", guardian.name),
           childDetailItem("保護者連絡先", guardian.phoneNumber),
           childDetailItem("利用バス", "○○コース"),
           // childDetailItem("乗降場所", "○○駐車場前"),

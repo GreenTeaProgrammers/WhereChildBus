@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class RidingToggle extends StatefulWidget {
-  Function(bool) onToggled;
+  final Function(bool) onToggled;
 
-  RidingToggle({required this.onToggled, super.key});
+  const RidingToggle({required this.onToggled, super.key});
 
   @override
   _RidingToggleState createState() => _RidingToggleState();

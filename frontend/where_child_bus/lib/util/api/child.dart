@@ -12,7 +12,7 @@ Future<T> performGrpcCall<T>(
     port: appConfig.grpcPort,
   );
   final grpcClient = ChildServiceClient(channel);
-  final Stopwatch stopwatch = new Stopwatch()..start();
+  final Stopwatch stopwatch = Stopwatch()..start();
 
   try {
     final result = await grpcCall(grpcClient);

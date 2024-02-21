@@ -17,7 +17,7 @@ Future<PingResponse> serviceHealthCheck() async {
     var rqst = PingRequest();
     rqst.name = "ping";
     PingResponse res = await grpcClient.ping(rqst);
-    print(res.message);
+    developer.log(res.message);
     await channel.shutdown();
     return res;
   } catch (error) {
