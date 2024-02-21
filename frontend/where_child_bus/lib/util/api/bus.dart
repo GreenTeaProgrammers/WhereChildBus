@@ -56,10 +56,18 @@ Future<CreateBusResponse> createBus(
 
 Future<ChangeBusStatusResponse> updateBusStatus(
     String busId, BusStatus busStatus) async {
+  DateTime now = DateTime.now();
+  BusType busType;
+  if (now.hour < 12) {
+    busType = BusType.BUS_TYPE_MORNING;
+  } else {
+    busType = BusType.BUS_TYPE_EVENING;
+  }
   return performGrpcCall((client) async {
     var req = ChangeBusStatusRequest(
       busId: busId,
       busStatus: busStatus,
+      busType: busType,
     );
     developer.log("Request: $req");
     return client.changeBusStatus(req);
