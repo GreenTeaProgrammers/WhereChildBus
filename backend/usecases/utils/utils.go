@@ -66,7 +66,7 @@ func ConvertPbStatusToEntStatus(pbStatus pb.BusStatus) (*busRepo.Status, error) 
 	}
 }
 
-func ToPbBus(t *ent.Bus) *pb.Bus {
+func ToPbBus(t *ent.Bus, nextStationID, morningFirstStationID, eveningFirstStationID string) *pb.Bus {
 	busStatus := convertStatusToPbStatus(t.Status)
 	return &pb.Bus{
 		Id:                    t.ID.String(),
@@ -77,9 +77,9 @@ func ToPbBus(t *ent.Bus) *pb.Bus {
 		Latitude:              t.Latitude,
 		Longitude:             t.Longitude,
 		EnableFaceRecognition: t.EnableFaceRecognition,
-		NextStationId:         t.Edges.NextStation.ID.String(),
-		MorningFirstStationId: t.Edges.MorningFirstStation.ID.String(),
-		EveningFirstStationId: t.Edges.EveningFirstStation.ID.String(),
+		NextStationId:         nextStationID,
+		MorningFirstStationId: morningFirstStationID,
+		EveningFirstStationId: eveningFirstStationID,
 		CreatedAt:             &timestamppb.Timestamp{Seconds: t.CreatedAt.Unix()},
 		UpdatedAt:             &timestamppb.Timestamp{Seconds: t.UpdatedAt.Unix()},
 	}

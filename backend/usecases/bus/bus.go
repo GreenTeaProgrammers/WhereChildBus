@@ -6,13 +6,12 @@ import (
 	"io"
 	"time"
 
-	"github.com/google/uuid"
-	"golang.org/x/exp/slog"
-
 	"context"
 
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/utils"
+	"github.com/google/uuid"
+	"golang.org/x/exp/slog"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	boardingrecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
@@ -191,13 +190,19 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 		return nil, err
 	}
 
+	nextStationID, morningFirstStationID, eveningFirstStaionID, err := getStationIDs(i.logger, ctx, bus)
+	if err != nil {
+		i.logger.Error("failed to get station IDs", "error", err)
+		return nil, err
+	}
+
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
 
 	return &pb.CreateBusResponse{
-		Bus: utils.ToPbBus(bus),
+		Bus: utils.ToPbBus(bus, nextStationID, morningFirstStationID, eveningFirstStaionID),
 	}, nil
 }
 
@@ -246,7 +251,13 @@ func (i *Interactor) GetRunningBusByGuardianID(ctx context.Context, req *pb.GetR
 		return nil, err
 	}
 
-	return &pb.GetRunningBusByGuardianIdResponse{Bus: utils.ToPbBus(bus)}, nil
+	nextStationID, morningFirstStationID, eveningFirstStaionID, err := getStationIDs(i.logger, ctx, bus)
+	if err != nil {
+		i.logger.Error("failed to get station IDs", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetRunningBusByGuardianIdResponse{Bus: utils.ToPbBus(bus, nextStationID, morningFirstStationID, eveningFirstStaionID)}, nil
 }
 
 func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatusRequest) (*pb.ChangeBusStatusResponse, error) {
@@ -269,11 +280,11 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	}
 
 	bus, err := tx.Bus.Query().Where(busRepo.IDEQ(busID)).
-		WithNursery().
-		WithNextStation().
 		WithMorningFirstStation().
 		WithEveningFirstStation().
+		WithNursery().
 		Only(ctx)
+
 	if err != nil {
 		i.logger.Error("failed to get bus", "error", err)
 		return nil, err
@@ -283,14 +294,14 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	update := tx.Bus.UpdateOneID(busID)
 	// バスを停止に変更する場合、次のステーションをクリア
 	switch req.BusStatus {
-	case pb.BusStatus_BUS_STATUS_RUNNING:
-		update.ClearNextStation()
 	case pb.BusStatus_BUS_STATUS_STOPPED:
+		update.ClearNextStation()
+	case pb.BusStatus_BUS_STATUS_RUNNING:
 		switch req.BusType {
 		case pb.BusType_BUS_TYPE_MORNING:
-			update.ClearNextStation().SetNextStation(bus.Edges.MorningFirstStation)
+			update.SetNextStation(bus.Edges.MorningFirstStation)
 		case pb.BusType_BUS_TYPE_EVENING:
-			update.ClearNextStation().SetNextStation(bus.Edges.EveningFirstStation)
+			update.SetNextStation(bus.Edges.EveningFirstStation)
 		}
 	}
 
@@ -314,7 +325,7 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	}
 
 	// Nurseryエッジを持つBusを取得
-	bus, err = tx.Bus.Query().
+	bus, err = i.entClient.Bus.Query().
 		Where(busRepo.IDEQ(bus.ID)).
 		WithNursery().
 		WithNextStation().
@@ -327,11 +338,17 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 		return nil, err
 	}
 
+	nextStationID, morningFirstStationID, eveningFirstStaionID, err := getStationIDs(i.logger, ctx, bus)
+	if err != nil {
+		i.logger.Error("failed to get station IDs", "error", err)
+		return nil, err
+	}
+
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
-	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus)}, nil
+	return &pb.ChangeBusStatusResponse{Bus: utils.ToPbBus(bus, nextStationID, morningFirstStationID, eveningFirstStaionID)}, nil
 }
 
 func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*pb.UpdateBusResponse, error) {
@@ -414,6 +431,13 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 		i.logger.Error("failed to retrieve updated bus", "error", err)
 	}
 
+	nextStationID, morningFirstStationID, eveningFirstStaionID, err := getStationIDs(i.logger, ctx, updatedBus)
+
+	if err != nil {
+		i.logger.Error("failed to get station IDs", "error", err)
+		return nil, err
+	}
+
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
@@ -422,7 +446,7 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 
 	// レスポンスの生成と返却
 	return &pb.UpdateBusResponse{
-		Bus: utils.ToPbBus(updatedBus),
+		Bus: utils.ToPbBus(updatedBus, nextStationID, morningFirstStationID, eveningFirstStaionID),
 	}, nil
 }
 
@@ -682,8 +706,13 @@ func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*e
 	}
 
 	pbBuses := make([]*pb.Bus, len(entBuses))
-	for i, b := range entBuses {
-		pbBuses[i] = utils.ToPbBus(b)
+	for index, b := range entBuses {
+		nextStationID, morningFirstStationID, eveningFirstStaionID, err := getStationIDs(i.logger, ctx, b) // !なんか違う気がする
+		if err != nil {
+			i.logger.Error("failed to get station IDs", "error", err)
+			return nil, err
+		}
+		pbBuses[index] = utils.ToPbBus(b, nextStationID, morningFirstStationID, eveningFirstStaionID)
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -764,4 +793,37 @@ func setNextStation(logger slog.Logger, ctx context.Context, tx *ent.Tx, guardia
 		}
 	}
 	return nil
+}
+
+func getStationIDs(logger *slog.Logger, ctx context.Context, bus *ent.Bus) (nextStationId, morningFirstStationId, eveningFirstStationId string, err error) {
+	nextStation, err := bus.QueryNextStation().Only(ctx)
+	if err != nil && !ent.IsNotFound(err) {
+		logger.Error("failed to query next station", "error", err)
+		return "", "", "", err
+	}
+	if nextStation != nil {
+		nextStationId = nextStation.ID.String()
+	}
+
+	morningFirstStation, err := bus.QueryMorningFirstStation().Only(ctx)
+	if err != nil && !ent.IsNotFound(err) {
+		logger.Error("failed to query morning first station", "error", err)
+		return "", "", "", err
+	}
+
+	if morningFirstStation != nil {
+		morningFirstStationId = morningFirstStation.ID.String()
+	}
+
+	eveningFirstStation, err := bus.QueryEveningFirstStation().Only(ctx)
+	if err != nil && !ent.IsNotFound(err) {
+		logger.Error("failed to query evening first station", "error", err)
+		return "", "", "", err
+	}
+
+	if eveningFirstStation != nil {
+		eveningFirstStationId = eveningFirstStation.ID.String()
+	}
+
+	return nextStationId, morningFirstStationId, eveningFirstStationId, nil
 }
