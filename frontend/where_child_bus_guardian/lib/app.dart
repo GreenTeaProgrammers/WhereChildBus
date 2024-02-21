@@ -24,7 +24,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    _hasRunningBus = false;
+    _hasRunningBus = true;
     guardian = GuardianData().getGuardian();
     _loadRunningBus();
   }
@@ -32,7 +32,6 @@ class _AppState extends State<App> {
   Future<void> _loadRunningBus() async {
     try {
       var busRes = await getRunningBusByGuardianIdService(guardian.id);
-      _hasRunningBus = true;
     } catch (e) {
       _hasRunningBus = false;
     }

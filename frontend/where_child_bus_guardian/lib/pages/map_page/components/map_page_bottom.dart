@@ -8,8 +8,10 @@ import '../../styles/styles.dart';
 
 class MapPageBottom extends StatefulWidget {
   final GuardianResponse guardian;
+  final Bus bus;
   final List<Station> stations;
   final List<Waypoint> waypoints;
+  final String nextStationId;
   final double busLatitude;
   final double busLongitude;
   final double nurseryLatitude;
@@ -18,8 +20,10 @@ class MapPageBottom extends StatefulWidget {
   const MapPageBottom(
       {Key? key,
       required this.guardian,
+      required this.bus,
       required this.stations,
       required this.waypoints,
+      required this.nextStationId,
       required this.busLatitude,
       required this.busLongitude,
       required this.nurseryLatitude,
@@ -37,6 +41,12 @@ class _MapPageBottomState extends State<MapPageBottom> {
   void initState() {
     super.initState();
     _loadGuardianStationData();
+    if (mounted) {
+      setState(() {
+        widget.guardian.isUseEveningBus = widget.guardian.isUseEveningBus;
+        widget.guardian.isUseEveningBus = widget.guardian.isUseEveningBus;
+      });
+    }
   }
 
   Future<void> _loadGuardianStationData() async {
@@ -65,8 +75,8 @@ class _MapPageBottomState extends State<MapPageBottom> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             arrivalTimeBody(),
-            isRideScheduled("朝のバス", widget.guardian.isUseMorningBus),
-            isRideScheduled("夕方のバス", widget.guardian.isUseEveningBus),
+            // isRideScheduled("朝のバス", widget.guardian.isUseMorningBus),
+            // isRideScheduled("夕方のバス", widget.guardian.isUseEveningBus),
           ],
         ),
       ),
@@ -81,7 +91,9 @@ class _MapPageBottomState extends State<MapPageBottom> {
           fieldTitleAndTime(
               "到着まで",
               BusToBusStopTime(
+                bus: widget.bus,
                 waypoints: widget.waypoints,
+                nextStationId: widget.nextStationId,
                 busLatitude: widget.busLatitude,
                 busLongitude: widget.busLongitude,
                 guardianLatitude: guardianStation.latitude,
@@ -108,25 +120,25 @@ class _MapPageBottomState extends State<MapPageBottom> {
     );
   }
 
-  Widget isRideScheduled(String busName, bool isRide) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text("${busName}の乗車予定: "),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          decoration: statusFieldDecoration(isRide),
-          child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                isRide ? "あり" : "なし",
-                style: statusFieldTextStyle(isRide),
-                textAlign: TextAlign.center,
-              )),
-        )
-      ],
-    );
-  }
+  // Widget isRideScheduled(String busName, bool isRide) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     children: <Widget>[
+  //       Text("${busName}の乗車予定: "),
+  //       SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+  //       Container(
+  //         width: MediaQuery.of(context).size.width * 0.3,
+  //         decoration: statusFieldDecoration(isRide),
+  //         child: Padding(
+  //             padding: const EdgeInsets.all(5.0),
+  //             child: Text(
+  //               isRide ? "あり" : "なし",
+  //               style: statusFieldTextStyle(isRide),
+  //               textAlign: TextAlign.center,
+  //             )),
+  //       )
+  //     ],
+  //   );
+  // }
 }
