@@ -104,7 +104,7 @@ class _InputFormBodyState extends State<InputFormBody> {
       if (pickedFiles.isNotEmpty) {
         images = pickedFiles.map((xFile) => File(xFile.path)).toList();
       } else {
-        print("画像が選択できませんでした。");
+        developer.log("画像が選択できませんでした。");
       }
     });
   }

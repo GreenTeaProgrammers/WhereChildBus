@@ -5,7 +5,7 @@ import 'package:where_child_bus/pages/notification_page/notification_page.dart';
 import 'package:where_child_bus/pages/student_list_page/student_list_page.dart';
 
 class App extends StatefulWidget {
-  App({
+  const App({
     super.key,
   });
 

@@ -93,7 +93,7 @@ class _BusListPageState extends State<BusListPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isFailLoading) LoadFailText(),
+                if (_isFailLoading) const LoadFailText(),
                 if (buses.isEmpty) const NoBusRegisteredText(),
                 Expanded(
                   child: RefreshIndicator(
@@ -110,7 +110,7 @@ class _BusListPageState extends State<BusListPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BusEditPage(
+                builder: (context) => const BusEditPage(
                       busEditPageType: BusEditPageType.create,
                     )));
       },

@@ -61,7 +61,7 @@ Future<GetUnregisteredStationListResponse> getUnregisteredStations(
   }
 }
 
-Future<void> updateStation(
+Future<UpdateStationResponse> updateStation(
   String stationId,
   String busId,
   double latitude,
@@ -86,6 +86,7 @@ Future<void> updateStation(
       developer.log("リクエスト: $req");
       developer.log("レスポンス: $res");
     }
+    return res;
   } catch (error) {
     developer.log("Caught Error:", error: error);
     return Future.error(error);

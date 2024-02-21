@@ -23,6 +23,8 @@ class BusPassengerPage extends StatefulWidget {
     "2",
   ];
 
+  BusPassengerPage({super.key});
+
   @override
   _BusPassengerPage createState() => _BusPassengerPage();
 }
