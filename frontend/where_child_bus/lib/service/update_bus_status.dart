@@ -4,7 +4,7 @@ import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
-Future<UpdateBusResponse> updateBusStatusService(
+Future<ChangeBusStatusResponse> updateBusStatusService(
     String busId, BusStatus busStatus) async {
   try {
     var res = updateBusStatus(busId, busStatus);
