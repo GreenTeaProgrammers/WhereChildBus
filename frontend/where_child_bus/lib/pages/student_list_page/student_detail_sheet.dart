@@ -13,7 +13,7 @@ class StudentDetailSheet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _StudentDetailSheetState createState() => _StudentDetailSheetState();
+  State<StudentDetailSheet> createState() => _StudentDetailSheetState();
 }
 
 class _StudentDetailSheetState extends State<StudentDetailSheet> {
@@ -42,7 +42,8 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
         });
       }
     } catch (error) {
-      developer.log("Caught ErrorAAAAAA", error: error);
+      developer.log("Caught Error",
+          error: error, name: "StudentDetailSheetError");
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -76,15 +77,16 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
             margin: const EdgeInsets.only(top: 20),
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : childDetailList())
+                : _childDetailList())
       ],
     );
   }
 
   Widget modalHeader(BuildContext context) {
     return Stack(children: <Widget>[
-      Align(
-        alignment: Alignment.topRight,
+      Positioned(
+        right: -10,
+        top: -10,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(shape: const CircleBorder()),
           onPressed: () {
@@ -102,7 +104,7 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
 
   Widget childImageAndChildName() {
     return Row(children: <Widget>[
-      childFaceImage(),
+      _childFaceImage(),
       const SizedBox(
         width: 50,
       ),
@@ -111,12 +113,12 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
     ]);
   }
 
-  Widget childFaceImage() {
+  Widget _childFaceImage() {
     return ImageFromBytes(
         imageData: widget.image.photoData, height: 100, width: 100);
   }
 
-  Widget childDetailList() {
+  Widget _childDetailList() {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -128,36 +130,41 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          childDetailItem("年齢", "${widget.child.age}歳"),
+          _childDetailItem("年齢", "${widget.child.age}歳"),
           // childDetailItem("クラス", "1組"),
-          childDetailItem("保護者氏名", guardian.name),
-          childDetailItem("保護者連絡先", guardian.phoneNumber),
-          childDetailItem("利用バス", "○○コース"),
+          _childDetailItem("保護者氏名", guardian.name),
+          _childDetailItem("保護者連絡先", guardian.phoneNumber),
+          _childDetailItem("利用バス", "○○コース"),
           // childDetailItem("乗降場所", "○○駐車場前"),
         ],
       );
     }
   }
 
-  Widget childDetailItem(String title, String element) {
-    return Row(
-      children: <Widget>[
-        detailItemTitle(title),
-        const SizedBox(
-          width: 50,
-        ),
-        Text(element, style: const TextStyle(color: Colors.black, fontSize: 18))
-      ],
+  Widget _childDetailItem(String title, String element) {
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: <Widget>[
+          detailItemTitle(title),
+          const SizedBox(
+            width: 50,
+          ),
+          Text(element,
+              style: const TextStyle(color: Colors.black, fontSize: 18))
+        ],
+      ),
     );
   }
 
   Widget detailItemTitle(String title) {
+    const double fontSize = 18;
     return SizedBox(
-      width: 18 * 6 + 6,
+      width: fontSize * 6 + 6,
       child: Text(
         title,
-        style: const TextStyle(color: Colors.black, fontSize: 18),
-        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black, fontSize: fontSize),
+        textAlign: TextAlign.left,
       ),
     );
   }
