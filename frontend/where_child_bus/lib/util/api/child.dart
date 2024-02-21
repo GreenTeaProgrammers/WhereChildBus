@@ -4,6 +4,7 @@ import "package:flutter/foundation.dart";
 import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart";
+import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 Future<T> performGrpcCall<T>(
     Future<T> Function(ChildServiceClient) grpcCall) async {
@@ -35,5 +36,13 @@ Future<GetChildListByNurseryIDResponse> getChildListByNurseryId(
   return performGrpcCall((client) async {
     var req = GetChildListByNurseryIDRequest(nurseryId: nurseryId);
     return client.getChildListByNurseryID(req);
+  });
+}
+
+Future<CreateChildResponse> createChild(String nurseryId, String guardianId,
+    String name, int age, Sex sex, Iterable<List<int>> photos) async {
+  return performGrpcCall((client) async {
+    var req = CreateChildRequest();
+    return client.createChild(req);
   });
 }

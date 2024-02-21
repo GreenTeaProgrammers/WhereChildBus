@@ -27,14 +27,14 @@ class _ChildListState extends State<ChildList> {
       separatorBuilder: (BuildContext context, int index) =>
           const Divider(height: 20, color: Colors.transparent),
       itemBuilder: (BuildContext context, int index) =>
-          childListElement(context, index),
+          _createChildListElements(context, index),
     );
   }
 
-  Widget childListElement(BuildContext context, int index) {
+  Widget _createChildListElements(BuildContext context, int index) {
     return ChildListElement(
         title: widget.children[index].name,
-        subtitle: widget.children[index].id,
+        subtitle: "${widget.children[index].age.toString()}歳",
         image: widget.images[index],
         onTap: () {
           if (widget.callback == null) {
@@ -45,7 +45,7 @@ class _ChildListState extends State<ChildList> {
         });
   }
 
-  childDetailModal(int index) async {
+  Future<void> childDetailModal(int index) async {
     await showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
