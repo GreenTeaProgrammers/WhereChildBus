@@ -10,6 +10,7 @@ service BusService {
         rpc GetBusListByNurseryId(GetBusListByNurseryIdRequest) returns (GetBusListByNurseryIdResponse);
         rpc GetRunningBusByGuardianId(GetRunningBusByGuardianIdRequest) returns (GetRunningBusByGuardianIdResponse);
         rpc UpdateBus(UpdateBusRequest) returns (UpdateBusResponse);
+        rpc ChangeBusStatus(ChangeBusStatusRequest) returns (ChangeBusStatusResponse);
 
         rpc SendLocationContinuous(stream SendLocationContinuousRequest) returns (SendLocationContinuousResponse);
         rpc TrackBusContinuous(TrackBusContinuousRequest) returns (stream TrackBusContinuousResponse);
@@ -47,6 +48,7 @@ message GetRunningBusByGuardianIdResponse {
 message ChangeBusStatusRequest {
         string bus_id = 1;
         BusStatus bus_status = 2;
+        BusType bus_type = 3;
 }
 
 message ChangeBusStatusResponse {
@@ -72,6 +74,7 @@ message TrackBusContinuousResponse {
         string bus_id = 1;
         double latitude = 2;
         double longitude = 3;
+        string next_station_id = 4;
 }
 
 message StreamBusVideoRequest {
@@ -93,11 +96,13 @@ message UpdateBusRequest {
         string bus_id = 1;
         string name = 2;
         string plate_number = 3;
-        BusStatus bus_status = 4;
-        double latitude = 5;
-        double longitude = 6;
-        bool enable_face_recognition = 7;
-        google.protobuf.FieldMask update_mask = 8;
+        double latitude = 4;
+        double longitude = 5;
+        bool enable_face_recognition = 6;
+        string morning_first_station_id = 7;
+        string evening_first_station_id = 8;
+        string next_station_id = 9;
+        google.protobuf.FieldMask update_mask = 10;
 }
 
 message UpdateBusResponse {

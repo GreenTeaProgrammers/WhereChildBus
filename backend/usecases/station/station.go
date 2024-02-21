@@ -133,16 +133,33 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		return nil, err
 	}
 
-	// トランザクションのコミット
-	if err := tx.Commit(); err != nil {
-		i.logger.Error("failed to commit transaction", "error", err)
-		return nil, err
+	if req.BusId != "" {
+		bus, err := tx.Bus.Query().
+			Where(busRepo.IDEQ(uuid.MustParse(req.BusId))).
+			Only(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get bus", "error", err)
+			return nil, err
+		}
+
+		_, err = utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, bus)
+		if err != nil {
+			i.logger.Error("failed to check and fix bus station coordinates", "error", err)
+			return nil, err
+		}
 	}
 
 	// 次のバス停を取得
 	morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, updateStation)
 	if err != nil {
 		i.logger.Error("failed to get next station IDs", "error", err)
+		return nil, err
+	}
+
+	// トランザクションのコミット
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
 
@@ -163,7 +180,11 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 		Where(stationRepo.HasBusWith(busRepo.ID(busID))).
 		WithGuardian(func(q *ent.GuardianQuery) {
 			q.WithNursery()
-			q.WithChildren()
+			q.WithChildren(
+				func(q *ent.ChildQuery) {
+					q.WithGuardian()
+				},
+			)
 		}).
 		All(ctx)
 
@@ -235,7 +256,9 @@ func (i Interactor) GetUnregisteredStationList(ctx context.Context, req *pb.GetU
 		Where(stationRepo.HasBusWith(busRepo.IDEQ(busID))).
 		Where(stationRepo.Latitude(0)).
 		Where(stationRepo.Longitude(0)).
-		WithGuardian().
+		WithGuardian(func(q *ent.GuardianQuery) {
+			q.WithNursery()
+		}).
 		All(ctx)
 
 	if err != nil {

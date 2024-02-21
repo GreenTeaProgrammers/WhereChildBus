@@ -7,63 +7,55 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-from generated.where_child_bus.v1 import (
-    resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2,
-)
+from generated.where_child_bus.v1 import resources_pb2 as where__child__bus_dot_v1_dot_resources__pb2
 from google.protobuf import field_mask_pb2 as google_dot_protobuf_dot_field__mask__pb2
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x1cwhere_child_bus/v1/bus.proto\x12\x12where_child_bus.v1\x1a"where_child_bus/v1/resources.proto\x1a google/protobuf/field_mask.proto"\xcc\x01\n\x10\x43reateBusRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0cplate_number\x18\x03 \x01(\tR\x0bplateNumber\x12\x30\n\x14morning_guardian_ids\x18\x04 \x03(\tR\x12morningGuardianIds\x12\x30\n\x14\x65vening_guardian_ids\x18\x05 \x03(\tR\x12\x65veningGuardianIds">\n\x11\x43reateBusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us"=\n\x1cGetBusListByNurseryIdRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId"N\n\x1dGetBusListByNurseryIdResponse\x12-\n\x05\x62uses\x18\x01 \x03(\x0b\x32\x17.where_child_bus.v1.BusR\x05\x62uses"C\n GetRunningBusByGuardianIdRequest\x12\x1f\n\x0bguardian_id\x18\x01 \x01(\tR\nguardianId"N\n!GetRunningBusByGuardianIdResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us"m\n\x16\x43hangeBusStatusRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12<\n\nbus_status\x18\x02 \x01(\x0e\x32\x1d.where_child_bus.v1.BusStatusR\tbusStatus"D\n\x17\x43hangeBusStatusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us"p\n\x1dSendLocationContinuousRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude" \n\x1eSendLocationContinuousResponse"2\n\x19TrackBusContinuousRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId"m\n\x1aTrackBusContinuousResponse\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude"\xb1\x02\n\x15StreamBusVideoRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x1d\n\nnursery_id\x18\x02 \x01(\tR\tnurseryId\x12\x36\n\x08\x62us_type\x18\x03 \x01(\x0e\x32\x1b.where_child_bus.v1.BusTypeR\x07\x62usType\x12\x45\n\rvehicle_event\x18\x04 \x01(\x0e\x32 .where_child_bus.v1.VehicleEventR\x0cvehicleEvent\x12\x1f\n\x0bvideo_chunk\x18\x05 \x03(\x0cR\nvideoChunk\x12!\n\x0cphoto_height\x18\x06 \x01(\x05R\x0bphotoHeight\x12\x1f\n\x0bphoto_width\x18\x07 \x01(\x05R\nphotoWidth"p\n\x16StreamBusVideoResponse\x12\x1f\n\x0bis_detected\x18\x01 \x01(\x08R\nisDetected\x12\x35\n\x08\x63hildren\x18\x02 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren"\xcd\x02\n\x10UpdateBusRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0cplate_number\x18\x03 \x01(\tR\x0bplateNumber\x12<\n\nbus_status\x18\x04 \x01(\x0e\x32\x1d.where_child_bus.v1.BusStatusR\tbusStatus\x12\x1a\n\x08latitude\x18\x05 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x06 \x01(\x01R\tlongitude\x12\x36\n\x17\x65nable_face_recognition\x18\x07 \x01(\x08R\x15\x65nableFaceRecognition\x12;\n\x0bupdate_mask\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.FieldMaskR\nupdateMask">\n\x11UpdateBusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us2\xaf\x06\n\nBusService\x12X\n\tCreateBus\x12$.where_child_bus.v1.CreateBusRequest\x1a%.where_child_bus.v1.CreateBusResponse\x12|\n\x15GetBusListByNurseryId\x12\x30.where_child_bus.v1.GetBusListByNurseryIdRequest\x1a\x31.where_child_bus.v1.GetBusListByNurseryIdResponse\x12\x88\x01\n\x19GetRunningBusByGuardianId\x12\x34.where_child_bus.v1.GetRunningBusByGuardianIdRequest\x1a\x35.where_child_bus.v1.GetRunningBusByGuardianIdResponse\x12X\n\tUpdateBus\x12$.where_child_bus.v1.UpdateBusRequest\x1a%.where_child_bus.v1.UpdateBusResponse\x12\x81\x01\n\x16SendLocationContinuous\x12\x31.where_child_bus.v1.SendLocationContinuousRequest\x1a\x32.where_child_bus.v1.SendLocationContinuousResponse(\x01\x12u\n\x12TrackBusContinuous\x12-.where_child_bus.v1.TrackBusContinuousRequest\x1a..where_child_bus.v1.TrackBusContinuousResponse0\x01\x12i\n\x0eStreamBusVideo\x12).where_child_bus.v1.StreamBusVideoRequest\x1a*.where_child_bus.v1.StreamBusVideoResponse(\x01\x42\xeb\x01\n\x16\x63om.where_child_bus.v1B\x08\x42usProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3'
-)
+
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cwhere_child_bus/v1/bus.proto\x12\x12where_child_bus.v1\x1a\"where_child_bus/v1/resources.proto\x1a google/protobuf/field_mask.proto\"\xcc\x01\n\x10\x43reateBusRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0cplate_number\x18\x03 \x01(\tR\x0bplateNumber\x12\x30\n\x14morning_guardian_ids\x18\x04 \x03(\tR\x12morningGuardianIds\x12\x30\n\x14\x65vening_guardian_ids\x18\x05 \x03(\tR\x12\x65veningGuardianIds\">\n\x11\x43reateBusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us\"=\n\x1cGetBusListByNurseryIdRequest\x12\x1d\n\nnursery_id\x18\x01 \x01(\tR\tnurseryId\"N\n\x1dGetBusListByNurseryIdResponse\x12-\n\x05\x62uses\x18\x01 \x03(\x0b\x32\x17.where_child_bus.v1.BusR\x05\x62uses\"C\n GetRunningBusByGuardianIdRequest\x12\x1f\n\x0bguardian_id\x18\x01 \x01(\tR\nguardianId\"N\n!GetRunningBusByGuardianIdResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us\"\xa5\x01\n\x16\x43hangeBusStatusRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12<\n\nbus_status\x18\x02 \x01(\x0e\x32\x1d.where_child_bus.v1.BusStatusR\tbusStatus\x12\x36\n\x08\x62us_type\x18\x03 \x01(\x0e\x32\x1b.where_child_bus.v1.BusTypeR\x07\x62usType\"D\n\x17\x43hangeBusStatusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us\"p\n\x1dSendLocationContinuousRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude\" \n\x1eSendLocationContinuousResponse\"2\n\x19TrackBusContinuousRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\"\x95\x01\n\x1aTrackBusContinuousResponse\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x1a\n\x08latitude\x18\x02 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x03 \x01(\x01R\tlongitude\x12&\n\x0fnext_station_id\x18\x04 \x01(\tR\rnextStationId\"\xb1\x02\n\x15StreamBusVideoRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x1d\n\nnursery_id\x18\x02 \x01(\tR\tnurseryId\x12\x36\n\x08\x62us_type\x18\x03 \x01(\x0e\x32\x1b.where_child_bus.v1.BusTypeR\x07\x62usType\x12\x45\n\rvehicle_event\x18\x04 \x01(\x0e\x32 .where_child_bus.v1.VehicleEventR\x0cvehicleEvent\x12\x1f\n\x0bvideo_chunk\x18\x05 \x03(\x0cR\nvideoChunk\x12!\n\x0cphoto_height\x18\x06 \x01(\x05R\x0bphotoHeight\x12\x1f\n\x0bphoto_width\x18\x07 \x01(\x05R\nphotoWidth\"p\n\x16StreamBusVideoResponse\x12\x1f\n\x0bis_detected\x18\x01 \x01(\x08R\nisDetected\x12\x35\n\x08\x63hildren\x18\x02 \x03(\x0b\x32\x19.where_child_bus.v1.ChildR\x08\x63hildren\"\xa9\x03\n\x10UpdateBusRequest\x12\x15\n\x06\x62us_id\x18\x01 \x01(\tR\x05\x62usId\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12!\n\x0cplate_number\x18\x03 \x01(\tR\x0bplateNumber\x12\x1a\n\x08latitude\x18\x04 \x01(\x01R\x08latitude\x12\x1c\n\tlongitude\x18\x05 \x01(\x01R\tlongitude\x12\x36\n\x17\x65nable_face_recognition\x18\x06 \x01(\x08R\x15\x65nableFaceRecognition\x12\x37\n\x18morning_first_station_id\x18\x07 \x01(\tR\x15morningFirstStationId\x12\x37\n\x18\x65vening_first_station_id\x18\x08 \x01(\tR\x15\x65veningFirstStationId\x12&\n\x0fnext_station_id\x18\t \x01(\tR\rnextStationId\x12;\n\x0bupdate_mask\x18\n \x01(\x0b\x32\x1a.google.protobuf.FieldMaskR\nupdateMask\">\n\x11UpdateBusResponse\x12)\n\x03\x62us\x18\x01 \x01(\x0b\x32\x17.where_child_bus.v1.BusR\x03\x62us2\x9b\x07\n\nBusService\x12X\n\tCreateBus\x12$.where_child_bus.v1.CreateBusRequest\x1a%.where_child_bus.v1.CreateBusResponse\x12|\n\x15GetBusListByNurseryId\x12\x30.where_child_bus.v1.GetBusListByNurseryIdRequest\x1a\x31.where_child_bus.v1.GetBusListByNurseryIdResponse\x12\x88\x01\n\x19GetRunningBusByGuardianId\x12\x34.where_child_bus.v1.GetRunningBusByGuardianIdRequest\x1a\x35.where_child_bus.v1.GetRunningBusByGuardianIdResponse\x12X\n\tUpdateBus\x12$.where_child_bus.v1.UpdateBusRequest\x1a%.where_child_bus.v1.UpdateBusResponse\x12j\n\x0f\x43hangeBusStatus\x12*.where_child_bus.v1.ChangeBusStatusRequest\x1a+.where_child_bus.v1.ChangeBusStatusResponse\x12\x81\x01\n\x16SendLocationContinuous\x12\x31.where_child_bus.v1.SendLocationContinuousRequest\x1a\x32.where_child_bus.v1.SendLocationContinuousResponse(\x01\x12u\n\x12TrackBusContinuous\x12-.where_child_bus.v1.TrackBusContinuousRequest\x1a..where_child_bus.v1.TrackBusContinuousResponse0\x01\x12i\n\x0eStreamBusVideo\x12).where_child_bus.v1.StreamBusVideoRequest\x1a*.where_child_bus.v1.StreamBusVideoResponse(\x01\x42\xeb\x01\n\x16\x63om.where_child_bus.v1B\x08\x42usProtoP\x01Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\xa2\x02\x03WXX\xaa\x02\x10WhereChildBus.V1\xca\x02\x10WhereChildBus\\V1\xe2\x02\x1cWhereChildBus\\V1\\GPBMetadata\xea\x02\x11WhereChildBus::V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(
-    DESCRIPTOR, "where_child_bus.v1.bus_pb2", _globals
-)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'where_child_bus.v1.bus_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-    _globals["DESCRIPTOR"]._options = None
-    _globals[
-        "DESCRIPTOR"
-    ]._serialized_options = b"\n\026com.where_child_bus.v1B\010BusProtoP\001Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\242\002\003WXX\252\002\020WhereChildBus.V1\312\002\020WhereChildBus\\V1\342\002\034WhereChildBus\\V1\\GPBMetadata\352\002\021WhereChildBus::V1"
-    _globals["_CREATEBUSREQUEST"]._serialized_start = 123
-    _globals["_CREATEBUSREQUEST"]._serialized_end = 327
-    _globals["_CREATEBUSRESPONSE"]._serialized_start = 329
-    _globals["_CREATEBUSRESPONSE"]._serialized_end = 391
-    _globals["_GETBUSLISTBYNURSERYIDREQUEST"]._serialized_start = 393
-    _globals["_GETBUSLISTBYNURSERYIDREQUEST"]._serialized_end = 454
-    _globals["_GETBUSLISTBYNURSERYIDRESPONSE"]._serialized_start = 456
-    _globals["_GETBUSLISTBYNURSERYIDRESPONSE"]._serialized_end = 534
-    _globals["_GETRUNNINGBUSBYGUARDIANIDREQUEST"]._serialized_start = 536
-    _globals["_GETRUNNINGBUSBYGUARDIANIDREQUEST"]._serialized_end = 603
-    _globals["_GETRUNNINGBUSBYGUARDIANIDRESPONSE"]._serialized_start = 605
-    _globals["_GETRUNNINGBUSBYGUARDIANIDRESPONSE"]._serialized_end = 683
-    _globals["_CHANGEBUSSTATUSREQUEST"]._serialized_start = 685
-    _globals["_CHANGEBUSSTATUSREQUEST"]._serialized_end = 794
-    _globals["_CHANGEBUSSTATUSRESPONSE"]._serialized_start = 796
-    _globals["_CHANGEBUSSTATUSRESPONSE"]._serialized_end = 864
-    _globals["_SENDLOCATIONCONTINUOUSREQUEST"]._serialized_start = 866
-    _globals["_SENDLOCATIONCONTINUOUSREQUEST"]._serialized_end = 978
-    _globals["_SENDLOCATIONCONTINUOUSRESPONSE"]._serialized_start = 980
-    _globals["_SENDLOCATIONCONTINUOUSRESPONSE"]._serialized_end = 1012
-    _globals["_TRACKBUSCONTINUOUSREQUEST"]._serialized_start = 1014
-    _globals["_TRACKBUSCONTINUOUSREQUEST"]._serialized_end = 1064
-    _globals["_TRACKBUSCONTINUOUSRESPONSE"]._serialized_start = 1066
-    _globals["_TRACKBUSCONTINUOUSRESPONSE"]._serialized_end = 1175
-    _globals["_STREAMBUSVIDEOREQUEST"]._serialized_start = 1178
-    _globals["_STREAMBUSVIDEOREQUEST"]._serialized_end = 1483
-    _globals["_STREAMBUSVIDEORESPONSE"]._serialized_start = 1485
-    _globals["_STREAMBUSVIDEORESPONSE"]._serialized_end = 1597
-    _globals["_UPDATEBUSREQUEST"]._serialized_start = 1600
-    _globals["_UPDATEBUSREQUEST"]._serialized_end = 1933
-    _globals["_UPDATEBUSRESPONSE"]._serialized_start = 1935
-    _globals["_UPDATEBUSRESPONSE"]._serialized_end = 1997
-    _globals["_BUSSERVICE"]._serialized_start = 2000
-    _globals["_BUSSERVICE"]._serialized_end = 2815
+  _globals['DESCRIPTOR']._options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\n\026com.where_child_bus.v1B\010BusProtoP\001Zfgithub.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1;where_child_busv1\242\002\003WXX\252\002\020WhereChildBus.V1\312\002\020WhereChildBus\\V1\342\002\034WhereChildBus\\V1\\GPBMetadata\352\002\021WhereChildBus::V1'
+  _globals['_CREATEBUSREQUEST']._serialized_start=123
+  _globals['_CREATEBUSREQUEST']._serialized_end=327
+  _globals['_CREATEBUSRESPONSE']._serialized_start=329
+  _globals['_CREATEBUSRESPONSE']._serialized_end=391
+  _globals['_GETBUSLISTBYNURSERYIDREQUEST']._serialized_start=393
+  _globals['_GETBUSLISTBYNURSERYIDREQUEST']._serialized_end=454
+  _globals['_GETBUSLISTBYNURSERYIDRESPONSE']._serialized_start=456
+  _globals['_GETBUSLISTBYNURSERYIDRESPONSE']._serialized_end=534
+  _globals['_GETRUNNINGBUSBYGUARDIANIDREQUEST']._serialized_start=536
+  _globals['_GETRUNNINGBUSBYGUARDIANIDREQUEST']._serialized_end=603
+  _globals['_GETRUNNINGBUSBYGUARDIANIDRESPONSE']._serialized_start=605
+  _globals['_GETRUNNINGBUSBYGUARDIANIDRESPONSE']._serialized_end=683
+  _globals['_CHANGEBUSSTATUSREQUEST']._serialized_start=686
+  _globals['_CHANGEBUSSTATUSREQUEST']._serialized_end=851
+  _globals['_CHANGEBUSSTATUSRESPONSE']._serialized_start=853
+  _globals['_CHANGEBUSSTATUSRESPONSE']._serialized_end=921
+  _globals['_SENDLOCATIONCONTINUOUSREQUEST']._serialized_start=923
+  _globals['_SENDLOCATIONCONTINUOUSREQUEST']._serialized_end=1035
+  _globals['_SENDLOCATIONCONTINUOUSRESPONSE']._serialized_start=1037
+  _globals['_SENDLOCATIONCONTINUOUSRESPONSE']._serialized_end=1069
+  _globals['_TRACKBUSCONTINUOUSREQUEST']._serialized_start=1071
+  _globals['_TRACKBUSCONTINUOUSREQUEST']._serialized_end=1121
+  _globals['_TRACKBUSCONTINUOUSRESPONSE']._serialized_start=1124
+  _globals['_TRACKBUSCONTINUOUSRESPONSE']._serialized_end=1273
+  _globals['_STREAMBUSVIDEOREQUEST']._serialized_start=1276
+  _globals['_STREAMBUSVIDEOREQUEST']._serialized_end=1581
+  _globals['_STREAMBUSVIDEORESPONSE']._serialized_start=1583
+  _globals['_STREAMBUSVIDEORESPONSE']._serialized_end=1695
+  _globals['_UPDATEBUSREQUEST']._serialized_start=1698
+  _globals['_UPDATEBUSREQUEST']._serialized_end=2123
+  _globals['_UPDATEBUSRESPONSE']._serialized_start=2125
+  _globals['_UPDATEBUSRESPONSE']._serialized_end=2187
+  _globals['_BUSSERVICE']._serialized_start=2190
+  _globals['_BUSSERVICE']._serialized_end=3113
 # @@protoc_insertion_point(module_scope)

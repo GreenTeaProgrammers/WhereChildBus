@@ -44,9 +44,10 @@ message GetUnregisteredStationListResponse {
 
 message UpdateStationRequest {
         string id  = 1;
-        double latitude = 2;
-        double longitude = 3;
-        google.protobuf.FieldMask update_mask = 4;
+        string bus_id = 2;
+        double latitude = 3;
+        double longitude = 4;
+        google.protobuf.FieldMask update_mask = 5;
 }
 
 message UpdateStationResponse {

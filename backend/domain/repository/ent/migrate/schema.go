@@ -12,7 +12,7 @@ var (
 	BoardingRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "timestamp", Type: field.TypeTime},
-		{Name: "is_boarding", Type: field.TypeBool},
+		{Name: "is_boarding", Type: field.TypeBool, Default: false},
 		{Name: "bus_boarding_records", Type: field.TypeUUID, Nullable: true},
 		{Name: "child_boarding_record", Type: field.TypeUUID, Nullable: true},
 	}
@@ -48,6 +48,9 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "bus_nursery", Type: field.TypeUUID, Nullable: true},
+		{Name: "bus_next_station", Type: field.TypeUUID, Nullable: true},
+		{Name: "bus_morning_first_station", Type: field.TypeUUID, Nullable: true},
+		{Name: "bus_evening_first_station", Type: field.TypeUUID, Nullable: true},
 	}
 	// BusTable holds the schema information for the "bus" table.
 	BusTable = &schema.Table{
@@ -59,6 +62,24 @@ var (
 				Symbol:     "bus_nurseries_nursery",
 				Columns:    []*schema.Column{BusColumns[9]},
 				RefColumns: []*schema.Column{NurseriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "bus_stations_next_station",
+				Columns:    []*schema.Column{BusColumns[10]},
+				RefColumns: []*schema.Column{StationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "bus_stations_morning_first_station",
+				Columns:    []*schema.Column{BusColumns[11]},
+				RefColumns: []*schema.Column{StationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "bus_stations_evening_first_station",
+				Columns:    []*schema.Column{BusColumns[12]},
+				RefColumns: []*schema.Column{StationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -189,8 +210,8 @@ var (
 	// StationsColumns holds the columns for the "stations" table.
 	StationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "latitude", Type: field.TypeFloat64, Nullable: true},
-		{Name: "longitude", Type: field.TypeFloat64, Nullable: true},
+		{Name: "latitude", Type: field.TypeFloat64, Nullable: true, Default: 0},
+		{Name: "longitude", Type: field.TypeFloat64, Nullable: true, Default: 0},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_station", Type: field.TypeUUID, Unique: true, Nullable: true},
@@ -266,6 +287,9 @@ func init() {
 	BoardingRecordsTable.ForeignKeys[0].RefTable = BusTable
 	BoardingRecordsTable.ForeignKeys[1].RefTable = ChildsTable
 	BusTable.ForeignKeys[0].RefTable = NurseriesTable
+	BusTable.ForeignKeys[1].RefTable = StationsTable
+	BusTable.ForeignKeys[2].RefTable = StationsTable
+	BusTable.ForeignKeys[3].RefTable = StationsTable
 	ChildsTable.ForeignKeys[0].RefTable = GuardiansTable
 	ChildBusAssociationsTable.ForeignKeys[0].RefTable = BusTable
 	ChildBusAssociationsTable.ForeignKeys[1].RefTable = ChildsTable
