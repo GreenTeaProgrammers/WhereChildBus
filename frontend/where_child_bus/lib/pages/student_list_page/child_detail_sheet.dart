@@ -1,7 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/util/image_from_byte.dart';
-import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
+import 'package:where_child_bus/pages/student_list_page/child_edit_page.dart';
 import 'package:where_child_bus/service/get_guardians_list_by_child_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
