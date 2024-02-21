@@ -1,7 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
-import 'package:where_child_bus_guardian/pages/map_page/components/bus_to_bus_stop_time.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/arrival_time.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
 import '../../styles/styles.dart';
@@ -75,8 +74,6 @@ class _MapPageBottomState extends State<MapPageBottom> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             arrivalTimeBody(),
-            // isRideScheduled("朝のバス", widget.guardian.isUseMorningBus),
-            // isRideScheduled("夕方のバス", widget.guardian.isUseEveningBus),
           ],
         ),
       ),
@@ -90,24 +87,26 @@ class _MapPageBottomState extends State<MapPageBottom> {
         children: <Widget>[
           fieldTitleAndTime(
               "到着まで",
-              BusToBusStopTime(
-                bus: widget.bus,
-                waypoints: widget.waypoints,
-                nextStationId: widget.nextStationId,
-                busLatitude: widget.busLatitude,
-                busLongitude: widget.busLongitude,
-                guardianLatitude: guardianStation.latitude,
-                guardianLongitude: guardianStation.longitude,
-              )),
+              ArrivalTime(
+                  bus: widget.bus,
+                  waypoints: widget.waypoints,
+                  nextStationId: widget.nextStationId,
+                  busLatitude: widget.busLatitude,
+                  busLongitude: widget.busLongitude,
+                  guardianLatitude: guardianStation.latitude,
+                  guardianLongitude: guardianStation.longitude,
+                  isMinuteOnly: true)),
           fieldTitleAndTime(
               "到着予定時刻",
               ArrivalTime(
+                  bus: widget.bus,
                   waypoints: widget.waypoints,
-                  nurseryLatitude: widget.nurseryLatitude,
-                  nurseryLongitude: widget.nurseryLongitude,
+                  nextStationId: widget.nextStationId,
+                  busLatitude: widget.busLatitude,
+                  busLongitude: widget.busLongitude,
                   guardianLatitude: guardianStation.latitude,
                   guardianLongitude: guardianStation.longitude,
-                  departureTime: departureTime)),
+                  isMinuteOnly: false)),
         ]);
   }
 
@@ -119,26 +118,4 @@ class _MapPageBottomState extends State<MapPageBottom> {
       ],
     );
   }
-
-  // Widget isRideScheduled(String busName, bool isRide) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.center,
-  //     crossAxisAlignment: CrossAxisAlignment.center,
-  //     children: <Widget>[
-  //       Text("${busName}の乗車予定: "),
-  //       SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-  //       Container(
-  //         width: MediaQuery.of(context).size.width * 0.3,
-  //         decoration: statusFieldDecoration(isRide),
-  //         child: Padding(
-  //             padding: const EdgeInsets.all(5.0),
-  //             child: Text(
-  //               isRide ? "あり" : "なし",
-  //               style: statusFieldTextStyle(isRide),
-  //               textAlign: TextAlign.center,
-  //             )),
-  //       )
-  //     ],
-  //   );
-  // }
 }
