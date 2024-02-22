@@ -29,9 +29,9 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MachineLearningServiceClient interface {
-	Train(ctx context.Context, in *TrainRequest, opts ...grpc.CallOption) (*TrainResponse, error)
+	Train(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_TrainClient, error)
 	Pred(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_PredClient, error)
-	FaceDetectAndClip(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_FaceDetectAndClipClient, error)
+	FaceDetectAndClip(ctx context.Context, in *FaceDetectAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error)
 }
 
 type machineLearningServiceClient struct {
@@ -42,17 +42,39 @@ func NewMachineLearningServiceClient(cc grpc.ClientConnInterface) MachineLearnin
 	return &machineLearningServiceClient{cc}
 }
 
-func (c *machineLearningServiceClient) Train(ctx context.Context, in *TrainRequest, opts ...grpc.CallOption) (*TrainResponse, error) {
-	out := new(TrainResponse)
-	err := c.cc.Invoke(ctx, MachineLearningService_Train_FullMethodName, in, out, opts...)
+func (c *machineLearningServiceClient) Train(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_TrainClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MachineLearningService_ServiceDesc.Streams[0], MachineLearningService_Train_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &machineLearningServiceTrainClient{stream}
+	return x, nil
+}
+
+type MachineLearningService_TrainClient interface {
+	Send(*TrainRequest) error
+	Recv() (*TrainResponse, error)
+	grpc.ClientStream
+}
+
+type machineLearningServiceTrainClient struct {
+	grpc.ClientStream
+}
+
+func (x *machineLearningServiceTrainClient) Send(m *TrainRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *machineLearningServiceTrainClient) Recv() (*TrainResponse, error) {
+	m := new(TrainResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *machineLearningServiceClient) Pred(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_PredClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MachineLearningService_ServiceDesc.Streams[0], MachineLearningService_Pred_FullMethodName, opts...)
+	stream, err := c.cc.NewStream(ctx, &MachineLearningService_ServiceDesc.Streams[1], MachineLearningService_Pred_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -82,58 +104,36 @@ func (x *machineLearningServicePredClient) Recv() (*PredResponse, error) {
 	return m, nil
 }
 
-func (c *machineLearningServiceClient) FaceDetectAndClip(ctx context.Context, opts ...grpc.CallOption) (MachineLearningService_FaceDetectAndClipClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MachineLearningService_ServiceDesc.Streams[1], MachineLearningService_FaceDetectAndClip_FullMethodName, opts...)
+func (c *machineLearningServiceClient) FaceDetectAndClip(ctx context.Context, in *FaceDetectAndClipRequest, opts ...grpc.CallOption) (*FaceDetectAndClipResponse, error) {
+	out := new(FaceDetectAndClipResponse)
+	err := c.cc.Invoke(ctx, MachineLearningService_FaceDetectAndClip_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &machineLearningServiceFaceDetectAndClipClient{stream}
-	return x, nil
-}
-
-type MachineLearningService_FaceDetectAndClipClient interface {
-	Send(*FaceDetectAndClipRequest) error
-	Recv() (*FaceDetectAndClipResponse, error)
-	grpc.ClientStream
-}
-
-type machineLearningServiceFaceDetectAndClipClient struct {
-	grpc.ClientStream
-}
-
-func (x *machineLearningServiceFaceDetectAndClipClient) Send(m *FaceDetectAndClipRequest) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *machineLearningServiceFaceDetectAndClipClient) Recv() (*FaceDetectAndClipResponse, error) {
-	m := new(FaceDetectAndClipResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // MachineLearningServiceServer is the server API for MachineLearningService service.
 // All implementations should embed UnimplementedMachineLearningServiceServer
 // for forward compatibility
 type MachineLearningServiceServer interface {
-	Train(context.Context, *TrainRequest) (*TrainResponse, error)
+	Train(MachineLearningService_TrainServer) error
 	Pred(MachineLearningService_PredServer) error
-	FaceDetectAndClip(MachineLearningService_FaceDetectAndClipServer) error
+	FaceDetectAndClip(context.Context, *FaceDetectAndClipRequest) (*FaceDetectAndClipResponse, error)
 }
 
 // UnimplementedMachineLearningServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedMachineLearningServiceServer struct {
 }
 
-func (UnimplementedMachineLearningServiceServer) Train(context.Context, *TrainRequest) (*TrainResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Train not implemented")
+func (UnimplementedMachineLearningServiceServer) Train(MachineLearningService_TrainServer) error {
+	return status.Errorf(codes.Unimplemented, "method Train not implemented")
 }
 func (UnimplementedMachineLearningServiceServer) Pred(MachineLearningService_PredServer) error {
 	return status.Errorf(codes.Unimplemented, "method Pred not implemented")
 }
-func (UnimplementedMachineLearningServiceServer) FaceDetectAndClip(MachineLearningService_FaceDetectAndClipServer) error {
-	return status.Errorf(codes.Unimplemented, "method FaceDetectAndClip not implemented")
+func (UnimplementedMachineLearningServiceServer) FaceDetectAndClip(context.Context, *FaceDetectAndClipRequest) (*FaceDetectAndClipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FaceDetectAndClip not implemented")
 }
 
 // UnsafeMachineLearningServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -147,22 +147,30 @@ func RegisterMachineLearningServiceServer(s grpc.ServiceRegistrar, srv MachineLe
 	s.RegisterService(&MachineLearningService_ServiceDesc, srv)
 }
 
-func _MachineLearningService_Train_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TrainRequest)
-	if err := dec(in); err != nil {
+func _MachineLearningService_Train_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MachineLearningServiceServer).Train(&machineLearningServiceTrainServer{stream})
+}
+
+type MachineLearningService_TrainServer interface {
+	Send(*TrainResponse) error
+	Recv() (*TrainRequest, error)
+	grpc.ServerStream
+}
+
+type machineLearningServiceTrainServer struct {
+	grpc.ServerStream
+}
+
+func (x *machineLearningServiceTrainServer) Send(m *TrainResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *machineLearningServiceTrainServer) Recv() (*TrainRequest, error) {
+	m := new(TrainRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(MachineLearningServiceServer).Train(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineLearningService_Train_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineLearningServiceServer).Train(ctx, req.(*TrainRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _MachineLearningService_Pred_Handler(srv interface{}, stream grpc.ServerStream) error {
@@ -191,30 +199,22 @@ func (x *machineLearningServicePredServer) Recv() (*v1.StreamBusVideoRequest, er
 	return m, nil
 }
 
-func _MachineLearningService_FaceDetectAndClip_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MachineLearningServiceServer).FaceDetectAndClip(&machineLearningServiceFaceDetectAndClipServer{stream})
-}
-
-type MachineLearningService_FaceDetectAndClipServer interface {
-	Send(*FaceDetectAndClipResponse) error
-	Recv() (*FaceDetectAndClipRequest, error)
-	grpc.ServerStream
-}
-
-type machineLearningServiceFaceDetectAndClipServer struct {
-	grpc.ServerStream
-}
-
-func (x *machineLearningServiceFaceDetectAndClipServer) Send(m *FaceDetectAndClipResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *machineLearningServiceFaceDetectAndClipServer) Recv() (*FaceDetectAndClipRequest, error) {
-	m := new(FaceDetectAndClipRequest)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _MachineLearningService_FaceDetectAndClip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FaceDetectAndClipRequest)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(MachineLearningServiceServer).FaceDetectAndClip(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MachineLearningService_FaceDetectAndClip_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MachineLearningServiceServer).FaceDetectAndClip(ctx, req.(*FaceDetectAndClipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // MachineLearningService_ServiceDesc is the grpc.ServiceDesc for MachineLearningService service.
@@ -225,20 +225,20 @@ var MachineLearningService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MachineLearningServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Train",
-			Handler:    _MachineLearningService_Train_Handler,
+			MethodName: "FaceDetectAndClip",
+			Handler:    _MachineLearningService_FaceDetectAndClip_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "Pred",
-			Handler:       _MachineLearningService_Pred_Handler,
+			StreamName:    "Train",
+			Handler:       _MachineLearningService_Train_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
 		{
-			StreamName:    "FaceDetectAndClip",
-			Handler:       _MachineLearningService_FaceDetectAndClip_Handler,
+			StreamName:    "Pred",
+			Handler:       _MachineLearningService_Pred_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

@@ -5,9 +5,9 @@ import "where_child_bus/v1/bus.proto";
 import "where_child_bus/v1/resources.proto";
 
 service MachineLearningService {
-        rpc Train(TrainRequest) returns (TrainResponse);
+        rpc Train(stream TrainRequest) returns (stream TrainResponse);
         rpc Pred(stream where_child_bus.v1.StreamBusVideoRequest) returns (stream PredResponse);
-        rpc FaceDetectAndClip(stream FaceDetectAndClipRequest) returns (stream FaceDetectAndClipResponse);
+        rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
 }
 
 

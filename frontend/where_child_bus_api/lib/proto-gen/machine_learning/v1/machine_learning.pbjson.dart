@@ -13,6 +13,20 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use statusDescriptor instead')
+const status$json = {
+  '1': 'status',
+  '2': [
+    {'1': 'SUCCESS', '2': 0},
+    {'1': 'PROCESSING', '2': 1},
+    {'1': 'FAILED', '2': 2},
+  ],
+};
+
+/// Descriptor for `status`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
+    'CgZzdGF0dXMSCwoHU1VDQ0VTUxAAEg4KClBST0NFU1NJTkcQARIKCgZGQUlMRUQQAg==');
+
 @$core.Deprecated('Use trainRequestDescriptor instead')
 const TrainRequest$json = {
   '1': 'TrainRequest',
@@ -34,13 +48,13 @@ final $typed_data.Uint8List trainRequestDescriptor = $convert.base64Decode(
 const TrainResponse$json = {
   '1': 'TrainResponse',
   '2': [
-    {'1': 'is_started', '3': 1, '4': 1, '5': 8, '10': 'isStarted'},
+    {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
   ],
 };
 
 /// Descriptor for `TrainResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List trainResponseDescriptor = $convert.base64Decode(
-    'Cg1UcmFpblJlc3BvbnNlEh0KCmlzX3N0YXJ0ZWQYASABKAhSCWlzU3RhcnRlZA==');
+    'Cg1UcmFpblJlc3BvbnNlEhYKBnN0YXR1cxgBIAEoCFIGc3RhdHVz');
 
 @$core.Deprecated('Use predResponseDescriptor instead')
 const PredResponse$json = {

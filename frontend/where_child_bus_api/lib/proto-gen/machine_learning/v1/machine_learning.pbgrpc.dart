@@ -41,8 +41,8 @@ class MachineLearningServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$2.TrainResponse> train($2.TrainRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$train, request, options: options);
+  $grpc.ResponseStream<$2.TrainResponse> train($async.Stream<$2.TrainRequest> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$train, request, options: options);
   }
 
   $grpc.ResponseStream<$2.PredResponse> pred($async.Stream<$1.StreamBusVideoRequest> request, {$grpc.CallOptions? options}) {
@@ -61,9 +61,9 @@ abstract class MachineLearningServiceBase extends $grpc.Service {
   MachineLearningServiceBase() {
     $addMethod($grpc.ServiceMethod<$2.TrainRequest, $2.TrainResponse>(
         'Train',
-        train_Pre,
-        false,
-        false,
+        train,
+        true,
+        true,
         ($core.List<$core.int> value) => $2.TrainRequest.fromBuffer(value),
         ($2.TrainResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.StreamBusVideoRequest, $2.PredResponse>(
@@ -82,15 +82,11 @@ abstract class MachineLearningServiceBase extends $grpc.Service {
         ($2.FaceDetectAndClipResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$2.TrainResponse> train_Pre($grpc.ServiceCall call, $async.Future<$2.TrainRequest> request) async {
-    return train(call, await request);
-  }
-
   $async.Future<$2.FaceDetectAndClipResponse> faceDetectAndClip_Pre($grpc.ServiceCall call, $async.Future<$2.FaceDetectAndClipRequest> request) async {
     return faceDetectAndClip(call, await request);
   }
 
-  $async.Future<$2.TrainResponse> train($grpc.ServiceCall call, $2.TrainRequest request);
+  $async.Stream<$2.TrainResponse> train($grpc.ServiceCall call, $async.Stream<$2.TrainRequest> request);
   $async.Stream<$2.PredResponse> pred($grpc.ServiceCall call, $async.Stream<$1.StreamBusVideoRequest> request);
   $async.Future<$2.FaceDetectAndClipResponse> faceDetectAndClip($grpc.ServiceCall call, $2.FaceDetectAndClipRequest request);
 }
