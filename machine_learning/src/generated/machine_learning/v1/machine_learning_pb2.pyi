@@ -13,9 +13,11 @@ class status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     SUCCESS: _ClassVar[status]
     PROCESSING: _ClassVar[status]
     FAILED: _ClassVar[status]
+    WAITING: _ClassVar[status]
 SUCCESS: status
 PROCESSING: status
 FAILED: status
+WAITING: status
 
 class TrainRequest(_message.Message):
     __slots__ = ("nursery_id", "bus_id", "child_ids", "bus_type")
@@ -32,8 +34,8 @@ class TrainRequest(_message.Message):
 class TrainResponse(_message.Message):
     __slots__ = ("status",)
     STATUS_FIELD_NUMBER: _ClassVar[int]
-    status: bool
-    def __init__(self, status: bool = ...) -> None: ...
+    status: status
+    def __init__(self, status: _Optional[_Union[status, str]] = ...) -> None: ...
 
 class PredResponse(_message.Message):
     __slots__ = ("is_detected", "child_ids")

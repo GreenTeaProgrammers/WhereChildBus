@@ -17,11 +17,13 @@ class status extends $pb.ProtobufEnum {
   static const status SUCCESS = status._(0, _omitEnumNames ? '' : 'SUCCESS');
   static const status PROCESSING = status._(1, _omitEnumNames ? '' : 'PROCESSING');
   static const status FAILED = status._(2, _omitEnumNames ? '' : 'FAILED');
+  static const status WAITING = status._(3, _omitEnumNames ? '' : 'WAITING');
 
   static const $core.List<status> values = <status> [
     SUCCESS,
     PROCESSING,
     FAILED,
+    WAITING,
   ];
 
   static final $core.Map<$core.int, status> _byValue = $pb.ProtobufEnum.initByValue(values);
