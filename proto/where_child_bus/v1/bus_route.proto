@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+
+service BusRouteService {
+        rpc CreateBusRoute(CreateBusRouteRequest) returns (CreateBusRouteResponse );
+        rpc GetBusRoute(GetBusRouteRequest) returns (GetBusRouteResponse);
+}
+
+message CreateBusRouteRequest {
+        string bus_id = 1;
+        BusType bus_type = 2;
+        repeated string guardian_ids = 3;
+}
+
+message CreateBusRouteResponse {
+        BusRoute bus_route = 1;
+}
+
+message GetBusRouteRequest {
+        string bus_id = 1;
+        BusType bus_type = 2;
+}
+
+message GetBusRouteResponse {
+        BusRoute bus_route = 1;
+}
