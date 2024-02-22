@@ -127,8 +127,8 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           controller: controller,
-          decoration:
-              InputDecoration(border: OutlineInputBorder(), labelText: label),
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(), labelText: label),
           keyboardType: keyboardType,
           obscureText: isObscure,
         ),

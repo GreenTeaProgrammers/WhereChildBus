@@ -17,7 +17,9 @@ class ChildListWithMark extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ChildListWithMarkState createState() => _ChildListWithMarkState();
+  State<ChildListWithMark> createState() {
+    return _ChildListWithMarkState();
+  }
 }
 
 class _ChildListWithMarkState extends State<ChildListWithMark> {
