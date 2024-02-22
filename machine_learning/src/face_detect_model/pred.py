@@ -94,7 +94,7 @@ def get_clipped_faces_from_images(args, config, detecter, save_bucket):
                 now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
                 save_face_image_to_remote(
                     smile_image,
-                    f"{args.nursery_id}/{args.bus_id}/{now}_{switch_to_bus_type(args.bus_type)}.png",
+                    f"{args.nursery_id}/{args.bus_id}/{now}_{smile_degree}.png",
                     save_bucket,
                 )
         all_faces.extend(clipped_faces)
