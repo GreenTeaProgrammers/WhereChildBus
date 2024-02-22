@@ -1,15 +1,27 @@
-from typing import ClassVar as _ClassVar
-from typing import Iterable as _Iterable
-from typing import Optional as _Optional
-from typing import Union as _Union
-
-from google.protobuf import descriptor as _descriptor
-from google.protobuf import message as _message
-from google.protobuf.internal import containers as _containers
 from where_child_bus.v1 import bus_pb2 as _bus_pb2
 from where_child_bus.v1 import resources_pb2 as _resources_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from typing import (
+    ClassVar as _ClassVar,
+    Iterable as _Iterable,
+    Optional as _Optional,
+    Union as _Union,
+)
 
 DESCRIPTOR: _descriptor.FileDescriptor
+
+class status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    SUCCESS: _ClassVar[status]
+    PROCESSING: _ClassVar[status]
+    FAILED: _ClassVar[status]
+
+SUCCESS: status
+PROCESSING: status
+FAILED: status
 
 class TrainRequest(_message.Message):
     __slots__ = ("nursery_id", "bus_id", "child_ids", "bus_type")
@@ -30,10 +42,10 @@ class TrainRequest(_message.Message):
     ) -> None: ...
 
 class TrainResponse(_message.Message):
-    __slots__ = ("is_started",)
-    IS_STARTED_FIELD_NUMBER: _ClassVar[int]
-    is_started: bool
-    def __init__(self, is_started: bool = ...) -> None: ...
+    __slots__ = ("status",)
+    STATUS_FIELD_NUMBER: _ClassVar[int]
+    status: bool
+    def __init__(self, status: bool = ...) -> None: ...
 
 class PredResponse(_message.Message):
     __slots__ = ("is_detected", "child_ids")

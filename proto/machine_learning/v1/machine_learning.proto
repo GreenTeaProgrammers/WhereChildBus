@@ -7,7 +7,7 @@ import "where_child_bus/v1/resources.proto";
 service MachineLearningService {
         rpc Train(TrainRequest) returns (TrainResponse);
         rpc Pred(stream where_child_bus.v1.StreamBusVideoRequest) returns (stream PredResponse);
-        rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
+        rpc FaceDetectAndClip(stream FaceDetectAndClipRequest) returns (stream FaceDetectAndClipResponse);
 }
 
 
@@ -19,7 +19,7 @@ message TrainRequest {
 }
 
 message TrainResponse {
-        bool is_started = 1;
+        bool status = 1;
 }
 
 message PredResponse {
@@ -34,4 +34,10 @@ message FaceDetectAndClipRequest {
 
 message FaceDetectAndClipResponse {
         bool is_started = 1;
+}
+
+enum status {
+        SUCCESS = 0;
+        PROCESSING = 1;
+        FAILED = 2;
 }
