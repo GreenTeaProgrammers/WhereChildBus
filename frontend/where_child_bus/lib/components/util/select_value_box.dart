@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class SelectValueBox extends StatefulWidget {
   final List<String> lists;
   String? selectedValue;
+  Function? onChanged;
 
-  SelectValueBox({required this.lists, super.key});
+  SelectValueBox(
+      {required this.lists, super.key, this.selectedValue, this.onChanged});
   @override
   State<SelectValueBox> createState() => _SelectValueBox();
 }
@@ -25,6 +27,7 @@ class _SelectValueBox extends State<SelectValueBox> {
             setState(() {
               widget.selectedValue = value;
             });
+            widget.onChanged?.call(value);
           }),
     );
   }

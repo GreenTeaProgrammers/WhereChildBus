@@ -34,8 +34,14 @@ func (Bus) Fields() []ent.Field {
 func (Bus) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("nursery", Nursery.Type).Unique(),
-		edge.To("stations", Station.Type),
 		edge.To("boarding_records", BoardingRecord.Type),
-		edge.To("childBusAssociations", ChildBusAssociation.Type),
+		// バスが向かっている先のステーション
+		edge.To("next_station", Station.Type).Unique(),
+		edge.From("bus_route", BusRoute.Type).
+			Ref("bus"),
+		edge.To("latest_morning_route", BusRoute.Type).
+			Unique(), // 夕方のバスルートの最新のものを参照するエッジ
+		edge.To("latest_evening_route", BusRoute.Type).
+			Unique(),
 	}
 }

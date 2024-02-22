@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart';
 import 'package:where_child_bus_guardian/service/update_child_item_status.dart';
-import '../styles/styles.dart';
+import '../../styles/styles.dart';
 
 class HasItemState extends StatefulWidget {
   final Child child;

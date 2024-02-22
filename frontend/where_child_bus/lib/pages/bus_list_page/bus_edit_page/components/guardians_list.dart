@@ -4,7 +4,7 @@ import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 class GuardiansList extends StatelessWidget {
   final List<GuardianResponse> guardiansList;
 
-  GuardiansList({required this.guardiansList});
+  const GuardiansList({super.key, required this.guardiansList});
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,9 @@ import "dart:developer" as developer;
 import "package:flutter/foundation.dart";
 import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
+import "package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart";
+import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 Future<T> performGrpcCall<T>(
     Future<T> Function(ChildServiceClient) grpcCall) async {
@@ -12,7 +14,7 @@ Future<T> performGrpcCall<T>(
     port: appConfig.grpcPort,
   );
   final grpcClient = ChildServiceClient(channel);
-  final Stopwatch stopwatch = new Stopwatch()..start();
+  final Stopwatch stopwatch = Stopwatch()..start();
 
   try {
     final result = await grpcCall(grpcClient);
@@ -35,5 +37,40 @@ Future<GetChildListByNurseryIDResponse> getChildListByNurseryId(
   return performGrpcCall((client) async {
     var req = GetChildListByNurseryIDRequest(nurseryId: nurseryId);
     return client.getChildListByNurseryID(req);
+  });
+}
+
+Future<CreateChildResponse> createChild(String nurseryId, String guardianId,
+    String name, int age, Sex sex, Iterable<List<int>> photos) async {
+  return performGrpcCall((client) async {
+    var req = CreateChildRequest(
+        nurseryId: nurseryId,
+        guardianId: guardianId,
+        name: name,
+        age: age,
+        sex: sex,
+        photos: photos);
+    return client.createChild(req);
+  });
+}
+
+Future<UpdateChildResponse> updateChild(
+  String id,
+  String nurseryId,
+  String guardianId,
+  String name,
+  int age,
+  Sex sex,
+  FieldMask updateMask,
+) async {
+  return performGrpcCall((client) async {
+    var req = UpdateChildRequest(
+      childId: id,
+      name: name,
+      age: age,
+      sex: sex,
+      updateMask: updateMask,
+    );
+    return client.updateChild(req);
   });
 }

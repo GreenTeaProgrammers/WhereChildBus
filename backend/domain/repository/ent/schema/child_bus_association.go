@@ -17,9 +17,7 @@ type ChildBusAssociation struct {
 func (ChildBusAssociation) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("child_id", uuid.UUID{}),
-		field.UUID("bus_id", uuid.UUID{}),
-		field.Enum("bus_type").
-			Values("morning", "evening").Comment("朝のバスか放課後のバスかを示す"),
+		field.UUID("bus_route_id", uuid.UUID{}),
 	}
 }
 
@@ -31,10 +29,10 @@ func (ChildBusAssociation) Edges() []ent.Edge {
 			Unique().                    // 一つのChildBusAssociationは一人の子供に紐づく
 			Required().                  // 必ずChildBusAssociationが存在する
 			Field("child_id"),
-		edge.From("bus", Bus.Type).
-			Ref("childBusAssociations"). // Busエンティティ側の参照名を合わせる
-			Unique().                    // 一つのChildBusAssociationは一台のバスに紐づく
+		edge.From("bus_route", BusRoute.Type).
+			Ref("childBusAssociations"). // BusRouteエンティティ側の参照名を合わせる
+			Unique().                    // 一つのChildBusAssociationは一つのバスルートに紐づく
 			Required().                  // 必ずChildBusAssociationが存在する
-			Field("bus_id"),
+			Field("bus_route_id"),
 	}
 }

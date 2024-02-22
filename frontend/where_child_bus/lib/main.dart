@@ -1,3 +1,4 @@
+import "dart:developer" as developer;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/config/config.dart';
@@ -13,7 +14,7 @@ Future<void> main() async {
     await appConfig.loadConfig();
     await serviceHealthCheck();
   } catch (e) {
-    print("Failed to initialize the app");
+    developer.log("Failed to initialize the app", error: e, name: "main");
   }
 
   //カメラを取得

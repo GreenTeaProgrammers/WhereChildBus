@@ -30,13 +30,13 @@ class _GuardiansListState extends State<GuardianList> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: calculateAddedGuardiansHeight(),
             child: ReorderableListView(
               onReorder: (int oldIndex, int newIndex) =>
                   onReorder(oldIndex, newIndex),
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: widget.selectedGuardians.map((item) {
                 int index = widget.selectedGuardians.indexOf(item);
                 return SelectedGuardianListElement(

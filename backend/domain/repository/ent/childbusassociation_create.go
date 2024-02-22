@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/google/uuid"
@@ -28,15 +28,9 @@ func (cbac *ChildBusAssociationCreate) SetChildID(u uuid.UUID) *ChildBusAssociat
 	return cbac
 }
 
-// SetBusID sets the "bus_id" field.
-func (cbac *ChildBusAssociationCreate) SetBusID(u uuid.UUID) *ChildBusAssociationCreate {
-	cbac.mutation.SetBusID(u)
-	return cbac
-}
-
-// SetBusType sets the "bus_type" field.
-func (cbac *ChildBusAssociationCreate) SetBusType(ct childbusassociation.BusType) *ChildBusAssociationCreate {
-	cbac.mutation.SetBusType(ct)
+// SetBusRouteID sets the "bus_route_id" field.
+func (cbac *ChildBusAssociationCreate) SetBusRouteID(u uuid.UUID) *ChildBusAssociationCreate {
+	cbac.mutation.SetBusRouteID(u)
 	return cbac
 }
 
@@ -45,9 +39,9 @@ func (cbac *ChildBusAssociationCreate) SetChild(c *Child) *ChildBusAssociationCr
 	return cbac.SetChildID(c.ID)
 }
 
-// SetBus sets the "bus" edge to the Bus entity.
-func (cbac *ChildBusAssociationCreate) SetBus(b *Bus) *ChildBusAssociationCreate {
-	return cbac.SetBusID(b.ID)
+// SetBusRoute sets the "bus_route" edge to the BusRoute entity.
+func (cbac *ChildBusAssociationCreate) SetBusRoute(b *BusRoute) *ChildBusAssociationCreate {
+	return cbac.SetBusRouteID(b.ID)
 }
 
 // Mutation returns the ChildBusAssociationMutation object of the builder.
@@ -87,22 +81,14 @@ func (cbac *ChildBusAssociationCreate) check() error {
 	if _, ok := cbac.mutation.ChildID(); !ok {
 		return &ValidationError{Name: "child_id", err: errors.New(`ent: missing required field "ChildBusAssociation.child_id"`)}
 	}
-	if _, ok := cbac.mutation.BusID(); !ok {
-		return &ValidationError{Name: "bus_id", err: errors.New(`ent: missing required field "ChildBusAssociation.bus_id"`)}
-	}
-	if _, ok := cbac.mutation.BusType(); !ok {
-		return &ValidationError{Name: "bus_type", err: errors.New(`ent: missing required field "ChildBusAssociation.bus_type"`)}
-	}
-	if v, ok := cbac.mutation.BusType(); ok {
-		if err := childbusassociation.BusTypeValidator(v); err != nil {
-			return &ValidationError{Name: "bus_type", err: fmt.Errorf(`ent: validator failed for field "ChildBusAssociation.bus_type": %w`, err)}
-		}
+	if _, ok := cbac.mutation.BusRouteID(); !ok {
+		return &ValidationError{Name: "bus_route_id", err: errors.New(`ent: missing required field "ChildBusAssociation.bus_route_id"`)}
 	}
 	if _, ok := cbac.mutation.ChildID(); !ok {
 		return &ValidationError{Name: "child", err: errors.New(`ent: missing required edge "ChildBusAssociation.child"`)}
 	}
-	if _, ok := cbac.mutation.BusID(); !ok {
-		return &ValidationError{Name: "bus", err: errors.New(`ent: missing required edge "ChildBusAssociation.bus"`)}
+	if _, ok := cbac.mutation.BusRouteID(); !ok {
+		return &ValidationError{Name: "bus_route", err: errors.New(`ent: missing required edge "ChildBusAssociation.bus_route"`)}
 	}
 	return nil
 }
@@ -130,10 +116,6 @@ func (cbac *ChildBusAssociationCreate) createSpec() (*ChildBusAssociation, *sqlg
 		_node = &ChildBusAssociation{config: cbac.config}
 		_spec = sqlgraph.NewCreateSpec(childbusassociation.Table, sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt))
 	)
-	if value, ok := cbac.mutation.BusType(); ok {
-		_spec.SetField(childbusassociation.FieldBusType, field.TypeEnum, value)
-		_node.BusType = value
-	}
 	if nodes := cbac.mutation.ChildIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -151,21 +133,21 @@ func (cbac *ChildBusAssociationCreate) createSpec() (*ChildBusAssociation, *sqlg
 		_node.ChildID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cbac.mutation.BusIDs(); len(nodes) > 0 {
+	if nodes := cbac.mutation.BusRouteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   childbusassociation.BusTable,
-			Columns: []string{childbusassociation.BusColumn},
+			Table:   childbusassociation.BusRouteTable,
+			Columns: []string{childbusassociation.BusRouteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.BusID = nodes[0]
+		_node.BusRouteID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -4,6 +4,14 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+
+	<!-- NOTE:これを追記することでフォトライブラリにアクセスできる -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Access Warning</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera Library Access Warning</string>
+	<!--NoteEnd  -->
+
 	<key>CFBundleDisplayName</key>
 	<string>Where Child Bus</string>
 	<key>CFBundleExecutable</key>
@@ -45,5 +53,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Note: これを追記することで、カメラを使用できる -->
+	<key>NSCameraUsageDescription</key>
+	<string>カメラを使う理由・用途を記述（ここをちゃんと書かないと、Appleのレビューでリジェクトされます）</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>マイクを使う理由・用途を記述（ここをちゃんと書かないと、Appleのレビューでリジェクトされます）</string>
+	<!-- NoteEnd -->
+
 </dict>
 </plist>

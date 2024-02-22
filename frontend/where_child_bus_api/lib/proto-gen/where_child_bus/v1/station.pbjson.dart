@@ -101,22 +101,52 @@ final $typed_data.Uint8List getUnregisteredStationListResponseDescriptor = $conv
     'sud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXRpb25SCHN0YXRpb25zEkIKCWd1YXJkaWFucxgCIAMo'
     'CzIkLndoZXJlX2NoaWxkX2J1cy52MS5HdWFyZGlhblJlc3BvbnNlUglndWFyZGlhbnM=');
 
+@$core.Deprecated('Use getCorrectOrderStationListByBusIdRequestDescriptor instead')
+const GetCorrectOrderStationListByBusIdRequest$json = {
+  '1': 'GetCorrectOrderStationListByBusIdRequest',
+  '2': [
+    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'bus_type', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
+  ],
+};
+
+/// Descriptor for `GetCorrectOrderStationListByBusIdRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getCorrectOrderStationListByBusIdRequestDescriptor = $convert.base64Decode(
+    'CihHZXRDb3JyZWN0T3JkZXJTdGF0aW9uTGlzdEJ5QnVzSWRSZXF1ZXN0EhUKBmJ1c19pZBgBIA'
+    'EoCVIFYnVzSWQSNgoIYnVzX3R5cGUYAiABKA4yGy53aGVyZV9jaGlsZF9idXMudjEuQnVzVHlw'
+    'ZVIHYnVzVHlwZQ==');
+
+@$core.Deprecated('Use getCorrectOrderStationListByBusIdResponseDescriptor instead')
+const GetCorrectOrderStationListByBusIdResponse$json = {
+  '1': 'GetCorrectOrderStationListByBusIdResponse',
+  '2': [
+    {'1': 'bus_route', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.BusRoute', '10': 'busRoute'},
+  ],
+};
+
+/// Descriptor for `GetCorrectOrderStationListByBusIdResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getCorrectOrderStationListByBusIdResponseDescriptor = $convert.base64Decode(
+    'CilHZXRDb3JyZWN0T3JkZXJTdGF0aW9uTGlzdEJ5QnVzSWRSZXNwb25zZRI5CglidXNfcm91dG'
+    'UYASABKAsyHC53aGVyZV9jaGlsZF9idXMudjEuQnVzUm91dGVSCGJ1c1JvdXRl');
+
 @$core.Deprecated('Use updateStationRequestDescriptor instead')
 const UpdateStationRequest$json = {
   '1': 'UpdateStationRequest',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'latitude', '3': 2, '4': 1, '5': 1, '10': 'latitude'},
-    {'1': 'longitude', '3': 3, '4': 1, '5': 1, '10': 'longitude'},
-    {'1': 'update_mask', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
+    {'1': 'bus_id', '3': 2, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'latitude', '3': 3, '4': 1, '5': 1, '10': 'latitude'},
+    {'1': 'longitude', '3': 4, '4': 1, '5': 1, '10': 'longitude'},
+    {'1': 'update_mask', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
   ],
 };
 
 /// Descriptor for `UpdateStationRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateStationRequestDescriptor = $convert.base64Decode(
-    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSGgoIbGF0aXR1ZGUYAiABKA'
-    'FSCGxhdGl0dWRlEhwKCWxvbmdpdHVkZRgDIAEoAVIJbG9uZ2l0dWRlEjsKC3VwZGF0ZV9tYXNr'
-    'GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLkZpZWxkTWFza1IKdXBkYXRlTWFzaw==');
+    'ChRVcGRhdGVTdGF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSFQoGYnVzX2lkGAIgASgJUg'
+    'VidXNJZBIaCghsYXRpdHVkZRgDIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAQgASgBUgls'
+    'b25naXR1ZGUSOwoLdXBkYXRlX21hc2sYBSABKAsyGi5nb29nbGUucHJvdG9idWYuRmllbGRNYX'
+    'NrUgp1cGRhdGVNYXNr');
 
 @$core.Deprecated('Use updateStationResponseDescriptor instead')
 const UpdateStationResponse$json = {

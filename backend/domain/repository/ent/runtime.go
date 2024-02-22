@@ -7,6 +7,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
@@ -26,6 +27,10 @@ func init() {
 	boardingrecordDescTimestamp := boardingrecordFields[1].Descriptor()
 	// boardingrecord.DefaultTimestamp holds the default value on creation for the timestamp field.
 	boardingrecord.DefaultTimestamp = boardingrecordDescTimestamp.Default.(func() time.Time)
+	// boardingrecordDescIsBoarding is the schema descriptor for is_boarding field.
+	boardingrecordDescIsBoarding := boardingrecordFields[2].Descriptor()
+	// boardingrecord.DefaultIsBoarding holds the default value on creation for the is_boarding field.
+	boardingrecord.DefaultIsBoarding = boardingrecordDescIsBoarding.Default.(bool)
 	// boardingrecordDescID is the schema descriptor for id field.
 	boardingrecordDescID := boardingrecordFields[0].Descriptor()
 	// boardingrecord.DefaultID holds the default value on creation for the id field.
@@ -50,6 +55,22 @@ func init() {
 	busDescID := busFields[0].Descriptor()
 	// bus.DefaultID holds the default value on creation for the id field.
 	bus.DefaultID = busDescID.Default.(func() uuid.UUID)
+	busrouteFields := schema.BusRoute{}.Fields()
+	_ = busrouteFields
+	// busrouteDescCreatedAt is the schema descriptor for created_at field.
+	busrouteDescCreatedAt := busrouteFields[2].Descriptor()
+	// busroute.DefaultCreatedAt holds the default value on creation for the created_at field.
+	busroute.DefaultCreatedAt = busrouteDescCreatedAt.Default.(time.Time)
+	// busrouteDescUpdatedAt is the schema descriptor for updated_at field.
+	busrouteDescUpdatedAt := busrouteFields[3].Descriptor()
+	// busroute.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	busroute.DefaultUpdatedAt = busrouteDescUpdatedAt.Default.(func() time.Time)
+	// busroute.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	busroute.UpdateDefaultUpdatedAt = busrouteDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// busrouteDescID is the schema descriptor for id field.
+	busrouteDescID := busrouteFields[0].Descriptor()
+	// busroute.DefaultID holds the default value on creation for the id field.
+	busroute.DefaultID = busrouteDescID.Default.(func() uuid.UUID)
 	childFields := schema.Child{}.Fields()
 	_ = childFields
 	// childDescCheckForMissingItems is the schema descriptor for check_for_missing_items field.
@@ -148,6 +169,14 @@ func init() {
 	nursery.DefaultID = nurseryDescID.Default.(func() uuid.UUID)
 	stationFields := schema.Station{}.Fields()
 	_ = stationFields
+	// stationDescLatitude is the schema descriptor for latitude field.
+	stationDescLatitude := stationFields[1].Descriptor()
+	// station.DefaultLatitude holds the default value on creation for the latitude field.
+	station.DefaultLatitude = stationDescLatitude.Default.(float64)
+	// stationDescLongitude is the schema descriptor for longitude field.
+	stationDescLongitude := stationFields[2].Descriptor()
+	// station.DefaultLongitude holds the default value on creation for the longitude field.
+	station.DefaultLongitude = stationDescLongitude.Default.(float64)
 	// stationDescCreatedAt is the schema descriptor for created_at field.
 	stationDescCreatedAt := stationFields[3].Descriptor()
 	// station.DefaultCreatedAt holds the default value on creation for the created_at field.

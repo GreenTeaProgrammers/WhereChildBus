@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busrouteassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
@@ -34,6 +36,8 @@ const (
 	// Node types.
 	TypeBoardingRecord      = "BoardingRecord"
 	TypeBus                 = "Bus"
+	TypeBusRoute            = "BusRoute"
+	TypeBusRouteAssociation = "BusRouteAssociation"
 	TypeChild               = "Child"
 	TypeChildBusAssociation = "ChildBusAssociation"
 	TypeChildPhoto          = "ChildPhoto"
@@ -573,15 +577,18 @@ type BusMutation struct {
 	clearedFields               map[string]struct{}
 	nursery                     *uuid.UUID
 	clearednursery              bool
-	stations                    map[uuid.UUID]struct{}
-	removedstations             map[uuid.UUID]struct{}
-	clearedstations             bool
 	boarding_records            map[uuid.UUID]struct{}
 	removedboarding_records     map[uuid.UUID]struct{}
 	clearedboarding_records     bool
-	childBusAssociations        map[int]struct{}
-	removedchildBusAssociations map[int]struct{}
-	clearedchildBusAssociations bool
+	next_station                *uuid.UUID
+	clearednext_station         bool
+	bus_route                   map[uuid.UUID]struct{}
+	removedbus_route            map[uuid.UUID]struct{}
+	clearedbus_route            bool
+	latest_morning_route        *uuid.UUID
+	clearedlatest_morning_route bool
+	latest_evening_route        *uuid.UUID
+	clearedlatest_evening_route bool
 	done                        bool
 	oldValue                    func(context.Context) (*Bus, error)
 	predicates                  []predicate.Bus
@@ -1099,60 +1106,6 @@ func (m *BusMutation) ResetNursery() {
 	m.clearednursery = false
 }
 
-// AddStationIDs adds the "stations" edge to the Station entity by ids.
-func (m *BusMutation) AddStationIDs(ids ...uuid.UUID) {
-	if m.stations == nil {
-		m.stations = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		m.stations[ids[i]] = struct{}{}
-	}
-}
-
-// ClearStations clears the "stations" edge to the Station entity.
-func (m *BusMutation) ClearStations() {
-	m.clearedstations = true
-}
-
-// StationsCleared reports if the "stations" edge to the Station entity was cleared.
-func (m *BusMutation) StationsCleared() bool {
-	return m.clearedstations
-}
-
-// RemoveStationIDs removes the "stations" edge to the Station entity by IDs.
-func (m *BusMutation) RemoveStationIDs(ids ...uuid.UUID) {
-	if m.removedstations == nil {
-		m.removedstations = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		delete(m.stations, ids[i])
-		m.removedstations[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedStations returns the removed IDs of the "stations" edge to the Station entity.
-func (m *BusMutation) RemovedStationsIDs() (ids []uuid.UUID) {
-	for id := range m.removedstations {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// StationsIDs returns the "stations" edge IDs in the mutation.
-func (m *BusMutation) StationsIDs() (ids []uuid.UUID) {
-	for id := range m.stations {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetStations resets all changes to the "stations" edge.
-func (m *BusMutation) ResetStations() {
-	m.stations = nil
-	m.clearedstations = false
-	m.removedstations = nil
-}
-
 // AddBoardingRecordIDs adds the "boarding_records" edge to the BoardingRecord entity by ids.
 func (m *BusMutation) AddBoardingRecordIDs(ids ...uuid.UUID) {
 	if m.boarding_records == nil {
@@ -1207,58 +1160,175 @@ func (m *BusMutation) ResetBoardingRecords() {
 	m.removedboarding_records = nil
 }
 
-// AddChildBusAssociationIDs adds the "childBusAssociations" edge to the ChildBusAssociation entity by ids.
-func (m *BusMutation) AddChildBusAssociationIDs(ids ...int) {
-	if m.childBusAssociations == nil {
-		m.childBusAssociations = make(map[int]struct{})
+// SetNextStationID sets the "next_station" edge to the Station entity by id.
+func (m *BusMutation) SetNextStationID(id uuid.UUID) {
+	m.next_station = &id
+}
+
+// ClearNextStation clears the "next_station" edge to the Station entity.
+func (m *BusMutation) ClearNextStation() {
+	m.clearednext_station = true
+}
+
+// NextStationCleared reports if the "next_station" edge to the Station entity was cleared.
+func (m *BusMutation) NextStationCleared() bool {
+	return m.clearednext_station
+}
+
+// NextStationID returns the "next_station" edge ID in the mutation.
+func (m *BusMutation) NextStationID() (id uuid.UUID, exists bool) {
+	if m.next_station != nil {
+		return *m.next_station, true
+	}
+	return
+}
+
+// NextStationIDs returns the "next_station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// NextStationID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) NextStationIDs() (ids []uuid.UUID) {
+	if id := m.next_station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetNextStation resets all changes to the "next_station" edge.
+func (m *BusMutation) ResetNextStation() {
+	m.next_station = nil
+	m.clearednext_station = false
+}
+
+// AddBusRouteIDs adds the "bus_route" edge to the BusRoute entity by ids.
+func (m *BusMutation) AddBusRouteIDs(ids ...uuid.UUID) {
+	if m.bus_route == nil {
+		m.bus_route = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
-		m.childBusAssociations[ids[i]] = struct{}{}
+		m.bus_route[ids[i]] = struct{}{}
 	}
 }
 
-// ClearChildBusAssociations clears the "childBusAssociations" edge to the ChildBusAssociation entity.
-func (m *BusMutation) ClearChildBusAssociations() {
-	m.clearedchildBusAssociations = true
+// ClearBusRoute clears the "bus_route" edge to the BusRoute entity.
+func (m *BusMutation) ClearBusRoute() {
+	m.clearedbus_route = true
 }
 
-// ChildBusAssociationsCleared reports if the "childBusAssociations" edge to the ChildBusAssociation entity was cleared.
-func (m *BusMutation) ChildBusAssociationsCleared() bool {
-	return m.clearedchildBusAssociations
+// BusRouteCleared reports if the "bus_route" edge to the BusRoute entity was cleared.
+func (m *BusMutation) BusRouteCleared() bool {
+	return m.clearedbus_route
 }
 
-// RemoveChildBusAssociationIDs removes the "childBusAssociations" edge to the ChildBusAssociation entity by IDs.
-func (m *BusMutation) RemoveChildBusAssociationIDs(ids ...int) {
-	if m.removedchildBusAssociations == nil {
-		m.removedchildBusAssociations = make(map[int]struct{})
+// RemoveBusRouteIDs removes the "bus_route" edge to the BusRoute entity by IDs.
+func (m *BusMutation) RemoveBusRouteIDs(ids ...uuid.UUID) {
+	if m.removedbus_route == nil {
+		m.removedbus_route = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
-		delete(m.childBusAssociations, ids[i])
-		m.removedchildBusAssociations[ids[i]] = struct{}{}
+		delete(m.bus_route, ids[i])
+		m.removedbus_route[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedChildBusAssociations returns the removed IDs of the "childBusAssociations" edge to the ChildBusAssociation entity.
-func (m *BusMutation) RemovedChildBusAssociationsIDs() (ids []int) {
-	for id := range m.removedchildBusAssociations {
+// RemovedBusRoute returns the removed IDs of the "bus_route" edge to the BusRoute entity.
+func (m *BusMutation) RemovedBusRouteIDs() (ids []uuid.UUID) {
+	for id := range m.removedbus_route {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ChildBusAssociationsIDs returns the "childBusAssociations" edge IDs in the mutation.
-func (m *BusMutation) ChildBusAssociationsIDs() (ids []int) {
-	for id := range m.childBusAssociations {
+// BusRouteIDs returns the "bus_route" edge IDs in the mutation.
+func (m *BusMutation) BusRouteIDs() (ids []uuid.UUID) {
+	for id := range m.bus_route {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetChildBusAssociations resets all changes to the "childBusAssociations" edge.
-func (m *BusMutation) ResetChildBusAssociations() {
-	m.childBusAssociations = nil
-	m.clearedchildBusAssociations = false
-	m.removedchildBusAssociations = nil
+// ResetBusRoute resets all changes to the "bus_route" edge.
+func (m *BusMutation) ResetBusRoute() {
+	m.bus_route = nil
+	m.clearedbus_route = false
+	m.removedbus_route = nil
+}
+
+// SetLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by id.
+func (m *BusMutation) SetLatestMorningRouteID(id uuid.UUID) {
+	m.latest_morning_route = &id
+}
+
+// ClearLatestMorningRoute clears the "latest_morning_route" edge to the BusRoute entity.
+func (m *BusMutation) ClearLatestMorningRoute() {
+	m.clearedlatest_morning_route = true
+}
+
+// LatestMorningRouteCleared reports if the "latest_morning_route" edge to the BusRoute entity was cleared.
+func (m *BusMutation) LatestMorningRouteCleared() bool {
+	return m.clearedlatest_morning_route
+}
+
+// LatestMorningRouteID returns the "latest_morning_route" edge ID in the mutation.
+func (m *BusMutation) LatestMorningRouteID() (id uuid.UUID, exists bool) {
+	if m.latest_morning_route != nil {
+		return *m.latest_morning_route, true
+	}
+	return
+}
+
+// LatestMorningRouteIDs returns the "latest_morning_route" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// LatestMorningRouteID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) LatestMorningRouteIDs() (ids []uuid.UUID) {
+	if id := m.latest_morning_route; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLatestMorningRoute resets all changes to the "latest_morning_route" edge.
+func (m *BusMutation) ResetLatestMorningRoute() {
+	m.latest_morning_route = nil
+	m.clearedlatest_morning_route = false
+}
+
+// SetLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by id.
+func (m *BusMutation) SetLatestEveningRouteID(id uuid.UUID) {
+	m.latest_evening_route = &id
+}
+
+// ClearLatestEveningRoute clears the "latest_evening_route" edge to the BusRoute entity.
+func (m *BusMutation) ClearLatestEveningRoute() {
+	m.clearedlatest_evening_route = true
+}
+
+// LatestEveningRouteCleared reports if the "latest_evening_route" edge to the BusRoute entity was cleared.
+func (m *BusMutation) LatestEveningRouteCleared() bool {
+	return m.clearedlatest_evening_route
+}
+
+// LatestEveningRouteID returns the "latest_evening_route" edge ID in the mutation.
+func (m *BusMutation) LatestEveningRouteID() (id uuid.UUID, exists bool) {
+	if m.latest_evening_route != nil {
+		return *m.latest_evening_route, true
+	}
+	return
+}
+
+// LatestEveningRouteIDs returns the "latest_evening_route" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// LatestEveningRouteID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) LatestEveningRouteIDs() (ids []uuid.UUID) {
+	if id := m.latest_evening_route; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLatestEveningRoute resets all changes to the "latest_evening_route" edge.
+func (m *BusMutation) ResetLatestEveningRoute() {
+	m.latest_evening_route = nil
+	m.clearedlatest_evening_route = false
 }
 
 // Where appends a list predicates to the BusMutation builder.
@@ -1561,18 +1631,24 @@ func (m *BusMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BusMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.nursery != nil {
 		edges = append(edges, bus.EdgeNursery)
-	}
-	if m.stations != nil {
-		edges = append(edges, bus.EdgeStations)
 	}
 	if m.boarding_records != nil {
 		edges = append(edges, bus.EdgeBoardingRecords)
 	}
-	if m.childBusAssociations != nil {
-		edges = append(edges, bus.EdgeChildBusAssociations)
+	if m.next_station != nil {
+		edges = append(edges, bus.EdgeNextStation)
+	}
+	if m.bus_route != nil {
+		edges = append(edges, bus.EdgeBusRoute)
+	}
+	if m.latest_morning_route != nil {
+		edges = append(edges, bus.EdgeLatestMorningRoute)
+	}
+	if m.latest_evening_route != nil {
+		edges = append(edges, bus.EdgeLatestEveningRoute)
 	}
 	return edges
 }
@@ -1585,39 +1661,42 @@ func (m *BusMutation) AddedIDs(name string) []ent.Value {
 		if id := m.nursery; id != nil {
 			return []ent.Value{*id}
 		}
-	case bus.EdgeStations:
-		ids := make([]ent.Value, 0, len(m.stations))
-		for id := range m.stations {
-			ids = append(ids, id)
-		}
-		return ids
 	case bus.EdgeBoardingRecords:
 		ids := make([]ent.Value, 0, len(m.boarding_records))
 		for id := range m.boarding_records {
 			ids = append(ids, id)
 		}
 		return ids
-	case bus.EdgeChildBusAssociations:
-		ids := make([]ent.Value, 0, len(m.childBusAssociations))
-		for id := range m.childBusAssociations {
+	case bus.EdgeNextStation:
+		if id := m.next_station; id != nil {
+			return []ent.Value{*id}
+		}
+	case bus.EdgeBusRoute:
+		ids := make([]ent.Value, 0, len(m.bus_route))
+		for id := range m.bus_route {
 			ids = append(ids, id)
 		}
 		return ids
+	case bus.EdgeLatestMorningRoute:
+		if id := m.latest_morning_route; id != nil {
+			return []ent.Value{*id}
+		}
+	case bus.EdgeLatestEveningRoute:
+		if id := m.latest_evening_route; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BusMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
-	if m.removedstations != nil {
-		edges = append(edges, bus.EdgeStations)
-	}
+	edges := make([]string, 0, 6)
 	if m.removedboarding_records != nil {
 		edges = append(edges, bus.EdgeBoardingRecords)
 	}
-	if m.removedchildBusAssociations != nil {
-		edges = append(edges, bus.EdgeChildBusAssociations)
+	if m.removedbus_route != nil {
+		edges = append(edges, bus.EdgeBusRoute)
 	}
 	return edges
 }
@@ -1626,21 +1705,15 @@ func (m *BusMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *BusMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case bus.EdgeStations:
-		ids := make([]ent.Value, 0, len(m.removedstations))
-		for id := range m.removedstations {
-			ids = append(ids, id)
-		}
-		return ids
 	case bus.EdgeBoardingRecords:
 		ids := make([]ent.Value, 0, len(m.removedboarding_records))
 		for id := range m.removedboarding_records {
 			ids = append(ids, id)
 		}
 		return ids
-	case bus.EdgeChildBusAssociations:
-		ids := make([]ent.Value, 0, len(m.removedchildBusAssociations))
-		for id := range m.removedchildBusAssociations {
+	case bus.EdgeBusRoute:
+		ids := make([]ent.Value, 0, len(m.removedbus_route))
+		for id := range m.removedbus_route {
 			ids = append(ids, id)
 		}
 		return ids
@@ -1650,18 +1723,24 @@ func (m *BusMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BusMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.clearednursery {
 		edges = append(edges, bus.EdgeNursery)
-	}
-	if m.clearedstations {
-		edges = append(edges, bus.EdgeStations)
 	}
 	if m.clearedboarding_records {
 		edges = append(edges, bus.EdgeBoardingRecords)
 	}
-	if m.clearedchildBusAssociations {
-		edges = append(edges, bus.EdgeChildBusAssociations)
+	if m.clearednext_station {
+		edges = append(edges, bus.EdgeNextStation)
+	}
+	if m.clearedbus_route {
+		edges = append(edges, bus.EdgeBusRoute)
+	}
+	if m.clearedlatest_morning_route {
+		edges = append(edges, bus.EdgeLatestMorningRoute)
+	}
+	if m.clearedlatest_evening_route {
+		edges = append(edges, bus.EdgeLatestEveningRoute)
 	}
 	return edges
 }
@@ -1672,12 +1751,16 @@ func (m *BusMutation) EdgeCleared(name string) bool {
 	switch name {
 	case bus.EdgeNursery:
 		return m.clearednursery
-	case bus.EdgeStations:
-		return m.clearedstations
 	case bus.EdgeBoardingRecords:
 		return m.clearedboarding_records
-	case bus.EdgeChildBusAssociations:
-		return m.clearedchildBusAssociations
+	case bus.EdgeNextStation:
+		return m.clearednext_station
+	case bus.EdgeBusRoute:
+		return m.clearedbus_route
+	case bus.EdgeLatestMorningRoute:
+		return m.clearedlatest_morning_route
+	case bus.EdgeLatestEveningRoute:
+		return m.clearedlatest_evening_route
 	}
 	return false
 }
@@ -1688,6 +1771,15 @@ func (m *BusMutation) ClearEdge(name string) error {
 	switch name {
 	case bus.EdgeNursery:
 		m.ClearNursery()
+		return nil
+	case bus.EdgeNextStation:
+		m.ClearNextStation()
+		return nil
+	case bus.EdgeLatestMorningRoute:
+		m.ClearLatestMorningRoute()
+		return nil
+	case bus.EdgeLatestEveningRoute:
+		m.ClearLatestEveningRoute()
 		return nil
 	}
 	return fmt.Errorf("unknown Bus unique edge %s", name)
@@ -1700,17 +1792,1458 @@ func (m *BusMutation) ResetEdge(name string) error {
 	case bus.EdgeNursery:
 		m.ResetNursery()
 		return nil
-	case bus.EdgeStations:
-		m.ResetStations()
-		return nil
 	case bus.EdgeBoardingRecords:
 		m.ResetBoardingRecords()
 		return nil
-	case bus.EdgeChildBusAssociations:
-		m.ResetChildBusAssociations()
+	case bus.EdgeNextStation:
+		m.ResetNextStation()
+		return nil
+	case bus.EdgeBusRoute:
+		m.ResetBusRoute()
+		return nil
+	case bus.EdgeLatestMorningRoute:
+		m.ResetLatestMorningRoute()
+		return nil
+	case bus.EdgeLatestEveningRoute:
+		m.ResetLatestEveningRoute()
 		return nil
 	}
 	return fmt.Errorf("unknown Bus edge %s", name)
+}
+
+// BusRouteMutation represents an operation that mutates the BusRoute nodes in the graph.
+type BusRouteMutation struct {
+	config
+	op                          Op
+	typ                         string
+	id                          *uuid.UUID
+	bus_type                    *busroute.BusType
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	clearedFields               map[string]struct{}
+	bus                         map[uuid.UUID]struct{}
+	removedbus                  map[uuid.UUID]struct{}
+	clearedbus                  bool
+	childBusAssociations        map[int]struct{}
+	removedchildBusAssociations map[int]struct{}
+	clearedchildBusAssociations bool
+	busRouteAssociations        map[int]struct{}
+	removedbusRouteAssociations map[int]struct{}
+	clearedbusRouteAssociations bool
+	morning_buses               map[uuid.UUID]struct{}
+	removedmorning_buses        map[uuid.UUID]struct{}
+	clearedmorning_buses        bool
+	evening_buses               map[uuid.UUID]struct{}
+	removedevening_buses        map[uuid.UUID]struct{}
+	clearedevening_buses        bool
+	done                        bool
+	oldValue                    func(context.Context) (*BusRoute, error)
+	predicates                  []predicate.BusRoute
+}
+
+var _ ent.Mutation = (*BusRouteMutation)(nil)
+
+// busrouteOption allows management of the mutation configuration using functional options.
+type busrouteOption func(*BusRouteMutation)
+
+// newBusRouteMutation creates new mutation for the BusRoute entity.
+func newBusRouteMutation(c config, op Op, opts ...busrouteOption) *BusRouteMutation {
+	m := &BusRouteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeBusRoute,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withBusRouteID sets the ID field of the mutation.
+func withBusRouteID(id uuid.UUID) busrouteOption {
+	return func(m *BusRouteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *BusRoute
+		)
+		m.oldValue = func(ctx context.Context) (*BusRoute, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().BusRoute.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withBusRoute sets the old BusRoute of the mutation.
+func withBusRoute(node *BusRoute) busrouteOption {
+	return func(m *BusRouteMutation) {
+		m.oldValue = func(context.Context) (*BusRoute, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m BusRouteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m BusRouteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of BusRoute entities.
+func (m *BusRouteMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *BusRouteMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *BusRouteMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().BusRoute.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetBusType sets the "bus_type" field.
+func (m *BusRouteMutation) SetBusType(bt busroute.BusType) {
+	m.bus_type = &bt
+}
+
+// BusType returns the value of the "bus_type" field in the mutation.
+func (m *BusRouteMutation) BusType() (r busroute.BusType, exists bool) {
+	v := m.bus_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBusType returns the old "bus_type" field's value of the BusRoute entity.
+// If the BusRoute object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusRouteMutation) OldBusType(ctx context.Context) (v busroute.BusType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBusType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBusType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBusType: %w", err)
+	}
+	return oldValue.BusType, nil
+}
+
+// ResetBusType resets all changes to the "bus_type" field.
+func (m *BusRouteMutation) ResetBusType() {
+	m.bus_type = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *BusRouteMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *BusRouteMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the BusRoute entity.
+// If the BusRoute object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusRouteMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *BusRouteMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *BusRouteMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *BusRouteMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the BusRoute entity.
+// If the BusRoute object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusRouteMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *BusRouteMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// AddBuIDs adds the "bus" edge to the Bus entity by ids.
+func (m *BusRouteMutation) AddBuIDs(ids ...uuid.UUID) {
+	if m.bus == nil {
+		m.bus = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.bus[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBus clears the "bus" edge to the Bus entity.
+func (m *BusRouteMutation) ClearBus() {
+	m.clearedbus = true
+}
+
+// BusCleared reports if the "bus" edge to the Bus entity was cleared.
+func (m *BusRouteMutation) BusCleared() bool {
+	return m.clearedbus
+}
+
+// RemoveBuIDs removes the "bus" edge to the Bus entity by IDs.
+func (m *BusRouteMutation) RemoveBuIDs(ids ...uuid.UUID) {
+	if m.removedbus == nil {
+		m.removedbus = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.bus, ids[i])
+		m.removedbus[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBus returns the removed IDs of the "bus" edge to the Bus entity.
+func (m *BusRouteMutation) RemovedBusIDs() (ids []uuid.UUID) {
+	for id := range m.removedbus {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BusIDs returns the "bus" edge IDs in the mutation.
+func (m *BusRouteMutation) BusIDs() (ids []uuid.UUID) {
+	for id := range m.bus {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBus resets all changes to the "bus" edge.
+func (m *BusRouteMutation) ResetBus() {
+	m.bus = nil
+	m.clearedbus = false
+	m.removedbus = nil
+}
+
+// AddChildBusAssociationIDs adds the "childBusAssociations" edge to the ChildBusAssociation entity by ids.
+func (m *BusRouteMutation) AddChildBusAssociationIDs(ids ...int) {
+	if m.childBusAssociations == nil {
+		m.childBusAssociations = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.childBusAssociations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearChildBusAssociations clears the "childBusAssociations" edge to the ChildBusAssociation entity.
+func (m *BusRouteMutation) ClearChildBusAssociations() {
+	m.clearedchildBusAssociations = true
+}
+
+// ChildBusAssociationsCleared reports if the "childBusAssociations" edge to the ChildBusAssociation entity was cleared.
+func (m *BusRouteMutation) ChildBusAssociationsCleared() bool {
+	return m.clearedchildBusAssociations
+}
+
+// RemoveChildBusAssociationIDs removes the "childBusAssociations" edge to the ChildBusAssociation entity by IDs.
+func (m *BusRouteMutation) RemoveChildBusAssociationIDs(ids ...int) {
+	if m.removedchildBusAssociations == nil {
+		m.removedchildBusAssociations = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.childBusAssociations, ids[i])
+		m.removedchildBusAssociations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedChildBusAssociations returns the removed IDs of the "childBusAssociations" edge to the ChildBusAssociation entity.
+func (m *BusRouteMutation) RemovedChildBusAssociationsIDs() (ids []int) {
+	for id := range m.removedchildBusAssociations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ChildBusAssociationsIDs returns the "childBusAssociations" edge IDs in the mutation.
+func (m *BusRouteMutation) ChildBusAssociationsIDs() (ids []int) {
+	for id := range m.childBusAssociations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetChildBusAssociations resets all changes to the "childBusAssociations" edge.
+func (m *BusRouteMutation) ResetChildBusAssociations() {
+	m.childBusAssociations = nil
+	m.clearedchildBusAssociations = false
+	m.removedchildBusAssociations = nil
+}
+
+// AddBusRouteAssociationIDs adds the "busRouteAssociations" edge to the BusRouteAssociation entity by ids.
+func (m *BusRouteMutation) AddBusRouteAssociationIDs(ids ...int) {
+	if m.busRouteAssociations == nil {
+		m.busRouteAssociations = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.busRouteAssociations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBusRouteAssociations clears the "busRouteAssociations" edge to the BusRouteAssociation entity.
+func (m *BusRouteMutation) ClearBusRouteAssociations() {
+	m.clearedbusRouteAssociations = true
+}
+
+// BusRouteAssociationsCleared reports if the "busRouteAssociations" edge to the BusRouteAssociation entity was cleared.
+func (m *BusRouteMutation) BusRouteAssociationsCleared() bool {
+	return m.clearedbusRouteAssociations
+}
+
+// RemoveBusRouteAssociationIDs removes the "busRouteAssociations" edge to the BusRouteAssociation entity by IDs.
+func (m *BusRouteMutation) RemoveBusRouteAssociationIDs(ids ...int) {
+	if m.removedbusRouteAssociations == nil {
+		m.removedbusRouteAssociations = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.busRouteAssociations, ids[i])
+		m.removedbusRouteAssociations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBusRouteAssociations returns the removed IDs of the "busRouteAssociations" edge to the BusRouteAssociation entity.
+func (m *BusRouteMutation) RemovedBusRouteAssociationsIDs() (ids []int) {
+	for id := range m.removedbusRouteAssociations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BusRouteAssociationsIDs returns the "busRouteAssociations" edge IDs in the mutation.
+func (m *BusRouteMutation) BusRouteAssociationsIDs() (ids []int) {
+	for id := range m.busRouteAssociations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBusRouteAssociations resets all changes to the "busRouteAssociations" edge.
+func (m *BusRouteMutation) ResetBusRouteAssociations() {
+	m.busRouteAssociations = nil
+	m.clearedbusRouteAssociations = false
+	m.removedbusRouteAssociations = nil
+}
+
+// AddMorningBusIDs adds the "morning_buses" edge to the Bus entity by ids.
+func (m *BusRouteMutation) AddMorningBusIDs(ids ...uuid.UUID) {
+	if m.morning_buses == nil {
+		m.morning_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.morning_buses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMorningBuses clears the "morning_buses" edge to the Bus entity.
+func (m *BusRouteMutation) ClearMorningBuses() {
+	m.clearedmorning_buses = true
+}
+
+// MorningBusesCleared reports if the "morning_buses" edge to the Bus entity was cleared.
+func (m *BusRouteMutation) MorningBusesCleared() bool {
+	return m.clearedmorning_buses
+}
+
+// RemoveMorningBusIDs removes the "morning_buses" edge to the Bus entity by IDs.
+func (m *BusRouteMutation) RemoveMorningBusIDs(ids ...uuid.UUID) {
+	if m.removedmorning_buses == nil {
+		m.removedmorning_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.morning_buses, ids[i])
+		m.removedmorning_buses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMorningBuses returns the removed IDs of the "morning_buses" edge to the Bus entity.
+func (m *BusRouteMutation) RemovedMorningBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removedmorning_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MorningBusesIDs returns the "morning_buses" edge IDs in the mutation.
+func (m *BusRouteMutation) MorningBusesIDs() (ids []uuid.UUID) {
+	for id := range m.morning_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMorningBuses resets all changes to the "morning_buses" edge.
+func (m *BusRouteMutation) ResetMorningBuses() {
+	m.morning_buses = nil
+	m.clearedmorning_buses = false
+	m.removedmorning_buses = nil
+}
+
+// AddEveningBusIDs adds the "evening_buses" edge to the Bus entity by ids.
+func (m *BusRouteMutation) AddEveningBusIDs(ids ...uuid.UUID) {
+	if m.evening_buses == nil {
+		m.evening_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.evening_buses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEveningBuses clears the "evening_buses" edge to the Bus entity.
+func (m *BusRouteMutation) ClearEveningBuses() {
+	m.clearedevening_buses = true
+}
+
+// EveningBusesCleared reports if the "evening_buses" edge to the Bus entity was cleared.
+func (m *BusRouteMutation) EveningBusesCleared() bool {
+	return m.clearedevening_buses
+}
+
+// RemoveEveningBusIDs removes the "evening_buses" edge to the Bus entity by IDs.
+func (m *BusRouteMutation) RemoveEveningBusIDs(ids ...uuid.UUID) {
+	if m.removedevening_buses == nil {
+		m.removedevening_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.evening_buses, ids[i])
+		m.removedevening_buses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEveningBuses returns the removed IDs of the "evening_buses" edge to the Bus entity.
+func (m *BusRouteMutation) RemovedEveningBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removedevening_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EveningBusesIDs returns the "evening_buses" edge IDs in the mutation.
+func (m *BusRouteMutation) EveningBusesIDs() (ids []uuid.UUID) {
+	for id := range m.evening_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEveningBuses resets all changes to the "evening_buses" edge.
+func (m *BusRouteMutation) ResetEveningBuses() {
+	m.evening_buses = nil
+	m.clearedevening_buses = false
+	m.removedevening_buses = nil
+}
+
+// Where appends a list predicates to the BusRouteMutation builder.
+func (m *BusRouteMutation) Where(ps ...predicate.BusRoute) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the BusRouteMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *BusRouteMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.BusRoute, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *BusRouteMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *BusRouteMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (BusRoute).
+func (m *BusRouteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *BusRouteMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.bus_type != nil {
+		fields = append(fields, busroute.FieldBusType)
+	}
+	if m.created_at != nil {
+		fields = append(fields, busroute.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, busroute.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *BusRouteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case busroute.FieldBusType:
+		return m.BusType()
+	case busroute.FieldCreatedAt:
+		return m.CreatedAt()
+	case busroute.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *BusRouteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case busroute.FieldBusType:
+		return m.OldBusType(ctx)
+	case busroute.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case busroute.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown BusRoute field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BusRouteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case busroute.FieldBusType:
+		v, ok := value.(busroute.BusType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBusType(v)
+		return nil
+	case busroute.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case busroute.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown BusRoute field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *BusRouteMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *BusRouteMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BusRouteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown BusRoute numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *BusRouteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *BusRouteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *BusRouteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown BusRoute nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *BusRouteMutation) ResetField(name string) error {
+	switch name {
+	case busroute.FieldBusType:
+		m.ResetBusType()
+		return nil
+	case busroute.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case busroute.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown BusRoute field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *BusRouteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.bus != nil {
+		edges = append(edges, busroute.EdgeBus)
+	}
+	if m.childBusAssociations != nil {
+		edges = append(edges, busroute.EdgeChildBusAssociations)
+	}
+	if m.busRouteAssociations != nil {
+		edges = append(edges, busroute.EdgeBusRouteAssociations)
+	}
+	if m.morning_buses != nil {
+		edges = append(edges, busroute.EdgeMorningBuses)
+	}
+	if m.evening_buses != nil {
+		edges = append(edges, busroute.EdgeEveningBuses)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *BusRouteMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case busroute.EdgeBus:
+		ids := make([]ent.Value, 0, len(m.bus))
+		for id := range m.bus {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeChildBusAssociations:
+		ids := make([]ent.Value, 0, len(m.childBusAssociations))
+		for id := range m.childBusAssociations {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeBusRouteAssociations:
+		ids := make([]ent.Value, 0, len(m.busRouteAssociations))
+		for id := range m.busRouteAssociations {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeMorningBuses:
+		ids := make([]ent.Value, 0, len(m.morning_buses))
+		for id := range m.morning_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeEveningBuses:
+		ids := make([]ent.Value, 0, len(m.evening_buses))
+		for id := range m.evening_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *BusRouteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.removedbus != nil {
+		edges = append(edges, busroute.EdgeBus)
+	}
+	if m.removedchildBusAssociations != nil {
+		edges = append(edges, busroute.EdgeChildBusAssociations)
+	}
+	if m.removedbusRouteAssociations != nil {
+		edges = append(edges, busroute.EdgeBusRouteAssociations)
+	}
+	if m.removedmorning_buses != nil {
+		edges = append(edges, busroute.EdgeMorningBuses)
+	}
+	if m.removedevening_buses != nil {
+		edges = append(edges, busroute.EdgeEveningBuses)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *BusRouteMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case busroute.EdgeBus:
+		ids := make([]ent.Value, 0, len(m.removedbus))
+		for id := range m.removedbus {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeChildBusAssociations:
+		ids := make([]ent.Value, 0, len(m.removedchildBusAssociations))
+		for id := range m.removedchildBusAssociations {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeBusRouteAssociations:
+		ids := make([]ent.Value, 0, len(m.removedbusRouteAssociations))
+		for id := range m.removedbusRouteAssociations {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeMorningBuses:
+		ids := make([]ent.Value, 0, len(m.removedmorning_buses))
+		for id := range m.removedmorning_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	case busroute.EdgeEveningBuses:
+		ids := make([]ent.Value, 0, len(m.removedevening_buses))
+		for id := range m.removedevening_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *BusRouteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.clearedbus {
+		edges = append(edges, busroute.EdgeBus)
+	}
+	if m.clearedchildBusAssociations {
+		edges = append(edges, busroute.EdgeChildBusAssociations)
+	}
+	if m.clearedbusRouteAssociations {
+		edges = append(edges, busroute.EdgeBusRouteAssociations)
+	}
+	if m.clearedmorning_buses {
+		edges = append(edges, busroute.EdgeMorningBuses)
+	}
+	if m.clearedevening_buses {
+		edges = append(edges, busroute.EdgeEveningBuses)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *BusRouteMutation) EdgeCleared(name string) bool {
+	switch name {
+	case busroute.EdgeBus:
+		return m.clearedbus
+	case busroute.EdgeChildBusAssociations:
+		return m.clearedchildBusAssociations
+	case busroute.EdgeBusRouteAssociations:
+		return m.clearedbusRouteAssociations
+	case busroute.EdgeMorningBuses:
+		return m.clearedmorning_buses
+	case busroute.EdgeEveningBuses:
+		return m.clearedevening_buses
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *BusRouteMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown BusRoute unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *BusRouteMutation) ResetEdge(name string) error {
+	switch name {
+	case busroute.EdgeBus:
+		m.ResetBus()
+		return nil
+	case busroute.EdgeChildBusAssociations:
+		m.ResetChildBusAssociations()
+		return nil
+	case busroute.EdgeBusRouteAssociations:
+		m.ResetBusRouteAssociations()
+		return nil
+	case busroute.EdgeMorningBuses:
+		m.ResetMorningBuses()
+		return nil
+	case busroute.EdgeEveningBuses:
+		m.ResetEveningBuses()
+		return nil
+	}
+	return fmt.Errorf("unknown BusRoute edge %s", name)
+}
+
+// BusRouteAssociationMutation represents an operation that mutates the BusRouteAssociation nodes in the graph.
+type BusRouteAssociationMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *int
+	_order          *int32
+	add_order       *int32
+	clearedFields   map[string]struct{}
+	station         *uuid.UUID
+	clearedstation  bool
+	busRoute        *uuid.UUID
+	clearedbusRoute bool
+	done            bool
+	oldValue        func(context.Context) (*BusRouteAssociation, error)
+	predicates      []predicate.BusRouteAssociation
+}
+
+var _ ent.Mutation = (*BusRouteAssociationMutation)(nil)
+
+// busrouteassociationOption allows management of the mutation configuration using functional options.
+type busrouteassociationOption func(*BusRouteAssociationMutation)
+
+// newBusRouteAssociationMutation creates new mutation for the BusRouteAssociation entity.
+func newBusRouteAssociationMutation(c config, op Op, opts ...busrouteassociationOption) *BusRouteAssociationMutation {
+	m := &BusRouteAssociationMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeBusRouteAssociation,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withBusRouteAssociationID sets the ID field of the mutation.
+func withBusRouteAssociationID(id int) busrouteassociationOption {
+	return func(m *BusRouteAssociationMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *BusRouteAssociation
+		)
+		m.oldValue = func(ctx context.Context) (*BusRouteAssociation, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().BusRouteAssociation.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withBusRouteAssociation sets the old BusRouteAssociation of the mutation.
+func withBusRouteAssociation(node *BusRouteAssociation) busrouteassociationOption {
+	return func(m *BusRouteAssociationMutation) {
+		m.oldValue = func(context.Context) (*BusRouteAssociation, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m BusRouteAssociationMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m BusRouteAssociationMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *BusRouteAssociationMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *BusRouteAssociationMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().BusRouteAssociation.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetStationID sets the "station_id" field.
+func (m *BusRouteAssociationMutation) SetStationID(u uuid.UUID) {
+	m.station = &u
+}
+
+// StationID returns the value of the "station_id" field in the mutation.
+func (m *BusRouteAssociationMutation) StationID() (r uuid.UUID, exists bool) {
+	v := m.station
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStationID returns the old "station_id" field's value of the BusRouteAssociation entity.
+// If the BusRouteAssociation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusRouteAssociationMutation) OldStationID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStationID: %w", err)
+	}
+	return oldValue.StationID, nil
+}
+
+// ResetStationID resets all changes to the "station_id" field.
+func (m *BusRouteAssociationMutation) ResetStationID() {
+	m.station = nil
+}
+
+// SetBusRouteID sets the "bus_route_id" field.
+func (m *BusRouteAssociationMutation) SetBusRouteID(u uuid.UUID) {
+	m.busRoute = &u
+}
+
+// BusRouteID returns the value of the "bus_route_id" field in the mutation.
+func (m *BusRouteAssociationMutation) BusRouteID() (r uuid.UUID, exists bool) {
+	v := m.busRoute
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBusRouteID returns the old "bus_route_id" field's value of the BusRouteAssociation entity.
+// If the BusRouteAssociation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusRouteAssociationMutation) OldBusRouteID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBusRouteID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBusRouteID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBusRouteID: %w", err)
+	}
+	return oldValue.BusRouteID, nil
+}
+
+// ResetBusRouteID resets all changes to the "bus_route_id" field.
+func (m *BusRouteAssociationMutation) ResetBusRouteID() {
+	m.busRoute = nil
+}
+
+// SetOrder sets the "order" field.
+func (m *BusRouteAssociationMutation) SetOrder(i int32) {
+	m._order = &i
+	m.add_order = nil
+}
+
+// Order returns the value of the "order" field in the mutation.
+func (m *BusRouteAssociationMutation) Order() (r int32, exists bool) {
+	v := m._order
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrder returns the old "order" field's value of the BusRouteAssociation entity.
+// If the BusRouteAssociation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BusRouteAssociationMutation) OldOrder(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrder is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrder requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrder: %w", err)
+	}
+	return oldValue.Order, nil
+}
+
+// AddOrder adds i to the "order" field.
+func (m *BusRouteAssociationMutation) AddOrder(i int32) {
+	if m.add_order != nil {
+		*m.add_order += i
+	} else {
+		m.add_order = &i
+	}
+}
+
+// AddedOrder returns the value that was added to the "order" field in this mutation.
+func (m *BusRouteAssociationMutation) AddedOrder() (r int32, exists bool) {
+	v := m.add_order
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOrder resets all changes to the "order" field.
+func (m *BusRouteAssociationMutation) ResetOrder() {
+	m._order = nil
+	m.add_order = nil
+}
+
+// ClearStation clears the "station" edge to the Station entity.
+func (m *BusRouteAssociationMutation) ClearStation() {
+	m.clearedstation = true
+	m.clearedFields[busrouteassociation.FieldStationID] = struct{}{}
+}
+
+// StationCleared reports if the "station" edge to the Station entity was cleared.
+func (m *BusRouteAssociationMutation) StationCleared() bool {
+	return m.clearedstation
+}
+
+// StationIDs returns the "station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// StationID instead. It exists only for internal usage by the builders.
+func (m *BusRouteAssociationMutation) StationIDs() (ids []uuid.UUID) {
+	if id := m.station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetStation resets all changes to the "station" edge.
+func (m *BusRouteAssociationMutation) ResetStation() {
+	m.station = nil
+	m.clearedstation = false
+}
+
+// ClearBusRoute clears the "busRoute" edge to the BusRoute entity.
+func (m *BusRouteAssociationMutation) ClearBusRoute() {
+	m.clearedbusRoute = true
+	m.clearedFields[busrouteassociation.FieldBusRouteID] = struct{}{}
+}
+
+// BusRouteCleared reports if the "busRoute" edge to the BusRoute entity was cleared.
+func (m *BusRouteAssociationMutation) BusRouteCleared() bool {
+	return m.clearedbusRoute
+}
+
+// BusRouteIDs returns the "busRoute" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// BusRouteID instead. It exists only for internal usage by the builders.
+func (m *BusRouteAssociationMutation) BusRouteIDs() (ids []uuid.UUID) {
+	if id := m.busRoute; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetBusRoute resets all changes to the "busRoute" edge.
+func (m *BusRouteAssociationMutation) ResetBusRoute() {
+	m.busRoute = nil
+	m.clearedbusRoute = false
+}
+
+// Where appends a list predicates to the BusRouteAssociationMutation builder.
+func (m *BusRouteAssociationMutation) Where(ps ...predicate.BusRouteAssociation) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the BusRouteAssociationMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *BusRouteAssociationMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.BusRouteAssociation, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *BusRouteAssociationMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *BusRouteAssociationMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (BusRouteAssociation).
+func (m *BusRouteAssociationMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *BusRouteAssociationMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.station != nil {
+		fields = append(fields, busrouteassociation.FieldStationID)
+	}
+	if m.busRoute != nil {
+		fields = append(fields, busrouteassociation.FieldBusRouteID)
+	}
+	if m._order != nil {
+		fields = append(fields, busrouteassociation.FieldOrder)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *BusRouteAssociationMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case busrouteassociation.FieldStationID:
+		return m.StationID()
+	case busrouteassociation.FieldBusRouteID:
+		return m.BusRouteID()
+	case busrouteassociation.FieldOrder:
+		return m.Order()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *BusRouteAssociationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case busrouteassociation.FieldStationID:
+		return m.OldStationID(ctx)
+	case busrouteassociation.FieldBusRouteID:
+		return m.OldBusRouteID(ctx)
+	case busrouteassociation.FieldOrder:
+		return m.OldOrder(ctx)
+	}
+	return nil, fmt.Errorf("unknown BusRouteAssociation field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BusRouteAssociationMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case busrouteassociation.FieldStationID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStationID(v)
+		return nil
+	case busrouteassociation.FieldBusRouteID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBusRouteID(v)
+		return nil
+	case busrouteassociation.FieldOrder:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrder(v)
+		return nil
+	}
+	return fmt.Errorf("unknown BusRouteAssociation field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *BusRouteAssociationMutation) AddedFields() []string {
+	var fields []string
+	if m.add_order != nil {
+		fields = append(fields, busrouteassociation.FieldOrder)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *BusRouteAssociationMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case busrouteassociation.FieldOrder:
+		return m.AddedOrder()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BusRouteAssociationMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case busrouteassociation.FieldOrder:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOrder(v)
+		return nil
+	}
+	return fmt.Errorf("unknown BusRouteAssociation numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *BusRouteAssociationMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *BusRouteAssociationMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *BusRouteAssociationMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown BusRouteAssociation nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *BusRouteAssociationMutation) ResetField(name string) error {
+	switch name {
+	case busrouteassociation.FieldStationID:
+		m.ResetStationID()
+		return nil
+	case busrouteassociation.FieldBusRouteID:
+		m.ResetBusRouteID()
+		return nil
+	case busrouteassociation.FieldOrder:
+		m.ResetOrder()
+		return nil
+	}
+	return fmt.Errorf("unknown BusRouteAssociation field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *BusRouteAssociationMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.station != nil {
+		edges = append(edges, busrouteassociation.EdgeStation)
+	}
+	if m.busRoute != nil {
+		edges = append(edges, busrouteassociation.EdgeBusRoute)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *BusRouteAssociationMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case busrouteassociation.EdgeStation:
+		if id := m.station; id != nil {
+			return []ent.Value{*id}
+		}
+	case busrouteassociation.EdgeBusRoute:
+		if id := m.busRoute; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *BusRouteAssociationMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *BusRouteAssociationMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *BusRouteAssociationMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedstation {
+		edges = append(edges, busrouteassociation.EdgeStation)
+	}
+	if m.clearedbusRoute {
+		edges = append(edges, busrouteassociation.EdgeBusRoute)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *BusRouteAssociationMutation) EdgeCleared(name string) bool {
+	switch name {
+	case busrouteassociation.EdgeStation:
+		return m.clearedstation
+	case busrouteassociation.EdgeBusRoute:
+		return m.clearedbusRoute
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *BusRouteAssociationMutation) ClearEdge(name string) error {
+	switch name {
+	case busrouteassociation.EdgeStation:
+		m.ClearStation()
+		return nil
+	case busrouteassociation.EdgeBusRoute:
+		m.ClearBusRoute()
+		return nil
+	}
+	return fmt.Errorf("unknown BusRouteAssociation unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *BusRouteAssociationMutation) ResetEdge(name string) error {
+	switch name {
+	case busrouteassociation.EdgeStation:
+		m.ResetStation()
+		return nil
+	case busrouteassociation.EdgeBusRoute:
+		m.ResetBusRoute()
+		return nil
+	}
+	return fmt.Errorf("unknown BusRouteAssociation edge %s", name)
 }
 
 // ChildMutation represents an operation that mutates the Child nodes in the graph.
@@ -2942,18 +4475,17 @@ func (m *ChildMutation) ResetEdge(name string) error {
 // ChildBusAssociationMutation represents an operation that mutates the ChildBusAssociation nodes in the graph.
 type ChildBusAssociationMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	bus_type      *childbusassociation.BusType
-	clearedFields map[string]struct{}
-	child         *uuid.UUID
-	clearedchild  bool
-	bus           *uuid.UUID
-	clearedbus    bool
-	done          bool
-	oldValue      func(context.Context) (*ChildBusAssociation, error)
-	predicates    []predicate.ChildBusAssociation
+	op               Op
+	typ              string
+	id               *int
+	clearedFields    map[string]struct{}
+	child            *uuid.UUID
+	clearedchild     bool
+	bus_route        *uuid.UUID
+	clearedbus_route bool
+	done             bool
+	oldValue         func(context.Context) (*ChildBusAssociation, error)
+	predicates       []predicate.ChildBusAssociation
 }
 
 var _ ent.Mutation = (*ChildBusAssociationMutation)(nil)
@@ -3090,76 +4622,40 @@ func (m *ChildBusAssociationMutation) ResetChildID() {
 	m.child = nil
 }
 
-// SetBusID sets the "bus_id" field.
-func (m *ChildBusAssociationMutation) SetBusID(u uuid.UUID) {
-	m.bus = &u
+// SetBusRouteID sets the "bus_route_id" field.
+func (m *ChildBusAssociationMutation) SetBusRouteID(u uuid.UUID) {
+	m.bus_route = &u
 }
 
-// BusID returns the value of the "bus_id" field in the mutation.
-func (m *ChildBusAssociationMutation) BusID() (r uuid.UUID, exists bool) {
-	v := m.bus
+// BusRouteID returns the value of the "bus_route_id" field in the mutation.
+func (m *ChildBusAssociationMutation) BusRouteID() (r uuid.UUID, exists bool) {
+	v := m.bus_route
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldBusID returns the old "bus_id" field's value of the ChildBusAssociation entity.
+// OldBusRouteID returns the old "bus_route_id" field's value of the ChildBusAssociation entity.
 // If the ChildBusAssociation object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildBusAssociationMutation) OldBusID(ctx context.Context) (v uuid.UUID, err error) {
+func (m *ChildBusAssociationMutation) OldBusRouteID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldBusID is only allowed on UpdateOne operations")
+		return v, errors.New("OldBusRouteID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldBusID requires an ID field in the mutation")
+		return v, errors.New("OldBusRouteID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBusID: %w", err)
+		return v, fmt.Errorf("querying old value for OldBusRouteID: %w", err)
 	}
-	return oldValue.BusID, nil
+	return oldValue.BusRouteID, nil
 }
 
-// ResetBusID resets all changes to the "bus_id" field.
-func (m *ChildBusAssociationMutation) ResetBusID() {
-	m.bus = nil
-}
-
-// SetBusType sets the "bus_type" field.
-func (m *ChildBusAssociationMutation) SetBusType(ct childbusassociation.BusType) {
-	m.bus_type = &ct
-}
-
-// BusType returns the value of the "bus_type" field in the mutation.
-func (m *ChildBusAssociationMutation) BusType() (r childbusassociation.BusType, exists bool) {
-	v := m.bus_type
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldBusType returns the old "bus_type" field's value of the ChildBusAssociation entity.
-// If the ChildBusAssociation object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChildBusAssociationMutation) OldBusType(ctx context.Context) (v childbusassociation.BusType, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldBusType is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldBusType requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBusType: %w", err)
-	}
-	return oldValue.BusType, nil
-}
-
-// ResetBusType resets all changes to the "bus_type" field.
-func (m *ChildBusAssociationMutation) ResetBusType() {
-	m.bus_type = nil
+// ResetBusRouteID resets all changes to the "bus_route_id" field.
+func (m *ChildBusAssociationMutation) ResetBusRouteID() {
+	m.bus_route = nil
 }
 
 // ClearChild clears the "child" edge to the Child entity.
@@ -3189,31 +4685,31 @@ func (m *ChildBusAssociationMutation) ResetChild() {
 	m.clearedchild = false
 }
 
-// ClearBus clears the "bus" edge to the Bus entity.
-func (m *ChildBusAssociationMutation) ClearBus() {
-	m.clearedbus = true
-	m.clearedFields[childbusassociation.FieldBusID] = struct{}{}
+// ClearBusRoute clears the "bus_route" edge to the BusRoute entity.
+func (m *ChildBusAssociationMutation) ClearBusRoute() {
+	m.clearedbus_route = true
+	m.clearedFields[childbusassociation.FieldBusRouteID] = struct{}{}
 }
 
-// BusCleared reports if the "bus" edge to the Bus entity was cleared.
-func (m *ChildBusAssociationMutation) BusCleared() bool {
-	return m.clearedbus
+// BusRouteCleared reports if the "bus_route" edge to the BusRoute entity was cleared.
+func (m *ChildBusAssociationMutation) BusRouteCleared() bool {
+	return m.clearedbus_route
 }
 
-// BusIDs returns the "bus" edge IDs in the mutation.
+// BusRouteIDs returns the "bus_route" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// BusID instead. It exists only for internal usage by the builders.
-func (m *ChildBusAssociationMutation) BusIDs() (ids []uuid.UUID) {
-	if id := m.bus; id != nil {
+// BusRouteID instead. It exists only for internal usage by the builders.
+func (m *ChildBusAssociationMutation) BusRouteIDs() (ids []uuid.UUID) {
+	if id := m.bus_route; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetBus resets all changes to the "bus" edge.
-func (m *ChildBusAssociationMutation) ResetBus() {
-	m.bus = nil
-	m.clearedbus = false
+// ResetBusRoute resets all changes to the "bus_route" edge.
+func (m *ChildBusAssociationMutation) ResetBusRoute() {
+	m.bus_route = nil
+	m.clearedbus_route = false
 }
 
 // Where appends a list predicates to the ChildBusAssociationMutation builder.
@@ -3250,15 +4746,12 @@ func (m *ChildBusAssociationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChildBusAssociationMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 2)
 	if m.child != nil {
 		fields = append(fields, childbusassociation.FieldChildID)
 	}
-	if m.bus != nil {
-		fields = append(fields, childbusassociation.FieldBusID)
-	}
-	if m.bus_type != nil {
-		fields = append(fields, childbusassociation.FieldBusType)
+	if m.bus_route != nil {
+		fields = append(fields, childbusassociation.FieldBusRouteID)
 	}
 	return fields
 }
@@ -3270,10 +4763,8 @@ func (m *ChildBusAssociationMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case childbusassociation.FieldChildID:
 		return m.ChildID()
-	case childbusassociation.FieldBusID:
-		return m.BusID()
-	case childbusassociation.FieldBusType:
-		return m.BusType()
+	case childbusassociation.FieldBusRouteID:
+		return m.BusRouteID()
 	}
 	return nil, false
 }
@@ -3285,10 +4776,8 @@ func (m *ChildBusAssociationMutation) OldField(ctx context.Context, name string)
 	switch name {
 	case childbusassociation.FieldChildID:
 		return m.OldChildID(ctx)
-	case childbusassociation.FieldBusID:
-		return m.OldBusID(ctx)
-	case childbusassociation.FieldBusType:
-		return m.OldBusType(ctx)
+	case childbusassociation.FieldBusRouteID:
+		return m.OldBusRouteID(ctx)
 	}
 	return nil, fmt.Errorf("unknown ChildBusAssociation field %s", name)
 }
@@ -3305,19 +4794,12 @@ func (m *ChildBusAssociationMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetChildID(v)
 		return nil
-	case childbusassociation.FieldBusID:
+	case childbusassociation.FieldBusRouteID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetBusID(v)
-		return nil
-	case childbusassociation.FieldBusType:
-		v, ok := value.(childbusassociation.BusType)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetBusType(v)
+		m.SetBusRouteID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ChildBusAssociation field %s", name)
@@ -3371,11 +4853,8 @@ func (m *ChildBusAssociationMutation) ResetField(name string) error {
 	case childbusassociation.FieldChildID:
 		m.ResetChildID()
 		return nil
-	case childbusassociation.FieldBusID:
-		m.ResetBusID()
-		return nil
-	case childbusassociation.FieldBusType:
-		m.ResetBusType()
+	case childbusassociation.FieldBusRouteID:
+		m.ResetBusRouteID()
 		return nil
 	}
 	return fmt.Errorf("unknown ChildBusAssociation field %s", name)
@@ -3387,8 +4866,8 @@ func (m *ChildBusAssociationMutation) AddedEdges() []string {
 	if m.child != nil {
 		edges = append(edges, childbusassociation.EdgeChild)
 	}
-	if m.bus != nil {
-		edges = append(edges, childbusassociation.EdgeBus)
+	if m.bus_route != nil {
+		edges = append(edges, childbusassociation.EdgeBusRoute)
 	}
 	return edges
 }
@@ -3401,8 +4880,8 @@ func (m *ChildBusAssociationMutation) AddedIDs(name string) []ent.Value {
 		if id := m.child; id != nil {
 			return []ent.Value{*id}
 		}
-	case childbusassociation.EdgeBus:
-		if id := m.bus; id != nil {
+	case childbusassociation.EdgeBusRoute:
+		if id := m.bus_route; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -3427,8 +4906,8 @@ func (m *ChildBusAssociationMutation) ClearedEdges() []string {
 	if m.clearedchild {
 		edges = append(edges, childbusassociation.EdgeChild)
 	}
-	if m.clearedbus {
-		edges = append(edges, childbusassociation.EdgeBus)
+	if m.clearedbus_route {
+		edges = append(edges, childbusassociation.EdgeBusRoute)
 	}
 	return edges
 }
@@ -3439,8 +4918,8 @@ func (m *ChildBusAssociationMutation) EdgeCleared(name string) bool {
 	switch name {
 	case childbusassociation.EdgeChild:
 		return m.clearedchild
-	case childbusassociation.EdgeBus:
-		return m.clearedbus
+	case childbusassociation.EdgeBusRoute:
+		return m.clearedbus_route
 	}
 	return false
 }
@@ -3452,8 +4931,8 @@ func (m *ChildBusAssociationMutation) ClearEdge(name string) error {
 	case childbusassociation.EdgeChild:
 		m.ClearChild()
 		return nil
-	case childbusassociation.EdgeBus:
-		m.ClearBus()
+	case childbusassociation.EdgeBusRoute:
+		m.ClearBusRoute()
 		return nil
 	}
 	return fmt.Errorf("unknown ChildBusAssociation unique edge %s", name)
@@ -3466,8 +4945,8 @@ func (m *ChildBusAssociationMutation) ResetEdge(name string) error {
 	case childbusassociation.EdgeChild:
 		m.ResetChild()
 		return nil
-	case childbusassociation.EdgeBus:
-		m.ResetBus()
+	case childbusassociation.EdgeBusRoute:
+		m.ResetBusRoute()
 		return nil
 	}
 	return fmt.Errorf("unknown ChildBusAssociation edge %s", name)
@@ -5799,34 +7278,27 @@ func (m *NurseryMutation) ResetEdge(name string) error {
 // StationMutation represents an operation that mutates the Station nodes in the graph.
 type StationMutation struct {
 	config
-	op                              Op
-	typ                             string
-	id                              *uuid.UUID
-	latitude                        *float64
-	addlatitude                     *float64
-	longitude                       *float64
-	addlongitude                    *float64
-	created_at                      *time.Time
-	updated_at                      *time.Time
-	clearedFields                   map[string]struct{}
-	guardian                        *uuid.UUID
-	clearedguardian                 bool
-	bus                             map[uuid.UUID]struct{}
-	removedbus                      map[uuid.UUID]struct{}
-	clearedbus                      bool
-	morning_previous_station        *uuid.UUID
-	clearedmorning_previous_station bool
-	morning_next_station            map[uuid.UUID]struct{}
-	removedmorning_next_station     map[uuid.UUID]struct{}
-	clearedmorning_next_station     bool
-	evening_previous_station        *uuid.UUID
-	clearedevening_previous_station bool
-	evening_next_station            map[uuid.UUID]struct{}
-	removedevening_next_station     map[uuid.UUID]struct{}
-	clearedevening_next_station     bool
-	done                            bool
-	oldValue                        func(context.Context) (*Station, error)
-	predicates                      []predicate.Station
+	op                          Op
+	typ                         string
+	id                          *uuid.UUID
+	latitude                    *float64
+	addlatitude                 *float64
+	longitude                   *float64
+	addlongitude                *float64
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	clearedFields               map[string]struct{}
+	guardian                    *uuid.UUID
+	clearedguardian             bool
+	next_for_buses              map[uuid.UUID]struct{}
+	removednext_for_buses       map[uuid.UUID]struct{}
+	clearednext_for_buses       bool
+	busRouteAssociations        map[int]struct{}
+	removedbusRouteAssociations map[int]struct{}
+	clearedbusRouteAssociations bool
+	done                        bool
+	oldValue                    func(context.Context) (*Station, error)
+	predicates                  []predicate.Station
 }
 
 var _ ent.Mutation = (*StationMutation)(nil)
@@ -6184,244 +7656,112 @@ func (m *StationMutation) ResetGuardian() {
 	m.clearedguardian = false
 }
 
-// AddBuIDs adds the "bus" edge to the Bus entity by ids.
-func (m *StationMutation) AddBuIDs(ids ...uuid.UUID) {
-	if m.bus == nil {
-		m.bus = make(map[uuid.UUID]struct{})
+// AddNextForBusIDs adds the "next_for_buses" edge to the Bus entity by ids.
+func (m *StationMutation) AddNextForBusIDs(ids ...uuid.UUID) {
+	if m.next_for_buses == nil {
+		m.next_for_buses = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
-		m.bus[ids[i]] = struct{}{}
+		m.next_for_buses[ids[i]] = struct{}{}
 	}
 }
 
-// ClearBus clears the "bus" edge to the Bus entity.
-func (m *StationMutation) ClearBus() {
-	m.clearedbus = true
+// ClearNextForBuses clears the "next_for_buses" edge to the Bus entity.
+func (m *StationMutation) ClearNextForBuses() {
+	m.clearednext_for_buses = true
 }
 
-// BusCleared reports if the "bus" edge to the Bus entity was cleared.
-func (m *StationMutation) BusCleared() bool {
-	return m.clearedbus
+// NextForBusesCleared reports if the "next_for_buses" edge to the Bus entity was cleared.
+func (m *StationMutation) NextForBusesCleared() bool {
+	return m.clearednext_for_buses
 }
 
-// RemoveBuIDs removes the "bus" edge to the Bus entity by IDs.
-func (m *StationMutation) RemoveBuIDs(ids ...uuid.UUID) {
-	if m.removedbus == nil {
-		m.removedbus = make(map[uuid.UUID]struct{})
+// RemoveNextForBusIDs removes the "next_for_buses" edge to the Bus entity by IDs.
+func (m *StationMutation) RemoveNextForBusIDs(ids ...uuid.UUID) {
+	if m.removednext_for_buses == nil {
+		m.removednext_for_buses = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
-		delete(m.bus, ids[i])
-		m.removedbus[ids[i]] = struct{}{}
+		delete(m.next_for_buses, ids[i])
+		m.removednext_for_buses[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedBus returns the removed IDs of the "bus" edge to the Bus entity.
-func (m *StationMutation) RemovedBusIDs() (ids []uuid.UUID) {
-	for id := range m.removedbus {
+// RemovedNextForBuses returns the removed IDs of the "next_for_buses" edge to the Bus entity.
+func (m *StationMutation) RemovedNextForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removednext_for_buses {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// BusIDs returns the "bus" edge IDs in the mutation.
-func (m *StationMutation) BusIDs() (ids []uuid.UUID) {
-	for id := range m.bus {
+// NextForBusesIDs returns the "next_for_buses" edge IDs in the mutation.
+func (m *StationMutation) NextForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.next_for_buses {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetBus resets all changes to the "bus" edge.
-func (m *StationMutation) ResetBus() {
-	m.bus = nil
-	m.clearedbus = false
-	m.removedbus = nil
+// ResetNextForBuses resets all changes to the "next_for_buses" edge.
+func (m *StationMutation) ResetNextForBuses() {
+	m.next_for_buses = nil
+	m.clearednext_for_buses = false
+	m.removednext_for_buses = nil
 }
 
-// SetMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by id.
-func (m *StationMutation) SetMorningPreviousStationID(id uuid.UUID) {
-	m.morning_previous_station = &id
-}
-
-// ClearMorningPreviousStation clears the "morning_previous_station" edge to the Station entity.
-func (m *StationMutation) ClearMorningPreviousStation() {
-	m.clearedmorning_previous_station = true
-}
-
-// MorningPreviousStationCleared reports if the "morning_previous_station" edge to the Station entity was cleared.
-func (m *StationMutation) MorningPreviousStationCleared() bool {
-	return m.clearedmorning_previous_station
-}
-
-// MorningPreviousStationID returns the "morning_previous_station" edge ID in the mutation.
-func (m *StationMutation) MorningPreviousStationID() (id uuid.UUID, exists bool) {
-	if m.morning_previous_station != nil {
-		return *m.morning_previous_station, true
-	}
-	return
-}
-
-// MorningPreviousStationIDs returns the "morning_previous_station" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// MorningPreviousStationID instead. It exists only for internal usage by the builders.
-func (m *StationMutation) MorningPreviousStationIDs() (ids []uuid.UUID) {
-	if id := m.morning_previous_station; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetMorningPreviousStation resets all changes to the "morning_previous_station" edge.
-func (m *StationMutation) ResetMorningPreviousStation() {
-	m.morning_previous_station = nil
-	m.clearedmorning_previous_station = false
-}
-
-// AddMorningNextStationIDs adds the "morning_next_station" edge to the Station entity by ids.
-func (m *StationMutation) AddMorningNextStationIDs(ids ...uuid.UUID) {
-	if m.morning_next_station == nil {
-		m.morning_next_station = make(map[uuid.UUID]struct{})
+// AddBusRouteAssociationIDs adds the "busRouteAssociations" edge to the BusRouteAssociation entity by ids.
+func (m *StationMutation) AddBusRouteAssociationIDs(ids ...int) {
+	if m.busRouteAssociations == nil {
+		m.busRouteAssociations = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.morning_next_station[ids[i]] = struct{}{}
+		m.busRouteAssociations[ids[i]] = struct{}{}
 	}
 }
 
-// ClearMorningNextStation clears the "morning_next_station" edge to the Station entity.
-func (m *StationMutation) ClearMorningNextStation() {
-	m.clearedmorning_next_station = true
+// ClearBusRouteAssociations clears the "busRouteAssociations" edge to the BusRouteAssociation entity.
+func (m *StationMutation) ClearBusRouteAssociations() {
+	m.clearedbusRouteAssociations = true
 }
 
-// MorningNextStationCleared reports if the "morning_next_station" edge to the Station entity was cleared.
-func (m *StationMutation) MorningNextStationCleared() bool {
-	return m.clearedmorning_next_station
+// BusRouteAssociationsCleared reports if the "busRouteAssociations" edge to the BusRouteAssociation entity was cleared.
+func (m *StationMutation) BusRouteAssociationsCleared() bool {
+	return m.clearedbusRouteAssociations
 }
 
-// RemoveMorningNextStationIDs removes the "morning_next_station" edge to the Station entity by IDs.
-func (m *StationMutation) RemoveMorningNextStationIDs(ids ...uuid.UUID) {
-	if m.removedmorning_next_station == nil {
-		m.removedmorning_next_station = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		delete(m.morning_next_station, ids[i])
-		m.removedmorning_next_station[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedMorningNextStation returns the removed IDs of the "morning_next_station" edge to the Station entity.
-func (m *StationMutation) RemovedMorningNextStationIDs() (ids []uuid.UUID) {
-	for id := range m.removedmorning_next_station {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// MorningNextStationIDs returns the "morning_next_station" edge IDs in the mutation.
-func (m *StationMutation) MorningNextStationIDs() (ids []uuid.UUID) {
-	for id := range m.morning_next_station {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetMorningNextStation resets all changes to the "morning_next_station" edge.
-func (m *StationMutation) ResetMorningNextStation() {
-	m.morning_next_station = nil
-	m.clearedmorning_next_station = false
-	m.removedmorning_next_station = nil
-}
-
-// SetEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by id.
-func (m *StationMutation) SetEveningPreviousStationID(id uuid.UUID) {
-	m.evening_previous_station = &id
-}
-
-// ClearEveningPreviousStation clears the "evening_previous_station" edge to the Station entity.
-func (m *StationMutation) ClearEveningPreviousStation() {
-	m.clearedevening_previous_station = true
-}
-
-// EveningPreviousStationCleared reports if the "evening_previous_station" edge to the Station entity was cleared.
-func (m *StationMutation) EveningPreviousStationCleared() bool {
-	return m.clearedevening_previous_station
-}
-
-// EveningPreviousStationID returns the "evening_previous_station" edge ID in the mutation.
-func (m *StationMutation) EveningPreviousStationID() (id uuid.UUID, exists bool) {
-	if m.evening_previous_station != nil {
-		return *m.evening_previous_station, true
-	}
-	return
-}
-
-// EveningPreviousStationIDs returns the "evening_previous_station" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// EveningPreviousStationID instead. It exists only for internal usage by the builders.
-func (m *StationMutation) EveningPreviousStationIDs() (ids []uuid.UUID) {
-	if id := m.evening_previous_station; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetEveningPreviousStation resets all changes to the "evening_previous_station" edge.
-func (m *StationMutation) ResetEveningPreviousStation() {
-	m.evening_previous_station = nil
-	m.clearedevening_previous_station = false
-}
-
-// AddEveningNextStationIDs adds the "evening_next_station" edge to the Station entity by ids.
-func (m *StationMutation) AddEveningNextStationIDs(ids ...uuid.UUID) {
-	if m.evening_next_station == nil {
-		m.evening_next_station = make(map[uuid.UUID]struct{})
+// RemoveBusRouteAssociationIDs removes the "busRouteAssociations" edge to the BusRouteAssociation entity by IDs.
+func (m *StationMutation) RemoveBusRouteAssociationIDs(ids ...int) {
+	if m.removedbusRouteAssociations == nil {
+		m.removedbusRouteAssociations = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.evening_next_station[ids[i]] = struct{}{}
+		delete(m.busRouteAssociations, ids[i])
+		m.removedbusRouteAssociations[ids[i]] = struct{}{}
 	}
 }
 
-// ClearEveningNextStation clears the "evening_next_station" edge to the Station entity.
-func (m *StationMutation) ClearEveningNextStation() {
-	m.clearedevening_next_station = true
-}
-
-// EveningNextStationCleared reports if the "evening_next_station" edge to the Station entity was cleared.
-func (m *StationMutation) EveningNextStationCleared() bool {
-	return m.clearedevening_next_station
-}
-
-// RemoveEveningNextStationIDs removes the "evening_next_station" edge to the Station entity by IDs.
-func (m *StationMutation) RemoveEveningNextStationIDs(ids ...uuid.UUID) {
-	if m.removedevening_next_station == nil {
-		m.removedevening_next_station = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		delete(m.evening_next_station, ids[i])
-		m.removedevening_next_station[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedEveningNextStation returns the removed IDs of the "evening_next_station" edge to the Station entity.
-func (m *StationMutation) RemovedEveningNextStationIDs() (ids []uuid.UUID) {
-	for id := range m.removedevening_next_station {
+// RemovedBusRouteAssociations returns the removed IDs of the "busRouteAssociations" edge to the BusRouteAssociation entity.
+func (m *StationMutation) RemovedBusRouteAssociationsIDs() (ids []int) {
+	for id := range m.removedbusRouteAssociations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// EveningNextStationIDs returns the "evening_next_station" edge IDs in the mutation.
-func (m *StationMutation) EveningNextStationIDs() (ids []uuid.UUID) {
-	for id := range m.evening_next_station {
+// BusRouteAssociationsIDs returns the "busRouteAssociations" edge IDs in the mutation.
+func (m *StationMutation) BusRouteAssociationsIDs() (ids []int) {
+	for id := range m.busRouteAssociations {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetEveningNextStation resets all changes to the "evening_next_station" edge.
-func (m *StationMutation) ResetEveningNextStation() {
-	m.evening_next_station = nil
-	m.clearedevening_next_station = false
-	m.removedevening_next_station = nil
+// ResetBusRouteAssociations resets all changes to the "busRouteAssociations" edge.
+func (m *StationMutation) ResetBusRouteAssociations() {
+	m.busRouteAssociations = nil
+	m.clearedbusRouteAssociations = false
+	m.removedbusRouteAssociations = nil
 }
 
 // Where appends a list predicates to the StationMutation builder.
@@ -6650,24 +7990,15 @@ func (m *StationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 3)
 	if m.guardian != nil {
 		edges = append(edges, station.EdgeGuardian)
 	}
-	if m.bus != nil {
-		edges = append(edges, station.EdgeBus)
+	if m.next_for_buses != nil {
+		edges = append(edges, station.EdgeNextForBuses)
 	}
-	if m.morning_previous_station != nil {
-		edges = append(edges, station.EdgeMorningPreviousStation)
-	}
-	if m.morning_next_station != nil {
-		edges = append(edges, station.EdgeMorningNextStation)
-	}
-	if m.evening_previous_station != nil {
-		edges = append(edges, station.EdgeEveningPreviousStation)
-	}
-	if m.evening_next_station != nil {
-		edges = append(edges, station.EdgeEveningNextStation)
+	if m.busRouteAssociations != nil {
+		edges = append(edges, station.EdgeBusRouteAssociations)
 	}
 	return edges
 }
@@ -6680,29 +8011,15 @@ func (m *StationMutation) AddedIDs(name string) []ent.Value {
 		if id := m.guardian; id != nil {
 			return []ent.Value{*id}
 		}
-	case station.EdgeBus:
-		ids := make([]ent.Value, 0, len(m.bus))
-		for id := range m.bus {
+	case station.EdgeNextForBuses:
+		ids := make([]ent.Value, 0, len(m.next_for_buses))
+		for id := range m.next_for_buses {
 			ids = append(ids, id)
 		}
 		return ids
-	case station.EdgeMorningPreviousStation:
-		if id := m.morning_previous_station; id != nil {
-			return []ent.Value{*id}
-		}
-	case station.EdgeMorningNextStation:
-		ids := make([]ent.Value, 0, len(m.morning_next_station))
-		for id := range m.morning_next_station {
-			ids = append(ids, id)
-		}
-		return ids
-	case station.EdgeEveningPreviousStation:
-		if id := m.evening_previous_station; id != nil {
-			return []ent.Value{*id}
-		}
-	case station.EdgeEveningNextStation:
-		ids := make([]ent.Value, 0, len(m.evening_next_station))
-		for id := range m.evening_next_station {
+	case station.EdgeBusRouteAssociations:
+		ids := make([]ent.Value, 0, len(m.busRouteAssociations))
+		for id := range m.busRouteAssociations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -6712,15 +8029,12 @@ func (m *StationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
-	if m.removedbus != nil {
-		edges = append(edges, station.EdgeBus)
+	edges := make([]string, 0, 3)
+	if m.removednext_for_buses != nil {
+		edges = append(edges, station.EdgeNextForBuses)
 	}
-	if m.removedmorning_next_station != nil {
-		edges = append(edges, station.EdgeMorningNextStation)
-	}
-	if m.removedevening_next_station != nil {
-		edges = append(edges, station.EdgeEveningNextStation)
+	if m.removedbusRouteAssociations != nil {
+		edges = append(edges, station.EdgeBusRouteAssociations)
 	}
 	return edges
 }
@@ -6729,21 +8043,15 @@ func (m *StationMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *StationMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case station.EdgeBus:
-		ids := make([]ent.Value, 0, len(m.removedbus))
-		for id := range m.removedbus {
+	case station.EdgeNextForBuses:
+		ids := make([]ent.Value, 0, len(m.removednext_for_buses))
+		for id := range m.removednext_for_buses {
 			ids = append(ids, id)
 		}
 		return ids
-	case station.EdgeMorningNextStation:
-		ids := make([]ent.Value, 0, len(m.removedmorning_next_station))
-		for id := range m.removedmorning_next_station {
-			ids = append(ids, id)
-		}
-		return ids
-	case station.EdgeEveningNextStation:
-		ids := make([]ent.Value, 0, len(m.removedevening_next_station))
-		for id := range m.removedevening_next_station {
+	case station.EdgeBusRouteAssociations:
+		ids := make([]ent.Value, 0, len(m.removedbusRouteAssociations))
+		for id := range m.removedbusRouteAssociations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -6753,24 +8061,15 @@ func (m *StationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 3)
 	if m.clearedguardian {
 		edges = append(edges, station.EdgeGuardian)
 	}
-	if m.clearedbus {
-		edges = append(edges, station.EdgeBus)
+	if m.clearednext_for_buses {
+		edges = append(edges, station.EdgeNextForBuses)
 	}
-	if m.clearedmorning_previous_station {
-		edges = append(edges, station.EdgeMorningPreviousStation)
-	}
-	if m.clearedmorning_next_station {
-		edges = append(edges, station.EdgeMorningNextStation)
-	}
-	if m.clearedevening_previous_station {
-		edges = append(edges, station.EdgeEveningPreviousStation)
-	}
-	if m.clearedevening_next_station {
-		edges = append(edges, station.EdgeEveningNextStation)
+	if m.clearedbusRouteAssociations {
+		edges = append(edges, station.EdgeBusRouteAssociations)
 	}
 	return edges
 }
@@ -6781,16 +8080,10 @@ func (m *StationMutation) EdgeCleared(name string) bool {
 	switch name {
 	case station.EdgeGuardian:
 		return m.clearedguardian
-	case station.EdgeBus:
-		return m.clearedbus
-	case station.EdgeMorningPreviousStation:
-		return m.clearedmorning_previous_station
-	case station.EdgeMorningNextStation:
-		return m.clearedmorning_next_station
-	case station.EdgeEveningPreviousStation:
-		return m.clearedevening_previous_station
-	case station.EdgeEveningNextStation:
-		return m.clearedevening_next_station
+	case station.EdgeNextForBuses:
+		return m.clearednext_for_buses
+	case station.EdgeBusRouteAssociations:
+		return m.clearedbusRouteAssociations
 	}
 	return false
 }
@@ -6801,12 +8094,6 @@ func (m *StationMutation) ClearEdge(name string) error {
 	switch name {
 	case station.EdgeGuardian:
 		m.ClearGuardian()
-		return nil
-	case station.EdgeMorningPreviousStation:
-		m.ClearMorningPreviousStation()
-		return nil
-	case station.EdgeEveningPreviousStation:
-		m.ClearEveningPreviousStation()
 		return nil
 	}
 	return fmt.Errorf("unknown Station unique edge %s", name)
@@ -6819,20 +8106,11 @@ func (m *StationMutation) ResetEdge(name string) error {
 	case station.EdgeGuardian:
 		m.ResetGuardian()
 		return nil
-	case station.EdgeBus:
-		m.ResetBus()
+	case station.EdgeNextForBuses:
+		m.ResetNextForBuses()
 		return nil
-	case station.EdgeMorningPreviousStation:
-		m.ResetMorningPreviousStation()
-		return nil
-	case station.EdgeMorningNextStation:
-		m.ResetMorningNextStation()
-		return nil
-	case station.EdgeEveningPreviousStation:
-		m.ResetEveningPreviousStation()
-		return nil
-	case station.EdgeEveningNextStation:
-		m.ResetEveningNextStation()
+	case station.EdgeBusRouteAssociations:
+		m.ResetBusRouteAssociations()
 		return nil
 	}
 	return fmt.Errorf("unknown Station edge %s", name)
