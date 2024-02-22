@@ -7,6 +7,7 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
@@ -54,6 +55,12 @@ func init() {
 	busDescID := busFields[0].Descriptor()
 	// bus.DefaultID holds the default value on creation for the id field.
 	bus.DefaultID = busDescID.Default.(func() uuid.UUID)
+	busrouteFields := schema.BusRoute{}.Fields()
+	_ = busrouteFields
+	// busrouteDescID is the schema descriptor for id field.
+	busrouteDescID := busrouteFields[0].Descriptor()
+	// busroute.DefaultID holds the default value on creation for the id field.
+	busroute.DefaultID = busrouteDescID.Default.(func() uuid.UUID)
 	childFields := schema.Child{}.Fields()
 	_ = childFields
 	// childDescCheckForMissingItems is the schema descriptor for check_for_missing_items field.

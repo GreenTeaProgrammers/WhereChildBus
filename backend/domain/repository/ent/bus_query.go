@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
@@ -23,18 +23,15 @@ import (
 // BusQuery is the builder for querying Bus entities.
 type BusQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []bus.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Bus
-	withNursery              *NurseryQuery
-	withStations             *StationQuery
-	withBoardingRecords      *BoardingRecordQuery
-	withChildBusAssociations *ChildBusAssociationQuery
-	withNextStation          *StationQuery
-	withMorningFirstStation  *StationQuery
-	withEveningFirstStation  *StationQuery
-	withFKs                  bool
+	ctx                 *QueryContext
+	order               []bus.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.Bus
+	withNursery         *NurseryQuery
+	withBoardingRecords *BoardingRecordQuery
+	withNextStation     *StationQuery
+	withBusRoute        *BusRouteQuery
+	withFKs             bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -93,28 +90,6 @@ func (bq *BusQuery) QueryNursery() *NurseryQuery {
 	return query
 }
 
-// QueryStations chains the current query on the "stations" edge.
-func (bq *BusQuery) QueryStations() *StationQuery {
-	query := (&StationClient{config: bq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := bq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := bq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(bus.Table, bus.FieldID, selector),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, bus.StationsTable, bus.StationsPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryBoardingRecords chains the current query on the "boarding_records" edge.
 func (bq *BusQuery) QueryBoardingRecords() *BoardingRecordQuery {
 	query := (&BoardingRecordClient{config: bq.config}).Query()
@@ -130,28 +105,6 @@ func (bq *BusQuery) QueryBoardingRecords() *BoardingRecordQuery {
 			sqlgraph.From(bus.Table, bus.FieldID, selector),
 			sqlgraph.To(boardingrecord.Table, boardingrecord.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, bus.BoardingRecordsTable, bus.BoardingRecordsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryChildBusAssociations chains the current query on the "childBusAssociations" edge.
-func (bq *BusQuery) QueryChildBusAssociations() *ChildBusAssociationQuery {
-	query := (&ChildBusAssociationClient{config: bq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := bq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := bq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(bus.Table, bus.FieldID, selector),
-			sqlgraph.To(childbusassociation.Table, childbusassociation.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, bus.ChildBusAssociationsTable, bus.ChildBusAssociationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -181,9 +134,9 @@ func (bq *BusQuery) QueryNextStation() *StationQuery {
 	return query
 }
 
-// QueryMorningFirstStation chains the current query on the "morning_first_station" edge.
-func (bq *BusQuery) QueryMorningFirstStation() *StationQuery {
-	query := (&StationClient{config: bq.config}).Query()
+// QueryBusRoute chains the current query on the "bus_route" edge.
+func (bq *BusQuery) QueryBusRoute() *BusRouteQuery {
+	query := (&BusRouteClient{config: bq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := bq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -194,30 +147,8 @@ func (bq *BusQuery) QueryMorningFirstStation() *StationQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bus.Table, bus.FieldID, selector),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, bus.MorningFirstStationTable, bus.MorningFirstStationColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryEveningFirstStation chains the current query on the "evening_first_station" edge.
-func (bq *BusQuery) QueryEveningFirstStation() *StationQuery {
-	query := (&StationClient{config: bq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := bq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := bq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(bus.Table, bus.FieldID, selector),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, bus.EveningFirstStationTable, bus.EveningFirstStationColumn),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, bus.BusRouteTable, bus.BusRoutePrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -412,18 +343,15 @@ func (bq *BusQuery) Clone() *BusQuery {
 		return nil
 	}
 	return &BusQuery{
-		config:                   bq.config,
-		ctx:                      bq.ctx.Clone(),
-		order:                    append([]bus.OrderOption{}, bq.order...),
-		inters:                   append([]Interceptor{}, bq.inters...),
-		predicates:               append([]predicate.Bus{}, bq.predicates...),
-		withNursery:              bq.withNursery.Clone(),
-		withStations:             bq.withStations.Clone(),
-		withBoardingRecords:      bq.withBoardingRecords.Clone(),
-		withChildBusAssociations: bq.withChildBusAssociations.Clone(),
-		withNextStation:          bq.withNextStation.Clone(),
-		withMorningFirstStation:  bq.withMorningFirstStation.Clone(),
-		withEveningFirstStation:  bq.withEveningFirstStation.Clone(),
+		config:              bq.config,
+		ctx:                 bq.ctx.Clone(),
+		order:               append([]bus.OrderOption{}, bq.order...),
+		inters:              append([]Interceptor{}, bq.inters...),
+		predicates:          append([]predicate.Bus{}, bq.predicates...),
+		withNursery:         bq.withNursery.Clone(),
+		withBoardingRecords: bq.withBoardingRecords.Clone(),
+		withNextStation:     bq.withNextStation.Clone(),
+		withBusRoute:        bq.withBusRoute.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
@@ -441,17 +369,6 @@ func (bq *BusQuery) WithNursery(opts ...func(*NurseryQuery)) *BusQuery {
 	return bq
 }
 
-// WithStations tells the query-builder to eager-load the nodes that are connected to
-// the "stations" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BusQuery) WithStations(opts ...func(*StationQuery)) *BusQuery {
-	query := (&StationClient{config: bq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	bq.withStations = query
-	return bq
-}
-
 // WithBoardingRecords tells the query-builder to eager-load the nodes that are connected to
 // the "boarding_records" edge. The optional arguments are used to configure the query builder of the edge.
 func (bq *BusQuery) WithBoardingRecords(opts ...func(*BoardingRecordQuery)) *BusQuery {
@@ -460,17 +377,6 @@ func (bq *BusQuery) WithBoardingRecords(opts ...func(*BoardingRecordQuery)) *Bus
 		opt(query)
 	}
 	bq.withBoardingRecords = query
-	return bq
-}
-
-// WithChildBusAssociations tells the query-builder to eager-load the nodes that are connected to
-// the "childBusAssociations" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BusQuery) WithChildBusAssociations(opts ...func(*ChildBusAssociationQuery)) *BusQuery {
-	query := (&ChildBusAssociationClient{config: bq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	bq.withChildBusAssociations = query
 	return bq
 }
 
@@ -485,25 +391,14 @@ func (bq *BusQuery) WithNextStation(opts ...func(*StationQuery)) *BusQuery {
 	return bq
 }
 
-// WithMorningFirstStation tells the query-builder to eager-load the nodes that are connected to
-// the "morning_first_station" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BusQuery) WithMorningFirstStation(opts ...func(*StationQuery)) *BusQuery {
-	query := (&StationClient{config: bq.config}).Query()
+// WithBusRoute tells the query-builder to eager-load the nodes that are connected to
+// the "bus_route" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BusQuery) WithBusRoute(opts ...func(*BusRouteQuery)) *BusQuery {
+	query := (&BusRouteClient{config: bq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	bq.withMorningFirstStation = query
-	return bq
-}
-
-// WithEveningFirstStation tells the query-builder to eager-load the nodes that are connected to
-// the "evening_first_station" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BusQuery) WithEveningFirstStation(opts ...func(*StationQuery)) *BusQuery {
-	query := (&StationClient{config: bq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	bq.withEveningFirstStation = query
+	bq.withBusRoute = query
 	return bq
 }
 
@@ -586,17 +481,14 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 		nodes       = []*Bus{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [4]bool{
 			bq.withNursery != nil,
-			bq.withStations != nil,
 			bq.withBoardingRecords != nil,
-			bq.withChildBusAssociations != nil,
 			bq.withNextStation != nil,
-			bq.withMorningFirstStation != nil,
-			bq.withEveningFirstStation != nil,
+			bq.withBusRoute != nil,
 		}
 	)
-	if bq.withNursery != nil || bq.withNextStation != nil || bq.withMorningFirstStation != nil || bq.withEveningFirstStation != nil {
+	if bq.withNursery != nil || bq.withNextStation != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -626,26 +518,10 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 			return nil, err
 		}
 	}
-	if query := bq.withStations; query != nil {
-		if err := bq.loadStations(ctx, query, nodes,
-			func(n *Bus) { n.Edges.Stations = []*Station{} },
-			func(n *Bus, e *Station) { n.Edges.Stations = append(n.Edges.Stations, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := bq.withBoardingRecords; query != nil {
 		if err := bq.loadBoardingRecords(ctx, query, nodes,
 			func(n *Bus) { n.Edges.BoardingRecords = []*BoardingRecord{} },
 			func(n *Bus, e *BoardingRecord) { n.Edges.BoardingRecords = append(n.Edges.BoardingRecords, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := bq.withChildBusAssociations; query != nil {
-		if err := bq.loadChildBusAssociations(ctx, query, nodes,
-			func(n *Bus) { n.Edges.ChildBusAssociations = []*ChildBusAssociation{} },
-			func(n *Bus, e *ChildBusAssociation) {
-				n.Edges.ChildBusAssociations = append(n.Edges.ChildBusAssociations, e)
-			}); err != nil {
 			return nil, err
 		}
 	}
@@ -655,15 +531,10 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 			return nil, err
 		}
 	}
-	if query := bq.withMorningFirstStation; query != nil {
-		if err := bq.loadMorningFirstStation(ctx, query, nodes, nil,
-			func(n *Bus, e *Station) { n.Edges.MorningFirstStation = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := bq.withEveningFirstStation; query != nil {
-		if err := bq.loadEveningFirstStation(ctx, query, nodes, nil,
-			func(n *Bus, e *Station) { n.Edges.EveningFirstStation = e }); err != nil {
+	if query := bq.withBusRoute; query != nil {
+		if err := bq.loadBusRoute(ctx, query, nodes,
+			func(n *Bus) { n.Edges.BusRoute = []*BusRoute{} },
+			func(n *Bus, e *BusRoute) { n.Edges.BusRoute = append(n.Edges.BusRoute, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -702,67 +573,6 @@ func (bq *BusQuery) loadNursery(ctx context.Context, query *NurseryQuery, nodes 
 	}
 	return nil
 }
-func (bq *BusQuery) loadStations(ctx context.Context, query *StationQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *Station)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[uuid.UUID]*Bus)
-	nids := make(map[uuid.UUID]map[*Bus]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(bus.StationsTable)
-		s.Join(joinT).On(s.C(station.FieldID), joinT.C(bus.StationsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(bus.StationsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(bus.StationsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(uuid.UUID)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := *values[0].(*uuid.UUID)
-				inValue := *values[1].(*uuid.UUID)
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Bus]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Station](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "stations" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (bq *BusQuery) loadBoardingRecords(ctx context.Context, query *BoardingRecordQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *BoardingRecord)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[uuid.UUID]*Bus)
@@ -789,36 +599,6 @@ func (bq *BusQuery) loadBoardingRecords(ctx context.Context, query *BoardingReco
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "bus_boarding_records" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (bq *BusQuery) loadChildBusAssociations(ctx context.Context, query *ChildBusAssociationQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *ChildBusAssociation)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*Bus)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(childbusassociation.FieldBusID)
-	}
-	query.Where(predicate.ChildBusAssociation(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(bus.ChildBusAssociationsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.BusID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "bus_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -856,66 +636,63 @@ func (bq *BusQuery) loadNextStation(ctx context.Context, query *StationQuery, no
 	}
 	return nil
 }
-func (bq *BusQuery) loadMorningFirstStation(ctx context.Context, query *StationQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *Station)) error {
-	ids := make([]uuid.UUID, 0, len(nodes))
-	nodeids := make(map[uuid.UUID][]*Bus)
-	for i := range nodes {
-		if nodes[i].bus_morning_first_station == nil {
-			continue
+func (bq *BusQuery) loadBusRoute(ctx context.Context, query *BusRouteQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *BusRoute)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[uuid.UUID]*Bus)
+	nids := make(map[uuid.UUID]map[*Bus]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].bus_morning_first_station
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(bus.BusRouteTable)
+		s.Join(joinT).On(s.C(busroute.FieldID), joinT.C(bus.BusRoutePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(bus.BusRoutePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(bus.BusRoutePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(station.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(uuid.UUID)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := *values[0].(*uuid.UUID)
+				inValue := *values[1].(*uuid.UUID)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Bus]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*BusRoute](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "bus_morning_first_station" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "bus_route" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (bq *BusQuery) loadEveningFirstStation(ctx context.Context, query *StationQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *Station)) error {
-	ids := make([]uuid.UUID, 0, len(nodes))
-	nodeids := make(map[uuid.UUID][]*Bus)
-	for i := range nodes {
-		if nodes[i].bus_evening_first_station == nil {
-			continue
-		}
-		fk := *nodes[i].bus_evening_first_station
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(station.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "bus_evening_first_station" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil

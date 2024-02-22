@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busrouteassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	"github.com/google/uuid"
@@ -112,89 +113,6 @@ func (sc *StationCreate) SetGuardian(g *Guardian) *StationCreate {
 	return sc.SetGuardianID(g.ID)
 }
 
-// AddBuIDs adds the "bus" edge to the Bus entity by IDs.
-func (sc *StationCreate) AddBuIDs(ids ...uuid.UUID) *StationCreate {
-	sc.mutation.AddBuIDs(ids...)
-	return sc
-}
-
-// AddBus adds the "bus" edges to the Bus entity.
-func (sc *StationCreate) AddBus(b ...*Bus) *StationCreate {
-	ids := make([]uuid.UUID, len(b))
-	for i := range b {
-		ids[i] = b[i].ID
-	}
-	return sc.AddBuIDs(ids...)
-}
-
-// SetMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by ID.
-func (sc *StationCreate) SetMorningPreviousStationID(id uuid.UUID) *StationCreate {
-	sc.mutation.SetMorningPreviousStationID(id)
-	return sc
-}
-
-// SetNillableMorningPreviousStationID sets the "morning_previous_station" edge to the Station entity by ID if the given value is not nil.
-func (sc *StationCreate) SetNillableMorningPreviousStationID(id *uuid.UUID) *StationCreate {
-	if id != nil {
-		sc = sc.SetMorningPreviousStationID(*id)
-	}
-	return sc
-}
-
-// SetMorningPreviousStation sets the "morning_previous_station" edge to the Station entity.
-func (sc *StationCreate) SetMorningPreviousStation(s *Station) *StationCreate {
-	return sc.SetMorningPreviousStationID(s.ID)
-}
-
-// AddMorningNextStationIDs adds the "morning_next_station" edge to the Station entity by IDs.
-func (sc *StationCreate) AddMorningNextStationIDs(ids ...uuid.UUID) *StationCreate {
-	sc.mutation.AddMorningNextStationIDs(ids...)
-	return sc
-}
-
-// AddMorningNextStation adds the "morning_next_station" edges to the Station entity.
-func (sc *StationCreate) AddMorningNextStation(s ...*Station) *StationCreate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return sc.AddMorningNextStationIDs(ids...)
-}
-
-// SetEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by ID.
-func (sc *StationCreate) SetEveningPreviousStationID(id uuid.UUID) *StationCreate {
-	sc.mutation.SetEveningPreviousStationID(id)
-	return sc
-}
-
-// SetNillableEveningPreviousStationID sets the "evening_previous_station" edge to the Station entity by ID if the given value is not nil.
-func (sc *StationCreate) SetNillableEveningPreviousStationID(id *uuid.UUID) *StationCreate {
-	if id != nil {
-		sc = sc.SetEveningPreviousStationID(*id)
-	}
-	return sc
-}
-
-// SetEveningPreviousStation sets the "evening_previous_station" edge to the Station entity.
-func (sc *StationCreate) SetEveningPreviousStation(s *Station) *StationCreate {
-	return sc.SetEveningPreviousStationID(s.ID)
-}
-
-// AddEveningNextStationIDs adds the "evening_next_station" edge to the Station entity by IDs.
-func (sc *StationCreate) AddEveningNextStationIDs(ids ...uuid.UUID) *StationCreate {
-	sc.mutation.AddEveningNextStationIDs(ids...)
-	return sc
-}
-
-// AddEveningNextStation adds the "evening_next_station" edges to the Station entity.
-func (sc *StationCreate) AddEveningNextStation(s ...*Station) *StationCreate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return sc.AddEveningNextStationIDs(ids...)
-}
-
 // AddNextForBusIDs adds the "next_for_buses" edge to the Bus entity by IDs.
 func (sc *StationCreate) AddNextForBusIDs(ids ...uuid.UUID) *StationCreate {
 	sc.mutation.AddNextForBusIDs(ids...)
@@ -210,34 +128,19 @@ func (sc *StationCreate) AddNextForBuses(b ...*Bus) *StationCreate {
 	return sc.AddNextForBusIDs(ids...)
 }
 
-// AddMorningFirstForBusIDs adds the "morning_first_for_buses" edge to the Bus entity by IDs.
-func (sc *StationCreate) AddMorningFirstForBusIDs(ids ...uuid.UUID) *StationCreate {
-	sc.mutation.AddMorningFirstForBusIDs(ids...)
+// AddBusRouteAssociationIDs adds the "busRouteAssociations" edge to the BusRouteAssociation entity by IDs.
+func (sc *StationCreate) AddBusRouteAssociationIDs(ids ...int) *StationCreate {
+	sc.mutation.AddBusRouteAssociationIDs(ids...)
 	return sc
 }
 
-// AddMorningFirstForBuses adds the "morning_first_for_buses" edges to the Bus entity.
-func (sc *StationCreate) AddMorningFirstForBuses(b ...*Bus) *StationCreate {
-	ids := make([]uuid.UUID, len(b))
+// AddBusRouteAssociations adds the "busRouteAssociations" edges to the BusRouteAssociation entity.
+func (sc *StationCreate) AddBusRouteAssociations(b ...*BusRouteAssociation) *StationCreate {
+	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return sc.AddMorningFirstForBusIDs(ids...)
-}
-
-// AddEveningFirstForBusIDs adds the "evening_first_for_buses" edge to the Bus entity by IDs.
-func (sc *StationCreate) AddEveningFirstForBusIDs(ids ...uuid.UUID) *StationCreate {
-	sc.mutation.AddEveningFirstForBusIDs(ids...)
-	return sc
-}
-
-// AddEveningFirstForBuses adds the "evening_first_for_buses" edges to the Bus entity.
-func (sc *StationCreate) AddEveningFirstForBuses(b ...*Bus) *StationCreate {
-	ids := make([]uuid.UUID, len(b))
-	for i := range b {
-		ids[i] = b[i].ID
-	}
-	return sc.AddEveningFirstForBusIDs(ids...)
+	return sc.AddBusRouteAssociationIDs(ids...)
 }
 
 // Mutation returns the StationMutation object of the builder.
@@ -373,88 +276,6 @@ func (sc *StationCreate) createSpec() (*Station, *sqlgraph.CreateSpec) {
 		_node.guardian_station = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.BusIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   station.BusTable,
-			Columns: station.BusPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.MorningPreviousStationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   station.MorningPreviousStationTable,
-			Columns: []string{station.MorningPreviousStationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.station_morning_next_station = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.MorningNextStationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   station.MorningNextStationTable,
-			Columns: []string{station.MorningNextStationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.EveningPreviousStationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   station.EveningPreviousStationTable,
-			Columns: []string{station.EveningPreviousStationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.station_evening_next_station = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.EveningNextStationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   station.EveningNextStationTable,
-			Columns: []string{station.EveningNextStationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := sc.mutation.NextForBusesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -471,31 +292,15 @@ func (sc *StationCreate) createSpec() (*Station, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.MorningFirstForBusesIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.BusRouteAssociationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   station.MorningFirstForBusesTable,
-			Columns: []string{station.MorningFirstForBusesColumn},
+			Inverse: false,
+			Table:   station.BusRouteAssociationsTable,
+			Columns: []string{station.BusRouteAssociationsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.EveningFirstForBusesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   station.EveningFirstForBusesTable,
-			Columns: []string{station.EveningFirstForBusesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busrouteassociation.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

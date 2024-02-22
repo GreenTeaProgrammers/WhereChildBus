@@ -33,6 +33,30 @@ func (f BusFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BusMutation", m)
 }
 
+// The BusRouteFunc type is an adapter to allow the use of ordinary
+// function as BusRoute mutator.
+type BusRouteFunc func(context.Context, *ent.BusRouteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BusRouteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BusRouteMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BusRouteMutation", m)
+}
+
+// The BusRouteAssociationFunc type is an adapter to allow the use of ordinary
+// function as BusRouteAssociation mutator.
+type BusRouteAssociationFunc func(context.Context, *ent.BusRouteAssociationMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BusRouteAssociationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.BusRouteAssociationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BusRouteAssociationMutation", m)
+}
+
 // The ChildFunc type is an adapter to allow the use of ordinary
 // function as Child mutator.
 type ChildFunc func(context.Context, *ent.ChildMutation) (ent.Value, error)

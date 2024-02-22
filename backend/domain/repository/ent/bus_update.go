@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
@@ -188,21 +188,6 @@ func (bu *BusUpdate) SetNursery(n *Nursery) *BusUpdate {
 	return bu.SetNurseryID(n.ID)
 }
 
-// AddStationIDs adds the "stations" edge to the Station entity by IDs.
-func (bu *BusUpdate) AddStationIDs(ids ...uuid.UUID) *BusUpdate {
-	bu.mutation.AddStationIDs(ids...)
-	return bu
-}
-
-// AddStations adds the "stations" edges to the Station entity.
-func (bu *BusUpdate) AddStations(s ...*Station) *BusUpdate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return bu.AddStationIDs(ids...)
-}
-
 // AddBoardingRecordIDs adds the "boarding_records" edge to the BoardingRecord entity by IDs.
 func (bu *BusUpdate) AddBoardingRecordIDs(ids ...uuid.UUID) *BusUpdate {
 	bu.mutation.AddBoardingRecordIDs(ids...)
@@ -216,21 +201,6 @@ func (bu *BusUpdate) AddBoardingRecords(b ...*BoardingRecord) *BusUpdate {
 		ids[i] = b[i].ID
 	}
 	return bu.AddBoardingRecordIDs(ids...)
-}
-
-// AddChildBusAssociationIDs adds the "childBusAssociations" edge to the ChildBusAssociation entity by IDs.
-func (bu *BusUpdate) AddChildBusAssociationIDs(ids ...int) *BusUpdate {
-	bu.mutation.AddChildBusAssociationIDs(ids...)
-	return bu
-}
-
-// AddChildBusAssociations adds the "childBusAssociations" edges to the ChildBusAssociation entity.
-func (bu *BusUpdate) AddChildBusAssociations(c ...*ChildBusAssociation) *BusUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return bu.AddChildBusAssociationIDs(ids...)
 }
 
 // SetNextStationID sets the "next_station" edge to the Station entity by ID.
@@ -252,42 +222,19 @@ func (bu *BusUpdate) SetNextStation(s *Station) *BusUpdate {
 	return bu.SetNextStationID(s.ID)
 }
 
-// SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID.
-func (bu *BusUpdate) SetMorningFirstStationID(id uuid.UUID) *BusUpdate {
-	bu.mutation.SetMorningFirstStationID(id)
+// AddBusRouteIDs adds the "bus_route" edge to the BusRoute entity by IDs.
+func (bu *BusUpdate) AddBusRouteIDs(ids ...uuid.UUID) *BusUpdate {
+	bu.mutation.AddBusRouteIDs(ids...)
 	return bu
 }
 
-// SetNillableMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID if the given value is not nil.
-func (bu *BusUpdate) SetNillableMorningFirstStationID(id *uuid.UUID) *BusUpdate {
-	if id != nil {
-		bu = bu.SetMorningFirstStationID(*id)
+// AddBusRoute adds the "bus_route" edges to the BusRoute entity.
+func (bu *BusUpdate) AddBusRoute(b ...*BusRoute) *BusUpdate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
 	}
-	return bu
-}
-
-// SetMorningFirstStation sets the "morning_first_station" edge to the Station entity.
-func (bu *BusUpdate) SetMorningFirstStation(s *Station) *BusUpdate {
-	return bu.SetMorningFirstStationID(s.ID)
-}
-
-// SetEveningFirstStationID sets the "evening_first_station" edge to the Station entity by ID.
-func (bu *BusUpdate) SetEveningFirstStationID(id uuid.UUID) *BusUpdate {
-	bu.mutation.SetEveningFirstStationID(id)
-	return bu
-}
-
-// SetNillableEveningFirstStationID sets the "evening_first_station" edge to the Station entity by ID if the given value is not nil.
-func (bu *BusUpdate) SetNillableEveningFirstStationID(id *uuid.UUID) *BusUpdate {
-	if id != nil {
-		bu = bu.SetEveningFirstStationID(*id)
-	}
-	return bu
-}
-
-// SetEveningFirstStation sets the "evening_first_station" edge to the Station entity.
-func (bu *BusUpdate) SetEveningFirstStation(s *Station) *BusUpdate {
-	return bu.SetEveningFirstStationID(s.ID)
+	return bu.AddBusRouteIDs(ids...)
 }
 
 // Mutation returns the BusMutation object of the builder.
@@ -299,27 +246,6 @@ func (bu *BusUpdate) Mutation() *BusMutation {
 func (bu *BusUpdate) ClearNursery() *BusUpdate {
 	bu.mutation.ClearNursery()
 	return bu
-}
-
-// ClearStations clears all "stations" edges to the Station entity.
-func (bu *BusUpdate) ClearStations() *BusUpdate {
-	bu.mutation.ClearStations()
-	return bu
-}
-
-// RemoveStationIDs removes the "stations" edge to Station entities by IDs.
-func (bu *BusUpdate) RemoveStationIDs(ids ...uuid.UUID) *BusUpdate {
-	bu.mutation.RemoveStationIDs(ids...)
-	return bu
-}
-
-// RemoveStations removes "stations" edges to Station entities.
-func (bu *BusUpdate) RemoveStations(s ...*Station) *BusUpdate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return bu.RemoveStationIDs(ids...)
 }
 
 // ClearBoardingRecords clears all "boarding_records" edges to the BoardingRecord entity.
@@ -343,43 +269,31 @@ func (bu *BusUpdate) RemoveBoardingRecords(b ...*BoardingRecord) *BusUpdate {
 	return bu.RemoveBoardingRecordIDs(ids...)
 }
 
-// ClearChildBusAssociations clears all "childBusAssociations" edges to the ChildBusAssociation entity.
-func (bu *BusUpdate) ClearChildBusAssociations() *BusUpdate {
-	bu.mutation.ClearChildBusAssociations()
-	return bu
-}
-
-// RemoveChildBusAssociationIDs removes the "childBusAssociations" edge to ChildBusAssociation entities by IDs.
-func (bu *BusUpdate) RemoveChildBusAssociationIDs(ids ...int) *BusUpdate {
-	bu.mutation.RemoveChildBusAssociationIDs(ids...)
-	return bu
-}
-
-// RemoveChildBusAssociations removes "childBusAssociations" edges to ChildBusAssociation entities.
-func (bu *BusUpdate) RemoveChildBusAssociations(c ...*ChildBusAssociation) *BusUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return bu.RemoveChildBusAssociationIDs(ids...)
-}
-
 // ClearNextStation clears the "next_station" edge to the Station entity.
 func (bu *BusUpdate) ClearNextStation() *BusUpdate {
 	bu.mutation.ClearNextStation()
 	return bu
 }
 
-// ClearMorningFirstStation clears the "morning_first_station" edge to the Station entity.
-func (bu *BusUpdate) ClearMorningFirstStation() *BusUpdate {
-	bu.mutation.ClearMorningFirstStation()
+// ClearBusRoute clears all "bus_route" edges to the BusRoute entity.
+func (bu *BusUpdate) ClearBusRoute() *BusUpdate {
+	bu.mutation.ClearBusRoute()
 	return bu
 }
 
-// ClearEveningFirstStation clears the "evening_first_station" edge to the Station entity.
-func (bu *BusUpdate) ClearEveningFirstStation() *BusUpdate {
-	bu.mutation.ClearEveningFirstStation()
+// RemoveBusRouteIDs removes the "bus_route" edge to BusRoute entities by IDs.
+func (bu *BusUpdate) RemoveBusRouteIDs(ids ...uuid.UUID) *BusUpdate {
+	bu.mutation.RemoveBusRouteIDs(ids...)
 	return bu
+}
+
+// RemoveBusRoute removes "bus_route" edges to BusRoute entities.
+func (bu *BusUpdate) RemoveBusRoute(b ...*BusRoute) *BusUpdate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bu.RemoveBusRouteIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -508,51 +422,6 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if bu.mutation.StationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   bus.StationsTable,
-			Columns: bus.StationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.RemovedStationsIDs(); len(nodes) > 0 && !bu.mutation.StationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   bus.StationsTable,
-			Columns: bus.StationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.StationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   bus.StationsTable,
-			Columns: bus.StationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if bu.mutation.BoardingRecordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -598,51 +467,6 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if bu.mutation.ChildBusAssociationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   bus.ChildBusAssociationsTable,
-			Columns: []string{bus.ChildBusAssociationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.RemovedChildBusAssociationsIDs(); len(nodes) > 0 && !bu.mutation.ChildBusAssociationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   bus.ChildBusAssociationsTable,
-			Columns: []string{bus.ChildBusAssociationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.ChildBusAssociationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   bus.ChildBusAssociationsTable,
-			Columns: []string{bus.ChildBusAssociationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if bu.mutation.NextStationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -672,57 +496,44 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if bu.mutation.MorningFirstStationCleared() {
+	if bu.mutation.BusRouteCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.MorningFirstStationTable,
-			Columns: []string{bus.MorningFirstStationColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bus.BusRouteTable,
+			Columns: bus.BusRoutePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bu.mutation.MorningFirstStationIDs(); len(nodes) > 0 {
+	if nodes := bu.mutation.RemovedBusRouteIDs(); len(nodes) > 0 && !bu.mutation.BusRouteCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.MorningFirstStationTable,
-			Columns: []string{bus.MorningFirstStationColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bus.BusRouteTable,
+			Columns: bus.BusRoutePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if bu.mutation.EveningFirstStationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.EveningFirstStationTable,
-			Columns: []string{bus.EveningFirstStationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bu.mutation.EveningFirstStationIDs(); len(nodes) > 0 {
+	if nodes := bu.mutation.BusRouteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.EveningFirstStationTable,
-			Columns: []string{bus.EveningFirstStationColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bus.BusRouteTable,
+			Columns: bus.BusRoutePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -905,21 +716,6 @@ func (buo *BusUpdateOne) SetNursery(n *Nursery) *BusUpdateOne {
 	return buo.SetNurseryID(n.ID)
 }
 
-// AddStationIDs adds the "stations" edge to the Station entity by IDs.
-func (buo *BusUpdateOne) AddStationIDs(ids ...uuid.UUID) *BusUpdateOne {
-	buo.mutation.AddStationIDs(ids...)
-	return buo
-}
-
-// AddStations adds the "stations" edges to the Station entity.
-func (buo *BusUpdateOne) AddStations(s ...*Station) *BusUpdateOne {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return buo.AddStationIDs(ids...)
-}
-
 // AddBoardingRecordIDs adds the "boarding_records" edge to the BoardingRecord entity by IDs.
 func (buo *BusUpdateOne) AddBoardingRecordIDs(ids ...uuid.UUID) *BusUpdateOne {
 	buo.mutation.AddBoardingRecordIDs(ids...)
@@ -933,21 +729,6 @@ func (buo *BusUpdateOne) AddBoardingRecords(b ...*BoardingRecord) *BusUpdateOne 
 		ids[i] = b[i].ID
 	}
 	return buo.AddBoardingRecordIDs(ids...)
-}
-
-// AddChildBusAssociationIDs adds the "childBusAssociations" edge to the ChildBusAssociation entity by IDs.
-func (buo *BusUpdateOne) AddChildBusAssociationIDs(ids ...int) *BusUpdateOne {
-	buo.mutation.AddChildBusAssociationIDs(ids...)
-	return buo
-}
-
-// AddChildBusAssociations adds the "childBusAssociations" edges to the ChildBusAssociation entity.
-func (buo *BusUpdateOne) AddChildBusAssociations(c ...*ChildBusAssociation) *BusUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return buo.AddChildBusAssociationIDs(ids...)
 }
 
 // SetNextStationID sets the "next_station" edge to the Station entity by ID.
@@ -969,42 +750,19 @@ func (buo *BusUpdateOne) SetNextStation(s *Station) *BusUpdateOne {
 	return buo.SetNextStationID(s.ID)
 }
 
-// SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID.
-func (buo *BusUpdateOne) SetMorningFirstStationID(id uuid.UUID) *BusUpdateOne {
-	buo.mutation.SetMorningFirstStationID(id)
+// AddBusRouteIDs adds the "bus_route" edge to the BusRoute entity by IDs.
+func (buo *BusUpdateOne) AddBusRouteIDs(ids ...uuid.UUID) *BusUpdateOne {
+	buo.mutation.AddBusRouteIDs(ids...)
 	return buo
 }
 
-// SetNillableMorningFirstStationID sets the "morning_first_station" edge to the Station entity by ID if the given value is not nil.
-func (buo *BusUpdateOne) SetNillableMorningFirstStationID(id *uuid.UUID) *BusUpdateOne {
-	if id != nil {
-		buo = buo.SetMorningFirstStationID(*id)
+// AddBusRoute adds the "bus_route" edges to the BusRoute entity.
+func (buo *BusUpdateOne) AddBusRoute(b ...*BusRoute) *BusUpdateOne {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
 	}
-	return buo
-}
-
-// SetMorningFirstStation sets the "morning_first_station" edge to the Station entity.
-func (buo *BusUpdateOne) SetMorningFirstStation(s *Station) *BusUpdateOne {
-	return buo.SetMorningFirstStationID(s.ID)
-}
-
-// SetEveningFirstStationID sets the "evening_first_station" edge to the Station entity by ID.
-func (buo *BusUpdateOne) SetEveningFirstStationID(id uuid.UUID) *BusUpdateOne {
-	buo.mutation.SetEveningFirstStationID(id)
-	return buo
-}
-
-// SetNillableEveningFirstStationID sets the "evening_first_station" edge to the Station entity by ID if the given value is not nil.
-func (buo *BusUpdateOne) SetNillableEveningFirstStationID(id *uuid.UUID) *BusUpdateOne {
-	if id != nil {
-		buo = buo.SetEveningFirstStationID(*id)
-	}
-	return buo
-}
-
-// SetEveningFirstStation sets the "evening_first_station" edge to the Station entity.
-func (buo *BusUpdateOne) SetEveningFirstStation(s *Station) *BusUpdateOne {
-	return buo.SetEveningFirstStationID(s.ID)
+	return buo.AddBusRouteIDs(ids...)
 }
 
 // Mutation returns the BusMutation object of the builder.
@@ -1016,27 +774,6 @@ func (buo *BusUpdateOne) Mutation() *BusMutation {
 func (buo *BusUpdateOne) ClearNursery() *BusUpdateOne {
 	buo.mutation.ClearNursery()
 	return buo
-}
-
-// ClearStations clears all "stations" edges to the Station entity.
-func (buo *BusUpdateOne) ClearStations() *BusUpdateOne {
-	buo.mutation.ClearStations()
-	return buo
-}
-
-// RemoveStationIDs removes the "stations" edge to Station entities by IDs.
-func (buo *BusUpdateOne) RemoveStationIDs(ids ...uuid.UUID) *BusUpdateOne {
-	buo.mutation.RemoveStationIDs(ids...)
-	return buo
-}
-
-// RemoveStations removes "stations" edges to Station entities.
-func (buo *BusUpdateOne) RemoveStations(s ...*Station) *BusUpdateOne {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return buo.RemoveStationIDs(ids...)
 }
 
 // ClearBoardingRecords clears all "boarding_records" edges to the BoardingRecord entity.
@@ -1060,43 +797,31 @@ func (buo *BusUpdateOne) RemoveBoardingRecords(b ...*BoardingRecord) *BusUpdateO
 	return buo.RemoveBoardingRecordIDs(ids...)
 }
 
-// ClearChildBusAssociations clears all "childBusAssociations" edges to the ChildBusAssociation entity.
-func (buo *BusUpdateOne) ClearChildBusAssociations() *BusUpdateOne {
-	buo.mutation.ClearChildBusAssociations()
-	return buo
-}
-
-// RemoveChildBusAssociationIDs removes the "childBusAssociations" edge to ChildBusAssociation entities by IDs.
-func (buo *BusUpdateOne) RemoveChildBusAssociationIDs(ids ...int) *BusUpdateOne {
-	buo.mutation.RemoveChildBusAssociationIDs(ids...)
-	return buo
-}
-
-// RemoveChildBusAssociations removes "childBusAssociations" edges to ChildBusAssociation entities.
-func (buo *BusUpdateOne) RemoveChildBusAssociations(c ...*ChildBusAssociation) *BusUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return buo.RemoveChildBusAssociationIDs(ids...)
-}
-
 // ClearNextStation clears the "next_station" edge to the Station entity.
 func (buo *BusUpdateOne) ClearNextStation() *BusUpdateOne {
 	buo.mutation.ClearNextStation()
 	return buo
 }
 
-// ClearMorningFirstStation clears the "morning_first_station" edge to the Station entity.
-func (buo *BusUpdateOne) ClearMorningFirstStation() *BusUpdateOne {
-	buo.mutation.ClearMorningFirstStation()
+// ClearBusRoute clears all "bus_route" edges to the BusRoute entity.
+func (buo *BusUpdateOne) ClearBusRoute() *BusUpdateOne {
+	buo.mutation.ClearBusRoute()
 	return buo
 }
 
-// ClearEveningFirstStation clears the "evening_first_station" edge to the Station entity.
-func (buo *BusUpdateOne) ClearEveningFirstStation() *BusUpdateOne {
-	buo.mutation.ClearEveningFirstStation()
+// RemoveBusRouteIDs removes the "bus_route" edge to BusRoute entities by IDs.
+func (buo *BusUpdateOne) RemoveBusRouteIDs(ids ...uuid.UUID) *BusUpdateOne {
+	buo.mutation.RemoveBusRouteIDs(ids...)
 	return buo
+}
+
+// RemoveBusRoute removes "bus_route" edges to BusRoute entities.
+func (buo *BusUpdateOne) RemoveBusRoute(b ...*BusRoute) *BusUpdateOne {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return buo.RemoveBusRouteIDs(ids...)
 }
 
 // Where appends a list predicates to the BusUpdate builder.
@@ -1255,51 +980,6 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if buo.mutation.StationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   bus.StationsTable,
-			Columns: bus.StationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.RemovedStationsIDs(); len(nodes) > 0 && !buo.mutation.StationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   bus.StationsTable,
-			Columns: bus.StationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.StationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   bus.StationsTable,
-			Columns: bus.StationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if buo.mutation.BoardingRecordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1345,51 +1025,6 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if buo.mutation.ChildBusAssociationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   bus.ChildBusAssociationsTable,
-			Columns: []string{bus.ChildBusAssociationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.RemovedChildBusAssociationsIDs(); len(nodes) > 0 && !buo.mutation.ChildBusAssociationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   bus.ChildBusAssociationsTable,
-			Columns: []string{bus.ChildBusAssociationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.ChildBusAssociationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   bus.ChildBusAssociationsTable,
-			Columns: []string{bus.ChildBusAssociationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(childbusassociation.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if buo.mutation.NextStationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1419,57 +1054,44 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if buo.mutation.MorningFirstStationCleared() {
+	if buo.mutation.BusRouteCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.MorningFirstStationTable,
-			Columns: []string{bus.MorningFirstStationColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bus.BusRouteTable,
+			Columns: bus.BusRoutePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := buo.mutation.MorningFirstStationIDs(); len(nodes) > 0 {
+	if nodes := buo.mutation.RemovedBusRouteIDs(); len(nodes) > 0 && !buo.mutation.BusRouteCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.MorningFirstStationTable,
-			Columns: []string{bus.MorningFirstStationColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bus.BusRouteTable,
+			Columns: bus.BusRoutePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if buo.mutation.EveningFirstStationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.EveningFirstStationTable,
-			Columns: []string{bus.EveningFirstStationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
-			},
-		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := buo.mutation.EveningFirstStationIDs(); len(nodes) > 0 {
+	if nodes := buo.mutation.BusRouteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   bus.EveningFirstStationTable,
-			Columns: []string{bus.EveningFirstStationColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   bus.BusRouteTable,
+			Columns: bus.BusRoutePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(station.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

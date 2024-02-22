@@ -49,8 +49,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "bus_nursery", Type: field.TypeUUID, Nullable: true},
 		{Name: "bus_next_station", Type: field.TypeUUID, Nullable: true},
-		{Name: "bus_morning_first_station", Type: field.TypeUUID, Nullable: true},
-		{Name: "bus_evening_first_station", Type: field.TypeUUID, Nullable: true},
 	}
 	// BusTable holds the schema information for the "bus" table.
 	BusTable = &schema.Table{
@@ -70,17 +68,43 @@ var (
 				RefColumns: []*schema.Column{StationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
+		},
+	}
+	// BusRoutesColumns holds the columns for the "bus_routes" table.
+	BusRoutesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "bus_type", Type: field.TypeEnum, Enums: []string{"morning", "evening"}},
+	}
+	// BusRoutesTable holds the schema information for the "bus_routes" table.
+	BusRoutesTable = &schema.Table{
+		Name:       "bus_routes",
+		Columns:    BusRoutesColumns,
+		PrimaryKey: []*schema.Column{BusRoutesColumns[0]},
+	}
+	// BusRouteAssociationsColumns holds the columns for the "bus_route_associations" table.
+	BusRouteAssociationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "order", Type: field.TypeInt32},
+		{Name: "bus_route_id", Type: field.TypeUUID},
+		{Name: "station_id", Type: field.TypeUUID},
+	}
+	// BusRouteAssociationsTable holds the schema information for the "bus_route_associations" table.
+	BusRouteAssociationsTable = &schema.Table{
+		Name:       "bus_route_associations",
+		Columns:    BusRouteAssociationsColumns,
+		PrimaryKey: []*schema.Column{BusRouteAssociationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "bus_stations_morning_first_station",
-				Columns:    []*schema.Column{BusColumns[11]},
-				RefColumns: []*schema.Column{StationsColumns[0]},
-				OnDelete:   schema.SetNull,
+				Symbol:     "bus_route_associations_bus_routes_busRouteAssociations",
+				Columns:    []*schema.Column{BusRouteAssociationsColumns[2]},
+				RefColumns: []*schema.Column{BusRoutesColumns[0]},
+				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "bus_stations_evening_first_station",
-				Columns:    []*schema.Column{BusColumns[12]},
+				Symbol:     "bus_route_associations_stations_busRouteAssociations",
+				Columns:    []*schema.Column{BusRouteAssociationsColumns[3]},
 				RefColumns: []*schema.Column{StationsColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
@@ -117,8 +141,7 @@ var (
 	// ChildBusAssociationsColumns holds the columns for the "child_bus_associations" table.
 	ChildBusAssociationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "bus_type", Type: field.TypeEnum, Enums: []string{"morning", "evening"}},
-		{Name: "bus_id", Type: field.TypeUUID},
+		{Name: "bus_route_id", Type: field.TypeUUID},
 		{Name: "child_id", Type: field.TypeUUID},
 	}
 	// ChildBusAssociationsTable holds the schema information for the "child_bus_associations" table.
@@ -128,14 +151,14 @@ var (
 		PrimaryKey: []*schema.Column{ChildBusAssociationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "child_bus_associations_bus_childBusAssociations",
-				Columns:    []*schema.Column{ChildBusAssociationsColumns[2]},
-				RefColumns: []*schema.Column{BusColumns[0]},
+				Symbol:     "child_bus_associations_bus_routes_childBusAssociations",
+				Columns:    []*schema.Column{ChildBusAssociationsColumns[1]},
+				RefColumns: []*schema.Column{BusRoutesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "child_bus_associations_childs_childBusAssociations",
-				Columns:    []*schema.Column{ChildBusAssociationsColumns[3]},
+				Columns:    []*schema.Column{ChildBusAssociationsColumns[2]},
 				RefColumns: []*schema.Column{ChildsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -215,8 +238,6 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "guardian_station", Type: field.TypeUUID, Unique: true, Nullable: true},
-		{Name: "station_morning_next_station", Type: field.TypeUUID, Nullable: true},
-		{Name: "station_evening_next_station", Type: field.TypeUUID, Nullable: true},
 	}
 	// StationsTable holds the schema information for the "stations" table.
 	StationsTable = &schema.Table{
@@ -230,41 +251,29 @@ var (
 				RefColumns: []*schema.Column{GuardiansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
-			{
-				Symbol:     "stations_stations_morning_next_station",
-				Columns:    []*schema.Column{StationsColumns[6]},
-				RefColumns: []*schema.Column{StationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "stations_stations_evening_next_station",
-				Columns:    []*schema.Column{StationsColumns[7]},
-				RefColumns: []*schema.Column{StationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
 		},
 	}
-	// BusStationsColumns holds the columns for the "bus_stations" table.
-	BusStationsColumns = []*schema.Column{
+	// BusRouteBusColumns holds the columns for the "bus_route_bus" table.
+	BusRouteBusColumns = []*schema.Column{
+		{Name: "bus_route_id", Type: field.TypeUUID},
 		{Name: "bus_id", Type: field.TypeUUID},
-		{Name: "station_id", Type: field.TypeUUID},
 	}
-	// BusStationsTable holds the schema information for the "bus_stations" table.
-	BusStationsTable = &schema.Table{
-		Name:       "bus_stations",
-		Columns:    BusStationsColumns,
-		PrimaryKey: []*schema.Column{BusStationsColumns[0], BusStationsColumns[1]},
+	// BusRouteBusTable holds the schema information for the "bus_route_bus" table.
+	BusRouteBusTable = &schema.Table{
+		Name:       "bus_route_bus",
+		Columns:    BusRouteBusColumns,
+		PrimaryKey: []*schema.Column{BusRouteBusColumns[0], BusRouteBusColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "bus_stations_bus_id",
-				Columns:    []*schema.Column{BusStationsColumns[0]},
-				RefColumns: []*schema.Column{BusColumns[0]},
+				Symbol:     "bus_route_bus_bus_route_id",
+				Columns:    []*schema.Column{BusRouteBusColumns[0]},
+				RefColumns: []*schema.Column{BusRoutesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "bus_stations_station_id",
-				Columns:    []*schema.Column{BusStationsColumns[1]},
-				RefColumns: []*schema.Column{StationsColumns[0]},
+				Symbol:     "bus_route_bus_bus_id",
+				Columns:    []*schema.Column{BusRouteBusColumns[1]},
+				RefColumns: []*schema.Column{BusColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -273,13 +282,15 @@ var (
 	Tables = []*schema.Table{
 		BoardingRecordsTable,
 		BusTable,
+		BusRoutesTable,
+		BusRouteAssociationsTable,
 		ChildsTable,
 		ChildBusAssociationsTable,
 		ChildPhotosTable,
 		GuardiansTable,
 		NurseriesTable,
 		StationsTable,
-		BusStationsTable,
+		BusRouteBusTable,
 	}
 )
 
@@ -288,16 +299,14 @@ func init() {
 	BoardingRecordsTable.ForeignKeys[1].RefTable = ChildsTable
 	BusTable.ForeignKeys[0].RefTable = NurseriesTable
 	BusTable.ForeignKeys[1].RefTable = StationsTable
-	BusTable.ForeignKeys[2].RefTable = StationsTable
-	BusTable.ForeignKeys[3].RefTable = StationsTable
+	BusRouteAssociationsTable.ForeignKeys[0].RefTable = BusRoutesTable
+	BusRouteAssociationsTable.ForeignKeys[1].RefTable = StationsTable
 	ChildsTable.ForeignKeys[0].RefTable = GuardiansTable
-	ChildBusAssociationsTable.ForeignKeys[0].RefTable = BusTable
+	ChildBusAssociationsTable.ForeignKeys[0].RefTable = BusRoutesTable
 	ChildBusAssociationsTable.ForeignKeys[1].RefTable = ChildsTable
 	ChildPhotosTable.ForeignKeys[0].RefTable = ChildsTable
 	GuardiansTable.ForeignKeys[0].RefTable = NurseriesTable
 	StationsTable.ForeignKeys[0].RefTable = GuardiansTable
-	StationsTable.ForeignKeys[1].RefTable = StationsTable
-	StationsTable.ForeignKeys[2].RefTable = StationsTable
-	BusStationsTable.ForeignKeys[0].RefTable = BusTable
-	BusStationsTable.ForeignKeys[1].RefTable = StationsTable
+	BusRouteBusTable.ForeignKeys[0].RefTable = BusRoutesTable
+	BusRouteBusTable.ForeignKeys[1].RefTable = BusTable
 }
