@@ -49,6 +49,8 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "bus_nursery", Type: field.TypeUUID, Nullable: true},
 		{Name: "bus_next_station", Type: field.TypeUUID, Nullable: true},
+		{Name: "bus_latest_morning_route", Type: field.TypeUUID, Nullable: true},
+		{Name: "bus_latest_evening_route", Type: field.TypeUUID, Nullable: true},
 	}
 	// BusTable holds the schema information for the "bus" table.
 	BusTable = &schema.Table{
@@ -68,12 +70,26 @@ var (
 				RefColumns: []*schema.Column{StationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
+			{
+				Symbol:     "bus_bus_routes_latest_morning_route",
+				Columns:    []*schema.Column{BusColumns[11]},
+				RefColumns: []*schema.Column{BusRoutesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "bus_bus_routes_latest_evening_route",
+				Columns:    []*schema.Column{BusColumns[12]},
+				RefColumns: []*schema.Column{BusRoutesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 		},
 	}
 	// BusRoutesColumns holds the columns for the "bus_routes" table.
 	BusRoutesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "bus_type", Type: field.TypeEnum, Enums: []string{"morning", "evening"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// BusRoutesTable holds the schema information for the "bus_routes" table.
 	BusRoutesTable = &schema.Table{
@@ -299,6 +315,8 @@ func init() {
 	BoardingRecordsTable.ForeignKeys[1].RefTable = ChildsTable
 	BusTable.ForeignKeys[0].RefTable = NurseriesTable
 	BusTable.ForeignKeys[1].RefTable = StationsTable
+	BusTable.ForeignKeys[2].RefTable = BusRoutesTable
+	BusTable.ForeignKeys[3].RefTable = BusRoutesTable
 	BusRouteAssociationsTable.ForeignKeys[0].RefTable = BusRoutesTable
 	BusRouteAssociationsTable.ForeignKeys[1].RefTable = StationsTable
 	ChildsTable.ForeignKeys[0].RefTable = GuardiansTable

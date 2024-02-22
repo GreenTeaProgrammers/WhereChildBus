@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -19,6 +20,10 @@ type BusRoute struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// 朝のバスか放課後のバスかを示す
 	BusType busroute.BusType `json:"bus_type,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BusRouteQuery when eager-loading is set.
 	Edges        BusRouteEdges `json:"edges"`
@@ -33,9 +38,13 @@ type BusRouteEdges struct {
 	ChildBusAssociations []*ChildBusAssociation `json:"childBusAssociations,omitempty"`
 	// BusRouteAssociations holds the value of the busRouteAssociations edge.
 	BusRouteAssociations []*BusRouteAssociation `json:"busRouteAssociations,omitempty"`
+	// MorningBuses holds the value of the morning_buses edge.
+	MorningBuses []*Bus `json:"morning_buses,omitempty"`
+	// EveningBuses holds the value of the evening_buses edge.
+	EveningBuses []*Bus `json:"evening_buses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 }
 
 // BusOrErr returns the Bus value or an error if the edge
@@ -65,6 +74,24 @@ func (e BusRouteEdges) BusRouteAssociationsOrErr() ([]*BusRouteAssociation, erro
 	return nil, &NotLoadedError{edge: "busRouteAssociations"}
 }
 
+// MorningBusesOrErr returns the MorningBuses value or an error if the edge
+// was not loaded in eager-loading.
+func (e BusRouteEdges) MorningBusesOrErr() ([]*Bus, error) {
+	if e.loadedTypes[3] {
+		return e.MorningBuses, nil
+	}
+	return nil, &NotLoadedError{edge: "morning_buses"}
+}
+
+// EveningBusesOrErr returns the EveningBuses value or an error if the edge
+// was not loaded in eager-loading.
+func (e BusRouteEdges) EveningBusesOrErr() ([]*Bus, error) {
+	if e.loadedTypes[4] {
+		return e.EveningBuses, nil
+	}
+	return nil, &NotLoadedError{edge: "evening_buses"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*BusRoute) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -72,6 +99,8 @@ func (*BusRoute) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case busroute.FieldBusType:
 			values[i] = new(sql.NullString)
+		case busroute.FieldCreatedAt, busroute.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case busroute.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -101,6 +130,18 @@ func (br *BusRoute) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				br.BusType = busroute.BusType(value.String)
 			}
+		case busroute.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				br.CreatedAt = value.Time
+			}
+		case busroute.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				br.UpdatedAt = value.Time
+			}
 		default:
 			br.selectValues.Set(columns[i], values[i])
 		}
@@ -129,6 +170,16 @@ func (br *BusRoute) QueryBusRouteAssociations() *BusRouteAssociationQuery {
 	return NewBusRouteClient(br.config).QueryBusRouteAssociations(br)
 }
 
+// QueryMorningBuses queries the "morning_buses" edge of the BusRoute entity.
+func (br *BusRoute) QueryMorningBuses() *BusQuery {
+	return NewBusRouteClient(br.config).QueryMorningBuses(br)
+}
+
+// QueryEveningBuses queries the "evening_buses" edge of the BusRoute entity.
+func (br *BusRoute) QueryEveningBuses() *BusQuery {
+	return NewBusRouteClient(br.config).QueryEveningBuses(br)
+}
+
 // Update returns a builder for updating this BusRoute.
 // Note that you need to call BusRoute.Unwrap() before calling this method if this BusRoute
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -154,6 +205,12 @@ func (br *BusRoute) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", br.ID))
 	builder.WriteString("bus_type=")
 	builder.WriteString(fmt.Sprintf("%v", br.BusType))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(br.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(br.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

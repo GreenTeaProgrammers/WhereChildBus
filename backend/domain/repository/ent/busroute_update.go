@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -42,6 +43,26 @@ func (bru *BusRouteUpdate) SetNillableBusType(bt *busroute.BusType) *BusRouteUpd
 	if bt != nil {
 		bru.SetBusType(*bt)
 	}
+	return bru
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (bru *BusRouteUpdate) SetCreatedAt(t time.Time) *BusRouteUpdate {
+	bru.mutation.SetCreatedAt(t)
+	return bru
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bru *BusRouteUpdate) SetNillableCreatedAt(t *time.Time) *BusRouteUpdate {
+	if t != nil {
+		bru.SetCreatedAt(*t)
+	}
+	return bru
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bru *BusRouteUpdate) SetUpdatedAt(t time.Time) *BusRouteUpdate {
+	bru.mutation.SetUpdatedAt(t)
 	return bru
 }
 
@@ -88,6 +109,36 @@ func (bru *BusRouteUpdate) AddBusRouteAssociations(b ...*BusRouteAssociation) *B
 		ids[i] = b[i].ID
 	}
 	return bru.AddBusRouteAssociationIDs(ids...)
+}
+
+// AddMorningBusIDs adds the "morning_buses" edge to the Bus entity by IDs.
+func (bru *BusRouteUpdate) AddMorningBusIDs(ids ...uuid.UUID) *BusRouteUpdate {
+	bru.mutation.AddMorningBusIDs(ids...)
+	return bru
+}
+
+// AddMorningBuses adds the "morning_buses" edges to the Bus entity.
+func (bru *BusRouteUpdate) AddMorningBuses(b ...*Bus) *BusRouteUpdate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bru.AddMorningBusIDs(ids...)
+}
+
+// AddEveningBusIDs adds the "evening_buses" edge to the Bus entity by IDs.
+func (bru *BusRouteUpdate) AddEveningBusIDs(ids ...uuid.UUID) *BusRouteUpdate {
+	bru.mutation.AddEveningBusIDs(ids...)
+	return bru
+}
+
+// AddEveningBuses adds the "evening_buses" edges to the Bus entity.
+func (bru *BusRouteUpdate) AddEveningBuses(b ...*Bus) *BusRouteUpdate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bru.AddEveningBusIDs(ids...)
 }
 
 // Mutation returns the BusRouteMutation object of the builder.
@@ -158,8 +209,51 @@ func (bru *BusRouteUpdate) RemoveBusRouteAssociations(b ...*BusRouteAssociation)
 	return bru.RemoveBusRouteAssociationIDs(ids...)
 }
 
+// ClearMorningBuses clears all "morning_buses" edges to the Bus entity.
+func (bru *BusRouteUpdate) ClearMorningBuses() *BusRouteUpdate {
+	bru.mutation.ClearMorningBuses()
+	return bru
+}
+
+// RemoveMorningBusIDs removes the "morning_buses" edge to Bus entities by IDs.
+func (bru *BusRouteUpdate) RemoveMorningBusIDs(ids ...uuid.UUID) *BusRouteUpdate {
+	bru.mutation.RemoveMorningBusIDs(ids...)
+	return bru
+}
+
+// RemoveMorningBuses removes "morning_buses" edges to Bus entities.
+func (bru *BusRouteUpdate) RemoveMorningBuses(b ...*Bus) *BusRouteUpdate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bru.RemoveMorningBusIDs(ids...)
+}
+
+// ClearEveningBuses clears all "evening_buses" edges to the Bus entity.
+func (bru *BusRouteUpdate) ClearEveningBuses() *BusRouteUpdate {
+	bru.mutation.ClearEveningBuses()
+	return bru
+}
+
+// RemoveEveningBusIDs removes the "evening_buses" edge to Bus entities by IDs.
+func (bru *BusRouteUpdate) RemoveEveningBusIDs(ids ...uuid.UUID) *BusRouteUpdate {
+	bru.mutation.RemoveEveningBusIDs(ids...)
+	return bru
+}
+
+// RemoveEveningBuses removes "evening_buses" edges to Bus entities.
+func (bru *BusRouteUpdate) RemoveEveningBuses(b ...*Bus) *BusRouteUpdate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bru.RemoveEveningBusIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (bru *BusRouteUpdate) Save(ctx context.Context) (int, error) {
+	bru.defaults()
 	return withHooks(ctx, bru.sqlSave, bru.mutation, bru.hooks)
 }
 
@@ -182,6 +276,14 @@ func (bru *BusRouteUpdate) Exec(ctx context.Context) error {
 func (bru *BusRouteUpdate) ExecX(ctx context.Context) {
 	if err := bru.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (bru *BusRouteUpdate) defaults() {
+	if _, ok := bru.mutation.UpdatedAt(); !ok {
+		v := busroute.UpdateDefaultUpdatedAt()
+		bru.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -209,6 +311,12 @@ func (bru *BusRouteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := bru.mutation.BusType(); ok {
 		_spec.SetField(busroute.FieldBusType, field.TypeEnum, value)
+	}
+	if value, ok := bru.mutation.CreatedAt(); ok {
+		_spec.SetField(busroute.FieldCreatedAt, field.TypeTime, value)
+	}
+	if value, ok := bru.mutation.UpdatedAt(); ok {
+		_spec.SetField(busroute.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if bru.mutation.BusCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -345,6 +453,96 @@ func (bru *BusRouteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bru.mutation.MorningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bru.mutation.RemovedMorningBusesIDs(); len(nodes) > 0 && !bru.mutation.MorningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bru.mutation.MorningBusesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bru.mutation.EveningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bru.mutation.RemovedEveningBusesIDs(); len(nodes) > 0 && !bru.mutation.EveningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bru.mutation.EveningBusesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{busroute.Label}
@@ -376,6 +574,26 @@ func (bruo *BusRouteUpdateOne) SetNillableBusType(bt *busroute.BusType) *BusRout
 	if bt != nil {
 		bruo.SetBusType(*bt)
 	}
+	return bruo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (bruo *BusRouteUpdateOne) SetCreatedAt(t time.Time) *BusRouteUpdateOne {
+	bruo.mutation.SetCreatedAt(t)
+	return bruo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bruo *BusRouteUpdateOne) SetNillableCreatedAt(t *time.Time) *BusRouteUpdateOne {
+	if t != nil {
+		bruo.SetCreatedAt(*t)
+	}
+	return bruo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bruo *BusRouteUpdateOne) SetUpdatedAt(t time.Time) *BusRouteUpdateOne {
+	bruo.mutation.SetUpdatedAt(t)
 	return bruo
 }
 
@@ -422,6 +640,36 @@ func (bruo *BusRouteUpdateOne) AddBusRouteAssociations(b ...*BusRouteAssociation
 		ids[i] = b[i].ID
 	}
 	return bruo.AddBusRouteAssociationIDs(ids...)
+}
+
+// AddMorningBusIDs adds the "morning_buses" edge to the Bus entity by IDs.
+func (bruo *BusRouteUpdateOne) AddMorningBusIDs(ids ...uuid.UUID) *BusRouteUpdateOne {
+	bruo.mutation.AddMorningBusIDs(ids...)
+	return bruo
+}
+
+// AddMorningBuses adds the "morning_buses" edges to the Bus entity.
+func (bruo *BusRouteUpdateOne) AddMorningBuses(b ...*Bus) *BusRouteUpdateOne {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bruo.AddMorningBusIDs(ids...)
+}
+
+// AddEveningBusIDs adds the "evening_buses" edge to the Bus entity by IDs.
+func (bruo *BusRouteUpdateOne) AddEveningBusIDs(ids ...uuid.UUID) *BusRouteUpdateOne {
+	bruo.mutation.AddEveningBusIDs(ids...)
+	return bruo
+}
+
+// AddEveningBuses adds the "evening_buses" edges to the Bus entity.
+func (bruo *BusRouteUpdateOne) AddEveningBuses(b ...*Bus) *BusRouteUpdateOne {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bruo.AddEveningBusIDs(ids...)
 }
 
 // Mutation returns the BusRouteMutation object of the builder.
@@ -492,6 +740,48 @@ func (bruo *BusRouteUpdateOne) RemoveBusRouteAssociations(b ...*BusRouteAssociat
 	return bruo.RemoveBusRouteAssociationIDs(ids...)
 }
 
+// ClearMorningBuses clears all "morning_buses" edges to the Bus entity.
+func (bruo *BusRouteUpdateOne) ClearMorningBuses() *BusRouteUpdateOne {
+	bruo.mutation.ClearMorningBuses()
+	return bruo
+}
+
+// RemoveMorningBusIDs removes the "morning_buses" edge to Bus entities by IDs.
+func (bruo *BusRouteUpdateOne) RemoveMorningBusIDs(ids ...uuid.UUID) *BusRouteUpdateOne {
+	bruo.mutation.RemoveMorningBusIDs(ids...)
+	return bruo
+}
+
+// RemoveMorningBuses removes "morning_buses" edges to Bus entities.
+func (bruo *BusRouteUpdateOne) RemoveMorningBuses(b ...*Bus) *BusRouteUpdateOne {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bruo.RemoveMorningBusIDs(ids...)
+}
+
+// ClearEveningBuses clears all "evening_buses" edges to the Bus entity.
+func (bruo *BusRouteUpdateOne) ClearEveningBuses() *BusRouteUpdateOne {
+	bruo.mutation.ClearEveningBuses()
+	return bruo
+}
+
+// RemoveEveningBusIDs removes the "evening_buses" edge to Bus entities by IDs.
+func (bruo *BusRouteUpdateOne) RemoveEveningBusIDs(ids ...uuid.UUID) *BusRouteUpdateOne {
+	bruo.mutation.RemoveEveningBusIDs(ids...)
+	return bruo
+}
+
+// RemoveEveningBuses removes "evening_buses" edges to Bus entities.
+func (bruo *BusRouteUpdateOne) RemoveEveningBuses(b ...*Bus) *BusRouteUpdateOne {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return bruo.RemoveEveningBusIDs(ids...)
+}
+
 // Where appends a list predicates to the BusRouteUpdate builder.
 func (bruo *BusRouteUpdateOne) Where(ps ...predicate.BusRoute) *BusRouteUpdateOne {
 	bruo.mutation.Where(ps...)
@@ -507,6 +797,7 @@ func (bruo *BusRouteUpdateOne) Select(field string, fields ...string) *BusRouteU
 
 // Save executes the query and returns the updated BusRoute entity.
 func (bruo *BusRouteUpdateOne) Save(ctx context.Context) (*BusRoute, error) {
+	bruo.defaults()
 	return withHooks(ctx, bruo.sqlSave, bruo.mutation, bruo.hooks)
 }
 
@@ -529,6 +820,14 @@ func (bruo *BusRouteUpdateOne) Exec(ctx context.Context) error {
 func (bruo *BusRouteUpdateOne) ExecX(ctx context.Context) {
 	if err := bruo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (bruo *BusRouteUpdateOne) defaults() {
+	if _, ok := bruo.mutation.UpdatedAt(); !ok {
+		v := busroute.UpdateDefaultUpdatedAt()
+		bruo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -573,6 +872,12 @@ func (bruo *BusRouteUpdateOne) sqlSave(ctx context.Context) (_node *BusRoute, er
 	}
 	if value, ok := bruo.mutation.BusType(); ok {
 		_spec.SetField(busroute.FieldBusType, field.TypeEnum, value)
+	}
+	if value, ok := bruo.mutation.CreatedAt(); ok {
+		_spec.SetField(busroute.FieldCreatedAt, field.TypeTime, value)
+	}
+	if value, ok := bruo.mutation.UpdatedAt(); ok {
+		_spec.SetField(busroute.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if bruo.mutation.BusCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -702,6 +1007,96 @@ func (bruo *BusRouteUpdateOne) sqlSave(ctx context.Context) (_node *BusRoute, er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(busrouteassociation.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bruo.mutation.MorningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bruo.mutation.RemovedMorningBusesIDs(); len(nodes) > 0 && !bruo.mutation.MorningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bruo.mutation.MorningBusesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bruo.mutation.EveningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bruo.mutation.RemovedEveningBusesIDs(); len(nodes) > 0 && !bruo.mutation.EveningBusesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bruo.mutation.EveningBusesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

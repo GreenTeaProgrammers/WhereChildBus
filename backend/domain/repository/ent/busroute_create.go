@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -26,6 +27,34 @@ type BusRouteCreate struct {
 // SetBusType sets the "bus_type" field.
 func (brc *BusRouteCreate) SetBusType(bt busroute.BusType) *BusRouteCreate {
 	brc.mutation.SetBusType(bt)
+	return brc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (brc *BusRouteCreate) SetCreatedAt(t time.Time) *BusRouteCreate {
+	brc.mutation.SetCreatedAt(t)
+	return brc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (brc *BusRouteCreate) SetNillableCreatedAt(t *time.Time) *BusRouteCreate {
+	if t != nil {
+		brc.SetCreatedAt(*t)
+	}
+	return brc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (brc *BusRouteCreate) SetUpdatedAt(t time.Time) *BusRouteCreate {
+	brc.mutation.SetUpdatedAt(t)
+	return brc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (brc *BusRouteCreate) SetNillableUpdatedAt(t *time.Time) *BusRouteCreate {
+	if t != nil {
+		brc.SetUpdatedAt(*t)
+	}
 	return brc
 }
 
@@ -88,6 +117,36 @@ func (brc *BusRouteCreate) AddBusRouteAssociations(b ...*BusRouteAssociation) *B
 	return brc.AddBusRouteAssociationIDs(ids...)
 }
 
+// AddMorningBusIDs adds the "morning_buses" edge to the Bus entity by IDs.
+func (brc *BusRouteCreate) AddMorningBusIDs(ids ...uuid.UUID) *BusRouteCreate {
+	brc.mutation.AddMorningBusIDs(ids...)
+	return brc
+}
+
+// AddMorningBuses adds the "morning_buses" edges to the Bus entity.
+func (brc *BusRouteCreate) AddMorningBuses(b ...*Bus) *BusRouteCreate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return brc.AddMorningBusIDs(ids...)
+}
+
+// AddEveningBusIDs adds the "evening_buses" edge to the Bus entity by IDs.
+func (brc *BusRouteCreate) AddEveningBusIDs(ids ...uuid.UUID) *BusRouteCreate {
+	brc.mutation.AddEveningBusIDs(ids...)
+	return brc
+}
+
+// AddEveningBuses adds the "evening_buses" edges to the Bus entity.
+func (brc *BusRouteCreate) AddEveningBuses(b ...*Bus) *BusRouteCreate {
+	ids := make([]uuid.UUID, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return brc.AddEveningBusIDs(ids...)
+}
+
 // Mutation returns the BusRouteMutation object of the builder.
 func (brc *BusRouteCreate) Mutation() *BusRouteMutation {
 	return brc.mutation
@@ -123,6 +182,14 @@ func (brc *BusRouteCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (brc *BusRouteCreate) defaults() {
+	if _, ok := brc.mutation.CreatedAt(); !ok {
+		v := busroute.DefaultCreatedAt
+		brc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := brc.mutation.UpdatedAt(); !ok {
+		v := busroute.DefaultUpdatedAt()
+		brc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := brc.mutation.ID(); !ok {
 		v := busroute.DefaultID()
 		brc.mutation.SetID(v)
@@ -138,6 +205,12 @@ func (brc *BusRouteCreate) check() error {
 		if err := busroute.BusTypeValidator(v); err != nil {
 			return &ValidationError{Name: "bus_type", err: fmt.Errorf(`ent: validator failed for field "BusRoute.bus_type": %w`, err)}
 		}
+	}
+	if _, ok := brc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "BusRoute.created_at"`)}
+	}
+	if _, ok := brc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "BusRoute.updated_at"`)}
 	}
 	return nil
 }
@@ -177,6 +250,14 @@ func (brc *BusRouteCreate) createSpec() (*BusRoute, *sqlgraph.CreateSpec) {
 	if value, ok := brc.mutation.BusType(); ok {
 		_spec.SetField(busroute.FieldBusType, field.TypeEnum, value)
 		_node.BusType = value
+	}
+	if value, ok := brc.mutation.CreatedAt(); ok {
+		_spec.SetField(busroute.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := brc.mutation.UpdatedAt(); ok {
+		_spec.SetField(busroute.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if nodes := brc.mutation.BusIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -219,6 +300,38 @@ func (brc *BusRouteCreate) createSpec() (*BusRoute, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(busrouteassociation.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := brc.mutation.MorningBusesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.MorningBusesTable,
+			Columns: []string{busroute.MorningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := brc.mutation.EveningBusesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   busroute.EveningBusesTable,
+			Columns: []string{busroute.EveningBusesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

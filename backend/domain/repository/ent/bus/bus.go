@@ -40,6 +40,10 @@ const (
 	EdgeNextStation = "next_station"
 	// EdgeBusRoute holds the string denoting the bus_route edge name in mutations.
 	EdgeBusRoute = "bus_route"
+	// EdgeLatestMorningRoute holds the string denoting the latest_morning_route edge name in mutations.
+	EdgeLatestMorningRoute = "latest_morning_route"
+	// EdgeLatestEveningRoute holds the string denoting the latest_evening_route edge name in mutations.
+	EdgeLatestEveningRoute = "latest_evening_route"
 	// Table holds the table name of the bus in the database.
 	Table = "bus"
 	// NurseryTable is the table that holds the nursery relation/edge.
@@ -68,6 +72,20 @@ const (
 	// BusRouteInverseTable is the table name for the BusRoute entity.
 	// It exists in this package in order to avoid circular dependency with the "busroute" package.
 	BusRouteInverseTable = "bus_routes"
+	// LatestMorningRouteTable is the table that holds the latest_morning_route relation/edge.
+	LatestMorningRouteTable = "bus"
+	// LatestMorningRouteInverseTable is the table name for the BusRoute entity.
+	// It exists in this package in order to avoid circular dependency with the "busroute" package.
+	LatestMorningRouteInverseTable = "bus_routes"
+	// LatestMorningRouteColumn is the table column denoting the latest_morning_route relation/edge.
+	LatestMorningRouteColumn = "bus_latest_morning_route"
+	// LatestEveningRouteTable is the table that holds the latest_evening_route relation/edge.
+	LatestEveningRouteTable = "bus"
+	// LatestEveningRouteInverseTable is the table name for the BusRoute entity.
+	// It exists in this package in order to avoid circular dependency with the "busroute" package.
+	LatestEveningRouteInverseTable = "bus_routes"
+	// LatestEveningRouteColumn is the table column denoting the latest_evening_route relation/edge.
+	LatestEveningRouteColumn = "bus_latest_evening_route"
 )
 
 // Columns holds all SQL columns for bus fields.
@@ -88,6 +106,8 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"bus_nursery",
 	"bus_next_station",
+	"bus_latest_morning_route",
+	"bus_latest_evening_route",
 }
 
 var (
@@ -240,6 +260,20 @@ func ByBusRoute(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newBusRouteStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByLatestMorningRouteField orders the results by latest_morning_route field.
+func ByLatestMorningRouteField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLatestMorningRouteStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLatestEveningRouteField orders the results by latest_evening_route field.
+func ByLatestEveningRouteField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLatestEveningRouteStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newNurseryStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -266,5 +300,19 @@ func newBusRouteStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BusRouteInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, BusRouteTable, BusRoutePrimaryKey...),
+	)
+}
+func newLatestMorningRouteStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LatestMorningRouteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LatestMorningRouteTable, LatestMorningRouteColumn),
+	)
+}
+func newLatestEveningRouteStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LatestEveningRouteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LatestEveningRouteTable, LatestEveningRouteColumn),
 	)
 }

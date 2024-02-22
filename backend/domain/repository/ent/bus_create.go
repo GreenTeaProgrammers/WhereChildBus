@@ -211,6 +211,44 @@ func (bc *BusCreate) AddBusRoute(b ...*BusRoute) *BusCreate {
 	return bc.AddBusRouteIDs(ids...)
 }
 
+// SetLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by ID.
+func (bc *BusCreate) SetLatestMorningRouteID(id uuid.UUID) *BusCreate {
+	bc.mutation.SetLatestMorningRouteID(id)
+	return bc
+}
+
+// SetNillableLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by ID if the given value is not nil.
+func (bc *BusCreate) SetNillableLatestMorningRouteID(id *uuid.UUID) *BusCreate {
+	if id != nil {
+		bc = bc.SetLatestMorningRouteID(*id)
+	}
+	return bc
+}
+
+// SetLatestMorningRoute sets the "latest_morning_route" edge to the BusRoute entity.
+func (bc *BusCreate) SetLatestMorningRoute(b *BusRoute) *BusCreate {
+	return bc.SetLatestMorningRouteID(b.ID)
+}
+
+// SetLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by ID.
+func (bc *BusCreate) SetLatestEveningRouteID(id uuid.UUID) *BusCreate {
+	bc.mutation.SetLatestEveningRouteID(id)
+	return bc
+}
+
+// SetNillableLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by ID if the given value is not nil.
+func (bc *BusCreate) SetNillableLatestEveningRouteID(id *uuid.UUID) *BusCreate {
+	if id != nil {
+		bc = bc.SetLatestEveningRouteID(*id)
+	}
+	return bc
+}
+
+// SetLatestEveningRoute sets the "latest_evening_route" edge to the BusRoute entity.
+func (bc *BusCreate) SetLatestEveningRoute(b *BusRoute) *BusCreate {
+	return bc.SetLatestEveningRouteID(b.ID)
+}
+
 // Mutation returns the BusMutation object of the builder.
 func (bc *BusCreate) Mutation() *BusMutation {
 	return bc.mutation
@@ -421,6 +459,40 @@ func (bc *BusCreate) createSpec() (*Bus, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.LatestMorningRouteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestMorningRouteTable,
+			Columns: []string{bus.LatestMorningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.bus_latest_morning_route = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.LatestEveningRouteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestEveningRouteTable,
+			Columns: []string{bus.LatestEveningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.bus_latest_evening_route = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

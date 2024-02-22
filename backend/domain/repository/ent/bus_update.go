@@ -237,6 +237,44 @@ func (bu *BusUpdate) AddBusRoute(b ...*BusRoute) *BusUpdate {
 	return bu.AddBusRouteIDs(ids...)
 }
 
+// SetLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by ID.
+func (bu *BusUpdate) SetLatestMorningRouteID(id uuid.UUID) *BusUpdate {
+	bu.mutation.SetLatestMorningRouteID(id)
+	return bu
+}
+
+// SetNillableLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by ID if the given value is not nil.
+func (bu *BusUpdate) SetNillableLatestMorningRouteID(id *uuid.UUID) *BusUpdate {
+	if id != nil {
+		bu = bu.SetLatestMorningRouteID(*id)
+	}
+	return bu
+}
+
+// SetLatestMorningRoute sets the "latest_morning_route" edge to the BusRoute entity.
+func (bu *BusUpdate) SetLatestMorningRoute(b *BusRoute) *BusUpdate {
+	return bu.SetLatestMorningRouteID(b.ID)
+}
+
+// SetLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by ID.
+func (bu *BusUpdate) SetLatestEveningRouteID(id uuid.UUID) *BusUpdate {
+	bu.mutation.SetLatestEveningRouteID(id)
+	return bu
+}
+
+// SetNillableLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by ID if the given value is not nil.
+func (bu *BusUpdate) SetNillableLatestEveningRouteID(id *uuid.UUID) *BusUpdate {
+	if id != nil {
+		bu = bu.SetLatestEveningRouteID(*id)
+	}
+	return bu
+}
+
+// SetLatestEveningRoute sets the "latest_evening_route" edge to the BusRoute entity.
+func (bu *BusUpdate) SetLatestEveningRoute(b *BusRoute) *BusUpdate {
+	return bu.SetLatestEveningRouteID(b.ID)
+}
+
 // Mutation returns the BusMutation object of the builder.
 func (bu *BusUpdate) Mutation() *BusMutation {
 	return bu.mutation
@@ -294,6 +332,18 @@ func (bu *BusUpdate) RemoveBusRoute(b ...*BusRoute) *BusUpdate {
 		ids[i] = b[i].ID
 	}
 	return bu.RemoveBusRouteIDs(ids...)
+}
+
+// ClearLatestMorningRoute clears the "latest_morning_route" edge to the BusRoute entity.
+func (bu *BusUpdate) ClearLatestMorningRoute() *BusUpdate {
+	bu.mutation.ClearLatestMorningRoute()
+	return bu
+}
+
+// ClearLatestEveningRoute clears the "latest_evening_route" edge to the BusRoute entity.
+func (bu *BusUpdate) ClearLatestEveningRoute() *BusUpdate {
+	bu.mutation.ClearLatestEveningRoute()
+	return bu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -541,6 +591,64 @@ func (bu *BusUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bu.mutation.LatestMorningRouteCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestMorningRouteTable,
+			Columns: []string{bus.LatestMorningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.LatestMorningRouteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestMorningRouteTable,
+			Columns: []string{bus.LatestMorningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.LatestEveningRouteCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestEveningRouteTable,
+			Columns: []string{bus.LatestEveningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.LatestEveningRouteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestEveningRouteTable,
+			Columns: []string{bus.LatestEveningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bus.Label}
@@ -765,6 +873,44 @@ func (buo *BusUpdateOne) AddBusRoute(b ...*BusRoute) *BusUpdateOne {
 	return buo.AddBusRouteIDs(ids...)
 }
 
+// SetLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by ID.
+func (buo *BusUpdateOne) SetLatestMorningRouteID(id uuid.UUID) *BusUpdateOne {
+	buo.mutation.SetLatestMorningRouteID(id)
+	return buo
+}
+
+// SetNillableLatestMorningRouteID sets the "latest_morning_route" edge to the BusRoute entity by ID if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableLatestMorningRouteID(id *uuid.UUID) *BusUpdateOne {
+	if id != nil {
+		buo = buo.SetLatestMorningRouteID(*id)
+	}
+	return buo
+}
+
+// SetLatestMorningRoute sets the "latest_morning_route" edge to the BusRoute entity.
+func (buo *BusUpdateOne) SetLatestMorningRoute(b *BusRoute) *BusUpdateOne {
+	return buo.SetLatestMorningRouteID(b.ID)
+}
+
+// SetLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by ID.
+func (buo *BusUpdateOne) SetLatestEveningRouteID(id uuid.UUID) *BusUpdateOne {
+	buo.mutation.SetLatestEveningRouteID(id)
+	return buo
+}
+
+// SetNillableLatestEveningRouteID sets the "latest_evening_route" edge to the BusRoute entity by ID if the given value is not nil.
+func (buo *BusUpdateOne) SetNillableLatestEveningRouteID(id *uuid.UUID) *BusUpdateOne {
+	if id != nil {
+		buo = buo.SetLatestEveningRouteID(*id)
+	}
+	return buo
+}
+
+// SetLatestEveningRoute sets the "latest_evening_route" edge to the BusRoute entity.
+func (buo *BusUpdateOne) SetLatestEveningRoute(b *BusRoute) *BusUpdateOne {
+	return buo.SetLatestEveningRouteID(b.ID)
+}
+
 // Mutation returns the BusMutation object of the builder.
 func (buo *BusUpdateOne) Mutation() *BusMutation {
 	return buo.mutation
@@ -822,6 +968,18 @@ func (buo *BusUpdateOne) RemoveBusRoute(b ...*BusRoute) *BusUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return buo.RemoveBusRouteIDs(ids...)
+}
+
+// ClearLatestMorningRoute clears the "latest_morning_route" edge to the BusRoute entity.
+func (buo *BusUpdateOne) ClearLatestMorningRoute() *BusUpdateOne {
+	buo.mutation.ClearLatestMorningRoute()
+	return buo
+}
+
+// ClearLatestEveningRoute clears the "latest_evening_route" edge to the BusRoute entity.
+func (buo *BusUpdateOne) ClearLatestEveningRoute() *BusUpdateOne {
+	buo.mutation.ClearLatestEveningRoute()
+	return buo
 }
 
 // Where appends a list predicates to the BusUpdate builder.
@@ -1089,6 +1247,64 @@ func (buo *BusUpdateOne) sqlSave(ctx context.Context) (_node *Bus, err error) {
 			Inverse: true,
 			Table:   bus.BusRouteTable,
 			Columns: bus.BusRoutePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.LatestMorningRouteCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestMorningRouteTable,
+			Columns: []string{bus.LatestMorningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.LatestMorningRouteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestMorningRouteTable,
+			Columns: []string{bus.LatestMorningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.LatestEveningRouteCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestEveningRouteTable,
+			Columns: []string{bus.LatestEveningRouteColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.LatestEveningRouteIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   bus.LatestEveningRouteTable,
+			Columns: []string{bus.LatestEveningRouteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),

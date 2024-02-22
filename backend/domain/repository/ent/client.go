@@ -617,6 +617,38 @@ func (c *BusClient) QueryBusRoute(b *Bus) *BusRouteQuery {
 	return query
 }
 
+// QueryLatestMorningRoute queries the latest_morning_route edge of a Bus.
+func (c *BusClient) QueryLatestMorningRoute(b *Bus) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, id),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.LatestMorningRouteTable, bus.LatestMorningRouteColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLatestEveningRoute queries the latest_evening_route edge of a Bus.
+func (c *BusClient) QueryLatestEveningRoute(b *Bus) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, id),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.LatestEveningRouteTable, bus.LatestEveningRouteColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *BusClient) Hooks() []Hook {
 	return c.hooks.Bus
@@ -791,6 +823,38 @@ func (c *BusRouteClient) QueryBusRouteAssociations(br *BusRoute) *BusRouteAssoci
 			sqlgraph.From(busroute.Table, busroute.FieldID, id),
 			sqlgraph.To(busrouteassociation.Table, busrouteassociation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, busroute.BusRouteAssociationsTable, busroute.BusRouteAssociationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMorningBuses queries the morning_buses edge of a BusRoute.
+func (c *BusRouteClient) QueryMorningBuses(br *BusRoute) *BusQuery {
+	query := (&BusClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(bus.Table, bus.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, busroute.MorningBusesTable, busroute.MorningBusesColumn),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEveningBuses queries the evening_buses edge of a BusRoute.
+func (c *BusRouteClient) QueryEveningBuses(br *BusRoute) *BusQuery {
+	query := (&BusClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(bus.Table, bus.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, busroute.EveningBusesTable, busroute.EveningBusesColumn),
 		)
 		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
 		return fromV, nil

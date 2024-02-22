@@ -4,6 +4,7 @@ package busroute
 
 import (
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -17,12 +18,20 @@ const (
 	FieldID = "id"
 	// FieldBusType holds the string denoting the bus_type field in the database.
 	FieldBusType = "bus_type"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// EdgeBus holds the string denoting the bus edge name in mutations.
 	EdgeBus = "bus"
 	// EdgeChildBusAssociations holds the string denoting the childbusassociations edge name in mutations.
 	EdgeChildBusAssociations = "childBusAssociations"
 	// EdgeBusRouteAssociations holds the string denoting the busrouteassociations edge name in mutations.
 	EdgeBusRouteAssociations = "busRouteAssociations"
+	// EdgeMorningBuses holds the string denoting the morning_buses edge name in mutations.
+	EdgeMorningBuses = "morning_buses"
+	// EdgeEveningBuses holds the string denoting the evening_buses edge name in mutations.
+	EdgeEveningBuses = "evening_buses"
 	// Table holds the table name of the busroute in the database.
 	Table = "bus_routes"
 	// BusTable is the table that holds the bus relation/edge. The primary key declared below.
@@ -44,12 +53,28 @@ const (
 	BusRouteAssociationsInverseTable = "bus_route_associations"
 	// BusRouteAssociationsColumn is the table column denoting the busRouteAssociations relation/edge.
 	BusRouteAssociationsColumn = "bus_route_id"
+	// MorningBusesTable is the table that holds the morning_buses relation/edge.
+	MorningBusesTable = "bus"
+	// MorningBusesInverseTable is the table name for the Bus entity.
+	// It exists in this package in order to avoid circular dependency with the "bus" package.
+	MorningBusesInverseTable = "bus"
+	// MorningBusesColumn is the table column denoting the morning_buses relation/edge.
+	MorningBusesColumn = "bus_latest_morning_route"
+	// EveningBusesTable is the table that holds the evening_buses relation/edge.
+	EveningBusesTable = "bus"
+	// EveningBusesInverseTable is the table name for the Bus entity.
+	// It exists in this package in order to avoid circular dependency with the "bus" package.
+	EveningBusesInverseTable = "bus"
+	// EveningBusesColumn is the table column denoting the evening_buses relation/edge.
+	EveningBusesColumn = "bus_latest_evening_route"
 )
 
 // Columns holds all SQL columns for busroute fields.
 var Columns = []string{
 	FieldID,
 	FieldBusType,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 var (
@@ -69,6 +94,12 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -107,6 +138,16 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByBusType orders the results by the bus_type field.
 func ByBusType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusType, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
 // ByBusCount orders the results by bus count.
@@ -150,6 +191,34 @@ func ByBusRouteAssociations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 		sqlgraph.OrderByNeighborTerms(s, newBusRouteAssociationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMorningBusesCount orders the results by morning_buses count.
+func ByMorningBusesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMorningBusesStep(), opts...)
+	}
+}
+
+// ByMorningBuses orders the results by morning_buses terms.
+func ByMorningBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMorningBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEveningBusesCount orders the results by evening_buses count.
+func ByEveningBusesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEveningBusesStep(), opts...)
+	}
+}
+
+// ByEveningBuses orders the results by evening_buses terms.
+func ByEveningBuses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEveningBusesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newBusStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -169,5 +238,19 @@ func newBusRouteAssociationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BusRouteAssociationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BusRouteAssociationsTable, BusRouteAssociationsColumn),
+	)
+}
+func newMorningBusesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MorningBusesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, MorningBusesTable, MorningBusesColumn),
+	)
+}
+func newEveningBusesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EveningBusesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, EveningBusesTable, EveningBusesColumn),
 	)
 }

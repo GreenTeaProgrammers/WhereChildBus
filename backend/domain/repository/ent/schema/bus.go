@@ -39,5 +39,9 @@ func (Bus) Edges() []ent.Edge {
 		edge.To("next_station", Station.Type).Unique(),
 		edge.From("bus_route", BusRoute.Type).
 			Ref("bus"),
+		edge.To("latest_morning_route", BusRoute.Type).
+			Unique(), // 夕方のバスルートの最新のものを参照するエッジ
+		edge.To("latest_evening_route", BusRoute.Type).
+			Unique(),
 	}
 }

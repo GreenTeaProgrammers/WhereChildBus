@@ -533,6 +533,52 @@ func HasBusRouteWith(preds ...predicate.BusRoute) predicate.Bus {
 	})
 }
 
+// HasLatestMorningRoute applies the HasEdge predicate on the "latest_morning_route" edge.
+func HasLatestMorningRoute() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LatestMorningRouteTable, LatestMorningRouteColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLatestMorningRouteWith applies the HasEdge predicate on the "latest_morning_route" edge with a given conditions (other predicates).
+func HasLatestMorningRouteWith(preds ...predicate.BusRoute) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newLatestMorningRouteStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLatestEveningRoute applies the HasEdge predicate on the "latest_evening_route" edge.
+func HasLatestEveningRoute() predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LatestEveningRouteTable, LatestEveningRouteColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLatestEveningRouteWith applies the HasEdge predicate on the "latest_evening_route" edge with a given conditions (other predicates).
+func HasLatestEveningRouteWith(preds ...predicate.BusRoute) predicate.Bus {
+	return predicate.Bus(func(s *sql.Selector) {
+		step := newLatestEveningRouteStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Bus) predicate.Bus {
 	return predicate.Bus(sql.AndPredicates(predicates...))

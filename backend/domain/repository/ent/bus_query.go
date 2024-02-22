@@ -23,15 +23,17 @@ import (
 // BusQuery is the builder for querying Bus entities.
 type BusQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []bus.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.Bus
-	withNursery         *NurseryQuery
-	withBoardingRecords *BoardingRecordQuery
-	withNextStation     *StationQuery
-	withBusRoute        *BusRouteQuery
-	withFKs             bool
+	ctx                    *QueryContext
+	order                  []bus.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.Bus
+	withNursery            *NurseryQuery
+	withBoardingRecords    *BoardingRecordQuery
+	withNextStation        *StationQuery
+	withBusRoute           *BusRouteQuery
+	withLatestMorningRoute *BusRouteQuery
+	withLatestEveningRoute *BusRouteQuery
+	withFKs                bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -149,6 +151,50 @@ func (bq *BusQuery) QueryBusRoute() *BusRouteQuery {
 			sqlgraph.From(bus.Table, bus.FieldID, selector),
 			sqlgraph.To(busroute.Table, busroute.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, bus.BusRouteTable, bus.BusRoutePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLatestMorningRoute chains the current query on the "latest_morning_route" edge.
+func (bq *BusQuery) QueryLatestMorningRoute() *BusRouteQuery {
+	query := (&BusRouteClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, selector),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.LatestMorningRouteTable, bus.LatestMorningRouteColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLatestEveningRoute chains the current query on the "latest_evening_route" edge.
+func (bq *BusQuery) QueryLatestEveningRoute() *BusRouteQuery {
+	query := (&BusRouteClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, selector),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.LatestEveningRouteTable, bus.LatestEveningRouteColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -343,15 +389,17 @@ func (bq *BusQuery) Clone() *BusQuery {
 		return nil
 	}
 	return &BusQuery{
-		config:              bq.config,
-		ctx:                 bq.ctx.Clone(),
-		order:               append([]bus.OrderOption{}, bq.order...),
-		inters:              append([]Interceptor{}, bq.inters...),
-		predicates:          append([]predicate.Bus{}, bq.predicates...),
-		withNursery:         bq.withNursery.Clone(),
-		withBoardingRecords: bq.withBoardingRecords.Clone(),
-		withNextStation:     bq.withNextStation.Clone(),
-		withBusRoute:        bq.withBusRoute.Clone(),
+		config:                 bq.config,
+		ctx:                    bq.ctx.Clone(),
+		order:                  append([]bus.OrderOption{}, bq.order...),
+		inters:                 append([]Interceptor{}, bq.inters...),
+		predicates:             append([]predicate.Bus{}, bq.predicates...),
+		withNursery:            bq.withNursery.Clone(),
+		withBoardingRecords:    bq.withBoardingRecords.Clone(),
+		withNextStation:        bq.withNextStation.Clone(),
+		withBusRoute:           bq.withBusRoute.Clone(),
+		withLatestMorningRoute: bq.withLatestMorningRoute.Clone(),
+		withLatestEveningRoute: bq.withLatestEveningRoute.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
@@ -399,6 +447,28 @@ func (bq *BusQuery) WithBusRoute(opts ...func(*BusRouteQuery)) *BusQuery {
 		opt(query)
 	}
 	bq.withBusRoute = query
+	return bq
+}
+
+// WithLatestMorningRoute tells the query-builder to eager-load the nodes that are connected to
+// the "latest_morning_route" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BusQuery) WithLatestMorningRoute(opts ...func(*BusRouteQuery)) *BusQuery {
+	query := (&BusRouteClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withLatestMorningRoute = query
+	return bq
+}
+
+// WithLatestEveningRoute tells the query-builder to eager-load the nodes that are connected to
+// the "latest_evening_route" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BusQuery) WithLatestEveningRoute(opts ...func(*BusRouteQuery)) *BusQuery {
+	query := (&BusRouteClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withLatestEveningRoute = query
 	return bq
 }
 
@@ -481,14 +551,16 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 		nodes       = []*Bus{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			bq.withNursery != nil,
 			bq.withBoardingRecords != nil,
 			bq.withNextStation != nil,
 			bq.withBusRoute != nil,
+			bq.withLatestMorningRoute != nil,
+			bq.withLatestEveningRoute != nil,
 		}
 	)
-	if bq.withNursery != nil || bq.withNextStation != nil {
+	if bq.withNursery != nil || bq.withNextStation != nil || bq.withLatestMorningRoute != nil || bq.withLatestEveningRoute != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -535,6 +607,18 @@ func (bq *BusQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bus, err
 		if err := bq.loadBusRoute(ctx, query, nodes,
 			func(n *Bus) { n.Edges.BusRoute = []*BusRoute{} },
 			func(n *Bus, e *BusRoute) { n.Edges.BusRoute = append(n.Edges.BusRoute, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withLatestMorningRoute; query != nil {
+		if err := bq.loadLatestMorningRoute(ctx, query, nodes, nil,
+			func(n *Bus, e *BusRoute) { n.Edges.LatestMorningRoute = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withLatestEveningRoute; query != nil {
+		if err := bq.loadLatestEveningRoute(ctx, query, nodes, nil,
+			func(n *Bus, e *BusRoute) { n.Edges.LatestEveningRoute = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -693,6 +777,70 @@ func (bq *BusQuery) loadBusRoute(ctx context.Context, query *BusRouteQuery, node
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (bq *BusQuery) loadLatestMorningRoute(ctx context.Context, query *BusRouteQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *BusRoute)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Bus)
+	for i := range nodes {
+		if nodes[i].bus_latest_morning_route == nil {
+			continue
+		}
+		fk := *nodes[i].bus_latest_morning_route
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(busroute.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "bus_latest_morning_route" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BusQuery) loadLatestEveningRoute(ctx context.Context, query *BusRouteQuery, nodes []*Bus, init func(*Bus), assign func(*Bus, *BusRoute)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Bus)
+	for i := range nodes {
+		if nodes[i].bus_latest_evening_route == nil {
+			continue
+		}
+		fk := *nodes[i].bus_latest_evening_route
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(busroute.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "bus_latest_evening_route" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
