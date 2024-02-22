@@ -23,6 +23,7 @@ dependencies:
   google_directions_api: ^0.10.0
   where_child_bus_api:
     path: ../where_child_bus_api
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
