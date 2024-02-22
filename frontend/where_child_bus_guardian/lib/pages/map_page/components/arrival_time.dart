@@ -64,14 +64,6 @@ class _ArrivalTimeState extends State<ArrivalTime> {
 
   Future<void> loadStationCoordinates() async {
     setState(() {
-      morningFirstStationLatitude =
-          getLatitudeForStation(widget.bus.morningFirstStationId);
-      morningFirstStationLongitude =
-          getLongitudeForStation(widget.bus.morningFirstStationId);
-      eveningFirstStationLatitude =
-          getLatitudeForStation(widget.bus.eveningFirstStationId);
-      eveningFirstStationLongitude =
-          getLongitudeForStation(widget.bus.eveningFirstStationId);
       nextStationLatitude = getLatitudeForStation(widget.bus.nextStationId);
       nextStationLongitude = getLongitudeForStation(widget.bus.nextStationId);
     });

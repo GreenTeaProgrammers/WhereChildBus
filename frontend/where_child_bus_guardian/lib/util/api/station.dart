@@ -25,9 +25,9 @@ Future<T> performGrpcCall<T>(
 }
 
 Future<GetStationListByBusIdResponse> getStationListByBusId(
-    String busId) async {
+    String busId, String busType) async {
   return performGrpcCall((client) async {
-    var req = GetStationListByBusIdRequest(busId: busId);
+    var req = GetStationListByBusIdRequest(busId: busId, busType: busType);
     return client.getStationListByBusId(req);
   });
 }

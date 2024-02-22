@@ -2,9 +2,9 @@ import 'package:where_child_bus_guardian/util/api/station.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/station.pb.dart';
 
 Future<GetStationListByBusIdResponse> getStationListByBusIdService(
-    String busId) async {
+    String busId, String busType) async {
   try {
-    var res = await getStationListByBusId(busId);
+    var res = await getStationListByBusId(busId: busId, busType: busType);
     return res;
   } catch (error) {
     return Future.error(error);

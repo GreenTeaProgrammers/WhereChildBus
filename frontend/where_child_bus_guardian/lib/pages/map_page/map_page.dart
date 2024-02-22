@@ -136,7 +136,7 @@ class _MapPageState extends State<MapPage> {
   Future<void> _loadStationsData() async {
     try {
       developer.log('停留所リストの読み込み開始');
-      var stationsRes = await getStationListByBusIdService(bus.id);
+      var stationsRes = await getStationListByBusIdService(bus.id, bus.type);
       if (mounted) {
         setState(() {
           stations = stationsRes.stations;
