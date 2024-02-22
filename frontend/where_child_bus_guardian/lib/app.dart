@@ -21,22 +21,34 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int _selectedIndex = 0;
-  late GuardianResponse guardian;
-  late bool _hasRunningBus;
+  GuardianResponse guardian = GuardianResponse();
+  bool _hasRunningBus = false;
 
   @override
   void initState() {
     super.initState();
-    _hasRunningBus = true;
+    _initializeAppState();
+  }
+
+  Future<void> _initializeAppState() async {
     guardian = GuardianData().getGuardian();
-    _loadRunningBus();
+    await _loadRunningBus();
   }
 
   Future<void> _loadRunningBus() async {
     try {
       var busRes = await getRunningBusByGuardianIdService(guardian.id);
+      if (mounted) {
+        setState(() {
+          _hasRunningBus = true;
+        });
+      }
     } catch (e) {
-      _hasRunningBus = false;
+      if (mounted) {
+        setState(() {
+          _hasRunningBus = false;
+        });
+      }
     }
   }
 
