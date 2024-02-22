@@ -20,7 +20,7 @@ class WaveClipper extends CustomClipper<Path> {
 
     // 二番目の波の上向きのカーブ
     var secondUpControlPoint = Offset(size.width * 3 / 4, 0);
-    var secondUpEndPoint = Offset(size.width, 30);
+    var secondUpEndPoint = Offset(size.width, 20);
     path.quadraticBezierTo(
       secondUpControlPoint.dx,
       secondUpControlPoint.dy,

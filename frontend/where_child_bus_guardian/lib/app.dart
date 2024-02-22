@@ -3,6 +3,8 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 import 'package:where_child_bus_guardian/pages/check_page/check_page.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/daily_page.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
+import 'package:where_child_bus_guardian/components/utils/half_circle_painter.dart';
+import 'package:where_child_bus_guardian/components/utils/custom_app_bar.dart';
 import 'package:where_child_bus_guardian/components/utils/custom_bottom_app_bar.dart';
 
 class App extends StatefulWidget {
@@ -18,12 +20,14 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(['日々の記録', '地図', '乗車確認'][_selectedIndex]),
+      appBar: CustomAppBar(
+        selectedIndex: _selectedIndex,
       ),
-      body: IndexedStack(
-          index: _selectedIndex,
-          children: [DailyPage(), const MapPage(), CheckPage()]),
+      body: Padding(
+          padding: EdgeInsets.only(top: 30),
+          child: IndexedStack(
+              index: _selectedIndex,
+              children: [DailyPage(), const MapPage(), CheckPage()])),
       bottomNavigationBar: CustomWaveBottomBar(
         selectedIndex: _selectedIndex,
         onItemTapped: (index) => setState(() => _selectedIndex = index),

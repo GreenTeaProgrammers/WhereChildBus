@@ -18,7 +18,7 @@ class CustomWaveBottomBar extends StatelessWidget {
         child: Container(
             color: const Color.fromARGB(255, 147, 211, 241),
             child: Padding(
-              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
+              padding: const EdgeInsets.only(top: 30.0, bottom: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children:
