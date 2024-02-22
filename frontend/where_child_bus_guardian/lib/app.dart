@@ -21,7 +21,7 @@ class _AppState extends State<App> {
     return Scaffold(
       appBar: appbar(),
       body: Padding(
-          padding: EdgeInsets.only(top: 30), // AppBarのカスタム形状の高さに応じて調整
+          padding: EdgeInsets.only(top: 30),
           child: IndexedStack(
               index: _selectedIndex,
               children: [DailyPage(), const MapPage(), CheckPage()])),
@@ -35,14 +35,14 @@ class _AppState extends State<App> {
   AppBar appbar() {
     return AppBar(
       backgroundColor: const Color.fromARGB(255, 255, 243, 190),
-      title: Text(''), // AppBarのデフォルトのタイトルは空に
-      centerTitle: true, // タイトルを中央揃えにする設定は保持
+      title: Text(''),
+      centerTitle: true,
       bottom: PreferredSize(
-        preferredSize: Size.fromHeight(10), // 半円を含めた高さ
+        preferredSize: Size.fromHeight(0),
         child: CustomPaint(
           painter: HalfCirclePainter(),
           child: Container(
-            height: 10,
+            height: 0,
           ),
         ),
       ),
@@ -64,7 +64,7 @@ class _AppState extends State<App> {
                   color: Color.fromARGB(255, 67, 55, 1)),
             ),
             // AppBarの高さに応じて位置を調整
-            padding: EdgeInsets.only(top: appBarHeight / 2, bottom: 20),
+            padding: EdgeInsets.only(top: appBarHeight / 2),
           ),
         );
       },
