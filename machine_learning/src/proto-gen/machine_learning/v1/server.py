@@ -63,6 +63,7 @@ class MachineLearningServiceServicer(
         self.pred_fn = pred_fn
         self.train_fn = train_fn
         self.detect_face_and_clip_fn = detect_face_and_clip_fn
+        self.train_status = machine_learning_pb2.STATUS_WAITING
 
     def Pred(self, request_iterator: Iterable[bus_pb2.StreamBusVideoRequest], context):
         for request in request_iterator:
@@ -92,25 +93,27 @@ class MachineLearningServiceServicer(
 
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
         logging.info("Train Service Start")
-        params = Train_Args(
-            nursery_id=request.nursery_id,
-            child_ids=request.child_ids,
-            bus_id=request.bus_id,
-            bus_type=request.bus_type,
-            seed=42,
-            mode="train",
-        )
         try:
+            params = Train_Args(
+                nursery_id=request.nursery_id,
+                child_ids=request.child_ids,
+                bus_id=request.bus_id,
+                bus_type=request.bus_type,
+                seed=42,
+                mode="train",
+            )
+            self.train_status = machine_learning_pb2.STATUS_PROCESSING
+            yield machine_learning_pb2.TrainResponse(status=self.train_status)
             self.train_fn(params)
-            is_started = True
+            self.train_status = machine_learning_pb2.STATUS_SUCCESS
+            yield machine_learning_pb2.TrainResponse(status=self.train_status)
         except Exception:
-            is_started = False
             e = traceback.format_exc()
             logging.error(e)
             rich_status = create_service_error_status(e)
             context.abort_with_status(rpc_status.to_status(rich_status))
-
-        return machine_learning_pb2.TrainResponse(is_started=is_started)
+            self.train_status = machine_learning_pb2.STATUS_FAILED
+            yield machine_learning_pb2.TrainResponse(status=self.train_status)
 
     def FaceDetectAndClip(
         self,

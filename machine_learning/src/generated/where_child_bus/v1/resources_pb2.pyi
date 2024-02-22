@@ -1,12 +1,9 @@
-from typing import ClassVar as _ClassVar
-from typing import Mapping as _Mapping
-from typing import Optional as _Optional
-from typing import Union as _Union
-
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from google.protobuf import timestamp_pb2 as _timestamp_pb2
-from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -35,7 +32,6 @@ class BusType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     BUS_TYPE_UNSPECIFIED: _ClassVar[BusType]
     BUS_TYPE_MORNING: _ClassVar[BusType]
     BUS_TYPE_EVENING: _ClassVar[BusType]
-
 BUS_STATUS_UNSPECIFIED: BusStatus
 BUS_STATUS_STOPPED: BusStatus
 BUS_STATUS_RUNNING: BusStatus
@@ -52,17 +48,7 @@ BUS_TYPE_MORNING: BusType
 BUS_TYPE_EVENING: BusType
 
 class Nursery(_message.Message):
-    __slots__ = (
-        "id",
-        "nursery_code",
-        "name",
-        "address",
-        "phone_number",
-        "email",
-        "hashed_password",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "nursery_code", "name", "address", "phone_number", "email", "hashed_password", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_CODE_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -81,30 +67,10 @@ class Nursery(_message.Message):
     hashed_password: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        nursery_code: _Optional[str] = ...,
-        name: _Optional[str] = ...,
-        address: _Optional[str] = ...,
-        phone_number: _Optional[str] = ...,
-        email: _Optional[str] = ...,
-        hashed_password: _Optional[str] = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_code: _Optional[str] = ..., name: _Optional[str] = ..., address: _Optional[str] = ..., phone_number: _Optional[str] = ..., email: _Optional[str] = ..., hashed_password: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class NurseryResponse(_message.Message):
-    __slots__ = (
-        "id",
-        "nursery_code",
-        "name",
-        "address",
-        "phone_number",
-        "email",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "nursery_code", "name", "address", "phone_number", "email", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_CODE_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -121,31 +87,10 @@ class NurseryResponse(_message.Message):
     email: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        nursery_code: _Optional[str] = ...,
-        name: _Optional[str] = ...,
-        address: _Optional[str] = ...,
-        phone_number: _Optional[str] = ...,
-        email: _Optional[str] = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_code: _Optional[str] = ..., name: _Optional[str] = ..., address: _Optional[str] = ..., phone_number: _Optional[str] = ..., email: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Guardian(_message.Message):
-    __slots__ = (
-        "id",
-        "nursery_id",
-        "name",
-        "email",
-        "phone_number",
-        "hashed_password",
-        "is_use_morning_bus",
-        "is_use_evening_bus",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "nursery_id", "name", "email", "phone_number", "hashed_password", "is_use_morning_bus", "is_use_evening_bus", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -166,32 +111,10 @@ class Guardian(_message.Message):
     is_use_evening_bus: bool
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        nursery_id: _Optional[str] = ...,
-        name: _Optional[str] = ...,
-        email: _Optional[str] = ...,
-        phone_number: _Optional[str] = ...,
-        hashed_password: _Optional[str] = ...,
-        is_use_morning_bus: bool = ...,
-        is_use_evening_bus: bool = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., email: _Optional[str] = ..., phone_number: _Optional[str] = ..., hashed_password: _Optional[str] = ..., is_use_morning_bus: bool = ..., is_use_evening_bus: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class GuardianResponse(_message.Message):
-    __slots__ = (
-        "id",
-        "nursery_id",
-        "name",
-        "email",
-        "phone_number",
-        "is_use_morning_bus",
-        "is_use_evening_bus",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "nursery_id", "name", "email", "phone_number", "is_use_morning_bus", "is_use_evening_bus", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -210,35 +133,10 @@ class GuardianResponse(_message.Message):
     is_use_evening_bus: bool
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        nursery_id: _Optional[str] = ...,
-        name: _Optional[str] = ...,
-        email: _Optional[str] = ...,
-        phone_number: _Optional[str] = ...,
-        is_use_morning_bus: bool = ...,
-        is_use_evening_bus: bool = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., email: _Optional[str] = ..., phone_number: _Optional[str] = ..., is_use_morning_bus: bool = ..., is_use_evening_bus: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Bus(_message.Message):
-    __slots__ = (
-        "id",
-        "nursery_id",
-        "name",
-        "plate_number",
-        "bus_status",
-        "latitude",
-        "longitude",
-        "enable_face_recognition",
-        "next_station_id",
-        "latest_morning_route_id",
-        "latest_evening_route_id",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "nursery_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "next_station_id", "latest_morning_route_id", "latest_evening_route_id", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -265,40 +163,10 @@ class Bus(_message.Message):
     latest_evening_route_id: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        nursery_id: _Optional[str] = ...,
-        name: _Optional[str] = ...,
-        plate_number: _Optional[str] = ...,
-        bus_status: _Optional[_Union[BusStatus, str]] = ...,
-        latitude: _Optional[float] = ...,
-        longitude: _Optional[float] = ...,
-        enable_face_recognition: bool = ...,
-        next_station_id: _Optional[str] = ...,
-        latest_morning_route_id: _Optional[str] = ...,
-        latest_evening_route_id: _Optional[str] = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., next_station_id: _Optional[str] = ..., latest_morning_route_id: _Optional[str] = ..., latest_evening_route_id: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Child(_message.Message):
-    __slots__ = (
-        "id",
-        "nursery_id",
-        "guardian_id",
-        "name",
-        "age",
-        "sex",
-        "check_for_missing_items",
-        "has_bag",
-        "has_lunch_box",
-        "has_water_bottle",
-        "has_umbrella",
-        "has_other",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "nursery_id", "guardian_id", "name", "age", "sex", "check_for_missing_items", "has_bag", "has_lunch_box", "has_water_bottle", "has_umbrella", "has_other", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
@@ -327,33 +195,10 @@ class Child(_message.Message):
     has_other: bool
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        nursery_id: _Optional[str] = ...,
-        guardian_id: _Optional[str] = ...,
-        name: _Optional[str] = ...,
-        age: _Optional[int] = ...,
-        sex: _Optional[_Union[Sex, str]] = ...,
-        check_for_missing_items: bool = ...,
-        has_bag: bool = ...,
-        has_lunch_box: bool = ...,
-        has_water_bottle: bool = ...,
-        has_umbrella: bool = ...,
-        has_other: bool = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., guardian_id: _Optional[str] = ..., name: _Optional[str] = ..., age: _Optional[int] = ..., sex: _Optional[_Union[Sex, str]] = ..., check_for_missing_items: bool = ..., has_bag: bool = ..., has_lunch_box: bool = ..., has_water_bottle: bool = ..., has_umbrella: bool = ..., has_other: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Station(_message.Message):
-    __slots__ = (
-        "id",
-        "guardian_id",
-        "latitude",
-        "longitude",
-        "created_at",
-        "updated_at",
-    )
+    __slots__ = ("id", "guardian_id", "latitude", "longitude", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
@@ -366,15 +211,7 @@ class Station(_message.Message):
     longitude: float
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        guardian_id: _Optional[str] = ...,
-        latitude: _Optional[float] = ...,
-        longitude: _Optional[float] = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., guardian_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class ChildBusAssociation(_message.Message):
     __slots__ = ("bus_route_id", "child_id")
@@ -382,9 +219,7 @@ class ChildBusAssociation(_message.Message):
     CHILD_ID_FIELD_NUMBER: _ClassVar[int]
     bus_route_id: str
     child_id: str
-    def __init__(
-        self, bus_route_id: _Optional[str] = ..., child_id: _Optional[str] = ...
-    ) -> None: ...
+    def __init__(self, bus_route_id: _Optional[str] = ..., child_id: _Optional[str] = ...) -> None: ...
 
 class ChildPhoto(_message.Message):
     __slots__ = ("id", "child_id", "photo_data", "created_at", "updated_at")
@@ -398,14 +233,7 @@ class ChildPhoto(_message.Message):
     photo_data: bytes
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        child_id: _Optional[str] = ...,
-        photo_data: _Optional[bytes] = ...,
-        created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., photo_data: _Optional[bytes] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class BoardingRecord(_message.Message):
     __slots__ = ("id", "child_id", "bus_id", "is_boarding", "timestamp")
@@ -419,14 +247,7 @@ class BoardingRecord(_message.Message):
     bus_id: str
     is_boarding: bool
     timestamp: _timestamp_pb2.Timestamp
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        child_id: _Optional[str] = ...,
-        bus_id: _Optional[str] = ...,
-        is_boarding: bool = ...,
-        timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., bus_id: _Optional[str] = ..., is_boarding: bool = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class BusRoute(_message.Message):
     __slots__ = ("id", "bus_id", "ordered_stations", "bus_type")
@@ -438,10 +259,4 @@ class BusRoute(_message.Message):
     bus_id: str
     ordered_stations: _containers.RepeatedCompositeFieldContainer[Station]
     bus_type: BusType
-    def __init__(
-        self,
-        id: _Optional[str] = ...,
-        bus_id: _Optional[str] = ...,
-        ordered_stations: _Optional[_Iterable[_Union[Station, _Mapping]]] = ...,
-        bus_type: _Optional[_Union[BusType, str]] = ...,
-    ) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., bus_id: _Optional[str] = ..., ordered_stations: _Optional[_Iterable[_Union[Station, _Mapping]]] = ..., bus_type: _Optional[_Union[BusType, str]] = ...) -> None: ...
