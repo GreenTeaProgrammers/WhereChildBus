@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	BusRouteService_CreateBusRoute_FullMethodName = "/where_child_bus.v1.BusRouteService/CreateBusRoute"
-	BusRouteService_GetBusRoute_FullMethodName    = "/where_child_bus.v1.BusRouteService/GetBusRoute"
+	BusRouteService_CreateBusRoute_FullMethodName     = "/where_child_bus.v1.BusRouteService/CreateBusRoute"
+	BusRouteService_GetBusRouteByBusID_FullMethodName = "/where_child_bus.v1.BusRouteService/GetBusRouteByBusID"
 )
 
 // BusRouteServiceClient is the client API for BusRouteService service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BusRouteServiceClient interface {
 	CreateBusRoute(ctx context.Context, in *CreateBusRouteRequest, opts ...grpc.CallOption) (*CreateBusRouteResponse, error)
-	GetBusRoute(ctx context.Context, in *GetBusRouteRequest, opts ...grpc.CallOption) (*GetBusRouteResponse, error)
+	GetBusRouteByBusID(ctx context.Context, in *GetBusRouteByBusIDRequest, opts ...grpc.CallOption) (*GetBusRouteByBusIDResponse, error)
 }
 
 type busRouteServiceClient struct {
@@ -48,9 +48,9 @@ func (c *busRouteServiceClient) CreateBusRoute(ctx context.Context, in *CreateBu
 	return out, nil
 }
 
-func (c *busRouteServiceClient) GetBusRoute(ctx context.Context, in *GetBusRouteRequest, opts ...grpc.CallOption) (*GetBusRouteResponse, error) {
-	out := new(GetBusRouteResponse)
-	err := c.cc.Invoke(ctx, BusRouteService_GetBusRoute_FullMethodName, in, out, opts...)
+func (c *busRouteServiceClient) GetBusRouteByBusID(ctx context.Context, in *GetBusRouteByBusIDRequest, opts ...grpc.CallOption) (*GetBusRouteByBusIDResponse, error) {
+	out := new(GetBusRouteByBusIDResponse)
+	err := c.cc.Invoke(ctx, BusRouteService_GetBusRouteByBusID_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *busRouteServiceClient) GetBusRoute(ctx context.Context, in *GetBusRoute
 // for forward compatibility
 type BusRouteServiceServer interface {
 	CreateBusRoute(context.Context, *CreateBusRouteRequest) (*CreateBusRouteResponse, error)
-	GetBusRoute(context.Context, *GetBusRouteRequest) (*GetBusRouteResponse, error)
+	GetBusRouteByBusID(context.Context, *GetBusRouteByBusIDRequest) (*GetBusRouteByBusIDResponse, error)
 }
 
 // UnimplementedBusRouteServiceServer should be embedded to have forward compatible implementations.
@@ -72,8 +72,8 @@ type UnimplementedBusRouteServiceServer struct {
 func (UnimplementedBusRouteServiceServer) CreateBusRoute(context.Context, *CreateBusRouteRequest) (*CreateBusRouteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBusRoute not implemented")
 }
-func (UnimplementedBusRouteServiceServer) GetBusRoute(context.Context, *GetBusRouteRequest) (*GetBusRouteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBusRoute not implemented")
+func (UnimplementedBusRouteServiceServer) GetBusRouteByBusID(context.Context, *GetBusRouteByBusIDRequest) (*GetBusRouteByBusIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBusRouteByBusID not implemented")
 }
 
 // UnsafeBusRouteServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -105,20 +105,20 @@ func _BusRouteService_CreateBusRoute_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BusRouteService_GetBusRoute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetBusRouteRequest)
+func _BusRouteService_GetBusRouteByBusID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBusRouteByBusIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BusRouteServiceServer).GetBusRoute(ctx, in)
+		return srv.(BusRouteServiceServer).GetBusRouteByBusID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: BusRouteService_GetBusRoute_FullMethodName,
+		FullMethod: BusRouteService_GetBusRouteByBusID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BusRouteServiceServer).GetBusRoute(ctx, req.(*GetBusRouteRequest))
+		return srv.(BusRouteServiceServer).GetBusRouteByBusID(ctx, req.(*GetBusRouteByBusIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -135,8 +135,8 @@ var BusRouteService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BusRouteService_CreateBusRoute_Handler,
 		},
 		{
-			MethodName: "GetBusRoute",
-			Handler:    _BusRouteService_GetBusRoute_Handler,
+			MethodName: "GetBusRouteByBusID",
+			Handler:    _BusRouteService_GetBusRouteByBusID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

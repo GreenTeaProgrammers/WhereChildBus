@@ -19,6 +19,7 @@ import (
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	nurseryRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/nursery"
+	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	mlv1 "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/machine_learning/v1"
 )
 
@@ -179,9 +180,19 @@ func (i *Interactor) ChangeBusStatus(ctx context.Context, req *pb.ChangeBusStatu
 	case pb.BusStatus_BUS_STATUS_RUNNING:
 		switch req.BusType {
 		case pb.BusType_BUS_TYPE_MORNING:
-			update.SetNextStation(bus.Edges.MorningFirstStation)
+			firstStation, err := i.getFirstStation(bus, pb.BusType_BUS_TYPE_MORNING)
+			if err != nil {
+				i.logger.Error("failed to get first station", "error", err)
+				return nil, err
+			}
+			update.SetNextStation(firstStation)
 		case pb.BusType_BUS_TYPE_EVENING:
-			update.SetNextStation(bus.Edges.EveningFirstStation)
+			firstStation, err := i.getFirstStation(bus, pb.BusType_BUS_TYPE_MORNING)
+			if err != nil {
+				i.logger.Error("failed to get first station", "error", err)
+				return nil, err
+			}
+			update.SetNextStation(firstStation)
 		}
 	}
 
@@ -597,20 +608,6 @@ func (i *Interactor) getBusList(ctx context.Context, queryFunc func(*ent.Tx) (*e
 	return pbBuses, nil
 }
 
-// parseGuardianIDs は、指定されたガーディアンIDの文字列のスライスをUUIDのスライスに変換します。
-func parseGuardianIDs(logger slog.Logger, ids []string) ([]uuid.UUID, error) {
-	parsedIDs := make([]uuid.UUID, len(ids))
-	for i, id := range ids {
-		parsedID, err := uuid.Parse(id)
-		if err != nil {
-			logger.Error("failed to parse guardian ID", "error", err)
-			return nil, err
-		}
-		parsedIDs[i] = parsedID
-	}
-	return parsedIDs, nil
-}
-
 func getStationIDs(logger *slog.Logger, ctx context.Context, bus *ent.Bus) (nextStationId string, err error) {
 	nextStation, err := bus.QueryNextStation().Only(ctx)
 	if err != nil && !ent.IsNotFound(err) {
@@ -622,4 +619,60 @@ func getStationIDs(logger *slog.Logger, ctx context.Context, bus *ent.Bus) (next
 	}
 
 	return nextStationId, nil
+}
+
+func (i *Interactor) getFirstStation(bus *ent.Bus, busType pb.BusType) (*ent.Station, error) {
+	var firstStation *ent.Station
+	var busRoute *ent.BusRoute
+	var err error
+
+	if busType == pb.BusType_BUS_TYPE_MORNING {
+		busRoute, err = bus.QueryLatestMorningRoute().Only(context.Background())
+	} else if busType == pb.BusType_BUS_TYPE_EVENING {
+		busRoute, err = bus.QueryLatestEveningRoute().Only(context.Background())
+	} else {
+		return nil, fmt.Errorf("invalid bus type")
+	}
+
+	if err != nil {
+		i.logger.Error("failed to get bus route", "error", err)
+		return nil, err
+	}
+
+	stations, err := busRoute.
+		QueryBusRouteAssociations().
+		QueryStation().
+		Order(ent.Asc("order")).
+		All(context.Background())
+	if err != nil {
+		i.logger.Error("failed to get stations", "error", err)
+		return nil, err
+	}
+
+	for _, station := range stations {
+		guardian, err := station.QueryGuardian().
+			Where(guardianRepo.HasStationWith(stationRepo.ID(station.ID))).
+			Only(context.Background())
+		if err != nil {
+			i.logger.Error("failed to get guardian", "error", err)
+			return nil, err
+		}
+		if busType == pb.BusType_BUS_TYPE_MORNING {
+			if !guardian.IsUseMorningBus {
+				continue
+			}
+		} else if busType == pb.BusType_BUS_TYPE_EVENING {
+			if !guardian.IsUseEveningBus {
+				continue
+			}
+		}
+		firstStation = station
+		break
+	}
+
+	if firstStation == nil {
+		return nil, fmt.Errorf("no station found")
+	}
+
+	return firstStation, nil
 }
