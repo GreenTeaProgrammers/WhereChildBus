@@ -2,6 +2,8 @@ package busroute
 
 import (
 	"context"
+	"fmt"
+	"io"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
@@ -94,9 +96,7 @@ func (i *Interactor) CreateBusRoute(ctx context.Context, req *pb.CreateBusRouteR
 		}
 		ChildIds[index] = childCopy.Id
 	}
-
-	i.logger.Info("Calling MLServiceClient.Train")
-	response, err := i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
+	stream, err := i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
 		BusId:     req.BusId,
 		ChildIds:  ChildIds,
 		NurseryId: req.NurseryId,
@@ -108,17 +108,37 @@ func (i *Interactor) CreateBusRoute(ctx context.Context, req *pb.CreateBusRouteR
 		return nil, err
 	}
 
-	if !response.IsStarted {
-		i.logger.Error("failed to start training", "error", err)
+	// 最初のレスポンスを待つ
+	response, err := stream.Recv()
+	if err != nil {
+		i.logger.Error("error receiving from stream", "error", err)
 		return nil, err
+	}
+
+	if response.Status == mlv1.Status_STATUS_FAILED {
+		i.logger.Error("training was not started", "error", err)
+		return nil, fmt.Errorf("training was not started")
 	}
 
 	i.logger.Info("Training started")
 
-	if err := tx.Commit(); err != nil {
-		i.logger.Error("failed to commit transaction", "error", err)
-		return nil, err
-	}
+	// バックグラウンドでストリーミングを継続するためのゴルーチン
+	go func() {
+		for {
+			_, err := stream.Recv()
+			if err == io.EOF {
+				// ストリームの終了
+				break
+			}
+			if err != nil {
+				i.logger.Error("error receiving from stream", "error", err)
+				return
+			}
+
+			// ここではストリーミングレスポンスは利用しませんが、接続を維持します
+		}
+		i.logger.Info("Training stream completed")
+	}()
 
 	pbBusRoute, err := i.CreateBusRouteResponse(ctx, tx, busRoute)
 	if err != nil {
@@ -126,9 +146,18 @@ func (i *Interactor) CreateBusRoute(ctx context.Context, req *pb.CreateBusRouteR
 		return nil, err
 	}
 
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
+		return nil, err
+	}
+
+	if err != nil {
+		i.logger.Error("failed to create bus route response", "error", err)
+		return nil, err
+	}
+
 	return &pb.CreateBusRouteResponse{BusRoute: pbBusRoute}, nil
 }
-
 func (i *Interactor) createAssociation(ctx context.Context, tx *ent.Tx, guardianIdList []string, busRoute *ent.BusRoute) ([]*pb.Child, error) {
 	var pbChildren []*pb.Child
 	for index, guardianId := range guardianIdList {
@@ -232,8 +261,8 @@ func (i Interactor) CreateBusRouteResponse(ctx context.Context, tx *ent.Tx, busR
 	var orderedStations []*pb.Station
 	stations, err := busRoute.
 		QueryBusRouteAssociations().
-		QueryStation().
 		Order(ent.Asc("order")).
+		QueryStation().
 		All(ctx)
 	if err != nil {
 		i.logger.Error("failed to get stations", "error", err)
