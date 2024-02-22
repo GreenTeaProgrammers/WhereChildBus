@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:grpc/grpc.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:location/location.dart';
 import 'package:where_child_bus/components/util/audio_manager.dart';
 import 'package:where_child_bus/config/config.dart';
 import 'package:where_child_bus/pages/camera_page/widgets/riding_toggle.dart';
@@ -28,7 +29,10 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   final StreamController<StreamBusVideoRequest> _streamController =
       StreamController<StreamBusVideoRequest>.broadcast();
+  final StreamController<SendLocationContinuousRequest> _locationStream =
+      StreamController<SendLocationContinuousRequest>.broadcast();
   VehicleEvent _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
+  final Location location = Location();
 
   @override
   void initState() {
@@ -47,8 +51,9 @@ class _CameraPageState extends State<CameraPage> {
       developer.log("Camera aspect ratio: ${_controller.value.aspectRatio}",
           name: "CameraPage");
       _startImageStream();
-      developer.log("Start streaming video to server", name: "CameraPage");
       streamBusVideo(_streamController.stream);
+      developer.log("Start streaming coordinate to server", name: "CameraPage");
+      _streamCoordinate(_locationStream.stream);
     } catch (e) {
       developer.log('Failed to initialize camera: $e');
     }
@@ -77,6 +82,60 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  Future<void> _streamCoordinate(
+      Stream<SendLocationContinuousRequest> requestStream) async {
+    final channel = ClientChannel(
+      appConfig.grpcEndpoint,
+      port: appConfig.grpcPort,
+      options: const ChannelOptions(),
+    );
+    final grpcClient = BusServiceClient(channel);
+    developer.log("ServiceClient created");
+    final res = grpcClient.sendLocationContinuous(requestStream);
+
+    try {
+      await for (var response in res.asStream()) {
+        developer.log("Received response: $response", name: "CameraPage");
+      }
+    } catch (error) {
+      developer.log("Caught Error:", error: error);
+    } finally {
+      await channel.shutdown();
+    }
+  }
+
+  Future<LocationData> _getCurrentLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    LocationData locationData;
+
+    // サービスが有効かどうかを確認
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      // サービスが無効の場合は、ユーザーに有効化を求める
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        throw Exception('Location service is not enabled.');
+      }
+    }
+
+    // 位置情報の権限を確認
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      // 権限が拒否されている場合は、権限をリクエスト
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        throw Exception('Location service is not enabled.');
+      }
+    }
+
+    // 現在地の取得
+    locationData = await location.getLocation();
+    developer
+        .log("現在地の緯度: ${locationData.latitude}, 経度: ${locationData.longitude}");
+    return locationData;
+  }
+
   List<int> _processCameraImage2gray(CameraImage image) {
     final int width = image.width;
     final int height = image.height;
@@ -101,11 +160,11 @@ class _CameraPageState extends State<CameraPage> {
     return grayscaleBytes;
   }
 
-  void _startImageStream() {
+  void _startImageStream() async {
     List<List<int>> videoChunks = [];
     if (!_controller.value.isStreamingImages) {
       int frameCounter = 0;
-      _controller.startImageStream((CameraImage image) {
+      _controller.startImageStream((CameraImage image) async {
         frameCounter++;
         if (frameCounter % 60 == 0) {
           if (Platform.isAndroid) {
@@ -121,6 +180,20 @@ class _CameraPageState extends State<CameraPage> {
             photoHeight: image.height,
             photoWidth: image.width,
           ));
+
+          try {
+            await _getCurrentLocation();
+            // await _getCurrentLocation().then((locationData) {
+            //   _locationStream.add(SendLocationContinuousRequest(
+            //     busId: widget.bus.id,
+            //     latitude: locationData.latitude,
+            //     longitude: locationData.longitude,
+            //   ));
+            // });
+          } catch (e) {
+            developer.log("Failed to get current location: $e");
+          }
+
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 
@@ -156,6 +229,7 @@ class _CameraPageState extends State<CameraPage> {
   void dispose() {
     _controller.dispose();
     _streamController.close();
+    _locationStream.close();
     super.dispose();
   }
 
