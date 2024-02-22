@@ -18,8 +18,8 @@ type Station struct {
 func (Station) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).StorageKey("id").Unique(),
-		field.Float("latitude").Optional(),
-		field.Float("longitude").Optional(),
+		field.Float("latitude").Optional().Default(0),
+		field.Float("longitude").Optional().Default(0),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}
@@ -41,5 +41,14 @@ func (Station) Edges() []ent.Edge {
 		edge.To("evening_next_station", Station.Type).
 			From("evening_previous_station").
 			Unique(),
+		// このステーションが「現在」の目的地であるバス
+		edge.From("next_for_buses", Bus.Type).
+			Ref("next_station"),
+		// このステーションが朝の最初のステーションであるバス
+		edge.From("morning_first_for_buses", Bus.Type).
+			Ref("morning_first_station"),
+		// このステーションが夕方の最初のステーションであるバス
+		edge.From("evening_first_for_buses", Bus.Type).
+			Ref("evening_first_station"),
 	}
 }

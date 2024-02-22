@@ -40,6 +40,12 @@ const (
 	EdgeBoardingRecords = "boarding_records"
 	// EdgeChildBusAssociations holds the string denoting the childbusassociations edge name in mutations.
 	EdgeChildBusAssociations = "childBusAssociations"
+	// EdgeNextStation holds the string denoting the next_station edge name in mutations.
+	EdgeNextStation = "next_station"
+	// EdgeMorningFirstStation holds the string denoting the morning_first_station edge name in mutations.
+	EdgeMorningFirstStation = "morning_first_station"
+	// EdgeEveningFirstStation holds the string denoting the evening_first_station edge name in mutations.
+	EdgeEveningFirstStation = "evening_first_station"
 	// Table holds the table name of the bus in the database.
 	Table = "bus"
 	// NurseryTable is the table that holds the nursery relation/edge.
@@ -68,6 +74,27 @@ const (
 	ChildBusAssociationsInverseTable = "child_bus_associations"
 	// ChildBusAssociationsColumn is the table column denoting the childBusAssociations relation/edge.
 	ChildBusAssociationsColumn = "bus_id"
+	// NextStationTable is the table that holds the next_station relation/edge.
+	NextStationTable = "bus"
+	// NextStationInverseTable is the table name for the Station entity.
+	// It exists in this package in order to avoid circular dependency with the "station" package.
+	NextStationInverseTable = "stations"
+	// NextStationColumn is the table column denoting the next_station relation/edge.
+	NextStationColumn = "bus_next_station"
+	// MorningFirstStationTable is the table that holds the morning_first_station relation/edge.
+	MorningFirstStationTable = "bus"
+	// MorningFirstStationInverseTable is the table name for the Station entity.
+	// It exists in this package in order to avoid circular dependency with the "station" package.
+	MorningFirstStationInverseTable = "stations"
+	// MorningFirstStationColumn is the table column denoting the morning_first_station relation/edge.
+	MorningFirstStationColumn = "bus_morning_first_station"
+	// EveningFirstStationTable is the table that holds the evening_first_station relation/edge.
+	EveningFirstStationTable = "bus"
+	// EveningFirstStationInverseTable is the table name for the Station entity.
+	// It exists in this package in order to avoid circular dependency with the "station" package.
+	EveningFirstStationInverseTable = "stations"
+	// EveningFirstStationColumn is the table column denoting the evening_first_station relation/edge.
+	EveningFirstStationColumn = "bus_evening_first_station"
 )
 
 // Columns holds all SQL columns for bus fields.
@@ -87,6 +114,9 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"bus_nursery",
+	"bus_next_station",
+	"bus_morning_first_station",
+	"bus_evening_first_station",
 }
 
 var (
@@ -246,6 +276,27 @@ func ByChildBusAssociations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 		sqlgraph.OrderByNeighborTerms(s, newChildBusAssociationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByNextStationField orders the results by next_station field.
+func ByNextStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNextStationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByMorningFirstStationField orders the results by morning_first_station field.
+func ByMorningFirstStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMorningFirstStationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEveningFirstStationField orders the results by evening_first_station field.
+func ByEveningFirstStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEveningFirstStationStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newNurseryStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -272,5 +323,26 @@ func newChildBusAssociationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ChildBusAssociationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ChildBusAssociationsTable, ChildBusAssociationsColumn),
+	)
+}
+func newNextStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NextStationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, NextStationTable, NextStationColumn),
+	)
+}
+func newMorningFirstStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MorningFirstStationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, MorningFirstStationTable, MorningFirstStationColumn),
+	)
+}
+func newEveningFirstStationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EveningFirstStationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EveningFirstStationTable, EveningFirstStationColumn),
 	)
 }

@@ -43,6 +43,14 @@ func (brc *BoardingRecordCreate) SetIsBoarding(b bool) *BoardingRecordCreate {
 	return brc
 }
 
+// SetNillableIsBoarding sets the "is_boarding" field if the given value is not nil.
+func (brc *BoardingRecordCreate) SetNillableIsBoarding(b *bool) *BoardingRecordCreate {
+	if b != nil {
+		brc.SetIsBoarding(*b)
+	}
+	return brc
+}
+
 // SetID sets the "id" field.
 func (brc *BoardingRecordCreate) SetID(u uuid.UUID) *BoardingRecordCreate {
 	brc.mutation.SetID(u)
@@ -133,6 +141,10 @@ func (brc *BoardingRecordCreate) defaults() {
 	if _, ok := brc.mutation.Timestamp(); !ok {
 		v := boardingrecord.DefaultTimestamp()
 		brc.mutation.SetTimestamp(v)
+	}
+	if _, ok := brc.mutation.IsBoarding(); !ok {
+		v := boardingrecord.DefaultIsBoarding
+		brc.mutation.SetIsBoarding(v)
 	}
 	if _, ok := brc.mutation.ID(); !ok {
 		v := boardingrecord.DefaultID()

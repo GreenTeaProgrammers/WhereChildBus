@@ -26,6 +26,10 @@ func init() {
 	boardingrecordDescTimestamp := boardingrecordFields[1].Descriptor()
 	// boardingrecord.DefaultTimestamp holds the default value on creation for the timestamp field.
 	boardingrecord.DefaultTimestamp = boardingrecordDescTimestamp.Default.(func() time.Time)
+	// boardingrecordDescIsBoarding is the schema descriptor for is_boarding field.
+	boardingrecordDescIsBoarding := boardingrecordFields[2].Descriptor()
+	// boardingrecord.DefaultIsBoarding holds the default value on creation for the is_boarding field.
+	boardingrecord.DefaultIsBoarding = boardingrecordDescIsBoarding.Default.(bool)
 	// boardingrecordDescID is the schema descriptor for id field.
 	boardingrecordDescID := boardingrecordFields[0].Descriptor()
 	// boardingrecord.DefaultID holds the default value on creation for the id field.
@@ -148,6 +152,14 @@ func init() {
 	nursery.DefaultID = nurseryDescID.Default.(func() uuid.UUID)
 	stationFields := schema.Station{}.Fields()
 	_ = stationFields
+	// stationDescLatitude is the schema descriptor for latitude field.
+	stationDescLatitude := stationFields[1].Descriptor()
+	// station.DefaultLatitude holds the default value on creation for the latitude field.
+	station.DefaultLatitude = stationDescLatitude.Default.(float64)
+	// stationDescLongitude is the schema descriptor for longitude field.
+	stationDescLongitude := stationFields[2].Descriptor()
+	// station.DefaultLongitude holds the default value on creation for the longitude field.
+	station.DefaultLongitude = stationDescLongitude.Default.(float64)
 	// stationDescCreatedAt is the schema descriptor for created_at field.
 	stationDescCreatedAt := stationFields[3].Descriptor()
 	// station.DefaultCreatedAt holds the default value on creation for the created_at field.

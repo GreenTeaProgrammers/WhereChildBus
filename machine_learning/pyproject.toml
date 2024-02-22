@@ -14,6 +14,8 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "grpcio>=1.60.1",
     "grpcio_reflection>=1.60.1",
+    "grpcio-status>=1.60.1",
+    "googleapis-common-protos>=1.62.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -27,7 +29,9 @@ build-backend = "hatchling.build"
 
 [tool.rye]
 managed = true
-dev-dependencies = []
+dev-dependencies = [
+    "watchdog>=4.0.0",
+]
 
 [tool.hatch.metadata]
 allow-direct-references = true

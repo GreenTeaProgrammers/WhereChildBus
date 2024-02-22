@@ -557,34 +557,40 @@ func (m *BoardingRecordMutation) ResetEdge(name string) error {
 // BusMutation represents an operation that mutates the Bus nodes in the graph.
 type BusMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *uuid.UUID
-	name                        *string
-	plate_number                *string
-	latitude                    *float64
-	addlatitude                 *float64
-	longitude                   *float64
-	addlongitude                *float64
-	status                      *bus.Status
-	enable_face_recognition     *bool
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	clearedFields               map[string]struct{}
-	nursery                     *uuid.UUID
-	clearednursery              bool
-	stations                    map[uuid.UUID]struct{}
-	removedstations             map[uuid.UUID]struct{}
-	clearedstations             bool
-	boarding_records            map[uuid.UUID]struct{}
-	removedboarding_records     map[uuid.UUID]struct{}
-	clearedboarding_records     bool
-	childBusAssociations        map[int]struct{}
-	removedchildBusAssociations map[int]struct{}
-	clearedchildBusAssociations bool
-	done                        bool
-	oldValue                    func(context.Context) (*Bus, error)
-	predicates                  []predicate.Bus
+	op                           Op
+	typ                          string
+	id                           *uuid.UUID
+	name                         *string
+	plate_number                 *string
+	latitude                     *float64
+	addlatitude                  *float64
+	longitude                    *float64
+	addlongitude                 *float64
+	status                       *bus.Status
+	enable_face_recognition      *bool
+	created_at                   *time.Time
+	updated_at                   *time.Time
+	clearedFields                map[string]struct{}
+	nursery                      *uuid.UUID
+	clearednursery               bool
+	stations                     map[uuid.UUID]struct{}
+	removedstations              map[uuid.UUID]struct{}
+	clearedstations              bool
+	boarding_records             map[uuid.UUID]struct{}
+	removedboarding_records      map[uuid.UUID]struct{}
+	clearedboarding_records      bool
+	childBusAssociations         map[int]struct{}
+	removedchildBusAssociations  map[int]struct{}
+	clearedchildBusAssociations  bool
+	next_station                 *uuid.UUID
+	clearednext_station          bool
+	morning_first_station        *uuid.UUID
+	clearedmorning_first_station bool
+	evening_first_station        *uuid.UUID
+	clearedevening_first_station bool
+	done                         bool
+	oldValue                     func(context.Context) (*Bus, error)
+	predicates                   []predicate.Bus
 }
 
 var _ ent.Mutation = (*BusMutation)(nil)
@@ -1261,6 +1267,123 @@ func (m *BusMutation) ResetChildBusAssociations() {
 	m.removedchildBusAssociations = nil
 }
 
+// SetNextStationID sets the "next_station" edge to the Station entity by id.
+func (m *BusMutation) SetNextStationID(id uuid.UUID) {
+	m.next_station = &id
+}
+
+// ClearNextStation clears the "next_station" edge to the Station entity.
+func (m *BusMutation) ClearNextStation() {
+	m.clearednext_station = true
+}
+
+// NextStationCleared reports if the "next_station" edge to the Station entity was cleared.
+func (m *BusMutation) NextStationCleared() bool {
+	return m.clearednext_station
+}
+
+// NextStationID returns the "next_station" edge ID in the mutation.
+func (m *BusMutation) NextStationID() (id uuid.UUID, exists bool) {
+	if m.next_station != nil {
+		return *m.next_station, true
+	}
+	return
+}
+
+// NextStationIDs returns the "next_station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// NextStationID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) NextStationIDs() (ids []uuid.UUID) {
+	if id := m.next_station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetNextStation resets all changes to the "next_station" edge.
+func (m *BusMutation) ResetNextStation() {
+	m.next_station = nil
+	m.clearednext_station = false
+}
+
+// SetMorningFirstStationID sets the "morning_first_station" edge to the Station entity by id.
+func (m *BusMutation) SetMorningFirstStationID(id uuid.UUID) {
+	m.morning_first_station = &id
+}
+
+// ClearMorningFirstStation clears the "morning_first_station" edge to the Station entity.
+func (m *BusMutation) ClearMorningFirstStation() {
+	m.clearedmorning_first_station = true
+}
+
+// MorningFirstStationCleared reports if the "morning_first_station" edge to the Station entity was cleared.
+func (m *BusMutation) MorningFirstStationCleared() bool {
+	return m.clearedmorning_first_station
+}
+
+// MorningFirstStationID returns the "morning_first_station" edge ID in the mutation.
+func (m *BusMutation) MorningFirstStationID() (id uuid.UUID, exists bool) {
+	if m.morning_first_station != nil {
+		return *m.morning_first_station, true
+	}
+	return
+}
+
+// MorningFirstStationIDs returns the "morning_first_station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MorningFirstStationID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) MorningFirstStationIDs() (ids []uuid.UUID) {
+	if id := m.morning_first_station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMorningFirstStation resets all changes to the "morning_first_station" edge.
+func (m *BusMutation) ResetMorningFirstStation() {
+	m.morning_first_station = nil
+	m.clearedmorning_first_station = false
+}
+
+// SetEveningFirstStationID sets the "evening_first_station" edge to the Station entity by id.
+func (m *BusMutation) SetEveningFirstStationID(id uuid.UUID) {
+	m.evening_first_station = &id
+}
+
+// ClearEveningFirstStation clears the "evening_first_station" edge to the Station entity.
+func (m *BusMutation) ClearEveningFirstStation() {
+	m.clearedevening_first_station = true
+}
+
+// EveningFirstStationCleared reports if the "evening_first_station" edge to the Station entity was cleared.
+func (m *BusMutation) EveningFirstStationCleared() bool {
+	return m.clearedevening_first_station
+}
+
+// EveningFirstStationID returns the "evening_first_station" edge ID in the mutation.
+func (m *BusMutation) EveningFirstStationID() (id uuid.UUID, exists bool) {
+	if m.evening_first_station != nil {
+		return *m.evening_first_station, true
+	}
+	return
+}
+
+// EveningFirstStationIDs returns the "evening_first_station" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// EveningFirstStationID instead. It exists only for internal usage by the builders.
+func (m *BusMutation) EveningFirstStationIDs() (ids []uuid.UUID) {
+	if id := m.evening_first_station; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetEveningFirstStation resets all changes to the "evening_first_station" edge.
+func (m *BusMutation) ResetEveningFirstStation() {
+	m.evening_first_station = nil
+	m.clearedevening_first_station = false
+}
+
 // Where appends a list predicates to the BusMutation builder.
 func (m *BusMutation) Where(ps ...predicate.Bus) {
 	m.predicates = append(m.predicates, ps...)
@@ -1561,7 +1684,7 @@ func (m *BusMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BusMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 7)
 	if m.nursery != nil {
 		edges = append(edges, bus.EdgeNursery)
 	}
@@ -1573,6 +1696,15 @@ func (m *BusMutation) AddedEdges() []string {
 	}
 	if m.childBusAssociations != nil {
 		edges = append(edges, bus.EdgeChildBusAssociations)
+	}
+	if m.next_station != nil {
+		edges = append(edges, bus.EdgeNextStation)
+	}
+	if m.morning_first_station != nil {
+		edges = append(edges, bus.EdgeMorningFirstStation)
+	}
+	if m.evening_first_station != nil {
+		edges = append(edges, bus.EdgeEveningFirstStation)
 	}
 	return edges
 }
@@ -1603,13 +1735,25 @@ func (m *BusMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case bus.EdgeNextStation:
+		if id := m.next_station; id != nil {
+			return []ent.Value{*id}
+		}
+	case bus.EdgeMorningFirstStation:
+		if id := m.morning_first_station; id != nil {
+			return []ent.Value{*id}
+		}
+	case bus.EdgeEveningFirstStation:
+		if id := m.evening_first_station; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BusMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 7)
 	if m.removedstations != nil {
 		edges = append(edges, bus.EdgeStations)
 	}
@@ -1650,7 +1794,7 @@ func (m *BusMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BusMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 7)
 	if m.clearednursery {
 		edges = append(edges, bus.EdgeNursery)
 	}
@@ -1662,6 +1806,15 @@ func (m *BusMutation) ClearedEdges() []string {
 	}
 	if m.clearedchildBusAssociations {
 		edges = append(edges, bus.EdgeChildBusAssociations)
+	}
+	if m.clearednext_station {
+		edges = append(edges, bus.EdgeNextStation)
+	}
+	if m.clearedmorning_first_station {
+		edges = append(edges, bus.EdgeMorningFirstStation)
+	}
+	if m.clearedevening_first_station {
+		edges = append(edges, bus.EdgeEveningFirstStation)
 	}
 	return edges
 }
@@ -1678,6 +1831,12 @@ func (m *BusMutation) EdgeCleared(name string) bool {
 		return m.clearedboarding_records
 	case bus.EdgeChildBusAssociations:
 		return m.clearedchildBusAssociations
+	case bus.EdgeNextStation:
+		return m.clearednext_station
+	case bus.EdgeMorningFirstStation:
+		return m.clearedmorning_first_station
+	case bus.EdgeEveningFirstStation:
+		return m.clearedevening_first_station
 	}
 	return false
 }
@@ -1688,6 +1847,15 @@ func (m *BusMutation) ClearEdge(name string) error {
 	switch name {
 	case bus.EdgeNursery:
 		m.ClearNursery()
+		return nil
+	case bus.EdgeNextStation:
+		m.ClearNextStation()
+		return nil
+	case bus.EdgeMorningFirstStation:
+		m.ClearMorningFirstStation()
+		return nil
+	case bus.EdgeEveningFirstStation:
+		m.ClearEveningFirstStation()
 		return nil
 	}
 	return fmt.Errorf("unknown Bus unique edge %s", name)
@@ -1708,6 +1876,15 @@ func (m *BusMutation) ResetEdge(name string) error {
 		return nil
 	case bus.EdgeChildBusAssociations:
 		m.ResetChildBusAssociations()
+		return nil
+	case bus.EdgeNextStation:
+		m.ResetNextStation()
+		return nil
+	case bus.EdgeMorningFirstStation:
+		m.ResetMorningFirstStation()
+		return nil
+	case bus.EdgeEveningFirstStation:
+		m.ResetEveningFirstStation()
 		return nil
 	}
 	return fmt.Errorf("unknown Bus edge %s", name)
@@ -5824,6 +6001,15 @@ type StationMutation struct {
 	evening_next_station            map[uuid.UUID]struct{}
 	removedevening_next_station     map[uuid.UUID]struct{}
 	clearedevening_next_station     bool
+	next_for_buses                  map[uuid.UUID]struct{}
+	removednext_for_buses           map[uuid.UUID]struct{}
+	clearednext_for_buses           bool
+	morning_first_for_buses         map[uuid.UUID]struct{}
+	removedmorning_first_for_buses  map[uuid.UUID]struct{}
+	clearedmorning_first_for_buses  bool
+	evening_first_for_buses         map[uuid.UUID]struct{}
+	removedevening_first_for_buses  map[uuid.UUID]struct{}
+	clearedevening_first_for_buses  bool
 	done                            bool
 	oldValue                        func(context.Context) (*Station, error)
 	predicates                      []predicate.Station
@@ -6424,6 +6610,168 @@ func (m *StationMutation) ResetEveningNextStation() {
 	m.removedevening_next_station = nil
 }
 
+// AddNextForBusIDs adds the "next_for_buses" edge to the Bus entity by ids.
+func (m *StationMutation) AddNextForBusIDs(ids ...uuid.UUID) {
+	if m.next_for_buses == nil {
+		m.next_for_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.next_for_buses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearNextForBuses clears the "next_for_buses" edge to the Bus entity.
+func (m *StationMutation) ClearNextForBuses() {
+	m.clearednext_for_buses = true
+}
+
+// NextForBusesCleared reports if the "next_for_buses" edge to the Bus entity was cleared.
+func (m *StationMutation) NextForBusesCleared() bool {
+	return m.clearednext_for_buses
+}
+
+// RemoveNextForBusIDs removes the "next_for_buses" edge to the Bus entity by IDs.
+func (m *StationMutation) RemoveNextForBusIDs(ids ...uuid.UUID) {
+	if m.removednext_for_buses == nil {
+		m.removednext_for_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.next_for_buses, ids[i])
+		m.removednext_for_buses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedNextForBuses returns the removed IDs of the "next_for_buses" edge to the Bus entity.
+func (m *StationMutation) RemovedNextForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removednext_for_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// NextForBusesIDs returns the "next_for_buses" edge IDs in the mutation.
+func (m *StationMutation) NextForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.next_for_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetNextForBuses resets all changes to the "next_for_buses" edge.
+func (m *StationMutation) ResetNextForBuses() {
+	m.next_for_buses = nil
+	m.clearednext_for_buses = false
+	m.removednext_for_buses = nil
+}
+
+// AddMorningFirstForBusIDs adds the "morning_first_for_buses" edge to the Bus entity by ids.
+func (m *StationMutation) AddMorningFirstForBusIDs(ids ...uuid.UUID) {
+	if m.morning_first_for_buses == nil {
+		m.morning_first_for_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.morning_first_for_buses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMorningFirstForBuses clears the "morning_first_for_buses" edge to the Bus entity.
+func (m *StationMutation) ClearMorningFirstForBuses() {
+	m.clearedmorning_first_for_buses = true
+}
+
+// MorningFirstForBusesCleared reports if the "morning_first_for_buses" edge to the Bus entity was cleared.
+func (m *StationMutation) MorningFirstForBusesCleared() bool {
+	return m.clearedmorning_first_for_buses
+}
+
+// RemoveMorningFirstForBusIDs removes the "morning_first_for_buses" edge to the Bus entity by IDs.
+func (m *StationMutation) RemoveMorningFirstForBusIDs(ids ...uuid.UUID) {
+	if m.removedmorning_first_for_buses == nil {
+		m.removedmorning_first_for_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.morning_first_for_buses, ids[i])
+		m.removedmorning_first_for_buses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMorningFirstForBuses returns the removed IDs of the "morning_first_for_buses" edge to the Bus entity.
+func (m *StationMutation) RemovedMorningFirstForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removedmorning_first_for_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MorningFirstForBusesIDs returns the "morning_first_for_buses" edge IDs in the mutation.
+func (m *StationMutation) MorningFirstForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.morning_first_for_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMorningFirstForBuses resets all changes to the "morning_first_for_buses" edge.
+func (m *StationMutation) ResetMorningFirstForBuses() {
+	m.morning_first_for_buses = nil
+	m.clearedmorning_first_for_buses = false
+	m.removedmorning_first_for_buses = nil
+}
+
+// AddEveningFirstForBusIDs adds the "evening_first_for_buses" edge to the Bus entity by ids.
+func (m *StationMutation) AddEveningFirstForBusIDs(ids ...uuid.UUID) {
+	if m.evening_first_for_buses == nil {
+		m.evening_first_for_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.evening_first_for_buses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEveningFirstForBuses clears the "evening_first_for_buses" edge to the Bus entity.
+func (m *StationMutation) ClearEveningFirstForBuses() {
+	m.clearedevening_first_for_buses = true
+}
+
+// EveningFirstForBusesCleared reports if the "evening_first_for_buses" edge to the Bus entity was cleared.
+func (m *StationMutation) EveningFirstForBusesCleared() bool {
+	return m.clearedevening_first_for_buses
+}
+
+// RemoveEveningFirstForBusIDs removes the "evening_first_for_buses" edge to the Bus entity by IDs.
+func (m *StationMutation) RemoveEveningFirstForBusIDs(ids ...uuid.UUID) {
+	if m.removedevening_first_for_buses == nil {
+		m.removedevening_first_for_buses = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.evening_first_for_buses, ids[i])
+		m.removedevening_first_for_buses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEveningFirstForBuses returns the removed IDs of the "evening_first_for_buses" edge to the Bus entity.
+func (m *StationMutation) RemovedEveningFirstForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.removedevening_first_for_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EveningFirstForBusesIDs returns the "evening_first_for_buses" edge IDs in the mutation.
+func (m *StationMutation) EveningFirstForBusesIDs() (ids []uuid.UUID) {
+	for id := range m.evening_first_for_buses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEveningFirstForBuses resets all changes to the "evening_first_for_buses" edge.
+func (m *StationMutation) ResetEveningFirstForBuses() {
+	m.evening_first_for_buses = nil
+	m.clearedevening_first_for_buses = false
+	m.removedevening_first_for_buses = nil
+}
+
 // Where appends a list predicates to the StationMutation builder.
 func (m *StationMutation) Where(ps ...predicate.Station) {
 	m.predicates = append(m.predicates, ps...)
@@ -6650,7 +6998,7 @@ func (m *StationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.guardian != nil {
 		edges = append(edges, station.EdgeGuardian)
 	}
@@ -6668,6 +7016,15 @@ func (m *StationMutation) AddedEdges() []string {
 	}
 	if m.evening_next_station != nil {
 		edges = append(edges, station.EdgeEveningNextStation)
+	}
+	if m.next_for_buses != nil {
+		edges = append(edges, station.EdgeNextForBuses)
+	}
+	if m.morning_first_for_buses != nil {
+		edges = append(edges, station.EdgeMorningFirstForBuses)
+	}
+	if m.evening_first_for_buses != nil {
+		edges = append(edges, station.EdgeEveningFirstForBuses)
 	}
 	return edges
 }
@@ -6706,13 +7063,31 @@ func (m *StationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case station.EdgeNextForBuses:
+		ids := make([]ent.Value, 0, len(m.next_for_buses))
+		for id := range m.next_for_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	case station.EdgeMorningFirstForBuses:
+		ids := make([]ent.Value, 0, len(m.morning_first_for_buses))
+		for id := range m.morning_first_for_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	case station.EdgeEveningFirstForBuses:
+		ids := make([]ent.Value, 0, len(m.evening_first_for_buses))
+		for id := range m.evening_first_for_buses {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.removedbus != nil {
 		edges = append(edges, station.EdgeBus)
 	}
@@ -6721,6 +7096,15 @@ func (m *StationMutation) RemovedEdges() []string {
 	}
 	if m.removedevening_next_station != nil {
 		edges = append(edges, station.EdgeEveningNextStation)
+	}
+	if m.removednext_for_buses != nil {
+		edges = append(edges, station.EdgeNextForBuses)
+	}
+	if m.removedmorning_first_for_buses != nil {
+		edges = append(edges, station.EdgeMorningFirstForBuses)
+	}
+	if m.removedevening_first_for_buses != nil {
+		edges = append(edges, station.EdgeEveningFirstForBuses)
 	}
 	return edges
 }
@@ -6747,13 +7131,31 @@ func (m *StationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case station.EdgeNextForBuses:
+		ids := make([]ent.Value, 0, len(m.removednext_for_buses))
+		for id := range m.removednext_for_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	case station.EdgeMorningFirstForBuses:
+		ids := make([]ent.Value, 0, len(m.removedmorning_first_for_buses))
+		for id := range m.removedmorning_first_for_buses {
+			ids = append(ids, id)
+		}
+		return ids
+	case station.EdgeEveningFirstForBuses:
+		ids := make([]ent.Value, 0, len(m.removedevening_first_for_buses))
+		for id := range m.removedevening_first_for_buses {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.clearedguardian {
 		edges = append(edges, station.EdgeGuardian)
 	}
@@ -6771,6 +7173,15 @@ func (m *StationMutation) ClearedEdges() []string {
 	}
 	if m.clearedevening_next_station {
 		edges = append(edges, station.EdgeEveningNextStation)
+	}
+	if m.clearednext_for_buses {
+		edges = append(edges, station.EdgeNextForBuses)
+	}
+	if m.clearedmorning_first_for_buses {
+		edges = append(edges, station.EdgeMorningFirstForBuses)
+	}
+	if m.clearedevening_first_for_buses {
+		edges = append(edges, station.EdgeEveningFirstForBuses)
 	}
 	return edges
 }
@@ -6791,6 +7202,12 @@ func (m *StationMutation) EdgeCleared(name string) bool {
 		return m.clearedevening_previous_station
 	case station.EdgeEveningNextStation:
 		return m.clearedevening_next_station
+	case station.EdgeNextForBuses:
+		return m.clearednext_for_buses
+	case station.EdgeMorningFirstForBuses:
+		return m.clearedmorning_first_for_buses
+	case station.EdgeEveningFirstForBuses:
+		return m.clearedevening_first_for_buses
 	}
 	return false
 }
@@ -6833,6 +7250,15 @@ func (m *StationMutation) ResetEdge(name string) error {
 		return nil
 	case station.EdgeEveningNextStation:
 		m.ResetEveningNextStation()
+		return nil
+	case station.EdgeNextForBuses:
+		m.ResetNextForBuses()
+		return nil
+	case station.EdgeMorningFirstForBuses:
+		m.ResetMorningFirstForBuses()
+		return nil
+	case station.EdgeEveningFirstForBuses:
+		m.ResetEveningFirstForBuses()
 		return nil
 	}
 	return fmt.Errorf("unknown Station edge %s", name)

@@ -54,16 +54,23 @@ Future<CreateBusResponse> createBus(
   });
 }
 
-Future<UpdateBusResponse> updateBusStatus(
+Future<ChangeBusStatusResponse> updateBusStatus(
     String busId, BusStatus busStatus) async {
+  DateTime now = DateTime.now();
+  BusType busType;
+  if (now.hour < 12) {
+    busType = BusType.BUS_TYPE_MORNING;
+  } else {
+    busType = BusType.BUS_TYPE_EVENING;
+  }
   return performGrpcCall((client) async {
-    var req = UpdateBusRequest(
+    var req = ChangeBusStatusRequest(
       busId: busId,
       busStatus: busStatus,
-      updateMask: FieldMask(paths: ["bus_status"]),
+      busType: busType,
     );
     developer.log("Request: $req");
-    return client.updateBus(req);
+    return client.changeBusStatus(req);
   });
 }
 

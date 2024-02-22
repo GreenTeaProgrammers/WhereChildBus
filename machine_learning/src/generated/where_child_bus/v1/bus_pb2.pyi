@@ -76,15 +76,18 @@ class GetRunningBusByGuardianIdResponse(_message.Message):
     ) -> None: ...
 
 class ChangeBusStatusRequest(_message.Message):
-    __slots__ = ("bus_id", "bus_status")
+    __slots__ = ("bus_id", "bus_status", "bus_type")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
+    BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     bus_status: _resources_pb2.BusStatus
+    bus_type: _resources_pb2.BusType
     def __init__(
         self,
         bus_id: _Optional[str] = ...,
         bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...,
+        bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ...,
     ) -> None: ...
 
 class ChangeBusStatusResponse(_message.Message):
@@ -121,18 +124,21 @@ class TrackBusContinuousRequest(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
 
 class TrackBusContinuousResponse(_message.Message):
-    __slots__ = ("bus_id", "latitude", "longitude")
+    __slots__ = ("bus_id", "latitude", "longitude", "next_station_id")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
+    NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     latitude: float
     longitude: float
+    next_station_id: str
     def __init__(
         self,
         bus_id: _Optional[str] = ...,
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
+        next_station_id: _Optional[str] = ...,
     ) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
@@ -187,37 +193,45 @@ class UpdateBusRequest(_message.Message):
         "bus_id",
         "name",
         "plate_number",
-        "bus_status",
         "latitude",
         "longitude",
         "enable_face_recognition",
+        "morning_first_station_id",
+        "evening_first_station_id",
+        "next_station_id",
         "update_mask",
     )
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    BUS_STATUS_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
+    MORNING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
+    EVENING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
+    NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     UPDATE_MASK_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
     name: str
     plate_number: str
-    bus_status: _resources_pb2.BusStatus
     latitude: float
     longitude: float
     enable_face_recognition: bool
+    morning_first_station_id: str
+    evening_first_station_id: str
+    next_station_id: str
     update_mask: _field_mask_pb2.FieldMask
     def __init__(
         self,
         bus_id: _Optional[str] = ...,
         name: _Optional[str] = ...,
         plate_number: _Optional[str] = ...,
-        bus_status: _Optional[_Union[_resources_pb2.BusStatus, str]] = ...,
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
         enable_face_recognition: bool = ...,
+        morning_first_station_id: _Optional[str] = ...,
+        evening_first_station_id: _Optional[str] = ...,
+        next_station_id: _Optional[str] = ...,
         update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...,
     ) -> None: ...
 

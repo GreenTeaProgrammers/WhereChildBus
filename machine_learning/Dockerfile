@@ -28,7 +28,8 @@ COPY ./src /machine-learning/src
 # .envファイルを作成し、ビルド引数の値を書き込む
 RUN mkdir -p /machine-learning/secrets && \
     echo "PROJECT_ID=$GCP_PROJECT_ID" > /machine-learning/secrets/.env && \
-    echo "BUCKET_NAME=$BUCKET_NAME_FOR_ML" >> /machine-learning/secrets/.env
+    echo "BUCKET_NAME=$BUCKET_NAME_FOR_ML" >> /machine-learning/secrets/.env && \
+    echo "BUCKET_NAME_FOR_FACE=$BUCKET_NAME_FOR_FACE" >> /machine-learning/secrets/.env
 
 # 環境変数PATHの設定
 ENV PYTHONPATH "${PYTHONPATH}:/machine-learning/src/"

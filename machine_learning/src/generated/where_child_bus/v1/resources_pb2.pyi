@@ -233,6 +233,9 @@ class Bus(_message.Message):
         "latitude",
         "longitude",
         "enable_face_recognition",
+        "morning_first_station_id",
+        "evening_first_station_id",
+        "next_station_id",
         "created_at",
         "updated_at",
     )
@@ -244,6 +247,9 @@ class Bus(_message.Message):
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
+    MORNING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
+    EVENING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
+    NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
@@ -254,6 +260,9 @@ class Bus(_message.Message):
     latitude: float
     longitude: float
     enable_face_recognition: bool
+    morning_first_station_id: str
+    evening_first_station_id: str
+    next_station_id: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
     def __init__(
@@ -266,6 +275,9 @@ class Bus(_message.Message):
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
         enable_face_recognition: bool = ...,
+        morning_first_station_id: _Optional[str] = ...,
+        evening_first_station_id: _Optional[str] = ...,
+        next_station_id: _Optional[str] = ...,
         created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
         updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
     ) -> None: ...
@@ -341,8 +353,6 @@ class Station(_message.Message):
         "evening_next_station_id",
         "latitude",
         "longitude",
-        "morning_order",
-        "evening_order",
         "created_at",
         "updated_at",
     )
@@ -352,8 +362,6 @@ class Station(_message.Message):
     EVENING_NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
-    MORNING_ORDER_FIELD_NUMBER: _ClassVar[int]
-    EVENING_ORDER_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
@@ -362,8 +370,6 @@ class Station(_message.Message):
     evening_next_station_id: str
     latitude: float
     longitude: float
-    morning_order: int
-    evening_order: int
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
     def __init__(
@@ -374,8 +380,6 @@ class Station(_message.Message):
         evening_next_station_id: _Optional[str] = ...,
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
-        morning_order: _Optional[int] = ...,
-        evening_order: _Optional[int] = ...,
         created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
         updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
     ) -> None: ...

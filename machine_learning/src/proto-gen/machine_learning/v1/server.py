@@ -1,8 +1,29 @@
 import logging
 from concurrent import futures
 from typing import Iterable
+import traceback
+
 
 import grpc
+
+from grpc_status import rpc_status
+from grpc_reflection.v1alpha import reflection
+
+
+from generated.machine_learning.v1 import health_check_pb2
+from generated.machine_learning.v1 import health_check_pb2_grpc
+from generated.machine_learning.v1 import machine_learning_pb2
+from generated.machine_learning.v1 import machine_learning_pb2_grpc
+from generated.where_child_bus.v1 import bus_pb2
+from generated.machine_learning.v1.func_args import (
+    FaceDetectAndClip_Args,
+    Pred_Args,
+    Train_Args,
+)
+
+from error_util import create_service_error_status
+
+
 from face_detect_model.DetectFaceAndClip.detectFaceAndClip import (
     main as detect_face_and_clip_fn,
 )
@@ -45,6 +66,7 @@ class MachineLearningServiceServicer(
 
     def Pred(self, request_iterator: Iterable[bus_pb2.StreamBusVideoRequest], context):
         for request in request_iterator:
+            logging.info("Pred Service Start")
             params = Pred_Args(
                 nursery_id=request.nursery_id,
                 bus_id=request.bus_id,
@@ -56,15 +78,20 @@ class MachineLearningServiceServicer(
             )
             try:
                 child_ids = self.pred_fn(params)
-            except Exception as e:
+            except Exception:
+                e = traceback.format_exc()
                 logging.error(e)
+                rich_status = create_service_error_status(e)
+                context.abort_with_status(rpc_status.to_status(rich_status))
                 child_ids = []
+
             is_detected = len(child_ids) > 0
             yield machine_learning_pb2.PredResponse(
                 is_detected=is_detected, child_ids=child_ids
             )
 
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
+        logging.info("Train Service Start")
         params = Train_Args(
             nursery_id=request.nursery_id,
             child_ids=request.child_ids,
@@ -76,9 +103,12 @@ class MachineLearningServiceServicer(
         try:
             self.train_fn(params)
             is_started = True
-        except Exception as e:
-            logging.error(e)
+        except Exception:
             is_started = False
+            e = traceback.format_exc()
+            logging.error(e)
+            rich_status = create_service_error_status(e)
+            context.abort_with_status(rpc_status.to_status(rich_status))
 
         return machine_learning_pb2.TrainResponse(is_started=is_started)
 
@@ -87,6 +117,7 @@ class MachineLearningServiceServicer(
         request: machine_learning_pb2.FaceDetectAndClipRequest,
         context,
     ):
+        logging.info("FaceDetectAndClip Service Start")
         params = FaceDetectAndClip_Args(
             nursery_id=request.nursery_id,
             child_id=request.child_id,
@@ -95,9 +126,12 @@ class MachineLearningServiceServicer(
         try:
             self.detect_face_and_clip_fn(params)
             is_started = True
-        except Exception as e:
-            logging.error(e)
+        except Exception:
             is_started = False
+            e = traceback.format_exc()
+            logging.error(e)
+            rich_status = create_service_error_status(e)
+            context.abort_with_status(rpc_status.to_status(rich_status))
 
         return machine_learning_pb2.FaceDetectAndClipResponse(is_started=is_started)
 
