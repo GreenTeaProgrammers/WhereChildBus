@@ -148,22 +148,26 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Widget _createPageBody() {
-    return Stack(
-      children: [
-        CameraPreview(_controller),
-        Positioned(
-            right: 15,
-            child: RidingToggle(
-                onToggled: (event) => {
-                      setState(() {
-                        if (event) {
-                          _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
-                        } else {
-                          _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_OFF;
-                        }
-                      }),
-                    }))
-      ],
+    return Expanded(
+      child: Stack(
+        children: [
+          AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: CameraPreview(_controller)),
+          Positioned(
+              right: 15,
+              child: RidingToggle(
+                  onToggled: (event) => {
+                        setState(() {
+                          if (event) {
+                            _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
+                          } else {
+                            _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_OFF;
+                          }
+                        }),
+                      }))
+        ],
+      ),
     );
   }
 }
