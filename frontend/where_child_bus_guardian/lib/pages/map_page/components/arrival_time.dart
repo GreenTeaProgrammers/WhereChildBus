@@ -112,12 +112,14 @@ class _ArrivalTimeState extends State<ArrivalTime> {
       );
 
       if (durationInSeconds != null) {
-        setState(() {
-          arrivalTime = widget.isMinuteOnly
-              ? (durationInSeconds ~/ 60).toString()
-              : DateFormat('HH:mm').format(
-                  departureTime.add(Duration(seconds: durationInSeconds)));
-        });
+        if (mounted) {
+          setState(() {
+            arrivalTime = widget.isMinuteOnly
+                ? (durationInSeconds ~/ 60).toString()
+                : DateFormat('HH:mm').format(
+                    departureTime.add(Duration(seconds: durationInSeconds)));
+          });
+        }
       } else {
         setState(() => arrivalTime = "N/A");
       }

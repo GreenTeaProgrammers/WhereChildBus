@@ -36,7 +36,7 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       if (kDebugMode) {
-        res = await guardianLogin("guardian1@example.com", "password");
+        res = await guardianLogin("hogosya1@example.com", "password");
       } else {
         res = await guardianLogin(
             _emailController.text, _passwordController.text);
