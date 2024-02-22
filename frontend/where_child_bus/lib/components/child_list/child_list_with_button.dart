@@ -1,3 +1,4 @@
+import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/element/child_list_element_with_button.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
@@ -40,11 +41,11 @@ class _ChildListWithButtonState extends State<ChildListWithButton> {
           buttonIconType: widget.buttonIconTypes[index], // 各アイテムに対応するアイコンタイプ
           onTap: () {
             // ここでリストアイテムがタップされたときの動作を定義
-            print("${widget.childNames[index]}がタップされました");
+            developer.log("${widget.childNames[index]}がタップされました");
           },
           onButtonTap: () {
             // ここでアイコンボタンがタップされたときの動作を定義
-            print("${widget.childNames[index]}のボタンがタップされました");
+            developer.log("${widget.childNames[index]}のボタンがタップされました");
           },
         );
       },

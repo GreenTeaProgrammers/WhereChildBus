@@ -16,6 +16,10 @@ type Tx struct {
 	BoardingRecord *BoardingRecordClient
 	// Bus is the client for interacting with the Bus builders.
 	Bus *BusClient
+	// BusRoute is the client for interacting with the BusRoute builders.
+	BusRoute *BusRouteClient
+	// BusRouteAssociation is the client for interacting with the BusRouteAssociation builders.
+	BusRouteAssociation *BusRouteAssociationClient
 	// Child is the client for interacting with the Child builders.
 	Child *ChildClient
 	// ChildBusAssociation is the client for interacting with the ChildBusAssociation builders.
@@ -161,6 +165,8 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.BoardingRecord = NewBoardingRecordClient(tx.config)
 	tx.Bus = NewBusClient(tx.config)
+	tx.BusRoute = NewBusRouteClient(tx.config)
+	tx.BusRouteAssociation = NewBusRouteAssociationClient(tx.config)
 	tx.Child = NewChildClient(tx.config)
 	tx.ChildBusAssociation = NewChildBusAssociationClient(tx.config)
 	tx.ChildPhoto = NewChildPhotoClient(tx.config)

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/child_list.dart';
 import 'package:where_child_bus/models/nursery_child_data.dart';
-import 'package:where_child_bus/pages/student_list_page/student_edit_page.dart';
+import 'package:where_child_bus/pages/student_list_page/child_edit_page.dart';
 import 'package:where_child_bus/service/get_child_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart';
@@ -87,7 +87,9 @@ class _ChildListPageState extends State<ChildListPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => const StudentEditPage()));
+              builder: (BuildContext context) => const StudentEditPage(
+                    isEdit: false,
+                  )));
         },
         child: const Icon(Icons.add),
       ),

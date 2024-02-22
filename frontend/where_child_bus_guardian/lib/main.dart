@@ -1,6 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:where_child_bus_guardian/config/config.dart';
 import 'package:where_child_bus_guardian/util/api/health_check.dart';
@@ -36,6 +37,9 @@ class _MyAppState extends State<MyApp> {
       title: 'WhereChildBus Guardian',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.hachiMaruPopTextTheme(
+          Theme.of(context).textTheme,
+        ),
         useMaterial3: true,
       ),
       home: const AuthPage(),

@@ -13,8 +13,9 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/field_mask.pb.dart' as $9;
-import 'resources.pb.dart' as $8;
+import '../../google/protobuf/field_mask.pb.dart' as $10;
+import 'resources.pb.dart' as $9;
+import 'resources.pbenum.dart' as $9;
 
 class UpdateStationLocationByGuardianIdRequest extends $pb.GeneratedMessage {
   factory UpdateStationLocationByGuardianIdRequest({
@@ -96,7 +97,7 @@ class UpdateStationLocationByGuardianIdRequest extends $pb.GeneratedMessage {
 
 class UpdateStationLocationByGuardianIdResponse extends $pb.GeneratedMessage {
   factory UpdateStationLocationByGuardianIdResponse({
-    $8.Station? station,
+    $9.Station? station,
   }) {
     final $result = create();
     if (station != null) {
@@ -109,7 +110,7 @@ class UpdateStationLocationByGuardianIdResponse extends $pb.GeneratedMessage {
   factory UpdateStationLocationByGuardianIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationLocationByGuardianIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Station>(1, _omitFieldNames ? '' : 'station', subBuilder: $8.Station.create)
+    ..aOM<$9.Station>(1, _omitFieldNames ? '' : 'station', subBuilder: $9.Station.create)
     ..hasRequiredFields = false
   ;
 
@@ -135,15 +136,15 @@ class UpdateStationLocationByGuardianIdResponse extends $pb.GeneratedMessage {
   static UpdateStationLocationByGuardianIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Station get station => $_getN(0);
+  $9.Station get station => $_getN(0);
   @$pb.TagNumber(1)
-  set station($8.Station v) { setField(1, v); }
+  set station($9.Station v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasStation() => $_has(0);
   @$pb.TagNumber(1)
   void clearStation() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Station ensureStation() => $_ensure(0);
+  $9.Station ensureStation() => $_ensure(0);
 }
 
 class GetStationListByBusIdRequest extends $pb.GeneratedMessage {
@@ -198,10 +199,10 @@ class GetStationListByBusIdRequest extends $pb.GeneratedMessage {
 
 class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
   factory GetStationListByBusIdResponse({
-    $core.Iterable<$8.Station>? stations,
-    $core.Iterable<$8.GuardianResponse>? guardians,
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $core.Iterable<$9.Station>? stations,
+    $core.Iterable<$9.GuardianResponse>? guardians,
+    $core.Iterable<$9.Child>? children,
+    $core.Iterable<$9.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (stations != null) {
@@ -223,10 +224,10 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
   factory GetStationListByBusIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetStationListByBusIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Station>(1, _omitFieldNames ? '' : 'stations', $pb.PbFieldType.PM, subBuilder: $8.Station.create)
-    ..pc<$8.GuardianResponse>(2, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
-    ..pc<$8.Child>(3, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(4, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..pc<$9.Station>(1, _omitFieldNames ? '' : 'stations', $pb.PbFieldType.PM, subBuilder: $9.Station.create)
+    ..pc<$9.GuardianResponse>(2, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $9.GuardianResponse.create)
+    ..pc<$9.Child>(3, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $9.Child.create)
+    ..pc<$9.ChildPhoto>(4, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $9.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -252,16 +253,16 @@ class GetStationListByBusIdResponse extends $pb.GeneratedMessage {
   static GetStationListByBusIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.Station> get stations => $_getList(0);
+  $core.List<$9.Station> get stations => $_getList(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.GuardianResponse> get guardians => $_getList(1);
+  $core.List<$9.GuardianResponse> get guardians => $_getList(1);
 
   @$pb.TagNumber(3)
-  $core.List<$8.Child> get children => $_getList(2);
+  $core.List<$9.Child> get children => $_getList(2);
 
   @$pb.TagNumber(4)
-  $core.List<$8.ChildPhoto> get photos => $_getList(3);
+  $core.List<$9.ChildPhoto> get photos => $_getList(3);
 }
 
 class GetUnregisteredStationListRequest extends $pb.GeneratedMessage {
@@ -316,8 +317,8 @@ class GetUnregisteredStationListRequest extends $pb.GeneratedMessage {
 
 class GetUnregisteredStationListResponse extends $pb.GeneratedMessage {
   factory GetUnregisteredStationListResponse({
-    $core.Iterable<$8.Station>? stations,
-    $core.Iterable<$8.GuardianResponse>? guardians,
+    $core.Iterable<$9.Station>? stations,
+    $core.Iterable<$9.GuardianResponse>? guardians,
   }) {
     final $result = create();
     if (stations != null) {
@@ -333,8 +334,8 @@ class GetUnregisteredStationListResponse extends $pb.GeneratedMessage {
   factory GetUnregisteredStationListResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetUnregisteredStationListResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Station>(1, _omitFieldNames ? '' : 'stations', $pb.PbFieldType.PM, subBuilder: $8.Station.create)
-    ..pc<$8.GuardianResponse>(2, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
+    ..pc<$9.Station>(1, _omitFieldNames ? '' : 'stations', $pb.PbFieldType.PM, subBuilder: $9.Station.create)
+    ..pc<$9.GuardianResponse>(2, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $9.GuardianResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -360,22 +361,142 @@ class GetUnregisteredStationListResponse extends $pb.GeneratedMessage {
   static GetUnregisteredStationListResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.Station> get stations => $_getList(0);
+  $core.List<$9.Station> get stations => $_getList(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.GuardianResponse> get guardians => $_getList(1);
+  $core.List<$9.GuardianResponse> get guardians => $_getList(1);
+}
+
+class GetCorrectOrderStationListByBusIdRequest extends $pb.GeneratedMessage {
+  factory GetCorrectOrderStationListByBusIdRequest({
+    $core.String? busId,
+    $9.BusType? busType,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    if (busType != null) {
+      $result.busType = busType;
+    }
+    return $result;
+  }
+  GetCorrectOrderStationListByBusIdRequest._() : super();
+  factory GetCorrectOrderStationListByBusIdRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetCorrectOrderStationListByBusIdRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetCorrectOrderStationListByBusIdRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..e<$9.BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $9.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $9.BusType.valueOf, enumValues: $9.BusType.values)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdRequest clone() => GetCorrectOrderStationListByBusIdRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdRequest copyWith(void Function(GetCorrectOrderStationListByBusIdRequest) updates) => super.copyWith((message) => updates(message as GetCorrectOrderStationListByBusIdRequest)) as GetCorrectOrderStationListByBusIdRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdRequest create() => GetCorrectOrderStationListByBusIdRequest._();
+  GetCorrectOrderStationListByBusIdRequest createEmptyInstance() => create();
+  static $pb.PbList<GetCorrectOrderStationListByBusIdRequest> createRepeated() => $pb.PbList<GetCorrectOrderStationListByBusIdRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetCorrectOrderStationListByBusIdRequest>(create);
+  static GetCorrectOrderStationListByBusIdRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $9.BusType get busType => $_getN(1);
+  @$pb.TagNumber(2)
+  set busType($9.BusType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasBusType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBusType() => clearField(2);
+}
+
+class GetCorrectOrderStationListByBusIdResponse extends $pb.GeneratedMessage {
+  factory GetCorrectOrderStationListByBusIdResponse({
+    $9.BusRoute? busRoute,
+  }) {
+    final $result = create();
+    if (busRoute != null) {
+      $result.busRoute = busRoute;
+    }
+    return $result;
+  }
+  GetCorrectOrderStationListByBusIdResponse._() : super();
+  factory GetCorrectOrderStationListByBusIdResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetCorrectOrderStationListByBusIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetCorrectOrderStationListByBusIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$9.BusRoute>(1, _omitFieldNames ? '' : 'busRoute', subBuilder: $9.BusRoute.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdResponse clone() => GetCorrectOrderStationListByBusIdResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdResponse copyWith(void Function(GetCorrectOrderStationListByBusIdResponse) updates) => super.copyWith((message) => updates(message as GetCorrectOrderStationListByBusIdResponse)) as GetCorrectOrderStationListByBusIdResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdResponse create() => GetCorrectOrderStationListByBusIdResponse._();
+  GetCorrectOrderStationListByBusIdResponse createEmptyInstance() => create();
+  static $pb.PbList<GetCorrectOrderStationListByBusIdResponse> createRepeated() => $pb.PbList<GetCorrectOrderStationListByBusIdResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetCorrectOrderStationListByBusIdResponse>(create);
+  static GetCorrectOrderStationListByBusIdResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $9.BusRoute get busRoute => $_getN(0);
+  @$pb.TagNumber(1)
+  set busRoute($9.BusRoute v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusRoute() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusRoute() => clearField(1);
+  @$pb.TagNumber(1)
+  $9.BusRoute ensureBusRoute() => $_ensure(0);
 }
 
 class UpdateStationRequest extends $pb.GeneratedMessage {
   factory UpdateStationRequest({
     $core.String? id,
+    $core.String? busId,
     $core.double? latitude,
     $core.double? longitude,
-    $9.FieldMask? updateMask,
+    $10.FieldMask? updateMask,
   }) {
     final $result = create();
     if (id != null) {
       $result.id = id;
+    }
+    if (busId != null) {
+      $result.busId = busId;
     }
     if (latitude != null) {
       $result.latitude = latitude;
@@ -394,9 +515,10 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOM<$9.FieldMask>(4, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..aOS(2, _omitFieldNames ? '' : 'busId')
+    ..a<$core.double>(3, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(4, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOM<$10.FieldMask>(5, _omitFieldNames ? '' : 'updateMask', subBuilder: $10.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -431,38 +553,47 @@ class UpdateStationRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.double get latitude => $_getN(1);
+  $core.String get busId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set latitude($core.double v) { $_setDouble(1, v); }
+  set busId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasLatitude() => $_has(1);
+  $core.bool hasBusId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearLatitude() => clearField(2);
+  void clearBusId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.double get longitude => $_getN(2);
+  $core.double get latitude => $_getN(2);
   @$pb.TagNumber(3)
-  set longitude($core.double v) { $_setDouble(2, v); }
+  set latitude($core.double v) { $_setDouble(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasLongitude() => $_has(2);
+  $core.bool hasLatitude() => $_has(2);
   @$pb.TagNumber(3)
-  void clearLongitude() => clearField(3);
+  void clearLatitude() => clearField(3);
 
   @$pb.TagNumber(4)
-  $9.FieldMask get updateMask => $_getN(3);
+  $core.double get longitude => $_getN(3);
   @$pb.TagNumber(4)
-  set updateMask($9.FieldMask v) { setField(4, v); }
+  set longitude($core.double v) { $_setDouble(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasUpdateMask() => $_has(3);
+  $core.bool hasLongitude() => $_has(3);
   @$pb.TagNumber(4)
-  void clearUpdateMask() => clearField(4);
-  @$pb.TagNumber(4)
-  $9.FieldMask ensureUpdateMask() => $_ensure(3);
+  void clearLongitude() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $10.FieldMask get updateMask => $_getN(4);
+  @$pb.TagNumber(5)
+  set updateMask($10.FieldMask v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUpdateMask() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUpdateMask() => clearField(5);
+  @$pb.TagNumber(5)
+  $10.FieldMask ensureUpdateMask() => $_ensure(4);
 }
 
 class UpdateStationResponse extends $pb.GeneratedMessage {
   factory UpdateStationResponse({
-    $8.Station? station,
+    $9.Station? station,
   }) {
     final $result = create();
     if (station != null) {
@@ -475,7 +606,7 @@ class UpdateStationResponse extends $pb.GeneratedMessage {
   factory UpdateStationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateStationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Station>(1, _omitFieldNames ? '' : 'station', subBuilder: $8.Station.create)
+    ..aOM<$9.Station>(1, _omitFieldNames ? '' : 'station', subBuilder: $9.Station.create)
     ..hasRequiredFields = false
   ;
 
@@ -501,15 +632,15 @@ class UpdateStationResponse extends $pb.GeneratedMessage {
   static UpdateStationResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Station get station => $_getN(0);
+  $9.Station get station => $_getN(0);
   @$pb.TagNumber(1)
-  set station($8.Station v) { setField(1, v); }
+  set station($9.Station v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasStation() => $_has(0);
   @$pb.TagNumber(1)
   void clearStation() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Station ensureStation() => $_ensure(0);
+  $9.Station ensureStation() => $_ensure(0);
 }
 
 

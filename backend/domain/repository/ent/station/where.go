@@ -279,21 +279,21 @@ func HasGuardianWith(preds ...predicate.Guardian) predicate.Station {
 	})
 }
 
-// HasBus applies the HasEdge predicate on the "bus" edge.
-func HasBus() predicate.Station {
+// HasNextForBuses applies the HasEdge predicate on the "next_for_buses" edge.
+func HasNextForBuses() predicate.Station {
 	return predicate.Station(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, BusTable, BusPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, true, NextForBusesTable, NextForBusesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasBusWith applies the HasEdge predicate on the "bus" edge with a given conditions (other predicates).
-func HasBusWith(preds ...predicate.Bus) predicate.Station {
+// HasNextForBusesWith applies the HasEdge predicate on the "next_for_buses" edge with a given conditions (other predicates).
+func HasNextForBusesWith(preds ...predicate.Bus) predicate.Station {
 	return predicate.Station(func(s *sql.Selector) {
-		step := newBusStep()
+		step := newNextForBusesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -302,90 +302,21 @@ func HasBusWith(preds ...predicate.Bus) predicate.Station {
 	})
 }
 
-// HasMorningPreviousStation applies the HasEdge predicate on the "morning_previous_station" edge.
-func HasMorningPreviousStation() predicate.Station {
+// HasBusRouteAssociations applies the HasEdge predicate on the "busRouteAssociations" edge.
+func HasBusRouteAssociations() predicate.Station {
 	return predicate.Station(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, MorningPreviousStationTable, MorningPreviousStationColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, BusRouteAssociationsTable, BusRouteAssociationsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasMorningPreviousStationWith applies the HasEdge predicate on the "morning_previous_station" edge with a given conditions (other predicates).
-func HasMorningPreviousStationWith(preds ...predicate.Station) predicate.Station {
+// HasBusRouteAssociationsWith applies the HasEdge predicate on the "busRouteAssociations" edge with a given conditions (other predicates).
+func HasBusRouteAssociationsWith(preds ...predicate.BusRouteAssociation) predicate.Station {
 	return predicate.Station(func(s *sql.Selector) {
-		step := newMorningPreviousStationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasMorningNextStation applies the HasEdge predicate on the "morning_next_station" edge.
-func HasMorningNextStation() predicate.Station {
-	return predicate.Station(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, MorningNextStationTable, MorningNextStationColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasMorningNextStationWith applies the HasEdge predicate on the "morning_next_station" edge with a given conditions (other predicates).
-func HasMorningNextStationWith(preds ...predicate.Station) predicate.Station {
-	return predicate.Station(func(s *sql.Selector) {
-		step := newMorningNextStationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEveningPreviousStation applies the HasEdge predicate on the "evening_previous_station" edge.
-func HasEveningPreviousStation() predicate.Station {
-	return predicate.Station(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, EveningPreviousStationTable, EveningPreviousStationColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEveningPreviousStationWith applies the HasEdge predicate on the "evening_previous_station" edge with a given conditions (other predicates).
-func HasEveningPreviousStationWith(preds ...predicate.Station) predicate.Station {
-	return predicate.Station(func(s *sql.Selector) {
-		step := newEveningPreviousStationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEveningNextStation applies the HasEdge predicate on the "evening_next_station" edge.
-func HasEveningNextStation() predicate.Station {
-	return predicate.Station(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EveningNextStationTable, EveningNextStationColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEveningNextStationWith applies the HasEdge predicate on the "evening_next_station" edge with a given conditions (other predicates).
-func HasEveningNextStationWith(preds ...predicate.Station) predicate.Station {
-	return predicate.Station(func(s *sql.Selector) {
-		step := newEveningNextStationStep()
+		step := newBusRouteAssociationsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

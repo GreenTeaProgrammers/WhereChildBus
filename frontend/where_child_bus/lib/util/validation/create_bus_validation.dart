@@ -1,5 +1,3 @@
-import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
-
 class CreateBusValidator {
   static bool validateFields(String name, String plateNumber) {
     return name.isEmpty && plateNumber.isEmpty;

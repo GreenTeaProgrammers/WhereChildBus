@@ -18,6 +18,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busrouteassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
@@ -35,6 +37,10 @@ type Client struct {
 	BoardingRecord *BoardingRecordClient
 	// Bus is the client for interacting with the Bus builders.
 	Bus *BusClient
+	// BusRoute is the client for interacting with the BusRoute builders.
+	BusRoute *BusRouteClient
+	// BusRouteAssociation is the client for interacting with the BusRouteAssociation builders.
+	BusRouteAssociation *BusRouteAssociationClient
 	// Child is the client for interacting with the Child builders.
 	Child *ChildClient
 	// ChildBusAssociation is the client for interacting with the ChildBusAssociation builders.
@@ -60,6 +66,8 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.BoardingRecord = NewBoardingRecordClient(c.config)
 	c.Bus = NewBusClient(c.config)
+	c.BusRoute = NewBusRouteClient(c.config)
+	c.BusRouteAssociation = NewBusRouteAssociationClient(c.config)
 	c.Child = NewChildClient(c.config)
 	c.ChildBusAssociation = NewChildBusAssociationClient(c.config)
 	c.ChildPhoto = NewChildPhotoClient(c.config)
@@ -160,6 +168,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		config:              cfg,
 		BoardingRecord:      NewBoardingRecordClient(cfg),
 		Bus:                 NewBusClient(cfg),
+		BusRoute:            NewBusRouteClient(cfg),
+		BusRouteAssociation: NewBusRouteAssociationClient(cfg),
 		Child:               NewChildClient(cfg),
 		ChildBusAssociation: NewChildBusAssociationClient(cfg),
 		ChildPhoto:          NewChildPhotoClient(cfg),
@@ -187,6 +197,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		config:              cfg,
 		BoardingRecord:      NewBoardingRecordClient(cfg),
 		Bus:                 NewBusClient(cfg),
+		BusRoute:            NewBusRouteClient(cfg),
+		BusRouteAssociation: NewBusRouteAssociationClient(cfg),
 		Child:               NewChildClient(cfg),
 		ChildBusAssociation: NewChildBusAssociationClient(cfg),
 		ChildPhoto:          NewChildPhotoClient(cfg),
@@ -222,8 +234,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.BoardingRecord, c.Bus, c.Child, c.ChildBusAssociation, c.ChildPhoto,
-		c.Guardian, c.Nursery, c.Station,
+		c.BoardingRecord, c.Bus, c.BusRoute, c.BusRouteAssociation, c.Child,
+		c.ChildBusAssociation, c.ChildPhoto, c.Guardian, c.Nursery, c.Station,
 	} {
 		n.Use(hooks...)
 	}
@@ -233,8 +245,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.BoardingRecord, c.Bus, c.Child, c.ChildBusAssociation, c.ChildPhoto,
-		c.Guardian, c.Nursery, c.Station,
+		c.BoardingRecord, c.Bus, c.BusRoute, c.BusRouteAssociation, c.Child,
+		c.ChildBusAssociation, c.ChildPhoto, c.Guardian, c.Nursery, c.Station,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -247,6 +259,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.BoardingRecord.mutate(ctx, m)
 	case *BusMutation:
 		return c.Bus.mutate(ctx, m)
+	case *BusRouteMutation:
+		return c.BusRoute.mutate(ctx, m)
+	case *BusRouteAssociationMutation:
+		return c.BusRouteAssociation.mutate(ctx, m)
 	case *ChildMutation:
 		return c.Child.mutate(ctx, m)
 	case *ChildBusAssociationMutation:
@@ -553,22 +569,6 @@ func (c *BusClient) QueryNursery(b *Bus) *NurseryQuery {
 	return query
 }
 
-// QueryStations queries the stations edge of a Bus.
-func (c *BusClient) QueryStations(b *Bus) *StationQuery {
-	query := (&StationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := b.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(bus.Table, bus.FieldID, id),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, bus.StationsTable, bus.StationsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryBoardingRecords queries the boarding_records edge of a Bus.
 func (c *BusClient) QueryBoardingRecords(b *Bus) *BoardingRecordQuery {
 	query := (&BoardingRecordClient{config: c.config}).Query()
@@ -585,15 +585,63 @@ func (c *BusClient) QueryBoardingRecords(b *Bus) *BoardingRecordQuery {
 	return query
 }
 
-// QueryChildBusAssociations queries the childBusAssociations edge of a Bus.
-func (c *BusClient) QueryChildBusAssociations(b *Bus) *ChildBusAssociationQuery {
-	query := (&ChildBusAssociationClient{config: c.config}).Query()
+// QueryNextStation queries the next_station edge of a Bus.
+func (c *BusClient) QueryNextStation(b *Bus) *StationQuery {
+	query := (&StationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := b.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bus.Table, bus.FieldID, id),
-			sqlgraph.To(childbusassociation.Table, childbusassociation.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, bus.ChildBusAssociationsTable, bus.ChildBusAssociationsColumn),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.NextStationTable, bus.NextStationColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBusRoute queries the bus_route edge of a Bus.
+func (c *BusClient) QueryBusRoute(b *Bus) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, id),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, bus.BusRouteTable, bus.BusRoutePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLatestMorningRoute queries the latest_morning_route edge of a Bus.
+func (c *BusClient) QueryLatestMorningRoute(b *Bus) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, id),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.LatestMorningRouteTable, bus.LatestMorningRouteColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLatestEveningRoute queries the latest_evening_route edge of a Bus.
+func (c *BusClient) QueryLatestEveningRoute(b *Bus) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bus.Table, bus.FieldID, id),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, bus.LatestEveningRouteTable, bus.LatestEveningRouteColumn),
 		)
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
@@ -623,6 +671,384 @@ func (c *BusClient) mutate(ctx context.Context, m *BusMutation) (Value, error) {
 		return (&BusDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Bus mutation op: %q", m.Op())
+	}
+}
+
+// BusRouteClient is a client for the BusRoute schema.
+type BusRouteClient struct {
+	config
+}
+
+// NewBusRouteClient returns a client for the BusRoute from the given config.
+func NewBusRouteClient(c config) *BusRouteClient {
+	return &BusRouteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `busroute.Hooks(f(g(h())))`.
+func (c *BusRouteClient) Use(hooks ...Hook) {
+	c.hooks.BusRoute = append(c.hooks.BusRoute, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `busroute.Intercept(f(g(h())))`.
+func (c *BusRouteClient) Intercept(interceptors ...Interceptor) {
+	c.inters.BusRoute = append(c.inters.BusRoute, interceptors...)
+}
+
+// Create returns a builder for creating a BusRoute entity.
+func (c *BusRouteClient) Create() *BusRouteCreate {
+	mutation := newBusRouteMutation(c.config, OpCreate)
+	return &BusRouteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of BusRoute entities.
+func (c *BusRouteClient) CreateBulk(builders ...*BusRouteCreate) *BusRouteCreateBulk {
+	return &BusRouteCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BusRouteClient) MapCreateBulk(slice any, setFunc func(*BusRouteCreate, int)) *BusRouteCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BusRouteCreateBulk{err: fmt.Errorf("calling to BusRouteClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BusRouteCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BusRouteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for BusRoute.
+func (c *BusRouteClient) Update() *BusRouteUpdate {
+	mutation := newBusRouteMutation(c.config, OpUpdate)
+	return &BusRouteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BusRouteClient) UpdateOne(br *BusRoute) *BusRouteUpdateOne {
+	mutation := newBusRouteMutation(c.config, OpUpdateOne, withBusRoute(br))
+	return &BusRouteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BusRouteClient) UpdateOneID(id uuid.UUID) *BusRouteUpdateOne {
+	mutation := newBusRouteMutation(c.config, OpUpdateOne, withBusRouteID(id))
+	return &BusRouteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for BusRoute.
+func (c *BusRouteClient) Delete() *BusRouteDelete {
+	mutation := newBusRouteMutation(c.config, OpDelete)
+	return &BusRouteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BusRouteClient) DeleteOne(br *BusRoute) *BusRouteDeleteOne {
+	return c.DeleteOneID(br.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BusRouteClient) DeleteOneID(id uuid.UUID) *BusRouteDeleteOne {
+	builder := c.Delete().Where(busroute.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BusRouteDeleteOne{builder}
+}
+
+// Query returns a query builder for BusRoute.
+func (c *BusRouteClient) Query() *BusRouteQuery {
+	return &BusRouteQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBusRoute},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a BusRoute entity by its id.
+func (c *BusRouteClient) Get(ctx context.Context, id uuid.UUID) (*BusRoute, error) {
+	return c.Query().Where(busroute.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BusRouteClient) GetX(ctx context.Context, id uuid.UUID) *BusRoute {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBus queries the bus edge of a BusRoute.
+func (c *BusRouteClient) QueryBus(br *BusRoute) *BusQuery {
+	query := (&BusClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(bus.Table, bus.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, busroute.BusTable, busroute.BusPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryChildBusAssociations queries the childBusAssociations edge of a BusRoute.
+func (c *BusRouteClient) QueryChildBusAssociations(br *BusRoute) *ChildBusAssociationQuery {
+	query := (&ChildBusAssociationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(childbusassociation.Table, childbusassociation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, busroute.ChildBusAssociationsTable, busroute.ChildBusAssociationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBusRouteAssociations queries the busRouteAssociations edge of a BusRoute.
+func (c *BusRouteClient) QueryBusRouteAssociations(br *BusRoute) *BusRouteAssociationQuery {
+	query := (&BusRouteAssociationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(busrouteassociation.Table, busrouteassociation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, busroute.BusRouteAssociationsTable, busroute.BusRouteAssociationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMorningBuses queries the morning_buses edge of a BusRoute.
+func (c *BusRouteClient) QueryMorningBuses(br *BusRoute) *BusQuery {
+	query := (&BusClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(bus.Table, bus.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, busroute.MorningBusesTable, busroute.MorningBusesColumn),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEveningBuses queries the evening_buses edge of a BusRoute.
+func (c *BusRouteClient) QueryEveningBuses(br *BusRoute) *BusQuery {
+	query := (&BusClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := br.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busroute.Table, busroute.FieldID, id),
+			sqlgraph.To(bus.Table, bus.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, busroute.EveningBusesTable, busroute.EveningBusesColumn),
+		)
+		fromV = sqlgraph.Neighbors(br.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *BusRouteClient) Hooks() []Hook {
+	return c.hooks.BusRoute
+}
+
+// Interceptors returns the client interceptors.
+func (c *BusRouteClient) Interceptors() []Interceptor {
+	return c.inters.BusRoute
+}
+
+func (c *BusRouteClient) mutate(ctx context.Context, m *BusRouteMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BusRouteCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BusRouteUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BusRouteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BusRouteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown BusRoute mutation op: %q", m.Op())
+	}
+}
+
+// BusRouteAssociationClient is a client for the BusRouteAssociation schema.
+type BusRouteAssociationClient struct {
+	config
+}
+
+// NewBusRouteAssociationClient returns a client for the BusRouteAssociation from the given config.
+func NewBusRouteAssociationClient(c config) *BusRouteAssociationClient {
+	return &BusRouteAssociationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `busrouteassociation.Hooks(f(g(h())))`.
+func (c *BusRouteAssociationClient) Use(hooks ...Hook) {
+	c.hooks.BusRouteAssociation = append(c.hooks.BusRouteAssociation, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `busrouteassociation.Intercept(f(g(h())))`.
+func (c *BusRouteAssociationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.BusRouteAssociation = append(c.inters.BusRouteAssociation, interceptors...)
+}
+
+// Create returns a builder for creating a BusRouteAssociation entity.
+func (c *BusRouteAssociationClient) Create() *BusRouteAssociationCreate {
+	mutation := newBusRouteAssociationMutation(c.config, OpCreate)
+	return &BusRouteAssociationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of BusRouteAssociation entities.
+func (c *BusRouteAssociationClient) CreateBulk(builders ...*BusRouteAssociationCreate) *BusRouteAssociationCreateBulk {
+	return &BusRouteAssociationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BusRouteAssociationClient) MapCreateBulk(slice any, setFunc func(*BusRouteAssociationCreate, int)) *BusRouteAssociationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BusRouteAssociationCreateBulk{err: fmt.Errorf("calling to BusRouteAssociationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BusRouteAssociationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BusRouteAssociationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for BusRouteAssociation.
+func (c *BusRouteAssociationClient) Update() *BusRouteAssociationUpdate {
+	mutation := newBusRouteAssociationMutation(c.config, OpUpdate)
+	return &BusRouteAssociationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BusRouteAssociationClient) UpdateOne(bra *BusRouteAssociation) *BusRouteAssociationUpdateOne {
+	mutation := newBusRouteAssociationMutation(c.config, OpUpdateOne, withBusRouteAssociation(bra))
+	return &BusRouteAssociationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BusRouteAssociationClient) UpdateOneID(id int) *BusRouteAssociationUpdateOne {
+	mutation := newBusRouteAssociationMutation(c.config, OpUpdateOne, withBusRouteAssociationID(id))
+	return &BusRouteAssociationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for BusRouteAssociation.
+func (c *BusRouteAssociationClient) Delete() *BusRouteAssociationDelete {
+	mutation := newBusRouteAssociationMutation(c.config, OpDelete)
+	return &BusRouteAssociationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BusRouteAssociationClient) DeleteOne(bra *BusRouteAssociation) *BusRouteAssociationDeleteOne {
+	return c.DeleteOneID(bra.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BusRouteAssociationClient) DeleteOneID(id int) *BusRouteAssociationDeleteOne {
+	builder := c.Delete().Where(busrouteassociation.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BusRouteAssociationDeleteOne{builder}
+}
+
+// Query returns a query builder for BusRouteAssociation.
+func (c *BusRouteAssociationClient) Query() *BusRouteAssociationQuery {
+	return &BusRouteAssociationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBusRouteAssociation},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a BusRouteAssociation entity by its id.
+func (c *BusRouteAssociationClient) Get(ctx context.Context, id int) (*BusRouteAssociation, error) {
+	return c.Query().Where(busrouteassociation.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BusRouteAssociationClient) GetX(ctx context.Context, id int) *BusRouteAssociation {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryStation queries the station edge of a BusRouteAssociation.
+func (c *BusRouteAssociationClient) QueryStation(bra *BusRouteAssociation) *StationQuery {
+	query := (&StationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := bra.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busrouteassociation.Table, busrouteassociation.FieldID, id),
+			sqlgraph.To(station.Table, station.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, busrouteassociation.StationTable, busrouteassociation.StationColumn),
+		)
+		fromV = sqlgraph.Neighbors(bra.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBusRoute queries the busRoute edge of a BusRouteAssociation.
+func (c *BusRouteAssociationClient) QueryBusRoute(bra *BusRouteAssociation) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := bra.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(busrouteassociation.Table, busrouteassociation.FieldID, id),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, busrouteassociation.BusRouteTable, busrouteassociation.BusRouteColumn),
+		)
+		fromV = sqlgraph.Neighbors(bra.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *BusRouteAssociationClient) Hooks() []Hook {
+	return c.hooks.BusRouteAssociation
+}
+
+// Interceptors returns the client interceptors.
+func (c *BusRouteAssociationClient) Interceptors() []Interceptor {
+	return c.inters.BusRouteAssociation
+}
+
+func (c *BusRouteAssociationClient) mutate(ctx context.Context, m *BusRouteAssociationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BusRouteAssociationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BusRouteAssociationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BusRouteAssociationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BusRouteAssociationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown BusRouteAssociation mutation op: %q", m.Op())
 	}
 }
 
@@ -947,15 +1373,15 @@ func (c *ChildBusAssociationClient) QueryChild(cba *ChildBusAssociation) *ChildQ
 	return query
 }
 
-// QueryBus queries the bus edge of a ChildBusAssociation.
-func (c *ChildBusAssociationClient) QueryBus(cba *ChildBusAssociation) *BusQuery {
-	query := (&BusClient{config: c.config}).Query()
+// QueryBusRoute queries the bus_route edge of a ChildBusAssociation.
+func (c *ChildBusAssociationClient) QueryBusRoute(cba *ChildBusAssociation) *BusRouteQuery {
+	query := (&BusRouteClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := cba.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(childbusassociation.Table, childbusassociation.FieldID, id),
-			sqlgraph.To(bus.Table, bus.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, childbusassociation.BusTable, childbusassociation.BusColumn),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, childbusassociation.BusRouteTable, childbusassociation.BusRouteColumn),
 		)
 		fromV = sqlgraph.Neighbors(cba.driver.Dialect(), step)
 		return fromV, nil
@@ -1607,15 +2033,15 @@ func (c *StationClient) QueryGuardian(s *Station) *GuardianQuery {
 	return query
 }
 
-// QueryBus queries the bus edge of a Station.
-func (c *StationClient) QueryBus(s *Station) *BusQuery {
+// QueryNextForBuses queries the next_for_buses edge of a Station.
+func (c *StationClient) QueryNextForBuses(s *Station) *BusQuery {
 	query := (&BusClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(station.Table, station.FieldID, id),
 			sqlgraph.To(bus.Table, bus.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, station.BusTable, station.BusPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, true, station.NextForBusesTable, station.NextForBusesColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -1623,63 +2049,15 @@ func (c *StationClient) QueryBus(s *Station) *BusQuery {
 	return query
 }
 
-// QueryMorningPreviousStation queries the morning_previous_station edge of a Station.
-func (c *StationClient) QueryMorningPreviousStation(s *Station) *StationQuery {
-	query := (&StationClient{config: c.config}).Query()
+// QueryBusRouteAssociations queries the busRouteAssociations edge of a Station.
+func (c *StationClient) QueryBusRouteAssociations(s *Station) *BusRouteAssociationQuery {
+	query := (&BusRouteAssociationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(station.Table, station.FieldID, id),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, station.MorningPreviousStationTable, station.MorningPreviousStationColumn),
-		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryMorningNextStation queries the morning_next_station edge of a Station.
-func (c *StationClient) QueryMorningNextStation(s *Station) *StationQuery {
-	query := (&StationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(station.Table, station.FieldID, id),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, station.MorningNextStationTable, station.MorningNextStationColumn),
-		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEveningPreviousStation queries the evening_previous_station edge of a Station.
-func (c *StationClient) QueryEveningPreviousStation(s *Station) *StationQuery {
-	query := (&StationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(station.Table, station.FieldID, id),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, station.EveningPreviousStationTable, station.EveningPreviousStationColumn),
-		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEveningNextStation queries the evening_next_station edge of a Station.
-func (c *StationClient) QueryEveningNextStation(s *Station) *StationQuery {
-	query := (&StationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(station.Table, station.FieldID, id),
-			sqlgraph.To(station.Table, station.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, station.EveningNextStationTable, station.EveningNextStationColumn),
+			sqlgraph.To(busrouteassociation.Table, busrouteassociation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, station.BusRouteAssociationsTable, station.BusRouteAssociationsColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -1715,11 +2093,11 @@ func (c *StationClient) mutate(ctx context.Context, m *StationMutation) (Value, 
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		BoardingRecord, Bus, Child, ChildBusAssociation, ChildPhoto, Guardian, Nursery,
-		Station []ent.Hook
+		BoardingRecord, Bus, BusRoute, BusRouteAssociation, Child, ChildBusAssociation,
+		ChildPhoto, Guardian, Nursery, Station []ent.Hook
 	}
 	inters struct {
-		BoardingRecord, Bus, Child, ChildBusAssociation, ChildPhoto, Guardian, Nursery,
-		Station []ent.Interceptor
+		BoardingRecord, Bus, BusRoute, BusRouteAssociation, Child, ChildBusAssociation,
+		ChildPhoto, Guardian, Nursery, Station []ent.Interceptor
 	}
 )

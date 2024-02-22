@@ -7,6 +7,8 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	busRouteRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
+	busRouteAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busrouteassociation"
 	guardianRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/guardian"
 	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
@@ -71,12 +73,6 @@ func (i *Interactor) UpdateStationLocationByGuardianID(ctx context.Context, req 
 		return nil, err
 	}
 
-	morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, station)
-	if err != nil {
-		i.logger.Error("failed to get next station IDs", "error", err)
-		return nil, err // エラーハンドリング
-	}
-
 	// トランザクションをコミットします。
 	if err := tx.Commit(); err != nil {
 		i.logger.Error(("failed to commit transaction"), "error", err)
@@ -85,7 +81,7 @@ func (i *Interactor) UpdateStationLocationByGuardianID(ctx context.Context, req 
 
 	// レスポンスを作成します。
 	return &pb.UpdateStationLocationByGuardianIdResponse{
-		Station: utils.ToPbStation(station, morningNextStationID, eveningNextStationID),
+		Station: utils.ToPbStation(station),
 	}, nil
 }
 
@@ -133,22 +129,32 @@ func (i *Interactor) UpdateStation(ctx context.Context, req *pb.UpdateStationReq
 		return nil, err
 	}
 
+	if req.BusId != "" {
+		bus, err := tx.Bus.Query().
+			Where(busRepo.IDEQ(uuid.MustParse(req.BusId))).
+			Only(ctx)
+
+		if err != nil {
+			i.logger.Error("failed to get bus", "error", err)
+			return nil, err
+		}
+
+		_, err = utils.CheckAndFixBusStationCoordinates(*i.logger, ctx, bus)
+		if err != nil {
+			i.logger.Error("failed to check and fix bus station coordinates", "error", err)
+			return nil, err
+		}
+	}
+
 	// トランザクションのコミット
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
 
-	// 次のバス停を取得
-	morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, updateStation)
-	if err != nil {
-		i.logger.Error("failed to get next station IDs", "error", err)
-		return nil, err
-	}
-
 	// レスポンスの作成と返却
 	return &pb.UpdateStationResponse{
-		Station: utils.ToPbStation(updateStation, morningNextStationID, eveningNextStationID),
+		Station: utils.ToPbStation(updateStation),
 	}, nil
 }
 
@@ -160,10 +166,22 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 	}
 
 	stations, err := i.entClient.Station.Query().
-		Where(stationRepo.HasBusWith(busRepo.ID(busID))).
+		Where( // !要チェック
+			stationRepo.HasBusRouteAssociationsWith(
+				busRouteAssociationRepo.HasBusRouteWith(
+					busRouteRepo.HasBusWith(
+						busRepo.IDEQ(busID),
+					),
+				),
+			),
+		).
 		WithGuardian(func(q *ent.GuardianQuery) {
 			q.WithNursery()
-			q.WithChildren()
+			q.WithChildren(
+				func(q *ent.ChildQuery) {
+					q.WithGuardian()
+				},
+			)
 		}).
 		All(ctx)
 
@@ -177,14 +195,13 @@ func (i *Interactor) GetStationListByBusId(ctx context.Context, req *pb.GetStati
 	uniqueChildren := make(map[string]*pb.Child)
 
 	for _, station := range stations {
-		morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, station)
 		if err != nil {
 			// エラーメッセージにステーションIDを追加して明確にする
 			i.logger.Error("failed to get next station IDs", "error", err)
 			return nil, err
 		}
 
-		pbStation := utils.ToPbStation(station, morningNextStationID, eveningNextStationID)
+		pbStation := utils.ToPbStation(station)
 		pbStations = append(pbStations, pbStation)
 
 		if station.Edges.Guardian != nil {
@@ -231,11 +248,21 @@ func (i Interactor) GetUnregisteredStationList(ctx context.Context, req *pb.GetU
 		return nil, err
 	}
 
-	stations, err := i.entClient.Station.Query().
-		Where(stationRepo.HasBusWith(busRepo.IDEQ(busID))).
+	stations, err := i.entClient.Station.Query(). // !要チェック
+		Where(
+			stationRepo.HasBusRouteAssociationsWith(
+				busRouteAssociationRepo.HasBusRouteWith(
+					busRouteRepo.HasBusWith(
+						busRepo.IDEQ(busID),
+					),
+				),
+			),
+		).
 		Where(stationRepo.Latitude(0)).
 		Where(stationRepo.Longitude(0)).
-		WithGuardian().
+		WithGuardian(func(q *ent.GuardianQuery) {
+			q.WithNursery()
+		}).
 		All(ctx)
 
 	if err != nil {
@@ -246,39 +273,12 @@ func (i Interactor) GetUnregisteredStationList(ctx context.Context, req *pb.GetU
 	var pbStations []*pb.Station
 	var pbGuardians []*pb.GuardianResponse
 	for _, station := range stations {
-		morningNextStationID, eveningNextStationID, err := getNextStationIDs(*i.logger, ctx, station)
-		if err != nil {
-			i.logger.Error("failed to get next station IDs", "error", err)
-			return nil, err
-		}
-
-		pbStations = append(pbStations, utils.ToPbStation(station, morningNextStationID, eveningNextStationID))
-		pbGuardians = append(pbGuardians, utils.ToPbGuardianResponse(station.Edges.Guardian))
+		pbStations = append(pbStations, utils.ToPbStation(station))
+		pbGuardians = append(pbGuardians, utils.ToPbGuardianResponse(station.Edges.Guardian)) // !要チェック
 	}
 
 	return &pb.GetUnregisteredStationListResponse{
 		Stations:  pbStations,
 		Guardians: pbGuardians,
 	}, nil
-}
-
-func getNextStationIDs(logger slog.Logger, ctx context.Context, station *ent.Station) (morningNextStationID, eveningNextStationID string, err error) {
-	morningNextStation, err := station.QueryMorningNextStation().Only(ctx)
-	if err != nil && !ent.IsNotFound(err) {
-		logger.Error("failed to query morning next station", "error", err)
-		return "", "", err
-	}
-	if morningNextStation != nil {
-		morningNextStationID = morningNextStation.ID.String()
-	}
-
-	eveningNextStation, err := station.QueryEveningNextStation().Only(ctx)
-	if err != nil && !ent.IsNotFound(err) {
-		return "", "", err
-	}
-	if eveningNextStation != nil {
-		eveningNextStationID = eveningNextStation.ID.String()
-	}
-
-	return morningNextStationID, eveningNextStationID, nil
 }

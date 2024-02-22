@@ -13,17 +13,15 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/field_mask.pb.dart' as $9;
-import 'resources.pb.dart' as $8;
-import 'resources.pbenum.dart' as $8;
+import '../../google/protobuf/field_mask.pb.dart' as $10;
+import 'resources.pb.dart' as $9;
+import 'resources.pbenum.dart' as $9;
 
 class CreateBusRequest extends $pb.GeneratedMessage {
   factory CreateBusRequest({
     $core.String? nurseryId,
     $core.String? name,
     $core.String? plateNumber,
-    $core.Iterable<$core.String>? morningGuardianIds,
-    $core.Iterable<$core.String>? eveningGuardianIds,
   }) {
     final $result = create();
     if (nurseryId != null) {
@@ -35,12 +33,6 @@ class CreateBusRequest extends $pb.GeneratedMessage {
     if (plateNumber != null) {
       $result.plateNumber = plateNumber;
     }
-    if (morningGuardianIds != null) {
-      $result.morningGuardianIds.addAll(morningGuardianIds);
-    }
-    if (eveningGuardianIds != null) {
-      $result.eveningGuardianIds.addAll(eveningGuardianIds);
-    }
     return $result;
   }
   CreateBusRequest._() : super();
@@ -51,8 +43,6 @@ class CreateBusRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'nurseryId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'plateNumber')
-    ..pPS(4, _omitFieldNames ? '' : 'morningGuardianIds')
-    ..pPS(5, _omitFieldNames ? '' : 'eveningGuardianIds')
     ..hasRequiredFields = false
   ;
 
@@ -103,17 +93,11 @@ class CreateBusRequest extends $pb.GeneratedMessage {
   $core.bool hasPlateNumber() => $_has(2);
   @$pb.TagNumber(3)
   void clearPlateNumber() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.List<$core.String> get morningGuardianIds => $_getList(3);
-
-  @$pb.TagNumber(5)
-  $core.List<$core.String> get eveningGuardianIds => $_getList(4);
 }
 
 class CreateBusResponse extends $pb.GeneratedMessage {
   factory CreateBusResponse({
-    $8.Bus? bus,
+    $9.Bus? bus,
   }) {
     final $result = create();
     if (bus != null) {
@@ -126,7 +110,7 @@ class CreateBusResponse extends $pb.GeneratedMessage {
   factory CreateBusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..aOM<$9.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $9.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -152,15 +136,15 @@ class CreateBusResponse extends $pb.GeneratedMessage {
   static CreateBusResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Bus get bus => $_getN(0);
+  $9.Bus get bus => $_getN(0);
   @$pb.TagNumber(1)
-  set bus($8.Bus v) { setField(1, v); }
+  set bus($9.Bus v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasBus() => $_has(0);
   @$pb.TagNumber(1)
   void clearBus() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Bus ensureBus() => $_ensure(0);
+  $9.Bus ensureBus() => $_ensure(0);
 }
 
 class GetBusListByNurseryIdRequest extends $pb.GeneratedMessage {
@@ -215,7 +199,7 @@ class GetBusListByNurseryIdRequest extends $pb.GeneratedMessage {
 
 class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetBusListByNurseryIdResponse({
-    $core.Iterable<$8.Bus>? buses,
+    $core.Iterable<$9.Bus>? buses,
   }) {
     final $result = create();
     if (buses != null) {
@@ -228,7 +212,7 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetBusListByNurseryIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusListByNurseryIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Bus>(1, _omitFieldNames ? '' : 'buses', $pb.PbFieldType.PM, subBuilder: $8.Bus.create)
+    ..pc<$9.Bus>(1, _omitFieldNames ? '' : 'buses', $pb.PbFieldType.PM, subBuilder: $9.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -254,7 +238,7 @@ class GetBusListByNurseryIdResponse extends $pb.GeneratedMessage {
   static GetBusListByNurseryIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.Bus> get buses => $_getList(0);
+  $core.List<$9.Bus> get buses => $_getList(0);
 }
 
 class GetRunningBusByGuardianIdRequest extends $pb.GeneratedMessage {
@@ -309,7 +293,7 @@ class GetRunningBusByGuardianIdRequest extends $pb.GeneratedMessage {
 
 class GetRunningBusByGuardianIdResponse extends $pb.GeneratedMessage {
   factory GetRunningBusByGuardianIdResponse({
-    $8.Bus? bus,
+    $9.Bus? bus,
   }) {
     final $result = create();
     if (bus != null) {
@@ -322,7 +306,7 @@ class GetRunningBusByGuardianIdResponse extends $pb.GeneratedMessage {
   factory GetRunningBusByGuardianIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRunningBusByGuardianIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..aOM<$9.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $9.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -348,21 +332,22 @@ class GetRunningBusByGuardianIdResponse extends $pb.GeneratedMessage {
   static GetRunningBusByGuardianIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Bus get bus => $_getN(0);
+  $9.Bus get bus => $_getN(0);
   @$pb.TagNumber(1)
-  set bus($8.Bus v) { setField(1, v); }
+  set bus($9.Bus v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasBus() => $_has(0);
   @$pb.TagNumber(1)
   void clearBus() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Bus ensureBus() => $_ensure(0);
+  $9.Bus ensureBus() => $_ensure(0);
 }
 
 class ChangeBusStatusRequest extends $pb.GeneratedMessage {
   factory ChangeBusStatusRequest({
     $core.String? busId,
-    $8.BusStatus? busStatus,
+    $9.BusStatus? busStatus,
+    $9.BusType? busType,
   }) {
     final $result = create();
     if (busId != null) {
@@ -370,6 +355,9 @@ class ChangeBusStatusRequest extends $pb.GeneratedMessage {
     }
     if (busStatus != null) {
       $result.busStatus = busStatus;
+    }
+    if (busType != null) {
+      $result.busType = busType;
     }
     return $result;
   }
@@ -379,7 +367,8 @@ class ChangeBusStatusRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChangeBusStatusRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..e<$8.BusStatus>(2, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: $8.BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: $8.BusStatus.valueOf, enumValues: $8.BusStatus.values)
+    ..e<$9.BusStatus>(2, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: $9.BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: $9.BusStatus.valueOf, enumValues: $9.BusStatus.values)
+    ..e<$9.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $9.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $9.BusType.valueOf, enumValues: $9.BusType.values)
     ..hasRequiredFields = false
   ;
 
@@ -414,18 +403,27 @@ class ChangeBusStatusRequest extends $pb.GeneratedMessage {
   void clearBusId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $8.BusStatus get busStatus => $_getN(1);
+  $9.BusStatus get busStatus => $_getN(1);
   @$pb.TagNumber(2)
-  set busStatus($8.BusStatus v) { setField(2, v); }
+  set busStatus($9.BusStatus v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasBusStatus() => $_has(1);
   @$pb.TagNumber(2)
   void clearBusStatus() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $9.BusType get busType => $_getN(2);
+  @$pb.TagNumber(3)
+  set busType($9.BusType v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasBusType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBusType() => clearField(3);
 }
 
 class ChangeBusStatusResponse extends $pb.GeneratedMessage {
   factory ChangeBusStatusResponse({
-    $8.Bus? bus,
+    $9.Bus? bus,
   }) {
     final $result = create();
     if (bus != null) {
@@ -438,7 +436,7 @@ class ChangeBusStatusResponse extends $pb.GeneratedMessage {
   factory ChangeBusStatusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChangeBusStatusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..aOM<$9.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $9.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -464,15 +462,15 @@ class ChangeBusStatusResponse extends $pb.GeneratedMessage {
   static ChangeBusStatusResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Bus get bus => $_getN(0);
+  $9.Bus get bus => $_getN(0);
   @$pb.TagNumber(1)
-  set bus($8.Bus v) { setField(1, v); }
+  set bus($9.Bus v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasBus() => $_has(0);
   @$pb.TagNumber(1)
   void clearBus() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Bus ensureBus() => $_ensure(0);
+  $9.Bus ensureBus() => $_ensure(0);
 }
 
 /// Updated and newly defined messages for the adjusted RPCs
@@ -641,6 +639,7 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
     $core.String? busId,
     $core.double? latitude,
     $core.double? longitude,
+    $core.String? nextStationId,
   }) {
     final $result = create();
     if (busId != null) {
@@ -652,6 +651,9 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
     if (longitude != null) {
       $result.longitude = longitude;
     }
+    if (nextStationId != null) {
+      $result.nextStationId = nextStationId;
+    }
     return $result;
   }
   TrackBusContinuousResponse._() : super();
@@ -662,6 +664,7 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..a<$core.double>(2, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(3, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOS(4, _omitFieldNames ? '' : 'nextStationId')
     ..hasRequiredFields = false
   ;
 
@@ -712,14 +715,22 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
   $core.bool hasLongitude() => $_has(2);
   @$pb.TagNumber(3)
   void clearLongitude() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get nextStationId => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set nextStationId($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasNextStationId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearNextStationId() => clearField(4);
 }
 
 class StreamBusVideoRequest extends $pb.GeneratedMessage {
   factory StreamBusVideoRequest({
     $core.String? busId,
-    $core.String? nurseryId,
-    $8.BusType? busType,
-    $8.VehicleEvent? vehicleEvent,
+    $9.BusType? busType,
+    $9.VehicleEvent? vehicleEvent,
     $core.Iterable<$core.List<$core.int>>? videoChunk,
     $core.int? photoHeight,
     $core.int? photoWidth,
@@ -727,9 +738,6 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     final $result = create();
     if (busId != null) {
       $result.busId = busId;
-    }
-    if (nurseryId != null) {
-      $result.nurseryId = nurseryId;
     }
     if (busType != null) {
       $result.busType = busType;
@@ -754,9 +762,8 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamBusVideoRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
-    ..e<$8.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
-    ..e<$8.VehicleEvent>(4, _omitFieldNames ? '' : 'vehicleEvent', $pb.PbFieldType.OE, defaultOrMaker: $8.VehicleEvent.VEHICLE_EVENT_UNSPECIFIED, valueOf: $8.VehicleEvent.valueOf, enumValues: $8.VehicleEvent.values)
+    ..e<$9.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $9.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $9.BusType.valueOf, enumValues: $9.BusType.values)
+    ..e<$9.VehicleEvent>(4, _omitFieldNames ? '' : 'vehicleEvent', $pb.PbFieldType.OE, defaultOrMaker: $9.VehicleEvent.VEHICLE_EVENT_UNSPECIFIED, valueOf: $9.VehicleEvent.valueOf, enumValues: $9.VehicleEvent.values)
     ..p<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.PY)
     ..a<$core.int>(6, _omitFieldNames ? '' : 'photoHeight', $pb.PbFieldType.O3)
     ..a<$core.int>(7, _omitFieldNames ? '' : 'photoWidth', $pb.PbFieldType.O3)
@@ -793,51 +800,42 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearBusId() => clearField(1);
 
-  @$pb.TagNumber(2)
-  $core.String get nurseryId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set nurseryId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasNurseryId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearNurseryId() => clearField(2);
-
   @$pb.TagNumber(3)
-  $8.BusType get busType => $_getN(2);
+  $9.BusType get busType => $_getN(1);
   @$pb.TagNumber(3)
-  set busType($8.BusType v) { setField(3, v); }
+  set busType($9.BusType v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBusType() => $_has(2);
+  $core.bool hasBusType() => $_has(1);
   @$pb.TagNumber(3)
   void clearBusType() => clearField(3);
 
   @$pb.TagNumber(4)
-  $8.VehicleEvent get vehicleEvent => $_getN(3);
+  $9.VehicleEvent get vehicleEvent => $_getN(2);
   @$pb.TagNumber(4)
-  set vehicleEvent($8.VehicleEvent v) { setField(4, v); }
+  set vehicleEvent($9.VehicleEvent v) { setField(4, v); }
   @$pb.TagNumber(4)
-  $core.bool hasVehicleEvent() => $_has(3);
+  $core.bool hasVehicleEvent() => $_has(2);
   @$pb.TagNumber(4)
   void clearVehicleEvent() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<$core.List<$core.int>> get videoChunk => $_getList(4);
+  $core.List<$core.List<$core.int>> get videoChunk => $_getList(3);
 
   @$pb.TagNumber(6)
-  $core.int get photoHeight => $_getIZ(5);
+  $core.int get photoHeight => $_getIZ(4);
   @$pb.TagNumber(6)
-  set photoHeight($core.int v) { $_setSignedInt32(5, v); }
+  set photoHeight($core.int v) { $_setSignedInt32(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasPhotoHeight() => $_has(5);
+  $core.bool hasPhotoHeight() => $_has(4);
   @$pb.TagNumber(6)
   void clearPhotoHeight() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.int get photoWidth => $_getIZ(6);
+  $core.int get photoWidth => $_getIZ(5);
   @$pb.TagNumber(7)
-  set photoWidth($core.int v) { $_setSignedInt32(6, v); }
+  set photoWidth($core.int v) { $_setSignedInt32(5, v); }
   @$pb.TagNumber(7)
-  $core.bool hasPhotoWidth() => $_has(6);
+  $core.bool hasPhotoWidth() => $_has(5);
   @$pb.TagNumber(7)
   void clearPhotoWidth() => clearField(7);
 }
@@ -845,7 +843,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
 class StreamBusVideoResponse extends $pb.GeneratedMessage {
   factory StreamBusVideoResponse({
     $core.bool? isDetected,
-    $core.Iterable<$8.Child>? children,
+    $core.Iterable<$9.Child>? children,
   }) {
     final $result = create();
     if (isDetected != null) {
@@ -862,7 +860,7 @@ class StreamBusVideoResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamBusVideoResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'isDetected')
-    ..pc<$8.Child>(2, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
+    ..pc<$9.Child>(2, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $9.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -897,7 +895,7 @@ class StreamBusVideoResponse extends $pb.GeneratedMessage {
   void clearIsDetected() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<$8.Child> get children => $_getList(1);
+  $core.List<$9.Child> get children => $_getList(1);
 }
 
 class UpdateBusRequest extends $pb.GeneratedMessage {
@@ -905,11 +903,11 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     $core.String? busId,
     $core.String? name,
     $core.String? plateNumber,
-    $8.BusStatus? busStatus,
     $core.double? latitude,
     $core.double? longitude,
     $core.bool? enableFaceRecognition,
-    $9.FieldMask? updateMask,
+    $core.String? nextStationId,
+    $10.FieldMask? updateMask,
   }) {
     final $result = create();
     if (busId != null) {
@@ -921,9 +919,6 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     if (plateNumber != null) {
       $result.plateNumber = plateNumber;
     }
-    if (busStatus != null) {
-      $result.busStatus = busStatus;
-    }
     if (latitude != null) {
       $result.latitude = latitude;
     }
@@ -932,6 +927,9 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     }
     if (enableFaceRecognition != null) {
       $result.enableFaceRecognition = enableFaceRecognition;
+    }
+    if (nextStationId != null) {
+      $result.nextStationId = nextStationId;
     }
     if (updateMask != null) {
       $result.updateMask = updateMask;
@@ -946,11 +944,11 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'plateNumber')
-    ..e<$8.BusStatus>(4, _omitFieldNames ? '' : 'busStatus', $pb.PbFieldType.OE, defaultOrMaker: $8.BusStatus.BUS_STATUS_UNSPECIFIED, valueOf: $8.BusStatus.valueOf, enumValues: $8.BusStatus.values)
-    ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOB(7, _omitFieldNames ? '' : 'enableFaceRecognition')
-    ..aOM<$9.FieldMask>(8, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..a<$core.double>(4, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
+    ..a<$core.double>(5, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aOB(6, _omitFieldNames ? '' : 'enableFaceRecognition')
+    ..aOS(9, _omitFieldNames ? '' : 'nextStationId')
+    ..aOM<$10.FieldMask>(10, _omitFieldNames ? '' : 'updateMask', subBuilder: $10.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -1003,56 +1001,56 @@ class UpdateBusRequest extends $pb.GeneratedMessage {
   void clearPlateNumber() => clearField(3);
 
   @$pb.TagNumber(4)
-  $8.BusStatus get busStatus => $_getN(3);
+  $core.double get latitude => $_getN(3);
   @$pb.TagNumber(4)
-  set busStatus($8.BusStatus v) { setField(4, v); }
+  set latitude($core.double v) { $_setDouble(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasBusStatus() => $_has(3);
+  $core.bool hasLatitude() => $_has(3);
   @$pb.TagNumber(4)
-  void clearBusStatus() => clearField(4);
+  void clearLatitude() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get latitude => $_getN(4);
+  $core.double get longitude => $_getN(4);
   @$pb.TagNumber(5)
-  set latitude($core.double v) { $_setDouble(4, v); }
+  set longitude($core.double v) { $_setDouble(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasLatitude() => $_has(4);
+  $core.bool hasLongitude() => $_has(4);
   @$pb.TagNumber(5)
-  void clearLatitude() => clearField(5);
+  void clearLongitude() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.double get longitude => $_getN(5);
+  $core.bool get enableFaceRecognition => $_getBF(5);
   @$pb.TagNumber(6)
-  set longitude($core.double v) { $_setDouble(5, v); }
+  set enableFaceRecognition($core.bool v) { $_setBool(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasLongitude() => $_has(5);
+  $core.bool hasEnableFaceRecognition() => $_has(5);
   @$pb.TagNumber(6)
-  void clearLongitude() => clearField(6);
+  void clearEnableFaceRecognition() => clearField(6);
 
-  @$pb.TagNumber(7)
-  $core.bool get enableFaceRecognition => $_getBF(6);
-  @$pb.TagNumber(7)
-  set enableFaceRecognition($core.bool v) { $_setBool(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasEnableFaceRecognition() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearEnableFaceRecognition() => clearField(7);
+  @$pb.TagNumber(9)
+  $core.String get nextStationId => $_getSZ(6);
+  @$pb.TagNumber(9)
+  set nextStationId($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasNextStationId() => $_has(6);
+  @$pb.TagNumber(9)
+  void clearNextStationId() => clearField(9);
 
-  @$pb.TagNumber(8)
-  $9.FieldMask get updateMask => $_getN(7);
-  @$pb.TagNumber(8)
-  set updateMask($9.FieldMask v) { setField(8, v); }
-  @$pb.TagNumber(8)
+  @$pb.TagNumber(10)
+  $10.FieldMask get updateMask => $_getN(7);
+  @$pb.TagNumber(10)
+  set updateMask($10.FieldMask v) { setField(10, v); }
+  @$pb.TagNumber(10)
   $core.bool hasUpdateMask() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearUpdateMask() => clearField(8);
-  @$pb.TagNumber(8)
-  $9.FieldMask ensureUpdateMask() => $_ensure(7);
+  @$pb.TagNumber(10)
+  void clearUpdateMask() => clearField(10);
+  @$pb.TagNumber(10)
+  $10.FieldMask ensureUpdateMask() => $_ensure(7);
 }
 
 class UpdateBusResponse extends $pb.GeneratedMessage {
   factory UpdateBusResponse({
-    $8.Bus? bus,
+    $9.Bus? bus,
   }) {
     final $result = create();
     if (bus != null) {
@@ -1065,7 +1063,7 @@ class UpdateBusResponse extends $pb.GeneratedMessage {
   factory UpdateBusResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBusResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $8.Bus.create)
+    ..aOM<$9.Bus>(1, _omitFieldNames ? '' : 'bus', subBuilder: $9.Bus.create)
     ..hasRequiredFields = false
   ;
 
@@ -1091,15 +1089,15 @@ class UpdateBusResponse extends $pb.GeneratedMessage {
   static UpdateBusResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Bus get bus => $_getN(0);
+  $9.Bus get bus => $_getN(0);
   @$pb.TagNumber(1)
-  set bus($8.Bus v) { setField(1, v); }
+  set bus($9.Bus v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasBus() => $_has(0);
   @$pb.TagNumber(1)
   void clearBus() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Bus ensureBus() => $_ensure(0);
+  $9.Bus ensureBus() => $_ensure(0);
 }
 
 

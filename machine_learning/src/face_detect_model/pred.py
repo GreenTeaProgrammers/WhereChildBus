@@ -25,6 +25,7 @@ from face_detect_model.util import (
     load_pickle_to_gcs,
     logger,
     switch_to_bus_type,
+    smile_detecter,
 )
 
 
@@ -79,19 +80,23 @@ def convert_to_tensor_from_images(clipped_face_images):
     return image_tensors
 
 
-def get_clipped_faces_from_images(args, config, save_bucket):
+def get_clipped_faces_from_images(args, config, detecter, save_bucket):
     all_faces = []
-    for video in args.video_chunk:
-        image = load_image_from_binary(args, video)
+    for video_clip in args.video_chunk:
+        image = load_image_from_binary(args, video_clip)
         clipped_faces = detect_face_and_clip_from_image(image, config)
         if len(clipped_faces) > 0:
             # timestampをファイル名に含めて保存
-            now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-            save_face_image_to_remote(
-                image,
-                f"{args.nursery_id}/{args.bus_id}/{now}_{switch_to_bus_type(args.bus_type)}.png",
-                save_bucket,
-            )
+            for clipped_face in clipped_faces:
+                smile_degree = detecter.detect_smile_degree(clipped_face)
+                logger.info(f"Smile degree: {smile_degree}")
+                smile_image = detecter.add_smile_degree_to_image(image, smile_degree)
+                now = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+                save_face_image_to_remote(
+                    smile_image,
+                    f"{args.nursery_id}/{args.bus_id}/{now}_{smile_degree}.png",
+                    save_bucket,
+                )
         all_faces.extend(clipped_faces)
     return all_faces
 
@@ -131,7 +136,10 @@ def pred_child_from_images(args, config):
     idx_to_label_dict = load_pickle_to_gcs(bucket, idx_to_label_dict_bucket_path)
     model_class_num = len(idx_to_label_dict)
 
-    clipped_faces = get_clipped_faces_from_images(args, config, bucket_for_face)
+    detecter = smile_detecter()
+    clipped_faces = get_clipped_faces_from_images(
+        args, config, detecter, bucket_for_face
+    )
 
     if len(clipped_faces) == 0:
         logger.info("No face detected.")

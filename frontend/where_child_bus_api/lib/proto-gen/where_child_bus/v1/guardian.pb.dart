@@ -13,8 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/field_mask.pb.dart' as $9;
-import 'resources.pb.dart' as $8;
+import '../../google/protobuf/field_mask.pb.dart' as $10;
+import 'resources.pb.dart' as $9;
 
 class CreateGuardianRequest extends $pb.GeneratedMessage {
   factory CreateGuardianRequest({
@@ -124,7 +124,7 @@ class CreateGuardianRequest extends $pb.GeneratedMessage {
 
 class CreateGuardianResponse extends $pb.GeneratedMessage {
   factory CreateGuardianResponse({
-    $8.GuardianResponse? guardian,
+    $9.GuardianResponse? guardian,
   }) {
     final $result = create();
     if (guardian != null) {
@@ -137,7 +137,7 @@ class CreateGuardianResponse extends $pb.GeneratedMessage {
   factory CreateGuardianResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateGuardianResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $8.GuardianResponse.create)
+    ..aOM<$9.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $9.GuardianResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -163,15 +163,15 @@ class CreateGuardianResponse extends $pb.GeneratedMessage {
   static CreateGuardianResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.GuardianResponse get guardian => $_getN(0);
+  $9.GuardianResponse get guardian => $_getN(0);
   @$pb.TagNumber(1)
-  set guardian($8.GuardianResponse v) { setField(1, v); }
+  set guardian($9.GuardianResponse v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasGuardian() => $_has(0);
   @$pb.TagNumber(1)
   void clearGuardian() => clearField(1);
   @$pb.TagNumber(1)
-  $8.GuardianResponse ensureGuardian() => $_ensure(0);
+  $9.GuardianResponse ensureGuardian() => $_ensure(0);
 }
 
 class GuardianLoginRequest extends $pb.GeneratedMessage {
@@ -241,8 +241,8 @@ class GuardianLoginRequest extends $pb.GeneratedMessage {
 class GuardianLoginResponse extends $pb.GeneratedMessage {
   factory GuardianLoginResponse({
     $core.bool? success,
-    $8.GuardianResponse? guardian,
-    $8.NurseryResponse? nursery,
+    $9.GuardianResponse? guardian,
+    $9.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (success != null) {
@@ -262,8 +262,8 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GuardianLoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'success')
-    ..aOM<$8.GuardianResponse>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $8.GuardianResponse.create)
-    ..aOM<$8.NurseryResponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $8.NurseryResponse.create)
+    ..aOM<$9.GuardianResponse>(2, _omitFieldNames ? '' : 'guardian', subBuilder: $9.GuardianResponse.create)
+    ..aOM<$9.NurseryResponse>(3, _omitFieldNames ? '' : 'nursery', subBuilder: $9.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -298,26 +298,26 @@ class GuardianLoginResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(1);
 
   @$pb.TagNumber(2)
-  $8.GuardianResponse get guardian => $_getN(1);
+  $9.GuardianResponse get guardian => $_getN(1);
   @$pb.TagNumber(2)
-  set guardian($8.GuardianResponse v) { setField(2, v); }
+  set guardian($9.GuardianResponse v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasGuardian() => $_has(1);
   @$pb.TagNumber(2)
   void clearGuardian() => clearField(2);
   @$pb.TagNumber(2)
-  $8.GuardianResponse ensureGuardian() => $_ensure(1);
+  $9.GuardianResponse ensureGuardian() => $_ensure(1);
 
   @$pb.TagNumber(3)
-  $8.NurseryResponse get nursery => $_getN(2);
+  $9.NurseryResponse get nursery => $_getN(2);
   @$pb.TagNumber(3)
-  set nursery($8.NurseryResponse v) { setField(3, v); }
+  set nursery($9.NurseryResponse v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasNursery() => $_has(2);
   @$pb.TagNumber(3)
   void clearNursery() => clearField(3);
   @$pb.TagNumber(3)
-  $8.NurseryResponse ensureNursery() => $_ensure(2);
+  $9.NurseryResponse ensureNursery() => $_ensure(2);
 }
 
 class GetGuardianListByBusIdRequest extends $pb.GeneratedMessage {
@@ -372,7 +372,7 @@ class GetGuardianListByBusIdRequest extends $pb.GeneratedMessage {
 
 class GetGuardianListByBusIdResponse extends $pb.GeneratedMessage {
   factory GetGuardianListByBusIdResponse({
-    $core.Iterable<$8.GuardianResponse>? guardians,
+    $core.Iterable<$9.GuardianResponse>? guardians,
   }) {
     final $result = create();
     if (guardians != null) {
@@ -385,7 +385,7 @@ class GetGuardianListByBusIdResponse extends $pb.GeneratedMessage {
   factory GetGuardianListByBusIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGuardianListByBusIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
+    ..pc<$9.GuardianResponse>(1, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $9.GuardianResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -411,7 +411,7 @@ class GetGuardianListByBusIdResponse extends $pb.GeneratedMessage {
   static GetGuardianListByBusIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.GuardianResponse> get guardians => $_getList(0);
+  $core.List<$9.GuardianResponse> get guardians => $_getList(0);
 }
 
 class GetGuardianByChildIdRequest extends $pb.GeneratedMessage {
@@ -466,7 +466,7 @@ class GetGuardianByChildIdRequest extends $pb.GeneratedMessage {
 
 class GetGuardianByChildIdResponse extends $pb.GeneratedMessage {
   factory GetGuardianByChildIdResponse({
-    $8.GuardianResponse? guardian,
+    $9.GuardianResponse? guardian,
   }) {
     final $result = create();
     if (guardian != null) {
@@ -479,7 +479,7 @@ class GetGuardianByChildIdResponse extends $pb.GeneratedMessage {
   factory GetGuardianByChildIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGuardianByChildIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $8.GuardianResponse.create)
+    ..aOM<$9.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $9.GuardianResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -505,15 +505,15 @@ class GetGuardianByChildIdResponse extends $pb.GeneratedMessage {
   static GetGuardianByChildIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.GuardianResponse get guardian => $_getN(0);
+  $9.GuardianResponse get guardian => $_getN(0);
   @$pb.TagNumber(1)
-  set guardian($8.GuardianResponse v) { setField(1, v); }
+  set guardian($9.GuardianResponse v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasGuardian() => $_has(0);
   @$pb.TagNumber(1)
   void clearGuardian() => clearField(1);
   @$pb.TagNumber(1)
-  $8.GuardianResponse ensureGuardian() => $_ensure(0);
+  $9.GuardianResponse ensureGuardian() => $_ensure(0);
 }
 
 class GetGuardianListByNurseryIdRequest extends $pb.GeneratedMessage {
@@ -568,7 +568,7 @@ class GetGuardianListByNurseryIdRequest extends $pb.GeneratedMessage {
 
 class GetGuardianListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetGuardianListByNurseryIdResponse({
-    $core.Iterable<$8.GuardianResponse>? guardians,
+    $core.Iterable<$9.GuardianResponse>? guardians,
   }) {
     final $result = create();
     if (guardians != null) {
@@ -581,7 +581,7 @@ class GetGuardianListByNurseryIdResponse extends $pb.GeneratedMessage {
   factory GetGuardianListByNurseryIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetGuardianListByNurseryIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $8.GuardianResponse.create)
+    ..pc<$9.GuardianResponse>(1, _omitFieldNames ? '' : 'guardians', $pb.PbFieldType.PM, subBuilder: $9.GuardianResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -607,7 +607,7 @@ class GetGuardianListByNurseryIdResponse extends $pb.GeneratedMessage {
   static GetGuardianListByNurseryIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.GuardianResponse> get guardians => $_getList(0);
+  $core.List<$9.GuardianResponse> get guardians => $_getList(0);
 }
 
 class UpdateGuardianRequest extends $pb.GeneratedMessage {
@@ -618,7 +618,7 @@ class UpdateGuardianRequest extends $pb.GeneratedMessage {
     $core.String? phoneNumber,
     $core.bool? isUseMorningBus,
     $core.bool? isUseEveningBus,
-    $9.FieldMask? updateMask,
+    $10.FieldMask? updateMask,
   }) {
     final $result = create();
     if (guardianId != null) {
@@ -655,7 +655,7 @@ class UpdateGuardianRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'phoneNumber')
     ..aOB(5, _omitFieldNames ? '' : 'isUseMorningBus')
     ..aOB(6, _omitFieldNames ? '' : 'isUseEveningBus')
-    ..aOM<$9.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..aOM<$10.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $10.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -735,20 +735,20 @@ class UpdateGuardianRequest extends $pb.GeneratedMessage {
   void clearIsUseEveningBus() => clearField(6);
 
   @$pb.TagNumber(11)
-  $9.FieldMask get updateMask => $_getN(6);
+  $10.FieldMask get updateMask => $_getN(6);
   @$pb.TagNumber(11)
-  set updateMask($9.FieldMask v) { setField(11, v); }
+  set updateMask($10.FieldMask v) { setField(11, v); }
   @$pb.TagNumber(11)
   $core.bool hasUpdateMask() => $_has(6);
   @$pb.TagNumber(11)
   void clearUpdateMask() => clearField(11);
   @$pb.TagNumber(11)
-  $9.FieldMask ensureUpdateMask() => $_ensure(6);
+  $10.FieldMask ensureUpdateMask() => $_ensure(6);
 }
 
 class UpdateGuardianResponse extends $pb.GeneratedMessage {
   factory UpdateGuardianResponse({
-    $8.GuardianResponse? guardian,
+    $9.GuardianResponse? guardian,
   }) {
     final $result = create();
     if (guardian != null) {
@@ -761,7 +761,7 @@ class UpdateGuardianResponse extends $pb.GeneratedMessage {
   factory UpdateGuardianResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateGuardianResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $8.GuardianResponse.create)
+    ..aOM<$9.GuardianResponse>(1, _omitFieldNames ? '' : 'guardian', subBuilder: $9.GuardianResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -787,15 +787,15 @@ class UpdateGuardianResponse extends $pb.GeneratedMessage {
   static UpdateGuardianResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.GuardianResponse get guardian => $_getN(0);
+  $9.GuardianResponse get guardian => $_getN(0);
   @$pb.TagNumber(1)
-  set guardian($8.GuardianResponse v) { setField(1, v); }
+  set guardian($9.GuardianResponse v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasGuardian() => $_has(0);
   @$pb.TagNumber(1)
   void clearGuardian() => clearField(1);
   @$pb.TagNumber(1)
-  $8.GuardianResponse ensureGuardian() => $_ensure(0);
+  $9.GuardianResponse ensureGuardian() => $_ensure(0);
 }
 
 

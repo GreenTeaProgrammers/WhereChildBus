@@ -12,6 +12,14 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+def secretProperties = new Properties()
+def secretPropertiesFile = rootProject.file('secret.properties')
+if (secretPropertiesFile.exists()) {
+    secretPropertiesFile.withReader('UTF-8') { reader ->
+        secretProperties.load(reader)
+    }
+}
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -45,11 +53,11 @@ android {
         applicationId "com.example.where_child_bus"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         minSdkVersion 21 //cameraパッケージの使用に必要
+        manifestPlaceholders = [googleMapApiKey: secretProperties.getProperty('googleMapApiKey'),]
     }
 
     buildTypes {

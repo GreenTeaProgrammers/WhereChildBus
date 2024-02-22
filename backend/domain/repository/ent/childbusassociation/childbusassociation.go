@@ -3,8 +3,6 @@
 package childbusassociation
 
 import (
-	"fmt"
-
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -16,14 +14,12 @@ const (
 	FieldID = "id"
 	// FieldChildID holds the string denoting the child_id field in the database.
 	FieldChildID = "child_id"
-	// FieldBusID holds the string denoting the bus_id field in the database.
-	FieldBusID = "bus_id"
-	// FieldBusType holds the string denoting the bus_type field in the database.
-	FieldBusType = "bus_type"
+	// FieldBusRouteID holds the string denoting the bus_route_id field in the database.
+	FieldBusRouteID = "bus_route_id"
 	// EdgeChild holds the string denoting the child edge name in mutations.
 	EdgeChild = "child"
-	// EdgeBus holds the string denoting the bus edge name in mutations.
-	EdgeBus = "bus"
+	// EdgeBusRoute holds the string denoting the bus_route edge name in mutations.
+	EdgeBusRoute = "bus_route"
 	// Table holds the table name of the childbusassociation in the database.
 	Table = "child_bus_associations"
 	// ChildTable is the table that holds the child relation/edge.
@@ -33,21 +29,20 @@ const (
 	ChildInverseTable = "childs"
 	// ChildColumn is the table column denoting the child relation/edge.
 	ChildColumn = "child_id"
-	// BusTable is the table that holds the bus relation/edge.
-	BusTable = "child_bus_associations"
-	// BusInverseTable is the table name for the Bus entity.
-	// It exists in this package in order to avoid circular dependency with the "bus" package.
-	BusInverseTable = "bus"
-	// BusColumn is the table column denoting the bus relation/edge.
-	BusColumn = "bus_id"
+	// BusRouteTable is the table that holds the bus_route relation/edge.
+	BusRouteTable = "child_bus_associations"
+	// BusRouteInverseTable is the table name for the BusRoute entity.
+	// It exists in this package in order to avoid circular dependency with the "busroute" package.
+	BusRouteInverseTable = "bus_routes"
+	// BusRouteColumn is the table column denoting the bus_route relation/edge.
+	BusRouteColumn = "bus_route_id"
 )
 
 // Columns holds all SQL columns for childbusassociation fields.
 var Columns = []string{
 	FieldID,
 	FieldChildID,
-	FieldBusID,
-	FieldBusType,
+	FieldBusRouteID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -58,29 +53,6 @@ func ValidColumn(column string) bool {
 		}
 	}
 	return false
-}
-
-// BusType defines the type for the "bus_type" enum field.
-type BusType string
-
-// BusType values.
-const (
-	BusTypeMorning BusType = "morning"
-	BusTypeEvening BusType = "evening"
-)
-
-func (bt BusType) String() string {
-	return string(bt)
-}
-
-// BusTypeValidator is a validator for the "bus_type" field enum values. It is called by the builders before save.
-func BusTypeValidator(bt BusType) error {
-	switch bt {
-	case BusTypeMorning, BusTypeEvening:
-		return nil
-	default:
-		return fmt.Errorf("childbusassociation: invalid enum value for bus_type field: %q", bt)
-	}
 }
 
 // OrderOption defines the ordering options for the ChildBusAssociation queries.
@@ -96,14 +68,9 @@ func ByChildID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChildID, opts...).ToFunc()
 }
 
-// ByBusID orders the results by the bus_id field.
-func ByBusID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBusID, opts...).ToFunc()
-}
-
-// ByBusType orders the results by the bus_type field.
-func ByBusType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBusType, opts...).ToFunc()
+// ByBusRouteID orders the results by the bus_route_id field.
+func ByBusRouteID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBusRouteID, opts...).ToFunc()
 }
 
 // ByChildField orders the results by child field.
@@ -113,10 +80,10 @@ func ByChildField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByBusField orders the results by bus field.
-func ByBusField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByBusRouteField orders the results by bus_route field.
+func ByBusRouteField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newBusStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newBusRouteStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newChildStep() *sqlgraph.Step {
@@ -126,10 +93,10 @@ func newChildStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, ChildTable, ChildColumn),
 	)
 }
-func newBusStep() *sqlgraph.Step {
+func newBusRouteStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(BusInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, BusTable, BusColumn),
+		sqlgraph.To(BusRouteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, BusRouteTable, BusRouteColumn),
 	)
 }
