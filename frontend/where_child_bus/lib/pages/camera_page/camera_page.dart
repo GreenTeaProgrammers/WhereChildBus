@@ -68,7 +68,7 @@ class _CameraPageState extends State<CameraPage> {
     try {
       await for (var response in res.asStream()) {
         developer.log("Received response: $response", name: "CameraPage");
-        _playAudio(response);
+        await _playAudio(response);
       }
     } catch (error) {
       developer.log("Caught Error:", error: error);
