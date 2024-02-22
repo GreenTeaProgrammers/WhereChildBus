@@ -42,7 +42,13 @@ Future<GetChildListByNurseryIDResponse> getChildListByNurseryId(
 Future<CreateChildResponse> createChild(String nurseryId, String guardianId,
     String name, int age, Sex sex, Iterable<List<int>> photos) async {
   return performGrpcCall((client) async {
-    var req = CreateChildRequest();
+    var req = CreateChildRequest(
+        nurseryId: nurseryId,
+        guardianId: guardianId,
+        name: name,
+        age: age,
+        sex: sex,
+        photos: photos);
     return client.createChild(req);
   });
 }

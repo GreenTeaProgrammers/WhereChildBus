@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
-class SelectValueBox extends StatefulWidget {
-  final List<String> lists;
-  String? selectedValue;
-  Function? onChanged;
+class BusSelectedValueBox extends StatefulWidget {
+  final List<Bus> lists;
+  Bus? selectedValue;
+  Function(Bus?)? onChanged;
 
-  SelectValueBox(
+  BusSelectedValueBox(
       {required this.lists, super.key, this.selectedValue, this.onChanged});
   @override
-  State<SelectValueBox> createState() => _SelectValueBox();
+  State<BusSelectedValueBox> createState() => _SelectValueBox();
 }
 
-class _SelectValueBox extends State<SelectValueBox> {
+class _SelectValueBox extends State<BusSelectedValueBox> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       height: 50,
-      child: DropdownButton<String>(
+      child: DropdownButton<Bus>(
           value: widget.selectedValue ?? widget.lists.first,
           items: widget.lists
-              .map((String list) =>
-                  DropdownMenuItem(value: list, child: Text(list)))
+              .map((Bus list) =>
+                  DropdownMenuItem(value: list, child: Text(list.name)))
               .toList(),
-          onChanged: (String? value) {
+          onChanged: (Bus? value) {
             setState(() {
               widget.selectedValue = value;
             });
