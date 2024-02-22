@@ -42,6 +42,8 @@ class _CameraPageState extends State<CameraPage> {
       await _controller.initialize();
       if (!mounted) return;
       setState(() {});
+      developer.log("Camera aspect ratio: ${_controller.value.aspectRatio}",
+          name: "CameraPage");
       _startImageStream();
       developer.log("Start streaming video to server", name: "CameraPage");
       streamBusVideo(_streamController.stream);
@@ -72,6 +74,30 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  List<int> _processCameraImage2gray(CameraImage image) {
+    final int width = image.width;
+    final int height = image.height;
+    const int bgraPixelStride = 4; // BGRAフォーマットではピクセルあたり4バイト
+    final bgraBytes = image.planes[0].bytes;
+
+    // グレースケール画像データを格納するためのリストを初期化
+    List<int> grayscaleBytes = List.filled(width * height, 0);
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        final int index = x * bgraPixelStride + y * image.planes[0].bytesPerRow;
+        final int b = bgraBytes[index];
+        final int g = bgraBytes[index + 1];
+        final int r = bgraBytes[index + 2];
+        // 輝度Yを計算
+        final int yValue = (0.299 * r + 0.587 * g + 0.114 * b).round();
+        grayscaleBytes[x + y * width] = yValue;
+      }
+    }
+
+    return grayscaleBytes;
+  }
+
   void _startImageStream() {
     List<List<int>> videoChunks = [];
     if (!_controller.value.isStreamingImages) {
@@ -83,7 +109,7 @@ class _CameraPageState extends State<CameraPage> {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
           } else if (Platform.isIOS) {
-            videoChunks.add(image.planes[0].bytes.toList());
+            videoChunks.add(_processCameraImage2gray(image));
           }
           _streamController.add(StreamBusVideoRequest(
             nurseryId: NurseryData().getNursery().id,
@@ -126,7 +152,11 @@ class _CameraPageState extends State<CameraPage> {
   Widget _createPageBody() {
     return Stack(
       children: [
-        CameraPreview(_controller),
+        Center(
+          child: AspectRatio(
+              aspectRatio: 1 / _controller.value.aspectRatio,
+              child: CameraPreview(_controller)),
+        ),
         Positioned(
             right: 15,
             child: RidingToggle(
