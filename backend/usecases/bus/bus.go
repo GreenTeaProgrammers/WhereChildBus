@@ -81,10 +81,6 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	}
 
 	nextStationID, err := getStationIDs(i.logger, ctx, bus)
-	if err != nil {
-		i.logger.Error("failed to get station IDs", "error", err)
-		return nil, err
-	}
 
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
@@ -338,6 +334,7 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 }
 
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
+	ctx := stream.Context()
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
@@ -346,8 +343,7 @@ func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationCon
 		}
 		if err != nil {
 			i.logger.Error("failed to receive location", err)
-			// 一時的なエラーの場合は、エラーをログに記録し、処理を続行する
-			continue
+			return err
 		}
 
 		busID, err := uuid.Parse(req.BusId)
@@ -361,17 +357,19 @@ func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationCon
 		_, err = i.entClient.Bus.UpdateOneID(busID).
 			SetLatitude(req.Latitude).
 			SetLongitude(req.Longitude).
-			Save(context.Background())
+			Save(ctx)
+
+		i.logger.Info("updated bus location", "bus_id", busID, "latitude", req.Latitude, "longitude", req.Longitude)
 
 		if err != nil {
 			i.logger.Error("failed to update bus location", err)
-			// 更新に失敗した場合は、エラーをログに記録し、処理を続行する
-			continue
+			return err
 		}
 	}
 }
 
 func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, stream pb.BusService_TrackBusContinuousServer) error {
+	ctx := stream.Context()
 	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
 		return fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
@@ -381,7 +379,7 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 		bus, err := i.entClient.Bus.Query().
 			Where(busRepo.IDEQ(busID)).
 			WithNursery().
-			Only(context.Background())
+			Only(ctx)
 
 		if err != nil {
 			return fmt.Errorf("failed to get bus: %w", err)
@@ -400,6 +398,7 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 		}); err != nil {
 			return fmt.Errorf("failed to send bus: %w", err)
 		}
+		i.logger.Info("sent bus location", "bus_id", busID, "latitude", bus.Latitude, "longitude", bus.Longitude)
 	}
 }
 
@@ -645,7 +644,6 @@ func (i *Interactor) getFirstStation(bus *ent.Bus, busType pb.BusType) (*ent.Sta
 
 	stations, err := busRoute.
 		QueryBusRouteAssociations().
-		Order(ent.Asc("order")).
 		QueryStation().
 		All(context.Background())
 	if err != nil {
