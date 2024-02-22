@@ -19,7 +19,7 @@ class MachineLearningServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Train = channel.stream_stream(
+        self.Train = channel.unary_stream(
             "/machine_learning.v1.MachineLearningService/Train",
             request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.SerializeToString,
             response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainResponse.FromString,
@@ -39,7 +39,7 @@ class MachineLearningServiceStub(object):
 class MachineLearningServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Train(self, request_iterator, context):
+    def Train(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -60,7 +60,7 @@ class MachineLearningServiceServicer(object):
 
 def add_MachineLearningServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "Train": grpc.stream_stream_rpc_method_handler(
+        "Train": grpc.unary_stream_rpc_method_handler(
             servicer.Train,
             request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.FromString,
             response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainResponse.SerializeToString,
@@ -88,7 +88,7 @@ class MachineLearningService(object):
 
     @staticmethod
     def Train(
-        request_iterator,
+        request,
         target,
         options=(),
         channel_credentials=None,
@@ -99,8 +99,8 @@ class MachineLearningService(object):
         timeout=None,
         metadata=None,
     ):
-        return grpc.experimental.stream_stream(
-            request_iterator,
+        return grpc.experimental.unary_stream(
+            request,
             target,
             "/machine_learning.v1.MachineLearningService/Train",
             machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.SerializeToString,
