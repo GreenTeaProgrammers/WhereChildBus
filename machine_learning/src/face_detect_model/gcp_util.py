@@ -1,4 +1,5 @@
 import os
+import time
 
 import cv2
 import google.cloud.storage as gcs
@@ -12,6 +13,7 @@ def init_client():
     PROJECT_ID = os.environ.get("PROJECT_ID")
 
     client = gcs.Client(PROJECT_ID)
+    logger.info(f"Initialized GCS client. {PROJECT_ID}")
     if client is None:
         raise RuntimeError("Failed to initialize client.")
     else:
@@ -22,6 +24,7 @@ def get_bucket(client: gcs.Client, bucket_name: str):
     bucket = client.bucket(bucket_name)
 
     if bucket.exists():
+        logger.info(f"Got bucket {bucket_name} in GCS.")
         return bucket
     else:
         raise ValueError(f"Failed to {bucket_name} does not exist.")
@@ -29,14 +32,21 @@ def get_bucket(client: gcs.Client, bucket_name: str):
 
 def get_blobs(bucket: Bucket, blob_name: str):
     # blobsの中身に対するエラーハンドリング
-    try:
-        blobs = list(bucket.list_blobs(prefix=blob_name))
-        if len(blobs) == 0:  # 最初の要素がない場合、イテレータは空
-            raise ValueError(f"No blobs found with prefix '{blob_name}' in the bucket.")
-        else:
+    tries = 60
+    retry_interval = 1
+    for i in range(0, tries):
+        try:
+            blobs = list(bucket.list_blobs(prefix=blob_name))
+            logger.info(f"Got blobs from {blob_name} in GCS.")
             return blobs
-    except Exception as e:
-        raise ValueError(f"Failed to get blobs from '{blob_name}' due to an error: {e}")
+        except Exception as e:
+            if i + 1 == tries:
+                raise ValueError(
+                    f"Failed to get blobs from '{blob_name}' due to an error: {e}"
+                )
+            time.sleep(retry_interval)
+            logger.info("リトライ回数:{}回目".format(i + 1))
+            continue
 
 
 def decode_face_image_from_ndaarray(face_image: np.ndarray):

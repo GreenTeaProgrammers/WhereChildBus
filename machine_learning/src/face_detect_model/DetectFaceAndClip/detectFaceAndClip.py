@@ -120,6 +120,9 @@ def detect_face_and_clip(args: argparse.Namespace, config: dict):
         exit(1)
 
     logger.info("Detecting faces...")
+    if len(images) == 0:
+        logger.error("No face Detected")
+
     detect_face_num = 0
     for image in images:
         faces = detect_face(
