@@ -5,7 +5,7 @@ class ConfirmButton extends StatelessWidget {
   final VoidCallback? onTap;
   final double fontSize = 20;
 
-  ConfirmButton({required this.buttonText, this.onTap});
+  const ConfirmButton({super.key, required this.buttonText, this.onTap});
 
   @override
   Widget build(BuildContext context) {

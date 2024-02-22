@@ -64,7 +64,7 @@ class _CreateStationPageState extends State<CreateStationPage> {
     try {
       var res = await updateStation(stations[_index].id, widget.bus.id,
           _markers.first.position.latitude, _markers.first.position.longitude);
-      developer.log("バス停の更新が完了しました");
+      developer.log("バス停の更新が完了しました $res", name: "CreateStationPage");
       setState(() {
         _markers.clear();
         if (_index < guardians.length - 1) {
@@ -77,7 +77,7 @@ class _CreateStationPageState extends State<CreateStationPage> {
       });
     } catch (e) {
       if (kDebugMode) {
-        developer.log("バス停の更新中にエラーが発生しました: $e");
+        developer.log("バス停の更新中にエラーが発生しました: $e", name: "CreateStationPageError");
       }
     }
 
@@ -134,10 +134,10 @@ class _CreateStationPageState extends State<CreateStationPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Text(
                           '${guardians[_index].name}さん',
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                       Padding(

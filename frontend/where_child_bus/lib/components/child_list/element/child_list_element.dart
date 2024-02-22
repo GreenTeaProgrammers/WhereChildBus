@@ -20,14 +20,14 @@ class ChildListElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return listElementPadding(
+    return _listElementPadding(
       Card(
         elevation: 8,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Material(
-          color: Colors.white, // Cardの背景色
+          color: Colors.white,
           child: InkWell(
-            onTap: onTap, // タップ時のアクション
+            onTap: onTap,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -36,9 +36,9 @@ class ChildListElement extends StatelessWidget {
                       imageData: image.photoData, height: 100, width: 100),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: titleAndSubTitle(title, subtitle),
+                    child: _createTitleAndSubTitle(title, subtitle),
                   ),
-                  if (actionButton != null) actionButton!, // アクションボタンを表示
+                  if (actionButton != null) actionButton!,
                 ],
               ),
             ),
@@ -48,27 +48,30 @@ class ChildListElement extends StatelessWidget {
     );
   }
 
-  Column titleAndSubTitle(String title, String subtitle) {
+  Column _createTitleAndSubTitle(String title, String subtitle) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        titleText(title),
-        subTitleText(subtitle),
+        _createTitleText(title),
+        _createSubTitleText(subtitle),
       ],
     );
   }
 
-  Text titleText(String title) {
+  Text _createTitleText(String title) {
     return Text(title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
   }
 
-  Text subTitleText(String subtitle) {
-    return Text(subtitle);
+  Widget _createSubTitleText(String subtitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Text(subtitle),
+    );
   }
 
-  Padding listElementPadding(Widget child) {
+  Padding _listElementPadding(Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: child,

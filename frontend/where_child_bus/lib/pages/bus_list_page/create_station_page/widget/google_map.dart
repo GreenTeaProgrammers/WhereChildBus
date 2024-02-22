@@ -4,9 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:where_child_bus/pages/bus_list_page/create_station_page/locate_user.dart';
 
 class GoogleMapWidget extends StatefulWidget {
-  Function(Set<Marker>) onTapped;
+  final Function(Set<Marker>) onTapped;
 
-  GoogleMapWidget({super.key, required this.onTapped});
+  const GoogleMapWidget({super.key, required this.onTapped});
 
   @override
   State<GoogleMapWidget> createState() => _GoogleMapWidgetState();
@@ -14,7 +14,7 @@ class GoogleMapWidget extends StatefulWidget {
 
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   late GoogleMapController mapController;
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
 
   final LatLng _center = const LatLng(35.68145403034362, 139.76707116150914);
 
@@ -38,7 +38,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       _markers.clear();
 
       // 新しいマーカーのID
-      final markerId = MarkerId("unique_id");
+      const markerId = MarkerId("unique_id");
 
       // 新しいマーカーの作成
       final marker = Marker(
@@ -50,7 +50,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       _markers.add(marker);
     });
 
-    widget.onTapped?.call(_markers);
+    widget.onTapped.call(_markers);
   }
 
   @override

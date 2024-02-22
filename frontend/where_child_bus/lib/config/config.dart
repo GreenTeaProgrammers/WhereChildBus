@@ -1,3 +1,4 @@
+import "dart:developer" as developer;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
@@ -16,11 +17,10 @@ class AppConfig {
     await dotenv.load();
 
     try {
-
       grpcEndpoint = dotenv.get("GRPC_ENDPOINT");
       grpcPort = int.tryParse(dotenv.get("GRPC_PORT")) ?? 0;
-    } catch(e) {
-      print("設定の読み込みにエラーが発生しました");
+    } catch (e) {
+      developer.log("設定の読み込みにエラーが発生しました", error: e, name: "AppConfigError");
     }
   }
 }

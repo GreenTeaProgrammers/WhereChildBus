@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
@@ -134,8 +135,8 @@ class _AuthPageState extends State<AuthPage> {
       }
 
       if (res.success) {
-        print(res.success);
-        print(res.nursery.name);
+        developer.log("${res.success}");
+        developer.log(res.nursery.name);
         NurseryData().setNursery(res.nursery);
         Navigator.pushReplacement(
           currentContext,
@@ -145,7 +146,7 @@ class _AuthPageState extends State<AuthPage> {
         );
       } else {
         //  ログイン失敗時の処理をここに記述
-        print('Login failed');
+        developer.log('Login failed');
       }
     } catch (e) {
       if (mounted) {

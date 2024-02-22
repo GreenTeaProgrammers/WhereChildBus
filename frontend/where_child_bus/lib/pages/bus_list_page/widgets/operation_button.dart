@@ -6,10 +6,10 @@ import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class OperationButton extends StatefulWidget {
-  Bus bus;
-  Function(Bus) onBusUpdated;
+  final Bus bus;
+  final Function(Bus) onBusUpdated;
 
-  OperationButton({
+  const OperationButton({
     super.key,
     required this.bus,
     required this.onBusUpdated,
