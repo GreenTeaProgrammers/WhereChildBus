@@ -8,16 +8,18 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Optional as _Op
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    SUCCESS: _ClassVar[status]
-    PROCESSING: _ClassVar[status]
-    FAILED: _ClassVar[status]
-    WAITING: _ClassVar[status]
-SUCCESS: status
-PROCESSING: status
-FAILED: status
-WAITING: status
+    STATUS_UNSPECIFIED: _ClassVar[Status]
+    STATUS_SUCCESS: _ClassVar[Status]
+    STATUS_PROCESSING: _ClassVar[Status]
+    STATUS_FAILED: _ClassVar[Status]
+    STATUS_WAITING: _ClassVar[Status]
+STATUS_UNSPECIFIED: Status
+STATUS_SUCCESS: Status
+STATUS_PROCESSING: Status
+STATUS_FAILED: Status
+STATUS_WAITING: Status
 
 class TrainRequest(_message.Message):
     __slots__ = ("nursery_id", "bus_id", "child_ids", "bus_type")
@@ -34,8 +36,8 @@ class TrainRequest(_message.Message):
 class TrainResponse(_message.Message):
     __slots__ = ("status",)
     STATUS_FIELD_NUMBER: _ClassVar[int]
-    status: status
-    def __init__(self, status: _Optional[_Union[status, str]] = ...) -> None: ...
+    status: Status
+    def __init__(self, status: _Optional[_Union[Status, str]] = ...) -> None: ...
 
 class PredResponse(_message.Message):
     __slots__ = ("is_detected", "child_ids")

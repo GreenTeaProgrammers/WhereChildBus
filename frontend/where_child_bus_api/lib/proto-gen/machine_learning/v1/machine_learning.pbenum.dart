@@ -13,23 +13,25 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class status extends $pb.ProtobufEnum {
-  static const status SUCCESS = status._(0, _omitEnumNames ? '' : 'SUCCESS');
-  static const status PROCESSING = status._(1, _omitEnumNames ? '' : 'PROCESSING');
-  static const status FAILED = status._(2, _omitEnumNames ? '' : 'FAILED');
-  static const status WAITING = status._(3, _omitEnumNames ? '' : 'WAITING');
+class Status extends $pb.ProtobufEnum {
+  static const Status STATUS_UNSPECIFIED = Status._(0, _omitEnumNames ? '' : 'STATUS_UNSPECIFIED');
+  static const Status STATUS_SUCCESS = Status._(1, _omitEnumNames ? '' : 'STATUS_SUCCESS');
+  static const Status STATUS_PROCESSING = Status._(2, _omitEnumNames ? '' : 'STATUS_PROCESSING');
+  static const Status STATUS_FAILED = Status._(3, _omitEnumNames ? '' : 'STATUS_FAILED');
+  static const Status STATUS_WAITING = Status._(4, _omitEnumNames ? '' : 'STATUS_WAITING');
 
-  static const $core.List<status> values = <status> [
-    SUCCESS,
-    PROCESSING,
-    FAILED,
-    WAITING,
+  static const $core.List<Status> values = <Status> [
+    STATUS_UNSPECIFIED,
+    STATUS_SUCCESS,
+    STATUS_PROCESSING,
+    STATUS_FAILED,
+    STATUS_WAITING,
   ];
 
-  static final $core.Map<$core.int, status> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static status? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, Status> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static Status? valueOf($core.int value) => _byValue[value];
 
-  const status._($core.int v, $core.String n) : super(v, n);
+  const Status._($core.int v, $core.String n) : super(v, n);
 }
 
 

@@ -106,7 +106,7 @@ class TrainRequest extends $pb.GeneratedMessage {
 
 class TrainResponse extends $pb.GeneratedMessage {
   factory TrainResponse({
-    status? status,
+    Status? status,
   }) {
     final $result = create();
     if (status != null) {
@@ -119,7 +119,7 @@ class TrainResponse extends $pb.GeneratedMessage {
   factory TrainResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..e<status>(1, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: status.SUCCESS, valueOf: status.valueOf, enumValues: status.values)
+    ..e<Status>(1, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..hasRequiredFields = false
   ;
 
@@ -145,9 +145,9 @@ class TrainResponse extends $pb.GeneratedMessage {
   static TrainResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  status get status => $_getN(0);
+  Status get status => $_getN(0);
   @$pb.TagNumber(1)
-  set status(status v) { setField(1, v); }
+  set status(Status v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
