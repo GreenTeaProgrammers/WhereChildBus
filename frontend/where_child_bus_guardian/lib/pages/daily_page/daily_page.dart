@@ -61,9 +61,6 @@ class _DailyPageState extends State<DailyPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 CurrentTimeBody(),
-                const SizedBox(
-                  height: 20,
-                ),
                 if (_isFailLoading) loadFailText(),
                 if (children.isEmpty) noChildDataText(),
                 DailyRecordSlider(children: children, images: photos),

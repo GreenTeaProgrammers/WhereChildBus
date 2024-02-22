@@ -13,8 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/field_mask.pb.dart' as $9;
-import 'resources.pb.dart' as $8;
+import '../../google/protobuf/field_mask.pb.dart' as $10;
+import 'resources.pb.dart' as $9;
 
 class GetNurseryByGuardianIdRequest extends $pb.GeneratedMessage {
   factory GetNurseryByGuardianIdRequest({
@@ -68,7 +68,7 @@ class GetNurseryByGuardianIdRequest extends $pb.GeneratedMessage {
 
 class GetNurseryByGuardianIdResponse extends $pb.GeneratedMessage {
   factory GetNurseryByGuardianIdResponse({
-    $8.NurseryResponse? nurseries,
+    $9.NurseryResponse? nurseries,
   }) {
     final $result = create();
     if (nurseries != null) {
@@ -81,7 +81,7 @@ class GetNurseryByGuardianIdResponse extends $pb.GeneratedMessage {
   factory GetNurseryByGuardianIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetNurseryByGuardianIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.NurseryResponse>(1, _omitFieldNames ? '' : 'nurseries', subBuilder: $8.NurseryResponse.create)
+    ..aOM<$9.NurseryResponse>(1, _omitFieldNames ? '' : 'nurseries', subBuilder: $9.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -107,15 +107,15 @@ class GetNurseryByGuardianIdResponse extends $pb.GeneratedMessage {
   static GetNurseryByGuardianIdResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.NurseryResponse get nurseries => $_getN(0);
+  $9.NurseryResponse get nurseries => $_getN(0);
   @$pb.TagNumber(1)
-  set nurseries($8.NurseryResponse v) { setField(1, v); }
+  set nurseries($9.NurseryResponse v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasNurseries() => $_has(0);
   @$pb.TagNumber(1)
   void clearNurseries() => clearField(1);
   @$pb.TagNumber(1)
-  $8.NurseryResponse ensureNurseries() => $_ensure(0);
+  $9.NurseryResponse ensureNurseries() => $_ensure(0);
 }
 
 class CreateNurseryRequest extends $pb.GeneratedMessage {
@@ -226,7 +226,7 @@ class CreateNurseryRequest extends $pb.GeneratedMessage {
 
 class CreateNurseryResponse extends $pb.GeneratedMessage {
   factory CreateNurseryResponse({
-    $8.NurseryResponse? nursery,
+    $9.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (nursery != null) {
@@ -239,7 +239,7 @@ class CreateNurseryResponse extends $pb.GeneratedMessage {
   factory CreateNurseryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateNurseryResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.NurseryResponse>(1, _omitFieldNames ? '' : 'nursery', subBuilder: $8.NurseryResponse.create)
+    ..aOM<$9.NurseryResponse>(1, _omitFieldNames ? '' : 'nursery', subBuilder: $9.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -265,15 +265,15 @@ class CreateNurseryResponse extends $pb.GeneratedMessage {
   static CreateNurseryResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.NurseryResponse get nursery => $_getN(0);
+  $9.NurseryResponse get nursery => $_getN(0);
   @$pb.TagNumber(1)
-  set nursery($8.NurseryResponse v) { setField(1, v); }
+  set nursery($9.NurseryResponse v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasNursery() => $_has(0);
   @$pb.TagNumber(1)
   void clearNursery() => clearField(1);
   @$pb.TagNumber(1)
-  $8.NurseryResponse ensureNursery() => $_ensure(0);
+  $9.NurseryResponse ensureNursery() => $_ensure(0);
 }
 
 class NurseryLoginRequest extends $pb.GeneratedMessage {
@@ -343,7 +343,7 @@ class NurseryLoginRequest extends $pb.GeneratedMessage {
 class NurseryLoginResponse extends $pb.GeneratedMessage {
   factory NurseryLoginResponse({
     $core.bool? success,
-    $8.NurseryResponse? nursery,
+    $9.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (success != null) {
@@ -360,7 +360,7 @@ class NurseryLoginResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NurseryLoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'success')
-    ..aOM<$8.NurseryResponse>(2, _omitFieldNames ? '' : 'nursery', subBuilder: $8.NurseryResponse.create)
+    ..aOM<$9.NurseryResponse>(2, _omitFieldNames ? '' : 'nursery', subBuilder: $9.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -395,15 +395,15 @@ class NurseryLoginResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(1);
 
   @$pb.TagNumber(2)
-  $8.NurseryResponse get nursery => $_getN(1);
+  $9.NurseryResponse get nursery => $_getN(1);
   @$pb.TagNumber(2)
-  set nursery($8.NurseryResponse v) { setField(2, v); }
+  set nursery($9.NurseryResponse v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasNursery() => $_has(1);
   @$pb.TagNumber(2)
   void clearNursery() => clearField(2);
   @$pb.TagNumber(2)
-  $8.NurseryResponse ensureNursery() => $_ensure(1);
+  $9.NurseryResponse ensureNursery() => $_ensure(1);
 }
 
 class UpdateNurseryRequest extends $pb.GeneratedMessage {
@@ -414,7 +414,7 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
     $core.String? phoneNumber,
     $core.String? email,
     $core.String? password,
-    $9.FieldMask? updateMask,
+    $10.FieldMask? updateMask,
   }) {
     final $result = create();
     if (id != null) {
@@ -451,7 +451,7 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'phoneNumber')
     ..aOS(5, _omitFieldNames ? '' : 'email')
     ..aOS(6, _omitFieldNames ? '' : 'password')
-    ..aOM<$9.FieldMask>(7, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..aOM<$10.FieldMask>(7, _omitFieldNames ? '' : 'updateMask', subBuilder: $10.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -531,20 +531,20 @@ class UpdateNurseryRequest extends $pb.GeneratedMessage {
   void clearPassword() => clearField(6);
 
   @$pb.TagNumber(7)
-  $9.FieldMask get updateMask => $_getN(6);
+  $10.FieldMask get updateMask => $_getN(6);
   @$pb.TagNumber(7)
-  set updateMask($9.FieldMask v) { setField(7, v); }
+  set updateMask($10.FieldMask v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasUpdateMask() => $_has(6);
   @$pb.TagNumber(7)
   void clearUpdateMask() => clearField(7);
   @$pb.TagNumber(7)
-  $9.FieldMask ensureUpdateMask() => $_ensure(6);
+  $10.FieldMask ensureUpdateMask() => $_ensure(6);
 }
 
 class UpdateNurseryResponse extends $pb.GeneratedMessage {
   factory UpdateNurseryResponse({
-    $8.NurseryResponse? nursery,
+    $9.NurseryResponse? nursery,
   }) {
     final $result = create();
     if (nursery != null) {
@@ -557,7 +557,7 @@ class UpdateNurseryResponse extends $pb.GeneratedMessage {
   factory UpdateNurseryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateNurseryResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.NurseryResponse>(1, _omitFieldNames ? '' : 'nursery', subBuilder: $8.NurseryResponse.create)
+    ..aOM<$9.NurseryResponse>(1, _omitFieldNames ? '' : 'nursery', subBuilder: $9.NurseryResponse.create)
     ..hasRequiredFields = false
   ;
 
@@ -583,15 +583,15 @@ class UpdateNurseryResponse extends $pb.GeneratedMessage {
   static UpdateNurseryResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.NurseryResponse get nursery => $_getN(0);
+  $9.NurseryResponse get nursery => $_getN(0);
   @$pb.TagNumber(1)
-  set nursery($8.NurseryResponse v) { setField(1, v); }
+  set nursery($9.NurseryResponse v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasNursery() => $_has(0);
   @$pb.TagNumber(1)
   void clearNursery() => clearField(1);
   @$pb.TagNumber(1)
-  $8.NurseryResponse ensureNursery() => $_ensure(0);
+  $9.NurseryResponse ensureNursery() => $_ensure(0);
 }
 
 

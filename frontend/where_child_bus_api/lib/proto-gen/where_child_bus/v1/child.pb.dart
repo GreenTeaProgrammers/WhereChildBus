@@ -13,9 +13,9 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/field_mask.pb.dart' as $9;
-import 'resources.pb.dart' as $8;
-import 'resources.pbenum.dart' as $8;
+import '../../google/protobuf/field_mask.pb.dart' as $10;
+import 'resources.pb.dart' as $9;
+import 'resources.pbenum.dart' as $9;
 
 class CreateChildRequest extends $pb.GeneratedMessage {
   factory CreateChildRequest({
@@ -23,7 +23,7 @@ class CreateChildRequest extends $pb.GeneratedMessage {
     $core.String? guardianId,
     $core.String? name,
     $core.int? age,
-    $8.Sex? sex,
+    $9.Sex? sex,
     $core.Iterable<$core.List<$core.int>>? photos,
   }) {
     final $result = create();
@@ -56,7 +56,7 @@ class CreateChildRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'guardianId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..a<$core.int>(4, _omitFieldNames ? '' : 'age', $pb.PbFieldType.O3)
-    ..e<$8.Sex>(5, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: $8.Sex.SEX_UNSPECIFIED, valueOf: $8.Sex.valueOf, enumValues: $8.Sex.values)
+    ..e<$9.Sex>(5, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: $9.Sex.SEX_UNSPECIFIED, valueOf: $9.Sex.valueOf, enumValues: $9.Sex.values)
     ..p<$core.List<$core.int>>(6, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PY)
     ..hasRequiredFields = false
   ;
@@ -119,9 +119,9 @@ class CreateChildRequest extends $pb.GeneratedMessage {
   void clearAge() => clearField(4);
 
   @$pb.TagNumber(5)
-  $8.Sex get sex => $_getN(4);
+  $9.Sex get sex => $_getN(4);
   @$pb.TagNumber(5)
-  set sex($8.Sex v) { setField(5, v); }
+  set sex($9.Sex v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasSex() => $_has(4);
   @$pb.TagNumber(5)
@@ -133,7 +133,7 @@ class CreateChildRequest extends $pb.GeneratedMessage {
 
 class CreateChildResponse extends $pb.GeneratedMessage {
   factory CreateChildResponse({
-    $8.Child? child,
+    $9.Child? child,
   }) {
     final $result = create();
     if (child != null) {
@@ -146,7 +146,7 @@ class CreateChildResponse extends $pb.GeneratedMessage {
   factory CreateChildResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateChildResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Child>(1, _omitFieldNames ? '' : 'child', subBuilder: $8.Child.create)
+    ..aOM<$9.Child>(1, _omitFieldNames ? '' : 'child', subBuilder: $9.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -172,15 +172,15 @@ class CreateChildResponse extends $pb.GeneratedMessage {
   static CreateChildResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Child get child => $_getN(0);
+  $9.Child get child => $_getN(0);
   @$pb.TagNumber(1)
-  set child($8.Child v) { setField(1, v); }
+  set child($9.Child v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasChild() => $_has(0);
   @$pb.TagNumber(1)
   void clearChild() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Child ensureChild() => $_ensure(0);
+  $9.Child ensureChild() => $_ensure(0);
 }
 
 class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
@@ -235,8 +235,8 @@ class GetChildListByNurseryIDRequest extends $pb.GeneratedMessage {
 
 class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse({
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $core.Iterable<$9.Child>? children,
+    $core.Iterable<$9.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (children != null) {
@@ -252,8 +252,8 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByNurseryIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByNurseryIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..pc<$9.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $9.Child.create)
+    ..pc<$9.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $9.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -279,10 +279,10 @@ class GetChildListByNurseryIDResponse extends $pb.GeneratedMessage {
   static GetChildListByNurseryIDResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.Child> get children => $_getList(0);
+  $core.List<$9.Child> get children => $_getList(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.ChildPhoto> get photos => $_getList(1);
+  $core.List<$9.ChildPhoto> get photos => $_getList(1);
 }
 
 class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
@@ -337,8 +337,8 @@ class GetChildListByGuardianIDRequest extends $pb.GeneratedMessage {
 
 class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse({
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $core.Iterable<$9.Child>? children,
+    $core.Iterable<$9.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (children != null) {
@@ -354,8 +354,8 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByGuardianIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByGuardianIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..pc<$9.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $9.Child.create)
+    ..pc<$9.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $9.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -381,10 +381,10 @@ class GetChildListByGuardianIDResponse extends $pb.GeneratedMessage {
   static GetChildListByGuardianIDResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.Child> get children => $_getList(0);
+  $core.List<$9.Child> get children => $_getList(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.ChildPhoto> get photos => $_getList(1);
+  $core.List<$9.ChildPhoto> get photos => $_getList(1);
 }
 
 class GetChildListByBusIDRequest extends $pb.GeneratedMessage {
@@ -439,8 +439,8 @@ class GetChildListByBusIDRequest extends $pb.GeneratedMessage {
 
 class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByBusIDResponse({
-    $core.Iterable<$8.Child>? children,
-    $core.Iterable<$8.ChildPhoto>? photos,
+    $core.Iterable<$9.Child>? children,
+    $core.Iterable<$9.ChildPhoto>? photos,
   }) {
     final $result = create();
     if (children != null) {
@@ -456,8 +456,8 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   factory GetChildListByBusIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetChildListByBusIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..pc<$8.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $8.Child.create)
-    ..pc<$8.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $8.ChildPhoto.create)
+    ..pc<$9.Child>(1, _omitFieldNames ? '' : 'children', $pb.PbFieldType.PM, subBuilder: $9.Child.create)
+    ..pc<$9.ChildPhoto>(2, _omitFieldNames ? '' : 'photos', $pb.PbFieldType.PM, subBuilder: $9.ChildPhoto.create)
     ..hasRequiredFields = false
   ;
 
@@ -483,10 +483,10 @@ class GetChildListByBusIDResponse extends $pb.GeneratedMessage {
   static GetChildListByBusIDResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$8.Child> get children => $_getList(0);
+  $core.List<$9.Child> get children => $_getList(0);
 
   @$pb.TagNumber(2)
-  $core.List<$8.ChildPhoto> get photos => $_getList(1);
+  $core.List<$9.ChildPhoto> get photos => $_getList(1);
 }
 
 class CheckIsChildInBusRequest extends $pb.GeneratedMessage {
@@ -594,14 +594,14 @@ class UpdateChildRequest extends $pb.GeneratedMessage {
     $core.String? childId,
     $core.String? name,
     $core.int? age,
-    $8.Sex? sex,
+    $9.Sex? sex,
     $core.bool? checkForMissingItems,
     $core.bool? hasBag,
     $core.bool? hasLunchBox,
     $core.bool? hasWaterBottle,
     $core.bool? hasUmbrella,
     $core.bool? hasOther,
-    $9.FieldMask? updateMask,
+    $10.FieldMask? updateMask,
   }) {
     final $result = create();
     if (childId != null) {
@@ -647,14 +647,14 @@ class UpdateChildRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'childId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..a<$core.int>(3, _omitFieldNames ? '' : 'age', $pb.PbFieldType.O3)
-    ..e<$8.Sex>(4, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: $8.Sex.SEX_UNSPECIFIED, valueOf: $8.Sex.valueOf, enumValues: $8.Sex.values)
+    ..e<$9.Sex>(4, _omitFieldNames ? '' : 'sex', $pb.PbFieldType.OE, defaultOrMaker: $9.Sex.SEX_UNSPECIFIED, valueOf: $9.Sex.valueOf, enumValues: $9.Sex.values)
     ..aOB(5, _omitFieldNames ? '' : 'checkForMissingItems')
     ..aOB(6, _omitFieldNames ? '' : 'hasBag')
     ..aOB(7, _omitFieldNames ? '' : 'hasLunchBox')
     ..aOB(8, _omitFieldNames ? '' : 'hasWaterBottle')
     ..aOB(9, _omitFieldNames ? '' : 'hasUmbrella')
     ..aOB(10, _omitFieldNames ? '' : 'hasOther')
-    ..aOM<$9.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $9.FieldMask.create)
+    ..aOM<$10.FieldMask>(11, _omitFieldNames ? '' : 'updateMask', subBuilder: $10.FieldMask.create)
     ..hasRequiredFields = false
   ;
 
@@ -707,9 +707,9 @@ class UpdateChildRequest extends $pb.GeneratedMessage {
   void clearAge() => clearField(3);
 
   @$pb.TagNumber(4)
-  $8.Sex get sex => $_getN(3);
+  $9.Sex get sex => $_getN(3);
   @$pb.TagNumber(4)
-  set sex($8.Sex v) { setField(4, v); }
+  set sex($9.Sex v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasSex() => $_has(3);
   @$pb.TagNumber(4)
@@ -770,20 +770,20 @@ class UpdateChildRequest extends $pb.GeneratedMessage {
   void clearHasOther() => clearField(10);
 
   @$pb.TagNumber(11)
-  $9.FieldMask get updateMask => $_getN(10);
+  $10.FieldMask get updateMask => $_getN(10);
   @$pb.TagNumber(11)
-  set updateMask($9.FieldMask v) { setField(11, v); }
+  set updateMask($10.FieldMask v) { setField(11, v); }
   @$pb.TagNumber(11)
   $core.bool hasUpdateMask() => $_has(10);
   @$pb.TagNumber(11)
   void clearUpdateMask() => clearField(11);
   @$pb.TagNumber(11)
-  $9.FieldMask ensureUpdateMask() => $_ensure(10);
+  $10.FieldMask ensureUpdateMask() => $_ensure(10);
 }
 
 class UpdateChildResponse extends $pb.GeneratedMessage {
   factory UpdateChildResponse({
-    $8.Child? child,
+    $9.Child? child,
   }) {
     final $result = create();
     if (child != null) {
@@ -796,7 +796,7 @@ class UpdateChildResponse extends $pb.GeneratedMessage {
   factory UpdateChildResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateChildResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOM<$8.Child>(1, _omitFieldNames ? '' : 'child', subBuilder: $8.Child.create)
+    ..aOM<$9.Child>(1, _omitFieldNames ? '' : 'child', subBuilder: $9.Child.create)
     ..hasRequiredFields = false
   ;
 
@@ -822,15 +822,15 @@ class UpdateChildResponse extends $pb.GeneratedMessage {
   static UpdateChildResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $8.Child get child => $_getN(0);
+  $9.Child get child => $_getN(0);
   @$pb.TagNumber(1)
-  set child($8.Child v) { setField(1, v); }
+  set child($9.Child v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasChild() => $_has(0);
   @$pb.TagNumber(1)
   void clearChild() => clearField(1);
   @$pb.TagNumber(1)
-  $8.Child ensureChild() => $_ensure(0);
+  $9.Child ensureChild() => $_ensure(0);
 }
 
 

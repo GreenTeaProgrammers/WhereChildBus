@@ -59,9 +59,9 @@ func ChildID(v uuid.UUID) predicate.ChildBusAssociation {
 	return predicate.ChildBusAssociation(sql.FieldEQ(FieldChildID, v))
 }
 
-// BusID applies equality check predicate on the "bus_id" field. It's identical to BusIDEQ.
-func BusID(v uuid.UUID) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldEQ(FieldBusID, v))
+// BusRouteID applies equality check predicate on the "bus_route_id" field. It's identical to BusRouteIDEQ.
+func BusRouteID(v uuid.UUID) predicate.ChildBusAssociation {
+	return predicate.ChildBusAssociation(sql.FieldEQ(FieldBusRouteID, v))
 }
 
 // ChildIDEQ applies the EQ predicate on the "child_id" field.
@@ -84,44 +84,24 @@ func ChildIDNotIn(vs ...uuid.UUID) predicate.ChildBusAssociation {
 	return predicate.ChildBusAssociation(sql.FieldNotIn(FieldChildID, vs...))
 }
 
-// BusIDEQ applies the EQ predicate on the "bus_id" field.
-func BusIDEQ(v uuid.UUID) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldEQ(FieldBusID, v))
+// BusRouteIDEQ applies the EQ predicate on the "bus_route_id" field.
+func BusRouteIDEQ(v uuid.UUID) predicate.ChildBusAssociation {
+	return predicate.ChildBusAssociation(sql.FieldEQ(FieldBusRouteID, v))
 }
 
-// BusIDNEQ applies the NEQ predicate on the "bus_id" field.
-func BusIDNEQ(v uuid.UUID) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldNEQ(FieldBusID, v))
+// BusRouteIDNEQ applies the NEQ predicate on the "bus_route_id" field.
+func BusRouteIDNEQ(v uuid.UUID) predicate.ChildBusAssociation {
+	return predicate.ChildBusAssociation(sql.FieldNEQ(FieldBusRouteID, v))
 }
 
-// BusIDIn applies the In predicate on the "bus_id" field.
-func BusIDIn(vs ...uuid.UUID) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldIn(FieldBusID, vs...))
+// BusRouteIDIn applies the In predicate on the "bus_route_id" field.
+func BusRouteIDIn(vs ...uuid.UUID) predicate.ChildBusAssociation {
+	return predicate.ChildBusAssociation(sql.FieldIn(FieldBusRouteID, vs...))
 }
 
-// BusIDNotIn applies the NotIn predicate on the "bus_id" field.
-func BusIDNotIn(vs ...uuid.UUID) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldNotIn(FieldBusID, vs...))
-}
-
-// BusTypeEQ applies the EQ predicate on the "bus_type" field.
-func BusTypeEQ(v BusType) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldEQ(FieldBusType, v))
-}
-
-// BusTypeNEQ applies the NEQ predicate on the "bus_type" field.
-func BusTypeNEQ(v BusType) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldNEQ(FieldBusType, v))
-}
-
-// BusTypeIn applies the In predicate on the "bus_type" field.
-func BusTypeIn(vs ...BusType) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldIn(FieldBusType, vs...))
-}
-
-// BusTypeNotIn applies the NotIn predicate on the "bus_type" field.
-func BusTypeNotIn(vs ...BusType) predicate.ChildBusAssociation {
-	return predicate.ChildBusAssociation(sql.FieldNotIn(FieldBusType, vs...))
+// BusRouteIDNotIn applies the NotIn predicate on the "bus_route_id" field.
+func BusRouteIDNotIn(vs ...uuid.UUID) predicate.ChildBusAssociation {
+	return predicate.ChildBusAssociation(sql.FieldNotIn(FieldBusRouteID, vs...))
 }
 
 // HasChild applies the HasEdge predicate on the "child" edge.
@@ -147,21 +127,21 @@ func HasChildWith(preds ...predicate.Child) predicate.ChildBusAssociation {
 	})
 }
 
-// HasBus applies the HasEdge predicate on the "bus" edge.
-func HasBus() predicate.ChildBusAssociation {
+// HasBusRoute applies the HasEdge predicate on the "bus_route" edge.
+func HasBusRoute() predicate.ChildBusAssociation {
 	return predicate.ChildBusAssociation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, BusTable, BusColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, BusRouteTable, BusRouteColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasBusWith applies the HasEdge predicate on the "bus" edge with a given conditions (other predicates).
-func HasBusWith(preds ...predicate.Bus) predicate.ChildBusAssociation {
+// HasBusRouteWith applies the HasEdge predicate on the "bus_route" edge with a given conditions (other predicates).
+func HasBusRouteWith(preds ...predicate.BusRoute) predicate.ChildBusAssociation {
 	return predicate.ChildBusAssociation(func(s *sql.Selector) {
-		step := newBusStep()
+		step := newBusRouteStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

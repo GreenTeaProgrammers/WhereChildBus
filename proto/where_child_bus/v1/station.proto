@@ -42,6 +42,15 @@ message GetUnregisteredStationListResponse {
         repeated GuardianResponse guardians = 2;
 }
 
+message GetCorrectOrderStationListByBusIdRequest {
+        string bus_id = 1;
+        BusType bus_type = 2;
+}
+
+message GetCorrectOrderStationListByBusIdResponse {
+        BusRoute bus_route = 1;
+}
+
 message UpdateStationRequest {
         string id  = 1;
         string bus_id = 2;

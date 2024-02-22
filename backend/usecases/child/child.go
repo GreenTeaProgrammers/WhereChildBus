@@ -16,6 +16,7 @@ import (
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	boardingRecordRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	busRouteRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	childBusAssociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
@@ -113,7 +114,7 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 			i.logger.Error("failed to upload photo to GCS", "error", err)
 			return nil, err
 		}
-
+		i.logger.Info("Byte data of photo", "photoData", photoData)
 		// childPhotoレコードをデータベースに作成
 		_, err := tx.ChildPhoto.
 			Create().
@@ -133,7 +134,12 @@ func (i *Interactor) CreateChild(ctx context.Context, req *pb.CreateChildRequest
 		ChildId:   child.ID.String(),
 	})
 
-	if !res.IsStarted && err != nil {
+	if err != nil {
+		i.logger.Error("failed to call FaceDetectAndClip RPC", "error", err)
+		return nil, err
+	}
+
+	if !res.IsStarted {
 		i.logger.Error("failed to start face detection and clipping", "error", err)
 		return nil, err
 	}
@@ -309,7 +315,15 @@ func (i *Interactor) GetChildListByBusID(ctx context.Context, req *pb.GetChildLi
 	children, err := i.getChildList(ctx, func(tx *ent.Tx) (*ent.ChildQuery, error) {
 		// Guardianの先のNurseryまで取得
 		return tx.Child.Query().
-			Where(childRepo.HasChildBusAssociationsWith(childBusAssociationRepo.BusIDEQ(busID))).
+			Where(
+				childRepo.HasChildBusAssociationsWith(
+					childBusAssociationRepo.HasBusRouteWith(
+						busRouteRepo.HasBusWith(
+							busRepo.IDEQ(busID),
+						),
+					),
+				),
+			).
 			WithGuardian(), nil
 	})
 
@@ -497,7 +511,6 @@ func (i *Interactor) uploadPhotoToGCS(ctx context.Context, nurseryID, childID, p
 		i.logger.Error("failed to close writer", "error", err)
 		return err
 	}
-
 	return nil
 }
 

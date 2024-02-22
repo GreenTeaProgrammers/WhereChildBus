@@ -8,6 +8,9 @@ import 'package:where_child_bus_guardian/pages/stop_bus_page/stop_bus_page.dart'
 import 'package:where_child_bus_guardian/service/get_running_bus_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/util/guardian_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
+import 'package:where_child_bus_guardian/components/utils/half_circle_painter.dart';
+import 'package:where_child_bus_guardian/components/utils/custom_app_bar.dart';
+import 'package:where_child_bus_guardian/components/utils/custom_bottom_app_bar.dart';
 
 class App extends StatefulWidget {
   App({super.key});
@@ -40,31 +43,19 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(['日々の記録', '地図', '乗車確認'][_selectedIndex]),
+      appBar: CustomAppBar(
+        selectedIndex: _selectedIndex,
       ),
-      body: IndexedStack(index: _selectedIndex, children: [
-        DailyPage(),
-        _hasRunningBus ? MapPage() : StopBusPage(),
-        CheckPage()
-      ]),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (int index) => setState(() => _selectedIndex = index),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note_alt),
-            label: '日々の記録',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bus_alert),
-            label: '地図',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_active),
-            label: '乗車確認',
-          ),
-        ],
+      body: Padding(
+          padding: EdgeInsets.only(top: 30),
+          child: IndexedStack(index: _selectedIndex, children: [
+            DailyPage(),
+            _hasRunningBus ? MapPage() : StopBusPage(),
+            CheckPage(),
+          ])),
+      bottomNavigationBar: CustomWaveBottomBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (index) => setState(() => _selectedIndex = index),
       ),
     );
   }

@@ -14,9 +14,9 @@ import '../../../../components/util/select_value_box.dart';
 import 'submit_button.dart';
 
 class InputFormBody extends StatefulWidget {
-  Child? child;
+  final Child? child;
 
-  InputFormBody({Key? key, this.child}) : super(key: key);
+  const InputFormBody({Key? key, this.child}) : super(key: key);
 
   @override
   State<InputFormBody> createState() => _InputFormBodyState();
@@ -104,7 +104,7 @@ class _InputFormBodyState extends State<InputFormBody> {
       if (pickedFiles.isNotEmpty) {
         images = pickedFiles.map((xFile) => File(xFile.path)).toList();
       } else {
-        print("画像が選択できませんでした。");
+        developer.log("画像が選択できませんでした。");
       }
     });
   }

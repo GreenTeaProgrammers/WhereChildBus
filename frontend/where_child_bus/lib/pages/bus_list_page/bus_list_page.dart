@@ -1,7 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:where_child_bus/components/util/operation_button.dart';
+import 'package:where_child_bus/pages/bus_list_page/widgets/operation_button.dart';
 import 'package:where_child_bus/models/bus_edit_page_type.dart';
 import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bottom_sheet.dart';
@@ -10,6 +10,12 @@ import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
+
+import 'widgets/bus_description_text.dart';
+import 'widgets/bus_image.dart';
+import 'widgets/bus_name_text.dart';
+import 'widgets/load_fail_text.dart';
+import 'widgets/no_bus_registered_text.dart';
 
 class BusListPage extends StatefulWidget {
   const BusListPage({
@@ -32,7 +38,11 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Future<void> _fetchBusList() async {
-    _isLoading = true;
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
     try {
       GetBusListByNurseryIdResponse busList =
@@ -69,12 +79,12 @@ class _BusListPageState extends State<BusListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pageBody(),
-      floatingActionButton: addBusButton(),
+      body: _createPageBody(),
+      floatingActionButton: _createAddBusButton(),
     );
   }
 
-  Widget pageBody() {
+  Widget _createPageBody() {
     return _isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -83,31 +93,24 @@ class _BusListPageState extends State<BusListPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isFailLoading) loadFailText(),
-                if (buses.isEmpty) busNotRegisteredText(),
+                if (_isFailLoading) const LoadFailText(),
+                if (buses.isEmpty) const NoBusRegisteredText(),
                 Expanded(
                   child: RefreshIndicator(
-                      onRefresh: _fetchBusList, child: listViewBuilder()),
+                      onRefresh: _fetchBusList, child: _listViewBuilder()),
                 )
               ],
             ),
           );
   }
 
-  Widget busNotRegisteredText() {
-    return const Padding(
-      padding: EdgeInsets.all(20),
-      child: Text("バスが登録されていません"),
-    );
-  }
-
-  Widget addBusButton() {
+  Widget _createAddBusButton() {
     return FloatingActionButton(
       onPressed: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BusEditPage(
+                builder: (context) => const BusEditPage(
                       busEditPageType: BusEditPageType.create,
                     )));
       },
@@ -115,16 +118,16 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget listViewBuilder() {
+  Widget _listViewBuilder() {
     return ListView.builder(
       itemCount: buses.length,
       itemBuilder: (BuildContext context, int index) {
-        return busListCard(buses[index]);
+        return _createBusListCard(buses[index]);
       },
     );
   }
 
-  Widget busListCard(Bus bus) {
+  Widget _createBusListCard(Bus bus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -150,17 +153,21 @@ class _BusListPageState extends State<BusListPage> {
             },
             child: Row(
               children: [
-                busPhoto(bus.busStatus),
-                busNameAndDescription(bus.name, bus.busStatus),
+                BusImage(busStatus: bus.busStatus),
+                _createBusNameAndDescription(bus.name, bus.busStatus),
                 const Spacer(),
                 OperationButton(
                   bus: bus,
                   onBusUpdated: (Bus updatedBus) {
-                    int index = buses.indexOf(bus);
-                    if (index != -1) {
-                      setState(() {
-                        buses[index] = updatedBus;
-                      });
+                    if (bus.busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
+                      _fetchBusList();
+                    } else {
+                      int index = buses.indexOf(bus);
+                      if (index != -1) {
+                        setState(() {
+                          buses[index] = updatedBus;
+                        });
+                      }
                     }
                   },
                 ),
@@ -172,73 +179,16 @@ class _BusListPageState extends State<BusListPage> {
     );
   }
 
-  Widget busPhoto(BusStatus busStatus) {
-    late String imagePath;
-    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
-      imagePath = "assets/images/bus_operating.png";
-    } else if (busStatus == BusStatus.BUS_STATUS_STOPPED) {
-      imagePath = "assets/images/bus_not_operating.png";
-    } else {
-      imagePath = "assets/images/bus_maintenance.png";
-    }
-
-    return SizedBox(
-        width: 100,
-        height: 100,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-          ),
-        ));
-  }
-
-  Widget busName(name) {
-    return Text(
-      name,
-      textAlign: TextAlign.left,
-      style: const TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 22,
-      ),
-    );
-  }
-
-  Widget busDescription(BusStatus busStatus) {
-    late String description;
-    if (busStatus == BusStatus.BUS_STATUS_RUNNING) {
-      description = "運行中";
-    } else if (busStatus == BusStatus.BUS_STATUS_MAINTENANCE) {
-      description = "経路未設定";
-    } else {
-      description = "停止中";
-    }
-    return Text(
-      description,
-      style: const TextStyle(
-        color: Colors.grey,
-        fontSize: 16,
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 2,
-    );
-  }
-
-  Widget busNameAndDescription(String name, BusStatus busStatus) {
+  Widget _createBusNameAndDescription(String name, BusStatus busStatus) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [busName(name), busDescription(busStatus)],
+        children: [
+          BusNameText(name: name),
+          BusDescriptionText(busStatus: busStatus)
+        ],
       ),
-    );
-  }
-
-  Widget loadFailText() {
-    return const Text(
-      "バスのロードに失敗しました",
-      style: TextStyle(color: Colors.red, fontSize: 16),
     );
   }
 }

@@ -1,29 +1,32 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:grpc/grpc.dart';
 import 'package:where_child_bus/config/config.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
+import 'package:where_child_bus/pages/camera_page/widgets/riding_toggle.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 import "package:where_child_bus/main.dart" as where_child_bus;
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class CameraPage extends StatefulWidget {
-  Bus bus;
-  BusType busType;
+  final Bus bus;
+  final BusType busType;
 
-  CameraPage({Key? key, required this.bus, required this.busType})
+  const CameraPage({Key? key, required this.bus, required this.busType})
       : super(key: key);
 
   @override
-  _CameraPageState createState() => _CameraPageState();
+  State<CameraPage> createState() => _CameraPageState();
 }
 
 class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   final StreamController<StreamBusVideoRequest> _streamController =
       StreamController<StreamBusVideoRequest>.broadcast();
+  VehicleEvent _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
 
   @override
   void initState() {
@@ -39,6 +42,8 @@ class _CameraPageState extends State<CameraPage> {
       await _controller.initialize();
       if (!mounted) return;
       setState(() {});
+      developer.log("Camera aspect ratio: ${_controller.value.aspectRatio}",
+          name: "CameraPage");
       _startImageStream();
       developer.log("Start streaming video to server", name: "CameraPage");
       streamBusVideo(_streamController.stream);
@@ -59,15 +64,38 @@ class _CameraPageState extends State<CameraPage> {
     final res = grpcClient.streamBusVideo(requestStream);
 
     try {
-      developer.log("Streamed video to server");
       await for (var response in res.asStream()) {
-        developer.log("Received response: $response");
+        developer.log("Received response: $response", name: "CameraPage");
       }
     } catch (error) {
       developer.log("Caught Error:", error: error);
     } finally {
       await channel.shutdown();
     }
+  }
+
+  List<int> _processCameraImage2gray(CameraImage image) {
+    final int width = image.width;
+    final int height = image.height;
+    const int bgraPixelStride = 4; // BGRAフォーマットではピクセルあたり4バイト
+    final bgraBytes = image.planes[0].bytes;
+
+    // グレースケール画像データを格納するためのリストを初期化
+    List<int> grayscaleBytes = List.filled(width * height, 0);
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        final int index = x * bgraPixelStride + y * image.planes[0].bytesPerRow;
+        final int b = bgraBytes[index];
+        final int g = bgraBytes[index + 1];
+        final int r = bgraBytes[index + 2];
+        // 輝度Yを計算
+        final int yValue = (0.299 * r + 0.587 * g + 0.114 * b).round();
+        grayscaleBytes[x + y * width] = yValue;
+      }
+    }
+
+    return grayscaleBytes;
   }
 
   void _startImageStream() {
@@ -77,19 +105,21 @@ class _CameraPageState extends State<CameraPage> {
       _controller.startImageStream((CameraImage image) {
         frameCounter++;
         if (frameCounter % 60 == 0) {
-          videoChunks.add(image.planes[0].bytes.toList());
+          //TODO プラットフォームで画像を変える
+          if (Platform.isAndroid) {
+            videoChunks.add(image.planes[0].bytes.toList());
+          } else if (Platform.isIOS) {
+            videoChunks.add(_processCameraImage2gray(image));
+          }
           _streamController.add(StreamBusVideoRequest(
             nurseryId: NurseryData().getNursery().id,
             busId: widget.bus.id,
             busType: widget.busType,
-            //TODO VheicleEventを動的にする
-            vehicleEvent: VehicleEvent.VEHICLE_EVENT_GET_ON,
+            vehicleEvent: _vehicleEvent,
             videoChunk: videoChunks,
             photoHeight: image.height,
             photoWidth: image.width,
           ));
-          developer.log("Received image frame ${videoChunks}",
-              name: "CameraPage");
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 
@@ -115,7 +145,31 @@ class _CameraPageState extends State<CameraPage> {
       appBar: AppBar(
         title: const Text("カメラ"),
       ),
-      body: CameraPreview(_controller),
+      body: _createPageBody(),
+    );
+  }
+
+  Widget _createPageBody() {
+    return Stack(
+      children: [
+        Center(
+          child: AspectRatio(
+              aspectRatio: 1 / _controller.value.aspectRatio,
+              child: CameraPreview(_controller)),
+        ),
+        Positioned(
+            right: 15,
+            child: RidingToggle(
+                onToggled: (event) => {
+                      setState(() {
+                        if (event) {
+                          _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
+                        } else {
+                          _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_OFF;
+                        }
+                      }),
+                    }))
+      ],
     );
   }
 }

@@ -31,24 +31,9 @@ func (Station) Edges() []ent.Edge {
 		edge.From("guardian", Guardian.Type).
 			Ref("station").
 			Unique(),
-		edge.From("bus", Bus.Type).
-			Ref("stations"),
-		// 朝の次のステーションへの自己参照エッジ
-		edge.To("morning_next_station", Station.Type).
-			From("morning_previous_station").
-			Unique(),
-		// 夕方の次のステーションへの自己参照エッジ
-		edge.To("evening_next_station", Station.Type).
-			From("evening_previous_station").
-			Unique(),
 		// このステーションが「現在」の目的地であるバス
 		edge.From("next_for_buses", Bus.Type).
 			Ref("next_station"),
-		// このステーションが朝の最初のステーションであるバス
-		edge.From("morning_first_for_buses", Bus.Type).
-			Ref("morning_first_station"),
-		// このステーションが夕方の最初のステーションであるバス
-		edge.From("evening_first_for_buses", Bus.Type).
-			Ref("evening_first_station"),
+		edge.To("busRouteAssociations", BusRouteAssociation.Type),
 	}
 }

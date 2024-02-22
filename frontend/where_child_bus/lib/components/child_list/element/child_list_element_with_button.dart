@@ -11,7 +11,7 @@ class ChildListElementWithButton extends StatefulWidget {
   final VoidCallback? onButtonTap;
   final ButtonIconType buttonIconType;
 
-  ChildListElementWithButton({
+  const ChildListElementWithButton({
     Key? key,
     required this.childName,
     required this.groupName,

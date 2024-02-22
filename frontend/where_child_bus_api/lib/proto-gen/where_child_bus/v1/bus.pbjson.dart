@@ -20,17 +20,13 @@ const CreateBusRequest$json = {
     {'1': 'nursery_id', '3': 1, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'plate_number', '3': 3, '4': 1, '5': 9, '10': 'plateNumber'},
-    {'1': 'morning_guardian_ids', '3': 4, '4': 3, '5': 9, '10': 'morningGuardianIds'},
-    {'1': 'evening_guardian_ids', '3': 5, '4': 3, '5': 9, '10': 'eveningGuardianIds'},
   ],
 };
 
 /// Descriptor for `CreateBusRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBusRequestDescriptor = $convert.base64Decode(
     'ChBDcmVhdGVCdXNSZXF1ZXN0Eh0KCm51cnNlcnlfaWQYASABKAlSCW51cnNlcnlJZBISCgRuYW'
-    '1lGAIgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgDIAEoCVILcGxhdGVOdW1iZXISMAoUbW9y'
-    'bmluZ19ndWFyZGlhbl9pZHMYBCADKAlSEm1vcm5pbmdHdWFyZGlhbklkcxIwChRldmVuaW5nX2'
-    'd1YXJkaWFuX2lkcxgFIAMoCVISZXZlbmluZ0d1YXJkaWFuSWRz');
+    '1lGAIgASgJUgRuYW1lEiEKDHBsYXRlX251bWJlchgDIAEoCVILcGxhdGVOdW1iZXI=');
 
 @$core.Deprecated('Use createBusResponseDescriptor instead')
 const CreateBusResponse$json = {
@@ -185,7 +181,6 @@ const StreamBusVideoRequest$json = {
   '1': 'StreamBusVideoRequest',
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'bus_type', '3': 3, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
     {'1': 'vehicle_event', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.VehicleEvent', '10': 'vehicleEvent'},
     {'1': 'video_chunk', '3': 5, '4': 3, '5': 12, '10': 'videoChunk'},
@@ -196,12 +191,11 @@ const StreamBusVideoRequest$json = {
 
 /// Descriptor for `StreamBusVideoRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamBusVideoRequestDescriptor = $convert.base64Decode(
-    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBIdCgpudXJzZX'
-    'J5X2lkGAIgASgJUgludXJzZXJ5SWQSNgoIYnVzX3R5cGUYAyABKA4yGy53aGVyZV9jaGlsZF9i'
-    'dXMudjEuQnVzVHlwZVIHYnVzVHlwZRJFCg12ZWhpY2xlX2V2ZW50GAQgASgOMiAud2hlcmVfY2'
-    'hpbGRfYnVzLnYxLlZlaGljbGVFdmVudFIMdmVoaWNsZUV2ZW50Eh8KC3ZpZGVvX2NodW5rGAUg'
-    'AygMUgp2aWRlb0NodW5rEiEKDHBob3RvX2hlaWdodBgGIAEoBVILcGhvdG9IZWlnaHQSHwoLcG'
-    'hvdG9fd2lkdGgYByABKAVSCnBob3RvV2lkdGg=');
+    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBI2CghidXNfdH'
+    'lwZRgDIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBlEkUKDXZlaGlj'
+    'bGVfZXZlbnQYBCABKA4yIC53aGVyZV9jaGlsZF9idXMudjEuVmVoaWNsZUV2ZW50Ugx2ZWhpY2'
+    'xlRXZlbnQSHwoLdmlkZW9fY2h1bmsYBSADKAxSCnZpZGVvQ2h1bmsSIQoMcGhvdG9faGVpZ2h0'
+    'GAYgASgFUgtwaG90b0hlaWdodBIfCgtwaG90b193aWR0aBgHIAEoBVIKcGhvdG9XaWR0aA==');
 
 @$core.Deprecated('Use streamBusVideoResponseDescriptor instead')
 const StreamBusVideoResponse$json = {
@@ -228,8 +222,6 @@ const UpdateBusRequest$json = {
     {'1': 'latitude', '3': 4, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 5, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'enable_face_recognition', '3': 6, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
-    {'1': 'morning_first_station_id', '3': 7, '4': 1, '5': 9, '10': 'morningFirstStationId'},
-    {'1': 'evening_first_station_id', '3': 8, '4': 1, '5': 9, '10': 'eveningFirstStationId'},
     {'1': 'next_station_id', '3': 9, '4': 1, '5': 9, '10': 'nextStationId'},
     {'1': 'update_mask', '3': 10, '4': 1, '5': 11, '6': '.google.protobuf.FieldMask', '10': 'updateMask'},
   ],
@@ -240,11 +232,9 @@ final $typed_data.Uint8List updateBusRequestDescriptor = $convert.base64Decode(
     'ChBVcGRhdGVCdXNSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSEgoEbmFtZRgCIAEoCV'
     'IEbmFtZRIhCgxwbGF0ZV9udW1iZXIYAyABKAlSC3BsYXRlTnVtYmVyEhoKCGxhdGl0dWRlGAQg'
     'ASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYBSABKAFSCWxvbmdpdHVkZRI2ChdlbmFibGVfZm'
-    'FjZV9yZWNvZ25pdGlvbhgGIAEoCFIVZW5hYmxlRmFjZVJlY29nbml0aW9uEjcKGG1vcm5pbmdf'
-    'Zmlyc3Rfc3RhdGlvbl9pZBgHIAEoCVIVbW9ybmluZ0ZpcnN0U3RhdGlvbklkEjcKGGV2ZW5pbm'
-    'dfZmlyc3Rfc3RhdGlvbl9pZBgIIAEoCVIVZXZlbmluZ0ZpcnN0U3RhdGlvbklkEiYKD25leHRf'
-    'c3RhdGlvbl9pZBgJIAEoCVINbmV4dFN0YXRpb25JZBI7Cgt1cGRhdGVfbWFzaxgKIAEoCzIaLm'
-    'dvb2dsZS5wcm90b2J1Zi5GaWVsZE1hc2tSCnVwZGF0ZU1hc2s=');
+    'FjZV9yZWNvZ25pdGlvbhgGIAEoCFIVZW5hYmxlRmFjZVJlY29nbml0aW9uEiYKD25leHRfc3Rh'
+    'dGlvbl9pZBgJIAEoCVINbmV4dFN0YXRpb25JZBI7Cgt1cGRhdGVfbWFzaxgKIAEoCzIaLmdvb2'
+    'dsZS5wcm90b2J1Zi5GaWVsZE1hc2tSCnVwZGF0ZU1hc2s=');
 
 @$core.Deprecated('Use updateBusResponseDescriptor instead')
 const UpdateBusResponse$json = {
