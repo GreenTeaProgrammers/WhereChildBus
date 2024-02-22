@@ -19,7 +19,7 @@ class MachineLearningServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Train = channel.unary_unary(
+        self.Train = channel.stream_stream(
             "/machine_learning.v1.MachineLearningService/Train",
             request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.SerializeToString,
             response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainResponse.FromString,
@@ -29,7 +29,7 @@ class MachineLearningServiceStub(object):
             request_serializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
             response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.FromString,
         )
-        self.FaceDetectAndClip = channel.stream_stream(
+        self.FaceDetectAndClip = channel.unary_unary(
             "/machine_learning.v1.MachineLearningService/FaceDetectAndClip",
             request_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.FaceDetectAndClipRequest.SerializeToString,
             response_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.FaceDetectAndClipResponse.FromString,
@@ -39,7 +39,7 @@ class MachineLearningServiceStub(object):
 class MachineLearningServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Train(self, request, context):
+    def Train(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -51,7 +51,7 @@ class MachineLearningServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
-    def FaceDetectAndClip(self, request_iterator, context):
+    def FaceDetectAndClip(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -60,7 +60,7 @@ class MachineLearningServiceServicer(object):
 
 def add_MachineLearningServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "Train": grpc.unary_unary_rpc_method_handler(
+        "Train": grpc.stream_stream_rpc_method_handler(
             servicer.Train,
             request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.FromString,
             response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.TrainResponse.SerializeToString,
@@ -70,7 +70,7 @@ def add_MachineLearningServiceServicer_to_server(servicer, server):
             request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.FromString,
             response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.PredResponse.SerializeToString,
         ),
-        "FaceDetectAndClip": grpc.stream_stream_rpc_method_handler(
+        "FaceDetectAndClip": grpc.unary_unary_rpc_method_handler(
             servicer.FaceDetectAndClip,
             request_deserializer=machine__learning_dot_v1_dot_machine__learning__pb2.FaceDetectAndClipRequest.FromString,
             response_serializer=machine__learning_dot_v1_dot_machine__learning__pb2.FaceDetectAndClipResponse.SerializeToString,
@@ -88,7 +88,7 @@ class MachineLearningService(object):
 
     @staticmethod
     def Train(
-        request,
+        request_iterator,
         target,
         options=(),
         channel_credentials=None,
@@ -99,8 +99,8 @@ class MachineLearningService(object):
         timeout=None,
         metadata=None,
     ):
-        return grpc.experimental.unary_unary(
-            request,
+        return grpc.experimental.stream_stream(
+            request_iterator,
             target,
             "/machine_learning.v1.MachineLearningService/Train",
             machine__learning_dot_v1_dot_machine__learning__pb2.TrainRequest.SerializeToString,
@@ -146,7 +146,7 @@ class MachineLearningService(object):
 
     @staticmethod
     def FaceDetectAndClip(
-        request_iterator,
+        request,
         target,
         options=(),
         channel_credentials=None,
@@ -157,8 +157,8 @@ class MachineLearningService(object):
         timeout=None,
         metadata=None,
     ):
-        return grpc.experimental.stream_stream(
-            request_iterator,
+        return grpc.experimental.unary_unary(
+            request,
             target,
             "/machine_learning.v1.MachineLearningService/FaceDetectAndClip",
             machine__learning_dot_v1_dot_machine__learning__pb2.FaceDetectAndClipRequest.SerializeToString,
