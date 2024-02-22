@@ -46,8 +46,6 @@ Future<CreateBusResponse> createBus(
       nurseryId: nurseryId,
       name: name,
       plateNumber: plateNumber,
-      morningGuardianIds: morningGuardianIds.toList(),
-      eveningGuardianIds: eveningGuardianIds.toList(),
     );
     return client.createBus(req);
   });

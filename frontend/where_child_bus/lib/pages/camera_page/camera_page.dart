@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:grpc/grpc.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:where_child_bus/components/util/audio_manager.dart';
 import 'package:where_child_bus/config/config.dart';
-import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus/pages/camera_page/widgets/riding_toggle.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 import "package:where_child_bus/main.dart" as where_child_bus;
@@ -23,6 +24,7 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
+  final AudioPlayer audioPlayer = AudioPlayer();
   late CameraController _controller;
   final StreamController<StreamBusVideoRequest> _streamController =
       StreamController<StreamBusVideoRequest>.broadcast();
@@ -66,6 +68,7 @@ class _CameraPageState extends State<CameraPage> {
     try {
       await for (var response in res.asStream()) {
         developer.log("Received response: $response", name: "CameraPage");
+        await _playAudio(response);
       }
     } catch (error) {
       developer.log("Caught Error:", error: error);
@@ -105,14 +108,12 @@ class _CameraPageState extends State<CameraPage> {
       _controller.startImageStream((CameraImage image) {
         frameCounter++;
         if (frameCounter % 60 == 0) {
-          //TODO プラットフォームで画像を変える
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
           } else if (Platform.isIOS) {
             videoChunks.add(_processCameraImage2gray(image));
           }
           _streamController.add(StreamBusVideoRequest(
-            nurseryId: NurseryData().getNursery().id,
             busId: widget.bus.id,
             busType: widget.busType,
             vehicleEvent: _vehicleEvent,
@@ -127,6 +128,28 @@ class _CameraPageState extends State<CameraPage> {
         }
       });
     }
+  }
+
+  Future<void> _playAudio(StreamBusVideoResponse res) async {
+    List<String> audioFiles = [];
+
+    if (res.children.any((child) => child.hasBag)) {
+      audioFiles.add("sounds/bag.wav");
+    }
+
+    if (res.children.any((child) => child.hasLunchBox)) {
+      audioFiles.add("sounds/lunch_box.wav");
+    }
+
+    if (res.children.any((child) => child.hasWaterBottle)) {
+      audioFiles.add("sounds/water_bottle.wav");
+    }
+
+    if (res.children.any((child) => child.hasUmbrella)) {
+      audioFiles.add("sounds/umbrella.wav");
+    }
+
+    AudioManager(audioFiles: audioFiles).playSequentially();
   }
 
   @override
@@ -168,7 +191,12 @@ class _CameraPageState extends State<CameraPage> {
                           _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_OFF;
                         }
                       }),
-                    }))
+                    })),
+        //NOTE: テスト用
+        // ElevatedButton(
+        //     onPressed: AudioManager(audioFiles: ["sounds/water_bottle.wav"])
+        //         .playSequentially,
+        //     child: const Text("Play")),
       ],
     );
   }
