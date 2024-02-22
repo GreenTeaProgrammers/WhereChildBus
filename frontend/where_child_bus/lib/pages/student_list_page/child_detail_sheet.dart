@@ -93,6 +93,7 @@ class _StudentDetailSheetState extends State<StudentDetailSheet> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => StudentEditPage(
                       child: widget.child,
+                      isEdit: true,
                     )));
           },
           child: const Icon(Icons.edit),

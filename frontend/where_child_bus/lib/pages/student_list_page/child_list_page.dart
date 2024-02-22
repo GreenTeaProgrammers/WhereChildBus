@@ -87,7 +87,9 @@ class _ChildListPageState extends State<ChildListPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => const StudentEditPage()));
+              builder: (BuildContext context) => const StudentEditPage(
+                    isEdit: false,
+                  )));
         },
         child: const Icon(Icons.add),
       ),

@@ -12,6 +12,7 @@ class BusNameText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       name,
+      overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.left,
       style: const TextStyle(
         fontWeight: FontWeight.w600,
