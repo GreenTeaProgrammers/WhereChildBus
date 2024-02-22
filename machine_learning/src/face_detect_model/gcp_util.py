@@ -38,6 +38,9 @@ def get_blobs(bucket: Bucket, blob_name: str):
         try:
             blobs = list(bucket.list_blobs(prefix=blob_name))
             logger.info(f"Got blobs from {blob_name} in GCS.")
+            if len(blobs) == 0:
+                logger.info(f"No blobs found in {blob_name}.")
+                raise ValueError(f"No blobs found in {blob_name}.")
             return blobs
         except Exception as e:
             if i + 1 == tries:
