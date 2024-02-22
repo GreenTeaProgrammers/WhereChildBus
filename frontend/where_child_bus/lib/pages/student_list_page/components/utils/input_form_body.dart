@@ -18,8 +18,10 @@ import 'submit_button.dart';
 
 class InputFormBody extends StatefulWidget {
   final Child? child;
+  final bool isEdit;
 
-  const InputFormBody({Key? key, this.child}) : super(key: key);
+  const InputFormBody({Key? key, this.child, required this.isEdit})
+      : super(key: key);
 
   @override
   State<InputFormBody> createState() => _InputFormBodyState();
@@ -304,6 +306,6 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Widget submitButton() {
-    return SubmitButton(onPressed: () {});
+    return SubmitButton(onPressed: widget.isEdit ? () {} : _createChild);
   }
 }

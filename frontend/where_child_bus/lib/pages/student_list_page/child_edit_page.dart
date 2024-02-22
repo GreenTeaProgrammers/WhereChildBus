@@ -27,7 +27,10 @@ class _StudentEditPageState extends State<StudentEditPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(),
-        body: InputFormBody(child: widget.child),
+        body: InputFormBody(
+          child: widget.child,
+          isEdit: widget.isEdit,
+        ),
       ),
     );
   }
