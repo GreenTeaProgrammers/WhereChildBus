@@ -116,8 +116,10 @@ def detect_face_and_clip(args: argparse.Namespace, config: dict):
         blobs = get_blobs(bucket, SOURCE_BLOB_NAME)
         images = load_image(args, blobs=blobs)
     else:
-        logger.error(f"Invalid env: {args.env}")
-        exit(1)
+        raise ValueError(f"Invalid env: {args.env}")
+
+    if len(images) == 0:
+        logger.error("No face Detected")
 
     logger.info("Detecting faces...")
     detect_face_num = 0
