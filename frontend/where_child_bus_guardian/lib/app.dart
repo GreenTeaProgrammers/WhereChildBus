@@ -19,9 +19,13 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbar(),
-      body: IndexedStack(
+      body: Padding(
+        padding: EdgeInsets.only(top: 30), // AppBarのカスタム形状の高さに応じて調整
+        child: IndexedStack(
           index: _selectedIndex,
-          children: [DailyPage(), const MapPage(), CheckPage()]),
+          children: [DailyPage(), const MapPage(), CheckPage()],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (int index) => setState(() => _selectedIndex = index),
