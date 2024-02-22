@@ -697,6 +697,8 @@ class Bus extends $pb.GeneratedMessage {
     $core.String? nextStationId,
     $8.Timestamp? createdAt,
     $8.Timestamp? updatedAt,
+    $core.String? latestMorningRouteId,
+    $core.String? latestEveningRouteId,
   }) {
     final $result = create();
     if (id != null) {
@@ -732,6 +734,12 @@ class Bus extends $pb.GeneratedMessage {
     if (updatedAt != null) {
       $result.updatedAt = updatedAt;
     }
+    if (latestMorningRouteId != null) {
+      $result.latestMorningRouteId = latestMorningRouteId;
+    }
+    if (latestEveningRouteId != null) {
+      $result.latestEveningRouteId = latestEveningRouteId;
+    }
     return $result;
   }
   Bus._() : super();
@@ -750,6 +758,8 @@ class Bus extends $pb.GeneratedMessage {
     ..aOS(11, _omitFieldNames ? '' : 'nextStationId')
     ..aOM<$8.Timestamp>(12, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
     ..aOM<$8.Timestamp>(13, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
+    ..aOS(14, _omitFieldNames ? '' : 'latestMorningRouteId')
+    ..aOS(15, _omitFieldNames ? '' : 'latestEveningRouteId')
     ..hasRequiredFields = false
   ;
 
@@ -877,6 +887,24 @@ class Bus extends $pb.GeneratedMessage {
   void clearUpdatedAt() => clearField(13);
   @$pb.TagNumber(13)
   $8.Timestamp ensureUpdatedAt() => $_ensure(10);
+
+  @$pb.TagNumber(14)
+  $core.String get latestMorningRouteId => $_getSZ(11);
+  @$pb.TagNumber(14)
+  set latestMorningRouteId($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasLatestMorningRouteId() => $_has(11);
+  @$pb.TagNumber(14)
+  void clearLatestMorningRouteId() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get latestEveningRouteId => $_getSZ(12);
+  @$pb.TagNumber(15)
+  set latestEveningRouteId($core.String v) { $_setString(12, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasLatestEveningRouteId() => $_has(12);
+  @$pb.TagNumber(15)
+  void clearLatestEveningRouteId() => clearField(15);
 }
 
 class Child extends $pb.GeneratedMessage {
@@ -1525,7 +1553,7 @@ class BusRoute extends $pb.GeneratedMessage {
   factory BusRoute({
     $core.String? id,
     $core.String? busId,
-    $core.Iterable<$core.String>? orderedStationIds,
+    $core.Iterable<Station>? orderedStations,
     BusType? busType,
   }) {
     final $result = create();
@@ -1535,8 +1563,8 @@ class BusRoute extends $pb.GeneratedMessage {
     if (busId != null) {
       $result.busId = busId;
     }
-    if (orderedStationIds != null) {
-      $result.orderedStationIds.addAll(orderedStationIds);
+    if (orderedStations != null) {
+      $result.orderedStations.addAll(orderedStations);
     }
     if (busType != null) {
       $result.busType = busType;
@@ -1550,7 +1578,7 @@ class BusRoute extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BusRoute', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'busId')
-    ..pPS(3, _omitFieldNames ? '' : 'orderedStationIds')
+    ..pc<Station>(3, _omitFieldNames ? '' : 'orderedStations', $pb.PbFieldType.PM, subBuilder: Station.create)
     ..e<BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: BusType.BUS_TYPE_UNSPECIFIED, valueOf: BusType.valueOf, enumValues: BusType.values)
     ..hasRequiredFields = false
   ;
@@ -1595,7 +1623,7 @@ class BusRoute extends $pb.GeneratedMessage {
   void clearBusId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.String> get orderedStationIds => $_getList(2);
+  $core.List<Station> get orderedStations => $_getList(2);
 
   @$pb.TagNumber(4)
   BusType get busType => $_getN(3);

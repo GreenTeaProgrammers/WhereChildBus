@@ -20,6 +20,7 @@ class CreateBusRouteRequest extends $pb.GeneratedMessage {
   factory CreateBusRouteRequest({
     $core.String? busId,
     $9.BusType? busType,
+    $core.String? nurseryId,
     $core.Iterable<$core.String>? guardianIds,
   }) {
     final $result = create();
@@ -28,6 +29,9 @@ class CreateBusRouteRequest extends $pb.GeneratedMessage {
     }
     if (busType != null) {
       $result.busType = busType;
+    }
+    if (nurseryId != null) {
+      $result.nurseryId = nurseryId;
     }
     if (guardianIds != null) {
       $result.guardianIds.addAll(guardianIds);
@@ -41,7 +45,8 @@ class CreateBusRouteRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBusRouteRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..e<$9.BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $9.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $9.BusType.valueOf, enumValues: $9.BusType.values)
-    ..pPS(3, _omitFieldNames ? '' : 'guardianIds')
+    ..aOS(3, _omitFieldNames ? '' : 'nurseryId')
+    ..pPS(4, _omitFieldNames ? '' : 'guardianIds')
     ..hasRequiredFields = false
   ;
 
@@ -85,7 +90,16 @@ class CreateBusRouteRequest extends $pb.GeneratedMessage {
   void clearBusType() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.String> get guardianIds => $_getList(2);
+  $core.String get nurseryId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set nurseryId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasNurseryId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNurseryId() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.List<$core.String> get guardianIds => $_getList(3);
 }
 
 class CreateBusRouteResponse extends $pb.GeneratedMessage {
@@ -140,8 +154,8 @@ class CreateBusRouteResponse extends $pb.GeneratedMessage {
   $9.BusRoute ensureBusRoute() => $_ensure(0);
 }
 
-class GetBusRouteRequest extends $pb.GeneratedMessage {
-  factory GetBusRouteRequest({
+class GetBusRouteByBusIDRequest extends $pb.GeneratedMessage {
+  factory GetBusRouteByBusIDRequest({
     $core.String? busId,
     $9.BusType? busType,
   }) {
@@ -154,11 +168,11 @@ class GetBusRouteRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetBusRouteRequest._() : super();
-  factory GetBusRouteRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBusRouteRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetBusRouteByBusIDRequest._() : super();
+  factory GetBusRouteByBusIDRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBusRouteByBusIDRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusRouteRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusRouteByBusIDRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
     ..e<$9.BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $9.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $9.BusType.valueOf, enumValues: $9.BusType.values)
     ..hasRequiredFields = false
@@ -168,22 +182,22 @@ class GetBusRouteRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetBusRouteRequest clone() => GetBusRouteRequest()..mergeFromMessage(this);
+  GetBusRouteByBusIDRequest clone() => GetBusRouteByBusIDRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBusRouteRequest copyWith(void Function(GetBusRouteRequest) updates) => super.copyWith((message) => updates(message as GetBusRouteRequest)) as GetBusRouteRequest;
+  GetBusRouteByBusIDRequest copyWith(void Function(GetBusRouteByBusIDRequest) updates) => super.copyWith((message) => updates(message as GetBusRouteByBusIDRequest)) as GetBusRouteByBusIDRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetBusRouteRequest create() => GetBusRouteRequest._();
-  GetBusRouteRequest createEmptyInstance() => create();
-  static $pb.PbList<GetBusRouteRequest> createRepeated() => $pb.PbList<GetBusRouteRequest>();
+  static GetBusRouteByBusIDRequest create() => GetBusRouteByBusIDRequest._();
+  GetBusRouteByBusIDRequest createEmptyInstance() => create();
+  static $pb.PbList<GetBusRouteByBusIDRequest> createRepeated() => $pb.PbList<GetBusRouteByBusIDRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetBusRouteRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBusRouteRequest>(create);
-  static GetBusRouteRequest? _defaultInstance;
+  static GetBusRouteByBusIDRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBusRouteByBusIDRequest>(create);
+  static GetBusRouteByBusIDRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get busId => $_getSZ(0);
@@ -204,8 +218,8 @@ class GetBusRouteRequest extends $pb.GeneratedMessage {
   void clearBusType() => clearField(2);
 }
 
-class GetBusRouteResponse extends $pb.GeneratedMessage {
-  factory GetBusRouteResponse({
+class GetBusRouteByBusIDResponse extends $pb.GeneratedMessage {
+  factory GetBusRouteByBusIDResponse({
     $9.BusRoute? busRoute,
   }) {
     final $result = create();
@@ -214,11 +228,11 @@ class GetBusRouteResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  GetBusRouteResponse._() : super();
-  factory GetBusRouteResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetBusRouteResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetBusRouteByBusIDResponse._() : super();
+  factory GetBusRouteByBusIDResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetBusRouteByBusIDResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusRouteResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusRouteByBusIDResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOM<$9.BusRoute>(1, _omitFieldNames ? '' : 'busRoute', subBuilder: $9.BusRoute.create)
     ..hasRequiredFields = false
   ;
@@ -227,22 +241,22 @@ class GetBusRouteResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetBusRouteResponse clone() => GetBusRouteResponse()..mergeFromMessage(this);
+  GetBusRouteByBusIDResponse clone() => GetBusRouteByBusIDResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetBusRouteResponse copyWith(void Function(GetBusRouteResponse) updates) => super.copyWith((message) => updates(message as GetBusRouteResponse)) as GetBusRouteResponse;
+  GetBusRouteByBusIDResponse copyWith(void Function(GetBusRouteByBusIDResponse) updates) => super.copyWith((message) => updates(message as GetBusRouteByBusIDResponse)) as GetBusRouteByBusIDResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static GetBusRouteResponse create() => GetBusRouteResponse._();
-  GetBusRouteResponse createEmptyInstance() => create();
-  static $pb.PbList<GetBusRouteResponse> createRepeated() => $pb.PbList<GetBusRouteResponse>();
+  static GetBusRouteByBusIDResponse create() => GetBusRouteByBusIDResponse._();
+  GetBusRouteByBusIDResponse createEmptyInstance() => create();
+  static $pb.PbList<GetBusRouteByBusIDResponse> createRepeated() => $pb.PbList<GetBusRouteByBusIDResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetBusRouteResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBusRouteResponse>(create);
-  static GetBusRouteResponse? _defaultInstance;
+  static GetBusRouteByBusIDResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBusRouteByBusIDResponse>(create);
+  static GetBusRouteByBusIDResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $9.BusRoute get busRoute => $_getN(0);

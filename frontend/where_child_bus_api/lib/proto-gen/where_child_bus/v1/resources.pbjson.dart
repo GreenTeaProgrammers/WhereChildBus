@@ -191,6 +191,8 @@ const Bus$json = {
     {'1': 'longitude', '3': 7, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'enable_face_recognition', '3': 8, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
     {'1': 'next_station_id', '3': 11, '4': 1, '5': 9, '10': 'nextStationId'},
+    {'1': 'latest_morning_route_id', '3': 14, '4': 1, '5': 9, '10': 'latestMorningRouteId'},
+    {'1': 'latest_evening_route_id', '3': 15, '4': 1, '5': 9, '10': 'latestEveningRouteId'},
     {'1': 'created_at', '3': 12, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
     {'1': 'updated_at', '3': 13, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
   ],
@@ -203,9 +205,11 @@ final $typed_data.Uint8List busDescriptor = $convert.base64Decode(
     'YnVzX3N0YXR1cxgFIAEoDjIdLndoZXJlX2NoaWxkX2J1cy52MS5CdXNTdGF0dXNSCWJ1c1N0YX'
     'R1cxIaCghsYXRpdHVkZRgGIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAcgASgBUglsb25n'
     'aXR1ZGUSNgoXZW5hYmxlX2ZhY2VfcmVjb2duaXRpb24YCCABKAhSFWVuYWJsZUZhY2VSZWNvZ2'
-    '5pdGlvbhImCg9uZXh0X3N0YXRpb25faWQYCyABKAlSDW5leHRTdGF0aW9uSWQSOQoKY3JlYXRl'
-    'ZF9hdBgMIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cG'
-    'RhdGVkX2F0GA0gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
+    '5pdGlvbhImCg9uZXh0X3N0YXRpb25faWQYCyABKAlSDW5leHRTdGF0aW9uSWQSNQoXbGF0ZXN0'
+    'X21vcm5pbmdfcm91dGVfaWQYDiABKAlSFGxhdGVzdE1vcm5pbmdSb3V0ZUlkEjUKF2xhdGVzdF'
+    '9ldmVuaW5nX3JvdXRlX2lkGA8gASgJUhRsYXRlc3RFdmVuaW5nUm91dGVJZBI5CgpjcmVhdGVk'
+    'X2F0GAwgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0EjkKCnVwZG'
+    'F0ZWRfYXQYDSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgl1cGRhdGVkQXQ=');
 
 @$core.Deprecated('Use childDescriptor instead')
 const Child$json = {
@@ -320,14 +324,15 @@ const BusRoute$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'bus_id', '3': 2, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'ordered_station_ids', '3': 3, '4': 3, '5': 9, '10': 'orderedStationIds'},
+    {'1': 'ordered_stations', '3': 3, '4': 3, '5': 11, '6': '.where_child_bus.v1.Station', '10': 'orderedStations'},
     {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
   ],
 };
 
 /// Descriptor for `BusRoute`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List busRouteDescriptor = $convert.base64Decode(
-    'CghCdXNSb3V0ZRIOCgJpZBgBIAEoCVICaWQSFQoGYnVzX2lkGAIgASgJUgVidXNJZBIuChNvcm'
-    'RlcmVkX3N0YXRpb25faWRzGAMgAygJUhFvcmRlcmVkU3RhdGlvbklkcxI2CghidXNfdHlwZRgE'
-    'IAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBl');
+    'CghCdXNSb3V0ZRIOCgJpZBgBIAEoCVICaWQSFQoGYnVzX2lkGAIgASgJUgVidXNJZBJGChBvcm'
+    'RlcmVkX3N0YXRpb25zGAMgAygLMhsud2hlcmVfY2hpbGRfYnVzLnYxLlN0YXRpb25SD29yZGVy'
+    'ZWRTdGF0aW9ucxI2CghidXNfdHlwZRgEIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeX'
+    'BlUgdidXNUeXBl');
 

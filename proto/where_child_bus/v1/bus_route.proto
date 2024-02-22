@@ -6,24 +6,25 @@ import "where_child_bus/v1/resources.proto";
 
 service BusRouteService {
         rpc CreateBusRoute(CreateBusRouteRequest) returns (CreateBusRouteResponse );
-        rpc GetBusRoute(GetBusRouteRequest) returns (GetBusRouteResponse);
+        rpc GetBusRouteByBusID(GetBusRouteByBusIDRequest) returns (GetBusRouteByBusIDResponse);
 }
 
 message CreateBusRouteRequest {
         string bus_id = 1;
         BusType bus_type = 2;
-        repeated string guardian_ids = 3;
+        string nursery_id = 3; // 機械学習サーバーにわたすため
+        repeated string guardian_ids = 4;
 }
 
 message CreateBusRouteResponse {
         BusRoute bus_route = 1;
 }
 
-message GetBusRouteRequest {
+message GetBusRouteByBusIDRequest {
         string bus_id = 1;
         BusType bus_type = 2;
 }
 
-message GetBusRouteResponse {
+message GetBusRouteByBusIDResponse {
         BusRoute bus_route = 1;
 }

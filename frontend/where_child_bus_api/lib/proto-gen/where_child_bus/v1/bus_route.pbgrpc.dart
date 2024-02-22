@@ -25,10 +25,10 @@ class BusRouteServiceClient extends $grpc.Client {
       '/where_child_bus.v1.BusRouteService/CreateBusRoute',
       ($1.CreateBusRouteRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.CreateBusRouteResponse.fromBuffer(value));
-  static final _$getBusRoute = $grpc.ClientMethod<$1.GetBusRouteRequest, $1.GetBusRouteResponse>(
-      '/where_child_bus.v1.BusRouteService/GetBusRoute',
-      ($1.GetBusRouteRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.GetBusRouteResponse.fromBuffer(value));
+  static final _$getBusRouteByBusID = $grpc.ClientMethod<$1.GetBusRouteByBusIDRequest, $1.GetBusRouteByBusIDResponse>(
+      '/where_child_bus.v1.BusRouteService/GetBusRouteByBusID',
+      ($1.GetBusRouteByBusIDRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.GetBusRouteByBusIDResponse.fromBuffer(value));
 
   BusRouteServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -40,8 +40,8 @@ class BusRouteServiceClient extends $grpc.Client {
     return $createUnaryCall(_$createBusRoute, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.GetBusRouteResponse> getBusRoute($1.GetBusRouteRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getBusRoute, request, options: options);
+  $grpc.ResponseFuture<$1.GetBusRouteByBusIDResponse> getBusRouteByBusID($1.GetBusRouteByBusIDRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getBusRouteByBusID, request, options: options);
   }
 }
 
@@ -57,23 +57,23 @@ abstract class BusRouteServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $1.CreateBusRouteRequest.fromBuffer(value),
         ($1.CreateBusRouteResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.GetBusRouteRequest, $1.GetBusRouteResponse>(
-        'GetBusRoute',
-        getBusRoute_Pre,
+    $addMethod($grpc.ServiceMethod<$1.GetBusRouteByBusIDRequest, $1.GetBusRouteByBusIDResponse>(
+        'GetBusRouteByBusID',
+        getBusRouteByBusID_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $1.GetBusRouteRequest.fromBuffer(value),
-        ($1.GetBusRouteResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $1.GetBusRouteByBusIDRequest.fromBuffer(value),
+        ($1.GetBusRouteByBusIDResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.CreateBusRouteResponse> createBusRoute_Pre($grpc.ServiceCall call, $async.Future<$1.CreateBusRouteRequest> request) async {
     return createBusRoute(call, await request);
   }
 
-  $async.Future<$1.GetBusRouteResponse> getBusRoute_Pre($grpc.ServiceCall call, $async.Future<$1.GetBusRouteRequest> request) async {
-    return getBusRoute(call, await request);
+  $async.Future<$1.GetBusRouteByBusIDResponse> getBusRouteByBusID_Pre($grpc.ServiceCall call, $async.Future<$1.GetBusRouteByBusIDRequest> request) async {
+    return getBusRouteByBusID(call, await request);
   }
 
   $async.Future<$1.CreateBusRouteResponse> createBusRoute($grpc.ServiceCall call, $1.CreateBusRouteRequest request);
-  $async.Future<$1.GetBusRouteResponse> getBusRoute($grpc.ServiceCall call, $1.GetBusRouteRequest request);
+  $async.Future<$1.GetBusRouteByBusIDResponse> getBusRouteByBusID($grpc.ServiceCall call, $1.GetBusRouteByBusIDRequest request);
 }

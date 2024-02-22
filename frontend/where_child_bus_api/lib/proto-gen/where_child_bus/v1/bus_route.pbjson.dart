@@ -19,15 +19,17 @@ const CreateBusRouteRequest$json = {
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
     {'1': 'bus_type', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
-    {'1': 'guardian_ids', '3': 3, '4': 3, '5': 9, '10': 'guardianIds'},
+    {'1': 'nursery_id', '3': 3, '4': 1, '5': 9, '10': 'nurseryId'},
+    {'1': 'guardian_ids', '3': 4, '4': 3, '5': 9, '10': 'guardianIds'},
   ],
 };
 
 /// Descriptor for `CreateBusRouteRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createBusRouteRequestDescriptor = $convert.base64Decode(
     'ChVDcmVhdGVCdXNSb3V0ZVJlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBI2CghidXNfdH'
-    'lwZRgCIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBlEiEKDGd1YXJk'
-    'aWFuX2lkcxgDIAMoCVILZ3VhcmRpYW5JZHM=');
+    'lwZRgCIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBlEh0KCm51cnNl'
+    'cnlfaWQYAyABKAlSCW51cnNlcnlJZBIhCgxndWFyZGlhbl9pZHMYBCADKAlSC2d1YXJkaWFuSW'
+    'Rz');
 
 @$core.Deprecated('Use createBusRouteResponseDescriptor instead')
 const CreateBusRouteResponse$json = {
@@ -42,30 +44,30 @@ final $typed_data.Uint8List createBusRouteResponseDescriptor = $convert.base64De
     'ChZDcmVhdGVCdXNSb3V0ZVJlc3BvbnNlEjkKCWJ1c19yb3V0ZRgBIAEoCzIcLndoZXJlX2NoaW'
     'xkX2J1cy52MS5CdXNSb3V0ZVIIYnVzUm91dGU=');
 
-@$core.Deprecated('Use getBusRouteRequestDescriptor instead')
-const GetBusRouteRequest$json = {
-  '1': 'GetBusRouteRequest',
+@$core.Deprecated('Use getBusRouteByBusIDRequestDescriptor instead')
+const GetBusRouteByBusIDRequest$json = {
+  '1': 'GetBusRouteByBusIDRequest',
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
     {'1': 'bus_type', '3': 2, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
   ],
 };
 
-/// Descriptor for `GetBusRouteRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getBusRouteRequestDescriptor = $convert.base64Decode(
-    'ChJHZXRCdXNSb3V0ZVJlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBI2CghidXNfdHlwZR'
-    'gCIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBl');
+/// Descriptor for `GetBusRouteByBusIDRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getBusRouteByBusIDRequestDescriptor = $convert.base64Decode(
+    'ChlHZXRCdXNSb3V0ZUJ5QnVzSURSZXF1ZXN0EhUKBmJ1c19pZBgBIAEoCVIFYnVzSWQSNgoIYn'
+    'VzX3R5cGUYAiABKA4yGy53aGVyZV9jaGlsZF9idXMudjEuQnVzVHlwZVIHYnVzVHlwZQ==');
 
-@$core.Deprecated('Use getBusRouteResponseDescriptor instead')
-const GetBusRouteResponse$json = {
-  '1': 'GetBusRouteResponse',
+@$core.Deprecated('Use getBusRouteByBusIDResponseDescriptor instead')
+const GetBusRouteByBusIDResponse$json = {
+  '1': 'GetBusRouteByBusIDResponse',
   '2': [
     {'1': 'bus_route', '3': 1, '4': 1, '5': 11, '6': '.where_child_bus.v1.BusRoute', '10': 'busRoute'},
   ],
 };
 
-/// Descriptor for `GetBusRouteResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getBusRouteResponseDescriptor = $convert.base64Decode(
-    'ChNHZXRCdXNSb3V0ZVJlc3BvbnNlEjkKCWJ1c19yb3V0ZRgBIAEoCzIcLndoZXJlX2NoaWxkX2'
-    'J1cy52MS5CdXNSb3V0ZVIIYnVzUm91dGU=');
+/// Descriptor for `GetBusRouteByBusIDResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getBusRouteByBusIDResponseDescriptor = $convert.base64Decode(
+    'ChpHZXRCdXNSb3V0ZUJ5QnVzSURSZXNwb25zZRI5CglidXNfcm91dGUYASABKAsyHC53aGVyZV'
+    '9jaGlsZF9idXMudjEuQnVzUm91dGVSCGJ1c1JvdXRl');
 

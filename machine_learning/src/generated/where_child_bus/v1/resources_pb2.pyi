@@ -136,7 +136,7 @@ class GuardianResponse(_message.Message):
     def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., email: _Optional[str] = ..., phone_number: _Optional[str] = ..., is_use_morning_bus: bool = ..., is_use_evening_bus: bool = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Bus(_message.Message):
-    __slots__ = ("id", "nursery_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "next_station_id", "created_at", "updated_at")
+    __slots__ = ("id", "nursery_id", "name", "plate_number", "bus_status", "latitude", "longitude", "enable_face_recognition", "next_station_id", "latest_morning_route_id", "latest_evening_route_id", "created_at", "updated_at")
     ID_FIELD_NUMBER: _ClassVar[int]
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -146,6 +146,8 @@ class Bus(_message.Message):
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
     NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
+    LATEST_MORNING_ROUTE_ID_FIELD_NUMBER: _ClassVar[int]
+    LATEST_EVENING_ROUTE_ID_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
@@ -157,9 +159,11 @@ class Bus(_message.Message):
     longitude: float
     enable_face_recognition: bool
     next_station_id: str
+    latest_morning_route_id: str
+    latest_evening_route_id: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
-    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., next_station_id: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., name: _Optional[str] = ..., plate_number: _Optional[str] = ..., bus_status: _Optional[_Union[BusStatus, str]] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., enable_face_recognition: bool = ..., next_station_id: _Optional[str] = ..., latest_morning_route_id: _Optional[str] = ..., latest_evening_route_id: _Optional[str] = ..., created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Child(_message.Message):
     __slots__ = ("id", "nursery_id", "guardian_id", "name", "age", "sex", "check_for_missing_items", "has_bag", "has_lunch_box", "has_water_bottle", "has_umbrella", "has_other", "created_at", "updated_at")
@@ -246,13 +250,13 @@ class BoardingRecord(_message.Message):
     def __init__(self, id: _Optional[str] = ..., child_id: _Optional[str] = ..., bus_id: _Optional[str] = ..., is_boarding: bool = ..., timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class BusRoute(_message.Message):
-    __slots__ = ("id", "bus_id", "ordered_station_ids", "bus_type")
+    __slots__ = ("id", "bus_id", "ordered_stations", "bus_type")
     ID_FIELD_NUMBER: _ClassVar[int]
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
-    ORDERED_STATION_IDS_FIELD_NUMBER: _ClassVar[int]
+    ORDERED_STATIONS_FIELD_NUMBER: _ClassVar[int]
     BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
     id: str
     bus_id: str
-    ordered_station_ids: _containers.RepeatedScalarFieldContainer[str]
+    ordered_stations: _containers.RepeatedCompositeFieldContainer[Station]
     bus_type: BusType
-    def __init__(self, id: _Optional[str] = ..., bus_id: _Optional[str] = ..., ordered_station_ids: _Optional[_Iterable[str]] = ..., bus_type: _Optional[_Union[BusType, str]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., bus_id: _Optional[str] = ..., ordered_stations: _Optional[_Iterable[_Union[Station, _Mapping]]] = ..., bus_type: _Optional[_Union[BusType, str]] = ...) -> None: ...

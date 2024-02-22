@@ -19,10 +19,10 @@ class BusRouteServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_bus__route__pb2.CreateBusRouteRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_bus__route__pb2.CreateBusRouteResponse.FromString,
                 )
-        self.GetBusRoute = channel.unary_unary(
-                '/where_child_bus.v1.BusRouteService/GetBusRoute',
-                request_serializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteRequest.SerializeToString,
-                response_deserializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteResponse.FromString,
+        self.GetBusRouteByBusID = channel.unary_unary(
+                '/where_child_bus.v1.BusRouteService/GetBusRouteByBusID',
+                request_serializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteByBusIDRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteByBusIDResponse.FromString,
                 )
 
 
@@ -35,7 +35,7 @@ class BusRouteServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetBusRoute(self, request, context):
+    def GetBusRouteByBusID(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -49,10 +49,10 @@ def add_BusRouteServiceServicer_to_server(servicer, server):
                     request_deserializer=where__child__bus_dot_v1_dot_bus__route__pb2.CreateBusRouteRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_bus__route__pb2.CreateBusRouteResponse.SerializeToString,
             ),
-            'GetBusRoute': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetBusRoute,
-                    request_deserializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteRequest.FromString,
-                    response_serializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteResponse.SerializeToString,
+            'GetBusRouteByBusID': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetBusRouteByBusID,
+                    request_deserializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteByBusIDRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteByBusIDResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -82,7 +82,7 @@ class BusRouteService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetBusRoute(request,
+    def GetBusRouteByBusID(request,
             target,
             options=(),
             channel_credentials=None,
@@ -92,8 +92,8 @@ class BusRouteService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusRouteService/GetBusRoute',
-            where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteRequest.SerializeToString,
-            where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.BusRouteService/GetBusRouteByBusID',
+            where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteByBusIDRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_bus__route__pb2.GetBusRouteByBusIDResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
