@@ -82,6 +82,11 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 
 	nextStationID, err := getStationIDs(i.logger, ctx, bus)
 
+	if err != nil {
+		i.logger.Error("failed to get station IDs", "error", err)
+		return nil, err
+	}
+
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
