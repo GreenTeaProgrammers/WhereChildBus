@@ -21,8 +21,6 @@ message CreateBusRequest {
         string nursery_id = 1;
         string name = 2;
         string plate_number = 3;
-        repeated string morning_guardian_ids = 4;
-        repeated string evening_guardian_ids = 5;
 }
 
 message CreateBusResponse {
@@ -79,7 +77,6 @@ message TrackBusContinuousResponse {
 
 message StreamBusVideoRequest {
         string bus_id = 1;
-        string nursery_id = 2;
         BusType bus_type = 3;
         VehicleEvent vehicle_event = 4;
         repeated bytes video_chunk = 5; // Chunk of video data
@@ -99,8 +96,6 @@ message UpdateBusRequest {
         double latitude = 4;
         double longitude = 5;
         bool enable_face_recognition = 6;
-        string morning_first_station_id = 7;
-        string evening_first_station_id = 8;
         string next_station_id = 9;
         google.protobuf.FieldMask update_mask = 10;
 }

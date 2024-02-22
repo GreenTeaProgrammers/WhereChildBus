@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
@@ -20,12 +20,12 @@ import (
 // ChildBusAssociationQuery is the builder for querying ChildBusAssociation entities.
 type ChildBusAssociationQuery struct {
 	config
-	ctx        *QueryContext
-	order      []childbusassociation.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ChildBusAssociation
-	withChild  *ChildQuery
-	withBus    *BusQuery
+	ctx          *QueryContext
+	order        []childbusassociation.OrderOption
+	inters       []Interceptor
+	predicates   []predicate.ChildBusAssociation
+	withChild    *ChildQuery
+	withBusRoute *BusRouteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,9 +84,9 @@ func (cbaq *ChildBusAssociationQuery) QueryChild() *ChildQuery {
 	return query
 }
 
-// QueryBus chains the current query on the "bus" edge.
-func (cbaq *ChildBusAssociationQuery) QueryBus() *BusQuery {
-	query := (&BusClient{config: cbaq.config}).Query()
+// QueryBusRoute chains the current query on the "bus_route" edge.
+func (cbaq *ChildBusAssociationQuery) QueryBusRoute() *BusRouteQuery {
+	query := (&BusRouteClient{config: cbaq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cbaq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -97,8 +97,8 @@ func (cbaq *ChildBusAssociationQuery) QueryBus() *BusQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(childbusassociation.Table, childbusassociation.FieldID, selector),
-			sqlgraph.To(bus.Table, bus.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, childbusassociation.BusTable, childbusassociation.BusColumn),
+			sqlgraph.To(busroute.Table, busroute.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, childbusassociation.BusRouteTable, childbusassociation.BusRouteColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cbaq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,13 +293,13 @@ func (cbaq *ChildBusAssociationQuery) Clone() *ChildBusAssociationQuery {
 		return nil
 	}
 	return &ChildBusAssociationQuery{
-		config:     cbaq.config,
-		ctx:        cbaq.ctx.Clone(),
-		order:      append([]childbusassociation.OrderOption{}, cbaq.order...),
-		inters:     append([]Interceptor{}, cbaq.inters...),
-		predicates: append([]predicate.ChildBusAssociation{}, cbaq.predicates...),
-		withChild:  cbaq.withChild.Clone(),
-		withBus:    cbaq.withBus.Clone(),
+		config:       cbaq.config,
+		ctx:          cbaq.ctx.Clone(),
+		order:        append([]childbusassociation.OrderOption{}, cbaq.order...),
+		inters:       append([]Interceptor{}, cbaq.inters...),
+		predicates:   append([]predicate.ChildBusAssociation{}, cbaq.predicates...),
+		withChild:    cbaq.withChild.Clone(),
+		withBusRoute: cbaq.withBusRoute.Clone(),
 		// clone intermediate query.
 		sql:  cbaq.sql.Clone(),
 		path: cbaq.path,
@@ -317,14 +317,14 @@ func (cbaq *ChildBusAssociationQuery) WithChild(opts ...func(*ChildQuery)) *Chil
 	return cbaq
 }
 
-// WithBus tells the query-builder to eager-load the nodes that are connected to
-// the "bus" edge. The optional arguments are used to configure the query builder of the edge.
-func (cbaq *ChildBusAssociationQuery) WithBus(opts ...func(*BusQuery)) *ChildBusAssociationQuery {
-	query := (&BusClient{config: cbaq.config}).Query()
+// WithBusRoute tells the query-builder to eager-load the nodes that are connected to
+// the "bus_route" edge. The optional arguments are used to configure the query builder of the edge.
+func (cbaq *ChildBusAssociationQuery) WithBusRoute(opts ...func(*BusRouteQuery)) *ChildBusAssociationQuery {
+	query := (&BusRouteClient{config: cbaq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cbaq.withBus = query
+	cbaq.withBusRoute = query
 	return cbaq
 }
 
@@ -408,7 +408,7 @@ func (cbaq *ChildBusAssociationQuery) sqlAll(ctx context.Context, hooks ...query
 		_spec       = cbaq.querySpec()
 		loadedTypes = [2]bool{
 			cbaq.withChild != nil,
-			cbaq.withBus != nil,
+			cbaq.withBusRoute != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -435,9 +435,9 @@ func (cbaq *ChildBusAssociationQuery) sqlAll(ctx context.Context, hooks ...query
 			return nil, err
 		}
 	}
-	if query := cbaq.withBus; query != nil {
-		if err := cbaq.loadBus(ctx, query, nodes, nil,
-			func(n *ChildBusAssociation, e *Bus) { n.Edges.Bus = e }); err != nil {
+	if query := cbaq.withBusRoute; query != nil {
+		if err := cbaq.loadBusRoute(ctx, query, nodes, nil,
+			func(n *ChildBusAssociation, e *BusRoute) { n.Edges.BusRoute = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -473,11 +473,11 @@ func (cbaq *ChildBusAssociationQuery) loadChild(ctx context.Context, query *Chil
 	}
 	return nil
 }
-func (cbaq *ChildBusAssociationQuery) loadBus(ctx context.Context, query *BusQuery, nodes []*ChildBusAssociation, init func(*ChildBusAssociation), assign func(*ChildBusAssociation, *Bus)) error {
+func (cbaq *ChildBusAssociationQuery) loadBusRoute(ctx context.Context, query *BusRouteQuery, nodes []*ChildBusAssociation, init func(*ChildBusAssociation), assign func(*ChildBusAssociation, *BusRoute)) error {
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*ChildBusAssociation)
 	for i := range nodes {
-		fk := nodes[i].BusID
+		fk := nodes[i].BusRouteID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -486,7 +486,7 @@ func (cbaq *ChildBusAssociationQuery) loadBus(ctx context.Context, query *BusQue
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(bus.IDIn(ids...))
+	query.Where(busroute.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -494,7 +494,7 @@ func (cbaq *ChildBusAssociationQuery) loadBus(ctx context.Context, query *BusQue
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "bus_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "bus_route_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -531,8 +531,8 @@ func (cbaq *ChildBusAssociationQuery) querySpec() *sqlgraph.QuerySpec {
 		if cbaq.withChild != nil {
 			_spec.Node.AddColumnOnce(childbusassociation.FieldChildID)
 		}
-		if cbaq.withBus != nil {
-			_spec.Node.AddColumnOnce(childbusassociation.FieldBusID)
+		if cbaq.withBusRoute != nil {
+			_spec.Node.AddColumnOnce(childbusassociation.FieldBusRouteID)
 		}
 	}
 	if ps := cbaq.predicates; len(ps) > 0 {

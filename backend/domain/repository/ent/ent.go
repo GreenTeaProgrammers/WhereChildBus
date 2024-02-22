@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/boardingrecord"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busrouteassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childphoto"
@@ -82,6 +84,8 @@ func checkColumn(table, column string) error {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			boardingrecord.Table:      boardingrecord.ValidColumn,
 			bus.Table:                 bus.ValidColumn,
+			busroute.Table:            busroute.ValidColumn,
+			busrouteassociation.Table: busrouteassociation.ValidColumn,
 			child.Table:               child.ValidColumn,
 			childbusassociation.Table: childbusassociation.ValidColumn,
 			childphoto.Table:          childphoto.ValidColumn,

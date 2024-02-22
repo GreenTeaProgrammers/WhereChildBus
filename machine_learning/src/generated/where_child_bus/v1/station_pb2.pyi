@@ -85,26 +85,24 @@ class GetUnregisteredStationListResponse(_message.Message):
         ] = ...,
     ) -> None: ...
 
-class GetUnregisteredStationListRequest(_message.Message):
-    __slots__ = ("bus_id",)
+class GetCorrectOrderStationListByBusIdRequest(_message.Message):
+    __slots__ = ("bus_id", "bus_type")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
-    def __init__(self, bus_id: _Optional[str] = ...) -> None: ...
-
-class GetUnregisteredStationListResponse(_message.Message):
-    __slots__ = ("stations", "guardians")
-    STATIONS_FIELD_NUMBER: _ClassVar[int]
-    GUARDIANS_FIELD_NUMBER: _ClassVar[int]
-    stations: _containers.RepeatedCompositeFieldContainer[_resources_pb2.Station]
-    guardians: _containers.RepeatedCompositeFieldContainer[
-        _resources_pb2.GuardianResponse
-    ]
+    bus_type: _resources_pb2.BusType
     def __init__(
         self,
-        stations: _Optional[_Iterable[_Union[_resources_pb2.Station, _Mapping]]] = ...,
-        guardians: _Optional[
-            _Iterable[_Union[_resources_pb2.GuardianResponse, _Mapping]]
-        ] = ...,
+        bus_id: _Optional[str] = ...,
+        bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ...,
+    ) -> None: ...
+
+class GetCorrectOrderStationListByBusIdResponse(_message.Message):
+    __slots__ = ("bus_route",)
+    BUS_ROUTE_FIELD_NUMBER: _ClassVar[int]
+    bus_route: _resources_pb2.BusRoute
+    def __init__(
+        self, bus_route: _Optional[_Union[_resources_pb2.BusRoute, _Mapping]] = ...
     ) -> None: ...
 
 class UpdateStationRequest(_message.Message):

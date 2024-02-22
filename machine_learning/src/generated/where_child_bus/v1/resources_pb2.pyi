@@ -233,9 +233,9 @@ class Bus(_message.Message):
         "latitude",
         "longitude",
         "enable_face_recognition",
-        "morning_first_station_id",
-        "evening_first_station_id",
         "next_station_id",
+        "latest_morning_route_id",
+        "latest_evening_route_id",
         "created_at",
         "updated_at",
     )
@@ -247,9 +247,9 @@ class Bus(_message.Message):
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
-    MORNING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
-    EVENING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
+    LATEST_MORNING_ROUTE_ID_FIELD_NUMBER: _ClassVar[int]
+    LATEST_EVENING_ROUTE_ID_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
@@ -260,9 +260,9 @@ class Bus(_message.Message):
     latitude: float
     longitude: float
     enable_face_recognition: bool
-    morning_first_station_id: str
-    evening_first_station_id: str
     next_station_id: str
+    latest_morning_route_id: str
+    latest_evening_route_id: str
     created_at: _timestamp_pb2.Timestamp
     updated_at: _timestamp_pb2.Timestamp
     def __init__(
@@ -275,9 +275,9 @@ class Bus(_message.Message):
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
         enable_face_recognition: bool = ...,
-        morning_first_station_id: _Optional[str] = ...,
-        evening_first_station_id: _Optional[str] = ...,
         next_station_id: _Optional[str] = ...,
+        latest_morning_route_id: _Optional[str] = ...,
+        latest_evening_route_id: _Optional[str] = ...,
         created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
         updated_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
     ) -> None: ...
@@ -349,8 +349,6 @@ class Station(_message.Message):
     __slots__ = (
         "id",
         "guardian_id",
-        "morning_next_station_id",
-        "evening_next_station_id",
         "latitude",
         "longitude",
         "created_at",
@@ -358,16 +356,12 @@ class Station(_message.Message):
     )
     ID_FIELD_NUMBER: _ClassVar[int]
     GUARDIAN_ID_FIELD_NUMBER: _ClassVar[int]
-    MORNING_NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
-    EVENING_NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     UPDATED_AT_FIELD_NUMBER: _ClassVar[int]
     id: str
     guardian_id: str
-    morning_next_station_id: str
-    evening_next_station_id: str
     latitude: float
     longitude: float
     created_at: _timestamp_pb2.Timestamp
@@ -376,8 +370,6 @@ class Station(_message.Message):
         self,
         id: _Optional[str] = ...,
         guardian_id: _Optional[str] = ...,
-        morning_next_station_id: _Optional[str] = ...,
-        evening_next_station_id: _Optional[str] = ...,
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
         created_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
@@ -385,31 +377,13 @@ class Station(_message.Message):
     ) -> None: ...
 
 class ChildBusAssociation(_message.Message):
-    __slots__ = ("id", "bus_id", "child_id", "bus_type")
-    ID_FIELD_NUMBER: _ClassVar[int]
-    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("bus_route_id", "child_id")
+    BUS_ROUTE_ID_FIELD_NUMBER: _ClassVar[int]
     CHILD_ID_FIELD_NUMBER: _ClassVar[int]
-    BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
-    id: str
-    bus_id: str
+    bus_route_id: str
     child_id: str
-    bus_type: BusType
     def __init__(
-        self,
-        id: _Optional[str] = ...,
-        bus_id: _Optional[str] = ...,
-        child_id: _Optional[str] = ...,
-        bus_type: _Optional[_Union[BusType, str]] = ...,
-    ) -> None: ...
-
-class BusStationAssociation(_message.Message):
-    __slots__ = ("bus_id", "station_id")
-    BUS_ID_FIELD_NUMBER: _ClassVar[int]
-    STATION_ID_FIELD_NUMBER: _ClassVar[int]
-    bus_id: str
-    station_id: str
-    def __init__(
-        self, bus_id: _Optional[str] = ..., station_id: _Optional[str] = ...
+        self, bus_route_id: _Optional[str] = ..., child_id: _Optional[str] = ...
     ) -> None: ...
 
 class ChildPhoto(_message.Message):
@@ -452,4 +426,22 @@ class BoardingRecord(_message.Message):
         bus_id: _Optional[str] = ...,
         is_boarding: bool = ...,
         timestamp: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
+    ) -> None: ...
+
+class BusRoute(_message.Message):
+    __slots__ = ("id", "bus_id", "ordered_stations", "bus_type")
+    ID_FIELD_NUMBER: _ClassVar[int]
+    BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    ORDERED_STATIONS_FIELD_NUMBER: _ClassVar[int]
+    BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
+    id: str
+    bus_id: str
+    ordered_stations: _containers.RepeatedCompositeFieldContainer[Station]
+    bus_type: BusType
+    def __init__(
+        self,
+        id: _Optional[str] = ...,
+        bus_id: _Optional[str] = ...,
+        ordered_stations: _Optional[_Iterable[_Union[Station, _Mapping]]] = ...,
+        bus_type: _Optional[_Union[BusType, str]] = ...,
     ) -> None: ...

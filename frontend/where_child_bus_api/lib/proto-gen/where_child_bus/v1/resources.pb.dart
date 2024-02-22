@@ -13,7 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/timestamp.pb.dart' as $7;
+import '../../google/protobuf/timestamp.pb.dart' as $8;
 import 'resources.pbenum.dart';
 
 export 'resources.pbenum.dart';
@@ -27,8 +27,8 @@ class Nursery extends $pb.GeneratedMessage {
     $core.String? phoneNumber,
     $core.String? email,
     $core.String? hashedPassword,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -72,8 +72,8 @@ class Nursery extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
     ..aOS(6, _omitFieldNames ? '' : 'email')
     ..aOS(7, _omitFieldNames ? '' : 'hashedPassword')
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -162,26 +162,26 @@ class Nursery extends $pb.GeneratedMessage {
   void clearHashedPassword() => clearField(7);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get createdAt => $_getN(7);
+  $8.Timestamp get createdAt => $_getN(7);
   @$pb.TagNumber(8)
-  set createdAt($7.Timestamp v) { setField(8, v); }
+  set createdAt($8.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasCreatedAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearCreatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $7.Timestamp ensureCreatedAt() => $_ensure(7);
+  $8.Timestamp ensureCreatedAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
-  $7.Timestamp get updatedAt => $_getN(8);
+  $8.Timestamp get updatedAt => $_getN(8);
   @$pb.TagNumber(9)
-  set updatedAt($7.Timestamp v) { setField(9, v); }
+  set updatedAt($8.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasUpdatedAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearUpdatedAt() => clearField(9);
   @$pb.TagNumber(9)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(8);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(8);
 }
 
 class NurseryResponse extends $pb.GeneratedMessage {
@@ -192,8 +192,8 @@ class NurseryResponse extends $pb.GeneratedMessage {
     $core.String? address,
     $core.String? phoneNumber,
     $core.String? email,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -233,8 +233,8 @@ class NurseryResponse extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'address')
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
     ..aOS(6, _omitFieldNames ? '' : 'email')
-    ..aOM<$7.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -315,26 +315,26 @@ class NurseryResponse extends $pb.GeneratedMessage {
 
   /// ハッシュ化されたパスワードは除外
   @$pb.TagNumber(7)
-  $7.Timestamp get createdAt => $_getN(6);
+  $8.Timestamp get createdAt => $_getN(6);
   @$pb.TagNumber(7)
-  set createdAt($7.Timestamp v) { setField(7, v); }
+  set createdAt($8.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $7.Timestamp ensureCreatedAt() => $_ensure(6);
+  $8.Timestamp ensureCreatedAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get updatedAt => $_getN(7);
+  $8.Timestamp get updatedAt => $_getN(7);
   @$pb.TagNumber(8)
-  set updatedAt($7.Timestamp v) { setField(8, v); }
+  set updatedAt($8.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasUpdatedAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearUpdatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(7);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(7);
 }
 
 class Guardian extends $pb.GeneratedMessage {
@@ -347,8 +347,8 @@ class Guardian extends $pb.GeneratedMessage {
     $core.String? hashedPassword,
     $core.bool? isUseMorningBus,
     $core.bool? isUseEveningBus,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -396,8 +396,8 @@ class Guardian extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'hashedPassword')
     ..aOB(7, _omitFieldNames ? '' : 'isUseMorningBus')
     ..aOB(8, _omitFieldNames ? '' : 'isUseEveningBus')
-    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(10, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -495,26 +495,26 @@ class Guardian extends $pb.GeneratedMessage {
   void clearIsUseEveningBus() => clearField(8);
 
   @$pb.TagNumber(9)
-  $7.Timestamp get createdAt => $_getN(8);
+  $8.Timestamp get createdAt => $_getN(8);
   @$pb.TagNumber(9)
-  set createdAt($7.Timestamp v) { setField(9, v); }
+  set createdAt($8.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasCreatedAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearCreatedAt() => clearField(9);
   @$pb.TagNumber(9)
-  $7.Timestamp ensureCreatedAt() => $_ensure(8);
+  $8.Timestamp ensureCreatedAt() => $_ensure(8);
 
   @$pb.TagNumber(10)
-  $7.Timestamp get updatedAt => $_getN(9);
+  $8.Timestamp get updatedAt => $_getN(9);
   @$pb.TagNumber(10)
-  set updatedAt($7.Timestamp v) { setField(10, v); }
+  set updatedAt($8.Timestamp v) { setField(10, v); }
   @$pb.TagNumber(10)
   $core.bool hasUpdatedAt() => $_has(9);
   @$pb.TagNumber(10)
   void clearUpdatedAt() => clearField(10);
   @$pb.TagNumber(10)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(9);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(9);
 }
 
 class GuardianResponse extends $pb.GeneratedMessage {
@@ -526,8 +526,8 @@ class GuardianResponse extends $pb.GeneratedMessage {
     $core.String? phoneNumber,
     $core.bool? isUseMorningBus,
     $core.bool? isUseEveningBus,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -571,8 +571,8 @@ class GuardianResponse extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'phoneNumber')
     ..aOB(6, _omitFieldNames ? '' : 'isUseMorningBus')
     ..aOB(7, _omitFieldNames ? '' : 'isUseEveningBus')
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(8, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(9, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -662,26 +662,26 @@ class GuardianResponse extends $pb.GeneratedMessage {
   void clearIsUseEveningBus() => clearField(7);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get createdAt => $_getN(7);
+  $8.Timestamp get createdAt => $_getN(7);
   @$pb.TagNumber(8)
-  set createdAt($7.Timestamp v) { setField(8, v); }
+  set createdAt($8.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasCreatedAt() => $_has(7);
   @$pb.TagNumber(8)
   void clearCreatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $7.Timestamp ensureCreatedAt() => $_ensure(7);
+  $8.Timestamp ensureCreatedAt() => $_ensure(7);
 
   @$pb.TagNumber(9)
-  $7.Timestamp get updatedAt => $_getN(8);
+  $8.Timestamp get updatedAt => $_getN(8);
   @$pb.TagNumber(9)
-  set updatedAt($7.Timestamp v) { setField(9, v); }
+  set updatedAt($8.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasUpdatedAt() => $_has(8);
   @$pb.TagNumber(9)
   void clearUpdatedAt() => clearField(9);
   @$pb.TagNumber(9)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(8);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(8);
 }
 
 class Bus extends $pb.GeneratedMessage {
@@ -694,11 +694,11 @@ class Bus extends $pb.GeneratedMessage {
     $core.double? latitude,
     $core.double? longitude,
     $core.bool? enableFaceRecognition,
-    $core.String? morningFirstStationId,
-    $core.String? eveningFirstStationId,
     $core.String? nextStationId,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
+    $core.String? latestMorningRouteId,
+    $core.String? latestEveningRouteId,
   }) {
     final $result = create();
     if (id != null) {
@@ -725,12 +725,6 @@ class Bus extends $pb.GeneratedMessage {
     if (enableFaceRecognition != null) {
       $result.enableFaceRecognition = enableFaceRecognition;
     }
-    if (morningFirstStationId != null) {
-      $result.morningFirstStationId = morningFirstStationId;
-    }
-    if (eveningFirstStationId != null) {
-      $result.eveningFirstStationId = eveningFirstStationId;
-    }
     if (nextStationId != null) {
       $result.nextStationId = nextStationId;
     }
@@ -739,6 +733,12 @@ class Bus extends $pb.GeneratedMessage {
     }
     if (updatedAt != null) {
       $result.updatedAt = updatedAt;
+    }
+    if (latestMorningRouteId != null) {
+      $result.latestMorningRouteId = latestMorningRouteId;
+    }
+    if (latestEveningRouteId != null) {
+      $result.latestEveningRouteId = latestEveningRouteId;
     }
     return $result;
   }
@@ -755,11 +755,11 @@ class Bus extends $pb.GeneratedMessage {
     ..a<$core.double>(6, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
     ..aOB(8, _omitFieldNames ? '' : 'enableFaceRecognition')
-    ..aOS(9, _omitFieldNames ? '' : 'morningFirstStationId')
-    ..aOS(10, _omitFieldNames ? '' : 'eveningFirstStationId')
     ..aOS(11, _omitFieldNames ? '' : 'nextStationId')
-    ..aOM<$7.Timestamp>(12, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(13, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(12, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(13, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
+    ..aOS(14, _omitFieldNames ? '' : 'latestMorningRouteId')
+    ..aOS(15, _omitFieldNames ? '' : 'latestEveningRouteId')
     ..hasRequiredFields = false
   ;
 
@@ -857,54 +857,54 @@ class Bus extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearEnableFaceRecognition() => clearField(8);
 
-  @$pb.TagNumber(9)
-  $core.String get morningFirstStationId => $_getSZ(8);
-  @$pb.TagNumber(9)
-  set morningFirstStationId($core.String v) { $_setString(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasMorningFirstStationId() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearMorningFirstStationId() => clearField(9);
-
-  @$pb.TagNumber(10)
-  $core.String get eveningFirstStationId => $_getSZ(9);
-  @$pb.TagNumber(10)
-  set eveningFirstStationId($core.String v) { $_setString(9, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasEveningFirstStationId() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearEveningFirstStationId() => clearField(10);
-
   @$pb.TagNumber(11)
-  $core.String get nextStationId => $_getSZ(10);
+  $core.String get nextStationId => $_getSZ(8);
   @$pb.TagNumber(11)
-  set nextStationId($core.String v) { $_setString(10, v); }
+  set nextStationId($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(11)
-  $core.bool hasNextStationId() => $_has(10);
+  $core.bool hasNextStationId() => $_has(8);
   @$pb.TagNumber(11)
   void clearNextStationId() => clearField(11);
 
   @$pb.TagNumber(12)
-  $7.Timestamp get createdAt => $_getN(11);
+  $8.Timestamp get createdAt => $_getN(9);
   @$pb.TagNumber(12)
-  set createdAt($7.Timestamp v) { setField(12, v); }
+  set createdAt($8.Timestamp v) { setField(12, v); }
   @$pb.TagNumber(12)
-  $core.bool hasCreatedAt() => $_has(11);
+  $core.bool hasCreatedAt() => $_has(9);
   @$pb.TagNumber(12)
   void clearCreatedAt() => clearField(12);
   @$pb.TagNumber(12)
-  $7.Timestamp ensureCreatedAt() => $_ensure(11);
+  $8.Timestamp ensureCreatedAt() => $_ensure(9);
 
   @$pb.TagNumber(13)
-  $7.Timestamp get updatedAt => $_getN(12);
+  $8.Timestamp get updatedAt => $_getN(10);
   @$pb.TagNumber(13)
-  set updatedAt($7.Timestamp v) { setField(13, v); }
+  set updatedAt($8.Timestamp v) { setField(13, v); }
   @$pb.TagNumber(13)
-  $core.bool hasUpdatedAt() => $_has(12);
+  $core.bool hasUpdatedAt() => $_has(10);
   @$pb.TagNumber(13)
   void clearUpdatedAt() => clearField(13);
   @$pb.TagNumber(13)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(12);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(10);
+
+  @$pb.TagNumber(14)
+  $core.String get latestMorningRouteId => $_getSZ(11);
+  @$pb.TagNumber(14)
+  set latestMorningRouteId($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasLatestMorningRouteId() => $_has(11);
+  @$pb.TagNumber(14)
+  void clearLatestMorningRouteId() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get latestEveningRouteId => $_getSZ(12);
+  @$pb.TagNumber(15)
+  set latestEveningRouteId($core.String v) { $_setString(12, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasLatestEveningRouteId() => $_has(12);
+  @$pb.TagNumber(15)
+  void clearLatestEveningRouteId() => clearField(15);
 }
 
 class Child extends $pb.GeneratedMessage {
@@ -921,8 +921,8 @@ class Child extends $pb.GeneratedMessage {
     $core.bool? hasWaterBottle,
     $core.bool? hasUmbrella,
     $core.bool? hasOther,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -986,8 +986,8 @@ class Child extends $pb.GeneratedMessage {
     ..aOB(10, _omitFieldNames ? '' : 'hasWaterBottle')
     ..aOB(11, _omitFieldNames ? '' : 'hasUmbrella')
     ..aOB(12, _omitFieldNames ? '' : 'hasOther')
-    ..aOM<$7.Timestamp>(13, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(14, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(13, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(14, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1121,38 +1121,36 @@ class Child extends $pb.GeneratedMessage {
   void clearHasOther() => clearField(12);
 
   @$pb.TagNumber(13)
-  $7.Timestamp get createdAt => $_getN(12);
+  $8.Timestamp get createdAt => $_getN(12);
   @$pb.TagNumber(13)
-  set createdAt($7.Timestamp v) { setField(13, v); }
+  set createdAt($8.Timestamp v) { setField(13, v); }
   @$pb.TagNumber(13)
   $core.bool hasCreatedAt() => $_has(12);
   @$pb.TagNumber(13)
   void clearCreatedAt() => clearField(13);
   @$pb.TagNumber(13)
-  $7.Timestamp ensureCreatedAt() => $_ensure(12);
+  $8.Timestamp ensureCreatedAt() => $_ensure(12);
 
   @$pb.TagNumber(14)
-  $7.Timestamp get updatedAt => $_getN(13);
+  $8.Timestamp get updatedAt => $_getN(13);
   @$pb.TagNumber(14)
-  set updatedAt($7.Timestamp v) { setField(14, v); }
+  set updatedAt($8.Timestamp v) { setField(14, v); }
   @$pb.TagNumber(14)
   $core.bool hasUpdatedAt() => $_has(13);
   @$pb.TagNumber(14)
   void clearUpdatedAt() => clearField(14);
   @$pb.TagNumber(14)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(13);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(13);
 }
 
 class Station extends $pb.GeneratedMessage {
   factory Station({
     $core.String? id,
     $core.String? guardianId,
-    $core.String? morningNextStationId,
-    $core.String? eveningNextStationId,
     $core.double? latitude,
     $core.double? longitude,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -1160,12 +1158,6 @@ class Station extends $pb.GeneratedMessage {
     }
     if (guardianId != null) {
       $result.guardianId = guardianId;
-    }
-    if (morningNextStationId != null) {
-      $result.morningNextStationId = morningNextStationId;
-    }
-    if (eveningNextStationId != null) {
-      $result.eveningNextStationId = eveningNextStationId;
     }
     if (latitude != null) {
       $result.latitude = latitude;
@@ -1188,12 +1180,10 @@ class Station extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Station', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'guardianId')
-    ..aOS(3, _omitFieldNames ? '' : 'morningNextStationId')
-    ..aOS(4, _omitFieldNames ? '' : 'eveningNextStationId')
     ..a<$core.double>(5, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
-    ..aOM<$7.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(7, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(8, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1236,84 +1226,58 @@ class Station extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearGuardianId() => clearField(2);
 
-  @$pb.TagNumber(3)
-  $core.String get morningNextStationId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set morningNextStationId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasMorningNextStationId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearMorningNextStationId() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.String get eveningNextStationId => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set eveningNextStationId($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasEveningNextStationId() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearEveningNextStationId() => clearField(4);
-
   @$pb.TagNumber(5)
-  $core.double get latitude => $_getN(4);
+  $core.double get latitude => $_getN(2);
   @$pb.TagNumber(5)
-  set latitude($core.double v) { $_setDouble(4, v); }
+  set latitude($core.double v) { $_setDouble(2, v); }
   @$pb.TagNumber(5)
-  $core.bool hasLatitude() => $_has(4);
+  $core.bool hasLatitude() => $_has(2);
   @$pb.TagNumber(5)
   void clearLatitude() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.double get longitude => $_getN(5);
+  $core.double get longitude => $_getN(3);
   @$pb.TagNumber(6)
-  set longitude($core.double v) { $_setDouble(5, v); }
+  set longitude($core.double v) { $_setDouble(3, v); }
   @$pb.TagNumber(6)
-  $core.bool hasLongitude() => $_has(5);
+  $core.bool hasLongitude() => $_has(3);
   @$pb.TagNumber(6)
   void clearLongitude() => clearField(6);
 
   @$pb.TagNumber(7)
-  $7.Timestamp get createdAt => $_getN(6);
+  $8.Timestamp get createdAt => $_getN(4);
   @$pb.TagNumber(7)
-  set createdAt($7.Timestamp v) { setField(7, v); }
+  set createdAt($8.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
-  $core.bool hasCreatedAt() => $_has(6);
+  $core.bool hasCreatedAt() => $_has(4);
   @$pb.TagNumber(7)
   void clearCreatedAt() => clearField(7);
   @$pb.TagNumber(7)
-  $7.Timestamp ensureCreatedAt() => $_ensure(6);
+  $8.Timestamp ensureCreatedAt() => $_ensure(4);
 
   @$pb.TagNumber(8)
-  $7.Timestamp get updatedAt => $_getN(7);
+  $8.Timestamp get updatedAt => $_getN(5);
   @$pb.TagNumber(8)
-  set updatedAt($7.Timestamp v) { setField(8, v); }
+  set updatedAt($8.Timestamp v) { setField(8, v); }
   @$pb.TagNumber(8)
-  $core.bool hasUpdatedAt() => $_has(7);
+  $core.bool hasUpdatedAt() => $_has(5);
   @$pb.TagNumber(8)
   void clearUpdatedAt() => clearField(8);
   @$pb.TagNumber(8)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(7);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(5);
 }
 
 class ChildBusAssociation extends $pb.GeneratedMessage {
   factory ChildBusAssociation({
-    $core.String? id,
-    $core.String? busId,
+    $core.String? busRouteId,
     $core.String? childId,
-    BusType? busType,
   }) {
     final $result = create();
-    if (id != null) {
-      $result.id = id;
-    }
-    if (busId != null) {
-      $result.busId = busId;
+    if (busRouteId != null) {
+      $result.busRouteId = busRouteId;
     }
     if (childId != null) {
       $result.childId = childId;
-    }
-    if (busType != null) {
-      $result.busType = busType;
     }
     return $result;
   }
@@ -1322,10 +1286,8 @@ class ChildBusAssociation extends $pb.GeneratedMessage {
   factory ChildBusAssociation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChildBusAssociation', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
-    ..aOS(2, _omitFieldNames ? '' : 'busId')
-    ..aOS(3, _omitFieldNames ? '' : 'childId')
-    ..e<BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: BusType.BUS_TYPE_UNSPECIFIED, valueOf: BusType.valueOf, enumValues: BusType.values)
+    ..aOS(1, _omitFieldNames ? '' : 'busRouteId')
+    ..aOS(2, _omitFieldNames ? '' : 'childId')
     ..hasRequiredFields = false
   ;
 
@@ -1351,104 +1313,22 @@ class ChildBusAssociation extends $pb.GeneratedMessage {
   static ChildBusAssociation? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.String get busRouteId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set busRouteId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasBusRouteId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearBusRouteId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get busId => $_getSZ(1);
+  $core.String get childId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set busId($core.String v) { $_setString(1, v); }
+  set childId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasBusId() => $_has(1);
+  $core.bool hasChildId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearBusId() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get childId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set childId($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasChildId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearChildId() => clearField(3);
-
-  @$pb.TagNumber(4)
-  BusType get busType => $_getN(3);
-  @$pb.TagNumber(4)
-  set busType(BusType v) { setField(4, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasBusType() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearBusType() => clearField(4);
-}
-
-class BusStationAssociation extends $pb.GeneratedMessage {
-  factory BusStationAssociation({
-    $core.String? busId,
-    $core.String? stationId,
-  }) {
-    final $result = create();
-    if (busId != null) {
-      $result.busId = busId;
-    }
-    if (stationId != null) {
-      $result.stationId = stationId;
-    }
-    return $result;
-  }
-  BusStationAssociation._() : super();
-  factory BusStationAssociation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory BusStationAssociation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BusStationAssociation', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'busId')
-    ..aOS(2, _omitFieldNames ? '' : 'stationId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  BusStationAssociation clone() => BusStationAssociation()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  BusStationAssociation copyWith(void Function(BusStationAssociation) updates) => super.copyWith((message) => updates(message as BusStationAssociation)) as BusStationAssociation;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static BusStationAssociation create() => BusStationAssociation._();
-  BusStationAssociation createEmptyInstance() => create();
-  static $pb.PbList<BusStationAssociation> createRepeated() => $pb.PbList<BusStationAssociation>();
-  @$core.pragma('dart2js:noInline')
-  static BusStationAssociation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BusStationAssociation>(create);
-  static BusStationAssociation? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get busId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set busId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasBusId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearBusId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get stationId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set stationId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasStationId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearStationId() => clearField(2);
+  void clearChildId() => clearField(2);
 }
 
 class ChildPhoto extends $pb.GeneratedMessage {
@@ -1456,8 +1336,8 @@ class ChildPhoto extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? childId,
     $core.List<$core.int>? photoData,
-    $7.Timestamp? createdAt,
-    $7.Timestamp? updatedAt,
+    $8.Timestamp? createdAt,
+    $8.Timestamp? updatedAt,
   }) {
     final $result = create();
     if (id != null) {
@@ -1485,8 +1365,8 @@ class ChildPhoto extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'childId')
     ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'photoData', $pb.PbFieldType.OY)
-    ..aOM<$7.Timestamp>(4, _omitFieldNames ? '' : 'createdAt', subBuilder: $7.Timestamp.create)
-    ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'updatedAt', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(4, _omitFieldNames ? '' : 'createdAt', subBuilder: $8.Timestamp.create)
+    ..aOM<$8.Timestamp>(5, _omitFieldNames ? '' : 'updatedAt', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1539,26 +1419,26 @@ class ChildPhoto extends $pb.GeneratedMessage {
   void clearPhotoData() => clearField(3);
 
   @$pb.TagNumber(4)
-  $7.Timestamp get createdAt => $_getN(3);
+  $8.Timestamp get createdAt => $_getN(3);
   @$pb.TagNumber(4)
-  set createdAt($7.Timestamp v) { setField(4, v); }
+  set createdAt($8.Timestamp v) { setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasCreatedAt() => $_has(3);
   @$pb.TagNumber(4)
   void clearCreatedAt() => clearField(4);
   @$pb.TagNumber(4)
-  $7.Timestamp ensureCreatedAt() => $_ensure(3);
+  $8.Timestamp ensureCreatedAt() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $7.Timestamp get updatedAt => $_getN(4);
+  $8.Timestamp get updatedAt => $_getN(4);
   @$pb.TagNumber(5)
-  set updatedAt($7.Timestamp v) { setField(5, v); }
+  set updatedAt($8.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasUpdatedAt() => $_has(4);
   @$pb.TagNumber(5)
   void clearUpdatedAt() => clearField(5);
   @$pb.TagNumber(5)
-  $7.Timestamp ensureUpdatedAt() => $_ensure(4);
+  $8.Timestamp ensureUpdatedAt() => $_ensure(4);
 }
 
 class BoardingRecord extends $pb.GeneratedMessage {
@@ -1567,7 +1447,7 @@ class BoardingRecord extends $pb.GeneratedMessage {
     $core.String? childId,
     $core.String? busId,
     $core.bool? isBoarding,
-    $7.Timestamp? timestamp,
+    $8.Timestamp? timestamp,
   }) {
     final $result = create();
     if (id != null) {
@@ -1596,7 +1476,7 @@ class BoardingRecord extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'childId')
     ..aOS(3, _omitFieldNames ? '' : 'busId')
     ..aOB(4, _omitFieldNames ? '' : 'isBoarding')
-    ..aOM<$7.Timestamp>(5, _omitFieldNames ? '' : 'timestamp', subBuilder: $7.Timestamp.create)
+    ..aOM<$8.Timestamp>(5, _omitFieldNames ? '' : 'timestamp', subBuilder: $8.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1658,15 +1538,101 @@ class BoardingRecord extends $pb.GeneratedMessage {
   void clearIsBoarding() => clearField(4);
 
   @$pb.TagNumber(5)
-  $7.Timestamp get timestamp => $_getN(4);
+  $8.Timestamp get timestamp => $_getN(4);
   @$pb.TagNumber(5)
-  set timestamp($7.Timestamp v) { setField(5, v); }
+  set timestamp($8.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasTimestamp() => $_has(4);
   @$pb.TagNumber(5)
   void clearTimestamp() => clearField(5);
   @$pb.TagNumber(5)
-  $7.Timestamp ensureTimestamp() => $_ensure(4);
+  $8.Timestamp ensureTimestamp() => $_ensure(4);
+}
+
+class BusRoute extends $pb.GeneratedMessage {
+  factory BusRoute({
+    $core.String? id,
+    $core.String? busId,
+    $core.Iterable<Station>? orderedStations,
+    BusType? busType,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    if (orderedStations != null) {
+      $result.orderedStations.addAll(orderedStations);
+    }
+    if (busType != null) {
+      $result.busType = busType;
+    }
+    return $result;
+  }
+  BusRoute._() : super();
+  factory BusRoute.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BusRoute.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BusRoute', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'busId')
+    ..pc<Station>(3, _omitFieldNames ? '' : 'orderedStations', $pb.PbFieldType.PM, subBuilder: Station.create)
+    ..e<BusType>(4, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: BusType.BUS_TYPE_UNSPECIFIED, valueOf: BusType.valueOf, enumValues: BusType.values)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  BusRoute clone() => BusRoute()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  BusRoute copyWith(void Function(BusRoute) updates) => super.copyWith((message) => updates(message as BusRoute)) as BusRoute;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static BusRoute create() => BusRoute._();
+  BusRoute createEmptyInstance() => create();
+  static $pb.PbList<BusRoute> createRepeated() => $pb.PbList<BusRoute>();
+  @$core.pragma('dart2js:noInline')
+  static BusRoute getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BusRoute>(create);
+  static BusRoute? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get busId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set busId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasBusId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBusId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<Station> get orderedStations => $_getList(2);
+
+  @$pb.TagNumber(4)
+  BusType get busType => $_getN(3);
+  @$pb.TagNumber(4)
+  set busType(BusType v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBusType() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBusType() => clearField(4);
 }
 
 

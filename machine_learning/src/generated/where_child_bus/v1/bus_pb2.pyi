@@ -13,30 +13,18 @@ from where_child_bus.v1 import resources_pb2 as _resources_pb2
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class CreateBusRequest(_message.Message):
-    __slots__ = (
-        "nursery_id",
-        "name",
-        "plate_number",
-        "morning_guardian_ids",
-        "evening_guardian_ids",
-    )
+    __slots__ = ("nursery_id", "name", "plate_number")
     NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PLATE_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    MORNING_GUARDIAN_IDS_FIELD_NUMBER: _ClassVar[int]
-    EVENING_GUARDIAN_IDS_FIELD_NUMBER: _ClassVar[int]
     nursery_id: str
     name: str
     plate_number: str
-    morning_guardian_ids: _containers.RepeatedScalarFieldContainer[str]
-    evening_guardian_ids: _containers.RepeatedScalarFieldContainer[str]
     def __init__(
         self,
         nursery_id: _Optional[str] = ...,
         name: _Optional[str] = ...,
         plate_number: _Optional[str] = ...,
-        morning_guardian_ids: _Optional[_Iterable[str]] = ...,
-        evening_guardian_ids: _Optional[_Iterable[str]] = ...,
     ) -> None: ...
 
 class CreateBusResponse(_message.Message):
@@ -144,7 +132,6 @@ class TrackBusContinuousResponse(_message.Message):
 class StreamBusVideoRequest(_message.Message):
     __slots__ = (
         "bus_id",
-        "nursery_id",
         "bus_type",
         "vehicle_event",
         "video_chunk",
@@ -152,14 +139,12 @@ class StreamBusVideoRequest(_message.Message):
         "photo_width",
     )
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
-    NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
     VEHICLE_EVENT_FIELD_NUMBER: _ClassVar[int]
     VIDEO_CHUNK_FIELD_NUMBER: _ClassVar[int]
     PHOTO_HEIGHT_FIELD_NUMBER: _ClassVar[int]
     PHOTO_WIDTH_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
-    nursery_id: str
     bus_type: _resources_pb2.BusType
     vehicle_event: _resources_pb2.VehicleEvent
     video_chunk: _containers.RepeatedScalarFieldContainer[bytes]
@@ -168,7 +153,6 @@ class StreamBusVideoRequest(_message.Message):
     def __init__(
         self,
         bus_id: _Optional[str] = ...,
-        nursery_id: _Optional[str] = ...,
         bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ...,
         vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ...,
         video_chunk: _Optional[_Iterable[bytes]] = ...,
@@ -196,8 +180,6 @@ class UpdateBusRequest(_message.Message):
         "latitude",
         "longitude",
         "enable_face_recognition",
-        "morning_first_station_id",
-        "evening_first_station_id",
         "next_station_id",
         "update_mask",
     )
@@ -207,8 +189,6 @@ class UpdateBusRequest(_message.Message):
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     ENABLE_FACE_RECOGNITION_FIELD_NUMBER: _ClassVar[int]
-    MORNING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
-    EVENING_FIRST_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     NEXT_STATION_ID_FIELD_NUMBER: _ClassVar[int]
     UPDATE_MASK_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
@@ -217,8 +197,6 @@ class UpdateBusRequest(_message.Message):
     latitude: float
     longitude: float
     enable_face_recognition: bool
-    morning_first_station_id: str
-    evening_first_station_id: str
     next_station_id: str
     update_mask: _field_mask_pb2.FieldMask
     def __init__(
@@ -229,8 +207,6 @@ class UpdateBusRequest(_message.Message):
         latitude: _Optional[float] = ...,
         longitude: _Optional[float] = ...,
         enable_face_recognition: bool = ...,
-        morning_first_station_id: _Optional[str] = ...,
-        evening_first_station_id: _Optional[str] = ...,
         next_station_id: _Optional[str] = ...,
         update_mask: _Optional[_Union[_field_mask_pb2.FieldMask, _Mapping]] = ...,
     ) -> None: ...
