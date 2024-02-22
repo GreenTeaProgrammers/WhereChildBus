@@ -24,9 +24,6 @@ class Waypoint {
       {required this.latitude, required this.longitude, required this.name});
 }
 
-//TODO: 将来的には出発時刻を受け取る
-DateTime departureTime = DateTime.now();
-
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
 
@@ -38,7 +35,6 @@ class _MapPageState extends State<MapPage> {
   final StreamController<TrackBusContinuousRequest> _streamController =
       StreamController<TrackBusContinuousRequest>.broadcast();
 
-  Timer? _timer;
   String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
   List<Station> busRoutes = [];
   List<Waypoint> waypoints = [];
