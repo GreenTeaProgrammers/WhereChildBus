@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/components/child_list/element/child_list_element.dart';
-import 'package:where_child_bus/pages/student_list_page/student_detail_sheet.dart';
+import 'package:where_child_bus/pages/student_list_page/child_detail_sheet.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class ChildList extends StatefulWidget {
