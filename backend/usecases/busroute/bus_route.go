@@ -261,7 +261,7 @@ func (i Interactor) CreateBusRouteResponse(ctx context.Context, tx *ent.Tx, busR
 	var orderedStations []*pb.Station
 	stations, err := busRoute.
 		QueryBusRouteAssociations().
-		Order(ent.Asc("order")).
+		Order(ent.Asc("order")). // !要チェック
 		QueryStation().
 		All(ctx)
 	if err != nil {

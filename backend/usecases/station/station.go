@@ -249,7 +249,7 @@ func (i Interactor) GetUnregisteredStationList(ctx context.Context, req *pb.GetU
 	}
 
 	stations, err := i.entClient.Station.Query(). // !要チェック
-							Where(
+		Where(
 			stationRepo.HasBusRouteAssociationsWith(
 				busRouteAssociationRepo.HasBusRouteWith(
 					busRouteRepo.HasBusWith(

@@ -81,6 +81,10 @@ func (i *Interactor) CreateBus(ctx context.Context, req *pb.CreateBusRequest) (*
 	}
 
 	nextStationID, err := getStationIDs(i.logger, ctx, bus)
+	if err != nil {
+		i.logger.Error("failed to get station IDs", "error", err)
+		return nil, err
+	}
 
 	if err := tx.Commit(); err != nil {
 		i.logger.Error("failed to commit transaction", "error", err)
@@ -641,8 +645,8 @@ func (i *Interactor) getFirstStation(bus *ent.Bus, busType pb.BusType) (*ent.Sta
 
 	stations, err := busRoute.
 		QueryBusRouteAssociations().
-		QueryStation().
 		Order(ent.Asc("order")).
+		QueryStation().
 		All(context.Background())
 	if err != nil {
 		i.logger.Error("failed to get stations", "error", err)
