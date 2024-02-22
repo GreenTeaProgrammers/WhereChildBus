@@ -112,7 +112,6 @@ class _CameraPageState extends State<CameraPage> {
             videoChunks.add(_processCameraImage2gray(image));
           }
           _streamController.add(StreamBusVideoRequest(
-            nurseryId: NurseryData().getNursery().id,
             busId: widget.bus.id,
             busType: widget.busType,
             vehicleEvent: _vehicleEvent,
@@ -127,6 +126,10 @@ class _CameraPageState extends State<CameraPage> {
         }
       });
     }
+  }
+
+  Future<void> _playAudio() async {
+    //TODO 音声を再生する
   }
 
   @override
