@@ -3,6 +3,7 @@ import "dart:developer" as developer;
 import "package:flutter/foundation.dart";
 import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
+import "package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/child.pbgrpc.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
@@ -50,5 +51,26 @@ Future<CreateChildResponse> createChild(String nurseryId, String guardianId,
         sex: sex,
         photos: photos);
     return client.createChild(req);
+  });
+}
+
+Future<UpdateChildResponse> updateChild(
+  String id,
+  String nurseryId,
+  String guardianId,
+  String name,
+  int age,
+  Sex sex,
+  FieldMask updateMask,
+) async {
+  return performGrpcCall((client) async {
+    var req = UpdateChildRequest(
+      childId: id,
+      name: name,
+      age: age,
+      sex: sex,
+      updateMask: updateMask,
+    );
+    return client.updateChild(req);
   });
 }

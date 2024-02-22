@@ -38,7 +38,6 @@ class _InputFormBodyState extends State<InputFormBody> {
 
   Sex? selectedSex;
   GuardianResponse? selectedGuardian;
-  Bus? selectedBus;
 
   @override
   void initState() {
@@ -107,9 +106,7 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Future<void> _createChild() async {
-    if (selectedGuardian == null ||
-        selectedBus == null ||
-        selectedSex == null) {
+    if (selectedGuardian == null || selectedSex == null) {
       developer.log("保護者、利用バス、性別が選択されていません。");
       return;
     }
@@ -131,6 +128,7 @@ class _InputFormBodyState extends State<InputFormBody> {
         selectedSex!,
         photos);
     developer.log("園児情報の登録が完了しました。$res");
+    Navigator.pop(context);
   }
 
   Future _getImageFromGallery() async {
@@ -211,10 +209,6 @@ class _InputFormBodyState extends State<InputFormBody> {
     selectedGuardian = value;
   }
 
-  void _onBusSelected(Bus? value) {
-    selectedBus = value;
-  }
-
   Widget editFormBody(
     BuildContext context,
   ) {
@@ -235,12 +229,6 @@ class _InputFormBodyState extends State<InputFormBody> {
           "保護者",
           guardians,
           _onGuardianSelected,
-        ),
-        _createBusInputLabelAndSelectBox(
-          context,
-          "利用バス",
-          buses,
-          _onBusSelected,
         ),
         Container(
           margin: const EdgeInsets.only(top: 20.0),
@@ -268,11 +256,29 @@ class _InputFormBodyState extends State<InputFormBody> {
 
   Widget _createSexInputLabelAndSelectBox(BuildContext context, String label,
       List<String> lists, Function? onChanged) {
+    String selected = "男";
+    if (widget.isEdit) {
+      switch (widget.child!.sex) {
+        case Sex.SEX_MAN:
+          selected = "男";
+          break;
+        case Sex.SEX_WOMAN:
+          selected = "女";
+          break;
+        default:
+          selected = "その他";
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         InputValueLabel(label: label),
-        SelectValueBox(lists: lists, onChanged: onChanged),
+        SelectValueBox(
+          lists: lists,
+          onChanged: onChanged,
+          selectedValue: selected,
+        ),
       ],
     );
   }
@@ -286,6 +292,10 @@ class _InputFormBodyState extends State<InputFormBody> {
         GuardianSelectValueBox(
           lists: lists,
           onChanged: onChanged,
+          selectedValue: widget.isEdit
+              ? guardians.firstWhere(
+                  (guardian) => guardian.id == widget.child!.guardianId)
+              : null,
         ),
       ],
     );
@@ -300,6 +310,7 @@ class _InputFormBodyState extends State<InputFormBody> {
         BusSelectValueBox(
           busLists: lists,
           onChanged: onChanged,
+          //TODO: 修正: 選択されたバスを初期値として設定
         ),
       ],
     );

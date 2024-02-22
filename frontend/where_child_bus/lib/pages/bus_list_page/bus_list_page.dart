@@ -155,7 +155,7 @@ class _BusListPageState extends State<BusListPage> {
               children: [
                 BusImage(busStatus: bus.busStatus),
                 _createBusNameAndDescription(bus.name, bus.busStatus),
-                const Spacer(),
+                // const Spacer(),
                 OperationButton(
                   bus: bus,
                   onBusUpdated: (Bus updatedBus) {
@@ -180,14 +180,16 @@ class _BusListPageState extends State<BusListPage> {
   }
 
   Widget _createBusNameAndDescription(String name, BusStatus busStatus) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BusNameText(name: name),
-          BusDescriptionText(busStatus: busStatus)
-        ],
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BusNameText(name: name),
+            BusDescriptionText(busStatus: busStatus)
+          ],
+        ),
       ),
     );
   }
