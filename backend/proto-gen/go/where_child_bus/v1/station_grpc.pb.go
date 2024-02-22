@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	StationService_UpdateStationLocationByGuardianId_FullMethodName = "/where_child_bus.v1.StationService/UpdateStationLocationByGuardianId"
 	StationService_GetStationListByBusId_FullMethodName             = "/where_child_bus.v1.StationService/GetStationListByBusId"
+	StationService_GetCorrectOrderStationListByBusId_FullMethodName = "/where_child_bus.v1.StationService/GetCorrectOrderStationListByBusId"
 	StationService_GetUnregisteredStationList_FullMethodName        = "/where_child_bus.v1.StationService/GetUnregisteredStationList"
 	StationService_UpdateStation_FullMethodName                     = "/where_child_bus.v1.StationService/UpdateStation"
 )
@@ -31,6 +32,7 @@ const (
 type StationServiceClient interface {
 	UpdateStationLocationByGuardianId(ctx context.Context, in *UpdateStationLocationByGuardianIdRequest, opts ...grpc.CallOption) (*UpdateStationLocationByGuardianIdResponse, error)
 	GetStationListByBusId(ctx context.Context, in *GetStationListByBusIdRequest, opts ...grpc.CallOption) (*GetStationListByBusIdResponse, error)
+	GetCorrectOrderStationListByBusId(ctx context.Context, in *GetCorrectOrderStationListByBusIdRequest, opts ...grpc.CallOption) (*GetCorrectOrderStationListByBusIdResponse, error)
 	GetUnregisteredStationList(ctx context.Context, in *GetUnregisteredStationListRequest, opts ...grpc.CallOption) (*GetUnregisteredStationListResponse, error)
 	UpdateStation(ctx context.Context, in *UpdateStationRequest, opts ...grpc.CallOption) (*UpdateStationResponse, error)
 }
@@ -61,6 +63,15 @@ func (c *stationServiceClient) GetStationListByBusId(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *stationServiceClient) GetCorrectOrderStationListByBusId(ctx context.Context, in *GetCorrectOrderStationListByBusIdRequest, opts ...grpc.CallOption) (*GetCorrectOrderStationListByBusIdResponse, error) {
+	out := new(GetCorrectOrderStationListByBusIdResponse)
+	err := c.cc.Invoke(ctx, StationService_GetCorrectOrderStationListByBusId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *stationServiceClient) GetUnregisteredStationList(ctx context.Context, in *GetUnregisteredStationListRequest, opts ...grpc.CallOption) (*GetUnregisteredStationListResponse, error) {
 	out := new(GetUnregisteredStationListResponse)
 	err := c.cc.Invoke(ctx, StationService_GetUnregisteredStationList_FullMethodName, in, out, opts...)
@@ -85,6 +96,7 @@ func (c *stationServiceClient) UpdateStation(ctx context.Context, in *UpdateStat
 type StationServiceServer interface {
 	UpdateStationLocationByGuardianId(context.Context, *UpdateStationLocationByGuardianIdRequest) (*UpdateStationLocationByGuardianIdResponse, error)
 	GetStationListByBusId(context.Context, *GetStationListByBusIdRequest) (*GetStationListByBusIdResponse, error)
+	GetCorrectOrderStationListByBusId(context.Context, *GetCorrectOrderStationListByBusIdRequest) (*GetCorrectOrderStationListByBusIdResponse, error)
 	GetUnregisteredStationList(context.Context, *GetUnregisteredStationListRequest) (*GetUnregisteredStationListResponse, error)
 	UpdateStation(context.Context, *UpdateStationRequest) (*UpdateStationResponse, error)
 }
@@ -98,6 +110,9 @@ func (UnimplementedStationServiceServer) UpdateStationLocationByGuardianId(conte
 }
 func (UnimplementedStationServiceServer) GetStationListByBusId(context.Context, *GetStationListByBusIdRequest) (*GetStationListByBusIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStationListByBusId not implemented")
+}
+func (UnimplementedStationServiceServer) GetCorrectOrderStationListByBusId(context.Context, *GetCorrectOrderStationListByBusIdRequest) (*GetCorrectOrderStationListByBusIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCorrectOrderStationListByBusId not implemented")
 }
 func (UnimplementedStationServiceServer) GetUnregisteredStationList(context.Context, *GetUnregisteredStationListRequest) (*GetUnregisteredStationListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUnregisteredStationList not implemented")
@@ -153,6 +168,24 @@ func _StationService_GetStationListByBusId_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StationService_GetCorrectOrderStationListByBusId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCorrectOrderStationListByBusIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StationServiceServer).GetCorrectOrderStationListByBusId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StationService_GetCorrectOrderStationListByBusId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StationServiceServer).GetCorrectOrderStationListByBusId(ctx, req.(*GetCorrectOrderStationListByBusIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _StationService_GetUnregisteredStationList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUnregisteredStationListRequest)
 	if err := dec(in); err != nil {
@@ -203,6 +236,10 @@ var StationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStationListByBusId",
 			Handler:    _StationService_GetStationListByBusId_Handler,
+		},
+		{
+			MethodName: "GetCorrectOrderStationListByBusId",
+			Handler:    _StationService_GetCorrectOrderStationListByBusId_Handler,
 		},
 		{
 			MethodName: "GetUnregisteredStationList",

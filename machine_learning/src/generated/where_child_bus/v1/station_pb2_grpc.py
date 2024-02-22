@@ -24,6 +24,11 @@ class StationServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdResponse.FromString,
                 )
+        self.GetCorrectOrderStationListByBusId = channel.unary_unary(
+                '/where_child_bus.v1.StationService/GetCorrectOrderStationListByBusId',
+                request_serializer=where__child__bus_dot_v1_dot_station__pb2.GetCorrectOrderStationListByBusIdRequest.SerializeToString,
+                response_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetCorrectOrderStationListByBusIdResponse.FromString,
+                )
         self.GetUnregisteredStationList = channel.unary_unary(
                 '/where_child_bus.v1.StationService/GetUnregisteredStationList',
                 request_serializer=where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListRequest.SerializeToString,
@@ -51,7 +56,7 @@ class StationServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetUnregisteredStationList(self, request, context):
+    def GetCorrectOrderStationListByBusId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -81,6 +86,11 @@ def add_StationServiceServicer_to_server(servicer, server):
                     servicer.GetStationListByBusId,
                     request_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_station__pb2.GetStationListByBusIdResponse.SerializeToString,
+            ),
+            'GetCorrectOrderStationListByBusId': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetCorrectOrderStationListByBusId,
+                    request_deserializer=where__child__bus_dot_v1_dot_station__pb2.GetCorrectOrderStationListByBusIdRequest.FromString,
+                    response_serializer=where__child__bus_dot_v1_dot_station__pb2.GetCorrectOrderStationListByBusIdResponse.SerializeToString,
             ),
             'GetUnregisteredStationList': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUnregisteredStationList,
@@ -137,7 +147,7 @@ class StationService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetUnregisteredStationList(request,
+    def GetCorrectOrderStationListByBusId(request,
             target,
             options=(),
             channel_credentials=None,
@@ -147,9 +157,9 @@ class StationService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/GetUnregisteredStationList',
-            where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListRequest.SerializeToString,
-            where__child__bus_dot_v1_dot_station__pb2.GetUnregisteredStationListResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/where_child_bus.v1.StationService/GetCorrectOrderStationListByBusId',
+            where__child__bus_dot_v1_dot_station__pb2.GetCorrectOrderStationListByBusIdRequest.SerializeToString,
+            where__child__bus_dot_v1_dot_station__pb2.GetCorrectOrderStationListByBusIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

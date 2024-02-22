@@ -190,8 +190,6 @@ const Bus$json = {
     {'1': 'latitude', '3': 6, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 7, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'enable_face_recognition', '3': 8, '4': 1, '5': 8, '10': 'enableFaceRecognition'},
-    {'1': 'morning_first_station_id', '3': 9, '4': 1, '5': 9, '10': 'morningFirstStationId'},
-    {'1': 'evening_first_station_id', '3': 10, '4': 1, '5': 9, '10': 'eveningFirstStationId'},
     {'1': 'next_station_id', '3': 11, '4': 1, '5': 9, '10': 'nextStationId'},
     {'1': 'created_at', '3': 12, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
     {'1': 'updated_at', '3': 13, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'updatedAt'},
@@ -205,11 +203,9 @@ final $typed_data.Uint8List busDescriptor = $convert.base64Decode(
     'YnVzX3N0YXR1cxgFIAEoDjIdLndoZXJlX2NoaWxkX2J1cy52MS5CdXNTdGF0dXNSCWJ1c1N0YX'
     'R1cxIaCghsYXRpdHVkZRgGIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAcgASgBUglsb25n'
     'aXR1ZGUSNgoXZW5hYmxlX2ZhY2VfcmVjb2duaXRpb24YCCABKAhSFWVuYWJsZUZhY2VSZWNvZ2'
-    '5pdGlvbhI3Chhtb3JuaW5nX2ZpcnN0X3N0YXRpb25faWQYCSABKAlSFW1vcm5pbmdGaXJzdFN0'
-    'YXRpb25JZBI3ChhldmVuaW5nX2ZpcnN0X3N0YXRpb25faWQYCiABKAlSFWV2ZW5pbmdGaXJzdF'
-    'N0YXRpb25JZBImCg9uZXh0X3N0YXRpb25faWQYCyABKAlSDW5leHRTdGF0aW9uSWQSOQoKY3Jl'
-    'YXRlZF9hdBgMIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cg'
-    'p1cGRhdGVkX2F0GA0gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
+    '5pdGlvbhImCg9uZXh0X3N0YXRpb25faWQYCyABKAlSDW5leHRTdGF0aW9uSWQSOQoKY3JlYXRl'
+    'ZF9hdBgMIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWNyZWF0ZWRBdBI5Cgp1cG'
+    'RhdGVkX2F0GA0gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0');
 
 @$core.Deprecated('Use childDescriptor instead')
 const Child$json = {
@@ -251,8 +247,6 @@ const Station$json = {
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'guardian_id', '3': 2, '4': 1, '5': 9, '10': 'guardianId'},
-    {'1': 'morning_next_station_id', '3': 3, '4': 1, '5': 9, '10': 'morningNextStationId'},
-    {'1': 'evening_next_station_id', '3': 4, '4': 1, '5': 9, '10': 'eveningNextStationId'},
     {'1': 'latitude', '3': 5, '4': 1, '5': 1, '10': 'latitude'},
     {'1': 'longitude', '3': 6, '4': 1, '5': 1, '10': 'longitude'},
     {'1': 'created_at', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
@@ -263,43 +257,24 @@ const Station$json = {
 /// Descriptor for `Station`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List stationDescriptor = $convert.base64Decode(
     'CgdTdGF0aW9uEg4KAmlkGAEgASgJUgJpZBIfCgtndWFyZGlhbl9pZBgCIAEoCVIKZ3VhcmRpYW'
-    '5JZBI1Chdtb3JuaW5nX25leHRfc3RhdGlvbl9pZBgDIAEoCVIUbW9ybmluZ05leHRTdGF0aW9u'
-    'SWQSNQoXZXZlbmluZ19uZXh0X3N0YXRpb25faWQYBCABKAlSFGV2ZW5pbmdOZXh0U3RhdGlvbk'
-    'lkEhoKCGxhdGl0dWRlGAUgASgBUghsYXRpdHVkZRIcCglsb25naXR1ZGUYBiABKAFSCWxvbmdp'
-    'dHVkZRI5CgpjcmVhdGVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3'
-    'JlYXRlZEF0EjkKCnVwZGF0ZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w'
-    'Ugl1cGRhdGVkQXQ=');
+    '5JZBIaCghsYXRpdHVkZRgFIAEoAVIIbGF0aXR1ZGUSHAoJbG9uZ2l0dWRlGAYgASgBUglsb25n'
+    'aXR1ZGUSOQoKY3JlYXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCW'
+    'NyZWF0ZWRBdBI5Cgp1cGRhdGVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFt'
+    'cFIJdXBkYXRlZEF0');
 
 @$core.Deprecated('Use childBusAssociationDescriptor instead')
 const ChildBusAssociation$json = {
   '1': 'ChildBusAssociation',
   '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'bus_id', '3': 2, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'child_id', '3': 3, '4': 1, '5': 9, '10': 'childId'},
-    {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
+    {'1': 'bus_route_id', '3': 1, '4': 1, '5': 9, '10': 'busRouteId'},
+    {'1': 'child_id', '3': 2, '4': 1, '5': 9, '10': 'childId'},
   ],
 };
 
 /// Descriptor for `ChildBusAssociation`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List childBusAssociationDescriptor = $convert.base64Decode(
-    'ChNDaGlsZEJ1c0Fzc29jaWF0aW9uEg4KAmlkGAEgASgJUgJpZBIVCgZidXNfaWQYAiABKAlSBW'
-    'J1c0lkEhkKCGNoaWxkX2lkGAMgASgJUgdjaGlsZElkEjYKCGJ1c190eXBlGAQgASgOMhsud2hl'
-    'cmVfY2hpbGRfYnVzLnYxLkJ1c1R5cGVSB2J1c1R5cGU=');
-
-@$core.Deprecated('Use busStationAssociationDescriptor instead')
-const BusStationAssociation$json = {
-  '1': 'BusStationAssociation',
-  '2': [
-    {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
-    {'1': 'station_id', '3': 2, '4': 1, '5': 9, '10': 'stationId'},
-  ],
-};
-
-/// Descriptor for `BusStationAssociation`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List busStationAssociationDescriptor = $convert.base64Decode(
-    'ChVCdXNTdGF0aW9uQXNzb2NpYXRpb24SFQoGYnVzX2lkGAEgASgJUgVidXNJZBIdCgpzdGF0aW'
-    '9uX2lkGAIgASgJUglzdGF0aW9uSWQ=');
+    'ChNDaGlsZEJ1c0Fzc29jaWF0aW9uEiAKDGJ1c19yb3V0ZV9pZBgBIAEoCVIKYnVzUm91dGVJZB'
+    'IZCghjaGlsZF9pZBgCIAEoCVIHY2hpbGRJZA==');
 
 @$core.Deprecated('Use childPhotoDescriptor instead')
 const ChildPhoto$json = {
@@ -338,4 +313,21 @@ final $typed_data.Uint8List boardingRecordDescriptor = $convert.base64Decode(
     'xkSWQSFQoGYnVzX2lkGAMgASgJUgVidXNJZBIfCgtpc19ib2FyZGluZxgEIAEoCFIKaXNCb2Fy'
     'ZGluZxI4Cgl0aW1lc3RhbXAYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgl0aW'
     '1lc3RhbXA=');
+
+@$core.Deprecated('Use busRouteDescriptor instead')
+const BusRoute$json = {
+  '1': 'BusRoute',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'bus_id', '3': 2, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'ordered_station_ids', '3': 3, '4': 3, '5': 9, '10': 'orderedStationIds'},
+    {'1': 'bus_type', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
+  ],
+};
+
+/// Descriptor for `BusRoute`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List busRouteDescriptor = $convert.base64Decode(
+    'CghCdXNSb3V0ZRIOCgJpZBgBIAEoCVICaWQSFQoGYnVzX2lkGAIgASgJUgVidXNJZBIuChNvcm'
+    'RlcmVkX3N0YXRpb25faWRzGAMgAygJUhFvcmRlcmVkU3RhdGlvbklkcxI2CghidXNfdHlwZRgE'
+    'IAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBl');
 

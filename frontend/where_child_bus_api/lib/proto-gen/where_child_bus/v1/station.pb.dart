@@ -15,6 +15,7 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../google/protobuf/field_mask.pb.dart' as $9;
 import 'resources.pb.dart' as $8;
+import 'resources.pbenum.dart' as $8;
 
 class UpdateStationLocationByGuardianIdRequest extends $pb.GeneratedMessage {
   factory UpdateStationLocationByGuardianIdRequest({
@@ -364,6 +365,122 @@ class GetUnregisteredStationListResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.List<$8.GuardianResponse> get guardians => $_getList(1);
+}
+
+class GetCorrectOrderStationListByBusIdRequest extends $pb.GeneratedMessage {
+  factory GetCorrectOrderStationListByBusIdRequest({
+    $core.String? busId,
+    $8.BusType? busType,
+  }) {
+    final $result = create();
+    if (busId != null) {
+      $result.busId = busId;
+    }
+    if (busType != null) {
+      $result.busType = busType;
+    }
+    return $result;
+  }
+  GetCorrectOrderStationListByBusIdRequest._() : super();
+  factory GetCorrectOrderStationListByBusIdRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetCorrectOrderStationListByBusIdRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetCorrectOrderStationListByBusIdRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..e<$8.BusType>(2, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $8.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $8.BusType.valueOf, enumValues: $8.BusType.values)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdRequest clone() => GetCorrectOrderStationListByBusIdRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdRequest copyWith(void Function(GetCorrectOrderStationListByBusIdRequest) updates) => super.copyWith((message) => updates(message as GetCorrectOrderStationListByBusIdRequest)) as GetCorrectOrderStationListByBusIdRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdRequest create() => GetCorrectOrderStationListByBusIdRequest._();
+  GetCorrectOrderStationListByBusIdRequest createEmptyInstance() => create();
+  static $pb.PbList<GetCorrectOrderStationListByBusIdRequest> createRepeated() => $pb.PbList<GetCorrectOrderStationListByBusIdRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetCorrectOrderStationListByBusIdRequest>(create);
+  static GetCorrectOrderStationListByBusIdRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get busId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set busId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $8.BusType get busType => $_getN(1);
+  @$pb.TagNumber(2)
+  set busType($8.BusType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasBusType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBusType() => clearField(2);
+}
+
+class GetCorrectOrderStationListByBusIdResponse extends $pb.GeneratedMessage {
+  factory GetCorrectOrderStationListByBusIdResponse({
+    $8.BusRoute? busRoute,
+  }) {
+    final $result = create();
+    if (busRoute != null) {
+      $result.busRoute = busRoute;
+    }
+    return $result;
+  }
+  GetCorrectOrderStationListByBusIdResponse._() : super();
+  factory GetCorrectOrderStationListByBusIdResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetCorrectOrderStationListByBusIdResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetCorrectOrderStationListByBusIdResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
+    ..aOM<$8.BusRoute>(1, _omitFieldNames ? '' : 'busRoute', subBuilder: $8.BusRoute.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdResponse clone() => GetCorrectOrderStationListByBusIdResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetCorrectOrderStationListByBusIdResponse copyWith(void Function(GetCorrectOrderStationListByBusIdResponse) updates) => super.copyWith((message) => updates(message as GetCorrectOrderStationListByBusIdResponse)) as GetCorrectOrderStationListByBusIdResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdResponse create() => GetCorrectOrderStationListByBusIdResponse._();
+  GetCorrectOrderStationListByBusIdResponse createEmptyInstance() => create();
+  static $pb.PbList<GetCorrectOrderStationListByBusIdResponse> createRepeated() => $pb.PbList<GetCorrectOrderStationListByBusIdResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetCorrectOrderStationListByBusIdResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetCorrectOrderStationListByBusIdResponse>(create);
+  static GetCorrectOrderStationListByBusIdResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $8.BusRoute get busRoute => $_getN(0);
+  @$pb.TagNumber(1)
+  set busRoute($8.BusRoute v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBusRoute() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBusRoute() => clearField(1);
+  @$pb.TagNumber(1)
+  $8.BusRoute ensureBusRoute() => $_ensure(0);
 }
 
 class UpdateStationRequest extends $pb.GeneratedMessage {

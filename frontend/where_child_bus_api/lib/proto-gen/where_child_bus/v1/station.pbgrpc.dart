@@ -29,6 +29,10 @@ class StationServiceClient extends $grpc.Client {
       '/where_child_bus.v1.StationService/GetStationListByBusId',
       ($6.GetStationListByBusIdRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $6.GetStationListByBusIdResponse.fromBuffer(value));
+  static final _$getCorrectOrderStationListByBusId = $grpc.ClientMethod<$6.GetCorrectOrderStationListByBusIdRequest, $6.GetCorrectOrderStationListByBusIdResponse>(
+      '/where_child_bus.v1.StationService/GetCorrectOrderStationListByBusId',
+      ($6.GetCorrectOrderStationListByBusIdRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $6.GetCorrectOrderStationListByBusIdResponse.fromBuffer(value));
   static final _$getUnregisteredStationList = $grpc.ClientMethod<$6.GetUnregisteredStationListRequest, $6.GetUnregisteredStationListResponse>(
       '/where_child_bus.v1.StationService/GetUnregisteredStationList',
       ($6.GetUnregisteredStationListRequest value) => value.writeToBuffer(),
@@ -50,6 +54,10 @@ class StationServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$6.GetStationListByBusIdResponse> getStationListByBusId($6.GetStationListByBusIdRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getStationListByBusId, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$6.GetCorrectOrderStationListByBusIdResponse> getCorrectOrderStationListByBusId($6.GetCorrectOrderStationListByBusIdRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getCorrectOrderStationListByBusId, request, options: options);
   }
 
   $grpc.ResponseFuture<$6.GetUnregisteredStationListResponse> getUnregisteredStationList($6.GetUnregisteredStationListRequest request, {$grpc.CallOptions? options}) {
@@ -80,6 +88,13 @@ abstract class StationServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $6.GetStationListByBusIdRequest.fromBuffer(value),
         ($6.GetStationListByBusIdResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$6.GetCorrectOrderStationListByBusIdRequest, $6.GetCorrectOrderStationListByBusIdResponse>(
+        'GetCorrectOrderStationListByBusId',
+        getCorrectOrderStationListByBusId_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $6.GetCorrectOrderStationListByBusIdRequest.fromBuffer(value),
+        ($6.GetCorrectOrderStationListByBusIdResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$6.GetUnregisteredStationListRequest, $6.GetUnregisteredStationListResponse>(
         'GetUnregisteredStationList',
         getUnregisteredStationList_Pre,
@@ -104,6 +119,10 @@ abstract class StationServiceBase extends $grpc.Service {
     return getStationListByBusId(call, await request);
   }
 
+  $async.Future<$6.GetCorrectOrderStationListByBusIdResponse> getCorrectOrderStationListByBusId_Pre($grpc.ServiceCall call, $async.Future<$6.GetCorrectOrderStationListByBusIdRequest> request) async {
+    return getCorrectOrderStationListByBusId(call, await request);
+  }
+
   $async.Future<$6.GetUnregisteredStationListResponse> getUnregisteredStationList_Pre($grpc.ServiceCall call, $async.Future<$6.GetUnregisteredStationListRequest> request) async {
     return getUnregisteredStationList(call, await request);
   }
@@ -114,6 +133,7 @@ abstract class StationServiceBase extends $grpc.Service {
 
   $async.Future<$6.UpdateStationLocationByGuardianIdResponse> updateStationLocationByGuardianId($grpc.ServiceCall call, $6.UpdateStationLocationByGuardianIdRequest request);
   $async.Future<$6.GetStationListByBusIdResponse> getStationListByBusId($grpc.ServiceCall call, $6.GetStationListByBusIdRequest request);
+  $async.Future<$6.GetCorrectOrderStationListByBusIdResponse> getCorrectOrderStationListByBusId($grpc.ServiceCall call, $6.GetCorrectOrderStationListByBusIdRequest request);
   $async.Future<$6.GetUnregisteredStationListResponse> getUnregisteredStationList($grpc.ServiceCall call, $6.GetUnregisteredStationListRequest request);
   $async.Future<$6.UpdateStationResponse> updateStation($grpc.ServiceCall call, $6.UpdateStationRequest request);
 }

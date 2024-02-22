@@ -8,6 +8,7 @@ import "google/protobuf/field_mask.proto";
 service StationService {
         rpc UpdateStationLocationByGuardianId(UpdateStationLocationByGuardianIdRequest) returns (UpdateStationLocationByGuardianIdResponse);
         rpc GetStationListByBusId(GetStationListByBusIdRequest) returns (GetStationListByBusIdResponse);
+        rpc GetCorrectOrderStationListByBusId(GetCorrectOrderStationListByBusIdRequest) returns (GetCorrectOrderStationListByBusIdResponse);
         rpc GetUnregisteredStationList(GetUnregisteredStationListRequest) returns (GetUnregisteredStationListResponse);
         rpc UpdateStation(UpdateStationRequest) returns (UpdateStationResponse);
 }
@@ -40,6 +41,15 @@ message GetUnregisteredStationListRequest {
 message GetUnregisteredStationListResponse {
         repeated Station stations = 1;
         repeated GuardianResponse guardians = 2;
+}
+
+message GetCorrectOrderStationListByBusIdRequest {
+        string bus_id = 1;
+        BusType bus_type = 2;
+}
+
+message GetCorrectOrderStationListByBusIdResponse {
+        BusRoute bus_route = 1;
 }
 
 message UpdateStationRequest {

@@ -77,8 +77,6 @@ message Bus {
         double latitude = 6;
         double longitude = 7;
         bool enable_face_recognition = 8;
-        string morning_first_station_id = 9;
-        string evening_first_station_id = 10;
         string next_station_id = 11;
         google.protobuf.Timestamp  created_at = 12;
         google.protobuf.Timestamp  updated_at = 13;
@@ -111,8 +109,6 @@ message Child {
 message Station {
         string id = 1;
         string guardian_id = 2;
-        string morning_next_station_id = 3;
-        string evening_next_station_id = 4;
         double latitude = 5;
         double longitude = 6;
         google.protobuf.Timestamp  created_at = 7;
@@ -126,15 +122,8 @@ enum BusType {
 }
 
 message ChildBusAssociation {
-        string id = 1;
-        string bus_id = 2;
-        string child_id = 3;
-        BusType bus_type = 4;
-}
-
-message BusStationAssociation {
-        string bus_id = 1;
-        string station_id = 2;
+        string bus_route_id = 1;
+        string child_id = 2;
 }
 
 message ChildPhoto {
@@ -151,4 +140,11 @@ message BoardingRecord {
         string bus_id = 3;
         bool is_boarding = 4;
         google.protobuf.Timestamp  timestamp = 5;
+}
+
+message BusRoute {
+        string id = 1;
+        string bus_id = 2;
+        repeated string ordered_station_ids = 3;
+        BusType bus_type = 4;
 }
