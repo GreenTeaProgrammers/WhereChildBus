@@ -211,33 +211,52 @@ func (i *Interactor) createAssociation(ctx context.Context, tx *ent.Tx, guardian
 }
 
 func (i Interactor) GetBusRouteByBusID(ctx context.Context, req *pb.GetBusRouteByBusIDRequest) (*pb.GetBusRouteByBusIDResponse, error) {
-	busRouteID, err := uuid.Parse(req.BusId)
+	busID, err := uuid.Parse(req.BusId)
 	if err != nil {
 		i.logger.Error("failed to parse bus route id", "error", err)
 		return nil, err
 	}
 
-	busType, err := utils.ConvertPbBusTypeToEntBusType(req.BusType)
-
+	tx, err := i.entClient.Tx(ctx)
 	if err != nil {
-		i.logger.Error("failed to convert bus type", "error", err)
+		i.logger.Error("failed to start transaction", "error", err)
 		return nil, err
-
 	}
 
-	busRoute, err := i.entClient.BusRoute.Query().
-		Where(busRouteRepo.ID(busRouteID)).
-		Where(busRouteRepo.BusTypeEQ(*busType)).
+	bus, err := tx.Bus.Query().
+		Where(busRepo.ID(busID)).
 		Only(ctx)
+
+	var busRoute *ent.BusRoute
+	if req.BusType == pb.BusType_BUS_TYPE_MORNING {
+		busRoute, err = bus.QueryLatestMorningRoute().Only(ctx)
+		if err != nil {
+			i.logger.Error("failed to get bus route", "error", err)
+			return nil, err
+		}
+	} else if req.BusType == pb.BusType_BUS_TYPE_EVENING {
+		busRoute, err = bus.QueryLatestEveningRoute().Only(ctx)
+		if err != nil {
+			i.logger.Error("failed to get bus route", "error", err)
+			return nil, err
+		}
+	}
+
+	i.logger.Info("busRoute", "busRoute", busRoute)
 
 	if err != nil {
 		i.logger.Error("failed to get bus route", "error", err)
 		return nil, err
 	}
 
-	pbBusRoute, err := i.CreateBusRouteResponse(ctx, nil, busRoute)
+	pbBusRoute, err := i.CreateBusRouteResponse(ctx, tx, busRoute)
 	if err != nil {
 		i.logger.Error("failed to create bus route response", "error", err)
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		i.logger.Error("failed to commit transaction", "error", err)
 		return nil, err
 	}
 
@@ -263,6 +282,7 @@ func (i Interactor) CreateBusRouteResponse(ctx context.Context, tx *ent.Tx, busR
 		QueryBusRouteAssociations().
 		Order(ent.Asc("order")). // !要チェック
 		QueryStation().
+		WithGuardian().
 		All(ctx)
 	if err != nil {
 		i.logger.Error("failed to get stations", "error", err)
