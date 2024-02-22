@@ -3,6 +3,7 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 import 'package:where_child_bus_guardian/pages/check_page/check_page.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/daily_page.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
+import 'package:where_child_bus_guardian/components/utils/custom_bottom_app_bar.dart';
 
 class App extends StatefulWidget {
   App({super.key});
@@ -23,23 +24,9 @@ class _AppState extends State<App> {
       body: IndexedStack(
           index: _selectedIndex,
           children: [DailyPage(), const MapPage(), CheckPage()]),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (int index) => setState(() => _selectedIndex = index),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note_alt),
-            label: '日々の記録',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bus_alert),
-            label: '地図',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_active),
-            label: '乗車確認',
-          ),
-        ],
+      bottomNavigationBar: CustomWaveBottomBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (index) => setState(() => _selectedIndex = index),
       ),
     );
   }
