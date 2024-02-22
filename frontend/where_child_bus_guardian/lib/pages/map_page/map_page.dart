@@ -9,7 +9,7 @@ import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
 import 'package:where_child_bus_guardian/config/config.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/map_page_bottom.dart';
 import 'package:where_child_bus_guardian/service/get_running_bus_by_guardian_id.dart';
-import 'package:where_child_bus_guardian/service/get_station_list_by_bus_id.dart';
+import 'package:where_child_bus_guardian/service/get_bus_route_by_bus_id.dart';
 import 'package:where_child_bus_guardian/service/get_nursery_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/util/guardian_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
@@ -40,7 +40,7 @@ class _MapPageState extends State<MapPage> {
 
   Timer? _timer;
   String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
-  List<Station> stations = [];
+  List<Station> busRoutes = [];
   List<Waypoint> waypoints = [];
 
   final GuardianResponse guardian = GuardianData().getGuardian();
@@ -135,14 +135,15 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _loadStationsData() async {
     try {
+      var busType = BusType.BUS_TYPE_EVENING;
       developer.log('停留所リストの読み込み開始');
-      var stationsRes = await getStationListByBusIdService(bus.id, bus.type);
+      var busRouteRes = await getBusRouteByBusService(bus.id, busType);
       if (mounted) {
         setState(() {
-          stations = stationsRes.stations;
+          busRoutes = busRouteRes.busRoute.orderedStations;
         });
       }
-      developer.log('map_page.dart stations: ${stations}');
+      developer.log('map_page.dart stations: ${busRoutes}');
     } catch (error) {
       developer.log('停留所リストの読み込みに失敗しました: $error');
     }
@@ -152,7 +153,7 @@ class _MapPageState extends State<MapPage> {
     try {
       developer.log("Waypointsの作成開始", name: "CreateWaypointsFromStations");
       if (mounted) {
-        for (var station in stations) {
+        for (var station in busRoutes) {
           developer.log("Waypointsの作成中 ${station.id}",
               name: "CreateWaypointsFromStations");
           waypoints.add(Waypoint(
@@ -223,7 +224,7 @@ class _MapPageState extends State<MapPage> {
                 MapPageBottom(
                     guardian: guardian,
                     bus: bus,
-                    stations: stations,
+                    stations: busRoutes,
                     waypoints: waypoints,
                     nextStationId: nextStationId,
                     busLatitude: busLatitude,
