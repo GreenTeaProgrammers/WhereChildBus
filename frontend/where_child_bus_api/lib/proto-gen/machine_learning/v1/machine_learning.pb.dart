@@ -14,6 +14,7 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../where_child_bus/v1/resources.pbenum.dart' as $3;
+import 'machine_learning.pbenum.dart';
 
 export 'machine_learning.pbenum.dart';
 
@@ -105,7 +106,7 @@ class TrainRequest extends $pb.GeneratedMessage {
 
 class TrainResponse extends $pb.GeneratedMessage {
   factory TrainResponse({
-    $core.bool? status,
+    status? status,
   }) {
     final $result = create();
     if (status != null) {
@@ -118,7 +119,7 @@ class TrainResponse extends $pb.GeneratedMessage {
   factory TrainResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'machine_learning.v1'), createEmptyInstance: create)
-    ..aOB(1, _omitFieldNames ? '' : 'status')
+    ..e<status>(1, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: status.SUCCESS, valueOf: status.valueOf, enumValues: status.values)
     ..hasRequiredFields = false
   ;
 
@@ -144,9 +145,9 @@ class TrainResponse extends $pb.GeneratedMessage {
   static TrainResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.bool get status => $_getBF(0);
+  status get status => $_getN(0);
   @$pb.TagNumber(1)
-  set status($core.bool v) { $_setBool(0, v); }
+  set status(status v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)

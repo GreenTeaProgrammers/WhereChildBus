@@ -20,12 +20,14 @@ const status$json = {
     {'1': 'SUCCESS', '2': 0},
     {'1': 'PROCESSING', '2': 1},
     {'1': 'FAILED', '2': 2},
+    {'1': 'WAITING', '2': 3},
   ],
 };
 
 /// Descriptor for `status`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
-    'CgZzdGF0dXMSCwoHU1VDQ0VTUxAAEg4KClBST0NFU1NJTkcQARIKCgZGQUlMRUQQAg==');
+    'CgZzdGF0dXMSCwoHU1VDQ0VTUxAAEg4KClBST0NFU1NJTkcQARIKCgZGQUlMRUQQAhILCgdXQU'
+    'lUSU5HEAM=');
 
 @$core.Deprecated('Use trainRequestDescriptor instead')
 const TrainRequest$json = {
@@ -48,13 +50,14 @@ final $typed_data.Uint8List trainRequestDescriptor = $convert.base64Decode(
 const TrainResponse$json = {
   '1': 'TrainResponse',
   '2': [
-    {'1': 'status', '3': 1, '4': 1, '5': 8, '10': 'status'},
+    {'1': 'status', '3': 1, '4': 1, '5': 14, '6': '.machine_learning.v1.status', '10': 'status'},
   ],
 };
 
 /// Descriptor for `TrainResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List trainResponseDescriptor = $convert.base64Decode(
-    'Cg1UcmFpblJlc3BvbnNlEhYKBnN0YXR1cxgBIAEoCFIGc3RhdHVz');
+    'Cg1UcmFpblJlc3BvbnNlEjMKBnN0YXR1cxgBIAEoDjIbLm1hY2hpbmVfbGVhcm5pbmcudjEuc3'
+    'RhdHVzUgZzdGF0dXM=');
 
 @$core.Deprecated('Use predResponseDescriptor instead')
 const PredResponse$json = {

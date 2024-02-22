@@ -19,7 +19,7 @@ message TrainRequest {
 }
 
 message TrainResponse {
-        bool status = 1;
+        status status = 1;
 }
 
 message PredResponse {
@@ -40,4 +40,5 @@ enum status {
         SUCCESS = 0;
         PROCESSING = 1;
         FAILED = 2;
+        WAITING = 3;
 }
