@@ -6,6 +6,7 @@ import (
 	grpc_interfaces "github.com/GreenTeaProgrammers/WhereChildBus/backend/interfaces"
 	pb "github.com/GreenTeaProgrammers/WhereChildBus/backend/proto-gen/go/where_child_bus/v1"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/guardian"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/usecases/nursery"
@@ -42,6 +43,10 @@ func New(opts ...optionFunc) *grpc.Server {
 	busInteractor := bus.NewInteractor(opt.entClient, opt.logger, opt.MLClient)
 	busSrv := grpc_interfaces.NewBusServiceServer(busInteractor)
 	pb.RegisterBusServiceServer(srv, busSrv)
+
+	busRouteInteractor := busroute.NewInteractor(opt.entClient, opt.logger, opt.MLClient)
+	busRouteSrv := grpc_interfaces.NewBusRouteServiceServer(busRouteInteractor)
+	pb.RegisterBusRouteServiceServer(srv, busRouteSrv)
 
 	childInteractor := child.NewInteractor(opt.entClient, opt.logger, opt.storageClient, opt.MLClient, opt.bucketName) // NOTE: GCSを使うのでstorageClientとbucketNameを渡す
 	childSrv := grpc_interfaces.NewChildServiceServer(childInteractor)

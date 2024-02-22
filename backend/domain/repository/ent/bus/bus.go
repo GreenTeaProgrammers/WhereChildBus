@@ -34,18 +34,16 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// EdgeNursery holds the string denoting the nursery edge name in mutations.
 	EdgeNursery = "nursery"
-	// EdgeStations holds the string denoting the stations edge name in mutations.
-	EdgeStations = "stations"
 	// EdgeBoardingRecords holds the string denoting the boarding_records edge name in mutations.
 	EdgeBoardingRecords = "boarding_records"
-	// EdgeChildBusAssociations holds the string denoting the childbusassociations edge name in mutations.
-	EdgeChildBusAssociations = "childBusAssociations"
 	// EdgeNextStation holds the string denoting the next_station edge name in mutations.
 	EdgeNextStation = "next_station"
-	// EdgeMorningFirstStation holds the string denoting the morning_first_station edge name in mutations.
-	EdgeMorningFirstStation = "morning_first_station"
-	// EdgeEveningFirstStation holds the string denoting the evening_first_station edge name in mutations.
-	EdgeEveningFirstStation = "evening_first_station"
+	// EdgeBusRoute holds the string denoting the bus_route edge name in mutations.
+	EdgeBusRoute = "bus_route"
+	// EdgeLatestMorningRoute holds the string denoting the latest_morning_route edge name in mutations.
+	EdgeLatestMorningRoute = "latest_morning_route"
+	// EdgeLatestEveningRoute holds the string denoting the latest_evening_route edge name in mutations.
+	EdgeLatestEveningRoute = "latest_evening_route"
 	// Table holds the table name of the bus in the database.
 	Table = "bus"
 	// NurseryTable is the table that holds the nursery relation/edge.
@@ -55,11 +53,6 @@ const (
 	NurseryInverseTable = "nurseries"
 	// NurseryColumn is the table column denoting the nursery relation/edge.
 	NurseryColumn = "bus_nursery"
-	// StationsTable is the table that holds the stations relation/edge. The primary key declared below.
-	StationsTable = "bus_stations"
-	// StationsInverseTable is the table name for the Station entity.
-	// It exists in this package in order to avoid circular dependency with the "station" package.
-	StationsInverseTable = "stations"
 	// BoardingRecordsTable is the table that holds the boarding_records relation/edge.
 	BoardingRecordsTable = "boarding_records"
 	// BoardingRecordsInverseTable is the table name for the BoardingRecord entity.
@@ -67,13 +60,6 @@ const (
 	BoardingRecordsInverseTable = "boarding_records"
 	// BoardingRecordsColumn is the table column denoting the boarding_records relation/edge.
 	BoardingRecordsColumn = "bus_boarding_records"
-	// ChildBusAssociationsTable is the table that holds the childBusAssociations relation/edge.
-	ChildBusAssociationsTable = "child_bus_associations"
-	// ChildBusAssociationsInverseTable is the table name for the ChildBusAssociation entity.
-	// It exists in this package in order to avoid circular dependency with the "childbusassociation" package.
-	ChildBusAssociationsInverseTable = "child_bus_associations"
-	// ChildBusAssociationsColumn is the table column denoting the childBusAssociations relation/edge.
-	ChildBusAssociationsColumn = "bus_id"
 	// NextStationTable is the table that holds the next_station relation/edge.
 	NextStationTable = "bus"
 	// NextStationInverseTable is the table name for the Station entity.
@@ -81,20 +67,25 @@ const (
 	NextStationInverseTable = "stations"
 	// NextStationColumn is the table column denoting the next_station relation/edge.
 	NextStationColumn = "bus_next_station"
-	// MorningFirstStationTable is the table that holds the morning_first_station relation/edge.
-	MorningFirstStationTable = "bus"
-	// MorningFirstStationInverseTable is the table name for the Station entity.
-	// It exists in this package in order to avoid circular dependency with the "station" package.
-	MorningFirstStationInverseTable = "stations"
-	// MorningFirstStationColumn is the table column denoting the morning_first_station relation/edge.
-	MorningFirstStationColumn = "bus_morning_first_station"
-	// EveningFirstStationTable is the table that holds the evening_first_station relation/edge.
-	EveningFirstStationTable = "bus"
-	// EveningFirstStationInverseTable is the table name for the Station entity.
-	// It exists in this package in order to avoid circular dependency with the "station" package.
-	EveningFirstStationInverseTable = "stations"
-	// EveningFirstStationColumn is the table column denoting the evening_first_station relation/edge.
-	EveningFirstStationColumn = "bus_evening_first_station"
+	// BusRouteTable is the table that holds the bus_route relation/edge. The primary key declared below.
+	BusRouteTable = "bus_route_bus"
+	// BusRouteInverseTable is the table name for the BusRoute entity.
+	// It exists in this package in order to avoid circular dependency with the "busroute" package.
+	BusRouteInverseTable = "bus_routes"
+	// LatestMorningRouteTable is the table that holds the latest_morning_route relation/edge.
+	LatestMorningRouteTable = "bus"
+	// LatestMorningRouteInverseTable is the table name for the BusRoute entity.
+	// It exists in this package in order to avoid circular dependency with the "busroute" package.
+	LatestMorningRouteInverseTable = "bus_routes"
+	// LatestMorningRouteColumn is the table column denoting the latest_morning_route relation/edge.
+	LatestMorningRouteColumn = "bus_latest_morning_route"
+	// LatestEveningRouteTable is the table that holds the latest_evening_route relation/edge.
+	LatestEveningRouteTable = "bus"
+	// LatestEveningRouteInverseTable is the table name for the BusRoute entity.
+	// It exists in this package in order to avoid circular dependency with the "busroute" package.
+	LatestEveningRouteInverseTable = "bus_routes"
+	// LatestEveningRouteColumn is the table column denoting the latest_evening_route relation/edge.
+	LatestEveningRouteColumn = "bus_latest_evening_route"
 )
 
 // Columns holds all SQL columns for bus fields.
@@ -115,14 +106,14 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"bus_nursery",
 	"bus_next_station",
-	"bus_morning_first_station",
-	"bus_evening_first_station",
+	"bus_latest_morning_route",
+	"bus_latest_evening_route",
 }
 
 var (
-	// StationsPrimaryKey and StationsColumn2 are the table columns denoting the
-	// primary key for the stations relation (M2M).
-	StationsPrimaryKey = []string{"bus_id", "station_id"}
+	// BusRoutePrimaryKey and BusRouteColumn2 are the table columns denoting the
+	// primary key for the bus_route relation (M2M).
+	BusRoutePrimaryKey = []string{"bus_route_id", "bus_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -235,20 +226,6 @@ func ByNurseryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByStationsCount orders the results by stations count.
-func ByStationsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newStationsStep(), opts...)
-	}
-}
-
-// ByStations orders the results by stations terms.
-func ByStations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newStationsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByBoardingRecordsCount orders the results by boarding_records count.
 func ByBoardingRecordsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -263,20 +240,6 @@ func ByBoardingRecords(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByChildBusAssociationsCount orders the results by childBusAssociations count.
-func ByChildBusAssociationsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newChildBusAssociationsStep(), opts...)
-	}
-}
-
-// ByChildBusAssociations orders the results by childBusAssociations terms.
-func ByChildBusAssociations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newChildBusAssociationsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByNextStationField orders the results by next_station field.
 func ByNextStationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -284,17 +247,31 @@ func ByNextStationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByMorningFirstStationField orders the results by morning_first_station field.
-func ByMorningFirstStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByBusRouteCount orders the results by bus_route count.
+func ByBusRouteCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMorningFirstStationStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newBusRouteStep(), opts...)
 	}
 }
 
-// ByEveningFirstStationField orders the results by evening_first_station field.
-func ByEveningFirstStationField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByBusRoute orders the results by bus_route terms.
+func ByBusRoute(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEveningFirstStationStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newBusRouteStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByLatestMorningRouteField orders the results by latest_morning_route field.
+func ByLatestMorningRouteField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLatestMorningRouteStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLatestEveningRouteField orders the results by latest_evening_route field.
+func ByLatestEveningRouteField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLatestEveningRouteStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newNurseryStep() *sqlgraph.Step {
@@ -304,25 +281,11 @@ func newNurseryStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, NurseryTable, NurseryColumn),
 	)
 }
-func newStationsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(StationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, StationsTable, StationsPrimaryKey...),
-	)
-}
 func newBoardingRecordsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BoardingRecordsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BoardingRecordsTable, BoardingRecordsColumn),
-	)
-}
-func newChildBusAssociationsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ChildBusAssociationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ChildBusAssociationsTable, ChildBusAssociationsColumn),
 	)
 }
 func newNextStationStep() *sqlgraph.Step {
@@ -332,17 +295,24 @@ func newNextStationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, NextStationTable, NextStationColumn),
 	)
 }
-func newMorningFirstStationStep() *sqlgraph.Step {
+func newBusRouteStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MorningFirstStationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, MorningFirstStationTable, MorningFirstStationColumn),
+		sqlgraph.To(BusRouteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, BusRouteTable, BusRoutePrimaryKey...),
 	)
 }
-func newEveningFirstStationStep() *sqlgraph.Step {
+func newLatestMorningRouteStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EveningFirstStationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, EveningFirstStationTable, EveningFirstStationColumn),
+		sqlgraph.To(LatestMorningRouteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LatestMorningRouteTable, LatestMorningRouteColumn),
+	)
+}
+func newLatestEveningRouteStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LatestEveningRouteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LatestEveningRouteTable, LatestEveningRouteColumn),
 	)
 }
