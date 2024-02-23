@@ -64,19 +64,22 @@ class _BusEditPageState extends State<BusEditPage> {
         _createBusError = CreateBusError.fieldsNotFilled;
       });
       return true;
-      //Note 今のところ保護者が選択されていなくても作成できる
-      // } else if (CreateBusValidator.validateGuardians(
-      //     morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
-      //   setState(() {
-      //     _createBusError = CreateBusError.noGuardiansSelected;
-      //   });
-      // return true;
-    } else if (CreateBusValidator.validateNameLength(_busNameController.text)) {
-      setState(() {
-        _createBusError = CreateBusError.nameTooLong;
-      });
-      return true;
     }
+    //Note 今のところ保護者が選択されていなくても作成できる
+    // } else if (CreateBusValidator.validateGuardians(
+    //     morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
+    //   setState(() {
+    //     _createBusError = CreateBusError.noGuardiansSelected;
+    //   });
+    // return true;
+
+    //Todo 将来的に修正する
+    // } else if (CreateBusValidator.validateNameLength(_busNameController.text)) {
+    //   setState(() {
+    //     _createBusError = CreateBusError.nameTooLong;
+    //   });
+    //   return true;
+    // }
 
     return false;
   }
