@@ -38,7 +38,6 @@ class _ArrivalTimeState extends State<ArrivalTime> {
   String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
   String arrivalTime = "Loading...";
   Timer? _timer;
-  DateTime departureTime = DateTime.now();
   double morningFirstStationLatitude = 0.0, morningFirstStationLongitude = 0.0;
   double eveningFirstStationLatitude = 0.0, eveningFirstStationLongitude = 0.0;
   double nextStationLatitude = 0.0, nextStationLongitude = 0.0;
@@ -47,8 +46,6 @@ class _ArrivalTimeState extends State<ArrivalTime> {
   void initState() {
     super.initState();
     initArrivalTime();
-    _timer = Timer.periodic(
-        const Duration(minutes: 1), (Timer t) => initArrivalTime());
   }
 
   @override
@@ -85,6 +82,9 @@ class _ArrivalTimeState extends State<ArrivalTime> {
 
   @override
   Widget build(BuildContext context) {
+    _timer = Timer.periodic(
+        const Duration(minutes: 1), (Timer t) => initArrivalTime());
+
     return Text(
       widget.isMinuteOnly ? "${arrivalTime}分" : "${arrivalTime}",
       style: const TextStyle(fontSize: 30),
@@ -109,7 +109,7 @@ class _ArrivalTimeState extends State<ArrivalTime> {
             arrivalTime = widget.isMinuteOnly
                 ? (durationInSeconds ~/ 60).toString()
                 : DateFormat('HH:mm').format(
-                    departureTime.add(Duration(seconds: durationInSeconds)));
+                    DateTime.now().add(Duration(seconds: durationInSeconds)));
           });
         }
       } else {
