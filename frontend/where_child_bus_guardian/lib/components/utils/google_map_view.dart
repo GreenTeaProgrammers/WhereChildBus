@@ -113,8 +113,8 @@ class _GoogleMapView extends State<GoogleMapView> {
   void _getPolyline(List<Waypoint> waypoints) async {
     try {
       polylineCoordinates = await GoogleMapAPIManager().getPolylinePoints(
-        startLat: widget.busLatitude.toString(),
-        startLng: widget.busLongitude.toString(),
+        startLat: widget.nurseryLatitude.toString(),
+        startLng: widget.nurseryLongitude.toString(),
         endLat: widget.nurseryLatitude.toString(),
         endLng: widget.nurseryLongitude.toString(),
         waypoints: waypoints,
