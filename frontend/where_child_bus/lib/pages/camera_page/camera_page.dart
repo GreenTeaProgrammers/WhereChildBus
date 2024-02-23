@@ -170,6 +170,26 @@ class _CameraPageState extends State<CameraPage> {
     return grayscaleBytes;
   }
 
+  List<int> _rotateImageLeft90Degrees(
+      CameraImage image, List<int> grayscaleBytes) {
+    final int width = image.width;
+    final int height = image.height;
+    List<int> rotatedGrayscaleBytes = List.filled(width * height, 0);
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        // 元の画像でのピクセル位置
+        int originalIndex = y * width + x;
+        // 90度回転後の新しいピクセル位置
+        int rotatedIndex = (width - 1 - x) * height + y;
+        // 輝度値を新しい位置にコピー
+        rotatedGrayscaleBytes[rotatedIndex] = grayscaleBytes[originalIndex];
+      }
+    }
+
+    return rotatedGrayscaleBytes;
+  }
+
   void _startImageStream() async {
     List<List<int>> videoChunks = [];
     if (!_controller.value.isStreamingImages) {
@@ -189,7 +209,8 @@ class _CameraPageState extends State<CameraPage> {
               photoWidth: image.width,
             ));
           } else if (Platform.isIOS) {
-            videoChunks.add(_processCameraImage2gray(image));
+            videoChunks.add(_rotateImageLeft90Degrees(
+                image, _processCameraImage2gray(image)));
             _streamController.add(StreamBusVideoRequest(
               busId: widget.bus.id,
               nurseryId: NurseryData().getNursery().id,
