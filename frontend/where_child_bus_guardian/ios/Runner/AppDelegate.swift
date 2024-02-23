@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import GoogleMaps
+import GooglePlaces
 import flutter_config
 
 @UIApplicationMain
