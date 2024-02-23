@@ -74,3 +74,10 @@ Future<UpdateChildResponse> updateChild(
     return client.updateChild(req);
   });
 }
+
+Future<GetChildListByBusIDResponse> getChildListByBusId(String busId) async {
+  return performGrpcCall((client) async {
+    var req = GetChildListByBusIDRequest(busId: busId);
+    return client.getChildListByBusID(req);
+  });
+}
