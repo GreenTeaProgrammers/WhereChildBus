@@ -199,28 +199,20 @@ class _CameraPageState extends State<CameraPage> {
         if (frameCounter % 60 == 0) {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
-            _streamController.add(StreamBusVideoRequest(
-              busId: widget.bus.id,
-              nurseryId: NurseryData().getNursery().id,
-              busType: widget.busType,
-              vehicleEvent: _vehicleEvent,
-              videoChunk: videoChunks,
-              photoHeight: image.height,
-              photoWidth: image.width,
-            ));
           } else if (Platform.isIOS) {
             videoChunks.add(_rotateImageLeft90Degrees(
                 image, _processCameraImage2gray(image)));
-            _streamController.add(StreamBusVideoRequest(
-              busId: widget.bus.id,
-              nurseryId: NurseryData().getNursery().id,
-              busType: widget.busType,
-              vehicleEvent: _vehicleEvent,
-              videoChunk: videoChunks,
-              photoHeight: image.width,
-              photoWidth: image.height,
-            ));
           }
+
+          _streamController.add(StreamBusVideoRequest(
+            busId: widget.bus.id,
+            nurseryId: NurseryData().getNursery().id,
+            busType: widget.busType,
+            vehicleEvent: _vehicleEvent,
+            videoChunk: videoChunks,
+            photoHeight: image.height,
+            photoWidth: image.width,
+          ));
 
           try {
             // await _getCurrentLocation();
