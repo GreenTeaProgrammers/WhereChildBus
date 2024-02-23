@@ -61,5 +61,13 @@
 	<string>マイクを使う理由・用途を記述（ここをちゃんと書かないと、Appleのレビューでリジェクトされます）</string>
 	<!-- NoteEnd -->
 
+	<!-- Note: これを追記することで、GPSを使用できる -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background.</string>
+	<!-- NoteEnd -->
+
+
 </dict>
 </plist>

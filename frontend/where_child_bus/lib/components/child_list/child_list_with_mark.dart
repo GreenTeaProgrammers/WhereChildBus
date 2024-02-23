@@ -4,6 +4,7 @@ import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 
 class ChildListWithMark extends StatefulWidget {
   final List<String> childNames;
+  final List<bool> isInBus;
   final List<String> groupNames;
   final List<ChildPhoto> images;
   final VoidCallback? callback;
@@ -12,6 +13,7 @@ class ChildListWithMark extends StatefulWidget {
     Key? key,
     required this.childNames,
     required this.groupNames,
+    required this.isInBus,
     required this.images,
     this.callback,
   }) : super(key: key);
@@ -39,6 +41,7 @@ class _ChildListWithMarkState extends State<ChildListWithMark> {
         title: widget.childNames[index],
         subtitle: widget.groupNames[index],
         image: widget.images[index],
+        isInBus: widget.isInBus[index],
         onTap: () {
           widget.callback!();
         });

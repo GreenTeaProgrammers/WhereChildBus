@@ -25,6 +25,8 @@ dependencies:
   where_child_bus_api:
     path: ../where_child_bus_api
   google_fonts: ^6.1.0
+  flutter_config: ^2.0.2
+
 
 dev_dependencies:
   flutter_test:

@@ -81,3 +81,10 @@ Future<GetChildListByBusIDResponse> getChildListByBusId(String busId) async {
     return client.getChildListByBusID(req);
   });
 }
+
+Future<CheckIsChildInBusResponse> checkIsChildInBus(String childId) async {
+  return performGrpcCall((client) async {
+    var req = CheckIsChildInBusRequest(childId: childId);
+    return client.checkIsChildInBus(req);
+  });
+}
