@@ -85,7 +85,7 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget titleText() => const Padding(
         padding: EdgeInsets.only(bottom: 32),
-        child: Text('WhereChildBus',
+        child: Text('ほいくるーず',
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
       );
 
