@@ -436,7 +436,9 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 }
 
 func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) error {
-	ctx := stream.Context() // ストリームのコンテキストを使用
+	ctx, cancel := context.WithCancel(stream.Context()) // ゴルーチンの管理用にキャンセル可能なコンテキストを作成
+	defer cancel()                                      // 関数終了時にゴルーチンをキャンセル
+
 	MLStream, err := i.MLServiceClient.Pred(ctx)
 	if err != nil {
 		return err
@@ -444,21 +446,20 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 
 	var busID string
 	var vehicleEvent pb.VehicleEvent
-	errChan := make(chan error, 1) // エラーチャネルを作成
-	wg := sync.WaitGroup{}         // ゴルーチンの完了を待つためのWaitGroup
+	errChan := make(chan error, 1)
 
-	// Go サーバーから受け取ったメッセージをPythonサーバーに転送
-	wg.Add(1) // WaitGroupのカウンターをインクリメント
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
-		defer wg.Done() // 関数終了時にカウンターをデクリメント
+		defer wg.Done()
 		for {
 			in, err := stream.Recv()
-			if err == io.EOF {
-				// ストリームの終了
-				break
-			}
 			if err != nil {
-				errChan <- err // エラーチャネルにエラーを送信
+				if err == io.EOF {
+					cancel() // EOF の場合はコンテキストをキャンセルしてゴルーチンを終了
+					return
+				}
+				errChan <- err
 				return
 			}
 
@@ -466,7 +467,7 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 			vehicleEvent = in.VehicleEvent
 
 			if err := MLStream.Send(in); err != nil {
-				errChan <- err // エラーチャネルにエラーを送信
+				errChan <- err
 				return
 			}
 		}
@@ -474,16 +475,15 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 
 	for {
 		select {
-		case err := <-errChan: // エラーチャネルからのエラーを待機
+		case err := <-errChan:
 			return err
 		default:
 			resp, err := MLStream.Recv()
-			if err == io.EOF {
-				// ストリームの終了
-				wg.Wait() // ゴルーチンの完了を待つ
-				return nil
-			}
 			if err != nil {
+				if err == io.EOF {
+					wg.Wait() // ゴルーチンの完了を待つ
+					return nil
+				}
 				return err
 			}
 
@@ -496,14 +496,12 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 				return err
 			}
 
-			go func() {
-				i.logger.Info("processing detected children", "bus_id", busID, "vehicle_event", vehicleEvent)
-				err = i.processDetectedChildren(tx, ctx, stream, resp, busID, vehicleEvent)
-				if err != nil {
-					utils.RollbackTx(tx, i.logger)
-					return
-				}
-			}()
+			i.logger.Info("processing detected children", "bus_id", busID, "vehicle_event", vehicleEvent)
+			err = i.processDetectedChildren(tx, ctx, stream, resp, busID, vehicleEvent)
+			if err != nil {
+				utils.RollbackTx(tx, i.logger)
+				return err
+			}
 
 			if err := tx.Commit(); err != nil {
 				return err
@@ -520,6 +518,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, ctx context.Context, st
 	for _, childId := range resp.ChildIds {
 		childUUID := uuid.MustParse(childId)
 
+		i.logger.Info("start searching boarding record", "child_id", childUUID, "bus_id", busUUID)
 		// 既存のレコードを検索
 		exists, err := tx.BoardingRecord.Query().
 			Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))).
@@ -540,6 +539,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, ctx context.Context, st
 			if err != nil {
 				return err
 			}
+			i.logger.Info("created new boarding record", "child_id", childUUID, "bus_id", busUUID)
 		}
 
 		boardingrecord, err := tx.BoardingRecord.Query().
@@ -598,7 +598,6 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, ctx context.Context, st
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
