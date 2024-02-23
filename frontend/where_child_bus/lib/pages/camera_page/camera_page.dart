@@ -12,11 +12,13 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart
 import "package:where_child_bus/main.dart" as where_child_bus;
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
+import 'widgets/next_station_button.dart';
+
 class CameraPage extends StatefulWidget {
-  final Bus bus;
+  Bus bus;
   final BusType busType;
 
-  const CameraPage({Key? key, required this.bus, required this.busType})
+  CameraPage({Key? key, required this.bus, required this.busType})
       : super(key: key);
 
   @override
@@ -152,6 +154,13 @@ class _CameraPageState extends State<CameraPage> {
     AudioManager(audioFiles: audioFiles).playSequentially();
   }
 
+  void _onNextButtonPressed(Bus bus) {
+    developer.log("Next button pressed", name: "CameraPage");
+    setState(() {
+      widget.bus = bus;
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -182,16 +191,26 @@ class _CameraPageState extends State<CameraPage> {
         ),
         Positioned(
             right: 15,
-            child: RidingToggle(
-                onToggled: (event) => {
-                      setState(() {
-                        if (event) {
-                          _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
-                        } else {
-                          _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_OFF;
-                        }
-                      }),
-                    })),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                NextStationButton(
+                    bus: widget.bus,
+                    busType: widget.busType,
+                    onPressed: _onNextButtonPressed),
+                RidingToggle(
+                    onToggled: (event) => {
+                          setState(() {
+                            if (event) {
+                              _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
+                            } else {
+                              _vehicleEvent =
+                                  VehicleEvent.VEHICLE_EVENT_GET_OFF;
+                            }
+                          }),
+                        }),
+              ],
+            )),
         //NOTE: テスト用
         // ElevatedButton(
         //     onPressed: AudioManager(audioFiles: ["sounds/water_bottle.wav"])
