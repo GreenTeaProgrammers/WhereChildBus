@@ -88,13 +88,12 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   //TODO: 将来的に表情を受け取り、アイコンを表示する
   Widget childExpressionIcon() {
     return const SizedBox(
-      width: 100,
-      height: 100,
-      child: Card(
-        color: Colors.grey,
-        child: Text("ここに表情のアイコンが入る"),
-      ),
-    );
+        width: 100,
+        height: 100,
+        child: Icon(
+          Icons.sentiment_satisfied,
+          size: 100,
+        ));
   }
 
   Widget statusIconAndStatusField(
