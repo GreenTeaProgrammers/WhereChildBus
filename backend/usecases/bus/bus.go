@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"sync"
 	"time"
 
 	"context"
@@ -340,22 +341,45 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
 	ctx := stream.Context()
+	retryDelay := time.Second // リトライの間隔を1秒に設定
+	maxRetries := 5           // 最大リトライ回数
+
 	for {
 		req, err := stream.Recv()
 		if errors.Is(err, io.EOF) {
 			// ストリームの終了
 			return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
 		}
+
 		if err != nil {
 			i.logger.Error("failed to receive location", err)
-			return err
+
+			// 最大リトライ回数を超えるまでリトライ
+			for retry := 0; retry < maxRetries; retry++ {
+				time.Sleep(retryDelay) // リトライ間隔で待機
+
+				req, err = stream.Recv() // 再度受信を試みる
+				if err == nil {
+					break // 成功したらリトライループを抜ける
+				}
+				if errors.Is(err, io.EOF) {
+					// ストリームの終了
+					return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
+				}
+				i.logger.Error(fmt.Sprintf("retrying to receive location, attempt %d", retry+1), err)
+			}
+
+			// リトライ後もエラーが続く場合は、処理を中断
+			if err != nil {
+				i.logger.Error("failed to receive location after retries", err)
+				return err
+			}
 		}
 
 		busID, err := uuid.Parse(req.BusId)
 		if err != nil {
 			i.logger.Error("failed to parse bus ID", err)
-			// バスIDの解析に失敗した場合は、エラーをログに記録し、処理を続行する
-			continue
+			return err // バスIDの解析に失敗した場合は、次のリクエストの処理を試みる
 		}
 
 		// トランザクションを使用せずに直接更新
@@ -363,8 +387,6 @@ func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationCon
 			SetLatitude(req.Latitude).
 			SetLongitude(req.Longitude).
 			Save(ctx)
-
-		i.logger.Info("updated bus location", "bus_id", busID, "latitude", req.Latitude, "longitude", req.Longitude)
 
 		if err != nil {
 			i.logger.Error("failed to update bus location", err)
@@ -380,44 +402,57 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 		return fmt.Errorf("failed to parse bus ID '%s': %w", req.BusId, err)
 	}
 
+	// 送信間隔の設定（例えば、5秒ごと）
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
 	for {
-		bus, err := i.entClient.Bus.Query().
-			Where(busRepo.IDEQ(busID)).
-			WithNursery().
-			Only(ctx)
+		select {
+		case <-ctx.Done(): // クライアントの切断またはその他のキャンセルシグナルを受信
+			return ctx.Err()
+		case <-ticker.C: // 定期的にデータを送信
+			bus, err := i.entClient.Bus.Query().
+				Where(busRepo.IDEQ(busID)).
+				WithNursery().
+				Only(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to get bus: %w", err)
+			}
 
-		if err != nil {
-			return fmt.Errorf("failed to get bus: %w", err)
-		}
+			nextStation, err := bus.QueryNextStation().Only(ctx)
+			if err != nil {
+				return err
+			}
 
-		nextStation, err := bus.QueryNextStation().Only(context.Background())
-		if err != nil {
-			return err
+			if err := stream.Send(&pb.TrackBusContinuousResponse{
+				BusId:         req.BusId,
+				Latitude:      bus.Latitude,
+				Longitude:     bus.Longitude,
+				NextStationId: nextStation.ID.String(),
+			}); err != nil {
+				return fmt.Errorf("failed to send bus: %w", err)
+			}
+			i.logger.Info("sent bus location", "bus_id", busID, "latitude", bus.Latitude, "longitude", bus.Longitude)
 		}
-
-		if err := stream.Send(&pb.TrackBusContinuousResponse{
-			BusId:         req.BusId,
-			Latitude:      bus.Latitude,
-			Longitude:     bus.Longitude,
-			NextStationId: nextStation.ID.String(),
-		}); err != nil {
-			return fmt.Errorf("failed to send bus: %w", err)
-		}
-		i.logger.Info("sent bus location", "bus_id", busID, "latitude", bus.Latitude, "longitude", bus.Longitude)
 	}
 }
 
 func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) error {
-	MLStream, err := i.MLServiceClient.Pred(context.Background())
+	ctx := stream.Context() // ストリームのコンテキストを使用
+	MLStream, err := i.MLServiceClient.Pred(ctx)
 	if err != nil {
 		return err
 	}
 
 	var busID string
 	var vehicleEvent pb.VehicleEvent
+	errChan := make(chan error, 1) // エラーチャネルを作成
+	wg := sync.WaitGroup{}         // ゴルーチンの完了を待つためのWaitGroup
 
 	// Go サーバーから受け取ったメッセージをPythonサーバーに転送
+	wg.Add(1) // WaitGroupのカウンターをインクリメント
 	go func() {
+		defer wg.Done() // 関数終了時にカウンターをデクリメント
 		for {
 			in, err := stream.Recv()
 			if err == io.EOF {
@@ -425,58 +460,55 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 				break
 			}
 			if err != nil {
+				errChan <- err // エラーチャネルにエラーを送信
 				return
 			}
 
-			// バスID、バスタイプ、ビデオタイプを保持
 			busID = in.BusId
 			vehicleEvent = in.VehicleEvent
 
-			// Python サーバーへそのまま転送
-			err = MLStream.Send(in)
-			if err != nil {
+			if err := MLStream.Send(in); err != nil {
+				errChan <- err // エラーチャネルにエラーを送信
 				return
 			}
 		}
 	}()
 
-	// Python サーバーからのレスポンスを待つ
 	for {
-		resp, err := MLStream.Recv()
-		i.logger.Info("received from ML server")
-		if err == io.EOF {
-			// ストリームの終了
-			break
-		}
-		if err != nil {
+		select {
+		case err := <-errChan: // エラーチャネルからのエラーを待機
 			return err
-		}
+		default:
+			resp, err := MLStream.Recv()
+			if err == io.EOF {
+				// ストリームの終了
+				wg.Wait() // ゴルーチンの完了を待つ
+				return nil
+			}
+			if err != nil {
+				return err
+			}
 
-		if !resp.IsDetected {
-			// 検出されなかった場合は、次のループに進む
-			continue
-		}
+			if !resp.IsDetected {
+				continue
+			}
 
-		// トランザクションの開始
-		tx, err := i.entClient.Tx(context.Background())
-		if err != nil {
-			return err
-		}
+			tx, err := i.entClient.Tx(ctx)
+			if err != nil {
+				return err
+			}
 
-		// トランザクション内での操作
-		err = i.processDetectedChildren(tx, stream, resp, busID, vehicleEvent) // stream 引数を追加
-		if err != nil {
-			utils.RollbackTx(tx, i.logger)
-			return err
-		}
+			err = i.processDetectedChildren(tx, stream, resp, busID, vehicleEvent)
+			if err != nil {
+				utils.RollbackTx(tx, i.logger)
+				return err
+			}
 
-		// トランザクションのコミット
-		if err := tx.Commit(); err != nil {
-			return err
+			if err := tx.Commit(); err != nil {
+				return err
+			}
 		}
 	}
-
-	return nil
 }
 
 // processDetectedChildren は検出された子供たちを処理するためのヘルパー関数です。
