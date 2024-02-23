@@ -60,7 +60,9 @@ class _AuthPageState extends State<AuthPage> {
       }
     } catch (error) {
       developer.log("Login Failed for error: ", error: error);
-      setState(() => _loginError = GuardianLoginError.invalidCredentials);
+      if (mounted) {
+        setState(() => _loginError = GuardianLoginError.invalidCredentials);
+      }
     }
   }
 
