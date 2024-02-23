@@ -29,18 +29,22 @@ class _BusSelectPageState extends State<BusSelectPage> {
       _selectedBus = NurseryBusData().getBusList().first;
       return NurseryBusData().getBusList();
     } else {
-      try {
-        GetBusListByNurseryIdResponse busList =
-            await getBusList(NurseryData().getNursery().id);
-        NurseryBusData().setBusListResponse(busList);
-        _selectedBus = busList.buses[0];
-        return NurseryBusData().getBusList();
-      } catch (error) {
-        if (kDebugMode) {
-          developer.log("バスのロード中にエラーが発生しました", error: error.toString());
-        }
-        throw Exception('バスのロードに失敗しました');
+      return _fetchBus();
+    }
+  }
+
+  Future<List<Bus>> _fetchBus() async {
+    try {
+      GetBusListByNurseryIdResponse busList =
+          await getBusList(NurseryData().getNursery().id);
+      NurseryBusData().setBusListResponse(busList);
+      _selectedBus = busList.buses[0];
+      return NurseryBusData().getBusList();
+    } catch (error) {
+      if (kDebugMode) {
+        developer.log("バスのロード中にエラーが発生しました", error: error.toString());
       }
+      throw Exception('バスのロードに失敗しました');
     }
   }
 
@@ -129,7 +133,7 @@ class _BusSelectPageState extends State<BusSelectPage> {
 
   Widget _proceedButton() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (_selectedBus != null) {
           Navigator.push(
             context,
@@ -140,6 +144,7 @@ class _BusSelectPageState extends State<BusSelectPage> {
               ),
             ),
           );
+          await _fetchBus();
         }
       },
       child: const Text("カメラ起動"),

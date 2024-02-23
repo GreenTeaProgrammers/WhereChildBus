@@ -96,20 +96,22 @@ class TrackBusContinuousResponse(_message.Message):
     def __init__(self, bus_id: _Optional[str] = ..., latitude: _Optional[float] = ..., longitude: _Optional[float] = ..., next_station_id: _Optional[str] = ...) -> None: ...
 
 class StreamBusVideoRequest(_message.Message):
-    __slots__ = ("bus_id", "bus_type", "vehicle_event", "video_chunk", "photo_height", "photo_width")
+    __slots__ = ("bus_id", "nursery_id", "bus_type", "vehicle_event", "video_chunk", "photo_height", "photo_width")
     BUS_ID_FIELD_NUMBER: _ClassVar[int]
+    NURSERY_ID_FIELD_NUMBER: _ClassVar[int]
     BUS_TYPE_FIELD_NUMBER: _ClassVar[int]
     VEHICLE_EVENT_FIELD_NUMBER: _ClassVar[int]
     VIDEO_CHUNK_FIELD_NUMBER: _ClassVar[int]
     PHOTO_HEIGHT_FIELD_NUMBER: _ClassVar[int]
     PHOTO_WIDTH_FIELD_NUMBER: _ClassVar[int]
     bus_id: str
+    nursery_id: str
     bus_type: _resources_pb2.BusType
     vehicle_event: _resources_pb2.VehicleEvent
     video_chunk: _containers.RepeatedScalarFieldContainer[bytes]
     photo_height: int
     photo_width: int
-    def __init__(self, bus_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ..., video_chunk: _Optional[_Iterable[bytes]] = ..., photo_height: _Optional[int] = ..., photo_width: _Optional[int] = ...) -> None: ...
+    def __init__(self, bus_id: _Optional[str] = ..., nursery_id: _Optional[str] = ..., bus_type: _Optional[_Union[_resources_pb2.BusType, str]] = ..., vehicle_event: _Optional[_Union[_resources_pb2.VehicleEvent, str]] = ..., video_chunk: _Optional[_Iterable[bytes]] = ..., photo_height: _Optional[int] = ..., photo_width: _Optional[int] = ...) -> None: ...
 
 class StreamBusVideoResponse(_message.Message):
     __slots__ = ("is_detected", "children")

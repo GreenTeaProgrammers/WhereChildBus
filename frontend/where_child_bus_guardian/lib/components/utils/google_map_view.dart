@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:developer' as developer;
+import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../../pages/map_page/map_page.dart';
+import 'package:where_child_bus_guardian/util/google_map_manager.dart';
 
 class GoogleMapView extends StatefulWidget {
   final List<Waypoint> waypoints;
@@ -26,26 +28,36 @@ class _GoogleMapView extends State<GoogleMapView> {
       const CameraPosition(target: LatLng(0.0, 0.0), zoom: 14);
 
   late GoogleMapController mapController;
-
+  Timer? _timer;
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
 
   @override
   void initState() {
     super.initState();
-    _addMarker(LatLng(widget.nurseryLatitude, widget.nurseryLongitude), "保育園",
-        BitmapDescriptor.defaultMarker);
 
-    _addMarker(LatLng(widget.busLatitude, widget.busLongitude), "バス",
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue));
+    if (mounted) {
+      setState(() {
+        _addMarker(LatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+            "保育園", BitmapDescriptor.defaultMarker);
 
-    widget.waypoints.forEach((Waypoint waypoint) {
-      _addMarker(LatLng(waypoint.latitude, waypoint.longitude), waypoint.name,
-          BitmapDescriptor.defaultMarkerWithHue(90));
-    });
+        _addMarker(LatLng(widget.busLatitude, widget.busLongitude), "バス",
+            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue));
+
+        widget.waypoints.forEach((Waypoint waypoint) {
+          _addMarker(LatLng(waypoint.latitude, waypoint.longitude),
+              waypoint.name, BitmapDescriptor.defaultMarkerWithHue(90));
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -55,83 +67,67 @@ class _GoogleMapView extends State<GoogleMapView> {
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: GoogleMap(
-                  initialCameraPosition: _initialLocation,
-                  mapType: MapType.normal,
-                  onMapCreated: (GoogleMapController controller) {
-                    mapController = controller;
-                    _getPolyline(widget.waypoints);
-                  },
-                  markers: Set<Marker>.of(markers.values),
-                  polylines: Set<Polyline>.of(polylines.values),
-                ))));
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: googleMapBody(),
+            )));
   }
 
-  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+  Widget googleMapBody() {
+    _addMarker(LatLng(widget.busLatitude, widget.busLongitude), "バス",
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue));
+
+    return GoogleMap(
+      initialCameraPosition: _initialLocation,
+      mapType: MapType.normal,
+      onMapCreated: (GoogleMapController controller) {
+        mapController = controller;
+        _getPolyline(widget.waypoints);
+      },
+      markers: Set<Marker>.of(markers.values),
+      polylines: Set<Polyline>.of(polylines.values),
+    );
+  }
+
+  void _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
     Marker marker =
         Marker(markerId: markerId, icon: descriptor, position: position);
-    markers[markerId] = marker;
+    setState(() {
+      markers[markerId] = marker;
+    });
   }
 
-  _addPolyline() {
+  void _addPolyline() {
     PolylineId id = const PolylineId('poly');
     Polyline polyline = Polyline(
         polylineId: id,
         color: Colors.blue,
         points: polylineCoordinates,
         width: 5);
-    polylines[id] = polyline;
-    setState(() {});
+    setState(() {
+      polylines[id] = polyline;
+    });
   }
 
-  _getPolyline(List<Waypoint> waypoints) async {
-    List<PolylineWayPoint> polylineWayPoints = waypoints
-        .map((waypoint) => PolylineWayPoint(
-            location: "${waypoint.latitude},${waypoint.longitude}"))
-        .toList();
+  void _getPolyline(List<Waypoint> waypoints) async {
     try {
-      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey,
-        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-        travelMode: TravelMode.driving,
-        avoidTolls: true,
-        avoidHighways: false,
-        avoidFerries: false,
-        wayPoints: polylineWayPoints,
+      polylineCoordinates = await GoogleMapAPIManager().getPolylinePoints(
+        startLat: widget.nurseryLatitude.toString(),
+        startLng: widget.nurseryLongitude.toString(),
+        endLat: widget.nurseryLatitude.toString(),
+        endLng: widget.nurseryLongitude.toString(),
+        waypoints: waypoints,
       );
-
-      if (result.points.isNotEmpty) {
-        result.points.forEach((PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        });
-      }
+      developer.log("polylineCoordinates: $polylineCoordinates",
+          name: "GetPolyline");
       _addPolyline();
     } catch (e) {
       print(e);
     }
 
-    if (polylineCoordinates.isNotEmpty) {
-      double minLat = polylineCoordinates.first.latitude;
-      double maxLat = polylineCoordinates.first.latitude;
-      double minLng = polylineCoordinates.first.longitude;
-      double maxLng = polylineCoordinates.first.longitude;
-
-      for (LatLng point in polylineCoordinates) {
-        if (point.latitude < minLat) minLat = point.latitude;
-        if (point.latitude > maxLat) maxLat = point.latitude;
-        if (point.longitude < minLng) minLng = point.longitude;
-        if (point.longitude > maxLng) maxLng = point.longitude;
-      }
-
-      LatLngBounds bounds = LatLngBounds(
-        southwest: LatLng(minLat, minLng),
-        northeast: LatLng(maxLat, maxLng),
-      );
-      mapController.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
-    }
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+        zoom: 14)));
   }
 }

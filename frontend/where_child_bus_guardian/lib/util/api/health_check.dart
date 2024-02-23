@@ -22,7 +22,8 @@ Future<PingResponse> serviceHealthCheck() async {
     return res;
   } catch (error) {
     developer.log('Caught error: $error');
-    await channel.shutdown();
     return Future.error(error);
+  } finally {
+    await channel.shutdown();
   }
 }

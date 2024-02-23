@@ -36,7 +36,7 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       if (kDebugMode) {
-        res = await guardianLogin("guardian1@example.com", "password");
+        res = await guardianLogin("hogosya1@example.com", "password");
       } else {
         res = await guardianLogin(
             _emailController.text, _passwordController.text);
@@ -60,7 +60,9 @@ class _AuthPageState extends State<AuthPage> {
       }
     } catch (error) {
       developer.log("Login Failed for error: ", error: error);
-      setState(() => _loginError = GuardianLoginError.invalidCredentials);
+      if (mounted) {
+        setState(() => _loginError = GuardianLoginError.invalidCredentials);
+      }
     }
   }
 
@@ -85,7 +87,7 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget titleText() => const Padding(
         padding: EdgeInsets.only(bottom: 32),
-        child: Text('WhereChildBus',
+        child: Text('ほいくるーず',
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
       );
 
