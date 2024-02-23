@@ -2,7 +2,10 @@ import "dart:developer" as developer;
 import "package:flutter/foundation.dart";
 import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
+import "package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart";
+import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus_route.pb.dart";
+import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus_route.pbgrpc.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 Future<T> performGrpcCall<T>(
@@ -36,12 +39,11 @@ Future<GetBusListByNurseryIdResponse> getBusListByNurseryId(
 }
 
 Future<CreateBusResponse> createBus(
-    String nurseryId,
-    String name,
-    String plateNumber,
-    Iterable<String> morningGuardianIds,
-    Iterable<String> eveningGuardianIds) async {
-  return performGrpcCall((client) async {
+  String nurseryId,
+  String name,
+  String plateNumber,
+) async {
+  return await performGrpcCall((client) async {
     var req = CreateBusRequest(
       nurseryId: nurseryId,
       name: name,
@@ -69,6 +71,35 @@ Future<ChangeBusStatusResponse> updateBusStatus(
     developer.log("Request: $req");
     return client.changeBusStatus(req);
   });
+}
+
+Future<UpdateBusResponse> updateNextStation(
+  String busId,
+  String nextStationId,
+) async {
+  FieldMask updateMask = FieldMask()..paths.add("next_station_id");
+  final channel = ClientChannel(
+    appConfig.grpcEndpoint,
+    port: appConfig.grpcPort,
+  );
+  final grpcClient = BusServiceClient(channel);
+
+  try {
+    var req = UpdateBusRequest(
+      busId: busId,
+      nextStationId: nextStationId,
+      updateMask: updateMask,
+    );
+    var res = await grpcClient.updateBus(req);
+    developer.log("Request: $req", name: "updateNextStation");
+    developer.log("Response: $res", name: "updateNextStation");
+    return res;
+  } catch (error) {
+    developer.log("Caught Error:", error: error, name: "updateNextStation");
+    return Future.error(error);
+  } finally {
+    await channel.shutdown();
+  }
 }
 
 Future<void> streamBusVideo(Stream<StreamBusVideoRequest> requestStream) async {

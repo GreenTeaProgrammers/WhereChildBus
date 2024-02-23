@@ -9,6 +9,7 @@ import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_guardian_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
+import 'package:where_child_bus/service/create_bus.dart';
 import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus/util/validation/create_bus_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
@@ -87,7 +88,7 @@ class _BusEditPageState extends State<BusEditPage> {
     }
 
     try {
-      var res = await createBus(
+      var res = await createBusService(
         NurseryData().getNursery().id,
         _busNameController.text,
         _busNumberController.text,
