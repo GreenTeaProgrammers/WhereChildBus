@@ -13,23 +13,21 @@ class ConfirmButton extends StatelessWidget {
   }
 
   Widget confirmButton(BuildContext context) {
-    return Expanded(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.6,
-            height: fontSize * 2,
-            child: ElevatedButton(
-              onPressed: onTap ?? () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-              ),
-              child: Text(
-                buttonText,
-                style: buttonTextStyle(),
-              ),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.6,
+          height: fontSize * 2,
+          child: ElevatedButton(
+            onPressed: onTap ?? () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+            ),
+            child: Text(
+              buttonText,
+              style: buttonTextStyle(),
             ),
           ),
         ),
