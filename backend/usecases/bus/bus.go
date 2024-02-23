@@ -496,11 +496,14 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 				return err
 			}
 
-			err = i.processDetectedChildren(tx, stream, resp, busID, vehicleEvent)
-			if err != nil {
-				utils.RollbackTx(tx, i.logger)
-				return err
-			}
+			go func() {
+				i.logger.Info("processing detected children", "bus_id", busID, "vehicle_event", vehicleEvent)
+				err = i.processDetectedChildren(tx, ctx, stream, resp, busID, vehicleEvent)
+				if err != nil {
+					utils.RollbackTx(tx, i.logger)
+					return
+				}
+			}()
 
 			if err := tx.Commit(); err != nil {
 				return err
@@ -510,7 +513,8 @@ func (i *Interactor) StreamBusVideo(stream pb.BusService_StreamBusVideoServer) e
 }
 
 // processDetectedChildren は検出された子供たちを処理するためのヘルパー関数です。
-func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_StreamBusVideoServer, resp *mlv1.PredResponse, busID string, vehicleEvent pb.VehicleEvent) error {
+func (i *Interactor) processDetectedChildren(tx *ent.Tx, ctx context.Context, stream pb.BusService_StreamBusVideoServer, resp *mlv1.PredResponse, busID string, vehicleEvent pb.VehicleEvent) error {
+	i.logger.Info("called processDetectedChildren")
 	var pbChildren []*pb.Child
 	busUUID := uuid.MustParse(busID)
 	for _, childId := range resp.ChildIds {
@@ -520,10 +524,11 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 		exists, err := tx.BoardingRecord.Query().
 			Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))).
 			Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).
-			Exist(context.Background())
+			Exist(ctx)
 		if err != nil {
 			return err
 		}
+		i.logger.Info("exists", exists, "child_id", childUUID, "bus_id", busUUID)
 
 		if !exists {
 			_, err = tx.BoardingRecord.Create().
@@ -531,7 +536,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 				SetBusID(busUUID).
 				SetIsBoarding(false).
 				SetTimestamp(time.Now()).
-				Save(context.Background())
+				Save(ctx)
 			if err != nil {
 				return err
 			}
@@ -540,7 +545,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 		boardingrecord, err := tx.BoardingRecord.Query().
 			Where(boardingrecordRepo.HasChildWith(childRepo.IDEQ(childUUID))).
 			Where(boardingrecordRepo.HasBusWith(busRepo.IDEQ(busUUID))).
-			Only(context.Background())
+			Only(ctx)
 		if err != nil {
 			return err
 		}
@@ -554,7 +559,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 			_, err = tx.BoardingRecord.UpdateOneID(boardingrecord.ID).
 				SetIsBoarding(true).
 				SetTimestamp(time.Now()).
-				Save(context.Background())
+				Save(ctx)
 		case pb.VehicleEvent_VEHICLE_EVENT_GET_OFF:
 			if !boardingrecord.IsBoarding {
 				continue
@@ -562,7 +567,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 			_, err = tx.BoardingRecord.UpdateOneID(boardingrecord.ID).
 				SetIsBoarding(false).
 				SetTimestamp(time.Now()).
-				Save(context.Background())
+				Save(ctx)
 		default:
 			return fmt.Errorf("invalid vehicle event: %v", vehicleEvent)
 		}
@@ -570,16 +575,20 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, stream pb.BusService_St
 			return err
 		}
 
+		i.logger.Info("updated boarding record", "child_id", childUUID, "bus_id", busUUID, "is_boarding", boardingrecord.IsBoarding, "vehicle_event", vehicleEvent)
+
 		// 子供の情報を取得してレスポンスに追加
 		child, err := tx.Child.Query().
 			Where(childRepo.IDEQ(childUUID)).
 			WithGuardian().
-			Only(context.Background())
+			Only(ctx)
 		if err != nil {
 			return err
 		}
 		pbChildren = append(pbChildren, utils.ToPbChild(child))
 	}
+
+	i.logger.Info("sending response to client", "bus_id", busUUID, "vehicle_event", vehicleEvent, "children", pbChildren)
 
 	// 元のクライアントにレスポンスを返す
 	err := stream.SendMsg(&pb.StreamBusVideoResponse{
