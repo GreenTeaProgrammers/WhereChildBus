@@ -53,6 +53,10 @@ class _InputFormBodyState extends State<InputFormBody> {
     try {
       await _loadGuardians();
       await _loadBuses();
+      if (widget.isEdit == false) {
+        _onGuardianSelected(guardians[0]);
+        _onSexSelected("男");
+      }
     } catch (error) {
       developer.log("Caught Error", error: error.toString());
     }
@@ -317,6 +321,9 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Widget submitButton() {
-    return SubmitButton(onPressed: widget.isEdit ? () {} : _createChild);
+    return SubmitButton(
+        onPressed: widget.isEdit
+            ? () => developer.log("UnImplemented", name: "updateChild")
+            : _createChild);
   }
 }
