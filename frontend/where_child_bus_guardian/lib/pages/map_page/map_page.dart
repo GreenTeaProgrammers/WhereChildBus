@@ -79,7 +79,7 @@ class _MapPageState extends State<MapPage> {
           developer.log("$busLatitude, $busLongitude",
               name: "TrackBusContinuous");
         });
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 1));
       }
     } catch (error) {
       developer.log("Caught Error", error: error);
@@ -135,7 +135,9 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _loadStationsData() async {
     try {
-      var busType = BusType.BUS_TYPE_EVENING;
+      var busType = DateTime.now().hour <= 12
+          ? BusType.BUS_TYPE_MORNING
+          : BusType.BUS_TYPE_EVENING;
       developer.log('停留所リストの読み込み開始');
       var busRouteRes = await getBusRouteByBusService(bus.id, busType);
       if (mounted) {
