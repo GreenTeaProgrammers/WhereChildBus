@@ -77,6 +77,7 @@ message TrackBusContinuousResponse {
 
 message StreamBusVideoRequest {
         string bus_id = 1;
+        string nursery_id = 2;
         BusType bus_type = 3;
         VehicleEvent vehicle_event = 4;
         repeated bytes video_chunk = 5; // Chunk of video data
