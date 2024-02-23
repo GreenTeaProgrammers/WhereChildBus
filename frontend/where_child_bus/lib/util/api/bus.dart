@@ -128,7 +128,7 @@ Future<void> streamBusVideo(Stream<StreamBusVideoRequest> requestStream) async {
 
   try {
     developer.log("Streamed video to server");
-    await for (var response in res.asStream()) {
+    await for (var response in res) {
       developer.log("Received response: $response");
     }
   } catch (error) {
