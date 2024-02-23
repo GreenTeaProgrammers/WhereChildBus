@@ -402,7 +402,7 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 	}
 
 	// 送信間隔の設定（例えば、5秒ごと）
-	ticker := time.NewTicker(1 * time.Second)
+	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
 	for {
@@ -431,7 +431,6 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 			}); err != nil {
 				return fmt.Errorf("failed to send bus: %w", err)
 			}
-			i.logger.Info("sent bus location", "bus_id", busID, "latitude", bus.Latitude, "longitude", bus.Longitude)
 		}
 	}
 }
