@@ -30,8 +30,8 @@ class ArrivalTime extends StatefulWidget {
 }
 
 class _ArrivalTimeState extends State<ArrivalTime> {
-  String arrivalTimeText = "Loading";
-  String arrivalTimeAndCurrentText = "Loading";
+  String arrivalTimeText = "Loading...";
+  String arrivalTimeAndCurrentText = "Loading...";
   Timer? _timer;
   double nextStationLatitude = 0.0, nextStationLongitude = 0.0;
 
@@ -88,14 +88,19 @@ class _ArrivalTimeState extends State<ArrivalTime> {
                 "到着まで",
                 style: const TextStyle(fontSize: 20),
               ),
-              Text("${arrivalTimeText}分", style: const TextStyle(fontSize: 30))
+              Text("${arrivalTimeText}分",
+                  style: arrivalTimeText == "Loading..."
+                      ? const TextStyle(fontSize: 20)
+                      : const TextStyle(fontSize: 30))
             ],
           ),
           Column(
             children: <Widget>[
               Text("到着予定時刻", style: const TextStyle(fontSize: 20)),
               Text("${arrivalTimeAndCurrentText}",
-                  style: const TextStyle(fontSize: 30))
+                  style: arrivalTimeAndCurrentText == "Loading..."
+                      ? const TextStyle(fontSize: 20)
+                      : const TextStyle(fontSize: 30))
             ],
           ),
         ]);
@@ -117,7 +122,7 @@ class _ArrivalTimeState extends State<ArrivalTime> {
       developer.log("durationInSeconds: $durationInSeconds",
           name: "ArrivalTime");
 
-      // 成功した取得のみで値を更新
+      // 成功した取得のみで値を更新 失敗したときは前回の値を保持したままにする
       if (durationInSeconds != null) {
         if (mounted) {
           setState(() {
@@ -129,10 +134,8 @@ class _ArrivalTimeState extends State<ArrivalTime> {
           });
         }
       }
-      // durationInSecondsがnullの場合や例外が発生した場合は、値を更新しない
     } catch (e) {
       developer.log('到着時間の取得中にエラーが発生しました', error: e, name: "ArrivalTimeError");
-      // エラーが発生しても、到着時間のテキストを更新しない
     }
   }
 }
