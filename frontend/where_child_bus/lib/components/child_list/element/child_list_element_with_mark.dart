@@ -6,6 +6,7 @@ class ChildListElementWithMark extends StatefulWidget {
   final String title;
   final String subtitle;
   final ChildPhoto image;
+  final bool isInBus;
   final VoidCallback? onTap;
 
   const ChildListElementWithMark({
@@ -13,6 +14,7 @@ class ChildListElementWithMark extends StatefulWidget {
     required this.title,
     required this.subtitle,
     required this.image,
+    required this.isInBus,
     this.onTap,
   }) : super(key: key);
 
@@ -22,7 +24,6 @@ class ChildListElementWithMark extends StatefulWidget {
 }
 
 class _ChildListElementWithMarkState extends State<ChildListElementWithMark> {
-  //TODO:将来的にはChildのListを受け取ってマークを動的に変える
   @override
   Widget build(BuildContext context) {
     // ChildListElementを再利用して、actionButtonとしてmarkを渡す
@@ -33,7 +34,7 @@ class _ChildListElementWithMarkState extends State<ChildListElementWithMark> {
       onTap: widget.onTap,
       actionButton: Padding(
         padding: const EdgeInsets.only(left: 16), // マークと他の要素との間隔を調整
-        child: markRide(),
+        child: widget.isInBus ? markRide() : markNotRide(),
       ),
     );
   }
@@ -42,7 +43,15 @@ class _ChildListElementWithMarkState extends State<ChildListElementWithMark> {
     return const SizedBox(
       width: 100,
       height: 100,
-      child: Card(),
+      child: Card(
+        child: Center(
+          child: Icon(
+            Icons.circle,
+            size: 50,
+            color: Colors.green,
+          ),
+        ),
+      ),
     );
   }
 
@@ -50,7 +59,15 @@ class _ChildListElementWithMarkState extends State<ChildListElementWithMark> {
     return const SizedBox(
       width: 100,
       height: 100,
-      child: Card(),
+      child: Card(
+        child: Center(
+          child: Icon(
+            Icons.close,
+            size: 50,
+            color: Colors.red,
+          ),
+        ),
+      ),
     );
   }
 }

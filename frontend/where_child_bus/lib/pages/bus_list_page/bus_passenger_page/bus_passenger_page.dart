@@ -1,8 +1,18 @@
 import "dart:developer" as developer;
 import "package:flutter/material.dart";
 import "package:where_child_bus/components/child_list/child_list_with_mark.dart";
+import "package:where_child_bus/service/check_child_in_bus.dart";
 import "package:where_child_bus/service/get_child_list_by_bus_id.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
+
+class ChildrenAndPhotos {
+  final List<Child> children;
+  final List<ChildPhoto> photos;
+  final List<bool> isInBus;
+
+  ChildrenAndPhotos(
+      {required this.children, required this.photos, required this.isInBus});
+}
 
 class BusPassengerPage extends StatefulWidget {
   final Bus bus;
@@ -14,66 +24,63 @@ class BusPassengerPage extends StatefulWidget {
 }
 
 class _BusPassengerPage extends State<BusPassengerPage> {
-  List<Child> _childList = [];
-  List<ChildPhoto> _images = [];
-  bool _isLoading = false;
+  late Future<ChildrenAndPhotos> _childrenFuture;
 
-  Future<void> _loadChildren() async {
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-
+  Future<ChildrenAndPhotos> _loadChildren() async {
     try {
       var res = await getChildListByBusIDService(widget.bus.id);
-      if (mounted) {
-        setState(() {
-          _childList = res.children;
-          _images = res.photos;
-          _isLoading = false;
-        });
+      List<bool> isInBus = [];
+      List<ChildPhoto> photos = [];
+      photos = res.photos;
+
+      for (var child in res.children) {
+        var res = await checkIsChildInBusService(child.id);
+        isInBus.add(res.isInBus);
       }
+
+      developer.log("園児のロードが完了しました", name: "LoadChildren");
+      return ChildrenAndPhotos(
+          children: res.children, photos: photos, isInBus: isInBus);
     } catch (e) {
       developer.log("園児のロード中にエラーが発生しました: $e", name: "LoadChildren");
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      throw Exception('Failed to load children');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _loadChildren();
+    _childrenFuture = _loadChildren();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pageAppBar(),
-      body: pageBody(),
+      appBar: AppBar(
+        title: const Text("乗客情報"),
+      ),
+      body: FutureBuilder<ChildrenAndPhotos>(
+        future: _childrenFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('エラーが発生しました: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            return ChildListWithMark(
+              childNames:
+                  snapshot.data!.children.map((child) => child.name).toList(),
+              groupNames: snapshot.data!.children
+                  .map((child) => child.age.toString())
+                  .toList(),
+              isInBus: snapshot.data!.isInBus,
+              images: snapshot.data!.photos,
+            );
+          } else {
+            return const Text("データがありません");
+          }
+        },
+      ),
     );
-  }
-
-  AppBar pageAppBar() {
-    return AppBar(
-      title: const Text("乗客情報"),
-    );
-  }
-
-  Widget pageBody() {
-    return _isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : ChildListWithMark(
-            childNames: _childList.map((child) => child.name).toList(),
-            groupNames:
-                _childList.map((child) => child.age.toString()).toList(),
-            images: _images);
   }
 }
