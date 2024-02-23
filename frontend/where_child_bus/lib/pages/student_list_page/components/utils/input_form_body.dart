@@ -64,49 +64,33 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Future<void> _loadGuardians() async {
-    if (NurseryGuardianData().getGuardianList().isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          guardians = NurseryGuardianData().getGuardianList();
-        });
-      }
-      return;
-    } else {
-      try {
-        var res = await getGuardianListByNurseryIdService(
-            NurseryData().getNursery().id);
-        NurseryGuardianData().setGuardianListResponse(res);
-        setState(() {
-          guardians = NurseryGuardianData().getGuardianList();
-        });
-      } catch (error) {
-        developer.log("Caught Error", error: error.toString());
-        setState(() {
-          guardians = [];
-        });
-      }
+    try {
+      var res = await getGuardianListByNurseryIdService(
+          NurseryData().getNursery().id);
+      NurseryGuardianData().setGuardianListResponse(res);
+      setState(() {
+        guardians = NurseryGuardianData().getGuardianList();
+      });
+    } catch (error) {
+      developer.log("Caught Error", error: error.toString());
+      setState(() {
+        guardians = [];
+      });
     }
   }
 
   Future<void> _loadBuses() async {
-    if (NurseryBusData().getBusList().isNotEmpty) {
+    try {
+      var res = await getBusList(NurseryData().getNursery().id);
+      NurseryBusData().setBusListResponse(res);
       setState(() {
         buses = NurseryBusData().getBusList();
       });
-      return;
-    } else {
-      try {
-        var res = await getBusList(NurseryData().getNursery().id);
-        NurseryBusData().setBusListResponse(res);
-        setState(() {
-          buses = NurseryBusData().getBusList();
-        });
-      } catch (error) {
-        developer.log("Caught Error", error: error.toString());
-        setState(() {
-          buses = [];
-        });
-      }
+    } catch (error) {
+      developer.log("Caught Error", error: error.toString());
+      setState(() {
+        buses = [];
+      });
     }
   }
 
