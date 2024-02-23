@@ -4,8 +4,6 @@ import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
 import "package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart";
-import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus_route.pb.dart";
-import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus_route.pbgrpc.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 Future<T> performGrpcCall<T>(

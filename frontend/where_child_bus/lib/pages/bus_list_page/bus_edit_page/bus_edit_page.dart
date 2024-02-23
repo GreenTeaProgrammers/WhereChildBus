@@ -62,12 +62,13 @@ class _BusEditPageState extends State<BusEditPage> {
         _createBusError = CreateBusError.fieldsNotFilled;
       });
       return true;
-    } else if (CreateBusValidator.validateGuardians(
-        morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
-      setState(() {
-        _createBusError = CreateBusError.noGuardiansSelected;
-      });
-      return true;
+      //Note 今のところ保護者が選択されていなくても作成できる
+      // } else if (CreateBusValidator.validateGuardians(
+      //     morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
+      //   setState(() {
+      //     _createBusError = CreateBusError.noGuardiansSelected;
+      //   });
+      // return true;
     } else if (CreateBusValidator.validateNameLength(_busNameController.text)) {
       setState(() {
         _createBusError = CreateBusError.nameTooLong;
