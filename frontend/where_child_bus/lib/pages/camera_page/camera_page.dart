@@ -170,24 +170,46 @@ class _CameraPageState extends State<CameraPage> {
     return grayscaleBytes;
   }
 
-  List<int> _rotateImageLeft90Degrees(
-      int width, int height, List<int> grayscaleBytes) {
-    List<int> rotatedGrayscaleBytes = List.filled(width * height, 0);
+  List<int> _rotateRGBAImage90DegreesLeft(
+      List<int> rgbaBytes, int width, int height) {
+    int rotatedWidth = height;
+    int rotatedHeight = width;
+    List<int> rotatedBytes = List.filled(rotatedWidth * rotatedHeight * 4, 0);
 
     for (int originalY = 0; originalY < height; originalY++) {
       for (int originalX = 0; originalX < width; originalX++) {
-        // 元の位置のインデックス
-        int originalIndex = originalY * width + originalX;
-        // 回転後の位置のインデックス
+        int originalIndex = (originalY * width + originalX) * 4;
         int rotatedX = originalY;
-        int rotatedY = width - originalX - 1;
-        int rotatedIndex = rotatedY * height + rotatedX;
-        // 輝度値を新しい位置にコピー
-        rotatedGrayscaleBytes[rotatedIndex] = grayscaleBytes[originalIndex];
+        int rotatedY = width - 1 - originalX;
+        int rotatedIndex = (rotatedY * rotatedWidth + rotatedX) * 4;
+
+        rotatedBytes[rotatedIndex] = rgbaBytes[originalIndex]; // R
+        rotatedBytes[rotatedIndex + 1] = rgbaBytes[originalIndex + 1]; // G
+        rotatedBytes[rotatedIndex + 2] = rgbaBytes[originalIndex + 2]; // B
+        rotatedBytes[rotatedIndex + 3] = rgbaBytes[originalIndex + 3]; // A
       }
     }
 
-    return rotatedGrayscaleBytes;
+    return rotatedBytes;
+  }
+
+  List<int> _convertRGBAToGrayscale(
+      List<int> rgbaBytes, int width, int height) {
+    List<int> grayscaleBytes = List.filled(width * height, 0);
+
+    for (int i = 0; i < rgbaBytes.length; i += 4) {
+      int r = rgbaBytes[i];
+      int g = rgbaBytes[i + 1];
+      int b = rgbaBytes[i + 2];
+      // アルファチャンネル(rgbaBytes[i + 3])はグレースケール変換には不要なので無視
+
+      // 輝度値(Y)の計算
+      int yValue = (0.299 * r + 0.587 * g + 0.114 * b).round();
+      // グレースケール画像の各ピクセルに輝度値を設定
+      grayscaleBytes[i ~/ 4] = yValue;
+    }
+
+    return grayscaleBytes;
   }
 
   void _startImageStream() async {
@@ -200,8 +222,11 @@ class _CameraPageState extends State<CameraPage> {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
           } else if (Platform.isIOS) {
-            videoChunks.add(_rotateImageLeft90Degrees(
-                image.width, image.height, _processCameraImage2gray(image)));
+            videoChunks.add((_convertRGBAToGrayscale(
+                _rotateRGBAImage90DegreesLeft(
+                    image.planes[0].bytes.toList(), image.width, image.height),
+                image.width,
+                image.height)));
           }
 
           _streamController.add(StreamBusVideoRequest(
