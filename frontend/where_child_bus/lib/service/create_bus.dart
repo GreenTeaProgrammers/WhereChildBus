@@ -10,10 +10,13 @@ Future<CreateBusResponse> createBusService(
     Iterable<String> eveningGuardianIds) async {
   try {
     var res = await createBus(nurseryId, name, plateNumber);
-    await createMorningBusRoute(
-        res.bus, nurseryId, morningGuardianIds, eveningGuardianIds);
-    await createEveningBusRoute(
-        res.bus, nurseryId, morningGuardianIds, eveningGuardianIds);
+    if (morningGuardianIds.isNotEmpty) {
+      await createMorningBusRoute(
+          res.bus, nurseryId, morningGuardianIds, eveningGuardianIds);
+    } else if (eveningGuardianIds.isNotEmpty) {
+      await createEveningBusRoute(
+          res.bus, nurseryId, morningGuardianIds, eveningGuardianIds);
+    }
     return res;
   } catch (error) {
     return Future.error(error);
