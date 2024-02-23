@@ -729,6 +729,7 @@ class TrackBusContinuousResponse extends $pb.GeneratedMessage {
 class StreamBusVideoRequest extends $pb.GeneratedMessage {
   factory StreamBusVideoRequest({
     $core.String? busId,
+    $core.String? nurseryId,
     $9.BusType? busType,
     $9.VehicleEvent? vehicleEvent,
     $core.Iterable<$core.List<$core.int>>? videoChunk,
@@ -738,6 +739,9 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
     final $result = create();
     if (busId != null) {
       $result.busId = busId;
+    }
+    if (nurseryId != null) {
+      $result.nurseryId = nurseryId;
     }
     if (busType != null) {
       $result.busType = busType;
@@ -762,6 +766,7 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamBusVideoRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'where_child_bus.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'busId')
+    ..aOS(2, _omitFieldNames ? '' : 'nurseryId')
     ..e<$9.BusType>(3, _omitFieldNames ? '' : 'busType', $pb.PbFieldType.OE, defaultOrMaker: $9.BusType.BUS_TYPE_UNSPECIFIED, valueOf: $9.BusType.valueOf, enumValues: $9.BusType.values)
     ..e<$9.VehicleEvent>(4, _omitFieldNames ? '' : 'vehicleEvent', $pb.PbFieldType.OE, defaultOrMaker: $9.VehicleEvent.VEHICLE_EVENT_UNSPECIFIED, valueOf: $9.VehicleEvent.valueOf, enumValues: $9.VehicleEvent.values)
     ..p<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'videoChunk', $pb.PbFieldType.PY)
@@ -800,42 +805,51 @@ class StreamBusVideoRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearBusId() => clearField(1);
 
+  @$pb.TagNumber(2)
+  $core.String get nurseryId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set nurseryId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasNurseryId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNurseryId() => clearField(2);
+
   @$pb.TagNumber(3)
-  $9.BusType get busType => $_getN(1);
+  $9.BusType get busType => $_getN(2);
   @$pb.TagNumber(3)
   set busType($9.BusType v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasBusType() => $_has(1);
+  $core.bool hasBusType() => $_has(2);
   @$pb.TagNumber(3)
   void clearBusType() => clearField(3);
 
   @$pb.TagNumber(4)
-  $9.VehicleEvent get vehicleEvent => $_getN(2);
+  $9.VehicleEvent get vehicleEvent => $_getN(3);
   @$pb.TagNumber(4)
   set vehicleEvent($9.VehicleEvent v) { setField(4, v); }
   @$pb.TagNumber(4)
-  $core.bool hasVehicleEvent() => $_has(2);
+  $core.bool hasVehicleEvent() => $_has(3);
   @$pb.TagNumber(4)
   void clearVehicleEvent() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<$core.List<$core.int>> get videoChunk => $_getList(3);
+  $core.List<$core.List<$core.int>> get videoChunk => $_getList(4);
 
   @$pb.TagNumber(6)
-  $core.int get photoHeight => $_getIZ(4);
+  $core.int get photoHeight => $_getIZ(5);
   @$pb.TagNumber(6)
-  set photoHeight($core.int v) { $_setSignedInt32(4, v); }
+  set photoHeight($core.int v) { $_setSignedInt32(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasPhotoHeight() => $_has(4);
+  $core.bool hasPhotoHeight() => $_has(5);
   @$pb.TagNumber(6)
   void clearPhotoHeight() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.int get photoWidth => $_getIZ(5);
+  $core.int get photoWidth => $_getIZ(6);
   @$pb.TagNumber(7)
-  set photoWidth($core.int v) { $_setSignedInt32(5, v); }
+  set photoWidth($core.int v) { $_setSignedInt32(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasPhotoWidth() => $_has(5);
+  $core.bool hasPhotoWidth() => $_has(6);
   @$pb.TagNumber(7)
   void clearPhotoWidth() => clearField(7);
 }

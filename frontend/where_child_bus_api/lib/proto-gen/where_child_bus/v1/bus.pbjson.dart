@@ -181,6 +181,7 @@ const StreamBusVideoRequest$json = {
   '1': 'StreamBusVideoRequest',
   '2': [
     {'1': 'bus_id', '3': 1, '4': 1, '5': 9, '10': 'busId'},
+    {'1': 'nursery_id', '3': 2, '4': 1, '5': 9, '10': 'nurseryId'},
     {'1': 'bus_type', '3': 3, '4': 1, '5': 14, '6': '.where_child_bus.v1.BusType', '10': 'busType'},
     {'1': 'vehicle_event', '3': 4, '4': 1, '5': 14, '6': '.where_child_bus.v1.VehicleEvent', '10': 'vehicleEvent'},
     {'1': 'video_chunk', '3': 5, '4': 3, '5': 12, '10': 'videoChunk'},
@@ -191,11 +192,12 @@ const StreamBusVideoRequest$json = {
 
 /// Descriptor for `StreamBusVideoRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamBusVideoRequestDescriptor = $convert.base64Decode(
-    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBI2CghidXNfdH'
-    'lwZRgDIAEoDjIbLndoZXJlX2NoaWxkX2J1cy52MS5CdXNUeXBlUgdidXNUeXBlEkUKDXZlaGlj'
-    'bGVfZXZlbnQYBCABKA4yIC53aGVyZV9jaGlsZF9idXMudjEuVmVoaWNsZUV2ZW50Ugx2ZWhpY2'
-    'xlRXZlbnQSHwoLdmlkZW9fY2h1bmsYBSADKAxSCnZpZGVvQ2h1bmsSIQoMcGhvdG9faGVpZ2h0'
-    'GAYgASgFUgtwaG90b0hlaWdodBIfCgtwaG90b193aWR0aBgHIAEoBVIKcGhvdG9XaWR0aA==');
+    'ChVTdHJlYW1CdXNWaWRlb1JlcXVlc3QSFQoGYnVzX2lkGAEgASgJUgVidXNJZBIdCgpudXJzZX'
+    'J5X2lkGAIgASgJUgludXJzZXJ5SWQSNgoIYnVzX3R5cGUYAyABKA4yGy53aGVyZV9jaGlsZF9i'
+    'dXMudjEuQnVzVHlwZVIHYnVzVHlwZRJFCg12ZWhpY2xlX2V2ZW50GAQgASgOMiAud2hlcmVfY2'
+    'hpbGRfYnVzLnYxLlZlaGljbGVFdmVudFIMdmVoaWNsZUV2ZW50Eh8KC3ZpZGVvX2NodW5rGAUg'
+    'AygMUgp2aWRlb0NodW5rEiEKDHBob3RvX2hlaWdodBgGIAEoBVILcGhvdG9IZWlnaHQSHwoLcG'
+    'hvdG9fd2lkdGgYByABKAVSCnBob3RvV2lkdGg=');
 
 @$core.Deprecated('Use streamBusVideoResponseDescriptor instead')
 const StreamBusVideoResponse$json = {
