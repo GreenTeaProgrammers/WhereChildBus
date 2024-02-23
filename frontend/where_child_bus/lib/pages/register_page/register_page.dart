@@ -66,11 +66,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       CreateNurseryResponse res = await createNursery(
-        _nameController.text,
         _emailController.text,
         _passwordController.text,
         _phoneNumberController.text,
         _addressController.text,
+        _nameController.text,
       );
 
       NurseryData().setNursery(res.nursery);
