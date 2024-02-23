@@ -4,8 +4,6 @@ import "package:grpc/grpc.dart";
 import "package:where_child_bus/config/config.dart";
 import "package:where_child_bus_api/proto-gen/google/protobuf/field_mask.pb.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart";
-import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus_route.pb.dart";
-import "package:where_child_bus_api/proto-gen/where_child_bus/v1/bus_route.pbgrpc.dart";
 import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 Future<T> performGrpcCall<T>(
@@ -50,6 +48,22 @@ Future<CreateBusResponse> createBus(
       plateNumber: plateNumber,
     );
     return client.createBus(req);
+  });
+}
+
+Future<UpdateBusResponse> updateBus(
+    String busId, String busName, String plateNumber) async {
+  return await performGrpcCall((client) async {
+    var req = UpdateBusRequest(
+      busId: busId,
+      name: busName,
+      plateNumber: plateNumber,
+      updateMask: FieldMask()
+        ..paths.add("name")
+        ..paths.add("plate_number")
+        ..paths.add("bus_id"),
+    );
+    return client.updateBus(req);
   });
 }
 

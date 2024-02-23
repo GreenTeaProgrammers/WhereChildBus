@@ -2,14 +2,14 @@ import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus/util/api/busRoute.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 
-Future<CreateBusResponse> createBusService(
+Future<UpdateBusResponse> updateBusService(
     String nurseryId,
     String name,
     String plateNumber,
     Iterable<String> morningGuardianIds,
     Iterable<String> eveningGuardianIds) async {
   try {
-    var res = await createBus(nurseryId, name, plateNumber);
+    var res = await updateBus(nurseryId, name, plateNumber);
     if (morningGuardianIds.isNotEmpty) {
       await createMorningBusRoute(
           res.bus, nurseryId, morningGuardianIds, eveningGuardianIds);
