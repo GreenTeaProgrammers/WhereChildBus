@@ -11,6 +11,7 @@ class GoogleMapAPIManager {
   static final GoogleMapAPIManager _instance = GoogleMapAPIManager._internal();
   final String googleApiKey;
   Map<String, DateTime> _lastApiCallTimestamps = {};
+  bool isFirstTime = true;
 
   GoogleMapAPIManager._internal()
       : googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
@@ -18,7 +19,6 @@ class GoogleMapAPIManager {
   factory GoogleMapAPIManager() {
     return _instance;
   }
-
   // APIリクエストの頻度を制限するメソッド
   void _throttleApiCall(String apiName) {
     if (_lastApiCallTimestamps.containsKey(apiName)) {
@@ -52,9 +52,14 @@ class GoogleMapAPIManager {
     required String endLng,
     String waypoints = '',
   }) async {
-    String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=$startLat,$startLng&destination=$endLat,$endLng&waypoints=optimize:true|$waypoints&key=$googleApiKey';
+    developer.log(
+        '${startLat}, ${startLng}, ${endLat}, ${endLng}, ${waypoints}',
+        name: 'getDirections');
+    String url = waypoints == ''
+        ? 'https://maps.googleapis.com/maps/api/directions/json?origin=$startLat,$startLng&destination=$endLat,$endLng&key=$googleApiKey'
+        : 'https://maps.googleapis.com/maps/api/directions/json?origin=$startLat,$startLng&destination=$endLat,$endLng&waypoints=$waypoints&key=$googleApiKey';
     final response = await _fetchFromGoogleAPI(url, 'getDirections');
+    developer.log('${response.body}', name: "googleMapManager getDirections");
     return json.decode(response.body);
   }
 
