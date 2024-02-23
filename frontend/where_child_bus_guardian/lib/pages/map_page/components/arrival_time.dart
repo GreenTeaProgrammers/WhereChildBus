@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import "dart:developer" as developer;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:async';
 import '../map_page.dart';
 import 'package:intl/intl.dart';
-import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
-import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
+import 'package:where_child_bus_guardian/util/google_map_manager.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class ArrivalTime extends StatefulWidget {
@@ -35,11 +31,8 @@ class ArrivalTime extends StatefulWidget {
 }
 
 class _ArrivalTimeState extends State<ArrivalTime> {
-  String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
   String arrivalTime = "Loading...";
   Timer? _timer;
-  double morningFirstStationLatitude = 0.0, morningFirstStationLongitude = 0.0;
-  double eveningFirstStationLatitude = 0.0, eveningFirstStationLongitude = 0.0;
   double nextStationLatitude = 0.0, nextStationLongitude = 0.0;
 
   @override
@@ -133,12 +126,15 @@ class _ArrivalTimeState extends State<ArrivalTime> {
     String waypointsString =
         _generateWaypointsString(waypoints, nextLat, nextLng, endLat, endLng);
 
-    String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=$startLat,$startLng&destination=$endLat,$endLng&waypoints=$waypointsString&key=$googleApiKey';
+    dynamic response = await GoogleMapAPIManager().getDirections(
+      startLat: startLat.toString(),
+      startLng: startLng.toString(),
+      endLat: endLat.toString(),
+      endLng: endLng.toString(),
+      waypoints: waypointsString,
+    );
 
-    developer.log("URL: $url", name: 'getArrivalTime');
-    http.Response? response = await _fetchDirections(url);
-
+    developer.log("$response", name: "ArrivalTimeResponse");
     return _parseDurationFromResponse(response);
   }
 
@@ -165,20 +161,9 @@ class _ArrivalTimeState extends State<ArrivalTime> {
         .join('|');
   }
 
-  Future<http.Response?> _fetchDirections(String url) async {
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode != 200) {
-      developer.log(
-          'Failed to fetch directions. Status code: ${response.statusCode}');
-      return null;
-    }
-    return response;
-  }
+  int? _parseDurationFromResponse(dynamic data) {
+    if (data == null) return null;
 
-  int? _parseDurationFromResponse(http.Response? response) {
-    if (response == null) return null;
-
-    final data = json.decode(response.body);
     if (data['routes'] == null || data['routes'].isEmpty) {
       developer.log('No routes found.');
       return null;

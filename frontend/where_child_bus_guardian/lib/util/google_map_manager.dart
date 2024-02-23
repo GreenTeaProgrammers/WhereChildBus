@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
 
 class GoogleMapAPIManager {
   static final GoogleMapAPIManager _instance = GoogleMapAPIManager._internal();
@@ -70,13 +71,14 @@ class GoogleMapAPIManager {
     required String startLng,
     required String endLat,
     required String endLng,
-    List<String> waypoints = const [],
+    List<Waypoint> waypoints = const [],
   }) async {
     PolylinePoints polylinePoints = PolylinePoints();
     List<LatLng> polylineCoordinates = [];
 
     List<PolylineWayPoint> polylineWayPoints = waypoints
-        .map((waypoint) => PolylineWayPoint(location: waypoint))
+        .map((waypoint) => PolylineWayPoint(
+            location: "${waypoint.latitude},${waypoint.longitude}"))
         .toList();
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../../pages/map_page/map_page.dart';
-import 'package:where_child_bus_guardian/pages/map_page/google_map_api_manager.dart';
+import 'package:where_child_bus_guardian/util/google_map_manager.dart';
 
 class GoogleMapView extends StatefulWidget {
   final List<Waypoint> waypoints;
@@ -34,7 +33,6 @@ class _GoogleMapView extends State<GoogleMapView> {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
 
   @override
   void initState() {
@@ -112,28 +110,14 @@ class _GoogleMapView extends State<GoogleMapView> {
   }
 
   void _getPolyline(List<Waypoint> waypoints) async {
-    List<PolylineWayPoint> polylineWayPoints = waypoints
-        .map((waypoint) => PolylineWayPoint(
-            location: "${waypoint.latitude},${waypoint.longitude}"))
-        .toList();
     try {
-      late PolylineResult result;
-      result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey,
-        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-        travelMode: TravelMode.driving,
-        avoidTolls: true,
-        avoidHighways: false,
-        avoidFerries: false,
-        wayPoints: polylineWayPoints,
+      polylineCoordinates = await GoogleMapAPIManager().getPolylinePoints(
+        startLat: widget.busLatitude.toString(),
+        startLng: widget.busLongitude.toString(),
+        endLat: widget.nurseryLatitude.toString(),
+        endLng: widget.nurseryLongitude.toString(),
+        waypoints: waypoints,
       );
-
-      if (result.points.isNotEmpty) {
-        result.points.forEach((PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        });
-      }
       _addPolyline();
     } catch (e) {
       print(e);

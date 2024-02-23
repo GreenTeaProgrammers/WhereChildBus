@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:grpc/grpc.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
 import 'package:where_child_bus_guardian/config/config.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/map_page_bottom.dart';
@@ -14,6 +11,7 @@ import 'package:where_child_bus_guardian/service/get_nursery_by_guardian_id.dart
 import 'package:where_child_bus_guardian/util/guardian_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
+import 'package:where_child_bus_guardian/util/google_map_manager.dart';
 
 class Waypoint {
   final double latitude;
@@ -35,7 +33,6 @@ class _MapPageState extends State<MapPage> {
   final StreamController<TrackBusContinuousRequest> _streamController =
       StreamController<TrackBusContinuousRequest>.broadcast();
 
-  String googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
   List<Station> busRoutes = [];
   List<Waypoint> waypoints = [];
 
@@ -182,14 +179,11 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _getNurseryCoordinates() async {
     try {
-      dynamic response;
-      developer.log("住所から緯度経度への変換${nurseryAddress}");
-      response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/geocode/json?address=$nurseryAddress&key=$googleApiKey'));
+      dynamic data =
+          await GoogleMapAPIManager().geocodeAddress(nurseryAddress!);
       if (mounted) {
         setState(() {
-          final data = json.decode(response.body);
-          developer.log(response.body);
+          developer.log(data);
           final location = data['results'][0]['geometry']['location'];
           nurseryLatitude = location['lat'];
           nurseryLongitude = location['lng'];
