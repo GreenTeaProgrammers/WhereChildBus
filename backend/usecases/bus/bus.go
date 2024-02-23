@@ -276,7 +276,7 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 			update.SetLongitude(req.Longitude)
 		case "enable_face_recognition":
 			update.SetEnableFaceRecognition(req.EnableFaceRecognition)
-		case "next_station":
+		case "next_station_id":
 			nextStationID, err := uuid.Parse(req.NextStationId)
 			if err != nil {
 				i.logger.Error("failed to parse next station ID", "error", err)
