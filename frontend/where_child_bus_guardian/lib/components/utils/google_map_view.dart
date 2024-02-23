@@ -118,18 +118,16 @@ class _GoogleMapView extends State<GoogleMapView> {
         .toList();
     try {
       late PolylineResult result;
-      if (GoogleMapApiManager.canSendRequest()) {
-        result = await polylinePoints.getRouteBetweenCoordinates(
-          googleApiKey,
-          PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-          PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
-          travelMode: TravelMode.driving,
-          avoidTolls: true,
-          avoidHighways: false,
-          avoidFerries: false,
-          wayPoints: polylineWayPoints,
-        );
-      }
+      result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey,
+        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+        PointLatLng(widget.nurseryLatitude, widget.nurseryLongitude),
+        travelMode: TravelMode.driving,
+        avoidTolls: true,
+        avoidHighways: false,
+        avoidFerries: false,
+        wayPoints: polylineWayPoints,
+      );
 
       if (result.points.isNotEmpty) {
         result.points.forEach((PointLatLng point) {
