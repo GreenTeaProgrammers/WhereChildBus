@@ -173,7 +173,7 @@ func (c *busServiceClient) StreamBusVideo(ctx context.Context, opts ...grpc.Call
 
 type BusService_StreamBusVideoClient interface {
 	Send(*StreamBusVideoRequest) error
-	CloseAndRecv() (*StreamBusVideoResponse, error)
+	Recv() (*StreamBusVideoResponse, error)
 	grpc.ClientStream
 }
 
@@ -185,10 +185,7 @@ func (x *busServiceStreamBusVideoClient) Send(m *StreamBusVideoRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *busServiceStreamBusVideoClient) CloseAndRecv() (*StreamBusVideoResponse, error) {
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
+func (x *busServiceStreamBusVideoClient) Recv() (*StreamBusVideoResponse, error) {
 	m := new(StreamBusVideoResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -392,7 +389,7 @@ func _BusService_StreamBusVideo_Handler(srv interface{}, stream grpc.ServerStrea
 }
 
 type BusService_StreamBusVideoServer interface {
-	SendAndClose(*StreamBusVideoResponse) error
+	Send(*StreamBusVideoResponse) error
 	Recv() (*StreamBusVideoRequest, error)
 	grpc.ServerStream
 }
@@ -401,7 +398,7 @@ type busServiceStreamBusVideoServer struct {
 	grpc.ServerStream
 }
 
-func (x *busServiceStreamBusVideoServer) SendAndClose(m *StreamBusVideoResponse) error {
+func (x *busServiceStreamBusVideoServer) Send(m *StreamBusVideoResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -455,6 +452,7 @@ var BusService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "StreamBusVideo",
 			Handler:       _BusService_StreamBusVideo_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

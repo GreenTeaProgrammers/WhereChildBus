@@ -88,8 +88,8 @@ class BusServiceClient extends $grpc.Client {
     return $createStreamingCall(_$trackBusContinuous, $async.Stream.fromIterable([request]), options: options);
   }
 
-  $grpc.ResponseFuture<$0.StreamBusVideoResponse> streamBusVideo($async.Stream<$0.StreamBusVideoRequest> request, {$grpc.CallOptions? options}) {
-    return $createStreamingCall(_$streamBusVideo, request, options: options).single;
+  $grpc.ResponseStream<$0.StreamBusVideoResponse> streamBusVideo($async.Stream<$0.StreamBusVideoRequest> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$streamBusVideo, request, options: options);
   }
 }
 
@@ -151,7 +151,7 @@ abstract class BusServiceBase extends $grpc.Service {
         'StreamBusVideo',
         streamBusVideo,
         true,
-        false,
+        true,
         ($core.List<$core.int> value) => $0.StreamBusVideoRequest.fromBuffer(value),
         ($0.StreamBusVideoResponse value) => value.writeToBuffer()));
   }
@@ -187,5 +187,5 @@ abstract class BusServiceBase extends $grpc.Service {
   $async.Future<$0.ChangeBusStatusResponse> changeBusStatus($grpc.ServiceCall call, $0.ChangeBusStatusRequest request);
   $async.Future<$0.SendLocationContinuousResponse> sendLocationContinuous($grpc.ServiceCall call, $async.Stream<$0.SendLocationContinuousRequest> request);
   $async.Stream<$0.TrackBusContinuousResponse> trackBusContinuous($grpc.ServiceCall call, $0.TrackBusContinuousRequest request);
-  $async.Future<$0.StreamBusVideoResponse> streamBusVideo($grpc.ServiceCall call, $async.Stream<$0.StreamBusVideoRequest> request);
+  $async.Stream<$0.StreamBusVideoResponse> streamBusVideo($grpc.ServiceCall call, $async.Stream<$0.StreamBusVideoRequest> request);
 }

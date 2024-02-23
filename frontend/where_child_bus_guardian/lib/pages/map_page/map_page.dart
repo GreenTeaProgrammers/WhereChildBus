@@ -208,7 +208,7 @@ class _MapPageState extends State<MapPage> {
           )
         : Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 GoogleMapView(
                   waypoints: waypoints,
@@ -217,20 +217,39 @@ class _MapPageState extends State<MapPage> {
                   busLatitude: busLatitude,
                   busLongitude: busLongitude,
                 ),
-                _isFirstBusLocationUpdate
-                    ? CircularProgressIndicator()
-                    : MapPageBottom(
-                        guardian: guardian,
-                        bus: bus,
-                        stations: busRoutes,
-                        waypoints: waypoints,
-                        nextStationId: nextStationId,
-                        busLatitude: busLatitude,
-                        busLongitude: busLongitude,
-                        nurseryLatitude: nurseryLatitude,
-                        nurseryLongitude: nurseryLongitude),
+                pageBottomWrapper(),
               ],
             ),
           );
+  }
+
+  Widget pageBottomWrapper() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.2,
+      child: Padding(
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _isFirstBusLocationUpdate
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : MapPageBottom(
+                    guardian: guardian,
+                    bus: bus,
+                    stations: busRoutes,
+                    waypoints: waypoints,
+                    nextStationId: nextStationId,
+                    busLatitude: busLatitude,
+                    busLongitude: busLongitude,
+                    nurseryLatitude: nurseryLatitude,
+                    nurseryLongitude: nurseryLongitude),
+          ],
+        ),
+      ),
+    );
   }
 }
