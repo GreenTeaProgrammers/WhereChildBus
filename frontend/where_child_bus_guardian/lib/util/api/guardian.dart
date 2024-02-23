@@ -28,8 +28,9 @@ Future<GuardianLoginResponse> guardianLogin(
     return res;
   } catch (error) {
     developer.log("Caught Error", error: error);
-    await channel.shutdown();
     return Future.error(error);
+  } finally {
+    await channel.shutdown();
   }
 }
 
