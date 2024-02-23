@@ -11,11 +11,15 @@ import '../../styles/styles.dart';
 class DailyRecordBody extends StatefulWidget {
   final Child child;
   final ChildPhoto image;
+  final IconData icon;
+  final Color color;
 
   const DailyRecordBody({
     Key? key,
     required this.child,
     required this.image,
+    required this.icon,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -103,12 +107,13 @@ class _DailyRecordBody extends State<DailyRecordBody> {
 
   //TODO: 将来的に表情を受け取り、アイコンを表示する
   Widget childExpressionIcon() {
-    return const SizedBox(
+    return SizedBox(
         width: 100,
         height: 100,
         child: Icon(
-          Icons.sentiment_satisfied,
+          widget.icon,
           size: 100,
+          color: widget.color,
         ));
   }
 
