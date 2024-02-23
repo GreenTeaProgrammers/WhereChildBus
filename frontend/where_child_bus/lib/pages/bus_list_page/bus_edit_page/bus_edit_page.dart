@@ -33,6 +33,7 @@ class _BusEditPageState extends State<BusEditPage> {
 
   String? _selectedImagePath;
   bool _isPickingImage = false;
+  bool _isCreatingBus = false;
   CreateBusError? _createBusError;
 
   @override
@@ -80,7 +81,11 @@ class _BusEditPageState extends State<BusEditPage> {
   }
 
   Future<void> _updateBus() async {
-    throw UnimplementedError();
+    // throw UnimplementedError();
+
+    if (validation()) {
+      return;
+    }
   }
 
   Future<void> _createBus() async {
@@ -89,6 +94,12 @@ class _BusEditPageState extends State<BusEditPage> {
     }
 
     try {
+      if (mounted) {
+        setState(() {
+          _isCreatingBus = true;
+        });
+      }
+
       var res = await createBusService(
         NurseryData().getNursery().id,
         _busNameController.text,
@@ -114,12 +125,16 @@ class _BusEditPageState extends State<BusEditPage> {
           inputFields(),
           manageChildrenButton(),
           _createErrorMessage(),
-          ConfirmButton(
-            buttonText: "保存",
-            onTap: widget.busEditPageType == BusEditPageType.update
-                ? _updateBus
-                : _createBus,
-          ),
+          _isCreatingBus
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ConfirmButton(
+                  buttonText: "保存",
+                  onTap: widget.busEditPageType == BusEditPageType.update
+                      ? _updateBus
+                      : _createBus,
+                ),
         ],
       ),
     );

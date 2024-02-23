@@ -51,6 +51,22 @@ Future<CreateBusResponse> createBus(
   });
 }
 
+Future<UpdateBusResponse> updateBus(
+    String busId, String busName, String plateNumber) async {
+  return await performGrpcCall((client) async {
+    var req = UpdateBusRequest(
+      busId: busId,
+      name: busName,
+      plateNumber: plateNumber,
+      updateMask: FieldMask()
+        ..paths.add("name")
+        ..paths.add("plate_number")
+        ..paths.add("bus_id"),
+    );
+    return client.updateBus(req);
+  });
+}
+
 Future<ChangeBusStatusResponse> updateBusStatus(
     String busId, BusStatus busStatus) async {
   DateTime now = DateTime.now();
