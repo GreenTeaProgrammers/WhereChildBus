@@ -341,8 +341,8 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
 	ctx := stream.Context()
-	retryDelay := 10 * time.Second // リトライの間隔を10秒に設定
-	maxRetries := 5                // 最大リトライ回数
+	retryDelay := 1 * time.Second // リトライの間隔を10秒に設定
+	maxRetries := 5               // 最大リトライ回数
 
 	ticker := time.NewTicker(retryDelay)
 	defer ticker.Stop()
@@ -402,7 +402,7 @@ func (i *Interactor) TrackBusContinuous(req *pb.TrackBusContinuousRequest, strea
 	}
 
 	// 送信間隔の設定（例えば、5秒ごと）
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
 	for {
