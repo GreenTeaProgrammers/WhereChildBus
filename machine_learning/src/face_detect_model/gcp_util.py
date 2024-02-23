@@ -21,6 +21,7 @@ def init_client():
 
 
 def get_bucket(client: gcs.Client, bucket_name: str):
+    logger.info(f"Getting bucket '{bucket_name}'...")
     bucket = client.bucket(bucket_name)
     logger.info(f"Got bucket {bucket_name} in GCS.")
     if bucket.exists():
@@ -30,6 +31,7 @@ def get_bucket(client: gcs.Client, bucket_name: str):
 
 
 def get_blobs(bucket: Bucket, blob_name: str):
+    logger.info(f"Getting blobs with prefix '{blob_name}'...")
     # blobsの中身に対するエラーハンドリング
     tries = 10
     retry_interval = 1
