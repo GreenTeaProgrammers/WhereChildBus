@@ -249,6 +249,11 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future<void> _playAudio(StreamBusVideoResponse res) async {
+    // 乗車イベントがGET_ONの場合は音声を再生しない
+    if (_vehicleEvent == VehicleEvent.VEHICLE_EVENT_GET_ON) {
+      return;
+    }
+
     List<String> audioFiles = [];
 
     if (res.children.any((child) => child.hasBag)) {
