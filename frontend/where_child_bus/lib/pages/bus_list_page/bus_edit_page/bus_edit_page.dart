@@ -140,6 +140,12 @@ class _BusEditPageState extends State<BusEditPage> {
       if (kDebugMode) {
         developer.log("バスの作成中にエラーが発生しました: $e");
       }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCreatingBus = false;
+        });
+      }
     }
   }
 
