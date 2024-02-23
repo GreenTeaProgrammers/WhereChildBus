@@ -65,7 +65,7 @@ class _AuthPageState extends State<AuthPage> {
     return const Padding(
       padding: EdgeInsets.only(bottom: 32),
       child: Text(
-        'WhereChildBus',
+        'ほいくるーず',
         style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       ),
     );
