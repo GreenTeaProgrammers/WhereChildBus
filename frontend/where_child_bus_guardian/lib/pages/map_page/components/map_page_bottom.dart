@@ -65,27 +65,14 @@ class _MapPageBottomState extends State<MapPageBottom> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.25,
-      child: Padding(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ArrivalTime(
-              bus: widget.bus,
-              waypoints: widget.waypoints,
-              nextStationId: widget.nextStationId,
-              busLatitude: widget.busLatitude,
-              busLongitude: widget.busLongitude,
-              guardianLatitude: guardianStation.latitude,
-              guardianLongitude: guardianStation.longitude,
-            ),
-          ],
-        ),
-      ),
+    return ArrivalTime(
+      bus: widget.bus,
+      waypoints: widget.waypoints,
+      nextStationId: widget.nextStationId,
+      busLatitude: widget.busLatitude,
+      busLongitude: widget.busLongitude,
+      guardianLatitude: guardianStation.latitude,
+      guardianLongitude: guardianStation.longitude,
     );
   }
 }
