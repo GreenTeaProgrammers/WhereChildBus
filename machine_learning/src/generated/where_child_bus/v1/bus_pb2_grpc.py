@@ -49,7 +49,7 @@ class BusServiceStub(object):
                 request_serializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousResponse.FromString,
                 )
-        self.StreamBusVideo = channel.stream_unary(
+        self.StreamBusVideo = channel.stream_stream(
                 '/where_child_bus.v1.BusService/StreamBusVideo',
                 request_serializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
                 response_deserializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoResponse.FromString,
@@ -145,7 +145,7 @@ def add_BusServiceServicer_to_server(servicer, server):
                     request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_bus__pb2.TrackBusContinuousResponse.SerializeToString,
             ),
-            'StreamBusVideo': grpc.stream_unary_rpc_method_handler(
+            'StreamBusVideo': grpc.stream_stream_rpc_method_handler(
                     servicer.StreamBusVideo,
                     request_deserializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.FromString,
                     response_serializer=where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoResponse.SerializeToString,
@@ -290,7 +290,7 @@ class BusService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/where_child_bus.v1.BusService/StreamBusVideo',
+        return grpc.experimental.stream_stream(request_iterator, target, '/where_child_bus.v1.BusService/StreamBusVideo',
             where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoRequest.SerializeToString,
             where__child__bus_dot_v1_dot_bus__pb2.StreamBusVideoResponse.FromString,
             options, channel_credentials,
