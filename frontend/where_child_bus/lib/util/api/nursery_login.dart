@@ -27,5 +27,7 @@ Future<NurseryLoginResponse> nurseryLogin(String email, String password) async {
     developer.log("Caught error", error: err);
     await channel.shutdown();
     return Future.error(err);
+  } finally {
+    await channel.shutdown();
   }
 }
