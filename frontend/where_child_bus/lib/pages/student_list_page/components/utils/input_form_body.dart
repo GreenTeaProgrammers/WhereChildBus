@@ -31,6 +31,7 @@ class _InputFormBodyState extends State<InputFormBody> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   late Future<void> _loadDataFuture; // 非同期処理の結果を保持する変数
+  bool _isCreatingChild = false;
   List<GuardianResponse> guardians = [];
   List<Bus> buses = [];
   List<File>? images;
@@ -123,16 +124,31 @@ class _InputFormBodyState extends State<InputFormBody> {
       return;
     }
 
-    var photos = images!.map((file) => file.readAsBytesSync()).toList();
-    var res = await createChild(
-        NurseryData().getNursery().id,
-        selectedGuardian!.id,
-        _nameController.text,
-        int.parse(_ageController.text),
-        selectedSex!,
-        photos);
-    developer.log("園児情報の登録が完了しました。$res");
-    Navigator.pop(context);
+    try {
+      if (mounted) {
+        setState(() {
+          _isCreatingChild = true;
+        });
+      }
+      var photos = images!.map((file) => file.readAsBytesSync()).toList();
+      var res = await createChild(
+          NurseryData().getNursery().id,
+          selectedGuardian!.id,
+          _nameController.text,
+          int.parse(_ageController.text),
+          selectedSex!,
+          photos);
+      developer.log("園児情報の登録が完了しました。$res");
+      Navigator.pop(context);
+    } catch (error) {
+      developer.log("Caught Error", error: error.toString());
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCreatingChild = false;
+        });
+      }
+    }
   }
 
   Future _getImageFromGallery() async {
@@ -321,9 +337,13 @@ class _InputFormBodyState extends State<InputFormBody> {
   }
 
   Widget submitButton() {
-    return SubmitButton(
-        onPressed: widget.isEdit
-            ? () => developer.log("UnImplemented", name: "updateChild")
-            : _createChild);
+    return _isCreatingChild
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : SubmitButton(
+            onPressed: widget.isEdit
+                ? () => developer.log("UnImplemented", name: "updateChild")
+                : _createChild);
   }
 }
