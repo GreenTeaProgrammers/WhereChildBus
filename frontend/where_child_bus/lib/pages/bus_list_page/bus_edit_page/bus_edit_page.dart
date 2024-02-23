@@ -10,6 +10,7 @@ import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_mana
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
 import 'package:where_child_bus/service/create_bus.dart';
+import 'package:where_child_bus/service/update_bus.dart';
 import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus/util/validation/create_bus_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
@@ -85,6 +86,29 @@ class _BusEditPageState extends State<BusEditPage> {
 
     if (validation()) {
       return;
+    }
+
+    try {
+      if (mounted) {
+        setState(() {
+          _isCreatingBus = true;
+        });
+      }
+
+      var res = await updateBusService(
+        NurseryData().getNursery().id,
+        _busNameController.text,
+        _busNumberController.text,
+        morningSelectedGuardiansId,
+        eveningSelectedGuardiansId,
+      );
+      developer.log("バスの更新に成功しました $res", name: "BusUpdateButton");
+      Navigator.pop(context);
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスの更新中にエラーが発生しました",
+            error: e, name: "BusUpdateButtonError");
+      }
     }
   }
 
