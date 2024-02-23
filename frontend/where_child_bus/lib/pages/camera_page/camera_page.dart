@@ -7,6 +7,7 @@ import 'package:grpc/grpc.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:where_child_bus/components/util/audio_manager.dart';
 import 'package:where_child_bus/config/config.dart';
+import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus/pages/camera_page/widgets/riding_toggle.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pbgrpc.dart';
 import "package:where_child_bus/main.dart" as where_child_bus;
@@ -73,7 +74,7 @@ class _CameraPageState extends State<CameraPage> {
         await _playAudio(response);
       }
     } catch (error) {
-      developer.log("Caught Error:", error: error);
+      developer.log("Caught Error:", error: error, name: "StreamBusVideo");
     } finally {
       await channel.shutdown();
     }
@@ -117,12 +118,14 @@ class _CameraPageState extends State<CameraPage> {
           }
           _streamController.add(StreamBusVideoRequest(
             busId: widget.bus.id,
+            nurseryId: NurseryData().getNursery().id,
             busType: widget.busType,
             vehicleEvent: _vehicleEvent,
             videoChunk: videoChunks,
             photoHeight: image.height,
             photoWidth: image.width,
           ));
+
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 

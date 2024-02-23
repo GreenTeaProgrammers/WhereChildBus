@@ -39,11 +39,10 @@ Future<GetBusListByNurseryIdResponse> getBusListByNurseryId(
 }
 
 Future<CreateBusResponse> createBus(
-    String nurseryId,
-    String name,
-    String plateNumber,
-    Iterable<String> morningGuardianIds,
-    Iterable<String> eveningGuardianIds) async {
+  String nurseryId,
+  String name,
+  String plateNumber,
+) async {
   return await performGrpcCall((client) async {
     var req = CreateBusRequest(
       nurseryId: nurseryId,
@@ -92,8 +91,8 @@ Future<UpdateBusResponse> updateNextStation(
       updateMask: updateMask,
     );
     var res = await grpcClient.updateBus(req);
-    developer.log("Request: $req");
-    developer.log("Response: $res");
+    developer.log("Request: $req", name: "updateNextStation");
+    developer.log("Response: $res", name: "updateNextStation");
     return res;
   } catch (error) {
     developer.log("Caught Error:", error: error, name: "updateNextStation");
