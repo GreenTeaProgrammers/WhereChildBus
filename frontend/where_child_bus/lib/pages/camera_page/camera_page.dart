@@ -147,8 +147,8 @@ class _CameraPageState extends State<CameraPage> {
 
   List<int> _processCameraImage2gray(CameraImage image) {
     //Note:実験的に縦横を入れ替えてみる
-    final int width = image.height;
-    final int height = image.width;
+    final int width = image.width;
+    final int height = image.height;
     const int bgraPixelStride = 4; // BGRAフォーマットではピクセルあたり4バイト
     final bgraBytes = image.planes[0].bytes;
 
@@ -179,18 +179,27 @@ class _CameraPageState extends State<CameraPage> {
         if (frameCounter % 60 == 0) {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
+            _streamController.add(StreamBusVideoRequest(
+              busId: widget.bus.id,
+              nurseryId: NurseryData().getNursery().id,
+              busType: widget.busType,
+              vehicleEvent: _vehicleEvent,
+              videoChunk: videoChunks,
+              photoHeight: image.height,
+              photoWidth: image.width,
+            ));
           } else if (Platform.isIOS) {
             videoChunks.add(_processCameraImage2gray(image));
+            _streamController.add(StreamBusVideoRequest(
+              busId: widget.bus.id,
+              nurseryId: NurseryData().getNursery().id,
+              busType: widget.busType,
+              vehicleEvent: _vehicleEvent,
+              videoChunk: videoChunks,
+              photoHeight: image.width,
+              photoWidth: image.height,
+            ));
           }
-          _streamController.add(StreamBusVideoRequest(
-            busId: widget.bus.id,
-            nurseryId: NurseryData().getNursery().id,
-            busType: widget.busType,
-            vehicleEvent: _vehicleEvent,
-            videoChunk: videoChunks,
-            photoHeight: image.height,
-            photoWidth: image.width,
-          ));
 
           try {
             // await _getCurrentLocation();
