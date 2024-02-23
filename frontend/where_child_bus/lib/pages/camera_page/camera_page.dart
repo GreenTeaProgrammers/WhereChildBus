@@ -170,46 +170,28 @@ class _CameraPageState extends State<CameraPage> {
     return grayscaleBytes;
   }
 
-  List<int> _rotateRGBAImage90DegreesLeft(
-      List<int> rgbaBytes, int width, int height) {
+  List<dynamic> rotateGrayscaleImageLeft90Degrees(
+      List<int> grayscaleBytes, int width, int height) {
     int rotatedWidth = height;
     int rotatedHeight = width;
-    List<int> rotatedBytes = List.filled(rotatedWidth * rotatedHeight * 4, 0);
+    List<int> rotatedGrayscaleBytes =
+        List.filled(rotatedWidth * rotatedHeight, 0);
 
     for (int originalY = 0; originalY < height; originalY++) {
       for (int originalX = 0; originalX < width; originalX++) {
-        int originalIndex = (originalY * width + originalX) * 4;
+        // 元の画像でのピクセルのインデックス
+        int originalIndex = originalY * width + originalX;
+        // 回転後のピクセルの位置
         int rotatedX = originalY;
-        int rotatedY = width - 1 - originalX;
-        int rotatedIndex = (rotatedY * rotatedWidth + rotatedX) * 4;
-
-        rotatedBytes[rotatedIndex] = rgbaBytes[originalIndex]; // R
-        rotatedBytes[rotatedIndex + 1] = rgbaBytes[originalIndex + 1]; // G
-        rotatedBytes[rotatedIndex + 2] = rgbaBytes[originalIndex + 2]; // B
-        rotatedBytes[rotatedIndex + 3] = rgbaBytes[originalIndex + 3]; // A
+        int rotatedY = width - originalX - 1;
+        // 回転後のピクセルのインデックス
+        int rotatedIndex = rotatedY * rotatedWidth + rotatedX;
+        // 輝度値を新しい位置にコピー
+        rotatedGrayscaleBytes[rotatedIndex] = grayscaleBytes[originalIndex];
       }
     }
 
-    return rotatedBytes;
-  }
-
-  List<int> _convertRGBAToGrayscale(
-      List<int> rgbaBytes, int width, int height) {
-    List<int> grayscaleBytes = List.filled(width * height, 0);
-
-    for (int i = 0; i < rgbaBytes.length; i += 4) {
-      int r = rgbaBytes[i];
-      int g = rgbaBytes[i + 1];
-      int b = rgbaBytes[i + 2];
-      // アルファチャンネル(rgbaBytes[i + 3])はグレースケール変換には不要なので無視
-
-      // 輝度値(Y)の計算
-      int yValue = (0.299 * r + 0.587 * g + 0.114 * b).round();
-      // グレースケール画像の各ピクセルに輝度値を設定
-      grayscaleBytes[i ~/ 4] = yValue;
-    }
-
-    return grayscaleBytes;
+    return [rotatedGrayscaleBytes, rotatedWidth, rotatedHeight];
   }
 
   void _startImageStream() async {
@@ -221,23 +203,28 @@ class _CameraPageState extends State<CameraPage> {
         if (frameCounter % 60 == 0) {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
+            _streamController.add(StreamBusVideoRequest(
+              busId: widget.bus.id,
+              nurseryId: NurseryData().getNursery().id,
+              busType: widget.busType,
+              vehicleEvent: _vehicleEvent,
+              videoChunk: videoChunks,
+              photoHeight: image.height,
+              photoWidth: image.width,
+            ));
           } else if (Platform.isIOS) {
-            videoChunks.add((_convertRGBAToGrayscale(
-                _rotateRGBAImage90DegreesLeft(
-                    image.planes[0].bytes.toList(), image.width, image.height),
-                image.width,
-                image.height)));
+            videoChunks.add(rotateGrayscaleImageLeft90Degrees(
+                _processCameraImage2gray(image), image.width, image.height)[0]);
+            _streamController.add(StreamBusVideoRequest(
+              busId: widget.bus.id,
+              nurseryId: NurseryData().getNursery().id,
+              busType: widget.busType,
+              vehicleEvent: _vehicleEvent,
+              videoChunk: videoChunks,
+              photoHeight: image.width,
+              photoWidth: image.height,
+            ));
           }
-
-          _streamController.add(StreamBusVideoRequest(
-            busId: widget.bus.id,
-            nurseryId: NurseryData().getNursery().id,
-            busType: widget.busType,
-            vehicleEvent: _vehicleEvent,
-            videoChunk: videoChunks,
-            photoHeight: image.height,
-            photoWidth: image.width,
-          ));
 
           try {
             // await _getCurrentLocation();
