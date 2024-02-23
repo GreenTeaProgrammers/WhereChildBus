@@ -226,7 +226,7 @@ class _MapPageState extends State<MapPage> {
   Widget pageBottomWrapper() {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.25,
+      height: MediaQuery.of(context).size.height * 0.2,
       child: Padding(
         padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
         child: Column(
