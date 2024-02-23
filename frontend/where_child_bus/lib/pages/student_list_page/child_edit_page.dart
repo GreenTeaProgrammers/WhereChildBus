@@ -4,9 +4,11 @@ import 'components/utils/input_form_body.dart';
 
 class StudentEditPage extends StatefulWidget {
   final Child? child;
+  final ChildPhoto? childPhoto;
   final bool isEdit;
 
-  const StudentEditPage({super.key, this.child, required this.isEdit});
+  const StudentEditPage(
+      {super.key, this.child, this.childPhoto, required this.isEdit});
 
   @override
   State<StudentEditPage> createState() => _StudentEditPageState();
