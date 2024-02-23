@@ -182,14 +182,14 @@ class _CameraPageState extends State<CameraPage> {
           ));
 
           try {
-            await _getCurrentLocation();
-            // await _getCurrentLocation().then((locationData) {
-            //   _locationStream.add(SendLocationContinuousRequest(
-            //     busId: widget.bus.id,
-            //     latitude: locationData.latitude,
-            //     longitude: locationData.longitude,
-            //   ));
-            // });
+            // await _getCurrentLocation();
+            await _getCurrentLocation().then((locationData) {
+              _locationStream.add(SendLocationContinuousRequest(
+                busId: widget.bus.id,
+                latitude: locationData.latitude,
+                longitude: locationData.longitude,
+              ));
+            });
           } catch (e) {
             developer.log("Failed to get current location: $e");
           }
