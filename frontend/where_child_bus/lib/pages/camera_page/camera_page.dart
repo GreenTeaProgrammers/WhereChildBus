@@ -171,17 +171,17 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   List<int> _rotateImageLeft90Degrees(
-      CameraImage image, List<int> grayscaleBytes) {
-    final int width = image.width;
-    final int height = image.height;
+      int width, int height, List<int> grayscaleBytes) {
     List<int> rotatedGrayscaleBytes = List.filled(width * height, 0);
 
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        // 元の画像でのピクセル位置
-        int originalIndex = y * width + x;
-        // 90度回転後の新しいピクセル位置
-        int rotatedIndex = (width - 1 - x) * height + y;
+    for (int originalY = 0; originalY < height; originalY++) {
+      for (int originalX = 0; originalX < width; originalX++) {
+        // 元の位置のインデックス
+        int originalIndex = originalY * width + originalX;
+        // 回転後の位置のインデックス
+        int rotatedX = originalY;
+        int rotatedY = width - originalX - 1;
+        int rotatedIndex = rotatedY * height + rotatedX;
         // 輝度値を新しい位置にコピー
         rotatedGrayscaleBytes[rotatedIndex] = grayscaleBytes[originalIndex];
       }
@@ -201,7 +201,7 @@ class _CameraPageState extends State<CameraPage> {
             videoChunks.add(image.planes[0].bytes.toList());
           } else if (Platform.isIOS) {
             videoChunks.add(_rotateImageLeft90Degrees(
-                image, _processCameraImage2gray(image)));
+                image.width, image.height, _processCameraImage2gray(image)));
           }
 
           _streamController.add(StreamBusVideoRequest(
