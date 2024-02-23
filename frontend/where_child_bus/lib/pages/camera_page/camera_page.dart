@@ -37,6 +37,9 @@ class _CameraPageState extends State<CameraPage> {
   VehicleEvent _vehicleEvent = VehicleEvent.VEHICLE_EVENT_GET_ON;
   final Location location = Location();
 
+  ClientChannel? _videoChannel;
+  ClientChannel? _locationChannel;
+
   @override
   void initState() {
     super.initState();
@@ -70,12 +73,12 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> streamBusVideo(
       Stream<StreamBusVideoRequest> requestStream) async {
-    final channel = ClientChannel(
+    _videoChannel = ClientChannel(
       appConfig.grpcEndpoint,
       port: appConfig.grpcPort,
       options: const ChannelOptions(),
     );
-    final grpcClient = BusServiceClient(channel);
+    final grpcClient = BusServiceClient(_videoChannel!);
     developer.log("ServiceClient created");
     final res = grpcClient.streamBusVideo(requestStream);
 
@@ -87,18 +90,18 @@ class _CameraPageState extends State<CameraPage> {
     } catch (error) {
       developer.log("Caught Error:", error: error, name: "StreamBusVideo");
     } finally {
-      await channel.shutdown();
+      await _videoChannel!.shutdown();
     }
   }
 
   Future<void> _streamCoordinate(
       Stream<SendLocationContinuousRequest> requestStream) async {
-    final channel = ClientChannel(
+    _locationChannel = ClientChannel(
       appConfig.grpcEndpoint,
       port: appConfig.grpcPort,
       options: const ChannelOptions(),
     );
-    final grpcClient = BusServiceClient(channel);
+    final grpcClient = BusServiceClient(_locationChannel!);
     developer.log("ServiceClient created");
     final res = grpcClient.sendLocationContinuous(requestStream);
 
@@ -109,7 +112,7 @@ class _CameraPageState extends State<CameraPage> {
     } catch (error) {
       developer.log("Caught Error:", error: error);
     } finally {
-      await channel.shutdown();
+      await _locationChannel!.shutdown();
     }
   }
 
@@ -239,6 +242,7 @@ class _CameraPageState extends State<CameraPage> {
             developer.log("Failed to get current location: $e");
           }
 
+          developer.log("$_vehicleEvent", name: "CameraPage");
           developer.log("width ${image.width}", name: "CameraPage");
           developer.log("height ${image.height}", name: "CameraPage");
 
@@ -287,6 +291,8 @@ class _CameraPageState extends State<CameraPage> {
     _controller.dispose();
     _streamController.close();
     _locationStream.close();
+    _videoChannel?.shutdown();
+    _locationChannel?.shutdown();
     super.dispose();
   }
 
