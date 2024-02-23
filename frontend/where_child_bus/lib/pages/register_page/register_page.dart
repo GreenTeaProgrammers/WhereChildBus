@@ -29,6 +29,9 @@ class _RegisterPageState extends State<RegisterPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('新規登録'),
+        ),
         resizeToAvoidBottomInset: true,
         body: pageBody(),
       ),
@@ -116,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget titleText() => const Padding(
         padding: EdgeInsets.only(bottom: 32),
-        child: Text('WhereChildBus',
+        child: Text('ほいくるーず',
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
       );
 
@@ -127,8 +130,8 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           controller: controller,
-          decoration:
-              InputDecoration(border: OutlineInputBorder(), labelText: label),
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(), labelText: label),
           keyboardType: keyboardType,
           obscureText: isObscure,
         ),

@@ -1,9 +1,13 @@
+import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
+import 'package:where_child_bus/pages/register_page/register_page.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
+
+import 'widget/register_button.dart';
 
 enum NurseryLoginError {
   unknown,
@@ -47,6 +51,7 @@ class _AuthPageState extends State<AuthPage> {
           _loginError == NurseryLoginError.invalidCredentials)
         emailOrPasswordNotFound(),
       loginButton(),
+      RegisterButton(context: context),
     ];
 
     return Center(
@@ -64,7 +69,7 @@ class _AuthPageState extends State<AuthPage> {
     return const Padding(
       padding: EdgeInsets.only(bottom: 32),
       child: Text(
-        'WhereChildBus',
+        'ほいくるーず',
         style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       ),
     );
@@ -134,8 +139,8 @@ class _AuthPageState extends State<AuthPage> {
       }
 
       if (res.success) {
-        print(res.success);
-        print(res.nursery.name);
+        developer.log("${res.success}");
+        developer.log(res.nursery.name);
         NurseryData().setNursery(res.nursery);
         Navigator.pushReplacement(
           currentContext,
@@ -145,7 +150,7 @@ class _AuthPageState extends State<AuthPage> {
         );
       } else {
         //  ログイン失敗時の処理をここに記述
-        print('Login failed');
+        developer.log('Login failed');
       }
     } catch (e) {
       if (mounted) {

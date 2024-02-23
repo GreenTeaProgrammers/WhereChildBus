@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/google/uuid"
@@ -21,10 +21,8 @@ type ChildBusAssociation struct {
 	ID int `json:"id,omitempty"`
 	// ChildID holds the value of the "child_id" field.
 	ChildID uuid.UUID `json:"child_id,omitempty"`
-	// BusID holds the value of the "bus_id" field.
-	BusID uuid.UUID `json:"bus_id,omitempty"`
-	// 朝のバスか放課後のバスかを示す
-	BusType childbusassociation.BusType `json:"bus_type,omitempty"`
+	// BusRouteID holds the value of the "bus_route_id" field.
+	BusRouteID uuid.UUID `json:"bus_route_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ChildBusAssociationQuery when eager-loading is set.
 	Edges        ChildBusAssociationEdges `json:"edges"`
@@ -35,8 +33,8 @@ type ChildBusAssociation struct {
 type ChildBusAssociationEdges struct {
 	// Child holds the value of the child edge.
 	Child *Child `json:"child,omitempty"`
-	// Bus holds the value of the bus edge.
-	Bus *Bus `json:"bus,omitempty"`
+	// BusRoute holds the value of the bus_route edge.
+	BusRoute *BusRoute `json:"bus_route,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
@@ -55,17 +53,17 @@ func (e ChildBusAssociationEdges) ChildOrErr() (*Child, error) {
 	return nil, &NotLoadedError{edge: "child"}
 }
 
-// BusOrErr returns the Bus value or an error if the edge
+// BusRouteOrErr returns the BusRoute value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ChildBusAssociationEdges) BusOrErr() (*Bus, error) {
+func (e ChildBusAssociationEdges) BusRouteOrErr() (*BusRoute, error) {
 	if e.loadedTypes[1] {
-		if e.Bus == nil {
+		if e.BusRoute == nil {
 			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: bus.Label}
+			return nil, &NotFoundError{label: busroute.Label}
 		}
-		return e.Bus, nil
+		return e.BusRoute, nil
 	}
-	return nil, &NotLoadedError{edge: "bus"}
+	return nil, &NotLoadedError{edge: "bus_route"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -75,9 +73,7 @@ func (*ChildBusAssociation) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case childbusassociation.FieldID:
 			values[i] = new(sql.NullInt64)
-		case childbusassociation.FieldBusType:
-			values[i] = new(sql.NullString)
-		case childbusassociation.FieldChildID, childbusassociation.FieldBusID:
+		case childbusassociation.FieldChildID, childbusassociation.FieldBusRouteID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -106,17 +102,11 @@ func (cba *ChildBusAssociation) assignValues(columns []string, values []any) err
 			} else if value != nil {
 				cba.ChildID = *value
 			}
-		case childbusassociation.FieldBusID:
+		case childbusassociation.FieldBusRouteID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field bus_id", values[i])
+				return fmt.Errorf("unexpected type %T for field bus_route_id", values[i])
 			} else if value != nil {
-				cba.BusID = *value
-			}
-		case childbusassociation.FieldBusType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field bus_type", values[i])
-			} else if value.Valid {
-				cba.BusType = childbusassociation.BusType(value.String)
+				cba.BusRouteID = *value
 			}
 		default:
 			cba.selectValues.Set(columns[i], values[i])
@@ -136,9 +126,9 @@ func (cba *ChildBusAssociation) QueryChild() *ChildQuery {
 	return NewChildBusAssociationClient(cba.config).QueryChild(cba)
 }
 
-// QueryBus queries the "bus" edge of the ChildBusAssociation entity.
-func (cba *ChildBusAssociation) QueryBus() *BusQuery {
-	return NewChildBusAssociationClient(cba.config).QueryBus(cba)
+// QueryBusRoute queries the "bus_route" edge of the ChildBusAssociation entity.
+func (cba *ChildBusAssociation) QueryBusRoute() *BusRouteQuery {
+	return NewChildBusAssociationClient(cba.config).QueryBusRoute(cba)
 }
 
 // Update returns a builder for updating this ChildBusAssociation.
@@ -167,11 +157,8 @@ func (cba *ChildBusAssociation) String() string {
 	builder.WriteString("child_id=")
 	builder.WriteString(fmt.Sprintf("%v", cba.ChildID))
 	builder.WriteString(", ")
-	builder.WriteString("bus_id=")
-	builder.WriteString(fmt.Sprintf("%v", cba.BusID))
-	builder.WriteString(", ")
-	builder.WriteString("bus_type=")
-	builder.WriteString(fmt.Sprintf("%v", cba.BusType))
+	builder.WriteString("bus_route_id=")
+	builder.WriteString(fmt.Sprintf("%v", cba.BusRouteID))
 	builder.WriteByte(')')
 	return builder.String()
 }

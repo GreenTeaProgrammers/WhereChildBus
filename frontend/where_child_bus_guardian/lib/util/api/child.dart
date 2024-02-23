@@ -14,7 +14,7 @@ Future<T> performGrpcCall<T>(
   try {
     final result = await grpcCall(grpcClient);
     if (kDebugMode) {
-      developer.log("レスポンス: $result");
+      // developer.log("レスポンス: $result");
     }
     return result;
   } catch (error) {

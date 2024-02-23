@@ -21,15 +21,16 @@ Future<GuardianLoginResponse> guardianLogin(
 
     var res = await grpcClient.guardianLogin(req);
     if (kDebugMode) {
-      developer.log("レスポンス $res");
+      // developer.log("レスポンス $res");
     }
 
     await channel.shutdown();
     return res;
   } catch (error) {
     developer.log("Caught Error", error: error);
-    await channel.shutdown();
     return Future.error(error);
+  } finally {
+    await channel.shutdown();
   }
 }
 

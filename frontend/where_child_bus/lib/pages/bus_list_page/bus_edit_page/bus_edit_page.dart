@@ -9,15 +9,17 @@ import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/bus_child_manage_page/bus_guardian_manage_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/confirm_button.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_edit_page/components/input_element.dart';
+import 'package:where_child_bus/service/create_bus.dart';
+import 'package:where_child_bus/service/update_bus.dart';
 import 'package:where_child_bus/util/api/bus.dart';
 import 'package:where_child_bus/util/validation/create_bus_validation.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
 class BusEditPage extends StatefulWidget {
-  Bus? bus;
+  final Bus? bus;
   final BusEditPageType busEditPageType;
 
-  BusEditPage({super.key, this.bus, required this.busEditPageType});
+  const BusEditPage({super.key, this.bus, required this.busEditPageType});
 
   @override
   _BusEditPageState createState() => _BusEditPageState();
@@ -32,6 +34,7 @@ class _BusEditPageState extends State<BusEditPage> {
 
   String? _selectedImagePath;
   bool _isPickingImage = false;
+  bool _isCreatingBus = false;
   CreateBusError? _createBusError;
 
   @override
@@ -61,12 +64,13 @@ class _BusEditPageState extends State<BusEditPage> {
         _createBusError = CreateBusError.fieldsNotFilled;
       });
       return true;
-    } else if (CreateBusValidator.validateGuardians(
-        morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
-      setState(() {
-        _createBusError = CreateBusError.noGuardiansSelected;
-      });
-      return true;
+      //Note 今のところ保護者が選択されていなくても作成できる
+      // } else if (CreateBusValidator.validateGuardians(
+      //     morningSelectedGuardiansId, eveningSelectedGuardiansId)) {
+      //   setState(() {
+      //     _createBusError = CreateBusError.noGuardiansSelected;
+      //   });
+      // return true;
     } else if (CreateBusValidator.validateNameLength(_busNameController.text)) {
       setState(() {
         _createBusError = CreateBusError.nameTooLong;
@@ -78,7 +82,34 @@ class _BusEditPageState extends State<BusEditPage> {
   }
 
   Future<void> _updateBus() async {
-    throw UnimplementedError();
+    // throw UnimplementedError();
+
+    if (validation()) {
+      return;
+    }
+
+    try {
+      if (mounted) {
+        setState(() {
+          _isCreatingBus = true;
+        });
+      }
+
+      var res = await updateBusService(
+        NurseryData().getNursery().id,
+        _busNameController.text,
+        _busNumberController.text,
+        morningSelectedGuardiansId,
+        eveningSelectedGuardiansId,
+      );
+      developer.log("バスの更新に成功しました $res", name: "BusUpdateButton");
+      Navigator.pop(context);
+    } catch (e) {
+      if (kDebugMode) {
+        developer.log("バスの更新中にエラーが発生しました",
+            error: e, name: "BusUpdateButtonError");
+      }
+    }
   }
 
   Future<void> _createBus() async {
@@ -87,13 +118,20 @@ class _BusEditPageState extends State<BusEditPage> {
     }
 
     try {
-      var res = await createBus(
+      if (mounted) {
+        setState(() {
+          _isCreatingBus = true;
+        });
+      }
+
+      var res = await createBusService(
         NurseryData().getNursery().id,
         _busNameController.text,
         _busNumberController.text,
         morningSelectedGuardiansId,
         eveningSelectedGuardiansId,
       );
+      developer.log("バスの作成に成功しました: $res", name: "BusEditPage");
       Navigator.pop(context);
     } catch (e) {
       if (kDebugMode) {
@@ -111,12 +149,16 @@ class _BusEditPageState extends State<BusEditPage> {
           inputFields(),
           manageChildrenButton(),
           _createErrorMessage(),
-          ConfirmButton(
-            buttonText: "保存",
-            onTap: widget.busEditPageType == BusEditPageType.update
-                ? _updateBus
-                : _createBus,
-          ),
+          _isCreatingBus
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ConfirmButton(
+                  buttonText: "保存",
+                  onTap: widget.busEditPageType == BusEditPageType.update
+                      ? _updateBus
+                      : _createBus,
+                ),
         ],
       ),
     );

@@ -11,11 +11,15 @@ import '../../styles/styles.dart';
 class DailyRecordBody extends StatefulWidget {
   final Child child;
   final ChildPhoto image;
+  final IconData icon;
+  final Color color;
 
   const DailyRecordBody({
     Key? key,
     required this.child,
     required this.image,
+    required this.icon,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -74,33 +78,49 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget childFaceAndExpression() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[photoFrameAndChildFace(), childExpressionIcon()],
+    );
+  }
+
+  Widget photoFrameAndChildFace() {
+    return Stack(
       children: <Widget>[
-        ImageFromBytes(
-          imageData: widget.image.photoData,
-          height: 150,
-          width: 150,
+        Image.asset(
+          'assets/images/child_photo_frame.png',
+          width: 170,
+          height: 170,
         ),
-        childExpressionIcon()
+        Positioned(
+            top: 60,
+            right: 40,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ImageFromBytes(
+                imageData: widget.image.photoData,
+                height: 90,
+                width: 90,
+              ),
+            ))
       ],
     );
   }
 
   //TODO: 将来的に表情を受け取り、アイコンを表示する
   Widget childExpressionIcon() {
-    return const SizedBox(
-      width: 100,
-      height: 100,
-      child: Card(
-        color: Colors.grey,
-        child: Text("ここに表情のアイコンが入る"),
-      ),
-    );
+    return SizedBox(
+        width: 100,
+        height: 100,
+        child: Icon(
+          widget.icon,
+          size: 100,
+          color: widget.color,
+        ));
   }
 
   Widget statusIconAndStatusField(
       BuildContext context, IconData icon, Widget statusField) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.9,
+        width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -115,13 +135,20 @@ class _DailyRecordBody extends State<DailyRecordBody> {
 
   Widget isBoardingStatusField(context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.5,
+      margin: EdgeInsets.only(
+          right: MediaQuery.of(context).size.width * 0.05,
+          left: MediaQuery.of(context).size.width * 0.05),
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width * 0.4,
       decoration: statusFieldDecoration(!isBoarding),
       child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: Text(
             isBoarding ? "乗車中" : "降車済",
-            style: statusFieldTextStyle(!isBoarding),
+            style: TextStyle(
+              fontSize: 25,
+              color: !isBoarding ? Colors.green[900] : Colors.red[900],
+            ),
             textAlign: TextAlign.center,
           )),
     );

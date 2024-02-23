@@ -12,6 +12,12 @@ type BoardingRecord func(*sql.Selector)
 // Bus is the predicate function for bus builders.
 type Bus func(*sql.Selector)
 
+// BusRoute is the predicate function for busroute builders.
+type BusRoute func(*sql.Selector)
+
+// BusRouteAssociation is the predicate function for busrouteassociation builders.
+type BusRouteAssociation func(*sql.Selector)
+
 // Child is the predicate function for child builders.
 type Child func(*sql.Selector)
 

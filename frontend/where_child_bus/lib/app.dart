@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:where_child_bus/pages/auth_page/auth_page.dart';
 import 'package:where_child_bus/pages/bus_list_page/bus_list_page.dart';
 import 'package:where_child_bus/pages/camera_page/camera_bus_select_page.dart';
 import 'package:where_child_bus/pages/notification_page/notification_page.dart';
-import 'package:where_child_bus/pages/student_list_page/student_list_page.dart';
+import 'package:where_child_bus/pages/student_list_page/child_list_page.dart';
 
 class App extends StatefulWidget {
-  App({
+  const App({
     super.key,
   });
 
@@ -21,6 +22,16 @@ class _AppState extends State<App> {
     return Scaffold(
       appBar: AppBar(
         title: Text(['園児一覧', '送迎バスコース一覧', '連絡情報設定', 'カメラ'][_selectedIndex]),
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AuthPage()))
+                  }),
+        ],
       ),
       body: [
         const ChildListPage(),

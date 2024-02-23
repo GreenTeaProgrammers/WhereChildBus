@@ -5,8 +5,8 @@ import 'package:where_child_bus/components/util/input_value_label.dart';
 import 'package:where_child_bus/models/nursery_bus_data.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus/pages/camera_page/camera_page.dart';
-import 'package:where_child_bus/pages/camera_page/components/bus_select_box.dart';
-import 'package:where_child_bus/pages/camera_page/components/time_select_box.dart';
+import 'package:where_child_bus/pages/camera_page/widgets/bus_select_box.dart';
+import 'package:where_child_bus/pages/camera_page/widgets/time_select_box.dart';
 import 'package:where_child_bus/service/get_bus_list_by_nursery_id.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/bus.pb.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
@@ -22,25 +22,37 @@ class _BusSelectPageState extends State<BusSelectPage> {
   Bus? _selectedBus;
   BusType _selectedType = BusType.BUS_TYPE_MORNING;
   List<Bus> _buses = [];
+  Future<List<Bus>>? _busesFuture;
 
   Future<List<Bus>> _loadBuses() async {
     if (NurseryBusData().getBusList().isNotEmpty) {
       _selectedBus = NurseryBusData().getBusList().first;
       return NurseryBusData().getBusList();
     } else {
-      try {
-        GetBusListByNurseryIdResponse busList =
-            await getBusList(NurseryData().getNursery().id);
-        NurseryBusData().setBusListResponse(busList);
-        _selectedBus = busList.buses[0];
-        return NurseryBusData().getBusList();
-      } catch (error) {
-        if (kDebugMode) {
-          developer.log("バスのロード中にエラーが発生しました", error: error.toString());
-        }
-        throw Exception('バスのロードに失敗しました');
-      }
+      return _fetchBus();
     }
+  }
+
+  Future<List<Bus>> _fetchBus() async {
+    try {
+      GetBusListByNurseryIdResponse busList =
+          await getBusList(NurseryData().getNursery().id);
+      NurseryBusData().setBusListResponse(busList);
+      _selectedBus = busList.buses[0];
+      return NurseryBusData().getBusList();
+    } catch (error) {
+      if (kDebugMode) {
+        developer.log("バスのロード中にエラーが発生しました", error: error.toString());
+      }
+      throw Exception('バスのロードに失敗しました');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // _loadBuses()の結果をフィールドに保持
+    _busesFuture = _loadBuses();
   }
 
   @override
@@ -52,7 +64,7 @@ class _BusSelectPageState extends State<BusSelectPage> {
 
   Widget _createPageBody() {
     return FutureBuilder<List<Bus>>(
-      future: _loadBuses(),
+      future: _busesFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -121,7 +133,7 @@ class _BusSelectPageState extends State<BusSelectPage> {
 
   Widget _proceedButton() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (_selectedBus != null) {
           Navigator.push(
             context,
@@ -132,6 +144,7 @@ class _BusSelectPageState extends State<BusSelectPage> {
               ),
             ),
           );
+          await _fetchBus();
         }
       },
       child: const Text("カメラ起動"),

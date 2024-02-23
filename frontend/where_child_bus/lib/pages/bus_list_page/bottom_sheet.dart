@@ -97,7 +97,9 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
 
   moveToBusPassengerPage(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BusPassengerPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => BusPassengerPage(bus: widget.bus)));
   }
 
   Widget editButton(BuildContext context) {
@@ -141,7 +143,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
 
   Widget courseAndOperator(String courseName, String operatorName) {
     return Padding(
-      padding: const EdgeInsets.only(left: 30),
+      padding: const EdgeInsets.only(left: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -166,7 +168,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 150),
+        width: MediaQuery.of(context).size.width - 150,
         child: Text(
           name,
           overflow: TextOverflow.ellipsis,

@@ -1,6 +1,7 @@
 import "dart:developer" as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:where_child_bus_guardian/config/config.dart';
 import 'package:where_child_bus_guardian/util/api/health_check.dart';
@@ -33,9 +34,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'WhereChildBus Guardian',
+      title: 'hoicruise guardian',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+            background: const Color.fromARGB(255, 245, 255, 247),
+            seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.hachiMaruPopTextTheme(
+          Theme.of(context).textTheme,
+        ),
         useMaterial3: true,
       ),
       home: const AuthPage(),

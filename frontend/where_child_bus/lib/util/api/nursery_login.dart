@@ -13,9 +13,9 @@ Future<NurseryLoginResponse> nurseryLogin(String email, String password) async {
   var client = NurseryServiceClient(channel);
   try {
     var req = NurseryLoginRequest(email: email, password: password);
-    
-    if(kDebugMode) {
-      print("リクエスト: ${req}");
+
+    if (kDebugMode) {
+      print("リクエスト: $req");
     }
 
     var res = await client.nurseryLogin(req);
@@ -27,5 +27,7 @@ Future<NurseryLoginResponse> nurseryLogin(String email, String password) async {
     developer.log("Caught error", error: err);
     await channel.shutdown();
     return Future.error(err);
+  } finally {
+    await channel.shutdown();
   }
 }

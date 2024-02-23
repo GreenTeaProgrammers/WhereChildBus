@@ -1,33 +1,56 @@
+import "dart:developer" as developer;
 import "package:flutter/material.dart";
+import "package:where_child_bus/components/child_list/child_list_with_mark.dart";
+import "package:where_child_bus/service/get_child_list_by_bus_id.dart";
+import "package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart";
 
 class BusPassengerPage extends StatefulWidget {
-  final List<String> name = <String>[
-    "園児1",
-    "園児2",
-    "園児3",
-    "園児4",
-    "園児5",
-  ];
-  final List<String> group = <String>[
-    "1組",
-    "2組",
-    "3組",
-    "4組",
-    "5組",
-  ];
-  final List<String> image = <String>[
-    "1",
-    "2",
-    "1",
-    "1",
-    "2",
-  ];
+  final Bus bus;
+
+  const BusPassengerPage({super.key, required this.bus});
 
   @override
-  _BusPassengerPage createState() => _BusPassengerPage();
+  State<BusPassengerPage> createState() => _BusPassengerPage();
 }
 
 class _BusPassengerPage extends State<BusPassengerPage> {
+  List<Child> _childList = [];
+  List<ChildPhoto> _images = [];
+  bool _isLoading = false;
+
+  Future<void> _loadChildren() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
+    try {
+      var res = await getChildListByBusIDService(widget.bus.id);
+      if (mounted) {
+        setState(() {
+          _childList = res.children;
+          _images = res.photos;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      developer.log("園児のロード中にエラーが発生しました: $e", name: "LoadChildren");
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChildren();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +66,14 @@ class _BusPassengerPage extends State<BusPassengerPage> {
   }
 
   Widget pageBody() {
-    //TODO:将来的にはChildのリストを渡す
-    // return ChildListWithMark(childNames: widget.name, groupNames: widget.group, images: widget.image);
-
-    return Container();
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : ChildListWithMark(
+            childNames: _childList.map((child) => child.name).toList(),
+            groupNames:
+                _childList.map((child) => child.age.toString()).toList(),
+            images: _images);
   }
 }

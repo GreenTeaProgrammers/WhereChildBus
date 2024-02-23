@@ -3,6 +3,20 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:where_child_bus_guardian/pages/daily_page/components/daily_record_body.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
 
+//TODO:将来的に取得した表情データからアイコンと色を選択する
+final List<IconData> icons = [
+  Icons.sentiment_satisfied,
+  Icons.sentiment_neutral,
+  Icons.sentiment_dissatisfied,
+  Icons.sentiment_satisfied,
+];
+final List<Color> colors = [
+  Color.fromARGB(255, 255, 0, 0),
+  Color.fromARGB(255, 0, 255, 0),
+  Color.fromARGB(255, 0, 0, 255),
+  Color.fromARGB(255, 255, 153, 0),
+];
+
 class DailyRecordSlider extends StatefulWidget {
   final List<Child> children;
   final List<ChildPhoto> images;
@@ -26,6 +40,8 @@ class _DailyRecordSlider extends State<DailyRecordSlider> {
       return DailyRecordBody(
         child: child,
         image: widget.images[index],
+        icon: icons[index],
+        color: colors[index],
       );
     }).toList();
 

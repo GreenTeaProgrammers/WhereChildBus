@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/child"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/childbusassociation"
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/predicate"
@@ -44,30 +44,16 @@ func (cbau *ChildBusAssociationUpdate) SetNillableChildID(u *uuid.UUID) *ChildBu
 	return cbau
 }
 
-// SetBusID sets the "bus_id" field.
-func (cbau *ChildBusAssociationUpdate) SetBusID(u uuid.UUID) *ChildBusAssociationUpdate {
-	cbau.mutation.SetBusID(u)
+// SetBusRouteID sets the "bus_route_id" field.
+func (cbau *ChildBusAssociationUpdate) SetBusRouteID(u uuid.UUID) *ChildBusAssociationUpdate {
+	cbau.mutation.SetBusRouteID(u)
 	return cbau
 }
 
-// SetNillableBusID sets the "bus_id" field if the given value is not nil.
-func (cbau *ChildBusAssociationUpdate) SetNillableBusID(u *uuid.UUID) *ChildBusAssociationUpdate {
+// SetNillableBusRouteID sets the "bus_route_id" field if the given value is not nil.
+func (cbau *ChildBusAssociationUpdate) SetNillableBusRouteID(u *uuid.UUID) *ChildBusAssociationUpdate {
 	if u != nil {
-		cbau.SetBusID(*u)
-	}
-	return cbau
-}
-
-// SetBusType sets the "bus_type" field.
-func (cbau *ChildBusAssociationUpdate) SetBusType(ct childbusassociation.BusType) *ChildBusAssociationUpdate {
-	cbau.mutation.SetBusType(ct)
-	return cbau
-}
-
-// SetNillableBusType sets the "bus_type" field if the given value is not nil.
-func (cbau *ChildBusAssociationUpdate) SetNillableBusType(ct *childbusassociation.BusType) *ChildBusAssociationUpdate {
-	if ct != nil {
-		cbau.SetBusType(*ct)
+		cbau.SetBusRouteID(*u)
 	}
 	return cbau
 }
@@ -77,9 +63,9 @@ func (cbau *ChildBusAssociationUpdate) SetChild(c *Child) *ChildBusAssociationUp
 	return cbau.SetChildID(c.ID)
 }
 
-// SetBus sets the "bus" edge to the Bus entity.
-func (cbau *ChildBusAssociationUpdate) SetBus(b *Bus) *ChildBusAssociationUpdate {
-	return cbau.SetBusID(b.ID)
+// SetBusRoute sets the "bus_route" edge to the BusRoute entity.
+func (cbau *ChildBusAssociationUpdate) SetBusRoute(b *BusRoute) *ChildBusAssociationUpdate {
+	return cbau.SetBusRouteID(b.ID)
 }
 
 // Mutation returns the ChildBusAssociationMutation object of the builder.
@@ -93,9 +79,9 @@ func (cbau *ChildBusAssociationUpdate) ClearChild() *ChildBusAssociationUpdate {
 	return cbau
 }
 
-// ClearBus clears the "bus" edge to the Bus entity.
-func (cbau *ChildBusAssociationUpdate) ClearBus() *ChildBusAssociationUpdate {
-	cbau.mutation.ClearBus()
+// ClearBusRoute clears the "bus_route" edge to the BusRoute entity.
+func (cbau *ChildBusAssociationUpdate) ClearBusRoute() *ChildBusAssociationUpdate {
+	cbau.mutation.ClearBusRoute()
 	return cbau
 }
 
@@ -128,16 +114,11 @@ func (cbau *ChildBusAssociationUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (cbau *ChildBusAssociationUpdate) check() error {
-	if v, ok := cbau.mutation.BusType(); ok {
-		if err := childbusassociation.BusTypeValidator(v); err != nil {
-			return &ValidationError{Name: "bus_type", err: fmt.Errorf(`ent: validator failed for field "ChildBusAssociation.bus_type": %w`, err)}
-		}
-	}
 	if _, ok := cbau.mutation.ChildID(); cbau.mutation.ChildCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "ChildBusAssociation.child"`)
 	}
-	if _, ok := cbau.mutation.BusID(); cbau.mutation.BusCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "ChildBusAssociation.bus"`)
+	if _, ok := cbau.mutation.BusRouteID(); cbau.mutation.BusRouteCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "ChildBusAssociation.bus_route"`)
 	}
 	return nil
 }
@@ -153,9 +134,6 @@ func (cbau *ChildBusAssociationUpdate) sqlSave(ctx context.Context) (n int, err 
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := cbau.mutation.BusType(); ok {
-		_spec.SetField(childbusassociation.FieldBusType, field.TypeEnum, value)
 	}
 	if cbau.mutation.ChildCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -186,28 +164,28 @@ func (cbau *ChildBusAssociationUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cbau.mutation.BusCleared() {
+	if cbau.mutation.BusRouteCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   childbusassociation.BusTable,
-			Columns: []string{childbusassociation.BusColumn},
+			Table:   childbusassociation.BusRouteTable,
+			Columns: []string{childbusassociation.BusRouteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cbau.mutation.BusIDs(); len(nodes) > 0 {
+	if nodes := cbau.mutation.BusRouteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   childbusassociation.BusTable,
-			Columns: []string{childbusassociation.BusColumn},
+			Table:   childbusassociation.BusRouteTable,
+			Columns: []string{childbusassociation.BusRouteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -249,30 +227,16 @@ func (cbauo *ChildBusAssociationUpdateOne) SetNillableChildID(u *uuid.UUID) *Chi
 	return cbauo
 }
 
-// SetBusID sets the "bus_id" field.
-func (cbauo *ChildBusAssociationUpdateOne) SetBusID(u uuid.UUID) *ChildBusAssociationUpdateOne {
-	cbauo.mutation.SetBusID(u)
+// SetBusRouteID sets the "bus_route_id" field.
+func (cbauo *ChildBusAssociationUpdateOne) SetBusRouteID(u uuid.UUID) *ChildBusAssociationUpdateOne {
+	cbauo.mutation.SetBusRouteID(u)
 	return cbauo
 }
 
-// SetNillableBusID sets the "bus_id" field if the given value is not nil.
-func (cbauo *ChildBusAssociationUpdateOne) SetNillableBusID(u *uuid.UUID) *ChildBusAssociationUpdateOne {
+// SetNillableBusRouteID sets the "bus_route_id" field if the given value is not nil.
+func (cbauo *ChildBusAssociationUpdateOne) SetNillableBusRouteID(u *uuid.UUID) *ChildBusAssociationUpdateOne {
 	if u != nil {
-		cbauo.SetBusID(*u)
-	}
-	return cbauo
-}
-
-// SetBusType sets the "bus_type" field.
-func (cbauo *ChildBusAssociationUpdateOne) SetBusType(ct childbusassociation.BusType) *ChildBusAssociationUpdateOne {
-	cbauo.mutation.SetBusType(ct)
-	return cbauo
-}
-
-// SetNillableBusType sets the "bus_type" field if the given value is not nil.
-func (cbauo *ChildBusAssociationUpdateOne) SetNillableBusType(ct *childbusassociation.BusType) *ChildBusAssociationUpdateOne {
-	if ct != nil {
-		cbauo.SetBusType(*ct)
+		cbauo.SetBusRouteID(*u)
 	}
 	return cbauo
 }
@@ -282,9 +246,9 @@ func (cbauo *ChildBusAssociationUpdateOne) SetChild(c *Child) *ChildBusAssociati
 	return cbauo.SetChildID(c.ID)
 }
 
-// SetBus sets the "bus" edge to the Bus entity.
-func (cbauo *ChildBusAssociationUpdateOne) SetBus(b *Bus) *ChildBusAssociationUpdateOne {
-	return cbauo.SetBusID(b.ID)
+// SetBusRoute sets the "bus_route" edge to the BusRoute entity.
+func (cbauo *ChildBusAssociationUpdateOne) SetBusRoute(b *BusRoute) *ChildBusAssociationUpdateOne {
+	return cbauo.SetBusRouteID(b.ID)
 }
 
 // Mutation returns the ChildBusAssociationMutation object of the builder.
@@ -298,9 +262,9 @@ func (cbauo *ChildBusAssociationUpdateOne) ClearChild() *ChildBusAssociationUpda
 	return cbauo
 }
 
-// ClearBus clears the "bus" edge to the Bus entity.
-func (cbauo *ChildBusAssociationUpdateOne) ClearBus() *ChildBusAssociationUpdateOne {
-	cbauo.mutation.ClearBus()
+// ClearBusRoute clears the "bus_route" edge to the BusRoute entity.
+func (cbauo *ChildBusAssociationUpdateOne) ClearBusRoute() *ChildBusAssociationUpdateOne {
+	cbauo.mutation.ClearBusRoute()
 	return cbauo
 }
 
@@ -346,16 +310,11 @@ func (cbauo *ChildBusAssociationUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (cbauo *ChildBusAssociationUpdateOne) check() error {
-	if v, ok := cbauo.mutation.BusType(); ok {
-		if err := childbusassociation.BusTypeValidator(v); err != nil {
-			return &ValidationError{Name: "bus_type", err: fmt.Errorf(`ent: validator failed for field "ChildBusAssociation.bus_type": %w`, err)}
-		}
-	}
 	if _, ok := cbauo.mutation.ChildID(); cbauo.mutation.ChildCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "ChildBusAssociation.child"`)
 	}
-	if _, ok := cbauo.mutation.BusID(); cbauo.mutation.BusCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "ChildBusAssociation.bus"`)
+	if _, ok := cbauo.mutation.BusRouteID(); cbauo.mutation.BusRouteCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "ChildBusAssociation.bus_route"`)
 	}
 	return nil
 }
@@ -389,9 +348,6 @@ func (cbauo *ChildBusAssociationUpdateOne) sqlSave(ctx context.Context) (_node *
 			}
 		}
 	}
-	if value, ok := cbauo.mutation.BusType(); ok {
-		_spec.SetField(childbusassociation.FieldBusType, field.TypeEnum, value)
-	}
 	if cbauo.mutation.ChildCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -421,28 +377,28 @@ func (cbauo *ChildBusAssociationUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cbauo.mutation.BusCleared() {
+	if cbauo.mutation.BusRouteCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   childbusassociation.BusTable,
-			Columns: []string{childbusassociation.BusColumn},
+			Table:   childbusassociation.BusRouteTable,
+			Columns: []string{childbusassociation.BusRouteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cbauo.mutation.BusIDs(); len(nodes) > 0 {
+	if nodes := cbauo.mutation.BusRouteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   childbusassociation.BusTable,
-			Columns: []string{childbusassociation.BusColumn},
+			Table:   childbusassociation.BusRouteTable,
+			Columns: []string{childbusassociation.BusRouteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(bus.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(busroute.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

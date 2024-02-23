@@ -17,7 +17,10 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   camera: ^0.10.5+9
   image: ^4.1.7
+  google_maps_flutter: ^2.5.3
   collection: ^1.18.0
+  location: ^5.0.3
+  audioplayers: ^5.2.1
   where_child_bus_api:
     path: ../where_child_bus_api
 
@@ -33,5 +36,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/sounds/
     - .env
 
