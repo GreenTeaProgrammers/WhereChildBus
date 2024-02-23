@@ -67,50 +67,55 @@ class MachineLearningServiceServicer(
     def Pred(self, request_iterator: Iterable[bus_pb2.StreamBusVideoRequest], context):
         for request in request_iterator:
             logging.info("Pred Service Start")
-            params = Pred_Args(
-                nursery_id=request.nursery_id,
-                bus_id=request.bus_id,
-                bus_type=request.bus_type,
-                video_chunk=request.video_chunk,
-                photo_height=request.photo_height,
-                photo_width=request.photo_width,
-                vehicle_event=request.vehicle_event,
-            )
             try:
+                params = Pred_Args(
+                    nursery_id=request.nursery_id,
+                    bus_id=request.bus_id,
+                    bus_type=request.bus_type,
+                    video_chunk=request.video_chunk,
+                    photo_height=request.photo_height,
+                    photo_width=request.photo_width,
+                    vehicle_event=request.vehicle_event,
+                )
                 child_ids = self.pred_fn(params)
+                is_detected = len(child_ids) > 0
+                yield machine_learning_pb2.PredResponse(
+                    is_detected=is_detected, child_ids=child_ids
+                )
             except Exception:
                 e = traceback.format_exc()
                 logging.error(e)
                 rich_status = create_service_error_status(e)
                 context.abort_with_status(rpc_status.to_status(rich_status))
                 child_ids = []
-
-            is_detected = len(child_ids) > 0
-            yield machine_learning_pb2.PredResponse(
-                is_detected=is_detected, child_ids=child_ids
-            )
+                is_detected = len(child_ids) > 0
+                yield machine_learning_pb2.PredResponse(
+                    is_detected=is_detected, child_ids=child_ids
+                )
 
     def Train(self, request: machine_learning_pb2.TrainRequest, context):
         logging.info("Train Service Start")
-        params = Train_Args(
-            nursery_id=request.nursery_id,
-            child_ids=request.child_ids,
-            bus_id=request.bus_id,
-            bus_type=request.bus_type,
-            seed=42,
-            mode="train",
-        )
         try:
+            params = Train_Args(
+                nursery_id=request.nursery_id,
+                child_ids=request.child_ids,
+                bus_id=request.bus_id,
+                bus_type=request.bus_type,
+                seed=42,
+                mode="train",
+            )
+            self.train_status = machine_learning_pb2.STATUS_PROCESSING
+            yield machine_learning_pb2.TrainResponse(status=self.train_status)
             self.train_fn(params)
-            is_started = True
+            self.train_status = machine_learning_pb2.STATUS_SUCCESS
+            yield machine_learning_pb2.TrainResponse(status=self.train_status)
         except Exception:
-            is_started = False
             e = traceback.format_exc()
             logging.error(e)
             rich_status = create_service_error_status(e)
             context.abort_with_status(rpc_status.to_status(rich_status))
-
-        return machine_learning_pb2.TrainResponse(is_started=is_started)
+            self.train_status = machine_learning_pb2.STATUS_FAILED
+            yield machine_learning_pb2.TrainResponse(status=self.train_status)
 
     def FaceDetectAndClip(
         self,

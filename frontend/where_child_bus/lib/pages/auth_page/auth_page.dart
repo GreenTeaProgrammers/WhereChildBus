@@ -2,9 +2,12 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:where_child_bus/app.dart';
+import 'package:where_child_bus/pages/register_page/register_page.dart';
 import 'package:where_child_bus/util/api/nursery_login.dart';
 import 'package:where_child_bus/models/nursery_data.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/nursery.pb.dart';
+
+import 'widget/register_button.dart';
 
 enum NurseryLoginError {
   unknown,
@@ -48,6 +51,7 @@ class _AuthPageState extends State<AuthPage> {
           _loginError == NurseryLoginError.invalidCredentials)
         emailOrPasswordNotFound(),
       loginButton(),
+      RegisterButton(context: context),
     ];
 
     return Center(
@@ -65,7 +69,7 @@ class _AuthPageState extends State<AuthPage> {
     return const Padding(
       padding: EdgeInsets.only(bottom: 32),
       child: Text(
-        'WhereChildBus',
+        'ほいくるーず',
         style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       ),
     );

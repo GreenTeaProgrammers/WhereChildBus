@@ -97,7 +97,9 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
 
   moveToBusPassengerPage(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => BusPassengerPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => BusPassengerPage(bus: widget.bus)));
   }
 
   Widget editButton(BuildContext context) {

@@ -21,6 +21,7 @@ dependencies:
   google_maps_flutter: ^2.5.3
   flutter_polyline_points: ^2.0.0
   google_directions_api: ^0.10.0
+  intl: ^0.19.0
   where_child_bus_api:
     path: ../where_child_bus_api
   google_fonts: ^6.1.0
