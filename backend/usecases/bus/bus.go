@@ -591,7 +591,7 @@ func (i *Interactor) processDetectedChildren(tx *ent.Tx, ctx context.Context, st
 	i.logger.Info("sending response to client", "bus_id", busUUID, "vehicle_event", vehicleEvent, "children", pbChildren)
 
 	// 元のクライアントにレスポンスを返す
-	err := stream.SendMsg(&pb.StreamBusVideoResponse{
+	err := stream.Send(&pb.StreamBusVideoResponse{
 		IsDetected: resp.IsDetected,
 		Children:   pbChildren,
 	})
