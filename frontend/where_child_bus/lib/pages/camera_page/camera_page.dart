@@ -80,7 +80,7 @@ class _CameraPageState extends State<CameraPage> {
     final res = grpcClient.streamBusVideo(requestStream);
 
     try {
-      await for (var response in res.asStream()) {
+      await for (var response in res) {
         developer.log("Received response: $response", name: "CameraPage");
         await _playAudio(response);
       }
