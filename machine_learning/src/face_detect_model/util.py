@@ -195,12 +195,15 @@ class smile_detecter:
         if len(smile) > 0:
             (_, _, sw, sh) = smile[0]
             smile_area = sw * sh
-            smile_degree = (
-                smile_area / (gray_image.shape[0] * gray_image.shape[1]) * 100
-            )
+            # 仮定として、顔の最大30%が笑顔の面積となる場合
+            max_smile_area = (gray_image.shape[0] * gray_image.shape[1]) * 0.25
+            # 実際の笑顔の面積を最大笑顔面積で割り、100を掛けて正規化
+            smile_degree = (smile_area / max_smile_area) * 100
+            # 100を超える値を100に制限
+            smile_degree = min(smile_degree, 100)
             return smile_degree
-
-        return 0
+        else:
+            return 0
 
     def add_smile_degree_to_image(
         self, image, smile_degree, font_scale=0.7, thickness=2
