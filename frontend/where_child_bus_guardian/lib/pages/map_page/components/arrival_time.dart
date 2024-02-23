@@ -136,6 +136,7 @@ class _ArrivalTimeState extends State<ArrivalTime> {
     String url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=$startLat,$startLng&destination=$endLat,$endLng&waypoints=$waypointsString&key=$googleApiKey';
 
+    developer.log("URL: $url", name: 'getArrivalTime');
     http.Response? response = await _fetchDirections(url);
 
     return _parseDurationFromResponse(response);
