@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:where_child_bus_guardian/components/utils/google_map_view.dart';
 import 'package:where_child_bus_guardian/config/config.dart';
+import 'package:where_child_bus_guardian/pages/map_page/components/arrival_time.dart';
 import 'package:where_child_bus_guardian/pages/map_page/components/map_page_bottom.dart';
 import 'package:where_child_bus_guardian/service/get_running_bus_by_guardian_id.dart';
 import 'package:where_child_bus_guardian/service/get_bus_route_by_bus_id.dart';
@@ -47,6 +48,7 @@ class _MapPageState extends State<MapPage> {
   double nurseryLatitude = 0.0;
   double nurseryLongitude = 0.0;
 
+  bool _isFirstBusLocationUpdate = true;
   bool _isLoading = false;
 
   @override
@@ -71,6 +73,9 @@ class _MapPageState extends State<MapPage> {
           //このタイミングでインスタンスが再生成される
           busLatitude = response.latitude;
           busLongitude = response.longitude;
+          if (_isFirstBusLocationUpdate) {
+            _isFirstBusLocationUpdate = false;
+          }
           developer.log("$busLatitude, $busLongitude",
               name: "TrackBusContinuous");
         });
@@ -91,13 +96,13 @@ class _MapPageState extends State<MapPage> {
     try {
       await _loadBusData();
       developer.log("バスの読み込み完了", name: "LoadBusData");
-      trackBusContinuous(); // ストリームではなく、直接リクエストを送信
       await _loadStationsData();
       developer.log("停留所の読み込み完了", name: "LoadStationsData");
       await _createWayPointsFromStations();
       developer.log("経由地の読み込み完了", name: "LoadWaypointData");
       await _loadNurseryData();
       await _getNurseryCoordinates();
+      trackBusContinuous(); // ストリームではなく、直接リクエストを送信
     } catch (e) {
       developer.log('初期化中にエラーが発生しました: $e');
     } finally {
@@ -212,16 +217,18 @@ class _MapPageState extends State<MapPage> {
                   busLatitude: busLatitude,
                   busLongitude: busLongitude,
                 ),
-                MapPageBottom(
-                    guardian: guardian,
-                    bus: bus,
-                    stations: busRoutes,
-                    waypoints: waypoints,
-                    nextStationId: nextStationId,
-                    busLatitude: busLatitude,
-                    busLongitude: busLongitude,
-                    nurseryLatitude: nurseryLatitude,
-                    nurseryLongitude: nurseryLongitude),
+                _isFirstBusLocationUpdate
+                    ? CircularProgressIndicator()
+                    : MapPageBottom(
+                        guardian: guardian,
+                        bus: bus,
+                        stations: busRoutes,
+                        waypoints: waypoints,
+                        nextStationId: nextStationId,
+                        busLatitude: busLatitude,
+                        busLongitude: busLongitude,
+                        nurseryLatitude: nurseryLatitude,
+                        nurseryLongitude: nurseryLongitude),
               ],
             ),
           );
