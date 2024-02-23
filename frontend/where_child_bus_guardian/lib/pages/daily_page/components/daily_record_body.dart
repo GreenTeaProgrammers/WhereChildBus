@@ -74,13 +74,29 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget childFaceAndExpression() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[photoFrameAndChildFace(), childExpressionIcon()],
+    );
+  }
+
+  Widget photoFrameAndChildFace() {
+    return Stack(
       children: <Widget>[
-        ImageFromBytes(
-          imageData: widget.image.photoData,
-          height: 150,
-          width: 150,
+        Image.asset(
+          'assets/images/child_photo_frame.png',
+          width: 170,
+          height: 170,
         ),
-        childExpressionIcon()
+        Positioned(
+            top: 60,
+            right: 40,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ImageFromBytes(
+                imageData: widget.image.photoData,
+                height: 90,
+                width: 90,
+              ),
+            ))
       ],
     );
   }
