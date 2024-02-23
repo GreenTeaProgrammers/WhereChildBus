@@ -152,6 +152,7 @@ class _BusListPageState extends State<BusListPage> {
                   });
             },
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BusImage(busStatus: bus.busStatus),
                 _createBusNameAndDescription(bus.name, bus.busStatus),

@@ -128,32 +128,29 @@ class _CreateStationPageState extends State<CreateStationPage> {
             ? Container()
             : SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: Expanded(
-                  flex: 3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          '${guardians[_index].name}さん',
-                          style: const TextStyle(fontSize: 20),
-                        ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        '${guardians[_index].name}さん',
+                        style: const TextStyle(fontSize: 20),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 8.0),
-                        child: PositionDecideButton(
-                          onPressed:
-                              _markers.isNotEmpty ? _onButtonPressed : () {},
-                          text: _markers.isNotEmpty
-                              ? 'バス停を決定する'
-                              : '地図をタップしてバス停を決定してください',
-                          isLoading: _isLoadingUpdate,
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 8.0),
+                      child: PositionDecideButton(
+                        onPressed:
+                            _markers.isNotEmpty ? _onButtonPressed : () {},
+                        text: _markers.isNotEmpty
+                            ? 'バス停を決定する'
+                            : '地図をタップしてバス停を決定してください',
+                        isLoading: _isLoadingUpdate,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )
       ],
