@@ -44,8 +44,14 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _initializeCamera() async {
-    final firstCamera = where_child_bus.cameras.first;
-    _controller = CameraController(firstCamera, ResolutionPreset.medium);
+    var camera = where_child_bus.cameras.first;
+    try {
+      camera = where_child_bus.cameras[1];
+    } catch (e) {
+      developer.log("Failed to get camera: $e");
+    }
+
+    _controller = CameraController(camera, ResolutionPreset.medium);
 
     try {
       await _controller.initialize();
@@ -140,6 +146,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   List<int> _processCameraImage2gray(CameraImage image) {
+    //Note:実験的に縦横を入れ替えてみる
     final int width = image.width;
     final int height = image.height;
     const int bgraPixelStride = 4; // BGRAフォーマットではピクセルあたり4バイト
@@ -163,6 +170,30 @@ class _CameraPageState extends State<CameraPage> {
     return grayscaleBytes;
   }
 
+  List<dynamic> rotateGrayscaleImageLeft90Degrees(
+      List<int> grayscaleBytes, int width, int height) {
+    int rotatedWidth = height;
+    int rotatedHeight = width;
+    List<int> rotatedGrayscaleBytes =
+        List.filled(rotatedWidth * rotatedHeight, 0);
+
+    for (int originalY = 0; originalY < height; originalY++) {
+      for (int originalX = 0; originalX < width; originalX++) {
+        // 元の画像でのピクセルのインデックス
+        int originalIndex = originalY * width + originalX;
+        // 回転後のピクセルの位置
+        int rotatedX = originalY;
+        int rotatedY = width - originalX - 1;
+        // 回転後のピクセルのインデックス
+        int rotatedIndex = rotatedY * rotatedWidth + rotatedX;
+        // 輝度値を新しい位置にコピー
+        rotatedGrayscaleBytes[rotatedIndex] = grayscaleBytes[originalIndex];
+      }
+    }
+
+    return [rotatedGrayscaleBytes, rotatedWidth, rotatedHeight];
+  }
+
   void _startImageStream() async {
     List<List<int>> videoChunks = [];
     if (!_controller.value.isStreamingImages) {
@@ -172,19 +203,28 @@ class _CameraPageState extends State<CameraPage> {
         if (frameCounter % 60 == 0) {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
+            _streamController.add(StreamBusVideoRequest(
+              busId: widget.bus.id,
+              nurseryId: NurseryData().getNursery().id,
+              busType: widget.busType,
+              vehicleEvent: _vehicleEvent,
+              videoChunk: videoChunks,
+              photoHeight: image.height,
+              photoWidth: image.width,
+            ));
           } else if (Platform.isIOS) {
-            videoChunks.add(_processCameraImage2gray(image));
+            videoChunks.add(rotateGrayscaleImageLeft90Degrees(
+                _processCameraImage2gray(image), image.width, image.height)[0]);
+            _streamController.add(StreamBusVideoRequest(
+              busId: widget.bus.id,
+              nurseryId: NurseryData().getNursery().id,
+              busType: widget.busType,
+              vehicleEvent: _vehicleEvent,
+              videoChunk: videoChunks,
+              photoHeight: image.width,
+              photoWidth: image.height,
+            ));
           }
-          _streamController.add(StreamBusVideoRequest(
-            busId: widget.bus.id,
-            nurseryId: NurseryData().getNursery().id,
-            busType: widget.busType,
-            vehicleEvent: _vehicleEvent,
-            videoChunk: videoChunks,
-            photoHeight: image.height,
-            photoWidth: image.width,
-          ));
-
 
           try {
             // await _getCurrentLocation();
