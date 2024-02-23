@@ -44,8 +44,14 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _initializeCamera() async {
-    final firstCamera = where_child_bus.cameras.first;
-    _controller = CameraController(firstCamera, ResolutionPreset.medium);
+    var camera = where_child_bus.cameras.first;
+    try {
+      camera = where_child_bus.cameras[1];
+    } catch (e) {
+      developer.log("Failed to get camera: $e");
+    }
+
+    _controller = CameraController(camera, ResolutionPreset.medium);
 
     try {
       await _controller.initialize();
