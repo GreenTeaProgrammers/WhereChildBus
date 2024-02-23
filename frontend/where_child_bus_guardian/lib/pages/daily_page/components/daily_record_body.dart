@@ -115,7 +115,7 @@ class _DailyRecordBody extends State<DailyRecordBody> {
   Widget statusIconAndStatusField(
       BuildContext context, IconData icon, Widget statusField) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.9,
+        width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -130,13 +130,20 @@ class _DailyRecordBody extends State<DailyRecordBody> {
 
   Widget isBoardingStatusField(context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.5,
+      margin: EdgeInsets.only(
+          right: MediaQuery.of(context).size.width * 0.05,
+          left: MediaQuery.of(context).size.width * 0.05),
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width * 0.4,
       decoration: statusFieldDecoration(!isBoarding),
       child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: Text(
             isBoarding ? "乗車中" : "降車済",
-            style: statusFieldTextStyle(!isBoarding),
+            style: TextStyle(
+              fontSize: 25,
+              color: !isBoarding ? Colors.green[900] : Colors.red[900],
+            ),
             textAlign: TextAlign.center,
           )),
     );
