@@ -4,6 +4,7 @@ import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.da
 import 'package:where_child_bus_guardian/pages/map_page/components/arrival_time.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
 import '../../styles/styles.dart';
+import 'package:where_child_bus_guardian/pages/map_page/components/arrival_time.dart';
 
 class MapPageBottom extends StatefulWidget {
   final GuardianResponse guardian;
@@ -73,49 +74,18 @@ class _MapPageBottomState extends State<MapPageBottom> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            arrivalTimeBody(),
+            ArrivalTime(
+              bus: widget.bus,
+              waypoints: widget.waypoints,
+              nextStationId: widget.nextStationId,
+              busLatitude: widget.busLatitude,
+              busLongitude: widget.busLongitude,
+              guardianLatitude: guardianStation.latitude,
+              guardianLongitude: guardianStation.longitude,
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget arrivalTimeBody() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          fieldTitleAndTime(
-              "到着まで",
-              ArrivalTime(
-                  bus: widget.bus,
-                  waypoints: widget.waypoints,
-                  nextStationId: widget.nextStationId,
-                  busLatitude: widget.busLatitude,
-                  busLongitude: widget.busLongitude,
-                  guardianLatitude: guardianStation.latitude,
-                  guardianLongitude: guardianStation.longitude,
-                  isMinuteOnly: true)),
-          fieldTitleAndTime(
-              "到着予定時刻",
-              ArrivalTime(
-                  bus: widget.bus,
-                  waypoints: widget.waypoints,
-                  nextStationId: widget.nextStationId,
-                  busLatitude: widget.busLatitude,
-                  busLongitude: widget.busLongitude,
-                  guardianLatitude: guardianStation.latitude,
-                  guardianLongitude: guardianStation.longitude,
-                  isMinuteOnly: false)),
-        ]);
-  }
-
-  Widget fieldTitleAndTime(String title, Widget time) {
-    return Column(
-      children: <Widget>[
-        Text(title),
-        time,
-      ],
     );
   }
 }

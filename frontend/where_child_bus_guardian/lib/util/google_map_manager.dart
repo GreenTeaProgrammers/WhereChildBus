@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
@@ -62,6 +63,7 @@ class GoogleMapAPIManager {
     String url =
         'https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$googleApiKey';
     final response = await _fetchFromGoogleAPI(url, 'geocodeAddress');
+    developer.log('${response.body}', name: "geocodeAddress");
     return json.decode(response.body);
   }
 

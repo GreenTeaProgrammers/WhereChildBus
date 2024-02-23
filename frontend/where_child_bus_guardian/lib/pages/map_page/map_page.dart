@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
@@ -67,6 +68,7 @@ class _MapPageState extends State<MapPage> {
       await for (var response in grpcClient.trackBusContinuous(request)) {
         // レスポンスを受け取り、緯度と経度を更新
         setState(() {
+          //このタイミングでインスタンスが再生成される
           busLatitude = response.latitude;
           busLongitude = response.longitude;
           developer.log("$busLatitude, $busLongitude",
@@ -179,14 +181,13 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _getNurseryCoordinates() async {
     try {
-      dynamic data =
+      Map<String, dynamic> data =
           await GoogleMapAPIManager().geocodeAddress(nurseryAddress!);
       if (mounted) {
         setState(() {
-          developer.log(data);
           final location = data['results'][0]['geometry']['location'];
-          nurseryLatitude = location['lat'];
-          nurseryLongitude = location['lng'];
+          nurseryLatitude = location['lat'] as double;
+          nurseryLongitude = location['lng'] as double;
         });
       }
     } catch (e) {

@@ -5,6 +5,7 @@ import '../map_page.dart';
 import 'package:intl/intl.dart';
 import 'package:where_child_bus_guardian/util/google_map_manager.dart';
 import 'package:where_child_bus_api/proto-gen/where_child_bus/v1/resources.pb.dart';
+import 'package:where_child_bus_guardian/util/arrival_time_manager.dart';
 
 class ArrivalTime extends StatefulWidget {
   final Bus bus;
@@ -12,7 +13,6 @@ class ArrivalTime extends StatefulWidget {
   final String nextStationId;
   final double busLatitude, busLongitude;
   final double guardianLatitude, guardianLongitude;
-  final bool isMinuteOnly;
 
   const ArrivalTime({
     Key? key,
@@ -23,7 +23,6 @@ class ArrivalTime extends StatefulWidget {
     required this.busLongitude,
     required this.guardianLatitude,
     required this.guardianLongitude,
-    required this.isMinuteOnly,
   }) : super(key: key);
 
   @override
@@ -31,7 +30,8 @@ class ArrivalTime extends StatefulWidget {
 }
 
 class _ArrivalTimeState extends State<ArrivalTime> {
-  String arrivalTime = "Loading...";
+  String arrivalTimeText = "Loading";
+  String arrivalTimeAndCurrentText = "Loading";
   Timer? _timer;
   double nextStationLatitude = 0.0, nextStationLongitude = 0.0;
 
@@ -78,15 +78,33 @@ class _ArrivalTimeState extends State<ArrivalTime> {
     _timer = Timer.periodic(
         const Duration(minutes: 1), (Timer t) => initArrivalTime());
 
-    return Text(
-      widget.isMinuteOnly ? "${arrivalTime}分" : "${arrivalTime}",
-      style: const TextStyle(fontSize: 30),
-    );
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Text(
+                "到着まで",
+                style: const TextStyle(fontSize: 20),
+              ),
+              Text("${arrivalTimeText}分", style: const TextStyle(fontSize: 30))
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Text("到着予定時刻", style: const TextStyle(fontSize: 20)),
+              Text("${arrivalTimeAndCurrentText}",
+                  style: const TextStyle(fontSize: 30))
+            ],
+          ),
+        ]);
   }
 
   Future<void> setArrivalTime() async {
     try {
-      final durationInSeconds = await getArrivalTime(
+      final durationInSeconds =
+          await ArrivalTimeManager.instance.getArrivalTime(
         widget.busLatitude,
         widget.busLongitude,
         nextStationLatitude,
@@ -96,81 +114,25 @@ class _ArrivalTimeState extends State<ArrivalTime> {
         widget.waypoints,
       );
 
+      developer.log("durationInSeconds: $durationInSeconds",
+          name: "ArrivalTime");
+
+      // 成功した取得のみで値を更新
       if (durationInSeconds != null) {
         if (mounted) {
           setState(() {
-            arrivalTime = widget.isMinuteOnly
-                ? (durationInSeconds ~/ 60).toString()
-                : DateFormat('HH:mm').format(
-                    DateTime.now().add(Duration(seconds: durationInSeconds)));
+            arrivalTimeText = (durationInSeconds ~/ 60).toString();
+            arrivalTimeAndCurrentText = DateFormat('HH:mm')
+                .format(
+                    DateTime.now().add(Duration(seconds: durationInSeconds)))
+                .toString();
           });
         }
-      } else {
-        setState(() => arrivalTime = "N/A");
       }
+      // durationInSecondsがnullの場合や例外が発生した場合は、値を更新しない
     } catch (e) {
-      developer.log('到着時間の取得中にエラーが発生しました', error: e, name: "BusStopTimeError");
-      setState(() => arrivalTime = "Error");
+      developer.log('到着時間の取得中にエラーが発生しました', error: e, name: "ArrivalTimeError");
+      // エラーが発生しても、到着時間のテキストを更新しない
     }
-  }
-
-  Future<int?> getArrivalTime(
-    double startLat,
-    double startLng,
-    double nextLat,
-    double nextLng,
-    double endLat,
-    double endLng,
-    List<Waypoint> waypoints,
-  ) async {
-    String waypointsString =
-        _generateWaypointsString(waypoints, nextLat, nextLng, endLat, endLng);
-
-    dynamic response = await GoogleMapAPIManager().getDirections(
-      startLat: startLat.toString(),
-      startLng: startLng.toString(),
-      endLat: endLat.toString(),
-      endLng: endLng.toString(),
-      waypoints: waypointsString,
-    );
-
-    developer.log("$response", name: "ArrivalTimeResponse");
-    return _parseDurationFromResponse(response);
-  }
-
-  String _generateWaypointsString(List<Waypoint> waypoints, double startLat,
-      double startLng, double endLat, double endLng) {
-    int startIndex = waypoints.indexWhere(
-        (point) => point.latitude == startLat && point.longitude == startLng);
-    int endIndex = waypoints.indexWhere(
-        (point) => point.latitude == endLat && point.longitude == endLng);
-
-    if (startIndex == -1) {
-      startIndex = 0;
-    }
-
-    if (endIndex == -1 || endIndex < startIndex) {
-      endIndex = waypoints.length;
-    }
-
-    developer.log("$waypoints");
-
-    return waypoints
-        .sublist(startIndex, endIndex)
-        .map((point) => 'via:${point.latitude},${point.longitude}')
-        .join('|');
-  }
-
-  int? _parseDurationFromResponse(dynamic data) {
-    if (data == null) return null;
-
-    if (data['routes'] == null || data['routes'].isEmpty) {
-      developer.log('No routes found.');
-      return null;
-    }
-
-    final route = data['routes'][0];
-    final int duration = route['legs'][0]['duration']['value'];
-    return duration;
   }
 }

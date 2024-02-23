@@ -105,8 +105,9 @@ class _GoogleMapView extends State<GoogleMapView> {
         color: Colors.blue,
         points: polylineCoordinates,
         width: 5);
-    polylines[id] = polyline;
-    setState(() {});
+    setState(() {
+      polylines[id] = polyline;
+    });
   }
 
   void _getPolyline(List<Waypoint> waypoints) async {
@@ -118,6 +119,8 @@ class _GoogleMapView extends State<GoogleMapView> {
         endLng: widget.nurseryLongitude.toString(),
         waypoints: waypoints,
       );
+      developer.log("polylineCoordinates: $polylineCoordinates",
+          name: "GetPolyline");
       _addPolyline();
     } catch (e) {
       print(e);
