@@ -75,7 +75,7 @@ class _MapPageState extends State<MapPage> {
           developer.log("$busLatitude, $busLongitude",
               name: "TrackBusContinuous");
         });
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 10));
       }
     } catch (error) {
       developer.log("Caught Error", error: error);
