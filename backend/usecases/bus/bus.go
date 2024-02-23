@@ -341,56 +341,55 @@ func (i *Interactor) UpdateBus(ctx context.Context, req *pb.UpdateBusRequest) (*
 
 func (i *Interactor) SendLocationContinuous(stream pb.BusService_SendLocationContinuousServer) error {
 	ctx := stream.Context()
-	retryDelay := time.Second // リトライの間隔を1秒に設定
-	maxRetries := 5           // 最大リトライ回数
+	retryDelay := 10 * time.Second // リトライの間隔を10秒に設定
+	maxRetries := 5                // 最大リトライ回数
+
+	ticker := time.NewTicker(retryDelay)
+	defer ticker.Stop()
+
+	retryCount := 0
 
 	for {
-		req, err := stream.Recv()
-		if errors.Is(err, io.EOF) {
-			// ストリームの終了
-			return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
-		}
-
-		if err != nil {
-			i.logger.Error("failed to receive location", err)
-
-			// 最大リトライ回数を超えるまでリトライ
-			for retry := 0; retry < maxRetries; retry++ {
-				time.Sleep(retryDelay) // リトライ間隔で待機
-
-				req, err = stream.Recv() // 再度受信を試みる
-				if err == nil {
-					break // 成功したらリトライループを抜ける
-				}
-				if errors.Is(err, io.EOF) {
-					// ストリームの終了
-					return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
-				}
-				i.logger.Error(fmt.Sprintf("retrying to receive location, attempt %d", retry+1), err)
+		select {
+		case <-ctx.Done(): // クライアントの切断またはその他のキャンセルシグナルを受信
+			return ctx.Err()
+		case <-ticker.C: // 定期的にリトライを実施
+			req, err := stream.Recv()
+			if errors.Is(err, io.EOF) {
+				// ストリームの終了
+				return stream.SendAndClose(&pb.SendLocationContinuousResponse{})
 			}
 
-			// リトライ後もエラーが続く場合は、処理を中断
 			if err != nil {
-				i.logger.Error("failed to receive location after retries", err)
-				return err
+				i.logger.Error("failed to receive location", err)
+				retryCount++
+				if retryCount >= maxRetries {
+					i.logger.Error("max retries reached, stopping", err)
+					return err // 最大リトライ回数に達したので中断
+				}
+				continue // 次のリトライを待つ
 			}
-		}
 
-		busID, err := uuid.Parse(req.BusId)
-		if err != nil {
-			i.logger.Error("failed to parse bus ID", err)
-			return err // バスIDの解析に失敗した場合は、次のリクエストの処理を試みる
-		}
+			// リセットリトライカウント
+			retryCount = 0
 
-		// トランザクションを使用せずに直接更新
-		_, err = i.entClient.Bus.UpdateOneID(busID).
-			SetLatitude(req.Latitude).
-			SetLongitude(req.Longitude).
-			Save(ctx)
+			busID, err := uuid.Parse(req.BusId)
+			if err != nil {
+				i.logger.Error("failed to parse bus ID", err)
+				continue // バスIDの解析に失敗した場合は、次のリクエストの処理を試みる
+			}
 
-		if err != nil {
-			i.logger.Error("failed to update bus location", err)
-			return err
+			_, err = i.entClient.Bus.UpdateOneID(busID).
+				SetLatitude(req.Latitude).
+				SetLongitude(req.Longitude).
+				Save(ctx)
+
+			if err != nil {
+				i.logger.Error("failed to update bus location", err)
+				continue // データベース更新に失敗した場合は、次のリクエストの処理を試みる
+			}
+
+			i.logger.Info("updated bus location", "bus_id", busID, "latitude", req.Latitude, "longitude", req.Longitude)
 		}
 	}
 }
