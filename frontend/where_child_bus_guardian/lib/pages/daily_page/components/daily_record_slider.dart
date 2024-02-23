@@ -32,7 +32,7 @@ class _DailyRecordSlider extends State<DailyRecordSlider> {
     return Column(
       children: [
         recordCarouselSlider(recordList),
-        const SizedBox(height: 10),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.005),
         dotIndicator(recordList)
       ],
     );

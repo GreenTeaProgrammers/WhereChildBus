@@ -5,7 +5,7 @@ class CurrentTimeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.15,
+        height: MediaQuery.of(context).size.height * 0.13,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
