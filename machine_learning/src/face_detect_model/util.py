@@ -188,19 +188,6 @@ class smile_detecter:
             raise ValueError(f"Can not load cascade: {cascade_path}")
         return cascade
 
-    # def detect_smile_degree(self, gray_image):
-    #     smile = self.smile_cascade.detectMultiScale(
-    #         gray_image, scaleFactor=self.scaleFactor, minNeighbors=self.minNeighbors
-    #     )
-    #     if len(smile) > 0:
-    #         (_, _, sw, sh) = smile[0]
-    #         smile_area = sw * sh
-    #         smile_degree = (
-    #             smile_area / (gray_image.shape[0] * gray_image.shape[1]) * 100
-    #         )
-    #         return smile_degree
-    #     return 0
-
     def detect_smile_degree(self, gray_image):
         smile = self.smile_cascade.detectMultiScale(
             gray_image, scaleFactor=self.scaleFactor, minNeighbors=self.minNeighbors
