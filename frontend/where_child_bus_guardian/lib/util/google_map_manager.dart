@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:developer' as developer;
+import 'dart:io' show Platform;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:where_child_bus_guardian/pages/map_page/map_page.dart';
@@ -14,7 +15,11 @@ class GoogleMapAPIManager {
   bool isFirstTime = true;
 
   GoogleMapAPIManager._internal()
-      : googleApiKey = dotenv.get("GOOGLE_MAP_API_KEY");
+      : googleApiKey = Platform.isAndroid
+            ? dotenv.get("ANDROID_GOOGLE_MAP_API_KEY")
+            : Platform.isIOS
+                ? dotenv.get("IOS_GOOGLE_MAP_API_KEY")
+                : "";
 
   factory GoogleMapAPIManager() {
     return _instance;
