@@ -36,7 +36,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'hoicruise guardian',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+            background: const Color.fromARGB(255, 245, 255, 247),
+            seedColor: Colors.deepPurple),
         textTheme: GoogleFonts.hachiMaruPopTextTheme(
           Theme.of(context).textTheme,
         ),
