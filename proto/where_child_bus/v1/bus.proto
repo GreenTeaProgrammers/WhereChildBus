@@ -14,7 +14,7 @@ service BusService {
 
         rpc SendLocationContinuous(stream SendLocationContinuousRequest) returns (SendLocationContinuousResponse);
         rpc TrackBusContinuous(TrackBusContinuousRequest) returns (stream TrackBusContinuousResponse);
-        rpc StreamBusVideo(stream StreamBusVideoRequest) returns (StreamBusVideoResponse);
+        rpc StreamBusVideo(stream StreamBusVideoRequest) returns (stream StreamBusVideoResponse);
 }
 
 message CreateBusRequest {
