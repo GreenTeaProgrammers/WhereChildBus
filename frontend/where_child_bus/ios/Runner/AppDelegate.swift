@@ -10,7 +10,7 @@ import flutter_config
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GMSServices.provideAPIKey(FlutterConfigPlugin.env(for: "IOS_GOOGLE_MAP_API_KEY"))
-    GMSServices.setMetalRendererEnabled(true)
+    // GMSServices.setMetalRendererEnabled(true)
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
