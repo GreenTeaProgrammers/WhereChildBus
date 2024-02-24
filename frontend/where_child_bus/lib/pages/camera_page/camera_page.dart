@@ -85,6 +85,8 @@ class _CameraPageState extends State<CameraPage> {
     try {
       await for (var response in res) {
         developer.log("Received response: $response", name: "CameraPage");
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBar(response.children.first.name, _vehicleEvent));
         await _playAudio(response);
       }
     } catch (error) {
@@ -340,5 +342,29 @@ class _CameraPageState extends State<CameraPage> {
         //     child: const Text("Play")),
       ],
     );
+  }
+
+  SnackBar snackBar(String name, VehicleEvent event) {
+    if (event == VehicleEvent.VEHICLE_EVENT_GET_ON) {
+      return SnackBar(
+        content: Text('$name が乗車しました'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            // 何もしない
+          },
+        ),
+      );
+    } else {
+      return SnackBar(
+        content: Text('$name が降車しました'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            // 何もしない
+          },
+        ),
+      );
+    }
   }
 }
