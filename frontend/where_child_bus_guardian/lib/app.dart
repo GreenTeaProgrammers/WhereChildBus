@@ -64,8 +64,9 @@ class _AppState extends State<App> {
             DailyPage(),
             _hasRunningBus
                 ? MapPage()
-                : RefreshIndicator(
-                    onRefresh: _loadRunningBus, child: StopBusPage()),
+                : StopBusPage(
+                    onPressed: _loadRunningBus,
+                  ),
             CheckPage(),
           ])),
       bottomNavigationBar: CustomWaveBottomBar(
