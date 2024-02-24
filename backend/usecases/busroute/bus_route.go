@@ -2,7 +2,6 @@ package busroute
 
 import (
 	"context"
-	"fmt"
 	"io"
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
@@ -96,46 +95,50 @@ func (i *Interactor) CreateBusRoute(ctx context.Context, req *pb.CreateBusRouteR
 		}
 		ChildIds[index] = childCopy.Id
 	}
-	stream, err := i.MLServiceClient.Train(ctx, &mlv1.TrainRequest{
-		BusId:     req.BusId,
-		ChildIds:  ChildIds,
-		NurseryId: req.NurseryId,
-		BusType:   req.BusType,
-	})
-
-	if err != nil {
-		i.logger.Error("failed to transport to train server", "error", err)
-		return nil, err
-	}
-
-	// 最初のレスポンスを待つ
-	response, err := stream.Recv()
-	if err != nil {
-		i.logger.Error("error receiving from stream", "error", err)
-		return nil, err
-	}
-
-	if response.Status == mlv1.Status_STATUS_FAILED {
-		i.logger.Error("training was not started", "error", err)
-		return nil, fmt.Errorf("training was not started")
-	}
-
-	i.logger.Info("Training started")
 
 	// バックグラウンドでストリーミングを継続するためのゴルーチン
 	go func() {
+		// MLトレーニングのための新しいコンテクストを作成します。これは、元のリクエストのコンテクストとは独立しています。
+		trainCtx, cancel := context.WithCancel(context.Background())
+		defer cancel() // ストリームが完了またはエラーに遭遇したらコンテクストをキャンセル
+
+		stream, err := i.MLServiceClient.Train(trainCtx, &mlv1.TrainRequest{
+			BusId:     req.BusId,
+			ChildIds:  ChildIds,
+			NurseryId: req.NurseryId,
+			BusType:   req.BusType,
+		})
+		if err != nil {
+			i.logger.Error("failed to transport to train server", "error", err)
+			return
+		}
+
+		// 最初のレスポンスを待つ
+		response, err := stream.Recv()
+		if err != nil {
+			i.logger.Error("error receiving from stream", "error", err)
+			return
+		}
+
+		if response.Status == mlv1.Status_STATUS_FAILED {
+			i.logger.Error("training was not started", "error", err)
+			return
+		}
+
+		i.logger.Info("Training started")
 		for {
+			i.logger.Info("stream still connected")
 			_, err := stream.Recv()
 			if err == io.EOF {
 				// ストリームの終了
+				i.logger.Info("Training stream ended")
 				break
 			}
 			if err != nil {
 				i.logger.Error("error receiving from stream", "error", err)
+				// エラーが発生した場合でも適切にリソースを解放します。
 				return
 			}
-
-			// ここではストリーミングレスポンスは利用しませんが、接続を維持します
 		}
 		i.logger.Info("Training stream completed")
 	}()
@@ -155,7 +158,6 @@ func (i *Interactor) CreateBusRoute(ctx context.Context, req *pb.CreateBusRouteR
 		i.logger.Error("failed to create bus route response", "error", err)
 		return nil, err
 	}
-
 	return &pb.CreateBusRouteResponse{BusRoute: pbBusRoute}, nil
 }
 func (i *Interactor) createAssociation(ctx context.Context, tx *ent.Tx, guardianIdList []string, busRoute *ent.BusRoute) ([]*pb.Child, error) {
