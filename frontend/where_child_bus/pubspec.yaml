@@ -1,0 +1,42 @@
+name: where_child_bus
+description: "WhereChildBus"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  grpc: ^3.2.4
+  protobuf: ^3.1.0
+  flutter_dotenv: ^5.1.0
+  image_picker: ^1.0.7
+  flutter_cache_manager: ^3.3.1
+  camera: ^0.10.5+9
+  image: ^4.1.7
+  google_maps_flutter: ^2.5.3
+  collection: ^1.18.0
+  location: ^5.0.3
+  audioplayers: ^5.2.1
+  flutter_config: ^2.0.2
+  where_child_bus_api:
+    path: ../where_child_bus_api
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/sounds/
+    - .env
+

@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package machine_learning.v1;
+import "where_child_bus/v1/bus.proto";
+import "where_child_bus/v1/resources.proto";
+
+service MachineLearningService {
+        rpc Train(TrainRequest) returns (stream TrainResponse);
+        rpc Pred(stream where_child_bus.v1.StreamBusVideoRequest) returns (stream PredResponse);
+        rpc FaceDetectAndClip(FaceDetectAndClipRequest) returns (FaceDetectAndClipResponse);
+}
+
+
+message TrainRequest {
+        string nursery_id = 1;
+        string bus_id = 2;
+        repeated string child_ids = 3;
+        where_child_bus.v1.BusType bus_type = 4;
+}
+
+message TrainResponse {
+        Status status = 1;
+}
+
+message PredResponse {
+        bool is_detected = 1;
+        repeated string child_ids = 2;
+}
+
+message FaceDetectAndClipRequest {
+        string nursery_id = 1;
+        string child_id = 2;
+}
+
+message FaceDetectAndClipResponse {
+        bool is_started = 1;
+}
+
+enum Status {
+        STATUS_UNSPECIFIED = 0;
+        STATUS_SUCCESS = 1;
+        STATUS_PROCESSING = 2;
+        STATUS_FAILED = 3;
+        STATUS_WAITING = 4;
+}

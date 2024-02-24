@@ -1,0 +1,41 @@
+[project]
+name = "wherechildbus"
+version = "0.1.0"
+description = "Add your description here"
+authors = []
+dependencies = [
+    "opencv-python>=4.9.0.80",
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "numpy>=1.24.4",
+    "pyyaml>=6.0.1",
+    "tqdm>=4.66.2",
+    "google-cloud-storage>=2.14.0",
+    "python-dotenv>=1.0.1",
+    "grpcio>=1.60.1",
+    "grpcio_reflection>=1.60.1",
+    "grpcio-status>=1.60.1",
+    "googleapis-common-protos>=1.62.0",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[project.scripts]
+hello = "wherechildbus:hello"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "watchdog>=4.0.0",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/face_detect_model", "src/proto_gen"]
+

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+service ChildPhotoService {
+        rpc DuplicationCheck(DuplicationCheckRequest) returns (DuplicationCheckResponse);
+        rpc DeleteChildPhoto(DeleteChildPhotoRequest) returns (DeleteChildPhotoResponse);
+        rpc GetChildPhoto(GetChildPhotoRequest) returns (GetChildPhotoResponse);
+}
+
+message DuplicationCheckRequest {
+        repeated string child_ids = 1;
+}
+
+message DuplicationCheckResponse {
+        bool is_duplicated = 1;
+        repeated string photo_ids = 2;
+        repeated bytes duplicated_photos  = 3;
+}
+
+message DeleteChildPhotoRequest {
+        repeated string ids = 1;
+}
+
+message DeleteChildPhotoResponse {
+        repeated bool is_success_list = 1;
+        repeated string ids = 2;
+}
+
+message GetChildPhotoRequest {
+        string child_id = 1;
+}
+
+message ChildPhotoResponse {
+        string child_photo_id = 1;
+        bytes photo = 2;
+}
+
+
+message GetChildPhotoResponse {
+        repeated ChildPhotoResponse child_photos = 1;
+}

@@ -1,0 +1,29 @@
+# First stage: build environment
+FROM golang:1.21.5 AS builder
+
+WORKDIR /srv/grpc
+COPY . .
+RUN go mod download
+
+ARG VERS="3.11.4"
+ARG ARCH="linux-x86_64"
+
+RUN CGO_ENABLED=0 GOOS=linux \
+    go build -a -installsuffix cgo \
+    -o /go/bin/server \
+    github.com/GreenTeaProgrammers/WhereChildBus/backend/cmd/server
+
+# Final stage: runtime environment
+# CA証明書が必要なので、alpineをベースにする
+FROM alpine:latest
+
+# 必要なパッケージをインストール
+RUN apk --no-cache add ca-certificates
+
+# ビルドステージからバイナリと.envファイルをコピー
+COPY --from=builder /go/bin/server /server
+COPY --from=builder /srv/grpc/.env /
+COPY --from=builder /srv/grpc/secrets /secrets
+
+# アプリケーションの起動
+ENTRYPOINT ["/server"]

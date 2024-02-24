@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package where_child_bus.v1;
+
+import "where_child_bus/v1/resources.proto";
+import "google/protobuf/field_mask.proto";
+
+service StationService {
+        rpc UpdateStationLocationByGuardianId(UpdateStationLocationByGuardianIdRequest) returns (UpdateStationLocationByGuardianIdResponse);
+        rpc GetStationListByBusId(GetStationListByBusIdRequest) returns (GetStationListByBusIdResponse);
+        rpc GetUnregisteredStationList(GetUnregisteredStationListRequest) returns (GetUnregisteredStationListResponse);
+        rpc UpdateStation(UpdateStationRequest) returns (UpdateStationResponse);
+}
+
+message UpdateStationLocationByGuardianIdRequest {
+        string guardian_id = 1;
+        double longitude = 2;
+        double latitude = 3;
+}
+
+message UpdateStationLocationByGuardianIdResponse {
+        Station station = 1;
+}
+
+message GetStationListByBusIdRequest {
+        string bus_id = 1;
+}
+
+message GetStationListByBusIdResponse {
+        repeated Station stations = 1;
+        repeated GuardianResponse guardians = 2;
+        repeated Child children = 3;
+        repeated ChildPhoto photos = 4;
+}
+
+message GetUnregisteredStationListRequest {
+        string bus_id = 1;
+}
+
+message GetUnregisteredStationListResponse {
+        repeated Station stations = 1;
+        repeated GuardianResponse guardians = 2;
+}
+
+message GetCorrectOrderStationListByBusIdRequest {
+        string bus_id = 1;
+        BusType bus_type = 2;
+}
+
+message GetCorrectOrderStationListByBusIdResponse {
+        BusRoute bus_route = 1;
+}
+
+message UpdateStationRequest {
+        string id  = 1;
+        string bus_id = 2;
+        double latitude = 3;
+        double longitude = 4;
+        google.protobuf.FieldMask update_mask = 5;
+}
+
+message UpdateStationResponse {
+        Station station = 1;
+}
