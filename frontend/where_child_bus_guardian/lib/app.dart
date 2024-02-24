@@ -62,7 +62,11 @@ class _AppState extends State<App> {
           padding: EdgeInsets.only(top: 30),
           child: IndexedStack(index: _selectedIndex, children: [
             DailyPage(),
-            _hasRunningBus ? MapPage() : StopBusPage(),
+            _hasRunningBus
+                ? MapPage()
+                : StopBusPage(
+                    onPressed: _loadRunningBus,
+                  ),
             CheckPage(),
           ])),
       bottomNavigationBar: CustomWaveBottomBar(

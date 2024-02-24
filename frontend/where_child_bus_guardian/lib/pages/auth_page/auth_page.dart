@@ -35,15 +35,15 @@ class _AuthPageState extends State<AuthPage> {
     GuardianLoginResponse res;
 
     try {
-      if (kDebugMode) {
-        res = await guardianLogin("hogosya1@example.com", "password");
-      } else {
-        res = await guardianLogin(
-            _emailController.text, _passwordController.text);
-        if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-          setState(() => _loginError = GuardianLoginError.fieldsDoNotFilled);
-          return;
-        }
+      // if (kDebugMode) {
+      //   res = await guardianLogin("hogosya1@example.com", "password");
+      // } else {
+      res =
+          await guardianLogin(_emailController.text, _passwordController.text);
+      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+        setState(() => _loginError = GuardianLoginError.fieldsDoNotFilled);
+        return;
+        // }
       }
 
       if (res.success) {
