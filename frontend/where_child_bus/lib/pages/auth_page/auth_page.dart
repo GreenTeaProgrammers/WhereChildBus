@@ -132,7 +132,7 @@ class _AuthPageState extends State<AuthPage> {
     NurseryLoginResponse res;
     try {
       if (kDebugMode) {
-        res = await nurseryLogin("demo@example.com", "password");
+        res = await nurseryLogin("paopao@example.com", "password");
       } else {
         res =
             await nurseryLogin(_emailController.text, _passwordController.text);

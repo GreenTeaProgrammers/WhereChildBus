@@ -29,7 +29,7 @@ class GoogleMapAPIManager {
     if (_lastApiCallTimestamps.containsKey(apiName)) {
       final durationSinceLastCall =
           DateTime.now().difference(_lastApiCallTimestamps[apiName]!);
-      if (durationSinceLastCall.inSeconds < 60) {
+      if (durationSinceLastCall.inSeconds < 3) {
         throw Exception(
             'Too many requests: $apiName can only be called once per minute.');
       }
