@@ -203,7 +203,7 @@ class _CameraPageState extends State<CameraPage> {
       int frameCounter = 0;
       _controller.startImageStream((CameraImage image) async {
         frameCounter++;
-        if (frameCounter % 60 == 0) {
+        if (frameCounter % 45 == 0) {
           if (Platform.isAndroid) {
             videoChunks.add(image.planes[0].bytes.toList());
             _streamController.add(StreamBusVideoRequest(

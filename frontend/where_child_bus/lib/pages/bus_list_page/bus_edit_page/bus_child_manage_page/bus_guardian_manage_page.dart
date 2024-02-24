@@ -146,8 +146,8 @@ class _BusGuardianManagePageState extends State<BusGuardianManagePage> {
               ],
             ),
           ),
-          SizedBox(
-              height: 100,
+          Padding(
+              padding: const EdgeInsets.only(bottom: 8),
               child: ConfirmButton(
                 buttonText: "保存",
                 onTap: () => {

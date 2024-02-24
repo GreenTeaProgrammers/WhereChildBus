@@ -106,13 +106,14 @@ class _BusListPageState extends State<BusListPage> {
 
   Widget _createAddBusButton() {
     return FloatingActionButton(
-      onPressed: () {
+      onPressed: () async {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const BusEditPage(
                       busEditPageType: BusEditPageType.create,
                     )));
+        await _fetchBusList();
       },
       child: const Icon(Icons.add),
     );
@@ -152,6 +153,7 @@ class _BusListPageState extends State<BusListPage> {
                   });
             },
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BusImage(busStatus: bus.busStatus),
                 _createBusNameAndDescription(bus.name, bus.busStatus),
