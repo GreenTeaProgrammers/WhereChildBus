@@ -24,13 +24,24 @@ class _StopBusPageState extends State<StopBusPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-                onPressed: _fetchData,
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : const Text('更新')),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.2,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[100],
+                      foregroundColor: Colors.green[900]),
+                  onPressed: _fetchData,
+                  child: _isLoading
+                      ? const Center(
+                          child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.green,
+                          ),
+                        ))
+                      : const Text('更新')),
+            ),
           ),
         ],
       ),
