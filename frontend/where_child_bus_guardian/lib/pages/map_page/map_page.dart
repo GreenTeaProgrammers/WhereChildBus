@@ -208,19 +208,22 @@ class _MapPageState extends State<MapPage> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                GoogleMapView(
-                  waypoints: waypoints,
-                  nurseryLatitude: nurseryLatitude,
-                  nurseryLongitude: nurseryLongitude,
-                  busLatitude: busLatitude,
-                  busLongitude: busLongitude,
-                ),
-                pageBottomWrapper(),
-              ],
+        : RefreshIndicator(
+            onRefresh: _initializePage,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  GoogleMapView(
+                    waypoints: waypoints,
+                    nurseryLatitude: nurseryLatitude,
+                    nurseryLongitude: nurseryLongitude,
+                    busLatitude: busLatitude,
+                    busLongitude: busLongitude,
+                  ),
+                  pageBottomWrapper(),
+                ],
+              ),
             ),
           );
   }
