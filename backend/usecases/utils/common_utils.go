@@ -6,6 +6,9 @@ import (
 
 	"github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent"
 	busRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/bus"
+	busrouteRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busroute"
+	busrouteassociationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/busrouteassociation"
+	stationRepo "github.com/GreenTeaProgrammers/WhereChildBus/backend/domain/repository/ent/station"
 	"github.com/google/uuid"
 	"golang.org/x/exp/slog"
 )
@@ -50,42 +53,55 @@ func ParseUUID(idStr string, logger *slog.Logger) (uuid.UUID, error) {
 	return parsedID, nil
 }
 
-// ValidateBusStations は、与えられたバスの全ステーションの座標が正しく設定されているかを検証します。
+// ValidateBusStations は、すべてのバスの全ステーションの座標が正しく設定されているかを検証します。
 // すべてのステーションに有効な座標が設定されていない場合、バスのステータスをメンテナンスに更新します。
 // バスがメンテナンス状態であり、すべてのステーションに座標が設定されている場合、
 // バスのステータスを停止状態に戻します。全ての座標が有効であれば true を、
 // 一つでも無効な座標があれば false を返します。
-func ValidateBusStations(logger slog.Logger, ctx context.Context, bus *ent.Bus) (bool, error) {
-	stations, err := fetchStationsForBus(ctx, bus)
+func ValidateBusStations(ctx context.Context, tx *ent.Tx, logger *slog.Logger) error {
+	buses, err := tx.Bus.Query().
+		Where(
+			busRepo.Or(
+				busRepo.StatusEQ(busRepo.StatusMaintenance),
+				busRepo.StatusEQ(busRepo.StatusStopped),
+			),
+		).
+		All(ctx)
+
 	if err != nil {
-		logger.Error("failed to get stations for bus", "error", err, "busID", bus.ID)
-		return false, err
+		logger.Error("failed to get bus", "error", err)
+		return err
 	}
 
-	// 一つでも座標が不足しているステーションがあれば、バスのステータスをメンテナンスに更新
-	if hasMissingCoordinates(stations) {
-		return updateBusStatusToMaintenance(ctx, logger, bus)
-	}
+	for _, bus := range buses {
+		exist, err := tx.Station.Query().
+			Where(
+				stationRepo.HasBusRouteAssociationsWith(
+					busrouteassociationRepo.HasBusRouteWith(
+						busrouteRepo.HasBusWith(busRepo.IDEQ(bus.ID)),
+					),
+				),
+			).
+			Where(stationRepo.Or(
+				stationRepo.LatitudeEQ(0), stationRepo.LongitudeEQ(0)),
+			).
+			Exist(ctx)
+		if err != nil {
+			logger.Error("failed to get stations for bus", "error", err, "busID", bus.ID)
+			return err
+		}
 
-	// バスがメンテナンス状態であり、全てのステーションに座標が設定されている場合、バスのステータスを停止状態に戻す
-	if bus.Status == busRepo.StatusMaintenance {
-		return revertBusStatusFromMaintenance(ctx, logger, bus)
-	}
-
-	return true, nil
-}
-
-func fetchStationsForBus(ctx context.Context, bus *ent.Bus) ([]*ent.Station, error) {
-	return bus.QueryBusRoute().QueryBusRouteAssociations().QueryStation().All(ctx)
-}
-
-func hasMissingCoordinates(stations []*ent.Station) bool {
-	for _, station := range stations {
-		if station.Latitude == 0 || station.Longitude == 0 {
-			return true
+		if !exist {
+			// バスがメンテナンス状態であり、全てのステーションに座標が設定されている場合、バスのステータスを停止状態に戻す
+			if bus.Status == busRepo.StatusMaintenance {
+				revertBusStatusFromMaintenance(ctx, logger, bus)
+			}
+			continue
+		} else {
+			updateBusStatusToMaintenance(ctx, logger, bus)
 		}
 	}
-	return false
+	return nil
 }
 
 func updateBusStatusToMaintenance(ctx context.Context, logger slog.Logger, bus *ent.Bus) (bool, error) {
