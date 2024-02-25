@@ -39,10 +39,10 @@ func ToPbBus(bus *ent.Bus) (*pb.Bus, error) {
 		Longitude:             bus.Longitude,
 		EnableFaceRecognition: bus.EnableFaceRecognition,
 		NextStationId:         bus.Edges.NextStation.ID.String(),
-		CreatedAt:             convertToTimestampPb(bus.CreatedAt),
-		UpdatedAt:             convertToTimestampPb(bus.UpdatedAt),
 		LatestMorningRouteId:  bus.Edges.LatestMorningRoute.ID.String(),
 		LatestEveningRouteId:  bus.Edges.LatestEveningRoute.ID.String(),
+		CreatedAt:             convertToTimestampPb(bus.CreatedAt),
+		UpdatedAt:             convertToTimestampPb(bus.UpdatedAt),
 	}, nil
 }
 
